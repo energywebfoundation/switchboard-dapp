@@ -1,0 +1,78 @@
+.btn-color-primary {
+    color: #105EE8;
+}
+.btn-color-error {
+    color: #C82E2E;
+}
+.btn-color-success {
+    color: #0FB544;
+}
+.btn-color-warn {
+    color: #FFA500;
+}
+
+.icon-color {
+    color: #9080BA;
+}
+
+.menu-icon {
+    width: 42px !important;
+    height: auto !important;
+}
+
+.mat-raised-button {
+    min-width: 100px !important;
+}
+
+.mat-stroked-button {
+    border-color: #105ee8 !important;
+    color: #105ee8 !important;
+    border-radius: 50px !important;
+    line-height: 36px !important;
+    font-size: 16px !important;
+    font-weight: 600;
+    padding: 8px 16px !important;
+    letter-spacing: 0.33px;
+    min-width: 100px !important;
+}
+
+.btn-qr {
+    position: absolute !important;
+    bottom: 15px;
+    left: 32px;
+    color: #FFF !important;
+}
+
+.mat-mini-fab.mat-accent, .mat-raised-button.mat-accent {
+    background-color: #323855 !important;
+
+    .mat-button-wrapper {
+        padding: 0 !important;
+    }
+}
+
+.profile-wrapper {
+    position: absolute;
+    right: 0;
+    margin-right: 32px;
+
+    span {
+        color: #FFF;
+        margin-left: 10px;
+    }
+}
+
+@media (max-width: 800px) {
+    .profile-wrapper {
+        position: initial;
+        margin-left: 5px;
+        margin-right: 20px;
+    } 
+}
+
+.cursor-pointer {
+    cursor: pointer;
+    &:hover {
+        opacity: 0.8;
+    }
+}

@@ -1,0 +1,13 @@
+<h2 mat-dialog-title class="mb-0">User Identity Secret Key</h2>
+<div mat-dialog-content>
+    <div class="mb-2 mx-0 justify-content-center align-items-center">        
+        <div class="generate-qr-containter d-flex justify-content-center align-items-center mb-2 mt-2 mx-2 px-3">
+            <qr-code class="img-fluid" [canvas]="false" [size]="384"
+                    [value]="getUserData()" [level]="'M'"
+                    [foreground]="'#661ab9'" [background]="'#ffffff'"></qr-code>
+        </div> 
+    </div>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-center">
+    <button mat-stroked-button class="mr-3" (click)="onNoClick()">Close</button>
+</div>

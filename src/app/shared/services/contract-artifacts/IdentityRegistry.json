@@ -1,0 +1,277 @@
+{
+  "abi": [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "_sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "_recordId",
+				"type": "address"
+			}
+		],
+		"name": "IdentityCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "_sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "_recordId",
+				"type": "address"
+			}
+		],
+		"name": "IdentityUpdated",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "IdList",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "Table",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "organizationType",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "emailAddress",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "postalAddress",
+						"type": "string"
+					}
+				],
+				"internalType": "struct IdentityRegistry.Identity",
+				"name": "identity",
+				"type": "tuple"
+			},
+			{
+				"internalType": "uint256",
+				"name": "idListPointer",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "organizationType",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "emailAddress",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "postalAddress",
+						"type": "string"
+					}
+				],
+				"internalType": "struct IdentityRegistry.Identity",
+				"name": "recordData",
+				"type": "tuple"
+			}
+		],
+		"name": "createIdentity",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getIdentities",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "identity",
+				"type": "address"
+			}
+		],
+		"name": "getIdentityById",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			},
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "organizationType",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "emailAddress",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "postalAddress",
+						"type": "string"
+					}
+				],
+				"internalType": "struct IdentityRegistry.Identity",
+				"name": "record",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "identity",
+				"type": "address"
+			}
+		],
+		"name": "identityExists",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "exists",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "identity",
+				"type": "address"
+			},
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "organizationType",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "emailAddress",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "postalAddress",
+						"type": "string"
+					}
+				],
+				"internalType": "struct IdentityRegistry.Identity",
+				"name": "recordData",
+				"type": "tuple"
+			}
+		],
+		"name": "updateIdentity",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+}

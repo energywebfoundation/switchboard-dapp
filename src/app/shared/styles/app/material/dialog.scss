@@ -1,0 +1,346 @@
+.mat-dialog-container {
+    background: #000E28;
+    padding: 0!important;
+    color: #FFF;
+
+    .mat-icon-button {
+        color: #7FADFF;
+    }
+}
+
+mat-datetimepicker-content {
+    background-color: #2d3358 !important;
+}
+
+.mat-datetimepicker-calendar-table-header {
+    color: rgba(255, 255, 255, 0.38) !important;
+}
+
+.mat-datetimepicker-calendar-body-cell-content, .mat-datetimepicker-clock-cell {
+    color: #FFF !important;
+    font-size: 16px !important;
+}
+
+.mat-datetimepicker-calendar-body-cell-content.mat-datetimepicker-calendar-body-today:not(.mat-datetimepicker-calendar-body-selected) {
+    border-color: #FFF !important;
+}
+
+.mat-datetimepicker-calendar-body-selected {
+    background-color: #A466FF !important;
+}
+
+.mat-datetimepicker-clock {
+    background-color: #23294e !important;
+}
+
+.mat-datetimepicker-calendar-header {
+    background-color: #23294e !important;
+}
+
+.mat-datetimepicker-clock-center, .mat-datetimepicker-clock-hand, .mat-datetimepicker-clock-cell.mat-datetimepicker-clock-cell-selected {
+    background-color: #A466FF !important;
+}
+
+.mat-datetimepicker-calendar-next-button, .mat-datetimepicker-calendar-previous-button {
+    color: #7FADFF !important;
+}
+
+.mat-dialog-title {
+    color: #7FADFF;
+    padding: 15px 24px 15px 24px;
+    border-bottom: 1px solid #172239;
+    font-weight: 600;
+}
+
+.mat-dialog-content {
+    padding: 0 24px !important;
+    margin: 0 !important;
+}
+
+.cdk-overlay-dark-backdrop {
+    background: rgba(22, 26, 58, 0.88) !important;
+}
+
+.mat-dialog-actions {
+    border-top: 1px solid #172239;
+    margin: 10px 24px 0 24px !important;
+    padding: 20px 24px !important;
+}
+
+.timepicker-overlay {
+    z-index: 10000000 !important;
+}
+
+.timepicker-backdrop-overlay {
+    z-index: 10000000 !important;
+}
+.timepicker {
+.timepicker__header {
+    background-color: #26203a !important;
+}
+
+.timepicker__body {
+    background-color: #322b46 !important;
+}
+
+.timepicker__actions {
+    justify-content: center !important;
+    background-color: #161320 !important;
+}
+
+.timepicker-button {
+    border-radius: 50px !important;
+    min-width: 100px !important;
+    margin-right: 2px;
+    margin-left: 2px;
+    >span {
+        font-size: 16px !important;
+        padding: 8px 16px !important;
+        letter-spacing: 0.33px;
+        text-transform: capitalize !important;
+    }
+
+    &:hover {
+        background-color: #A466FF !important;
+    }
+}
+    
+.clock-face {
+    background-color: #27213a !important;
+}
+    .clock-face__clock-hand {
+      background-color: #A466FF !important;
+  
+      &::after {
+        background-color: #A466FF !important;
+      }
+  
+      &::before {
+        border-color: #A466FF !important;
+      }
+    }
+  
+    .clock-face__number {
+      > span.active {
+        background-color: #A466FF !important;
+      }
+    }
+
+    .clock-face__number > span{
+        color: #FFF !important;
+    }
+  
+    button:not(.timepicker-dial__item) {
+      color: #FFF !important;
+    }
+}
+
+ngx-material-timepicker-toggle {
+    svg {
+        fill: #b9a9de;
+    }
+
+}
+
+.result-filter {
+    margin: 0 20px;
+}
+
+.dialog-result {
+    background-color: #24222F;
+    min-height: 300px;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 0 20px;
+
+    .label-s {
+        font-size: 14px;
+        color: rgba(255,255,255,0.5);
+    }
+
+    .label-l {
+        font-size: 18px;
+        color: #FFF;
+    }
+}
+
+.dialog-result-user {
+    background-color: #171A3A;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 0 20px;
+
+    .label-s {
+        font-size: 14px;
+        color: rgba(255,255,255,0.5);
+    }
+
+    .label-l {
+        font-size: 18px;
+        color: #FFF;
+    }
+}
+
+.mat-checkbox-frame {
+    border-color: #FFF;
+}
+
+.mat-checkbox-layout {
+    display: inline-block !important;
+    white-space: normal !important;
+}
+
+.mat-checkbox-layout .mat-checkbox-label {
+    letter-spacing: 0.2px;
+}
+
+mat-checkbox {
+    opacity: 0.5;
+}
+
+.mat-checkbox-checked {
+    opacity: 1;
+}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background: #105DE7 !important;
+}
+
+.mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element, .mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element {
+    background: #105DE7 !important;
+}
+
+.mat-stepper-horizontal, .mat-stepper-vertical {
+    background-color: transparent !important;
+}
+
+.mat-horizontal-content-container {
+    padding: 0 24px 0 24px !important;
+    border-top: 1px solid #172239;
+}
+
+.mat-step-header .mat-step-label.mat-step-label-active {
+    font-size: 16px !important;
+    color: #7FADFF !important;
+    font-weight: 600;
+    letter-spacing: 0.2px !important;
+    opacity: 1;
+}
+
+.mat-step-header .mat-step-label {
+    font-weight: 400;
+}
+
+.mat-step-header .mat-step-icon-state-edit {
+    color: transparent !important;
+}
+
+.mat-step-header .mat-step-icon-selected {
+    background-color: #105DE7  !important;
+    color: #FFF !important;
+}
+
+.mat-step-header .mat-step-icon-state-edit {
+    background-color: transparent !important;
+    border: 1px solid #105DE7 !important;
+    color: #105DE7 !important;
+}
+
+.mat-step-header .mat-step-icon {
+    border: 1px solid #105DE7 !important;
+    color: #105DE7 ;
+}
+
+.mat-horizontal-stepper-header::after, .mat-horizontal-stepper-header::before, .mat-stepper-horizontal-line {
+    border-top-color: #7FADFF !important;
+}
+
+.mat-horizontal-stepper-header-container {
+    width: auto !important;
+}
+
+@media (max-width: 768px) {
+    .mat-horizontal-stepper-header-container {
+        width: auto !important;
+    } 
+
+    .mat-step-text-label, .mat-step-header .mat-step-label.mat-step-label-active {
+        font-size: 14px !important;
+    }
+
+    .mat-dialog-actions {
+        border-top: 1px solid #172239;
+        margin: 10px 0 0 0 !important;
+        padding: 20px 0 !important;
+    }
+
+    .mat-stepper-horizontal-line {
+        display: none;
+    }
+
+    // .mat-horizontal-stepper-header {
+    //     padding: 0 5px 0 10px !important;
+    // }
+
+    .mat-step-text-label {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: normal;
+    }
+
+    .generate-qr-container {
+        img {
+            width: 280px;
+        }
+    }
+}
+
+// bootstrap modal {
+    .modal-content {
+        background: #000E28;
+        padding: 0 !important;
+        color: #FFF;
+    }
+
+    .modal-title {
+        color: #7FADFF;
+        padding: 15px 24px 15px 24px;
+        border-bottom: 1px solid #172239;
+        font-weight: 600;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #172339;
+    }
+ 
+    .widget-empty {
+        border: 1px dashed #12162e !important;
+        border-radius: 3px;
+        padding: 0 120px;
+        height: 150px;
+
+        h4 {
+            font-weight: 400 !important;
+            font-size: 16px !important;
+            opacity: 0.3;
+        }
+
+        mat-icon {
+            opacity: 0.2;
+        }
+    }  
+
+    .warned-title {
+        font-size: 24px !important;
+        line-height: 1.2;
+        font-weight: 600 !important;
+    }
+
+    .warned-sub {
+        opacity: 0.6!important;
+    }
+
+    .warned-wrapper {
+        width: 120px !important;
+        height: auto !important;
+    }   
