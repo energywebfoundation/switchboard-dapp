@@ -3,22 +3,22 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { LogOutComponent } from './logout/logout.component';
+import { ProfileComponent } from './profile.component';
 
 
 
 /* Use this routes definition in case you want to make them lazy-loaded */
-/*const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent }
-];*/
+const routes: Routes = [
+    { path: '', component: ProfileComponent }
+];
 
 @NgModule({
     imports: [
         SharedModule,
-        // RouterModule.forChild(routes),
+        RouterModule.forChild(routes),
         RouterModule,
         MatCardModule,
         MatFormFieldModule,
@@ -26,7 +26,8 @@ import { LogOutComponent } from './logout/logout.component';
         MatDividerModule,
     ],
     declarations: [
-        LogOutComponent
+        LogOutComponent,
+        ProfileComponent
     ],
     exports: [
         LogOutComponent

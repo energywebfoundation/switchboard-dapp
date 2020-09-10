@@ -6,6 +6,8 @@ import { menu } from './menu';
 import { ProfileModule } from './profile/profile.module';
 import { RegistrationModule } from './registration/registration.module';
 import { routes } from './routes';
+import { WelcomeModule } from './welcome/welcome.module';
+import { EnrolmentModule } from './enrolment/enrolment.module';
 
 
 
@@ -15,8 +17,8 @@ import { routes } from './routes';
         RouterModule.forRoot(routes, { useHash: true, onSameUrlNavigation: 'reload' }),
         ProfileModule,
         RegistrationModule,
-
-
+        WelcomeModule,
+        EnrolmentModule
     ],
     declarations: [],
     exports: [
