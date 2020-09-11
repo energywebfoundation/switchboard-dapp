@@ -105,6 +105,32 @@ ul {
         }
 }
 
+  .card-profile {
+    background: transparent;
+
+    &:hover {
+      background: rgba(132,131,144,0.06);
+      cursor: pointer;
+    }
+  }
+
+  .card-icon {
+    background: rgba(132,131,144,0.06);
+    border: 1px solid #232131;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.14);
+    cursor: pointer;
+    position: relative;
+    top: 0;
+    transition: top ease 0.5s;
+
+    &:hover {
+      border: 1px solid #232131;
+      top: -5px; 
+      box-shadow: rgba(0,0,0,0.1) 0px 20px 20px 0px;
+    }
+  }
+
   .card-default {
     background-color: #13162F !important;
     border-top-width: 0 !important; 
@@ -165,6 +191,7 @@ ul {
         font-size: 14px;
         color: rgba(255,255,255,.70);
       }
+      
     }
 
     .graph-label {
@@ -213,6 +240,10 @@ ul {
       overflow: auto; 
       width: 600px;
     }
+
+    .height-log {
+      height: 25px !important;
+    }
   }
 
   @media (max-width: 700px){
@@ -250,7 +281,7 @@ ul {
   }
 
   .height-log {
-    height: 144px;
+    height: 200px;
   }
 
   @media (max-width: 320px){
@@ -276,5 +307,9 @@ ul {
         box-shadow: none;
       }
 
+    }
+
+    .height-log {
+      height: 25px !important;
     }
   }

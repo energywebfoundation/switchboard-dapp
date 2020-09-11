@@ -6,9 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { LogOutComponent } from './logout/logout.component';
-import { ProfileComponent } from './profile.component';
-
-
+import { ProfileComponent, DialogProfile} from './profile.component';
 
 /* Use this routes definition in case you want to make them lazy-loaded */
 const routes: Routes = [
@@ -27,8 +25,10 @@ const routes: Routes = [
     ],
     declarations: [
         LogOutComponent,
-        ProfileComponent
+        ProfileComponent,
+        DialogProfile
     ],
+    entryComponents: [DialogProfile],
     exports: [
         LogOutComponent
     ]
