@@ -8,10 +8,7 @@ import { NewRoleComponent } from './new-role/new-role.component';
 import { EnrolToRoleComponent } from './enrol-to-role/enrol-to-role.component';
 
 const routes: Routes = [
-  { path: '', component: EnrolmentComponent },
-  { path: 'create-role', component: NewRoleComponent },
-  { path: 'update-role', component: NewRoleComponent },
-  { path: 'enrol-to-role', component: EnrolToRoleComponent }
+  { path: '', component: EnrolmentComponent }
 ];
 
 @NgModule({
