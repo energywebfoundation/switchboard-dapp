@@ -2,7 +2,7 @@
 
 <div mat-dialog-content>
     <div class="mb-2 mt-4 mx-0 mx-lg-2">
-        <zxing-scanner (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+        <!-- <zxing-scanner (scanSuccess)="onCodeResult($event)"></zxing-scanner> -->
         <section class="results" *ngIf="qrResult && qrResult.privateKey">
             <div>
                 <small class="mb-1">Result</small>
