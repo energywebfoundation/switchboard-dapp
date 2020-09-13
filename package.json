@@ -85,7 +85,7 @@
     "ngx-chips": "2.0.0-beta.0",
     "ngx-color-picker": "7.0.2",
     "ngx-infinite-scroll": "6.0.1",
-    "ngx-material-timepicker": "^5.3.0",
+    "ngx-material-timepicker": "5.3.0",
     "ngx-select-ex": "3.6.7",
     "ngx-socket-io": "^3.0.1",
     "ngx-spinner": "^8.1.0",
