@@ -9,7 +9,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DashboardComponent } from './dashboard.component';
 import { WidgetsModule } from '../widgets/widgets.module';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
+// import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { GoverningBodyComponent, DialogHistory } from './governing-body/governing-body.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
@@ -46,7 +46,7 @@ const routes: Routes = [
         MatDatepickerModule,
         NgxMaterialTimepickerModule,
         WidgetsModule,
-        ZXingScannerModule,
+        // ZXingScannerModule,
         NgxSpinnerModule,
         
         
