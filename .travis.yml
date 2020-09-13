@@ -5,8 +5,8 @@ node_js:
   - '10.17.0'
 
 install:
-  - npm install
-  - npm run build --prod
+  - travis_wait npm install
+  - travis_wait npm run build --prod
 
 script:
   - echo "skipping tests"
