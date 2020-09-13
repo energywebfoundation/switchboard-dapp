@@ -6,7 +6,7 @@ node_js:
 
 install:
   - travis_wait npm install
-  - travis_wait npm run build --build-optimizer=true --aot=true --prod
+  - travis_wait npm run build --prod
 
 script:
   - echo "skipping tests"
