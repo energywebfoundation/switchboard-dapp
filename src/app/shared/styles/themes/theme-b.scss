@@ -260,7 +260,7 @@ tr.mat-row {
 }
 
 .mat-dialog-container {
-    background: #16131F;
+    background: #2A2837;
 }
 
 .mat-dialog-title {
@@ -282,14 +282,14 @@ tr.mat-row {
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
     background: rgba(56, 47, 86, 0.5);
-    color: #726690 !important;
+    color: #52436E !important;
 }
 
 .btn-primary {
     background-color: #33CBCB;
 
     &:hover {
-        background-image: linear-gradient(90deg, #A566ff 0%, #A566ff 47%);
+        background-color: #5bd6d6;
     }
 }
 

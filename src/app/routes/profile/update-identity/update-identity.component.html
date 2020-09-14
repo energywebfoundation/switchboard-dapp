@@ -1,0 +1,81 @@
+<!-- <h2 mat-dialog-title class="mb-0 d-flex flex-column">Update Identity</h2>
+
+<div mat-dialog-content>
+    <div class="mb-2 mt-4 mx-0 mx-lg-2">
+        <form role="form">
+            <div class="row">
+                <div class="col-lg-12">
+                    <mat-label class="ml-3 pl-1">Name</mat-label>
+                    <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                        <input matInput formControlName="name" placeholder="Name" autocomplete="off">
+                        <mat-error *ngIf="">Full name is <strong>required</strong></mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-12">
+                    <mat-label class="ml-3 pl-1">Date of Birth</mat-label>
+                    <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                        <input [matDatepicker]="picker" matInput placeholder="Date of Birth" autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+                        <mat-error *ngIf="">Date of birth is <strong>required</strong></mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-12">
+                    <mat-label class="ml-3 pl-1">Address</mat-label>
+                    <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                        <input formControlName="postalAddress" matInput placeholder="Address" autocomplete="off">
+                        <mat-error *ngIf="">Address is <strong>required</strong></mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-center">
+    <button mat-raised-button class="btn btn-primary w-100" type="submit">Create</button>
+</div> -->
+
+<div class="d-flex justify-content-center justify-content-lg-center align-items-lg-center align-items-center overflor-hidden">
+  <div class="row mx-0">
+    <div class="col-xl-12">
+      <div class="card bg-transparent mt-4 mb-3 py-2 py-lg-5">
+          <div class="d-flex align-items-center justify-content-center">
+            <div class="text-center cursor-pointer m-4" (click)="openUpdateIdentity()">
+              <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="64" height="64"
+                alt="identity image">
+              <h2 class="color-white mt-4 mb-0">Ted Tyler</h2>
+              <div class="label color-white">0x5B1B89A48C1fB….6d45</div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3">
+      <div class="card card-icon d-flex justify-content-center align-items-center p-4 mb-3">
+        <img class="m-4" src="../assets/img/icons/assets-icon.png" width="auto" height="80"
+                alt="assets image">
+        <h4 class="color-white mt-4">Assets</h4>         
+      </div>
+    </div>
+    <div class="col-6 col-xl-3">
+      <div class="card card-icon d-flex justify-content-center align-items-center p-4 mb-3">
+        <img class="m-4" src="../assets/img/icons/applications-icon.png" width="auto" height="80"
+                alt="assets image">
+        <h4 class="color-white mt-4">Applications</h4>        
+      </div>
+    </div>
+    <div class="col-6 col-xl-3">
+      <div class="card card-icon d-flex justify-content-center align-items-center p-4 mb-3">
+        <img class="m-4" src="../assets/img/icons/services-icon.png" width="auto" height="80"
+                alt="assets image">
+        <h4 class="color-white mt-4">Services</h4> 
+      </div>
+    </div>
+    <div class="col-6 col-xl-3">
+      <div class="card card-icon d-flex justify-content-center align-items-center p-4 mb-3">
+        <img class="m-4" src="../assets/img/icons/enrollment-icon.png" width="auto" height="80"
+                alt="assets image">
+        <h4 class="color-white mt-4">Enrollments</h4>         
+      </div>
+    </div>
+  </div>
+</div>

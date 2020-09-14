@@ -62,7 +62,7 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
         padding-left: 2rem;
 
         @include media-breakpoint-up(md) {
-            padding-left: 0;
+            // padding-left: 0;
         } // Reset default to allow handle via different logo size
         .navbar-brand {
             padding: 0;

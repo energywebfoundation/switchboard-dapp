@@ -127,16 +127,16 @@ fieldset[disabled] .mda-radio input+em:before {
   font-size: 16px !important;
 
   ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: rgba(255,255,255,0.4);
+    color: #B0ADDC;
   }  
   :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: rgba(255,255,255,0.4);
+    color: #B0ADDC;
   }
 
 }
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
-  background: rgba(28, 23, 38, 0.9);
+  background: #1C1726 !important;
   color: #52436E !important;
   border-radius: 5px;
 }

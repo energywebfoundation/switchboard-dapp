@@ -12,6 +12,7 @@ import { WidgetsModule } from '../widgets/widgets.module';
 // import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { GoverningBodyComponent, DialogHistory } from './governing-body/governing-body.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ProfileModule } from '../profile/profile.module';
 
 
 const routes: Routes = [
@@ -48,11 +49,12 @@ const routes: Routes = [
         WidgetsModule,
         // ZXingScannerModule,
         NgxSpinnerModule,
+        ProfileModule
         
         
 
     ],
-    entryComponents: [ DialogHistory],
+    entryComponents: [DialogHistory],
 
     declarations: [DashboardComponent,  GoverningBodyComponent, DialogHistory],
     exports: [
