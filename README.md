@@ -8,9 +8,9 @@
 ![Identity Creation](screenshots/registration.png)
 
 ## Maintainers
-Mani Hagh Sefat (@manihagh)
-Kim Honoridez (@kim-energyweb)
-Davy Jones Castillo (@davycastillo)
+- Mani Hagh Sefat (@manihagh)
+- Kim Honoridez (@kim-energyweb)
+- Davy Jones Castillo (@davycastillo)
 
 ## Getting Started
 
