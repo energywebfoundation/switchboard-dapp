@@ -15,7 +15,7 @@ import { RegisterComponent, SignInQr } from './register/register.component';
 import { RegistrationService } from './registration.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { GoverningBodyComponent } from './governing-body/governing-body.component';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
+// import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 /* Use this routes definition in case you want to make them lazy-loaded */
 const routes: Routes = [
@@ -40,7 +40,7 @@ const routes: Routes = [
         MatButtonModule,
         MatDividerModule,
         NgxSpinnerModule,
-        ZXingScannerModule,
+        // ZXingScannerModule,
     ],
     declarations: [
         AssetOwnerComponent,
