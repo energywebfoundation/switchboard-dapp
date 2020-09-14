@@ -89,6 +89,7 @@
     "ngx-select-ex": "3.6.7",
     "ngx-socket-io": "^3.0.1",
     "ngx-spinner": "^8.1.0",
+    "iam-client-lib": "git+https://github.com/energywebfoundation/iam-client-lib.git#feature/MYEN-93-integration-with-wallet-connect",
     "nodemon": "^2.0.2",
     "popper.js": "1.14.3",
     "roboto-fontface": "0.10.0",
