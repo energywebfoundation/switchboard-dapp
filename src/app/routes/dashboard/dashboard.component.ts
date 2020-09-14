@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IamService } from 'src/app/shared/services/iam.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,10 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  public accountAddress = "";
 
-  constructor() { }
+  constructor(private iamService: IamService) { }
 
   ngOnInit() {
+    console.log('accountAddress', this.iamService.user);
+    this.accountAddress = this.iamService.user['accountAddress'];
   }
 
 }
