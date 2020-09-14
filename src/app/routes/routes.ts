@@ -12,14 +12,8 @@ export const routes = [
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
-            // { path: 'profile', loadChildren: './profile/profile.module#ProfileModule' },
+            { path: 'profile', loadChildren: './profile/profile.module#ProfileModule' },
             { path: 'enrolment', loadChildren: './enrolment/enrolment.module#EnrolmentModule' }
-        ]
-    },
-    {
-        path: 'profile',
-        children: [
-            { path: '', loadChildren: './profile/profile.module#ProfileModule' }
         ]
     },
     {
