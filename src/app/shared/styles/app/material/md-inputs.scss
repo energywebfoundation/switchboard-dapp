@@ -1,0 +1,259 @@
+
+.mda-checkbox,
+.mda-radio {
+  position: relative;
+  display: inline-block;
+  padding-left: 20px;
+  margin: 0;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    margin-left: -20px;
+    cursor: pointer;
+    opacity: 0;
+    &:checked + em:before {
+      background-color: inherit;
+      border-width: 0;
+    }
+
+    &:checked + span .active {
+      display: inherit;
+    }
+  }
+
+  // Checkbox
+  input[type="checkbox"]:checked + em:after {
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    display: table;
+    width: 6px;
+    height: 12px;
+    border: 2px solid;
+    border-top: 0;
+    border-left: 0;
+    content: ' ';
+    transform: rotate(45deg);
+  }
+  // Radio
+  input[type="radio"]:checked + em:after {
+    content: ' ';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    display: table;
+    width: 12px;
+    height: 12px;
+    background: inherit;
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+
+  input[type="radio"]+em,
+  input[type="radio"]+em:before {
+    border-radius: 50%;
+  }
+}
+
+// Disable states
+.mda-checkbox input[disabled]+em:before,
+fieldset[disabled] .mda-checkbox input+em:before,
+.mda-radio input[disabled]+em:before,
+fieldset[disabled] .mda-radio input+em:before {
+  border-color: rgba(0,0,0,0.26);
+}
+// disable background color for icon
+.mda-checkbox input[disabled]:checked+em,
+.mda-radio input[disabled]:checked+em {
+  background-color: rgba(0,0,0,0.26);
+}
+
+.mda-radio input[disabled]:checked+em:after {
+  background-color: transparent;
+}
+
+.mda-checkbox input[disabled]:checked+em:before {
+  background-color: rgba(0,0,0,0.26);
+}
+
+// Icon style
+.mda-checkbox > em,
+.mda-radio > em {
+  position: relative;
+  display: inline-block;
+  width: 0;
+  height: 18px;
+  margin-top: -2px;
+  margin-right: 28px;
+  margin-left: -20px;
+  line-height: 1;
+  vertical-align: middle;
+  &:before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 100%;
+    border: 2px solid rgba(0,0,0,0.54);
+    border-radius: 2px;
+    @include transition(all .2s);
+  }
+  // Empty box with not icons
+  &.empty:after {
+    display: none !important;
+  }
+}
+
+.mat-divider {
+  border-top-color: #D8D8D8 !important;
+  opacity: 0.1;
+}
+
+.top-layer {
+  position: relative;
+  z-index: 2;
+}
+
+.mat-label {
+  color: #FFF !important;
+  letter-spacing: 0.5px;
+} 
+
+.mat-form-field {
+  display: block !important;
+  font-size: 16px !important;
+
+  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgba(255,255,255,0.4);
+  }  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: rgba(255,255,255,0.4);
+  }
+
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  background: rgba(28, 23, 38, 0.9);
+  color: #52436E !important;
+  border-radius: 5px;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.8em 0.5em;
+}
+
+.mat-input-element {
+  position: relative;
+  top: -4px;
+  color: #FFF !important;
+  caret-color: #FFF;
+}
+
+.mat-option {
+  color: #FFF !important;
+  background: #343242 !important;
+
+  &:nth-child(odd) {
+    background: #383746 !important;
+  }
+
+  .mat-active {
+    background: #424150 !important;
+  }
+}
+
+.mat-select-value {
+  position: relative;
+  top: -4px;
+  color: #FFF !important;
+}
+
+.mat-select-arrow {
+  color: #FFF !important;
+}
+
+.mat-select-placeholder, .mat-placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+.mat-datepicker-content {
+  background-color: #2f345a !important;
+  color: rgba(255,255,255,.87) !important;
+}
+
+.mat-calendar-body-cell-content {
+  color: rgba(255,255,255,.87) !important;
+}
+
+.mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
+  color: rgba(255,255,255,.54) !important;
+}
+
+.mat-calendar-body-label {
+  color: rgba(255,255,255,.54) !important;
+}
+
+.mat-calendar-table-header-divider {
+  color: rgba(255,255,255,.38) !important;
+}
+
+.mat-calendar-arrow {
+  border-top-color: rgba(255,255,255,.54) !important;
+}
+
+.mat-calendar-table-header {
+  color: rgba(255,255,255,.38) !important;
+}
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border-color: rgba(255,255,255,.38) !important;
+}
+
+.mat-calendar-body-selected {
+  background-color: #105ee8 !important;
+}
+
+.mat-calendar-table-header-divider::after {
+  background: rgba(255, 255, 255,.12);
+}
+
+.mat-select-panel {
+  max-height: 380px !important;
+}
+
+.mat-input-sort {
+    .mat-form-field {
+      font-size: 14px !important;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 0 !important;
+      margin: 0 !important;
+    }
+    .mat-form-field-appearance-outline .mat-form-field-wrapper {
+      margin: 0 0 !important;
+    }
+
+    .mat-form-field-infix {
+      padding: 0.2em 0.2em !important;
+  }
+
+  .mat-form-field-outline {
+    background: transparent !important;
+    color: #6E76AA !important;
+  }
+
+  .mat-form-field-flex {
+    padding: 0 .75em 0 .5em !important  ;
+  }
+
+  .mat-select-placeholder {
+    color: #9080bb !important;
+  }
+
+  .mat-select-value {
+    font-size: 14px !important;
+  }
+}

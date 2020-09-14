@@ -1,0 +1,34 @@
+<div class="position-brand m-lg-4">
+  <img src="assets/img/logo-ew-switchboard.svg"/>
+  <div _ngcontent-ogl-c12="" class="user-block-status cursor-pointer">
+      <div _ngcontent-ogl-c12="" class="d-flex align-items-center flex-lg-row flex-row-reverse">
+          <div _ngcontent-ogl-c12="" class="d-flex flex-column align-items-lg-end mt-2 mr-lg-2">
+              <!-- <div _ngcontent-ogl-c12="" class="label-role-white">[{{flexNode}}]</div> -->
+          </div>
+      </div>
+  </div>
+</div>
+<ngx-spinner [fullScreen]="false" type="ball-circus" size="medium" bdColor="#181423" bdOpacity=0.9 color="#A466FF">
+  <p class="loading">Welcome Back! Logging in ...</p>
+</ngx-spinner>
+<div
+  class="bg-register wrapper d-flex justify-content-center justify-content-lg-center align-items-lg-center align-items-center">
+  <div>
+      <!-- START card-->
+      <mat-card class="card-register mb-3">
+          <div class="top-layer">
+              <h1 class="font-weight-700 text-center mt-4 mt-md-2 mb-5 pb-2 pb-md-5 height-log">Welcome to Energy Web Switchboard.</h1>
+              <div class="my-3">
+                <button mat-raised-button class="btn btn-primary w-100" type="submit"><img width="32px" class="float-left" src="assets/img/icons/connect-wallet-icon.png"/> Connect to your wallet</button>
+              </div>
+              <div class="my-3">
+                  <button mat-raised-button class="btn btn-secondary w-100" (click)="goToCreateNewIdentity()" type="submit"><img width="32px" class="float-left" src="assets/img/icons/create-identity-icon.png"/> Create new identity</button>
+              </div>
+              <div class="my-3">
+                  <button mat-raised-button class="btn btn-secondary w-100" type="submit"><img width="32px" class="float-left" src="assets/img/icons/recover-keys-icon.png"/> Recover your keys</button>
+              </div>
+          </div>
+      </mat-card>
+      <!-- END card-->
+  </div>
+</div>

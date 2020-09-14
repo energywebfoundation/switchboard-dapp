@@ -1,0 +1,40 @@
+<div class="row mt-4 mx-0">
+  <div class="col-xl-12">
+    <div class="card card-default mb-3 pb-0">
+      <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-between align-lg-items-center">
+        <h4 class="my-2">Identity Approval</h4>
+
+        <!-- Sorting -->
+        <div class="d-flex flex-column flex-lg-row mt-3 mt-lg-0">
+          <mat-form-field appearance="outline" floatPlaceholder="never" class="mat-input-sort mr-0 mr-lg-2 mb-2 mb-lg-0">
+            <mat-select placeholder="Sort Organization">
+              <mat-option>Organization Type</mat-option>
+              <mat-option>Organization Name</mat-option>
+              <mat-option>Organization E-Mmail</mat-option>
+              <mat-option>Organization Address</mat-option>
+            </mat-select >
+          </mat-form-field>
+          <mat-form-field appearance="outline" floatPlaceholder="never" class="mat-input-sort">
+            <mat-select placeholder="Sort By">
+              <mat-option>Ascending</mat-option>
+              <mat-option>Descending</mat-option>
+            </mat-select >
+          </mat-form-field>
+          <button mat-icon-button matTooltip="History" (click)="openDialogHistory()">
+            <mat-icon class="btn-color-primary">history</mat-icon>
+          </button>
+        </div>
+        
+      </div>
+      <!-- Shows when table is empty -->
+      <div class="d-flex justify-content-center align-items-center">
+        <div class="d-flex align-items-center no-record color-white">
+          <mat-icon class="mr-2">info</mat-icon>
+          <i>No Record Found</i>
+        </div>
+      </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </div>
+</div>

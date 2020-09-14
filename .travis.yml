@@ -1,0 +1,12 @@
+sudo: required
+language: node_js
+dist: xenial
+node_js:
+  - '10.17.0'
+
+install:
+  - travis_wait npm install
+  - travis_wait npm run build --prod
+
+script:
+  - echo "skipping tests"

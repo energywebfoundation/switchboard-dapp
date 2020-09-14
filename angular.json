@@ -1,0 +1,212 @@
+{
+  "$schema": "./node_modules/@angular/cl/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "ew-boilerplate-ui": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",            
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              {
+                "input": "node_modules/@progress/kendo-theme-default/dist/all.css"
+              },
+              "src/app/core/preloader/preloader.scss",
+              "src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/app/core/preloader/preloader.js",
+              "node_modules/popper.js/dist/umd/popper.js",
+              "node_modules/flot/jquery.flot.js",
+              "node_modules/jquery.flot.tooltip/js/jquery.flot.tooltip.js",
+              "node_modules/flot/jquery.flot.resize.js",
+              "node_modules/flot/jquery.flot.pie.js",
+              "node_modules/flot/jquery.flot.time.js",
+              "node_modules/flot/jquery.flot.categories.js",
+              "node_modules/jquery.flot.spline/jquery.flot.spline.js",
+              "node_modules/jquery-sparkline/jquery.sparkline.js",
+              "node_modules/chart.js/dist/Chart.bundle.js",
+              "node_modules/jqcloud2/dist/jqcloud.js",
+              "node_modules/bootstrap/js/dist/util.js",
+              "node_modules/bootstrap/js/dist/modal.js",
+              "node_modules/bootstrap/js/dist/dropdown.js",
+              "node_modules/bootstrap/js/dist/tooltip.js",
+              "node_modules/summernote/dist/summernote.js",
+              "node_modules/moment/min/moment-with-locales.min.js",
+              "node_modules/fullcalendar/dist/fullcalendar.js",
+              "node_modules/ika.jvectormap/jquery-jvectormap-1.2.2.min.js",
+              "node_modules/ika.jvectormap/jquery-jvectormap-world-mill-en.js",
+              "node_modules/ika.jvectormap/jquery-jvectormap-us-mill-en.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "10mb",
+                  "maximumError": "10mb"
+                }
+              ]
+            },
+            "stag": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.stag.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "10mb",
+                  "maximumError": "10mb"
+                }
+              ]
+            },
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "ew-boilerplate-ui:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ew-boilerplate-ui:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "ew-boilerplate-ui:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              {
+                "input": "node_modules/@progress/kendo-theme-default/dist/all.css"
+              },
+              "src/app/core/preloader/preloader.scss",
+              "src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.js",
+              "src/app/core/preloader/preloader.js",
+              "node_modules/popper.js/dist/umd/popper.js",
+              "node_modules/flot/jquery.flot.js",
+              "node_modules/jquery.flot.tooltip/js/jquery.flot.tooltip.js",
+              "node_modules/flot/jquery.flot.resize.js",
+              "node_modules/flot/jquery.flot.pie.js",
+              "node_modules/flot/jquery.flot.time.js",
+              "node_modules/flot/jquery.flot.categories.js",
+              "node_modules/jquery.flot.spline/jquery.flot.spline.js",
+              "node_modules/jquery-sparkline/jquery.sparkline.js",
+              "node_modules/chart.js/dist/Chart.bundle.js",
+              "node_modules/jqcloud2/dist/jqcloud.js",
+              "node_modules/bootstrap/js/dist/util.js",
+              "node_modules/bootstrap/js/dist/modal.js",
+              "node_modules/bootstrap/js/dist/dropdown.js",
+              "node_modules/bootstrap/js/dist/tooltip.js",
+              "node_modules/summernote/dist/summernote.js",
+              "node_modules/moment/min/moment-with-locales.min.js",
+              "node_modules/fullcalendar/dist/fullcalendar.js",
+              "node_modules/ika.jvectormap/jquery-jvectormap-1.2.2.min.js",
+              "node_modules/ika.jvectormap/jquery-jvectormap-world-mill-en.js",
+              "node_modules/ika.jvectormap/jquery-jvectormap-us-mill-en.js"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "tsconfig.app.json",
+              "tsconfig.spec.json",
+              "e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "ew-boilerplate-ui:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "ew-boilerplate-ui:serve:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "ew-boilerplate-ui"
+}
