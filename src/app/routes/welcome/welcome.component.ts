@@ -11,9 +11,10 @@ export class WelcomeComponent implements OnInit {
 
   constructor(private route: Router, private iamService: IamService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     // Immediately navigate to dashboard if user is currently logged-in to walletconnect
     if (this.iamService.isLoggedIn()) {
+      await this.iamService.login();
       this.route.navigate(['dashboard']);
     }
   }

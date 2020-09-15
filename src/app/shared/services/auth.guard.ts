@@ -12,8 +12,9 @@ export class AuthGuard implements CanActivate {
         private iamService: IamService
     ) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {        
+    async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {        
         if (this.iamService.isLoggedIn()) {
+            await this.iamService.login();
             if (state.url === 'welcome') {
                 this.router.navigate(['dashboard']);
             }
