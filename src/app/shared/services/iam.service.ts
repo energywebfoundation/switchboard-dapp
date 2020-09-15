@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
 import { IAM } from 'iam-client-lib';
+import { environment } from 'src/environments/environment';
+
+const LS_WALLETCONNECT = 'walletconnect';
+const LS_KEY_CONNECTED = 'connected';
+const { walletConnectOptions } = environment;
 
 @Injectable({
   providedIn: 'root'
@@ -8,43 +13,62 @@ export class IamService {
   private _iam: IAM;
   private _user: any;
 
-  private _localStorage: any;
-
   constructor() {
-    console.log('initializing IAM...');
+    // Initialize Data
     this._user = {};
-    this._iam = new IAM({
-      rpc: {
-        73799: 'https://volta-rpc.energyweb.org/'
-      }
-    });
+    console.log(walletConnectOptions);
+    this._iam = new IAM(walletConnectOptions);
   }
 
+  /**
+   * Login via IAM and retrieve basic user info
+   */
   async login(): Promise<boolean> {
-    const { did, connected } = await this._iam.login();
+    const { did, connected, userClosedModal } = await this._iam.initializeConnection();
     const signer = this._iam.getSigner();
-
-    console.log('did', did);
-    console.log('signer', signer);
-    console.log('connected', connected);
-
     const account = await signer.provider.listAccounts();
+
+    // Retrieve account address
     if (account && account.length > 0) {
       this._user['accountAddress'] = account[0];
     }
 
-    if (did && connected) {
+    if (did && connected && !userClosedModal) {
+      // return true if successfully connected to walletconnect
       return true;
     }
     else {
+      // return false if errors occur during connection attempt to walletconnect
       return false;
     }
   }
 
+  /**
+   * Checks if the there is a user currently logged-in into the dApp
+   */
+  isLoggedIn() {
+    let isLocallyLoggedIn = false;
+
+    // Check if there is an existing walletconnect session locally
+    if (window.localStorage && window.localStorage.getItem(LS_WALLETCONNECT)) {
+      let walletconnectData = JSON.parse(window.localStorage.getItem(LS_WALLETCONNECT));
+      isLocallyLoggedIn = walletconnectData[LS_KEY_CONNECTED];
+    }
+
+    // TRUE if user is locally loggedin or is loggedin from IAM
+    return this._iam.isConnected() || isLocallyLoggedIn;
+  }
+
+  /**
+   * Retrieve IAM Object Reference
+   */
   get iam(): IAM {
     return this._iam;
   }
 
+  /**
+   * Retreive User Details
+   */
   get user() {
     return JSON.parse(JSON.stringify(this._user));
   }
