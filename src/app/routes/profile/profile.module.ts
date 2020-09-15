@@ -6,12 +6,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { LogOutComponent } from './logout/logout.component';
-// import { UpdateIdentityComponent } from './update-identity/update-identity.component';
 
 /* Use this routes definition in case you want to make them lazy-loaded */
-const routes: Routes = [
-    // { path: '', component: UpdateIdentityComponent }
-];
+const routes: Routes = [];
 
 @NgModule({
     imports: [
@@ -24,11 +21,9 @@ const routes: Routes = [
         MatDividerModule,
     ],
     declarations: [
-        LogOutComponent,
-        // UpdateIdentityComponent,
-        // UpdateIdentityComponent
+        LogOutComponent
     ],
-    entryComponents: [/*UpdateIdentityComponent*/],
+    entryComponents: [],
     exports: [
         LogOutComponent
     ]
