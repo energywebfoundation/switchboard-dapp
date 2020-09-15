@@ -11,6 +11,7 @@ export class DialogUser {
 
     public currentUserKey = '';
     public currentUserData = {};
+    public exampleHeader = '';
 
     constructor(
         public dialogRef: MatDialogRef<DialogUser>,
