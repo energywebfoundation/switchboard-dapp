@@ -3,3 +3,7 @@ node_modules
 dist
 .idea
 lerna.json
+package.json
+package-lock.json
+package.json
+package.json

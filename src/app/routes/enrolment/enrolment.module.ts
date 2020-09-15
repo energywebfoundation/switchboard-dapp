@@ -22,6 +22,7 @@ const routes: Routes = [
     MatButtonModule,
     MatDividerModule,
     NgxSpinnerModule
-  ]
+  ],
+  entryComponents: [NewRoleComponent],
 })
 export class EnrolmentModule { }
