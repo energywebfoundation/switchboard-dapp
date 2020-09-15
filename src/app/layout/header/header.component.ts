@@ -9,6 +9,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Identicon } from 'src/app/shared/directives/identicon/identicon';
 import { HttpClient } from '@angular/common/http';
 import { DialogUser } from './dialog-user/dialog-user.component';
+import { IamService } from 'src/app/shared/services/iam.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-header',
@@ -32,6 +34,8 @@ export class HeaderComponent implements OnInit {
 
     constructor(public menu: MenuService, 
         // private authenticationService: AuthService,
+        private iamService: IamService,
+        private router: Router,
         public userblockService: UserblockService, private http: HttpClient,
         public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer) {
 
@@ -118,5 +122,14 @@ export class HeaderComponent implements OnInit {
         if (screenfull.enabled) {
             screenfull.toggle();
         }
+    }
+
+    logout() {
+        this.iamService.logout();
+        let $navigate = setTimeout(() => {
+            clearTimeout($navigate);
+            location.reload();
+        }, 100);
+        
     }
 }
