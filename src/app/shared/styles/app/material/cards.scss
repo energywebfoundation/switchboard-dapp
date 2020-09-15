@@ -50,6 +50,10 @@ ul {
   min-width: 308px;
 }
 
+.shadow-none {
+  box-shadow: none !important;
+}
+
 .hs > li,
 .item {
   scroll-snap-align: center;

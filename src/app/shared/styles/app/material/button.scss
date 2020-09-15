@@ -27,7 +27,7 @@
 .mat-stroked-button {
     border-color: #105ee8 !important;
     color: #105ee8 !important;
-    border-radius: 50px !important;
+    border-radius: 4px !important;
     line-height: 36px !important;
     font-size: 16px !important;
     font-weight: 600;
@@ -52,8 +52,8 @@
 }
 
 .profile-wrapper {
-    position: absolute;
-    right: 0;
+    // position: absolute;
+    // right: 0;
     margin-right: 32px;
 
     span {
@@ -70,11 +70,11 @@
 }
 
 @media (max-width: 800px) {
-    .profile-wrapper {
-        position: initial;
-        margin-left: 5px;
-        margin-right: 20px;
-    } 
+    // .profile-wrapper {
+    //     position: initial;
+    //     margin-left: 5px;
+    //     margin-right: 20px;
+    // } 
 }
 
 .cursor-pointer {

@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   }
 
   goToEnrolment() {
-    this.route.navigate(['enrolment']);
+    this.route.navigate(['enrolment']); 
   }
 
 }

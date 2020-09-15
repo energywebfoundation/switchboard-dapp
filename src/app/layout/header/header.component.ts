@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit {
 
     openDialogUser(): void {
         const dialogRef = this.dialog.open(DialogUser, {
-          width: '800px',data:{},
+          width: '440px',data:{},
           maxWidth: '100%'
         });
     

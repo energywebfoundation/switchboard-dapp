@@ -1,4 +1,4 @@
-<!-- <h2 mat-dialog-title class="mb-0 d-flex flex-column">Update Identity</h2>
+<h2 mat-dialog-title class="mb-0 d-flex flex-column">Update Identity</h2>
 
 <div mat-dialog-content>
     <div class="mb-2 mt-4 mx-4 mx-lg-4">
@@ -26,49 +26,6 @@
                         <input formControlName="postalAddress" matInput placeholder="Address" autocomplete="off">
                         <mat-error *ngIf="">Address is <strong>required</strong></mat-error>
                     </mat-form-field>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<div mat-dialog-actions class="d-flex justify-content-center">
-    <button mat-raised-button class="btn btn-primary w-100" type="submit">Create</button>
-</div> -->
-
-<h2 mat-dialog-title class="mb-0 d-flex flex-column">Create New Role</h2>
-
-<div mat-dialog-content>
-    <div class="mb-2 mt-4 mx-4 mx-lg-4">
-        <form role="form">
-            <div class="row">
-                <div class="row col-lg-6">
-                    <div class="col-lg-12">
-                        <mat-label class="ml-3 pl-1">Role Type</mat-label>
-                        <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                            <mat-select placeholder="Role Type">
-                                <mat-option>Custom Role</mat-option>
-                                <mat-option>Application Role</mat-option>
-                                <mat-option>Organization Role</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-lg-12">
-                        <mat-label class="ml-3 pl-1">Role Name</mat-label>
-                        <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                            <input formControlName="roleName" matInput placeholder="Role Name" autocomplete="off">
-                            <mat-error *ngIf="">Role Name is <strong>required</strong></mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-lg-12">
-                        <mat-label class="ml-3 pl-1">ENS Name</mat-label>
-                        <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                            <input formControlName="ensName" matInput placeholder="ENS Name" autocomplete="off"
-                                disabled>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row col-lg-6">
-                    
                 </div>
             </div>
         </form>

@@ -78,9 +78,9 @@ body, .wrapper .section-container {
 
     .navbar-nav > .nav-item > .nav-link,
     .navbar-nav > .nav-item.show > .nav-link {
-        color: $nav-top-item;
+        color: #9080BA;
         &:hover, &:focus {
-            color: $nav-top-item-active;
+            color: $inverse;
         }
     }
 
@@ -298,11 +298,11 @@ tr.mat-row {
 }
 
 .mat-stroked-button {
-    border-color: #A566FF !important;
-    color: #A566FF !important;
+    border-color: #33CBCB !important;
+    color: #33CBCB !important;
 
     &:hover {
-        border-color: #8965ec !important;
-        color: #8965ec !important; 
+        border-color: #33CBCB !important;
+        color: #33CBCB!important; 
     }
 }

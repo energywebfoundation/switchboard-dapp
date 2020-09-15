@@ -12,21 +12,17 @@ export class AuthGuard implements CanActivate {
         private iamService: IamService
     ) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const currentUser = this.authenticationService.currentUser();
-        console.log('currentUser', currentUser);
-        
-        if (this.iamService.iam.isLoggedIn()) {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {        
+        if (this.iamService.isLoggedIn()) {
             if (state.url === 'welcome') {
                 this.router.navigate(['dashboard']);
             }
             return true;
         }
 
-        console.log('cannot activate yet', this.router);
-
         // not logged in so redirect to login page with the return url
-        this.router.navigate(['welcome'], { queryParams: { returnUrl: state.url } });
+        // this.router.navigate(['welcome'], { queryParams: { returnUrl: state.url } });
+        this.router.navigate(['welcome']);
         return false;
     }
 }
