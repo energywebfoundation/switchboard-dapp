@@ -6,16 +6,19 @@ const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
 const { walletConnectOptions } = environment;
 
+type User = {
+  accountAddress: string
+};
+
 @Injectable({
   providedIn: 'root'
 })
 export class IamService {
   private _iam: IAM;
-  private _user: any;
+  private _user: User;
 
   constructor() {
     // Initialize Data
-    this._user = {};
     console.log(walletConnectOptions);
     this._iam = new IAM(walletConnectOptions);
   }
@@ -24,23 +27,39 @@ export class IamService {
    * Login via IAM and retrieve basic user info
    */
   async login(): Promise<boolean> {
-    const { did, connected, userClosedModal } = await this._iam.initializeConnection();
-    const signer = this._iam.getSigner();
-    const account = await signer.provider.listAccounts();
+    let retVal = false;
 
-    // Retrieve account address
-    if (account && account.length > 0) {
-      this._user['accountAddress'] = account[0];
-    }
+    // Check if account address exists
+    if (!this._user) {
+      const { did, connected, userClosedModal } = await this._iam.initializeConnection();
+      const signer = this._iam.getSigner();
+      const account = await signer.provider.listAccounts();
+  
+      // Retrieve account address
+      if (account && account.length > 0) {
+        this._user = {
+          accountAddress: account[0]
+        };
+      }
 
-    if (did && connected && !userClosedModal) {
-      // return true if successfully connected to walletconnect
-      return true;
+      if (did && connected && !userClosedModal) {
+        retVal = true;
+      }
     }
     else {
-      // return false if errors occur during connection attempt to walletconnect
-      return false;
+      // The account address is set so it means the user is current loggedin
+      retVal = true;
     }
+
+    return retVal;
+  }
+
+  /**
+   * Disconnect from IAM
+   */
+  logout() {
+    this._iam.closeConnection();
+    this._user = undefined;
   }
 
   /**
