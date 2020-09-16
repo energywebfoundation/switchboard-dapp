@@ -13,7 +13,7 @@ $aside-bg:                      #181423;
 
 // NAVBAR TOP
 
-$nav-top-bg:                     #181423;
+$nav-top-bg:                     #181523;
 $nav-top-bg-start:              $nav-top-bg;
 $nav-top-bg-end:                $nav-top-bg;
 $nav-header-bg:                 transparent;
@@ -81,6 +81,15 @@ body, .wrapper .section-container {
         color: #9080BA;
         &:hover, &:focus {
             color: $inverse;
+        }
+    }
+
+    .navbar-nav>.nav-item.active {
+        &,
+        &:hover,
+        &:focus {
+            color: #33CBCB;
+            background-color: transparent;
         }
     }
 
