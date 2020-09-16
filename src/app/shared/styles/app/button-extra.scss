@@ -32,6 +32,11 @@
         &:hover {
             background-color: $inverse-light;
         }
+        &:not(:disabled):not(.disabled):active:focus, :not(:disabled):not(.disabled).active:focus, .show > .dropdown-toggle:focus {
+            background-color: $inverse-light;
+            border: 0 !important;
+            box-shadow: none;
+        }
 }
 
 .btn-secondary {

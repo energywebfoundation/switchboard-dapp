@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { MatCardModule, MatFormFieldModule, MatButtonModule, MatDividerModule } from '@angular/material';
+import { MatCardModule, MatFormFieldModule, MatButtonModule, MatDividerModule, MatDialogModule } from '@angular/material';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { EnrolmentComponent } from './enrolment.component';
 import { NewRoleComponent } from './new-role/new-role.component';
@@ -21,7 +21,9 @@ const routes: Routes = [
     MatFormFieldModule,
     MatButtonModule,
     MatDividerModule,
-    NgxSpinnerModule
-  ]
+    NgxSpinnerModule,
+    MatDialogModule
+  ],
+  entryComponents: [NewRoleComponent],
 })
 export class EnrolmentModule { }

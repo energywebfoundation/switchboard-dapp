@@ -6,17 +6,58 @@
             <img src="assets/img/logo-ew-switchboard.svg" width="140px" height="auto" />
         </a>
     </div>
-    <div class="profile-wrapper">
+    <!-- <ul class="navbar-nav mx-auto flex-row align-items-center">
+        <li class="nav-item">
+            <a class="nav-link d-none d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Dashboard</h6>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link d-none d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Assets</h6>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link d-none d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Applications</h6>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link d-none d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Services</h6>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link d-none d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Enrollments</h6>
+            </a>
+        </li>
+    </ul> -->
+    <ul class="navbar-nav flex-row profile-wrapper">
+        <li class="nav-item">
+            <div class="cursor-pointer" [matMenuTriggerFor]="menu">
+                <div class="d-flex align-items-center flex-row">
+                    <div class="d-flex flex-column align-items-end ml-2 mr-2">
+                        <div class="label-role">Ted Tyler</div>
+                        <!-- <div class="label-did">0x5B1B89A48C1fB….6d45</div> -->
+                    </div>
+                    <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="34"
+                        height="34" alt="avatar">
+                </div>
+            </div>
+        </li>
+    </ul>
+    <!-- <div class="profile-wrapper">
         <div class="user-block-status cursor-pointer" [matMenuTriggerFor]="menu">
             <div class="d-flex align-items-center flex-row">
                 <div class="d-flex flex-column align-items-end ml-2 mr-2">
                     <div class="label-role">Ted Tyler</div>
-                    <!-- <div class="label-did">0x5B1B89A48C1fB….6d45</div> -->
-                </div>               
-                <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="34" height="34" alt="avatar">
+                </div>
+                <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="34" height="34"
+                    alt="avatar">
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- END navbar header-->
 </nav>
 <!-- END Top Navbar-->

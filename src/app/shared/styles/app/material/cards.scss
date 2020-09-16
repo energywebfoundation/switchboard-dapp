@@ -50,6 +50,10 @@ ul {
   min-width: 308px;
 }
 
+.shadow-none {
+  box-shadow: none !important;
+}
+
 .hs > li,
 .item {
   scroll-snap-align: center;
@@ -132,7 +136,7 @@ ul {
   }
 
   .card-default {
-    background-color: #13162F !important;
+    background-color: #242230 !important;
     border-top-width: 0 !important; 
     border-color: transparent !important;
     box-shadow: 0 1px 8px 0 rgba(0,0,0,0.28);
@@ -140,7 +144,7 @@ ul {
     padding: 6px 20px 15px 20px;
 
      .card-header {
-      background-color: #13162F !important;
+      background-color: #242230 !important;
       padding: 0.1rem 0.1rem 0.1rem 0!important;
         h4 {
           font-weight: 600 !important;
@@ -241,9 +245,6 @@ ul {
       width: 600px;
     }
 
-    .height-log {
-      height: 25px !important;
-    }
   }
 
   @media (max-width: 700px){
@@ -272,7 +273,7 @@ ul {
     }
 
     .height-log {
-      height: 25px !important;
+      height: 75px !important;
     }
 
     .activation-label {
@@ -281,7 +282,7 @@ ul {
   }
 
   .height-log {
-    height: 200px;
+    height: 160px;
   }
 
   @media (max-width: 320px){

@@ -176,11 +176,11 @@ fieldset[disabled] .mda-radio input+em:before {
 }
 
 .mat-select-placeholder, .mat-placeholder {
-  color: rgba(255,255,255,0.6);
+  color: #B0ADDC !important;
 }
 
 .mat-datepicker-content {
-  background-color: #2f345a !important;
+  background-color: #2a2937 !important;
   color: rgba(255,255,255,.87) !important;
 }
 
@@ -226,7 +226,7 @@ fieldset[disabled] .mda-radio input+em:before {
 
 .mat-input-sort {
     .mat-form-field {
-      font-size: 14px !important;
+      font-size: 13px !important;
     }
     .mat-form-field-wrapper {
       padding-bottom: 0 !important;
@@ -241,8 +241,8 @@ fieldset[disabled] .mda-radio input+em:before {
   }
 
   .mat-form-field-outline {
-    background: transparent !important;
-    color: #6E76AA !important;
+    background: #181522 !important;
+    color: #554675 !important;
   }
 
   .mat-form-field-flex {
