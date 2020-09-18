@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
-import { IAM } from 'iam-client-lib';
+import { IAM, DIDAttribute } from 'iam-client-lib';
 import { environment } from 'src/environments/environment';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
 const { walletConnectOptions } = environment;
 
-type User = {
+export enum LoginType {
+  LOCAL = 'local',
+  REMOTE = 'remote'
+};
+
+declare type User = {
   accountAddress: string
 };
 
@@ -16,10 +21,10 @@ type User = {
 export class IamService {
   private _iam: IAM;
   private _user: User;
+  private _didDocument: any;
 
   constructor() {
     // Initialize Data
-    console.log(walletConnectOptions);
     this._iam = new IAM(walletConnectOptions);
   }
 
@@ -32,16 +37,7 @@ export class IamService {
     // Check if account address exists
     if (!this._user) {
       const { did, connected, userClosedModal } = await this._iam.initializeConnection();
-      const signer = this._iam.getSigner();
-      const account = await signer.provider.listAccounts();
-  
-      // Retrieve account address
-      if (account && account.length > 0) {
-        this._user = {
-          accountAddress: account[0]
-        };
-      }
-
+      console.log(did, connected, userClosedModal);
       if (did && connected && !userClosedModal) {
         retVal = true;
       }
@@ -52,6 +48,19 @@ export class IamService {
     }
 
     return retVal;
+  }
+
+  async setupUser() {
+    const signer = this._iam.getSigner();
+    const account = await signer.provider.listAccounts();
+    this._didDocument = await this._iam.getDidDocument();
+
+    // Retrieve account address
+    if (account && account.length > 0) {
+      this._user = {
+        accountAddress: account[0]
+      };
+    }
   }
 
   /**
@@ -65,17 +74,29 @@ export class IamService {
   /**
    * Checks if the there is a user currently logged-in into the dApp
    */
-  isLoggedIn() {
-    let isLocallyLoggedIn = false;
-
-    // Check if there is an existing walletconnect session locally
-    if (window.localStorage && window.localStorage.getItem(LS_WALLETCONNECT)) {
-      let walletconnectData = JSON.parse(window.localStorage.getItem(LS_WALLETCONNECT));
-      isLocallyLoggedIn = walletconnectData[LS_KEY_CONNECTED];
+  getLoginStatus(): LoginType {
+    if (this._iam.isConnected()) {
+      // User is loggedin via remote connection
+      return LoginType.REMOTE;
     }
+    else {
+      let isLocallyLoggedIn = false;
 
-    // TRUE if user is locally loggedin or is loggedin from IAM
-    return this._iam.isConnected() || isLocallyLoggedIn;
+      // Check if there is an existing walletconnect session locally
+      if (window.localStorage && window.localStorage.getItem(LS_WALLETCONNECT)) {
+        let walletconnectData = JSON.parse(window.localStorage.getItem(LS_WALLETCONNECT));
+        isLocallyLoggedIn = walletconnectData[LS_KEY_CONNECTED];
+      }
+      
+      if (isLocallyLoggedIn) {
+        // User has existing local session, need to call IAM.login()
+        return LoginType.LOCAL;
+      }
+      else {
+        // User is not logged-in
+        return;
+      }
+    }
   }
 
   /**

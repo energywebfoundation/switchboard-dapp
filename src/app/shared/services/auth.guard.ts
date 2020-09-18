@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { AuthService } from './auth.service';
-import { IamService } from './iam.service';
+import { IamService, LoginType } from './iam.service';
+import { LoadingService } from './loading.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
@@ -12,11 +13,13 @@ export class AuthGuard implements CanActivate {
         private iamService: IamService
     ) { }
 
-    async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {        
-        if (this.iamService.isLoggedIn()) {
-            await this.iamService.login();
-            if (state.url === 'welcome') {
-                this.router.navigate(['dashboard']);
+    async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        let loginStatus = this.iamService.getLoginStatus();
+        if (loginStatus) {
+            if (state.url === 'welcome' || loginStatus === LoginType.LOCAL) {
+                console.log(state);
+                let stateUrl = state.url === 'welcome' ? 'init' : state.url;
+                this.router.navigate(['init'], { queryParams: { returnUrl: stateUrl } });
             }
             return true;
         }
