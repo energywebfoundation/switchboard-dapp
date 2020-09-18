@@ -10,7 +10,7 @@ import { Identicon } from 'src/app/shared/directives/identicon/identicon';
 import { HttpClient } from '@angular/common/http';
 import { DialogUser } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
     selector: 'app-header',
@@ -30,6 +30,8 @@ export class HeaderComponent implements OnInit {
     flexNode="";
 
     isNavSearchVisible: boolean;
+    isNavMenuVisible = true;
+
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
     constructor(public menu: MenuService, 
@@ -49,6 +51,15 @@ export class HeaderComponent implements OnInit {
             this.currentUserDid = JSON.parse(localStorage.getItem('currentUser')).did;
             this.currentUserRole = JSON.parse(localStorage.getItem('currentUser')).organizationType;
         }
+
+        this.router.events.subscribe((event: any) => {
+            if (event instanceof NavigationEnd) {
+                this.isNavMenuVisible = true;
+                if (event.url  === '/dashboard') {
+                    this.isNavMenuVisible = false;
+                }
+            }
+        });
     }
 
     openDialogUser(): void {

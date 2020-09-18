@@ -554,18 +554,7 @@ _:-ms-lang(x),
     z-index: 3;
 
     img {
-        height: 52px;
-        width: auto;
-    }
-}
-
-.position-brand-form {
-    position: fixed; 
-    top: 0; 
-    z-index: 3;
-
-    img {
-        height: 52px;
+        height: 60px;
         width: auto;
     }
 }
@@ -581,17 +570,13 @@ _:-ms-lang(x),
         z-index: 3;
         margin: 20px 0 0 0;
     }
-
-    .position-brand-form {
-        display: none;
-    }
 }
 
 @media (max-width: 700px) { 
     .position-brand {
         position: fixed;
         width: 100%;
-        height: 40%;
+        height: 10%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -599,29 +584,29 @@ _:-ms-lang(x),
         margin: 10px 0;
 
         img {
-            height: 58px;
+            height: 28px;
             width: auto;
         }
     }
 }
 
 @media (max-width: 470px) { 
-    // .position-brand {
-    //     display: none;
+    .position-brand {
+        display: none;
 
-    //     img {
-    //         display: none;
-    //     }
-    // }
+        img {
+            display: none;
+        }
+    }
 }
 
 
 .bg-register {
-    background-color: #181422;
-    background-image: url("/assets/img/bg-energy.svg");
-    background-position: bottom;
+    background-color: #181421;
+    background-image: url("/assets/img/bg-register-purple.jpg");
+    background-position: center;
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
     height: auto;
     width: 100%;
     overflow: none;
