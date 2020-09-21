@@ -43,8 +43,12 @@ export class InitDataComponent implements OnInit {
       
       // Redirect to actual screen
       this.route.navigateByUrl(returnUrl);
+      setTimeout(() => {
+        /** spinner ends after 5 seconds */
+        this.spinner.hide();
+      }, 5000);
     });
-    this.spinner.hide();
+    // this.spinner.hide();
   }
 
 }

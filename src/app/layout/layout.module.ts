@@ -13,6 +13,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MatDialogModule } from '@angular/material';
 import {MatMenuModule} from '@angular/material/menu';
 import { DialogUser } from './header/dialog-user/dialog-user.component';
+import { LoadingComponent } from './loading/loading.component';
 
 @NgModule({
     imports: [
@@ -32,7 +33,8 @@ import { DialogUser } from './header/dialog-user/dialog-user.component';
         NavsearchComponent,
         OffsidebarComponent,
         FooterComponent,
-        DialogUser
+        DialogUser,
+        LoadingComponent
     ],
     entryComponents: [DialogUser],
     exports: [
