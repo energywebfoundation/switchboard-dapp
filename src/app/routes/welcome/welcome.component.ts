@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { IamService } from 'src/app/shared/services/iam.service';
 
 @Component({
   selector: 'app-welcome',
@@ -8,14 +10,20 @@ import { Router } from '@angular/router';
 })
 export class WelcomeComponent implements OnInit {
 
-  constructor(private route: Router) { }
+  constructor(private route: Router, private iamService: IamService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
-
+    // Immediately navigate to dashboard if user is currently logged-in to walletconnect
+    if (this.iamService.getLoginStatus()) {
+      this.route.navigate(['init']);
+    }
   }
 
-  goToCreateNewIdentity() {
-    console.log("i am called")
-    this.route.navigate(['identity/create-new']);
+  async connectToWallet() {
+    let isLoggedIn = await this.iamService.login();
+    console.log('isLoggedIn', isLoggedIn);
+    if (isLoggedIn) {
+      this.route.navigate(['init']);
+    }
   }
 }

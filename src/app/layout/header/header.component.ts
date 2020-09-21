@@ -9,6 +9,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Identicon } from 'src/app/shared/directives/identicon/identicon';
 import { HttpClient } from '@angular/common/http';
 import { DialogUser } from './dialog-user/dialog-user.component';
+import { IamService } from 'src/app/shared/services/iam.service';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
     selector: 'app-header',
@@ -28,10 +30,14 @@ export class HeaderComponent implements OnInit {
     flexNode="";
 
     isNavSearchVisible: boolean;
+    isNavMenuVisible = true;
+
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
     constructor(public menu: MenuService, 
         // private authenticationService: AuthService,
+        private iamService: IamService,
+        private router: Router,
         public userblockService: UserblockService, private http: HttpClient,
         public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer) {
 
@@ -45,12 +51,21 @@ export class HeaderComponent implements OnInit {
             this.currentUserDid = JSON.parse(localStorage.getItem('currentUser')).did;
             this.currentUserRole = JSON.parse(localStorage.getItem('currentUser')).organizationType;
         }
+
+        this.router.events.subscribe((event: any) => {
+            if (event instanceof NavigationEnd) {
+                this.isNavMenuVisible = true;
+                if (event.url  === '/dashboard') {
+                    this.isNavMenuVisible = false;
+                }
+            }
+        });
     }
 
     openDialogUser(): void {
         const dialogRef = this.dialog.open(DialogUser, {
-          width: 'auto',data:{},
-          maxWidth: '95vw'
+          width: '440px',data:{},
+          maxWidth: '100%'
         });
     
         dialogRef.afterClosed().subscribe(result => {
@@ -118,5 +133,14 @@ export class HeaderComponent implements OnInit {
         if (screenfull.enabled) {
             screenfull.toggle();
         }
+    }
+
+    logout() {
+        this.iamService.logout();
+        let $navigate = setTimeout(() => {
+            clearTimeout($navigate);
+            location.reload();
+        }, 100);
+        
     }
 }

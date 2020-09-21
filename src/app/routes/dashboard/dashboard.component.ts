@@ -1,32 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { IamService } from 'src/app/shared/services/iam.service';
 import { Router } from '@angular/router';
-
-enum ROUTE_MAPPING {
-  TSO = "tso",
-  BRP = "tso",
-  DSO = "tso",
-  OEM = "tso",
-  Installer = "installer",
-  "Asset-owner" = "owner",
-  "Governing-body" = "governing",
-}
 
 @Component({
   selector: 'app-dashboard',
-  template: ''
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  
-  constructor(private authService: AuthService, private router: Router) { 
-    this.router.navigate(['/dashboard/' + ROUTE_MAPPING[this.authService.currentUser().organizationType]]).then(()=>{
-      console.log(this.authService.currentUser().organizationType);
-    });
-  }
+  public accountAddress = "";
+
+  constructor(private iamService: IamService, private route: Router) { }
 
   ngOnInit() {
-      
-      
+    console.log('accountAddress', this.iamService.user);
+    this.accountAddress = this.iamService.user['accountAddress'];
+  }
+
+  goToEnrolment() {
+    this.route.navigate(['enrolment']); 
   }
 
 }

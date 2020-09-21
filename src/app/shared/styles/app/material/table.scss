@@ -11,9 +11,13 @@
 
 th.mat-header-cell {
     background-color: #12162e;
+    font-family: 'Rajdhani', sans-serif;
     font-weight: 600 !important;
-    font-size: 14px;
-    color: #B6B9C7 !important;
+    font-size: 12px;
+    color: #FFFFFF !important;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-bottom-style: none !important;
 } 
 
 .mat-header-cell, .mat-cell, .mat-footer-cell {
@@ -26,6 +30,13 @@ td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:la
 
 td.mat-cell {
     border-bottom: none !important;
+    font-size: 14px !important;
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+}
+
+tr.mat-header-row {
+    height: 30px !important;
 }
 
 tr.mat-row {
@@ -33,7 +44,11 @@ tr.mat-row {
 }
 
 .mat-row:nth-child(odd){
-    background-color: #2b2935;
+    background-color: #201E2B;
+}
+
+.mat-row:nth-child(even){
+    background-color: #1E1C29;
 }
 
 .mat-paginator-outer-container {

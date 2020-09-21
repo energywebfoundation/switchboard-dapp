@@ -6,6 +6,11 @@ import { constants } from './constants';
 
 export const environment = {
   production: false,  
+  walletConnectOptions: {
+    rpcUrl: 'https://volta-rpc.energyweb.org/',
+    chainId: 73799,
+    infuraId: null
+  },
   ...constants  
 };
 

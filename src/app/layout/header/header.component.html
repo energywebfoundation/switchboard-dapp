@@ -2,53 +2,55 @@
 <nav class="navbar topnavbar" role="navigation">
     <!-- START navbar header-->
     <div class="navbar-header">
-        <a class="navbar-brand" href="#/">
-            <div class="brand-logo">
-                <img class="img-fluid" src="assets/img/ew-flex-logo.png" alt="EWFlex" />
-            </div>
-            <div class="brand-logo-collapsed">
-                <img class="img-fluid" src="assets/img/ew-flex-single-logo.png" alt="EWFlex" />
-            </div>
+        <a href="#/">
+            <img src="assets/img/logo-ew-switchboard.svg" width="150px" height="auto" />
         </a>
     </div>
-    <div class="profile-wrapper">
-        <div class="user-block-status cursor-pointer" (click)="openDialogUser()">
-            <div class="d-flex align-items-center flex-lg-row flex-row-reverse">
-                <div class="d-flex flex-column align-items-lg-end ml-2 mr-lg-2">
-                    <div class="label-role">{{currentUserRole}}</div>
-                    <div class="label-did">{{currentUserDid}}</div>
-                </div>               
-                <img class="img-thumbnail rounded-circle" [src]="getUserIdenticon()" width="34" height="34" alt="avatar">
-            </div>
-        </div>
-    </div>
-    <!-- END navbar header-->
-    <!-- START Left navbar-->
-    <ul class="navbar-nav mr-auto flex-row">
+    <ul class="navbar-nav mx-auto flex-row align-items-center" *ngIf="isNavMenuVisible">
         <li class="nav-item">
-            <!-- Button used to collapse the left sidebar. Only visible on tablet and desktops-->
-            <button mat-icon-button class="d-none d-md-block d-lg-block d-xl-block" (click)="toggleCollapsedSideabar()" *ngIf="!isCollapsedText()">
-                    <mat-icon class="icon-color">menu</mat-icon>
-             </button>
-            <!-- Button to show/hide the sidebar on mobile. Visible on mobile only.-->
-            <button mat-icon-button class="nav-link sidebar-toggle d-md-none" (click)="settings.toggleLayoutSetting('asideToggled'); $event.stopPropagation()">
-                    <mat-icon class="icon-color">menu</mat-icon>
-             </button>
-             
-        </li>  
+            <a class="nav-link d-none d-lg-block d-xl-block cursor-pointer" routerLink="dashboard">
+                <h6 class="mb-0">Dashboard</h6>
+            </a>
+        </li>
         <li class="nav-item">
-            <div class="user-block-status cursor-pointer">
-                <div class="d-flex align-items-center flex-lg-row flex-row-reverse">
-                    <div class="d-flex flex-column align-items-lg-end mt-2 mr-lg-2">
-                        <!-- <div class="label-role-white">[{{flexNode}}]</div> -->
-                    </div>               
+            <a class="nav-link d-none d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Assets</h6>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link d-none d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Applications</h6>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link d-none d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Services</h6>
+            </a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link d-none d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Enrollments</h6>
+            </a>
+        </li>
+    </ul>
+    <ul class="navbar-nav flex-row profile-wrapper">
+        <li class="nav-item">
+            <div class="cursor-pointer" [matMenuTriggerFor]="menu">
+                <div class="d-flex align-items-center flex-row">
+                    <div class="d-flex flex-column align-items-end ml-2 mr-2">
+                        <div class="label-role">Ted Tyler</div>
+                        <!-- <div class="label-did">0x5B1B89A48C1fB….6d45</div> -->
+                    </div>
+                    <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="34"
+                        height="34" alt="avatar">
                 </div>
             </div>
         </li>
-
     </ul>
-    <!-- END Left navbar-->
-
-    <app-navsearch [visible]="getNavSearchVisible()" (onclose)="setNavSearchVisible(false)"></app-navsearch>
+    <!-- END navbar header-->
 </nav>
 <!-- END Top Navbar-->
+<mat-menu #menu="matMenu" xPosition="before" class="px-2">
+    <button class="color-white" mat-menu-item (click)="openDialogUser()">Update Identity</button>
+    <button class="color-white" mat-menu-item (click)="logout()">Logout</button>
+</mat-menu>

@@ -23,6 +23,12 @@ export const routes = [
         ]
     },
     {
+        path: 'init',
+        children: [
+            { path: '', loadChildren: './init-data/init-data.module#InitDataModule' }
+        ]
+    },
+    {
         path: 'registration',
         children: [
             { path: '', loadChildren: './registration/registration.module#RegistrationModule' }

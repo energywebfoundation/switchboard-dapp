@@ -12,10 +12,14 @@
 }
 
 .mat-tab-label {
+    height: 40px !important;
+    font-family: 'Rajdhani', sans-serif;
     color: #9080BA;
+    font-weight: 700 !important;
     opacity: 1 !important;
-    letter-spacing: 0.57px !important;
+    letter-spacing: 1px !important;
     font-size: 14px;
+    text-transform: uppercase;
     z-index: 4;
 
     .mat-tab-label-content {
@@ -40,7 +44,7 @@
 }
 
 .mat-tab-group.mat-primary .mat-ink-bar {
-    background-color: #323856;
+    background-color: #242330;
     height: 100%;
     border-radius: 50px;
 }
@@ -49,10 +53,6 @@
     background-image: linear-gradient(0deg, rgba(23, 23, 37, 0.8) 0%, rgba(62, 61, 82, 0.8) 100%) !important;
     padding: 20px 40px;
     border-radius: 5px;
-}
-
-.icon-alignment {
-    // margin-right: 45%;
 }
 
 .pending-reg-icon.mat-icon {

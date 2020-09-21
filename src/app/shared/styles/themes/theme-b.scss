@@ -13,7 +13,7 @@ $aside-bg:                      #181423;
 
 // NAVBAR TOP
 
-$nav-top-bg:                     #181423;
+$nav-top-bg:                     #181523;
 $nav-top-bg-start:              $nav-top-bg;
 $nav-top-bg-end:                $nav-top-bg;
 $nav-header-bg:                 transparent;
@@ -78,9 +78,18 @@ body, .wrapper .section-container {
 
     .navbar-nav > .nav-item > .nav-link,
     .navbar-nav > .nav-item.show > .nav-link {
-        color: $nav-top-item;
+        color: #9080BA;
         &:hover, &:focus {
-            color: $nav-top-item-active;
+            color: $inverse;
+        }
+    }
+
+    .navbar-nav>.nav-item.active {
+        &,
+        &:hover,
+        &:focus {
+            color: #33CBCB;
+            background-color: transparent;
         }
     }
 
@@ -208,10 +217,10 @@ body, .wrapper .section-container {
 }
 
 .card-default {
-    background-color: #24222F !important;
+    background-color: #242230 !important;
 
     .card-header {
-        background-color: #24222F !important;
+        background-color: #242230 !important;
     }
 }
 
@@ -220,7 +229,7 @@ background-image: url("/assets/img/bg-register-purple.jpg");
 }
 
 .mat-paginator-outer-container {
-    background-color: #24222F !important;
+    background-color: #242230 !important;
 }
 
 /* ========================================================================
@@ -260,7 +269,7 @@ tr.mat-row {
 }
 
 .mat-dialog-container {
-    background: #16131F;
+    background: #2A2837;
 }
 
 .mat-dialog-title {
@@ -282,14 +291,14 @@ tr.mat-row {
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
     background: rgba(56, 47, 86, 0.5);
-    color: #726690 !important;
+    color: #52436E !important;
 }
 
 .btn-primary {
     background-color: #33CBCB;
 
     &:hover {
-        background-image: linear-gradient(90deg, #A566ff 0%, #A566ff 47%);
+        background-color: #5bd6d6;
     }
 }
 
@@ -298,11 +307,11 @@ tr.mat-row {
 }
 
 .mat-stroked-button {
-    border-color: #A566FF !important;
-    color: #A566FF !important;
+    border-color: #33CBCB !important;
+    color: #33CBCB !important;
 
     &:hover {
-        border-color: #8965ec !important;
-        color: #8965ec !important; 
+        border-color: #33CBCB !important;
+        color: #33CBCB!important; 
     }
 }

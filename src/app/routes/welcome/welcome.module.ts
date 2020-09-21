@@ -21,7 +21,7 @@ const routes: Routes = [
     MatFormFieldModule,
     MatButtonModule,
     MatDividerModule,
-    NgxSpinnerModule,
+    NgxSpinnerModule
   ]
 })
 export class WelcomeModule { }

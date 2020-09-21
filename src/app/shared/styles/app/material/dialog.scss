@@ -1,5 +1,5 @@
 .mat-dialog-container {
-    background: #000E28;
+    background: #2A2837;
     padding: 0!important;
     color: #FFF;
 
@@ -46,9 +46,9 @@ mat-datetimepicker-content {
 }
 
 .mat-dialog-title {
-    color: #7FADFF;
+    color: #FFFFFF !important;
     padding: 15px 24px 15px 24px;
-    border-bottom: 1px solid #172239;
+    border-bottom: 1px solid #363546 !important;
     font-weight: 600;
 }
 
@@ -62,8 +62,8 @@ mat-datetimepicker-content {
 }
 
 .mat-dialog-actions {
-    border-top: 1px solid #172239;
-    margin: 10px 24px 0 24px !important;
+    border-top: 1px solid #363546 !important;
+    margin: 10px 0 !important;
     padding: 20px 24px !important;
 }
 
@@ -270,7 +270,7 @@ mat-checkbox {
 
     .mat-dialog-actions {
         border-top: 1px solid #172239;
-        margin: 10px 0 0 0 !important;
+        margin: 10px 25px 0 25px !important;
         padding: 20px 0 !important;
     }
 

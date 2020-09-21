@@ -17,15 +17,9 @@
       <!-- START card-->
       <mat-card class="card-register mb-3">
           <div class="top-layer">
-              <h1 class="font-weight-700 text-center mt-4 mt-md-2 mb-5 pb-2 pb-md-5 height-log">Welcome to Energy Web Switchboard.</h1>
+              <h1 class="font-weight-700 text-center mt-4 mt-md-2 mb-3 pb-2 pb-md-5">Welcome to Energy Web Switchboard.</h1>
               <div class="my-3">
-                <button mat-raised-button class="btn btn-primary w-100" type="submit"><img width="32px" class="float-left" src="assets/img/icons/connect-wallet-icon.png"/> Connect to your wallet</button>
-              </div>
-              <div class="my-3">
-                  <button mat-raised-button class="btn btn-secondary w-100" (click)="goToCreateNewIdentity()" type="submit"><img width="32px" class="float-left" src="assets/img/icons/create-identity-icon.png"/> Create new identity</button>
-              </div>
-              <div class="my-3">
-                  <button mat-raised-button class="btn btn-secondary w-100" type="submit"><img width="32px" class="float-left" src="assets/img/icons/recover-keys-icon.png"/> Recover your keys</button>
+                <button mat-raised-button (click)="connectToWallet()" class="btn btn-primary w-100" type="submit"><img width="48px" class="float-left pt-1" src="assets/img/icons/wallet-connect-icon.png"/> Connect to your wallet</button>
               </div>
           </div>
       </mat-card>
