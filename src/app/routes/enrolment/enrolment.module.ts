@@ -6,6 +6,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { EnrolmentComponent } from './enrolment.component';
 import { NewRoleComponent } from './new-role/new-role.component';
 import { EnrolToRoleComponent } from './enrol-to-role/enrol-to-role.component';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', component: EnrolmentComponent }
@@ -18,6 +19,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     RouterModule,
     MatCardModule,
+    FormsModule,
     MatFormFieldModule,
     MatButtonModule,
     MatDividerModule,

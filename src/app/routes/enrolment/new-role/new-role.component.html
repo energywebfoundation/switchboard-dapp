@@ -1,30 +1,29 @@
 <h2 mat-dialog-title class="mb-0 d-flex flex-column">Create New Role</h2>
 
 <div mat-dialog-content>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   <div class="mb-2 mt-4">
-    <form role="form">
+    <form role="form" [formGroup]="newRoleForm">
       <div class="row">
         <div class="col-lg-12">
           <mat-label class="ml-3 pl-1">Role Type</mat-label>
           <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-            <mat-select placeholder="Role Type">
-              <mat-option>Custom Role</mat-option>
-              <mat-option>Application Role</mat-option>
-              <mat-option>Organization Role</mat-option>
+            <mat-select placeholder="Role Type" formControlName="roleType">
+              <mat-option *ngFor="let roleType of RoleTypes | keyvalue" [value]="roleType.key">{{ roleType.value }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div class="col-lg-12">
           <mat-label class="ml-3 pl-1">Role Name</mat-label>
           <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-            <input formControlName="roleName" matInput placeholder="Role Name" autocomplete="off">
+            <input formControlName="roleName" matInput placeholder="Role Name" autocomplete="off" oninput="this.value = this.value.toUpperCase()" formControlName="roleName">
             <mat-error *ngIf="">Role Name is <strong>required</strong></mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-12">
           <mat-label class="ml-3 pl-1">ENS Name</mat-label>
           <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-            <input formControlName="ensName" matInput placeholder="ENS Name" autocomplete="off" disabled>
+            <input formControlName="ensName" matInput placeholder="ENS Name" autocomplete="off" disabled formControlName="ensName">
           </mat-form-field>
         </div>
 
