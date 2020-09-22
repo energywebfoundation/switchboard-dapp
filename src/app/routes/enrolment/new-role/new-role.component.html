@@ -1,4 +1,8 @@
-<h2 mat-dialog-title class="mb-0 d-flex flex-column">Create New Role</h2>
+<h2 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">Create New Role
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
 
 <div mat-dialog-content>
   <div *ngIf="isLoading || isCheckingEns">
@@ -6,55 +10,62 @@
   </div>
   <div class="mb-2 mt-4">
     <form role="form" [formGroup]="newRoleForm">
+      <div class="card card-default mb-3 py-3 shadow-none">
+        <div class="row">
+          <div class="col-lg-12">
+            <mat-label class="ml-3 pl-1">Role Type</mat-label>
+            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+              <mat-select placeholder="Role Type" formControlName="roleType"
+                (selectionChange)="roleTypeChanged($event)">
+                <mat-option *ngFor="let roleType of RoleTypes | keyvalue" [value]="roleType.key">{{ roleType.value }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="">Role Type is <strong>required</strong></mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-12" *ngIf="isHidden.orgField">
+            <mat-label class="ml-3 pl-1">Organization</mat-label>
+            <ngx-select formControlName="org" placeholder="Organization" [items]="orgList"
+              (select)="orgSelected($event)"></ngx-select>
+            <mat-error *ngIf="!newRoleForm.get('org').value">Organization is <strong>required</strong></mat-error>
+          </div>
+          <div class="col-lg-12" *ngIf="isHidden.appField">
+            <mat-label class="ml-3 pl-1">Application</mat-label>
+            <ngx-select formControlName="app" placeholder="Application" [items]="orgList"
+              (select)="appSelected($event)"></ngx-select>
+            <mat-error *ngIf="!newRoleForm.get('app').value">Application is <strong>required</strong></mat-error>
+          </div>
+          <div class="col-lg-12">
+            <mat-label class="ml-3 pl-1">Role Name</mat-label>
+            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+              <input matInput placeholder="Role Name" autocomplete="off" oninput="this.value = this.value.toLowerCase()"
+                formControlName="roleName" minlength="3" maxlength="256" #roleNameInput (blur)="checkRoleName()"
+                (keypress)="alphabetOnly($event)" (ngModelChange)="updateEnsName($event)">
+              <mat-error *ngIf="">Role Name is <strong>required</strong></mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-12">
+            <mat-label class="ml-3 pl-1">ENS Name</mat-label>
+            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+              <input matInput placeholder="ENS Name" autocomplete="off" formControlName="ensName">
+              <span *ngIf="isCheckingEns">Loading for checking ENS Name here...</span>
+              <span>ENS Name is <strong>taken</strong></span>
+              <span>ENS Name is <strong>available</strong></span>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="card card-default mb-3 pb-0 shadow-none">
       <div class="row">
-        <div class="col-lg-12">
-          <mat-label class="ml-3 pl-1">Role Type</mat-label>
-          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-            <mat-select placeholder="Role Type" formControlName="roleType" (selectionChange)="roleTypeChanged($event)">
-              <mat-option *ngFor="let roleType of RoleTypes | keyvalue" [value]="roleType.key">{{ roleType.value }}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="">Role Type is <strong>required</strong></mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-lg-12" *ngIf="isHidden.orgField">
-          <mat-label class="ml-3 pl-1">Organization</mat-label>
-          <ngx-select formControlName="org" placeholder="Organization" [items]="orgList" (select)="orgSelected($event)"></ngx-select>
-          <mat-error *ngIf="!newRoleForm.get('org').value">Organization is <strong>required</strong></mat-error>
-        </div>
-        <div class="col-lg-12" *ngIf="isHidden.appField">
-          <mat-label class="ml-3 pl-1">Application</mat-label>
-          <ngx-select formControlName="app" placeholder="Application" [items]="orgList" (select)="appSelected($event)"></ngx-select>
-          <mat-error *ngIf="!newRoleForm.get('app').value">Application is <strong>required</strong></mat-error>
-        </div>
-        <div class="col-lg-12">
-          <mat-label class="ml-3 pl-1">Role Name</mat-label>
-          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-            <input matInput placeholder="Role Name" autocomplete="off" 
-              oninput="this.value = this.value.toLowerCase()" formControlName="roleName"
-              minlength="3" maxlength="256" #roleNameInput
-              (blur)="checkRoleName()" (keypress)="alphabetOnly($event)"
-              (ngModelChange)="updateEnsName($event)">
-            <mat-error *ngIf="">Role Name is <strong>required</strong></mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-lg-12">
-          <mat-label class="ml-3 pl-1">ENS Name</mat-label>
-          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-            <input matInput placeholder="ENS Name" autocomplete="off" formControlName="ensName">
-            <span *ngIf="isCheckingEns">Loading for checking ENS Name here...</span>
-            <span>ENS Name is <strong>taken</strong></span>
-            <span>ENS Name is <strong>available</strong></span>
-          </mat-form-field>
-        </div>
-
         <div class="col-lg-12 mt-3">
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="pl-3">Fields</span>
+            <span class="label color-white opacity-50 pl-3">Fields</span>
             <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0">Add field</button>
           </div>
-          <div class="card card-default mb-3 pb-0 shadow-none">
-            <!-- <table mat-table [dataSource]="dataSource">
- 
+          <div>
+            <table mat-table [dataSource]="dataSource">
+
               <ng-container matColumnDef="type">
                 <th mat-header-cell *matHeaderCellDef> Type </th>
                 <td mat-cell *matCellDef="let element" data-label="Type"> {{element.type}} </td>
@@ -77,21 +88,21 @@
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table> -->
+            </table>
             <!-- Shows when table is empty -->
-            <div class="d-flex justify-content-center align-items-center">
-              <div class="d-flex align-items-center no-record color-white">
-                <mat-icon class="mr-2 my-2">info</mat-icon>
-                <i>Empty</i>
-              </div>
-            </div>
+            <!-- <div class="d-flex justify-content-center align-items-center">
+                  <div class="d-flex align-items-center no-record color-white">
+                    <mat-icon class="mr-2 my-2">info</mat-icon>
+                    <i>Empty</i>
+                  </div>
+                </div> -->
 
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
             </mat-paginator>
           </div>
         </div>
       </div>
-    </form>
+    </div>
   </div>
 </div>
 <div mat-dialog-actions class="d-flex justify-content-between">

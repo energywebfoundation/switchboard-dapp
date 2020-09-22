@@ -8,13 +8,14 @@ import { NewRoleComponent } from './new-role/new-role.component';
 import { EnrolToRoleComponent } from './enrol-to-role/enrol-to-role.component';
 import { FormsModule } from '@angular/forms';
 import { NgxSelectModule } from 'ngx-select-ex';
+import { ViewRequestsComponent } from './view-requests/view-requests.component';
 
 const routes: Routes = [
   { path: '', component: EnrolmentComponent }
 ];
 
 @NgModule({
-  declarations: [EnrolmentComponent, NewRoleComponent, EnrolToRoleComponent],
+  declarations: [EnrolmentComponent, NewRoleComponent, EnrolToRoleComponent, ViewRequestsComponent],
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
@@ -31,6 +32,6 @@ const routes: Routes = [
     NgxSelectModule,
     MatInputModule
   ],
-  entryComponents: [NewRoleComponent],
+  entryComponents: [NewRoleComponent,ViewRequestsComponent],
 })
 export class EnrolmentModule { }
