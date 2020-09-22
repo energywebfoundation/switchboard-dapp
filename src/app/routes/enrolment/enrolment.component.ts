@@ -17,7 +17,8 @@ export class EnrolmentComponent implements OnInit {
   openNewRoleComponent(): void {
     const dialogRef = this.dialog.open(NewRoleComponent, {
       width: '560px',data:{},
-      maxWidth: '100%'
+      maxWidth: '100%',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
