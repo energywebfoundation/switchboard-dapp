@@ -21,6 +21,9 @@ export class LoadingService {
   }
 
   hide() {
-    this._isLoading.next(--this._counter);
+    if (--this._counter < 0) {
+      this._counter = 0;
+    }
+    this._isLoading.next(this._counter);
   }
 }

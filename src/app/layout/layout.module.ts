@@ -14,13 +14,15 @@ import { MatDialogModule } from '@angular/material';
 import {MatMenuModule} from '@angular/material/menu';
 import { DialogUser } from './header/dialog-user/dialog-user.component';
 import { LoadingComponent } from './loading/loading.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
     imports: [
         SharedModule,
         MatDialogModule,
         MatMenuModule,
-        QRCodeModule
+        QRCodeModule,
+        NgxSpinnerModule
     ],
     providers: [
         UserblockService

@@ -110,6 +110,6 @@ export class IamService {
    * Retreive User Details
    */
   get user() {
-    return JSON.parse(JSON.stringify(this._user));
+    return this._user ? JSON.parse(JSON.stringify(this._user)) : this._user;
   }
 }
