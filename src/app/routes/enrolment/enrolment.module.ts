@@ -6,13 +6,14 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { EnrolmentComponent } from './enrolment.component';
 import { NewRoleComponent } from './new-role/new-role.component';
 import { EnrolToRoleComponent } from './enrol-to-role/enrol-to-role.component';
+import { ViewRequestsComponent } from './view-requests/view-requests.component';
 
 const routes: Routes = [
   { path: '', component: EnrolmentComponent }
 ];
 
 @NgModule({
-  declarations: [EnrolmentComponent, NewRoleComponent, EnrolToRoleComponent],
+  declarations: [EnrolmentComponent, NewRoleComponent, EnrolToRoleComponent, ViewRequestsComponent],
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
@@ -24,6 +25,6 @@ const routes: Routes = [
     NgxSpinnerModule,
     MatDialogModule
   ],
-  entryComponents: [NewRoleComponent],
+  entryComponents: [NewRoleComponent,ViewRequestsComponent],
 })
 export class EnrolmentModule { }
