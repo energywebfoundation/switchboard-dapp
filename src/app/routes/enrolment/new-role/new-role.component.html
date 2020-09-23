@@ -5,9 +5,6 @@
 </h2>
 
 <div mat-dialog-content>
-  <div *ngIf="isLoading || isCheckingEns">
-    <mat-spinner></mat-spinner>
-  </div>
   <div class="mb-2 mt-4">
     <form role="form" [formGroup]="newRoleForm">
       <div class="card card-default mb-3 py-3 shadow-none">
@@ -15,8 +12,8 @@
           <div class="col-lg-12">
             <mat-label class="ml-3 pl-1">Role Type</mat-label>
             <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-              <mat-select placeholder="Role Type" formControlName="roleType"
-                (selectionChange)="roleTypeChanged($event)" required>
+              <mat-select placeholder="Role Type" formControlName="roleType" (selectionChange)="roleTypeChanged($event)"
+                required>
                 <mat-option *ngFor="let roleType of RoleTypes | keyvalue" [value]="roleType.key">{{ roleType.value }}
                 </mat-option>
               </mat-select>
@@ -29,11 +26,18 @@
               (select)="orgSelected($event)"></ngx-select>
             <mat-error *ngIf="!newRoleForm.get('org').value">Organization is <strong>required</strong></mat-error>
           </div>
-          <div class="col-lg-12" *ngIf="isHidden.appField">
+          <div class="col-lg-12 mt-4 mb-3 pb-1" *ngIf="isHidden.appField">
             <mat-label class="ml-3 pl-1">Application</mat-label>
             <ngx-select formControlName="app" placeholder="Application" [items]="orgList"
               (select)="appSelected($event)"></ngx-select>
             <mat-error *ngIf="!newRoleForm.get('app').value">Application is <strong>required</strong></mat-error>
+          </div>
+        </div>
+      </div>
+      <div class="card card-default mb-3 py-3 shadow-none">
+        <div class="row">
+          <div class="d-flex align-items-center center" *ngIf="isLoading || isCheckingEns">
+            <mat-spinner></mat-spinner>
           </div>
           <div class="col-lg-12">
             <mat-label class="ml-3 pl-1">Role Name</mat-label>
@@ -48,9 +52,10 @@
             <mat-label class="ml-3 pl-1">ENS Name</mat-label>
             <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
               <input matInput placeholder="ENS Name" autocomplete="off" formControlName="ensName">
-              <span *ngIf="isCheckingEns">Loading for checking ENS Name here...</span>
-              <span>ENS Name is <strong>taken</strong></span>
-              <span>ENS Name is <strong>available</strong></span>
+              <span formControlName="ensName"></span>
+              <mat-hint class="color-white" *ngIf="isCheckingEns">Loading for checking ENS Name here...</mat-hint>
+              <mat-error>ENS Name is <strong>taken</strong></mat-error>
+              <mat-hint class="color-white">ENS Name is <strong>available</strong></mat-hint>
             </mat-form-field>
           </div>
         </div>
@@ -58,20 +63,22 @@
     </form>
     <div class="card card-default mb-3 pb-0 shadow-none">
       <div class="row">
-        <div class="col-lg-12 mt-3">
+        <div class="col-lg-12 my-3">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="label color-white opacity-50 pl-3">Fields</span>
-            <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0" (click)="showAddFieldForm()">Add field</button>
+            <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0" (click)="showAddFieldForm()">Add
+              field</button>
           </div>
           <div>
             <form role="form" [formGroup]="fieldsForm">
-              <div class="card card-default mb-3 py-3 shadow-none" *ngIf="showFieldsForm">
+              <div class="mb-3 py-3" *ngIf="showFieldsForm">
                 <div class="row">
                   <div class="col-lg-12">
                     <mat-label class="ml-3 pl-1">Type</mat-label>
                     <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                       <mat-select placeholder="Type" formControlName="type" required>
-                        <mat-option *ngFor="let fieldType of FieldTypes" [value]="fieldType">{{ fieldType | uppercase }}</mat-option>
+                        <mat-option *ngFor="let fieldType of FieldTypes" [value]="fieldType">{{ fieldType | uppercase }}
+                        </mat-option>
                       </mat-select>
                       <mat-error>Type is <strong>required</strong></mat-error>
                     </mat-form-field>
@@ -79,76 +86,82 @@
                   <div class="col-lg-12">
                     <mat-label class="ml-3 pl-1">Label</mat-label>
                     <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                      <input matInput placeholder="Label" autocomplete="off" formControlName="label" maxlength="256" required>
+                      <input matInput placeholder="Label" autocomplete="off" formControlName="label" maxlength="256"
+                        required>
                       <mat-error>Label is <strong>required</strong></mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-12">
                     <mat-label class="ml-3 pl-1">Validation</mat-label>
                     <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                      <input matInput placeholder="Validation" autocomplete="off" formControlName="label" maxlength="256">
+                      <input matInput placeholder="Validation" autocomplete="off" formControlName="label"
+                        maxlength="256">
                     </mat-form-field>
                   </div>
                 </div>
-                <button type="button" (click)="cancelAddField()">Cancel</button>
-                <button type="submit" (click)="addField()" [disabled]="!fieldsForm.valid || !fieldsForm.dirty">Add</button>
+                <div class="d-flex justify-content-end">
+                <button mat-stroked-button class="btn-small mr-2" (click)="cancelAddField()">Cancel</button>
+                <button mat-raised-button class="btn btn-small btn btn-primary" type="submit" (click)="addField()"
+                  [disabled]="!fieldsForm.valid || !fieldsForm.dirty">Add</button>
+                </div>
               </div>
             </form>
-          <div>
-          <div>
-            <table mat-table [dataSource]="dataSource" *ngIf="dataSource?.data?.length">
+            <div>
+              <div>
+                <table mat-table [dataSource]="dataSource" *ngIf="dataSource?.data?.length">
 
-              <ng-container matColumnDef="type">
-                <th mat-header-cell *matHeaderCellDef> Type </th>
-                <td mat-cell *matCellDef="let element" data-label="Type"> {{element.type}} </td>
-              </ng-container>
+                  <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef> Type </th>
+                    <td mat-cell *matCellDef="let element" data-label="Type"> {{element.type}} </td>
+                  </ng-container>
 
-              <ng-container matColumnDef="label">
-                <th mat-header-cell *matHeaderCellDef> Label </th>
-                <td mat-cell *matCellDef="let element" data-label="Label"> {{element.label}} </td>
-              </ng-container>
+                  <ng-container matColumnDef="label">
+                    <th mat-header-cell *matHeaderCellDef> Label </th>
+                    <td mat-cell *matCellDef="let element" data-label="Label"> {{element.label}} </td>
+                  </ng-container>
 
-              <ng-container matColumnDef="validation">
-                <th mat-header-cell *matHeaderCellDef> Validation </th>
-                <td mat-cell *matCellDef="let element" data-label="Validation"> {{element.validation}} </td>
-              </ng-container>
+                  <ng-container matColumnDef="validation">
+                    <th mat-header-cell *matHeaderCellDef> Validation </th>
+                    <td mat-cell *matCellDef="let element" data-label="Validation"> {{element.validation}} </td>
+                  </ng-container>
 
-              <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef> Actions </th>
-                <td mat-cell *matCellDef="let element; let i = index; let last = last; let first = first;" data-label="">
-                  <button mat-icon-button matSuffix class="mat-primary" *ngIf="!first" (click)="moveUp(i)">
-                    <mat-icon>arrow_circle_up</mat-icon>
-                  </button>
-                  <button mat-icon-button matSuffix class="mat-primary" *ngIf="!last" (click)="moveDown(i)">
-                    <mat-icon>arrow_circle_down</mat-icon>
-                  </button>
-                  <button mat-icon-button matSuffix class="mat-primary" (click)="editField(i)">
-                    <mat-icon>edit</mat-icon>
-                  </button>
-                  <button mat-icon-button matSuffix class="mat-primary" (click)="deleteField(i)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </td>
-              </ng-container>
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef> Actions </th>
+                    <td mat-cell *matCellDef="let element; let i = index; let last = last; let first = first;"
+                      data-label="">
+                      <button mat-icon-button matSuffix class="mat-primary" *ngIf="!first" (click)="moveUp(i)">
+                        <mat-icon>arrow_circle_up</mat-icon>
+                      </button>
+                      <button mat-icon-button matSuffix class="mat-primary" *ngIf="!last" (click)="moveDown(i)">
+                        <mat-icon>arrow_circle_down</mat-icon>
+                      </button>
+                      <button mat-icon-button matSuffix class="mat-primary" (click)="editField(i)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-icon-button matSuffix class="mat-primary color-error" (click)="deleteField(i)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
 
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-            <!-- Shows when table is empty -->
-            <div class="d-flex justify-content-center align-items-center" *ngIf="!dataSource?.data?.length">
-              <div class="d-flex align-items-center no-record color-white">
-                <mat-icon class="mr-2 my-2">info</mat-icon>
-                <i>Empty</i>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <!-- Shows when table is empty -->
+                <div class="d-flex justify-content-center align-items-center mb-4" *ngIf="!dataSource?.data?.length">
+                  <div class="d-flex align-items-center no-record color-white">
+                    <mat-icon class="mr-2 my-2">info</mat-icon>
+                    <i>Empty</i>
+                  </div>
+                </div>
+                <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
+            </mat-paginator> -->
               </div>
             </div>
-            <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
-            </mat-paginator> -->
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<div mat-dialog-actions class="d-flex justify-content-between">
-  <button mat-raised-button class="btn btn-primary w-100" type="submit" (click)="save()">Create</button>
-</div>
+    <div mat-dialog-actions class="d-flex justify-content-between">
+      <button mat-raised-button class="btn btn-primary w-100" type="submit" (click)="save()">Create</button>
+    </div>
