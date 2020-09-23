@@ -24,6 +24,10 @@
     min-width: 100px !important;
 }
 
+.mat-raised-button[disabled] {
+    color: rgba(255, 255, 255, 0.3) !important;
+}
+
 .mat-stroked-button {
     border-color: #105ee8 !important;
     color: #105ee8 !important;
@@ -64,7 +68,7 @@
 
 .btn-small {
     line-height: 12px !important;
-    font-size: 14px;
+    font-size: 14px !important;
     height: 32px;
     min-height: 32px !important;
 }
