@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material';
 import { MatDialogRef } from '@angular/material/dialog';
 
 export const RoleType = {
@@ -15,9 +16,8 @@ export interface RolesFields {
   actions: string;
 }
 
-const FIELD_DATA: RolesFields[] = [
-  {type: 'Date', label: 'My Label', validation: 'maxLength:30', actions: ''},
-
+const FIELD_TYPES = [
+  'text', 'number', 'date', 'boolean'
 ];
 
 @Component({
@@ -28,7 +28,9 @@ const FIELD_DATA: RolesFields[] = [
 export class NewRoleComponent {
   @ViewChild('roleNameInput', {static: false}) roleNameInput: ElementRef;
 
+  // Main Form Data
   RoleTypes     = RoleType;
+  FieldTypes    = FIELD_TYPES;
   newRoleForm   : FormGroup;
   isSubmitting  = false;
   isCheckingEns = false;
@@ -40,11 +42,16 @@ export class NewRoleComponent {
     orgField: false
   };
 
+  // Field Form Data
+  fieldsForm      : FormGroup;
+  showFieldsForm  = false;
+  isEditFieldForm = false;
   displayedColumns: string[] = ['type', 'label', 'validation', 'actions'];
-  dataSource: RolesFields[] = FIELD_DATA;
+  dataSource = new MatTableDataSource([]);
 
   constructor(public dialogRef: MatDialogRef<NewRoleComponent>,
-      private fb: FormBuilder) {
+      private fb: FormBuilder,
+      private changeDetectorRef: ChangeDetectorRef) {
     this.newRoleForm = fb.group({
       roleType: [null, Validators.required],
       org: new FormControl({ value: null }),
@@ -63,6 +70,11 @@ export class NewRoleComponent {
       }
     });
     
+    this.fieldsForm = fb.group({
+      type: ['', Validators.required],
+      label: ['', Validators.required],
+      validation: ''
+    });
   }
 
   private enableRoleName() {
@@ -164,6 +176,51 @@ export class NewRoleComponent {
     return false;
   }
 
+  showAddFieldForm() {
+    if (this.isEditFieldForm) {
+      this.fieldsForm.reset();
+    }
+    this.isEditFieldForm = false;
+    this.showFieldsForm = true;
+  }
+
+  addField() {
+    if (this.fieldsForm.valid) {
+      this.dataSource.data = [...this.dataSource.data, this.fieldsForm.value];
+      this.fieldsForm.reset();
+      this.showFieldsForm = false;
+      this.changeDetectorRef.detectChanges();
+    }
+  }
+
+  moveUp(i: number) {
+    let list = this.dataSource.data;
+    let tmp = list[i - 1];
+    
+    // Switch
+    list[i - 1] = list[i];
+    list[i] = tmp;
+
+    this.dataSource.data = [...list];
+  }
+
+  moveDown(i: number) {
+    let list = this.dataSource.data;
+    let tmp = list[i + 1];
+    
+    // Switch
+    list[i + 1] = list[i];
+    list[i] = tmp;
+
+    this.dataSource.data = [...list];
+  }
+
+  cancelAddField() {
+    this.fieldsForm.reset();
+    this.isEditFieldForm = false;
+    this.showFieldsForm = false;
+  }
+
   save() {
     this.isLoading = true;
     let $tmpTimeout = setTimeout(() => {
@@ -172,9 +229,5 @@ export class NewRoleComponent {
       this.dialogRef.close(true);
       clearTimeout($tmpTimeout);
     }, 5000);
-  }
-
-  cancel() {
-    this.dialogRef.close(false);
   }
 }
