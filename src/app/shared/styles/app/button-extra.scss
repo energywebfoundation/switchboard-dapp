@@ -9,8 +9,7 @@
     transition: box-shadow .4s $btn-t-function, background-color .4s $btn-t-function, transform .4s $btn-t-function;
     &:hover,
     &:focus {
-      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
-      transform: translate3d(0, -1px, 0);
+        box-shadow: 0 8px 15px rgba(0,0,0,.2);
     }
     font-family: 'Rajdhani', sans-serif;
     text-transform: uppercase;
@@ -28,12 +27,11 @@
 .btn-connect {
     background-color: $white;
     color: #000;
-    box-shadow: 0 8px 20px 0 rgba(0,14,38,0.26);
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.3) !important;
     border-radius: 4px;
         &:hover {
-
-            background-color: $inverse;
-            color: $white;
+            color: #4199fc;
+            box-shadow: 0 8px 20px 0 #000 !important;
         }
         &:not(:disabled):not(.disabled):active:focus, :not(:disabled):not(.disabled).active:focus, .show > .dropdown-toggle:focus {
             background-color: $inverse;

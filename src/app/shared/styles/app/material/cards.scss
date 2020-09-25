@@ -253,7 +253,6 @@ ul {
       width: 400px;
       border: none !important;
       box-shadow: none !important;
-      border-radius: 0 !important;
       position: unset !important;
       padding-top: 20px !important;
       padding-bottom: 0 !important;
@@ -269,6 +268,8 @@ ul {
         -moz-backdrop-filter: blur(0px);
         -o-backdrop-filter: blur(0px);
         box-shadow: none;
+        border: none !important;
+        border-radius: 0 !important;
       }
 
     }

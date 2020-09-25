@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NewRoleComponent } from './new-role/new-role.component';
+import { ViewRoleComponent } from './view-role/view-role.component';
 import { ViewRequestsComponent } from './view-requests/view-requests.component';
 
 @Component({
@@ -16,7 +17,7 @@ export class EnrolmentComponent implements OnInit {
     myEnrollmentsColumns: string[] = ['roleType', 'namespace', 'metadata', 'actions'];
     dataSourceMyEn: MyEnrollments[] = MY_ENROLLMENTS_DATA;
 
-    roleGovernanceColumns: string[] = ['creationDate', 'roleType', 'roleName', 'ensName'];
+    roleGovernanceColumns: string[] = ['creationDate', 'roleType', 'roleName', 'ensName', 'actions'];
     dataSourceRoleGov: EnrollmentRoles[] = ROLE_DATA;
 
   constructor(public dialog: MatDialog) { }
@@ -37,6 +38,18 @@ export class EnrolmentComponent implements OnInit {
     const dialogRef = this.dialog.open(ViewRequestsComponent, {
       width: '600px',data:{},
       maxWidth: '100%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  openViewRoleComponent(): void {
+    const dialogRef = this.dialog.open(ViewRoleComponent, {
+      width: '600px',data:{},
+      maxWidth: '100%'
+
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -81,12 +94,13 @@ export interface EnrollmentRoles {
   roleType: string;
   roleName: string;
   ensName: string;
+  actions: string;
 }
 
 const ROLE_DATA: EnrollmentRoles[] = [
-  {creationDate: '01/28/2020', roleType: 'Custom Role', roleName: 'Device Owner', ensName: 'device.roles.switchboard.ewc'},
-  {creationDate: '02/01/2020', roleType: 'Custom Role', roleName: 'Trader', ensName: 'trader.roles.switchboard.ewc'},
-  {creationDate: '03/16/2020', roleType: 'Custome Role', roleName: 'Admin', ensName: 'admin.roles.switchboard.ewc'},
+  {creationDate: '01/28/2020', roleType: 'Custom Role', roleName: 'Device Owner', ensName: 'device.roles.switchboard.ewc', actions: ''},
+  {creationDate: '02/01/2020', roleType: 'Custom Role', roleName: 'Trader', ensName: 'trader.roles.switchboard.ewc', actions: ''},
+  {creationDate: '03/16/2020', roleType: 'Custome Role', roleName: 'Admin', ensName: 'admin.roles.switchboard.ewc', actions: ''},
 
 ];
 
