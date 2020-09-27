@@ -2,12 +2,28 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@an
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+import { IamService } from 'src/app/shared/services/iam.service';
 
 export const RoleType = {
-  ORG: 'Organization',
-  APP: 'Application',
-  CUSTOM: 'Custom'
+  ORG: 'ORG',
+  APP: 'APP',
+  CUSTOM: 'CUSTOM'
 };
+
+const RoleTypeList = [{
+    label: 'Organization',
+    value: RoleType.ORG
+  },
+  {
+    label: 'Application',
+    value: RoleType.APP
+  },
+  {
+    label: 'Custom',
+    value: RoleType.CUSTOM
+  }
+];
 
 export interface RolesFields {
   type: string;
@@ -29,17 +45,23 @@ export class NewRoleComponent {
   @ViewChild('roleNameInput', {static: false}) roleNameInput: ElementRef;
 
   // Main Form Data
-  RoleTypes     = RoleType;
+  RoleTypeList  = RoleTypeList;
   FieldTypes    = FIELD_TYPES;
   newRoleForm   : FormGroup;
   isSubmitting  = false;
   isCheckingEns = false;
   isLoading     = false;
-  orgList       = [];
-  appList       = [];
+  appList       = ['Item 1', 'Item 2', 'Item 3'];
   isHidden      = {
+    orgFieldCancelBtn: true,
+    roleName: true,
+    fields: true
+  };
+  isDisabled    = {
+    roleType: false,
+    orgField: false,
     appField: false,
-    orgField: false
+    roleName: false
   };
 
   // Field Form Data
@@ -51,7 +73,9 @@ export class NewRoleComponent {
 
   constructor(public dialogRef: MatDialogRef<NewRoleComponent>,
       private fb: FormBuilder,
-      private changeDetectorRef: ChangeDetectorRef) {
+      private changeDetectorRef: ChangeDetectorRef,
+      private iamService: IamService,
+      private toastr: ToastrService) {
     this.newRoleForm = fb.group({
       roleType: [null, Validators.required],
       org: new FormControl({ value: null }),
@@ -77,65 +101,121 @@ export class NewRoleComponent {
     });
   }
 
-  private enableRoleName() {
-    this.newRoleForm.get('roleName').enable();
-    this.roleNameInput.nativeElement.focus();
+  confirmRoleType() {
+    this.newRoleForm.get('roleType').disable();
+    this.isDisabled.roleType = true;
   }
 
-  private disableRoleName() {
+  cancelRoleType() {
+    this.newRoleForm.get('roleType').enable();
+    this.isDisabled.roleType = false;
+    this.newRoleForm.get('org').reset();
+  }
+
+  async confirmOrg() {
+    // check if org exists and if user is owner of the org
+    let exists = true;
+    // let exists = await this.iamService.iam.checkExistenceOfDomain({
+    //   domain: this.newRoleForm.get('org').value
+    // });
+
+    try {
+      if (exists) {
+        let isOwner = true
+        // let isOwner = await this.iamService.iam.isOwner({
+        //   domain: this.newRoleForm.get('org').value
+        // });
+
+        if (isOwner) {
+          let roleType = this.newRoleForm.get('roleType').value;
+          if (roleType === RoleType.CUSTOM || 
+              (roleType === RoleType.ORG && this.isHidden.roleName) || 
+              roleType === RoleType.APP && !this.newRoleForm.get('app').disabled) {
+            this.isHidden.orgFieldCancelBtn = false;
+          }
+          this.newRoleForm.get('org').disable();
+          this.isDisabled.orgField = true;
+
+          if (roleType === RoleType.ORG) {
+            this.isHidden.roleName = false;
+          }
+        }
+        else {
+          this.toastr.error('You do not have permission to this namespace.');
+        }
+      }
+      else {
+        this.toastr.error('Organization namespace does not exist.');
+      }
+    }
+    catch (e) {
+      console.error(e);
+      this.toastr.error('Please contact system administrator.', 'System Error');
+    }
+  }
+
+  cancelOrg() {
+    this.newRoleForm.get('org').enable();
+    this.isDisabled.orgField = false;
+    this.isHidden.orgFieldCancelBtn = true;
+
+    if (this.newRoleForm.get('roleType').value === RoleType.ORG) {
+      this.isHidden.roleName = true;
+
+      // Reset ENS Name Fields
+      this.newRoleForm.get('roleName').reset();
+      this.newRoleForm.get('ensName').reset();
+    }
+    else {
+      // Reset App Field
+      this.newRoleForm.get('app').reset();
+    }
+  }
+
+  confirmApp() {
+    this.newRoleForm.get('app').disable();
+    this.isDisabled.appField = true;
+    this.isHidden.roleName = false;
+    this.isHidden.orgFieldCancelBtn = true;
+  }
+
+  cancelApp() {
+    this.newRoleForm.get('app').enable();
+    this.isDisabled.appField = false;
+    this.isHidden.roleName = true;
+    this.isHidden.orgFieldCancelBtn = false;
+    
+    // Reset ENS Name Fields
     this.newRoleForm.get('roleName').reset();
     this.newRoleForm.get('ensName').reset();
+  }
+
+  confirmRoleName() {
     this.newRoleForm.get('roleName').disable();
+    this.isDisabled.roleName = true;
+    this.isHidden.fields = false;
+
+    this.isHidden.orgFieldCancelBtn = true;
+  }
+
+  cancelRoleName() {
+    this.newRoleForm.get('roleName').enable();
+    this.isDisabled.roleName = false;
+    this.isHidden.fields = true;
+    this.isHidden.orgFieldCancelBtn = true;
+
+    let roleType = this.newRoleForm.get('roleType').value;
+    if (roleType === RoleType.ORG) {
+      this.isHidden.orgFieldCancelBtn = false;
+    }
   }
 
   roleTypeChanged(data: any) {
-    // Reset values
-    this.isHidden.orgField = false;
-    this.isHidden.appField = false;
     this.newRoleForm.patchValue({
       org: null,
-      app: null
+      app: null,
+      roleName: null
     });
-
-    if (['ORG', 'APP'].indexOf(data.value) >= 0) {
-      // Reset Org List
-      this.orgList.length = 0;
-      this.orgList.push('Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan','B','The Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria','Burkina Faso','Burundi','C','Cabo Verde','Cambodia','Cameroon','Canada','Central African Republic','Chad','Chile','China','Colombia','Comoros','Congo, Democratic Republic of the','Congo, Republic of the','Costa Rica','Côte d’Ivoire','Croatia','Cuba','Cyprus','Czech Republic','D','Denmark','Djibouti','Dominica','Dominican Republic','E','East Timor (Timor-Leste)','Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Eswatini','Ethiopia','F','Fiji','Finland','France','G','Gabon','The Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea','Guinea-Bissau','Guyana','H','Haiti','Honduras','Hungary','I','Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel','Italy','J','Jamaica','Japan','Jordan','K','Kazakhstan','Kenya','Kiribati','Korea, North','Korea, South','Kosovo','Kuwait','Kyrgyzstan','L','Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania','Luxembourg','M','Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia, Federated States of','Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar (Burma)','N','Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Macedonia','Norway','O','Oman','P','Pakistan','Palau','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal','Q','Qatar','R','Romania','Russia','Rwanda','S','Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Samoa','San Marino','Sao Tome and Principe','Saudi Arabia','Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa','Spain','Sri Lanka','Sudan','Sudan, South','Suriname','Sweden','Switzerland','Syria','T','Taiwan','Tajikistan','Tanzania','Thailand','Togo','Tonga','Trinidad and Tobago','Tunisia','Turkey','Turkmenistan','Tuvalu','U','Uganda','Ukraine','United Arab Emirates','United Kingdom','United States','Uruguay','Uzbekistan','V','Vanuatu','Vatican City','Venezuela','Vietnam','Y','Yemen','Z','Zambia','Zimbabwe');
-
-      // Show organization field
-      this.isHidden.orgField = true;
-      
-      // Disable Role Name
-      this.disableRoleName();
-    }
-    else {
-      // Enable Role Name
-      this.enableRoleName();
-    }
-  }
-
-  orgSelected(event: any) {
-    let roleType = this.newRoleForm.get('roleType').value;
-
-    // Disable Role Name
-      this.disableRoleName();
-
-    if (roleType === 'APP') {
-      // Reset App Value
-      this.newRoleForm.get('app').reset();
-
-      // Show application field
-      this.isHidden.appField = true;
-    }
-    else if ((roleType === 'ORG' && this.newRoleForm.get('org').value.trim()) || roleType === 'CUSTOM') {
-      // Enable Role Name
-      this.enableRoleName();
-    }
-  }
-
-  appSelected() {
-    // Enable Role Name
-    this.enableRoleName();
   }
 
   checkRoleName() {
@@ -154,7 +234,6 @@ export class NewRoleComponent {
       // Enable Back
       this.isCheckingEns = true;
       let $tmpTimeout = setTimeout(() => {
-        this.enableRoleName();
         this.isCheckingEns = false;
         clearTimeout($tmpTimeout);
       }, 5000);
@@ -162,14 +241,29 @@ export class NewRoleComponent {
   }
 
   updateEnsName(event: any) {
-    this.newRoleForm.get('ensName').setValue(this.newRoleForm.get('roleName').value + '.iam.ewc');
+    let data = this.newRoleForm.getRawValue();
+    let ensName = data.roleName + '.';
+
+    switch (data.roleType) {
+      case RoleType.ORG:
+        ensName += data.org;
+        break;
+      case RoleType.APP:
+        ensName += data.app;
+        break;
+      case RoleType.CUSTOM:
+        ensName += 'roles.iam.ewc';
+        break;
+    }
+
+    this.newRoleForm.get('ensName').setValue(ensName);
   }
 
-  alphabetOnly(event: any): boolean {
+  alphabetOnly(event: any, includePoint?: boolean): boolean {
     let charCode = (event.which) ? event.which : event.keyCode;
     
     // 96 = a, 122 = z
-    if ((charCode > 96 && charCode < 123) || (charCode === 46 && this.newRoleForm.get('roleType').value === 'CUSTOM')) {
+    if ((charCode > 96 && charCode < 123) || (charCode === 46 && (this.newRoleForm.get('roleType').value === 'CUSTOM' || includePoint))) {
       return true;
     }
 

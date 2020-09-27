@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { ToasterModule } from 'angular2-toaster/angular2-toaster';
 
 import {
     MatAutocompleteModule,
@@ -88,7 +87,6 @@ import { JAllowByDirective } from './directives/j-allow-by.directive';
         TooltipModule.forRoot(),
         PopoverModule.forRoot(),
         TypeaheadModule.forRoot(),
-        ToasterModule,
         // Material Modules
         MatAutocompleteModule,
         MatButtonModule,
@@ -153,7 +151,6 @@ import { JAllowByDirective } from './directives/j-allow-by.directive';
         TooltipModule,
         PopoverModule,
         TypeaheadModule,
-        ToasterModule,
         ScrollableDirective,
         JAllowByDirective,
         // Material Modules

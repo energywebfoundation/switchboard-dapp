@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material';
 import { ChartsModule } from '@progress/kendo-angular-charts';
 import 'hammerjs';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { ToastrModule } from 'ngx-toastr';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -31,6 +32,7 @@ export function createTranslateLoader(http: HttpClient) {
         LayoutModule,
         NgxMaterialTimepickerModule,
         SharedModule.forRoot(),
+        ToastrModule.forRoot(),
         RoutesModule,
         TranslateModule.forRoot({
             loader: {
