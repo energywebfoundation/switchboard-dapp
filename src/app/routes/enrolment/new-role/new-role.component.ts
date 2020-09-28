@@ -50,8 +50,9 @@ export class NewRoleComponent {
   newRoleForm   : FormGroup;
   isSubmitting  = false;
   isCheckingEns = false;
+  isEnsNameValid= undefined;
   isLoading     = false;
-  appList       = ['Item 1', 'Item 2', 'Item 3'];
+  appList       = [];
   isHidden      = {
     orgFieldCancelBtn: true,
     roleName: true,
@@ -112,6 +113,26 @@ export class NewRoleComponent {
     this.newRoleForm.get('org').reset();
   }
 
+  private async getAppList() {
+    try {
+      // retrieve the list of apps under this namespace
+      let appList = await this.iamService.iam.getSubdomains({
+        domain: this.newRoleForm.get('org').value
+      });
+
+      if (appList && appList.length) {
+        this.appList = appList;
+      }
+      else {
+        this.toastr.error('Application list is empty.');
+      }
+    }
+    catch (e) {
+      console.error(e);
+      this.toastr.error('Please contact system administrator.', 'System Error');
+    }
+  }
+
   async confirmOrg() {
     this.isLoading = true;
 
@@ -122,27 +143,33 @@ export class NewRoleComponent {
       });
 
       if (exists) {
-        let isOwner = true
-        // let isOwner = await this.iamService.iam.isOwner({
-        //   domain: this.newRoleForm.get('org').value
-        // });
+        // check if user is owner of the org namespace
+        let isOwner = await this.iamService.iam.isOwner({
+          domain: this.newRoleForm.get('org').value
+        });
 
         if (isOwner) {
           let roleType = this.newRoleForm.get('roleType').value;
           if (roleType === RoleType.CUSTOM || 
               (roleType === RoleType.ORG && this.isHidden.roleName) || 
               roleType === RoleType.APP && !this.newRoleForm.get('app').disabled) {
+            // hide org field's cancel button
             this.isHidden.orgFieldCancelBtn = false;
           }
           this.newRoleForm.get('org').disable();
           this.isDisabled.orgField = true;
 
           if (roleType === RoleType.ORG) {
+            // display role name if role type is Organization instead of the Application field
             this.isHidden.roleName = false;
+          }
+          else if (roleType === RoleType.APP) {
+            // retrieve the list of apps under this namespace
+            this.getAppList();
           }
         }
         else {
-          this.toastr.error('You do not have permission to this namespace.');
+          this.toastr.error('You are not an owner of this organization.');
         }
       }
       else {
@@ -188,18 +215,42 @@ export class NewRoleComponent {
     this.isDisabled.appField = false;
     this.isHidden.roleName = true;
     this.isHidden.orgFieldCancelBtn = false;
+    this.appList.length = 0;
     
     // Reset ENS Name Fields
     this.newRoleForm.get('roleName').reset();
     this.newRoleForm.get('ensName').reset();
   }
 
-  confirmRoleName() {
-    this.newRoleForm.get('roleName').disable();
-    this.isDisabled.roleName = true;
-    this.isHidden.fields = false;
+  async confirmRoleName() {
+    this.isLoading = true;
 
-    this.isHidden.orgFieldCancelBtn = true;
+    try {
+      // check if role exists
+      let exists = await this.iamService.iam.checkExistenceOfDomain({
+        domain: this.newRoleForm.get('roleName').value
+      });
+
+      if (!exists) {
+        this.newRoleForm.get('roleName').disable();
+        this.isDisabled.roleName = true;
+        this.isHidden.fields = false;
+    
+        this.isHidden.orgFieldCancelBtn = true;
+        this.isEnsNameValid = true;
+      }
+      else {
+        this.isEnsNameValid = false;
+        this.toastr.error('This role name is taken.');
+      }
+    }
+    catch (e) {
+      console.error(e);
+      this.toastr.error('Please contact system administrator.', 'System Error');
+    }
+    finally {
+      this.isLoading = false;
+    }
   }
 
   cancelRoleName() {
@@ -207,6 +258,7 @@ export class NewRoleComponent {
     this.isDisabled.roleName = false;
     this.isHidden.fields = true;
     this.isHidden.orgFieldCancelBtn = true;
+    this.isEnsNameValid = undefined;
 
     let roleType = this.newRoleForm.get('roleType').value;
     if (roleType === RoleType.ORG) {
@@ -260,7 +312,7 @@ export class NewRoleComponent {
         break;
     }
 
-    this.newRoleForm.get('ensName').setValue(ensName);
+    this.newRoleForm.get('ensName').setValue(data.roleName ? ensName : '');
   }
 
   alphabetOnly(event: any, includePoint?: boolean): boolean {

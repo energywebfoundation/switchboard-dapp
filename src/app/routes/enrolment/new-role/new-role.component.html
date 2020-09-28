@@ -6,6 +6,9 @@
 
 <div mat-dialog-content>
   <div class="mb-2 mt-4">
+    <div class="d-flex align-items-center center" *ngIf="isLoading || isCheckingEns">
+      <mat-spinner></mat-spinner>
+    </div>
     <form role="form" [formGroup]="newRoleForm">
       <div class="card card-default mb-3 py-3 shadow-none" *ngIf="isDisabled.roleType">
         <div class="card card-default text-left p-0 shadow-none d-flex flex-row">
@@ -92,9 +95,6 @@
       <!-- START: Role Name -->
       <div class="card card-default mb-3 py-3 shadow-none" *ngIf="!isHidden.roleName">
         <div class="row">
-          <div class="d-flex align-items-center center" *ngIf="isLoading || isCheckingEns">
-            <mat-spinner></mat-spinner>
-          </div>
           <div class="col-lg-12">
             <mat-label class="ml-3 pl-1">Role Name</mat-label>
             <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
@@ -116,14 +116,19 @@
 
             <div class="label color-white ml-1 pl-3 pb-2">ENS Name</div>
             <div class="card-result display-flex justify-content-between flex-row">
-              <span class="color-white mb-0">ENS Name</span>
+              <span class="color-white mb-0">{{ newRoleForm.get('ensName').value}}&nbsp;</span>
               <span *ngIf="isCheckingEns">Loading for checking ENS Name here...</span>
-              <!-- <mat-icon class="color-error">block</mat-icon> -->
-              <mat-icon class="color-primary">check</mat-icon>
+              <ng-container *ngIf="newRoleForm.get('ensName').value"> 
+                <mat-icon class="color-error" *ngIf="isEnsNameValid === false">block</mat-icon>
+                <mat-icon class="color-primary" *ngIf="isEnsNameValid === true">check</mat-icon>
+              </ng-container>
             </div>
             <div class="ml-1 pl-3">
-              <!-- <mat-hint class="small color-error">ENS Name is taken</mat-hint> -->
-              <mat-hint class="small opacity-50 color-white">ENS Name is available</mat-hint>
+              <ng-container *ngIf="newRoleForm.get('ensName').value">
+                <mat-hint class="small color-error" *ngIf="isEnsNameValid === false">ENS Name is taken.</mat-hint>
+                <mat-hint class="small opacity-50 color-white" *ngIf="isEnsNameValid === true">ENS Name is available.</mat-hint>
+              </ng-container>
+              <mat-hint class="small" *ngIf="!newRoleForm.get('ensName').value">&nbsp;</mat-hint>
             </div>
 
             <div class="d-flex justify-content-end mb-2">
