@@ -53,7 +53,7 @@ export class IamService {
   async setupUser() {
     const signer = this._iam.getSigner();
     const account = await signer.getAddress();
-    // this._didDocument = await this._iam.getDidDocument();
+    this._didDocument = await this._iam.getDidDocument();
 
     // Retrieve account address
     if (account) {

@@ -113,13 +113,14 @@ export class NewRoleComponent {
   }
 
   async confirmOrg() {
-    // check if org exists and if user is owner of the org
-    let exists = true;
-    // let exists = await this.iamService.iam.checkExistenceOfDomain({
-    //   domain: this.newRoleForm.get('org').value
-    // });
+    this.isLoading = true;
 
     try {
+      // check if org exists and if user is owner of the org
+      let exists = await this.iamService.iam.checkExistenceOfDomain({
+        domain: this.newRoleForm.get('org').value
+      });
+
       if (exists) {
         let isOwner = true
         // let isOwner = await this.iamService.iam.isOwner({
@@ -151,6 +152,9 @@ export class NewRoleComponent {
     catch (e) {
       console.error(e);
       this.toastr.error('Please contact system administrator.', 'System Error');
+    }
+    finally {
+      this.isLoading = false;
     }
   }
 

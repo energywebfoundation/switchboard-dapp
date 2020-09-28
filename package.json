@@ -56,7 +56,6 @@
     "core-js": "2.5.4",
     "easy-pie-chart": "2.1.7",
     "enhanced-resolve": "3.3.0",
-    "ethers": "^4.0.44",
     "flot": "themicon/flot",
     "fullcalendar": "3.9.0",
     "hammerjs": "^2.0.0",
@@ -111,7 +110,6 @@
     "uuidv4": "^6.0.2",
     "weather-icons": "github:erikflowers/weather-icons",
     "web-animations-js": "2.2.1",
-    "web3": "1.0.0-beta.37",
     "zone.js": "0.9.1"
   },
   "devDependencies": {
