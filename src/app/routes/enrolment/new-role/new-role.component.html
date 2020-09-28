@@ -8,7 +8,13 @@
   <div class="mb-2 mt-4">
     <form role="form" [formGroup]="newRoleForm">
       <div class="card card-default mb-3 py-3 shadow-none" *ngIf="isDisabled.roleType">
-        <div>Role Type: {{ newRoleForm.getRawValue().roleType }}</div>
+        <div class="card card-default text-left p-0 shadow-none d-flex flex-row">
+          <!-- <img src="#" class="img-thumbnail rounded-circle mr-2" width="52" height="52"> -->
+          <div class="d-flex flex-column">
+          <div class="label color-white opacity-50 text-truncate-middle ">Role Type</div>
+          <h4 class="color-white mb-0">{{ newRoleForm.getRawValue().roleType }}</h4>
+          </div>
+        </div>
       </div>
 
       <!-- START: Role Type -->
@@ -24,46 +30,60 @@
               </mat-select>
               <mat-error *ngIf="">Role Type is <strong>required</strong></mat-error>
             </mat-form-field>
-          </div>
-          <div class="d-flex justify-content-between">
-            <button mat-raised-button *ngIf="!isDisabled.roleType" class="btn btn-primary w-100" type="submit" (click)="confirmRoleType()" [disabled]="!newRoleForm.get('roleType').value">Confirm</button>
-            <button mat-raised-button *ngIf="isDisabled.roleType && !isDisabled.orgField" class="btn btn-primary w-100" type="submit" (click)="cancelRoleType()">Cancel</button>
+            <div class="d-flex justify-content-end mb-2">
+              <button mat-stroked-button *ngIf="isDisabled.roleType && !isDisabled.orgField" class="btn btn-small"
+                type="submit" (click)="cancelRoleType()">Cancel</button>
+              <button mat-raised-button *ngIf="!isDisabled.roleType" class="btn btn-small btn-primary" type="submit"
+                (click)="confirmRoleType()" [disabled]="!newRoleForm.get('roleType').value">Confirm</button>
+            </div>
           </div>
         </div>
       </div>
       <!-- END: Role Type -->
 
       <!-- START: Organization -->
-      <div class="card card-default mb-3 py-3 shadow-none" *ngIf="isDisabled.roleType">
-        <div class="row">
-          <div class="col-lg-12">
-            <mat-label class="ml-3 pl-1">Organization</mat-label>
-            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-              <input matInput type="text" maxlength="256" required formControlName="org" placeholder="Organization" autocomplete="off" 
-              oninput="this.value = this.value.toLowerCase()" (keypress)="alphabetOnly($event, true)"/>
-              <mat-error *ngIf="!newRoleForm.get('org').value">Organization is <strong>required</strong></mat-error>
-            </mat-form-field>
-            <span>Make sure that you are the owner of this organization namespace.</span>
-          </div>
-          <div class="d-flex justify-content-between">
-            <button mat-raised-button *ngIf="!isDisabled.orgField" class="btn btn-primary w-100" type="submit" (click)="confirmOrg()" [disabled]="!newRoleForm.get('org').value">Confirm</button>
-            <button mat-raised-button *ngIf="!isHidden.orgFieldCancelBtn" class="btn btn-primary w-100" type="submit" (click)="cancelOrg()">Cancel</button>
+      <ng-container *ngIf="isDisabled.roleType">
+        <div class="card-hint mb-3 py-3  px-4 text-left justify-content-start align-items-center">
+          <mat-icon class="pt-1">notifications_none</mat-icon>
+          Make sure that you are the owner of this organization namespace.
+        </div>
+        <div class="card card-default mb-3 py-3 shadow-none">
+          <div class="row">
+            <div class="col-lg-12">
+              <mat-label class="ml-3 pl-1">Organization</mat-label>
+              <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                <input matInput type="text" maxlength="256" required formControlName="org" placeholder="Organization"
+                  autocomplete="off" oninput="this.value = this.value.toLowerCase()"
+                  (keypress)="alphabetOnly($event, true)" />
+                <mat-error *ngIf="!newRoleForm.get('org').value">Organization is <strong>required</strong></mat-error>
+              </mat-form-field>
+              <div class="d-flex justify-content-end mb-2">
+                <button mat-stroked-button *ngIf="!isHidden.orgFieldCancelBtn" class="btn btn-small" type="submit"
+                  (click)="cancelOrg()">Cancel</button>
+                <button mat-raised-button *ngIf="!isDisabled.orgField" class="btn btn-small btn-primary" type="submit"
+                  (click)="confirmOrg()" [disabled]="!newRoleForm.get('org').value">Confirm</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </ng-container>
       <!-- END: Organization -->
 
       <!-- START: Application -->
-      <div class="card card-default mb-3 py-3 shadow-none" *ngIf="isDisabled.orgField && newRoleForm.getRawValue().roleType === 'APP'">
+      <div class="card card-default mb-3 py-3 shadow-none"
+        *ngIf="isDisabled.orgField && newRoleForm.getRawValue().roleType === 'APP'">
         <div class="row">
-          <div class="col-lg-12 mt-4 mb-3 pb-1" >
+          <div class="col-lg-12 mt-4 mb-3 pb-1">
             <mat-label class="ml-3 pl-1">Application</mat-label>
             <ngx-select formControlName="app" placeholder="Application" [items]="appList"></ngx-select>
             <mat-error *ngIf="!newRoleForm.get('app').value">Application is <strong>required</strong></mat-error>
-          </div>
-          <div class="d-flex justify-content-between">
-            <button mat-raised-button *ngIf="!isDisabled.appField" class="btn btn-primary w-100" type="submit" (click)="confirmApp()" [disabled]="!newRoleForm.get('app').value">Confirm</button>
-            <button mat-raised-button *ngIf="isDisabled.appField && isHidden.fields" class="btn btn-primary w-100" type="submit" (click)="cancelApp()">Cancel</button>
+
+            <div class="d-flex justify-content-end mb-2">
+              <button mat-stroked-button *ngIf="isDisabled.appField && isHidden.fields" class="btn btn-small"
+                type="submit" (click)="cancelApp()">Cancel</button>
+              <button mat-raised-button *ngIf="!isDisabled.appField" class="btn btn-small btn-primary" type="submit"
+                (click)="confirmApp()" [disabled]="!newRoleForm.get('app').value">Confirm</button>
+            </div>
           </div>
         </div>
       </div>
@@ -85,18 +105,33 @@
             </mat-form-field>
           </div>
           <div class="col-lg-12">
-            <mat-label class="ml-3 pl-1">ENS Name</mat-label>
+            <!-- <mat-label class="ml-3 pl-1">ENS Name</mat-label>
             <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
               <input matInput placeholder="ENS Name" autocomplete="off" formControlName="ensName">
               <span formControlName="ensName"></span>
               <mat-hint class="color-white" *ngIf="isCheckingEns">Loading for checking ENS Name here...</mat-hint>
               <mat-error>ENS Name is <strong>taken</strong></mat-error>
               <mat-hint class="color-white">ENS Name is <strong>available</strong></mat-hint>
-            </mat-form-field>
-          </div>
-          <div class="d-flex justify-content-between">
-            <button mat-raised-button *ngIf="!isDisabled.roleName" class="btn btn-primary w-100" type="submit" (click)="confirmRoleName()" [disabled]="!newRoleForm.get('roleName').value">Confirm</button>
-            <button mat-raised-button *ngIf="isDisabled.roleName" class="btn btn-primary w-100" type="submit" (click)="cancelRoleName()">Cancel</button>
+            </mat-form-field> -->
+
+            <div class="label color-white ml-1 pl-3 pb-2">ENS Name</div>
+            <div class="card-result display-flex justify-content-between flex-row">
+              <span class="color-white mb-0">ENS Name</span>
+              <span *ngIf="isCheckingEns">Loading for checking ENS Name here...</span>
+              <!-- <mat-icon class="color-error">block</mat-icon> -->
+              <mat-icon class="color-primary">check</mat-icon>
+            </div>
+            <div class="ml-1 pl-3">
+              <!-- <mat-hint class="small color-error">ENS Name is taken</mat-hint> -->
+              <mat-hint class="small opacity-50 color-white">ENS Name is available</mat-hint>
+            </div>
+
+            <div class="d-flex justify-content-end mb-2">
+              <button mat-stroked-button *ngIf="isDisabled.roleName" class="btn btn-small" type="submit"
+                (click)="cancelRoleName()">Cancel</button>
+              <button mat-raised-button *ngIf="!isDisabled.roleName" class="btn btn-small btn-primary" type="submit"
+                (click)="confirmRoleName()" [disabled]="!newRoleForm.get('roleName').value">Confirm</button>
+            </div>
           </div>
         </div>
       </div>
@@ -107,7 +142,9 @@
         <div class="col-lg-12 mb-2">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="label color-white opacity-50 pl-3">Fields</span>
-            <button mat-icon-button (click)="showAddFieldForm()" matTooltip="Add field" ><mat-icon class="btn-color-primary">add</mat-icon></button>
+            <button mat-icon-button (click)="showAddFieldForm()" matTooltip="Add field">
+              <mat-icon class="btn-color-primary">add</mat-icon>
+            </button>
           </div>
           <div>
             <form role="form" [formGroup]="fieldsForm">
@@ -139,10 +176,10 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <div class="d-flex justify-content-end">
-                <button mat-stroked-button class="btn-small mr-2" (click)="cancelAddField()">Cancel</button>
-                <button mat-raised-button class="btn btn-small btn btn-primary" type="submit" (click)="addField()"
-                  [disabled]="!fieldsForm.valid || !fieldsForm.dirty">Add</button>
+                <div class="d-flex justify-content-end mb-2">
+                  <button mat-stroked-button class="btn-small ml-2" (click)="cancelAddField()">Cancel</button>
+                  <button mat-raised-button class="btn btn-small btn btn-primary" type="submit" (click)="addField()"
+                    [disabled]="!fieldsForm.valid || !fieldsForm.dirty">Add</button>
                 </div>
               </div>
             </form>
@@ -178,7 +215,8 @@
                       <button mat-icon-button matSuffix class="mat-primary" matTooltip="Edit" (click)="editField(i)">
                         <mat-icon class="btn-color-primary">edit</mat-icon>
                       </button>
-                      <button mat-icon-button matSuffix class="mat-primary color-error" matTooltip="Delete" (click)="deleteField(i)">
+                      <button mat-icon-button matSuffix class="mat-primary color-error" matTooltip="Delete"
+                        (click)="deleteField(i)">
                         <mat-icon>delete</mat-icon>
                       </button>
                     </td>
@@ -203,5 +241,6 @@
       </div>
     </div>
     <div mat-dialog-actions class="d-flex justify-content-between">
-      <button mat-raised-button class="btn btn-primary w-100" type="submit" (click)="save()" [disabled]="newRoleForm.invalid || !isDisabled.roleName">Create</button>
+      <button mat-raised-button class="btn btn-primary w-100" type="submit" (click)="save()"
+        [disabled]="newRoleForm.invalid || !isDisabled.roleName">Create</button>
     </div>
