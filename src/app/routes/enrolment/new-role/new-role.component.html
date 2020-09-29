@@ -10,16 +10,6 @@
       <mat-spinner></mat-spinner>
     </div>
     <form role="form" [formGroup]="newRoleForm">
-      <div class="card card-default mb-3 py-3 shadow-none" *ngIf="isDisabled.roleType">
-        <div class="card card-default text-left p-0 shadow-none d-flex flex-row">
-          <!-- <img src="#" class="img-thumbnail rounded-circle mr-2" width="52" height="52"> -->
-          <div class="d-flex flex-column">
-          <div class="label color-white opacity-50 text-truncate-middle ">Role Type</div>
-          <h4 class="color-white mb-0">{{ newRoleForm.getRawValue().roleType }}</h4>
-          </div>
-        </div>
-      </div>
-
       <!-- START: Role Type -->
       <div class="card card-default mb-3 py-3 shadow-none">
         <div class="row">
@@ -45,7 +35,7 @@
       <!-- END: Role Type -->
 
       <!-- START: Organization -->
-      <ng-container *ngIf="isDisabled.roleType">
+      <ng-container *ngIf="isDisabled.roleType && newRoleForm.get('roleType').value !== 'CUSTOM'">
         <div class="card-hint mb-3 py-3  px-4 text-left justify-content-start align-items-center">
           <mat-icon class="pt-1">notifications_none</mat-icon>
           Make sure that you are the owner of this organization namespace.
@@ -78,10 +68,10 @@
         <div class="row">
           <div class="col-lg-12 mt-4 mb-3 pb-1">
             <mat-label class="ml-3 pl-1">Application</mat-label>
-            <ngx-select formControlName="app" placeholder="Application" [items]="appList"></ngx-select>
+            <ngx-select formControlName="app" placeholder="Application" [items]="appList.items"></ngx-select>
             <mat-error *ngIf="!newRoleForm.get('app').value">Application is <strong>required</strong></mat-error>
 
-            <div class="d-flex justify-content-end mb-2">
+            <div class="d-flex justify-content-end mb-2" [ngClass]="{ 'mt-4': newRoleForm.get('app').value }">
               <button mat-stroked-button *ngIf="isDisabled.appField && isHidden.fields" class="btn btn-small"
                 type="submit" (click)="cancelApp()">Cancel</button>
               <button mat-raised-button *ngIf="!isDisabled.appField" class="btn btn-small btn-primary" type="submit"
@@ -107,7 +97,7 @@
           <div class="col-lg-12">
             <div class="label color-white ml-1 pl-3 pb-2">ENS Name</div>
             <div class="card-result display-flex justify-content-between flex-row">
-              <span class="color-white mb-0">{{ newRoleForm.get('roleName').value + newRoleForm.get('ensName').value}}&nbsp;</span>
+              <span class="color-white mb-0">{{ tmpEnsName }}&nbsp;</span>
               <span *ngIf="isCheckingEns">Loading for checking ENS Name here...</span>
               <ng-container *ngIf="newRoleForm.get('ensName').value"> 
                 <mat-icon class="color-error" *ngIf="isEnsNameValid === false">block</mat-icon>
@@ -122,7 +112,7 @@
               <mat-hint class="small" *ngIf="!newRoleForm.get('ensName').value">&nbsp;</mat-hint>
             </div>
 
-            <div class="d-flex justify-content-end mb-2">
+            <div class="d-flex justify-content-end mb-2" [ngClass]="{ 'mt-4': isEnsNameValid === undefined }">
               <button mat-stroked-button *ngIf="isDisabled.roleName" class="btn btn-small" type="submit"
                 (click)="cancelRoleName()">Cancel</button>
               <button mat-raised-button *ngIf="!isDisabled.roleName" class="btn btn-small btn-primary" type="submit"
@@ -162,8 +152,13 @@
           </ng-container>
           <div class="col-lg-12">
             <div class="label color-white ml-1 pl-3 pb-2">Issuer DID List</div>
-            <div class="card-result display-flex justify-content-between flex-row" *ngFor="let did of issuerList">
-              <span class="color-white mb-0">{{ did }}</span>
+            <div class="card-result display-flex justify-content-between flex-row" *ngFor="let did of issuerList; let i = index">
+              <span class="color-white mb-0">
+                {{ did }}
+                <button mat-icon-button matSuffix class="mat-primary color-error" matTooltip="Remove" *ngIf="issuerList.length > 1" (click)="removeDid(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </span>
             </div>
           </div>
         </div>
@@ -274,6 +269,6 @@
       </div>
     </div>
     <div mat-dialog-actions class="d-flex justify-content-between">
-      <button mat-raised-button class="btn btn-primary w-100" type="submit" (click)="save()"
-        >Create</button>
+      <!-- <button type="submit" (click)="createApp()">Create App</button> -->
+      <button mat-raised-button class="btn btn-primary w-100" type="submit" (click)="save()" [disabled]="newRoleForm.invalid || !isDisabled.roleName || isLoading">Create</button>
     </div>
