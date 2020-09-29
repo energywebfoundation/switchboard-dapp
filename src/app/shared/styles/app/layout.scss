@@ -88,6 +88,13 @@ body {
             overflow: auto;
         }
     }
+
+    ul.menu-top {
+        img {
+            display: none;
+        }
+    }
+
     // Contains the main content
     .section-container {
         position: relative;
@@ -215,6 +222,10 @@ body {
         .aside-container {
             margin-left: -$aside-wd;
         }
+
+        .section-container {
+            margin-bottom: 95px;
+        }
     }
     .aside-toggled {
         .wrapper {
@@ -227,6 +238,32 @@ body {
                 margin-left: 0;
             }
         }
+    }
+
+    ul.menu-top {
+        background-color: rgb(21 17 31 / 95%);
+        padding: 15px 0;
+        position: fixed;
+        bottom: 0;
+        display: flex !important;
+        width: 100%;
+        justify-content: center;
+
+       li.nav-item {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+
+        img {
+            display: initial;
+        }
+
+        h6 {
+            font-size: 10px !important; 
+        }
+       }
     }
 
     .csstransforms3d {
@@ -581,6 +618,36 @@ _:-ms-lang(x),
         align-items: center;
         z-index: 3;
         margin: 20px 0 0 0;
+
+        .register-logo {
+            height: 15% !important;
+        }
+    }
+
+    ul.menu-top {
+        background-color: rgb(21 17 31 / 95%);
+        padding: 15px 0;
+        position: fixed;
+        bottom: 0;
+        display: flex !important;
+        width: 100%;
+        justify-content: center;
+
+       li.nav-item {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+
+        img {
+            display: initial;
+        }
+
+        h6 {
+            font-size: 10px !important; 
+        }
+       }
     }
 }
 
@@ -595,19 +662,13 @@ _:-ms-lang(x),
         z-index: 3;
         margin: 10px 0;
 
+        .register-logo {
+            height: 15% !important;
+        }
+
         img {
             height: 52px;
             width: auto;
-        }
-    }
-}
-
-@media (max-width: 470px) { 
-    .position-brand {
-        // display: none;
-
-        img {
-            // display: none;
         }
     }
 }

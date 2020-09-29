@@ -135,6 +135,10 @@ ul {
     }
   }
 
+  .height-log {
+    height: auto;
+  }
+
   .card-default {
     background-color: #242230 !important;
     border-top-width: 0 !important; 
@@ -251,7 +255,6 @@ ul {
     .card-register {
       height: 150px;
       width: 400px;
-      border: none !important;
       box-shadow: none !important;
       position: unset !important;
       padding-top: 20px !important;
@@ -275,7 +278,8 @@ ul {
     }
 
     .height-log {
-      height: 75px !important;
+      height: 100% !important;
+      margin-top: 30%;
     }
 
     .activation-label {
@@ -306,15 +310,10 @@ ul {
     border: 1px solid #3c3b4d;
   }
 
-  .height-log {
-    height: 160px;
-  }
-
   @media (max-width: 320px){
     .card-register {
       width: 360px;
       border: none !important;
-      box-shadow: none !important;
       border-radius: 0 !important;
       padding-top: 20px !important;
       padding-bottom: 0 !important;
@@ -336,6 +335,7 @@ ul {
     }
 
     .height-log {
-      height: 25px !important;
+      height: 100% !important;
+      margin-top: 30%;
     }
   }
