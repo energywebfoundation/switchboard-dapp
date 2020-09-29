@@ -48,6 +48,7 @@ export class NewRoleComponent {
   RoleTypeList  = RoleTypeList;
   FieldTypes    = FIELD_TYPES;
   newRoleForm   : FormGroup;
+  issuerGroup   : FormGroup;
   isSubmitting  = false;
   isCheckingEns = false;
   isEnsNameValid= undefined;
@@ -64,6 +65,11 @@ export class NewRoleComponent {
     appField: false,
     roleName: false
   };
+  issuerList    : [string];
+  IssuerType    = {
+    DID: 'DID',
+    Role: 'Role'
+  };
 
   // Field Form Data
   fieldsForm      : FormGroup;
@@ -77,6 +83,9 @@ export class NewRoleComponent {
       private changeDetectorRef: ChangeDetectorRef,
       private iamService: IamService,
       private toastr: ToastrService) {
+    
+    this.issuerList = [this.iamService.iam.getDid()];
+
     this.newRoleForm = fb.group({
       roleType: [null, Validators.required],
       org: new FormControl({ value: null }),
@@ -88,17 +97,20 @@ export class NewRoleComponent {
         Validators.maxLength(256)
       ])],
       ensName: new FormControl({ value: '', disabled: true}),
-      version: null,
-      issuer: {
-        issuerType: null,
-        did: null
-      }
+      version: '1.0.0',
+      issuer: fb.group({
+        issuerType: new FormControl({ value: undefined })
+      })
     });
     
     this.fieldsForm = fb.group({
       type: ['', Validators.required],
       label: ['', Validators.required],
       validation: ''
+    });
+
+    this.issuerGroup = fb.group({
+      newIssuer: ['', Validators.required]
     });
   }
 
@@ -298,7 +310,7 @@ export class NewRoleComponent {
 
   updateEnsName(event: any) {
     let data = this.newRoleForm.getRawValue();
-    let ensName = data.roleName + '.';
+    let ensName = '.roles.';
 
     switch (data.roleType) {
       case RoleType.ORG:
@@ -308,7 +320,7 @@ export class NewRoleComponent {
         ensName += data.app;
         break;
       case RoleType.CUSTOM:
-        ensName += 'roles.iam.ewc';
+        ensName += 'iam.ewc';
         break;
     }
 
@@ -324,6 +336,14 @@ export class NewRoleComponent {
     }
 
     return false;
+  }
+
+  issuerTypeChanged(data: any) {
+
+  }
+
+  addDid() {
+    this.issuerList.push(this.issuerGroup.get('newIssuer').value);
   }
 
   showAddFieldForm() {
@@ -371,13 +391,26 @@ export class NewRoleComponent {
     this.showFieldsForm = false;
   }
 
-  save() {
+  async save() {
     this.isLoading = true;
-    let $tmpTimeout = setTimeout(() => {
-      this.isLoading = false;
+    let data = this.newRoleForm.getRawValue();
+    data.issuer.did = this.issuerList;
 
+    try {
+      await this.iamService.iam.createRole({
+        roleName: data.roleName,
+        namespace: data.ensName,
+        data: JSON.stringify(data)
+      });
+      this.toastr.success('role is saved');
       this.dialogRef.close(true);
-      clearTimeout($tmpTimeout);
-    }, 5000);
+    }
+    catch (e) {
+      console.log(e);
+      this.toastr.error("Error saving data.")
+    }
+    finally{
+      this.isLoading = false;
+    }
   }
 }
