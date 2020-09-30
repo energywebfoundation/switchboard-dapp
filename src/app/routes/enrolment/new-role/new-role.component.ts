@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatTableDataSource } from '@angular/material';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 
@@ -51,9 +52,7 @@ export class NewRoleComponent {
   newRoleForm   : FormGroup;
   issuerGroup   : FormGroup;
   isSubmitting  = false;
-  isCheckingEns = false;
   isEnsNameValid= undefined;
-  isLoading     = false;
   tmpEnsName    = '';
   appList       = {
      items : [] 
@@ -86,8 +85,9 @@ export class NewRoleComponent {
       private fb: FormBuilder,
       private changeDetectorRef: ChangeDetectorRef,
       private iamService: IamService,
-      private toastr: ToastrService) {
-    
+      private toastr: ToastrService,
+      private spinner: NgxSpinnerService) {
+        
     this.issuerList = [this.iamService.iam.getDid()];
 
     this.newRoleForm = fb.group({
@@ -164,7 +164,7 @@ export class NewRoleComponent {
   }
 
   async confirmOrg() {
-    this.isLoading = true;
+    this.loading(true);
 
     try {
       // check if org exists and if user is owner of the org
@@ -212,7 +212,7 @@ export class NewRoleComponent {
       this.toastr.error('Please contact system administrator.', 'System Error');
     }
     finally {
-      this.isLoading = false;
+      this.loading(false);
     }
   }
 
@@ -254,7 +254,7 @@ export class NewRoleComponent {
   }
 
   async confirmRoleName() {
-    this.isLoading = true;
+    this.loading(true);
 
     try {
       // check if role exists
@@ -280,7 +280,7 @@ export class NewRoleComponent {
       this.toastr.error('Please contact system administrator.', 'System Error');
     }
     finally {
-      this.isLoading = false;
+      this.loading(false);
     }
   }
 
@@ -305,25 +305,12 @@ export class NewRoleComponent {
     });
   }
 
-  checkRoleName() {
-    let roleName: string = this.newRoleForm.get('roleName').value.trim();
-
-    if (roleName && roleName.length >= 3) {
-      if (roleName.charAt(roleName.length - 1) === '.') {
-        roleName = roleName.substr(0, roleName.length - 1);
-        this.newRoleForm.get('roleName').setValue(roleName);
-      }
-
-      // Temporarily disable role name input field to give way to checking the role
-      this.newRoleForm.get('roleName').disable();
-
-
-      // Enable Back
-      this.isCheckingEns = true;
-      let $tmpTimeout = setTimeout(() => {
-        this.isCheckingEns = false;
-        clearTimeout($tmpTimeout);
-      }, 5000);
+  private loading(show: boolean) {
+    if (show) {
+      this.spinner.show();
+    }
+    else {
+      this.spinner.hide();
     }
   }
 
@@ -440,7 +427,7 @@ export class NewRoleComponent {
   }
 
   async save() {
-    this.isLoading = true;
+    this.loading(true);
     this.toastr.info("Please make sure to confirm (3) transactions in Metamask.");
     let data = this.newRoleForm.getRawValue();
     data.issuer.did = this.issuerList;
@@ -459,12 +446,12 @@ export class NewRoleComponent {
       this.toastr.error("Error saving data.")
     }
     finally{
-      this.isLoading = false;
+      this.loading(false);
     }
   }
 
   async createApp() {
-    this.isLoading = true;
+    this.loading(true);
     try {
       await this.iamService.iam.createRole({
         roleName: 'monstax',
@@ -480,7 +467,7 @@ export class NewRoleComponent {
       this.toastr.error("Error saving data.")
     }
     finally{
-      this.isLoading = false;
+      this.loading(false);
     }
   }
 }
