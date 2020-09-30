@@ -57,6 +57,16 @@ mat-datetimepicker-content {
     margin: 0 !important;
 }
 
+@include media-breakpoint-down(sm) {
+    .mat-dialog-container {
+        height: 100vh !important;
+    }
+
+    .mat-dialog-content {
+        max-height: 90vh !important;
+    }
+}
+
 .cdk-overlay-dark-backdrop {
     background: rgba(22, 26, 58, 0.88) !important;
 }

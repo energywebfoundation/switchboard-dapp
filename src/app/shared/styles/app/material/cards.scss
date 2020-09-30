@@ -304,6 +304,11 @@ ul {
     flex-direction: column;
     border-radius: 5px;
     border: 1px solid #3c3b4d;
+
+    .break-word {
+      word-wrap: break-word !important; 
+      width: 85%;
+    }
   }
 
   .height-log {
