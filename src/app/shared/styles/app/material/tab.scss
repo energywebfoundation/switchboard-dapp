@@ -70,3 +70,17 @@
     text-align: center;
 
 }
+
+@include media-breakpoint-down(sm) {
+    .mat-tab-label {
+        height: 34px !important;
+        letter-spacing: 0.5px;
+        font-size: 12px;
+        text-transform: capitalize;
+        padding: 0 12px !important;
+    }
+
+    .mat-tab-labels {
+        display: inline-flex !important;
+    }
+}
