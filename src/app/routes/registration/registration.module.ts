@@ -15,6 +15,7 @@ import { RegisterComponent, SignInQr } from './register/register.component';
 import { RegistrationService } from './registration.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { GoverningBodyComponent } from './governing-body/governing-body.component';
+import { RequestClaimComponent } from './request-claim/request-claim.component';
 // import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 /* Use this routes definition in case you want to make them lazy-loaded */
@@ -51,7 +52,8 @@ const routes: Routes = [
         TsoComponent,
         RegisterComponent,
         GoverningBodyComponent,
-        SignInQr
+        SignInQr,
+        RequestClaimComponent
     ],
     entryComponents: [SignInQr],
     providers: [RegistrationService],
