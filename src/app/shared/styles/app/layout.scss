@@ -375,6 +375,12 @@ body {
         }
     }
 
+    .bg-register {
+        background-position: right bottom !important;
+        background-size: auto 140px !important;
+        bottom: 83px !important;
+    }
+
 
     .csstransforms3d {
 
@@ -616,7 +622,8 @@ _:-ms-lang(x),
     height: auto;
     width: 100%;
     position: relative;
-    bottom: 90px;
+    bottom: 65px;
+
 }
 
 .welcome-footer {

@@ -47,7 +47,7 @@ mat-datetimepicker-content {
 
 .mat-dialog-title {
     color: #FFFFFF !important;
-    padding: 15px 24px 15px 24px;
+    padding: 10px 24px 10px 24px;
     border-bottom: 1px solid #363546 !important;
     font-weight: 600;
 }
@@ -55,6 +55,16 @@ mat-datetimepicker-content {
 .mat-dialog-content {
     padding: 0 24px !important;
     margin: 0 !important;
+}
+
+@include media-breakpoint-down(sm) {
+    .mat-dialog-container {
+        height: 100vh !important;
+    }
+
+    .mat-dialog-content {
+        max-height: 90vh !important;
+    }
 }
 
 .cdk-overlay-dark-backdrop {

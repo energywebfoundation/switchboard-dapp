@@ -257,3 +257,56 @@ fieldset[disabled] .mda-radio input+em:before {
     font-size: 14px !important;
   }
 }
+
+// ngx-select 
+
+.ngx-select__toggle, .form-control {
+  margin-top: 8px;
+  font-family: 'Source Sans Pro', sans-serif;
+  background-color: #1c1826 !important;
+  color: #FFFFFF !important;
+  height: 53px;
+  line-height: 35px !important;
+  font-size: 16px;
+  border: 1px solid #52436e !important;
+  border-radius: 4px;
+  text-transform: none;
+  font-weight: 400; 
+
+  .dropdown-toggle {
+    margin-right: 7px;
+  }
+}
+
+.ngx-select__choices {
+  background: #343242 !important;
+}
+
+.ngx-select__item {
+  color: #FFF !important;
+  font-size: 16px !important;
+  line-height: 3rem !important;
+
+  &:hover {
+    background: #383746 !important;
+  }
+
+}
+
+.ngx-select__item:nth-child(odd) {
+  background: #383746 !important;
+}
+
+.ngx-select__item_active {
+  background: #2db3b3;
+}
+
+.dropdown-menu {
+  border-color: transparent !important;
+}
+
+.ngx-select__toggle:hover {
+  cursor: pointer;
+  background-color: #1c1826 !important;
+  transform: none !important;
+}

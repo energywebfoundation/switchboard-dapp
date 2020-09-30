@@ -275,7 +275,7 @@ tr.mat-row {
 .mat-dialog-title {
     color: #bcb1e0;
     border-bottom: 1px solid #272237;
-}
+} 
 
 .mat-dialog-container .mat-icon-button {
     color: #726690;
@@ -288,6 +288,15 @@ tr.mat-row {
 /* ========================================================================
    Input fields
  ========================================================================== */
+
+.mat-form-field, .mat-select {
+    font-family: 'Source Sans Pro', sans-serif !important;
+  }
+
+.mat-option-text {
+    font-size: 14px;
+}
+
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
     background: rgba(56, 47, 86, 0.5);
@@ -309,6 +318,7 @@ tr.mat-row {
 .mat-stroked-button {
     border-color: #33CBCB !important;
     color: #33CBCB !important;
+    text-transform: uppercase;
 
     &:hover {
         border-color: #33CBCB !important;

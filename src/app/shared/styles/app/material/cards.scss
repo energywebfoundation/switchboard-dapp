@@ -253,7 +253,6 @@ ul {
       width: 400px;
       border: none !important;
       box-shadow: none !important;
-      border-radius: 0 !important;
       position: unset !important;
       padding-top: 20px !important;
       padding-bottom: 0 !important;
@@ -269,6 +268,8 @@ ul {
         -moz-backdrop-filter: blur(0px);
         -o-backdrop-filter: blur(0px);
         box-shadow: none;
+        border: none !important;
+        border-radius: 0 !important;
       }
 
     }
@@ -279,6 +280,34 @@ ul {
 
     .activation-label {
       display: none !important;
+    }
+  }
+
+  .card-hint {
+    border: 1px solid rgb(239 225 181 / 0.2);
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    background-color: rgb(81 78 81 / 0.2);
+    border-radius: 5px;
+    font-size: 12px;
+    color: #fff2c1;
+
+    .mat-icon {
+      font-size: 16px;
+    }
+  }
+
+  .card-result {
+    padding: 14px 18px 13px 18px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    border: 1px solid #3c3b4d;
+
+    .break-word {
+      word-wrap: break-word !important; 
+      width: 85%;
     }
   }
 

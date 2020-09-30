@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { Router } from '@angular/router';
+import { IamService, LoginType } from 'src/app/shared/services/iam.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,12 +10,52 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
   public accountAddress = "";
+  private loginStatus = undefined;
 
-  constructor(private iamService: IamService, private route: Router) { }
+  constructor(private iamService: IamService, 
+    private route: Router,
+    private activeRoute: ActivatedRoute,
+    private loadingService: LoadingService) { 
+      this.loginStatus = this.iamService.getLoginStatus();
+      if (this.loginStatus === LoginType.LOCAL) {
+        this.loadingService.show();
+      }
+      
+  }
 
   ngOnInit() {
     console.log('accountAddress', this.iamService.user);
-    this.accountAddress = this.iamService.user['accountAddress'];
+
+    this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
+      let returnUrl = undefined;
+
+      // Check Login
+      if (this.loginStatus) {
+        console.log(this.loginStatus);
+        if (this.loginStatus === LoginType.LOCAL) {
+          await this.iamService.login();
+        }
+
+        // Setup User Data
+        await this.iamService.setupUser();
+        this.accountAddress = this.iamService.user['accountAddress'];
+
+        // Check if returnUrl is available or just redirect to dashboard
+        if (queryParams && queryParams.returnUrl) {
+          returnUrl = queryParams.returnUrl;
+        }
+      }
+      else {
+        // Redirect to login screen if user  is not yet logged-in
+        returnUrl = '/welcome';
+      }
+      
+      // Redirect to actual screen
+      this.loadingService.hide();
+      if (returnUrl) {
+        this.route.navigateByUrl(returnUrl);
+      }
+    });
   }
 
   goToEnrolment() {
