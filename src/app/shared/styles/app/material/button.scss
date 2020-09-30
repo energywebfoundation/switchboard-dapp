@@ -73,12 +73,11 @@
     min-height: 32px !important;
 }
 
-@media (max-width: 800px) { 
-    // .profile-wrapper {
-    //     position: initial;
-    //     margin-left: 5px;
-    //     margin-right: 20px;
-    // } 
+.mat-icon-button.icon-btn-small {
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+    line-height: 24px;
 }
 
 .cursor-pointer {

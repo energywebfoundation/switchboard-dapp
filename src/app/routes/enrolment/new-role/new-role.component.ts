@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@an
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialogRef } from '@angular/material/dialog';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 
@@ -48,10 +50,13 @@ export class NewRoleComponent {
   RoleTypeList  = RoleTypeList;
   FieldTypes    = FIELD_TYPES;
   newRoleForm   : FormGroup;
+  issuerGroup   : FormGroup;
   isSubmitting  = false;
-  isCheckingEns = false;
-  isLoading     = false;
-  appList       = ['Item 1', 'Item 2', 'Item 3'];
+  isEnsNameValid= undefined;
+  tmpEnsName    = '';
+  appList       = {
+     items : [] 
+  };
   isHidden      = {
     orgFieldCancelBtn: true,
     roleName: true,
@@ -62,6 +67,11 @@ export class NewRoleComponent {
     orgField: false,
     appField: false,
     roleName: false
+  };
+  issuerList    : [string];
+  IssuerType    = {
+    DID: 'DID',
+    Role: 'Role'
   };
 
   // Field Form Data
@@ -75,7 +85,11 @@ export class NewRoleComponent {
       private fb: FormBuilder,
       private changeDetectorRef: ChangeDetectorRef,
       private iamService: IamService,
-      private toastr: ToastrService) {
+      private toastr: ToastrService,
+      private spinner: NgxSpinnerService) {
+        
+    this.issuerList = [this.iamService.iam.getDid()];
+
     this.newRoleForm = fb.group({
       roleType: [null, Validators.required],
       org: new FormControl({ value: null }),
@@ -87,11 +101,10 @@ export class NewRoleComponent {
         Validators.maxLength(256)
       ])],
       ensName: new FormControl({ value: '', disabled: true}),
-      version: null,
-      issuer: {
-        issuerType: null,
-        did: null
-      }
+      version: '1.0.0',
+      issuer: fb.group({
+        issuerType: new FormControl({ value: undefined })
+      })
     });
     
     this.fieldsForm = fb.group({
@@ -99,21 +112,59 @@ export class NewRoleComponent {
       label: ['', Validators.required],
       validation: ''
     });
+
+    this.issuerGroup = fb.group({
+      newIssuer: ['', Validators.required]
+    });
   }
 
   confirmRoleType() {
     this.newRoleForm.get('roleType').disable();
     this.isDisabled.roleType = true;
+
+    if (this.newRoleForm.get('roleType').value === RoleType.CUSTOM) {
+      // Display Rolename
+      this.isHidden.roleName = false;
+    }
   }
 
   cancelRoleType() {
     this.newRoleForm.get('roleType').enable();
     this.isDisabled.roleType = false;
     this.newRoleForm.get('org').reset();
+    
+    if (this.newRoleForm.get('roleType').value === RoleType.CUSTOM) {
+      // Hide Rolename
+      this.isHidden.roleName = true;
+    }
+  }
+
+  private async getAppList() {
+    try {
+      // retrieve the list of apps under this namespace
+      console.log('retrieve the list of apps under this namespace', 'apps.' + this.newRoleForm.get('org').value);
+      let appList = await this.iamService.iam.getSubdomains({
+        domain: 'apps.' + this.newRoleForm.get('org').value
+      });
+
+      // reset
+      this.appList.items.length = 0;
+      if (appList && appList.length) {
+        console.log('appList', appList);
+        this.appList.items.push(...appList);
+      }
+      else {
+        this.toastr.error('Application list is empty.');
+      }
+    }
+    catch (e) {
+      console.error(e);
+      this.toastr.error('Please contact system administrator.', 'System Error');
+    }
   }
 
   async confirmOrg() {
-    this.isLoading = true;
+    this.loading(true);
 
     try {
       // check if org exists and if user is owner of the org
@@ -122,27 +173,34 @@ export class NewRoleComponent {
       });
 
       if (exists) {
-        let isOwner = true
-        // let isOwner = await this.iamService.iam.isOwner({
-        //   domain: this.newRoleForm.get('org').value
-        // });
+        // check if user is owner of the org namespace
+        let isOwner = await this.iamService.iam.isOwner({
+          domain: this.newRoleForm.get('org').value
+        });
 
         if (isOwner) {
           let roleType = this.newRoleForm.get('roleType').value;
+          
+          if (roleType === RoleType.APP) {
+            // retrieve the list of apps under this namespace
+            await this.getAppList();
+          }
+          else if (roleType) {
+            // display role name if role type is Organization instead of the Application field
+            this.isHidden.roleName = false;
+          }
+
           if (roleType === RoleType.CUSTOM || 
               (roleType === RoleType.ORG && this.isHidden.roleName) || 
               roleType === RoleType.APP && !this.newRoleForm.get('app').disabled) {
+            // hide org field's cancel button
             this.isHidden.orgFieldCancelBtn = false;
           }
           this.newRoleForm.get('org').disable();
           this.isDisabled.orgField = true;
-
-          if (roleType === RoleType.ORG) {
-            this.isHidden.roleName = false;
-          }
         }
         else {
-          this.toastr.error('You do not have permission to this namespace.');
+          this.toastr.error('You are not an owner of this organization.');
         }
       }
       else {
@@ -154,7 +212,7 @@ export class NewRoleComponent {
       this.toastr.error('Please contact system administrator.', 'System Error');
     }
     finally {
-      this.isLoading = false;
+      this.loading(false);
     }
   }
 
@@ -188,18 +246,42 @@ export class NewRoleComponent {
     this.isDisabled.appField = false;
     this.isHidden.roleName = true;
     this.isHidden.orgFieldCancelBtn = false;
+    this.appList.items.length = 0;
     
     // Reset ENS Name Fields
     this.newRoleForm.get('roleName').reset();
     this.newRoleForm.get('ensName').reset();
   }
 
-  confirmRoleName() {
-    this.newRoleForm.get('roleName').disable();
-    this.isDisabled.roleName = true;
-    this.isHidden.fields = false;
+  async confirmRoleName() {
+    this.loading(true);
 
-    this.isHidden.orgFieldCancelBtn = true;
+    try {
+      // check if role exists
+      let exists = await this.iamService.iam.checkExistenceOfDomain({
+        domain: this.tmpEnsName
+      });
+
+      if (!exists) {
+        this.newRoleForm.get('roleName').disable();
+        this.isDisabled.roleName = true;
+        this.isHidden.fields = false;
+    
+        this.isHidden.orgFieldCancelBtn = true;
+        this.isEnsNameValid = true;
+      }
+      else {
+        this.isEnsNameValid = false;
+        this.toastr.error('This role name is taken.');
+      }
+    }
+    catch (e) {
+      console.error(e);
+      this.toastr.error('Please contact system administrator.', 'System Error');
+    }
+    finally {
+      this.loading(false);
+    }
   }
 
   cancelRoleName() {
@@ -207,6 +289,7 @@ export class NewRoleComponent {
     this.isDisabled.roleName = false;
     this.isHidden.fields = true;
     this.isHidden.orgFieldCancelBtn = true;
+    this.isEnsNameValid = undefined;
 
     let roleType = this.newRoleForm.get('roleType').value;
     if (roleType === RoleType.ORG) {
@@ -222,45 +305,37 @@ export class NewRoleComponent {
     });
   }
 
-  checkRoleName() {
-    let roleName: string = this.newRoleForm.get('roleName').value.trim();
-
-    if (roleName && roleName.length >= 3) {
-      if (roleName.charAt(roleName.length - 1) === '.') {
-        roleName = roleName.substr(0, roleName.length - 1);
-        this.newRoleForm.get('roleName').setValue(roleName);
-      }
-
-      // Temporarily disable role name input field to give way to checking the role
-      this.newRoleForm.get('roleName').disable();
-
-
-      // Enable Back
-      this.isCheckingEns = true;
-      let $tmpTimeout = setTimeout(() => {
-        this.isCheckingEns = false;
-        clearTimeout($tmpTimeout);
-      }, 5000);
+  private loading(show: boolean) {
+    if (show) {
+      this.spinner.show();
+    }
+    else {
+      this.spinner.hide();
     }
   }
 
   updateEnsName(event: any) {
     let data = this.newRoleForm.getRawValue();
-    let ensName = data.roleName + '.';
+    let ensName = 'roles.';
 
     switch (data.roleType) {
       case RoleType.ORG:
         ensName += data.org;
         break;
       case RoleType.APP:
-        ensName += data.app;
+        ensName += data.app + '.apps.' + data.org;
         break;
       case RoleType.CUSTOM:
-        ensName += 'roles.iam.ewc';
+        ensName += 'iam.ewc';
         break;
     }
 
-    this.newRoleForm.get('ensName').setValue(ensName);
+    this.tmpEnsName = '';
+    if (data.roleName) {
+      this.tmpEnsName = data.roleName + '.' + ensName;
+    }
+
+    this.newRoleForm.get('ensName').setValue(data.roleName ? ensName : '');
   }
 
   alphabetOnly(event: any, includePoint?: boolean): boolean {
@@ -272,6 +347,38 @@ export class NewRoleComponent {
     }
 
     return false;
+  }
+
+  issuerTypeChanged(data: any) {
+
+  }
+
+  addDid() {
+    let newIssuerDid = this.issuerGroup.get('newIssuer').value;
+
+    // Check if duplicate
+    let exists = false;
+    for (let i = 0; i < this.issuerList.length; i++) {
+      if (this.issuerList[i] === newIssuerDid) {
+        exists = true;
+        break;
+      }
+    }
+
+    if (!exists) {
+      this.issuerList.push(newIssuerDid);
+      this.issuerGroup.get('newIssuer').reset();
+    }
+    else {
+      this.toastr.error('Item exists.', 'Issuer DID');
+    }
+  }
+
+  removeDid(i: number) {
+    // Make sure that [0] Default DID can never be removed
+    if (this.issuerList.length > 1) {
+      this.issuerList.splice(i, 1);
+    }
   }
 
   showAddFieldForm() {
@@ -319,13 +426,48 @@ export class NewRoleComponent {
     this.showFieldsForm = false;
   }
 
-  save() {
-    this.isLoading = true;
-    let $tmpTimeout = setTimeout(() => {
-      this.isLoading = false;
+  async save() {
+    this.loading(true);
+    this.toastr.info("Please make sure to confirm (3) transactions in Metamask.");
+    let data = this.newRoleForm.getRawValue();
+    data.issuer.did = this.issuerList;
 
+    try {
+      await this.iamService.iam.createRole({
+        roleName: data.roleName,
+        namespace: data.ensName,
+        data: JSON.stringify(data)
+      });
+      this.toastr.success('New role is created.');
       this.dialogRef.close(true);
-      clearTimeout($tmpTimeout);
-    }, 5000);
+    }
+    catch (e) {
+      console.log(e);
+      this.toastr.error("Error saving data.")
+    }
+    finally{
+      this.loading(false);
+    }
+  }
+
+  async createApp() {
+    this.loading(true);
+    try {
+      await this.iamService.iam.createRole({
+        roleName: 'monstax',
+        namespace: 'apps.bigbang.iam.ewc',
+        data: JSON.stringify({
+          name: 'MonstaX App'
+        })
+      });
+      this.toastr.success("App is created");
+    }
+    catch (e) {
+      console.log(e);
+      this.toastr.error("Error saving data.")
+    }
+    finally{
+      this.loading(false);
+    }
   }
 }

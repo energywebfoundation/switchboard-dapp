@@ -84,3 +84,13 @@ p {
 .small {
     font-size: 12px !important;
 }
+
+@include media-breakpoint-down(sm) {
+    h2,.h2 {
+        font-size: 21px;
+    }
+
+    h4,.h4  {
+        font-size: 16px !important;
+    }
+}

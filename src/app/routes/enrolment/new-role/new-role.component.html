@@ -6,17 +6,13 @@
 
 <div mat-dialog-content>
   <div class="mb-2 mt-4">
-    <form role="form" [formGroup]="newRoleForm">
-      <div class="card card-default mb-3 py-3 shadow-none" *ngIf="isDisabled.roleType">
-        <div class="card card-default text-left p-0 shadow-none d-flex flex-row">
-          <!-- <img src="#" class="img-thumbnail rounded-circle mr-2" width="52" height="52"> -->
-          <div class="d-flex flex-column">
-          <div class="label color-white opacity-50 text-truncate-middle ">Role Type</div>
-          <h4 class="color-white mb-0">{{ newRoleForm.getRawValue().roleType }}</h4>
-          </div>
-        </div>
+    <div class="">
+      <div style="width: 100%; height: 100%;">
+        <ngx-spinner bdColor="rgba(24,20,36,0.8)" size="medium" color="#a567ff" type="ball-spin-fade">
+        </ngx-spinner>
       </div>
-
+    </div>
+    <form role="form" [formGroup]="newRoleForm">
       <!-- START: Role Type -->
       <div class="card card-default mb-3 py-3 shadow-none">
         <div class="row">
@@ -42,7 +38,7 @@
       <!-- END: Role Type -->
 
       <!-- START: Organization -->
-      <ng-container *ngIf="isDisabled.roleType">
+      <ng-container *ngIf="isDisabled.roleType && newRoleForm.get('roleType').value !== 'CUSTOM'">
         <div class="card-hint mb-3 py-3  px-4 text-left justify-content-start align-items-center">
           <mat-icon class="pt-1">notifications_none</mat-icon>
           Make sure that you are the owner of this organization namespace.
@@ -75,10 +71,10 @@
         <div class="row">
           <div class="col-lg-12 mt-4 mb-3 pb-1">
             <mat-label class="ml-3 pl-1">Application</mat-label>
-            <ngx-select formControlName="app" placeholder="Application" [items]="appList"></ngx-select>
+            <ngx-select formControlName="app" placeholder="Application" [items]="appList.items"></ngx-select>
             <mat-error *ngIf="!newRoleForm.get('app').value">Application is <strong>required</strong></mat-error>
 
-            <div class="d-flex justify-content-end mb-2">
+            <div class="d-flex justify-content-end mb-2" [ngClass]="{ 'mt-4': newRoleForm.get('app').value }">
               <button mat-stroked-button *ngIf="isDisabled.appField && isHidden.fields" class="btn btn-small"
                 type="submit" (click)="cancelApp()">Cancel</button>
               <button mat-raised-button *ngIf="!isDisabled.appField" class="btn btn-small btn-primary" type="submit"
@@ -92,9 +88,6 @@
       <!-- START: Role Name -->
       <div class="card card-default mb-3 py-3 shadow-none" *ngIf="!isHidden.roleName">
         <div class="row">
-          <div class="d-flex align-items-center center" *ngIf="isLoading || isCheckingEns">
-            <mat-spinner></mat-spinner>
-          </div>
           <div class="col-lg-12">
             <mat-label class="ml-3 pl-1">Role Name</mat-label>
             <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
@@ -105,28 +98,25 @@
             </mat-form-field>
           </div>
           <div class="col-lg-12">
-            <!-- <mat-label class="ml-3 pl-1">ENS Name</mat-label>
-            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-              <input matInput placeholder="ENS Name" autocomplete="off" formControlName="ensName">
-              <span formControlName="ensName"></span>
-              <mat-hint class="color-white" *ngIf="isCheckingEns">Loading for checking ENS Name here...</mat-hint>
-              <mat-error>ENS Name is <strong>taken</strong></mat-error>
-              <mat-hint class="color-white">ENS Name is <strong>available</strong></mat-hint>
-            </mat-form-field> -->
-
             <div class="label color-white ml-1 pl-3 pb-2">ENS Name</div>
             <div class="card-result display-flex justify-content-between flex-row">
-              <span class="color-white mb-0">ENS Name</span>
+              <span class="color-white mb-0">{{ tmpEnsName }}&nbsp;</span>
               <span *ngIf="isCheckingEns">Loading for checking ENS Name here...</span>
-              <!-- <mat-icon class="color-error">block</mat-icon> -->
-              <mat-icon class="color-primary">check</mat-icon>
+              <ng-container *ngIf="newRoleForm.get('ensName').value">
+                <mat-icon class="color-error" *ngIf="isEnsNameValid === false">block</mat-icon>
+                <mat-icon class="color-primary" *ngIf="isEnsNameValid === true">check</mat-icon>
+              </ng-container>
             </div>
             <div class="ml-1 pl-3">
-              <!-- <mat-hint class="small color-error">ENS Name is taken</mat-hint> -->
-              <mat-hint class="small opacity-50 color-white">ENS Name is available</mat-hint>
+              <ng-container *ngIf="newRoleForm.get('ensName').value">
+                <mat-hint class="small color-error" *ngIf="isEnsNameValid === false">ENS Name is taken.</mat-hint>
+                <mat-hint class="small opacity-50 color-white" *ngIf="isEnsNameValid === true">ENS Name is available.
+                </mat-hint>
+              </ng-container>
+              <mat-hint class="small" *ngIf="!newRoleForm.get('ensName').value">&nbsp;</mat-hint>
             </div>
 
-            <div class="d-flex justify-content-end mb-2">
+            <div class="d-flex justify-content-end mb-2" [ngClass]="{ 'mt-4': isEnsNameValid === undefined }">
               <button mat-stroked-button *ngIf="isDisabled.roleName" class="btn btn-small" type="submit"
                 (click)="cancelRoleName()">Cancel</button>
               <button mat-raised-button *ngIf="!isDisabled.roleName" class="btn btn-small btn-primary" type="submit"
@@ -136,6 +126,61 @@
         </div>
       </div>
       <!-- END: Role Name -->
+
+      <!-- START: Issuers -->
+      <div class="card card-default py-3 shadow-none" *ngIf="!isHidden.roleName">
+        <div class="row">
+          <div class="col-lg-12" formGroupName="issuer">
+            <mat-label class="ml-3 pl-1">Issuer Type</mat-label>
+            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+              <mat-select placeholder="Issuer Type" formControlName="issuerType"
+                (selectionChange)="issuerTypeChanged($event)" required>
+                <mat-option></mat-option>
+                <mat-option *ngFor="let issuerType of IssuerType | keyvalue" [value]="issuerType.value">
+                  {{ issuerType.key }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <ng-container *ngIf="newRoleForm.get('issuer').get('issuerType').value">
+            <hr style="color: white" />
+            <div class="col-lg-12" [formGroup]="issuerGroup">
+              <mat-label class="ml-3 pl-1">Issuer DID</mat-label>
+              <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                <input matInput placeholder="DID" autocomplete="off" oninput="this.value = this.value.toLowerCase()"
+                  formControlName="newIssuer" minlength="3" maxlength="256">
+              </mat-form-field>
+
+              <div class="d-flex justify-content-end mb-2">
+                <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="addDid()"
+                  [disabled]="issuerGroup.invalid">Add</button>
+              </div>
+            </div>
+          </ng-container>
+          <div class="col-lg-12">
+            <div class="label color-white ml-1 pl-3 pb-2">Issuer DID List</div>
+            <div class="card-result mb-1" *ngFor="let did of issuerList; let i = index">
+              <div class="d-flex justify-content-between flex-row flex-nowrap">
+                <div class="color-white break-word">{{ did }}</div>
+                <div class="d-inline-flex">
+                  <button mat-icon-button matSuffix class="mat-primary icon-btn-small color-error" matTooltip="Remove"
+                    *ngIf="issuerList.length > 1" (click)="removeDid(i)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- <mat-list>
+              <mat-list-item *ngFor="let did of issuerList; let i = index">
+                <div class="d-inline-flex"><span>{{ did }}</span></div>
+                <button mat-icon-button matSuffix class="mat-primary icon-btn-small color-error" matTooltip="Remove" *ngIf="issuerList.length > 1" (click)="removeDid(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-list-item>
+            </mat-list> -->
+          </div>
+        </div>
+      </div>
+      <!-- END: Issuers -->
     </form>
     <div class="card card-default mb-3 pb-0 shadow-none" *ngIf="!isHidden.fields">
       <div class="row">
@@ -241,6 +286,7 @@
       </div>
     </div>
     <div mat-dialog-actions class="d-flex justify-content-between">
+      <!-- <button type="submit" (click)="createApp()">Create App</button> -->
       <button mat-raised-button class="btn btn-primary w-100" type="submit" (click)="save()"
-        [disabled]="newRoleForm.invalid || !isDisabled.roleName">Create</button>
+        [disabled]="newRoleForm.invalid || !isDisabled.roleName || isLoading">Create</button>
     </div>
