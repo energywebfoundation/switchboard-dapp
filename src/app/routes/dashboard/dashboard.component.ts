@@ -58,6 +58,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  goToApplications() {
+    this.route.navigate(['applications']); 
+  }
+
   goToEnrolment() {
     this.route.navigate(['enrolment']); 
   }

@@ -1,0 +1,191 @@
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">Create Organization
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h4>
+
+<div mat-dialog-content>
+  <div class="mb-2 mt-3">
+    <div class="row">
+      <mat-vertical-stepper class="w-100" [linear]="!isLinear" #stepper>
+        <ng-template matStepperIcon="edit">
+          <mat-icon>check</mat-icon>
+        </ng-template>
+        <mat-step [stepControl]="firstFormGroup">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>New Organization</ng-template>
+            <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+            <div class="row mt-2">
+              <div class="col-lg-12">
+                <div class="d-flex justify-content-start">
+                  <div class="image-wrapper w-50 d-flex align-items-center justify-content-center mb-3">
+                    <span class="opacity-50">Image Preview</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <mat-label class="ml-3 pl-1">Organization Image URL</mat-label>
+                <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                  <input matInput formControlName="firstCtrl" type="text" placeholder="https://www.example.com/images/logo.png"/>
+                </mat-form-field>
+              </div>
+            </div>
+            </div>
+            <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+              <div class="row">
+                <div class="col-lg-12">
+                  <mat-label class="ml-3 pl-1">Organization Namespace</mat-label>
+                  <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                    <input matInput formControlName="firstCtrl" type="text" placeholder="Organization Namespace" />
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12">
+                  <mat-label class="ml-3 pl-1">Organization Name</mat-label>
+                  <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                    <input matInput formControlName="firstCtrl" type="text" placeholder="Organization Name" />
+                    <mat-error>Organization Name is <strong>required</strong></mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12">
+                  <mat-label class="ml-3 pl-1">Website URL</mat-label>
+                  <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                    <input matInput formControlName="firstCtrl" type="text" placeholder="http://www.example.com" />
+                    <mat-error>Website URL is <strong>required</strong></mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12">
+                  <mat-label class="ml-3 pl-1">Description</mat-label>
+                  <mat-form-field appearance="outline">
+                    <textarea matInput></textarea>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12">
+                  <mat-label class="ml-3 pl-1">Others (JSON)</mat-label>
+                  <mat-form-field appearance="outline">
+                    <textarea matInput></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end mb-2">
+              <button mat-stroked-button class="btn btn-small mr-2" mat-dialog-close>Cancel</button>
+              <button mat-raised-button class="btn btn-small btn-primary" matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="thirdFormGroup">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Confirm Details</ng-template>
+            <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+              <div class="d-flex justify-content-center">
+                <div class="image-wrapper w-50 d-flex align-items-center justify-content-center mb-3">
+                  <span class="opacity-50">No image</span>
+                </div>
+              </div>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Organization Namespace</div>
+                <span class="color-white mb-0">Organization Namespace</span>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Organization Name</div>
+                <span class="color-white mb-0">Organization Name</span>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Website URL</div>
+                <span class="color-white mb-0">www.organization.com</span>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Description</div>
+                <span class="color-white mb-0">Organization Description</span>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Others (JSON)</div>
+                <span class="color-white mb-0">--</span>
+              </div>
+            </div>
+            <div>
+              <div class="d-flex justify-content-end mb-2">
+                <button mat-stroked-button class="btn btn-small mr-2" matStepperPrevious>Back</button>
+                <button mat-raised-button class="btn btn-small btn-primary" matStepperNext>Next</button>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="forthFormGroup">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Creating ENS Namespace</ng-template>
+            <div
+              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in
+                Metamask</span>
+            </div>
+            <div class="d-flex justify-content-end mb-2">
+              <button mat-stroked-button class="btn btn-small mr-2" matStepperPrevious>Cancel</button>
+              <button mat-raised-button class="btn btn-small btn-primary" matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="fifthFormGroup">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Setting up</ng-template>
+            <div
+              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in
+                Metamask</span>
+            </div>
+            <div class="d-flex justify-content-end mb-2">
+              <button mat-stroked-button class="btn btn-small mr-2" matStepperPrevious>Cancel</button>
+              <button mat-raised-button class="btn btn-small btn-primary" matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Saving Data</ng-template>
+            <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+              <div class="d-flex justify-content-center">
+                <div class="image-wrapper w-50 d-flex align-items-center justify-content-center mb-3">
+                  <span class="opacity-50">No image</span>
+                </div>
+              </div>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Organization Namespace</div>
+                <span class="color-white mb-0">Organization Namespace</span>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Organization Name</div>
+                <span class="color-white mb-0">Organization Name</span>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Website URL</div>
+                <span class="color-white mb-0">www.organization.com</span>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Description</div>
+                <span class="color-white mb-0">Organization Description</span>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Others (JSON)</div>
+                <span class="color-white mb-0">--</span>
+              </div>
+            </div>
+            <div>
+              <div class="d-flex justify-content-end mb-2">
+                <button mat-stroked-button class="btn btn-small mr-2" matStepperPrevious>Back</button>
+                <button mat-raised-button class="btn btn-small btn-primary" matStepperNext>Complete</button>
+              </div>
+            </div>
+          </form>
+        </mat-step>
+      </mat-vertical-stepper>
+    </div>
+  </div>
+</div>

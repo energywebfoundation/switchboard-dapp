@@ -687,6 +687,57 @@ _:-ms-lang(x),
 
 }
 
+.bg-energy-cloud {
+    background-image: url("/assets/img/bg-energy-cloud.svg");
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: auto;
+    width: 100%;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    top: 0;
+    animation: animateCloud 10s linear alternate-reverse infinite;
+}
+
+@keyframes animateCloud {
+    100% {
+        transform: translateX(95px);
+      }
+}
+
+@-webkit-keyframes animateCloud {
+    100% {
+        -webkit-transform: translateX(95px);
+      }
+}
+
+.bg-energy-turbine-1 {
+    background-image: url("/assets/img/bg-energy-turbine-1.svg");
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: auto;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    top: 0;
+    animation: animateTurbine1 50s linear infinite;
+}
+
+@keyframes animateTurbine1 {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@-webkit-keyframes animateTurbine1 {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+
 .welcome-footer {
     background-color: transparent; 
     position: fixed;

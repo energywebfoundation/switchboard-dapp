@@ -8,6 +8,7 @@ import { RegistrationModule } from './registration/registration.module';
 import { routes } from './routes';
 import { WelcomeModule } from './welcome/welcome.module';
 import { EnrolmentModule } from './enrolment/enrolment.module';
+import { ApplicationsModule } from './applications/applications.module';
 
 
 
@@ -18,6 +19,7 @@ import { EnrolmentModule } from './enrolment/enrolment.module';
         ProfileModule,
         RegistrationModule,
         WelcomeModule,
+        ApplicationsModule,
         EnrolmentModule
     ],
     declarations: [],
