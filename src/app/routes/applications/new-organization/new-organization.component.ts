@@ -107,6 +107,7 @@ export class NewOrganizationComponent implements OnInit {
         this.stepper.next();
 
         // Process the next step
+        await step.next();
         this.toastr.info(step.info, `Transaction Success (${index + 1}/${steps.length})`);
       }
 
