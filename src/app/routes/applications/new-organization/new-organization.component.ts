@@ -128,10 +128,10 @@ export class NewOrganizationComponent implements OnInit {
   closeDialog(isSuccess?: boolean) {
     if (this.orgForm.pristine) {
       this.dialog.open(ConfirmationDialogComponent, {
-        width: '600px',
+        width: '400px',
         data: {
           header: TOASTR_HEADER,
-          message: 'There are unsaved changes. Do you wish to exit?'
+          message: 'There are unsaved changes. Do you wish to continue?'
         },
         maxWidth: '100%',
         disableClose: true
