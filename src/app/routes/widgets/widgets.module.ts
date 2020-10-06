@@ -11,13 +11,14 @@ import { ChartsModule } from '@progress/kendo-angular-charts';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatNativeDatetimeModule, MatDatetimepickerModule } from '@mat-datetimepicker/core';
 import { QRCodeModule } from 'angular2-qrcode';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 const routes: Routes = [
 
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [ConfirmationDialogComponent],
   imports: [
     SharedModule,
     CommonModule,
@@ -42,7 +43,9 @@ const routes: Routes = [
     MatDatetimepickerModule,    
     QRCodeModule
   ],
-  entryComponents: [],
+  entryComponents: [
+    ConfirmationDialogComponent
+  ],
 
   exports: [
     RouterModule,

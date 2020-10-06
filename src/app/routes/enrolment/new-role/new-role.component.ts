@@ -341,8 +341,8 @@ export class NewRoleComponent {
   alphabetOnly(event: any, includePoint?: boolean): boolean {
     let charCode = (event.which) ? event.which : event.keyCode;
     
-    // 96 = a, 122 = z
-    if ((charCode > 96 && charCode < 123) || (charCode === 46 && (this.newRoleForm.get('roleType').value === 'CUSTOM' || includePoint))) {
+    // Check if key is alphanumeric key
+    if ((charCode > 96 && charCode < 123) || (charCode > 47 && charCode < 58)) {
       return true;
     }
 
