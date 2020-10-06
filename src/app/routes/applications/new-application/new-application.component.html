@@ -11,7 +11,7 @@
         <ng-template matStepperIcon="edit">
           <mat-icon>check</mat-icon>
         </ng-template>
-        <mat-step [stepControl]="zeroFormGroup" [completed]="false">
+        <mat-step [completed]="false">
           <form [formGroup]="appForm">
             <ng-template matStepLabel>Set Organization Namespace</ng-template>
             <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
@@ -23,7 +23,7 @@
                   <mat-label class="ml-3 pl-1">Full Organization Namespace</mat-label>
                   <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                     <input matInput autocomplete="off" formControlName="orgNamespace" type="text" placeholder="Example: myorg.iam.ewc"
-                      required oninput="this.value = this.value.toLowerCase()" (change)="this.value.trim()" (keypress)="alphaNumericOnly($event, true)"
+                      required oninput="this.value = this.value.toLowerCase()" (keypress)="alphaNumericOnly($event, true)"
                       minlength="3" maxlength="256" />
                     <mat-error>Full Organization Namespace is <strong>required</strong></mat-error>
                   </mat-form-field>
@@ -36,7 +36,7 @@
             </div>
           </form>
         </mat-step>
-        <mat-step [stepControl]="firstFormGroup" [completed]="false">
+        <mat-step [completed]="false">
           <form [formGroup]="appForm">
             <ng-template matStepLabel>New Application</ng-template>
             <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
@@ -110,7 +110,7 @@
             </div>
           </form>
         </mat-step>
-        <mat-step [stepControl]="thirdFormGroup" [editable]="false" [completed]="false">
+        <mat-step [editable]="false" [completed]="false">
             <ng-template matStepLabel>Confirm Details</ng-template>
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
               <div class="d-flex justify-content-center">
@@ -150,7 +150,7 @@
               </div>
             </div>
         </mat-step>
-        <mat-step [stepControl]="forthFormGroup" [editable]="false" [completed]="false">
+        <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Creating Application Namespace</ng-template>
           <div
             class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
@@ -162,7 +162,7 @@
             <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
           </div>
         </mat-step>
-        <mat-step [stepControl]="fifthFormGroup" [editable]="false" [completed]="false">
+        <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Registering Reverse Name for Namespace</ng-template>
           <div
             class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
@@ -173,7 +173,7 @@
             <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
           </div>
         </mat-step>
-        <mat-step [stepControl]="sixthFormGroup" [editable]="false" [completed]="false">
+        <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Setting up definitions</ng-template>
           <div
             class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
@@ -184,7 +184,7 @@
             <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
           </div>
         </mat-step>
-        <mat-step [stepControl]="seventhFormGroup" [editable]="false" [completed]="false">
+        <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Creating Role Sub-domain</ng-template>
           <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
             <mat-icon>info</mat-icon><span class="pb-2">Creating below sub-domain: <br>{{ ENSPrefixes.Roles }}.{{ appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace }}</span>
@@ -197,7 +197,7 @@
             <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
           </div>
         </mat-step>
-        <mat-step [stepControl]="eighthFormGroup" [editable]="false" [completed]="false">
+        <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Registering Reverse Name for Role Sub-domain</ng-template>
           <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
             <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in Metamask</span>

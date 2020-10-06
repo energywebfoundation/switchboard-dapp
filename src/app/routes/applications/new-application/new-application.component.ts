@@ -167,7 +167,8 @@ export class NewApplicationComponent implements OnInit {
     try {
       // Retrieve the steps to create an application
       let steps = await this.iamService.iam.createApplication(req);
-      for (let [index, step] of steps.entries()) {
+      for (let index = 0; index < steps.length; index++) {
+        let step = steps[index];
         console.log('Processing', step.info);
         
         // Show the next step
@@ -176,7 +177,7 @@ export class NewApplicationComponent implements OnInit {
 
         // Process the next steap
         await step.next();
-        this.toastr.info(step.info, `Transaction Success (${index + 1}/${steps.length})` )
+        this.toastr.info(step.info, `Transaction Success (${index + 1}/${steps.length})`);
       }
 
       // Move to Complete Step
