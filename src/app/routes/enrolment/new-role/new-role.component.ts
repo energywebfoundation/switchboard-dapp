@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatTableDataSource } from '@angular/material';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
+import { ENSPrefixes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -20,11 +21,11 @@ const RoleTypeList = [{
   {
     label: 'Application',
     value: RoleType.APP
-  },
+  }/*,
   {
     label: 'Custom',
     value: RoleType.CUSTOM
-  }
+  }*/
 ];
 
 export interface RolesFields {
@@ -45,6 +46,8 @@ const FIELD_TYPES = [
 })
 export class NewRoleComponent {
   @ViewChild('roleNameInput', {static: false}) roleNameInput: ElementRef;
+
+  public ENSPrefixes = ENSPrefixes;
 
   // Main Form Data
   RoleTypeList  = RoleTypeList;
@@ -142,9 +145,9 @@ export class NewRoleComponent {
   private async getAppList() {
     try {
       // retrieve the list of apps under this namespace
-      console.log('retrieve the list of apps under this namespace', 'apps.' + this.newRoleForm.get('org').value);
+      console.log('retrieve the list of apps under this namespace', ENSPrefixes.Application + '.' + this.newRoleForm.get('org').value);
       let appList = await this.iamService.iam.getSubdomains({
-        domain: 'apps.' + this.newRoleForm.get('org').value
+        domain: ENSPrefixes.Application + '.' + this.newRoleForm.get('org').value
       });
 
       // reset
@@ -316,14 +319,14 @@ export class NewRoleComponent {
 
   updateEnsName(event: any) {
     let data = this.newRoleForm.getRawValue();
-    let ensName = 'roles.';
+    let ensName = ENSPrefixes.Roles + '.';
 
     switch (data.roleType) {
       case RoleType.ORG:
         ensName += data.org;
         break;
       case RoleType.APP:
-        ensName += data.app + '.apps.' + data.org;
+        ensName += data.app + '.' + ENSPrefixes.Application + '.' + data.org;
         break;
       case RoleType.CUSTOM:
         ensName += 'iam.ewc';
@@ -342,7 +345,9 @@ export class NewRoleComponent {
     let charCode = (event.which) ? event.which : event.keyCode;
     
     // Check if key is alphanumeric key
-    if ((charCode > 96 && charCode < 123) || (charCode > 47 && charCode < 58)) {
+    if ((charCode > 96 && charCode < 123) || (
+        charCode > 47 && charCode < 58) || 
+        (charCode === 46 && (this.newRoleForm.get('roleType').value === 'CUSTOM' || includePoint))) {
       return true;
     }
 
@@ -440,27 +445,6 @@ export class NewRoleComponent {
       });
       this.toastr.success('New role is created.');
       this.dialogRef.close(true);
-    }
-    catch (e) {
-      console.log(e);
-      this.toastr.error("Error saving data.")
-    }
-    finally{
-      this.loading(false);
-    }
-  }
-
-  async createApp() {
-    this.loading(true);
-    try {
-      await this.iamService.iam.createRole({
-        roleName: 'monstax',
-        namespace: 'apps.bigbang.iam.ewc',
-        data: JSON.stringify({
-          name: 'MonstaX App'
-        })
-      });
-      this.toastr.success("App is created");
     }
     catch (e) {
       console.log(e);

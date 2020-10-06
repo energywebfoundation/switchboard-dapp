@@ -9,13 +9,14 @@ import { FormsModule } from '@angular/forms';
 import { ApplicationsComponent } from './applications.component';
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
 import { ViewOrganizationComponent } from './view-organization/view-organization.component';
+import { NewApplicationComponent } from './new-application/new-application.component';
 
 const routes: Routes = [
   { path: '', component: ApplicationsComponent }
 ];
 
 @NgModule({
-  declarations: [ApplicationsComponent, NewOrganizationComponent, ViewOrganizationComponent],
+  declarations: [ApplicationsComponent, NewOrganizationComponent, ViewOrganizationComponent, NewApplicationComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -33,6 +34,6 @@ const routes: Routes = [
     NgxSelectModule,
     MatInputModule
   ],
-  entryComponents: [NewOrganizationComponent]
+  entryComponents: [NewOrganizationComponent, NewApplicationComponent]
 })
 export class ApplicationsModule { }

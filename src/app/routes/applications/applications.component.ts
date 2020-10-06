@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
 import { MatDialog } from '@angular/material';
+import { NewApplicationComponent } from './new-application/new-application.component';
+import { NewRoleComponent } from '../enrolment/new-role/new-role.component';
 
 @Component({
   selector: 'app-applications',
@@ -14,8 +16,32 @@ export class ApplicationsComponent implements OnInit {
 
   constructor(public dialog: MatDialog) { }
 
-  openNewRoleComponent(): void {
+  openNewOrgComponent(): void {
     const dialogRef = this.dialog.open(NewOrganizationComponent, {
+      width: '600px',data:{},
+      maxWidth: '100%',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  openNewAppComponent(): void {
+    const dialogRef = this.dialog.open(NewApplicationComponent, {
+      width: '600px',data:{},
+      maxWidth: '100%',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  openNewRoleComponent(): void {
+    const dialogRef = this.dialog.open(NewRoleComponent, {
       width: '600px',data:{},
       maxWidth: '100%',
       disableClose: true
