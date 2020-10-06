@@ -1,0 +1,12 @@
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">{{ data?.header || 'Confirm' }}</h4>
+
+<div mat-dialog-content>
+  <div class="mb-2 mt-3">
+    <h5>{{ data?.message }}</h5>
+  </div>
+</div>
+
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button mat-stroked-button class="btn btn-small mr-2" type="submit" (click)="closeMe(false)">Cancel</button>
+  <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="closeMe(true)">Confirm</button>
+</div>

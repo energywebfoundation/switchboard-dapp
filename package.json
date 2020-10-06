@@ -58,7 +58,7 @@
     "flot": "themicon/flot",
     "fullcalendar": "3.9.0",
     "hammerjs": "^2.0.0",
-    "iam-client-lib": "git+ssh://git.github.com/energywebfoundation/iam-client-lib.git#feature/MYEN-133-add-exist-and-isOwner-methods",
+    "iam-client-lib": "git+https://github.com/energywebfoundation/iam-client-lib.git#develop",
     "ika.jvectormap": "themicon/ika.jvectormap",
     "intl": "1.2.5",
     "jqcloud2": "2.0.3",

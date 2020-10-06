@@ -9,6 +9,7 @@ import { routes } from './routes';
 import { WelcomeModule } from './welcome/welcome.module';
 import { EnrolmentModule } from './enrolment/enrolment.module';
 import { ApplicationsModule } from './applications/applications.module';
+import { WidgetsModule } from './widgets/widgets.module';
 
 
 
@@ -20,7 +21,8 @@ import { ApplicationsModule } from './applications/applications.module';
         RegistrationModule,
         WelcomeModule,
         ApplicationsModule,
-        EnrolmentModule
+        EnrolmentModule,
+        WidgetsModule
     ],
     declarations: [],
     exports: [
