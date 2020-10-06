@@ -50,6 +50,7 @@ mat-datetimepicker-content {
     padding: 10px 24px 10px 24px;
     border-bottom: 1px solid #363546 !important;
     font-weight: 600;
+    font-family: 'Rajdhani', sans-serif;
 }
 
 .mat-dialog-content {
@@ -229,16 +230,20 @@ mat-checkbox {
     border-top: 1px solid #172239;
 }
 
-.mat-step-header .mat-step-label.mat-step-label-active {
-    font-size: 16px !important;
-    color: #7FADFF !important;
-    font-weight: 600;
-    letter-spacing: 0.2px !important;
-    opacity: 1;
+.mat-step-icon {
+    border-radius: 4px !important;
 }
 
-.mat-step-header .mat-step-label {
-    font-weight: 400;
+.mat-stepper-vertical-line::before {
+    border-left-color: #9080BA;
+}
+
+.mat-step-header .mat-step-label.mat-step-label-active {
+    font-size: 16px !important;
+    color: #FFF;
+    font-weight: 500;
+    letter-spacing: 0.2px !important;
+    opacity: 1;
 }
 
 .mat-step-header .mat-step-icon-state-edit {
@@ -246,19 +251,26 @@ mat-checkbox {
 }
 
 .mat-step-header .mat-step-icon-selected {
-    background-color: #105DE7  !important;
+    background-color: #a467ff!important;
+    border: 1px solid #a467ff !important;
     color: #FFF !important;
 }
 
 .mat-step-header .mat-step-icon-state-edit {
-    background-color: transparent !important;
-    border: 1px solid #105DE7 !important;
-    color: #105DE7 !important;
+    background-color: #a467ff!important;
+    border: 1px solid #a467ff !important;
+    color: #FFF !important;
 }
 
 .mat-step-header .mat-step-icon {
-    border: 1px solid #105DE7 !important;
-    color: #105DE7 ;
+    border: 1px solid #9080BA;
+    background-color: transparent;
+    color: #9080BA;
+}
+
+.mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
+    color: #9080BA; 
+    font-size: 16px !important;
 }
 
 .mat-horizontal-stepper-header::after, .mat-horizontal-stepper-header::before, .mat-stepper-horizontal-line {
@@ -269,14 +281,17 @@ mat-checkbox {
     width: auto !important;
 }
 
+.image-wrapper {
+    border: 1px solid #353540;
+    height: 100px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
 @media (max-width: 768px) {
     .mat-horizontal-stepper-header-container {
         width: auto !important;
     } 
-
-    .mat-step-text-label, .mat-step-header .mat-step-label.mat-step-label-active {
-        font-size: 14px !important;
-    }
 
     .mat-dialog-actions {
         border-top: 1px solid #172239;

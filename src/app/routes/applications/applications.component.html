@@ -1,0 +1,63 @@
+
+    <div class="row mx-0 mt-1">
+      <div class="col-xl-12">
+        <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
+          <h4 class="color-white strong my-4">Organization Management</h4>
+          <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0" (click)="openNewRoleComponent()">Create Organization
+            </button>
+        </div>
+        <div class="card card-default mb-3 pb-0">
+          <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
+            <!-- Filter -->
+
+          </div>
+          <table mat-table [dataSource]="dataSourceOrganizations">
+            <!-- Logo Column -->
+            <ng-container matColumnDef="imageURL">
+              <th mat-header-cell *matHeaderCellDef> </th>
+              <td mat-cell *matCellDef="let element" data-label=""> <img [src]="element.imageUrl" width="64" height="auto" /> </td>
+            </ng-container>
+
+            <!-- Organization Namespace Column -->
+            <ng-container matColumnDef="orgNameSpace">
+              <th mat-header-cell *matHeaderCellDef> Organization Namespace </th>
+              <td mat-cell *matCellDef="let element" data-label="Organization Namespace"> {{element.orgNameSpace}} </td>
+            </ng-container>
+
+            <!-- Organization Name -->
+            <ng-container matColumnDef="orgName">
+              <th mat-header-cell *matHeaderCellDef> Organization Name </th>
+              <td mat-cell *matCellDef="let element" data-label="Organization Name"> {{element.orgName}} </td>
+            </ng-container>
+
+            <!-- Website URL Column -->
+            <ng-container matColumnDef="websiteURL">
+              <th mat-header-cell *matHeaderCellDef> Website URL </th>
+              <td mat-cell *matCellDef="let element" data-label="Website URL"> {{element.websiteURL}} </td>
+            </ng-container>
+
+             <!-- Actions Column -->
+             <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> Actions </th>
+              <td mat-cell *matCellDef="let element"> 
+                <button mat-icon-button matTooltip="View">
+                  <mat-icon class="btn-color-primary">preview</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="organizationsColumns"></tr>
+            <tr class="cursor-pointer" mat-row *matRowDef="let row; columns: organizationsColumns;"></tr>
+          </table>
+          <!-- Shows when table is empty -->
+          <!-- <div class="d-flex justify-content-center align-items-center">
+              <div class="d-flex align-items-center no-record color-white">
+                <mat-icon class="mr-2">info</mat-icon>
+                <i>No Record Found</i>
+              </div>
+            </div> -->
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
