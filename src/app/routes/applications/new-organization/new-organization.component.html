@@ -16,13 +16,13 @@
             <ng-template matStepLabel>New Organization</ng-template>
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
             <div class="row mt-2">
-              <div class="col-lg-12">
+              <!-- <div class="col-lg-12">
                 <div class="d-flex justify-content-start">
                   <div class="image-wrapper w-50 d-flex align-items-center justify-content-center mb-3">
                     <span class="opacity-50">Image Preview</span>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="col-lg-12" formGroupName="data">
                 <mat-label class="ml-3 pl-1">Organization Image URL</mat-label>
                 <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
@@ -87,7 +87,8 @@
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
               <div class="d-flex justify-content-center">
                 <div class="image-wrapper w-50 d-flex align-items-center justify-content-center mb-3">
-                  <span class="opacity-50">No image</span>
+                  <span class="opacity-50" *ngIf="!orgForm?.value?.data?.logoUrl">No image</span>
+                  <img class="w-50" *ngIf="orgForm?.value?.data?.logoUrl" src="{{ orgForm?.value?.data?.logoUrl }}"/>
                 </div>
               </div>
               <div class="text-left my-3">
@@ -138,7 +139,7 @@
           <ng-template matStepLabel>Registering Reverse Name for Namespace</ng-template>
           <div
             class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in Metamask</span>
+            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
@@ -149,7 +150,7 @@
           <ng-template matStepLabel>Setting up definitions</ng-template>
           <div
             class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in Metamask</span>
+            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
@@ -162,7 +163,7 @@
             <mat-icon>info</mat-icon><span class="pb-2">Creating below sub-domain: <br>{{ ENSPrefixes.Roles }}.{{ orgForm?.value?.orgName }}.{{ orgForm?.value?.namespace }}</span>
           </div>
           <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in Metamask</span>
+            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
@@ -172,7 +173,7 @@
         <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Registering Reverse Name for Role Sub-domain</ng-template>
           <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in Metamask</span>
+            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
@@ -185,7 +186,7 @@
             <mat-icon>info</mat-icon><span class="pb-2">Creating below sub-domain: <br>{{ ENSPrefixes.Application }}.{{ orgForm?.value?.orgName }}.{{ orgForm?.value?.namespace }}</span>
           </div>
           <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in Metamask</span>
+            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
@@ -195,7 +196,7 @@
         <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Registering Reverse Name for Application Sub-domain</ng-template>
           <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in Metamask</span>
+            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
@@ -207,7 +208,8 @@
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
               <div class="d-flex justify-content-center">
                 <div class="image-wrapper w-50 d-flex align-items-center justify-content-center mb-3">
-                  <span class="opacity-50">No image</span>
+                  <span class="opacity-50" *ngIf="!orgForm?.value?.data?.logoUrl">No image</span>
+                  <img class="w-50" *ngIf="orgForm?.value?.data?.logoUrl" src="{{ orgForm?.value?.data?.logoUrl }}"/>
                 </div>
               </div>
               <div class="text-left my-3">

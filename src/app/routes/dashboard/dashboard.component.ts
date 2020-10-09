@@ -9,7 +9,7 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  public accountAddress = "";
+  public accountDid = "";
   private loginStatus = undefined;
 
   constructor(private iamService: IamService, 
@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
 
         // Setup User Data
         await this.iamService.setupUser();
-        this.accountAddress = this.iamService.user['accountAddress'];
+        this.accountDid = this.iamService.iam.getDid();
 
         // Check if returnUrl is available or just redirect to dashboard
         if (queryParams && queryParams.returnUrl) {

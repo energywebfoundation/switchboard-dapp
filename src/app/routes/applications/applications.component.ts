@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
 import { MatDialog } from '@angular/material';
 import { NewApplicationComponent } from './new-application/new-application.component';
-import { NewRoleComponent } from '../enrolment/new-role/new-role.component';
+import { NewRoleComponent } from './new-role/new-role.component';
 
 @Component({
   selector: 'app-applications',

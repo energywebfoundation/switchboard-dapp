@@ -10,13 +10,14 @@ import { ApplicationsComponent } from './applications.component';
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
 import { ViewOrganizationComponent } from './view-organization/view-organization.component';
 import { NewApplicationComponent } from './new-application/new-application.component';
+import { NewRoleComponent } from './new-role/new-role.component';
 
 const routes: Routes = [
   { path: '', component: ApplicationsComponent }
 ];
 
 @NgModule({
-  declarations: [ApplicationsComponent, NewOrganizationComponent, ViewOrganizationComponent, NewApplicationComponent],
+  declarations: [ApplicationsComponent, NewOrganizationComponent, ViewOrganizationComponent, NewApplicationComponent, NewRoleComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -34,6 +35,6 @@ const routes: Routes = [
     NgxSelectModule,
     MatInputModule
   ],
-  entryComponents: [NewOrganizationComponent, NewApplicationComponent]
+  entryComponents: [NewOrganizationComponent, NewApplicationComponent, NewRoleComponent]
 })
 export class ApplicationsModule { }
