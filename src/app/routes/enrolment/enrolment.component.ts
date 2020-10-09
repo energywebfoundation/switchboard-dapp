@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NewRoleComponent } from './new-role/new-role.component';
 import { ViewRoleComponent } from './view-role/view-role.component';
 import { ViewRequestsComponent } from './view-requests/view-requests.component';
 
@@ -23,15 +22,15 @@ export class EnrolmentComponent implements OnInit {
   constructor(public dialog: MatDialog) { }
 
   openNewRoleComponent(): void {
-    const dialogRef = this.dialog.open(NewRoleComponent, {
-      width: '600px',data:{},
-      maxWidth: '100%',
-      disableClose: true
-    });
+    // const dialogRef = this.dialog.open(NewRoleComponent, {
+    //   width: '600px',data:{},
+    //   maxWidth: '100%',
+    //   disableClose: true
+    // });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log('The dialog was closed');
+    // });
   }
 
   openViewRequestsComponent(): void {

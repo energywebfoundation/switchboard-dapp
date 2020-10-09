@@ -376,7 +376,7 @@ export class NewRoleComponent implements OnInit {
   }
 
   closeDialog(isSuccess?: boolean) {
-    if (this.roleForm.pristine) {
+    if (this.roleForm.touched) {
       this.dialog.open(ConfirmationDialogComponent, {
         width: '400px',
         data: {
