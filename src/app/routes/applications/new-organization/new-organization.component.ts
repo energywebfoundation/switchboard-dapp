@@ -98,16 +98,17 @@ export class NewOrganizationComponent implements OnInit {
     try {
       // Retrieve the steps to create an organization
       let steps = await this.iamService.iam.createOrganization(req);
-      for (let [index, step] of steps.entries()) {
+      for (let index = 0; index < steps.length; index++) {
+        let step = steps[index];
         console.log('Processing', step.info);
         
         // Show the next step
         this.stepper.selected.completed = true;
         this.stepper.next();
 
-        // Process the next steap
+        // Process the next step
         await step.next();
-        this.toastr.info(step.info, `Transaction Success (${index + 1}/${steps.length})` )
+        this.toastr.info(step.info, `Transaction Success (${index + 1}/${steps.length})`);
       }
 
       // Move to Complete Step

@@ -3,8 +3,14 @@
       <div class="col-xl-12">
         <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
           <h4 class="color-white strong my-4">Organization Management</h4>
-          <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0" (click)="openNewRoleComponent()">Create Organization
-            </button>
+          <span>
+            <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0" (click)="openNewOrgComponent()">Create Organization
+              </button>
+            <button mat-raised-button class="btn btn-primary btn-small mb-3 ml-2 mb-lg-0" (click)="openNewAppComponent()">Create Application
+              </button>
+            <button mat-raised-button class="btn btn-primary btn-small mb-3 ml-2 mb-lg-0" (click)="openNewRoleComponent()">Create New Role
+              </button>
+          </span>
         </div>
         <div class="card card-default mb-3 pb-0">
           <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
