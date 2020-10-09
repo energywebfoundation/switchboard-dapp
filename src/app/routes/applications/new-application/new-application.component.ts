@@ -191,7 +191,7 @@ export class NewApplicationComponent implements OnInit {
   }
 
   closeDialog(isSuccess?: boolean) {
-    if (this.appForm.pristine) {
+    if (this.appForm.touched) {
       this.dialog.open(ConfirmationDialogComponent, {
         width: '400px',
         data: {

@@ -127,7 +127,7 @@ export class NewOrganizationComponent implements OnInit {
   }
 
   closeDialog(isSuccess?: boolean) {
-    if (this.orgForm.pristine) {
+    if (this.orgForm.touched) {
       this.dialog.open(ConfirmationDialogComponent, {
         width: '400px',
         data: {
