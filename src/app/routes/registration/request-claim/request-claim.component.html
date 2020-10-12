@@ -10,14 +10,11 @@
   </div>
   <ngx-spinner [fullScreen]="false" type="ball-spin-fade" size="medium" bdColor="rgba(24,20,36,0.8)" bdOpacity=0.9
     color="#A567FF"></ngx-spinner>
-  <div
-    class="bg-register wrapper d-flex justify-content-center justify-content-lg-center align-items-lg-center align-items-center">
-    <div>
+  <div class="bg-register wrapper d-flex justify-content-center justify-content-lg-center align-items-lg-center align-items-center">
+    <form role="form" [formGroup]="enrolmentForm">
 
       <mat-card class="card-register height-log">
         <div class="top-layer">
-          <h1 class="font-weight-600 text-center mt-1 mb-4 pb-1">Provide your details to
-            register</h1>
           <div class="row">
             <div class="col-lg-12">
               <mat-label class="ml-3 pl-1">Role Type</mat-label>
@@ -28,18 +25,32 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="col-lg-12">
-              <mat-label class="ml-3 pl-1">Name</mat-label>
-              <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                <input matInput type="text" placeholder="Name" />
+
+            <!-- START: Dynamic Form Fields -->
+            <div class="col-lg-12" *ngFor="let field of enrolmentForm.get('fields')?.controls; let i = index;">
+              <mat-label class="ml-3 pl-1" *ngIf="fieldList[i].type !== 'boolean'">{{ fieldList[i].label }}</mat-label>
+
+              <!-- TYPE: Text -->
+              <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never" *ngIf="fieldList[i].type === 'text'">
+                <input matInput type="text" placeholder="{{ fieldList[i].label }}" />
               </mat-form-field>
-            </div>
-            <div class="col-lg-12">
-              <mat-label class="ml-3 pl-1">Address</mat-label>
-              <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                <input matInput type="text" placeholder="Address" />
+
+              <!-- TYPE: Number -->
+              <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never" *ngIf="fieldList[i].type === 'number'">
+                <input matInput type="number" placeholder="{{ fieldList[i].label }}" />
               </mat-form-field>
+
+              <!-- TYPE: Date -->
+              <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never" *ngIf="fieldList[i].type === 'date'">
+                <input [matDatepicker]="picker" matInput placeholder="{{ fieldList[i].label }}" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <!-- TYPE: Boolean -->
+              <mat-checkbox class="mt-2 pl-3" *ngIf="fieldList[i].type === 'boolean'">{{ fieldList[i].label }}</mat-checkbox>
             </div>
+            <!-- END: Dynamic Form Fields -->
           </div>
           <div class="my-3">
             <button mat-raised-button class="btn btn-primary w-100" type="submit">Register</button>
@@ -47,7 +58,7 @@
         </div>
       </mat-card>
 
-    </div>
+    </form>
     <div class="welcome-footer">
       <div class="d-flex justify-content-start align-items-center mx-4 my-2">
         <img src="assets/img/icons/ew-logo-white.png" width="120px" height="auto" />
