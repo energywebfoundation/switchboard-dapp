@@ -1,7 +1,7 @@
 import { LayoutComponent } from '../layout/layout.component';
 import { AuthGuard } from '../shared/services/auth.guard';
-import { EnrolmentFormComponent } from './enrolment/enrolment-form/enrolment-form.component';
 import { LogOutComponent } from './profile/logout/logout.component';
+import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 
 
 
@@ -19,8 +19,8 @@ export const routes = [
         ]
     },
     {
-        path: 'new-enrolment',
-        component: EnrolmentFormComponent
+        path: 'enrol',
+        component: RequestClaimComponent
     },
     {
         path: 'welcome',
