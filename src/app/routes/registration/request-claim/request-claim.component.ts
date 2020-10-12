@@ -28,6 +28,22 @@ export class RequestClaimComponent implements OnInit {
       type: 'boolean',
       label: 'Married',
       validation: ''
+    },{
+      type: 'text',
+      label: 'Address',
+      validation: ''
+    },{
+      type: 'number',
+      label: 'Number of Children',
+      validation: ''
+    },{
+      type: 'date',
+      label: 'Registration Date',
+      validation: ''
+    },{
+      type: 'boolean',
+      label: 'Spicy Lover',
+      validation: ''
     }];
 
     let controls = [];
