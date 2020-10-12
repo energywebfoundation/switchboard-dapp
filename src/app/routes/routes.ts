@@ -1,5 +1,6 @@
 import { LayoutComponent } from '../layout/layout.component';
 import { AuthGuard } from '../shared/services/auth.guard';
+import { EnrolmentFormComponent } from './enrolment/enrolment-form/enrolment-form.component';
 import { LogOutComponent } from './profile/logout/logout.component';
 
 
@@ -16,6 +17,10 @@ export const routes = [
             { path: 'applications', loadChildren: './applications/applications.module#ApplicationsModule' },
             { path: 'enrolment', loadChildren: './enrolment/enrolment.module#EnrolmentModule' }
         ]
+    },
+    {
+        path: 'new-enrolment',
+        component: EnrolmentFormComponent
     },
     {
         path: 'welcome',
