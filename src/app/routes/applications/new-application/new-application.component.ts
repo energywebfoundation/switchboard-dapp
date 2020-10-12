@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatStepper } from '@angular/material';
-import { ENSPrefixes } from 'iam-client-lib';
+import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -21,7 +21,7 @@ export class NewApplicationComponent implements OnInit {
   public appForm: FormGroup;
   public environment = environment;
   public isChecking = false;
-  public ENSPrefixes = ENSPrefixes;
+  public ENSPrefixes = ENSNamespaceTypes;
   
   constructor(private fb: FormBuilder,
     private iamService: IamService,
@@ -71,7 +71,7 @@ export class NewApplicationComponent implements OnInit {
         if (exists) {
           // Check if application sub-domain exists in this organization
           exists = await this.iamService.iam.checkExistenceOfDomain({
-            domain: `${ENSPrefixes.Application}.${this.appForm.value.orgNamespace}`
+            domain: `${this.ENSPrefixes.Application}.${this.appForm.value.orgNamespace}`
           });
 
           if (exists) {
@@ -130,7 +130,7 @@ export class NewApplicationComponent implements OnInit {
       // Check if app namespace is taken
       let orgData = this.appForm.value;
       let exists = await this.iamService.iam.checkExistenceOfDomain({
-        domain: `${orgData.appName}.${ENSPrefixes.Application}.${orgData.orgNamespace}`
+        domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
       });
 
       if (exists) {
@@ -154,7 +154,7 @@ export class NewApplicationComponent implements OnInit {
 
   async confirmApp() {
     let req = { ...this.appForm.value, returnSteps: true };
-    req.namespace = `${ENSPrefixes.Application}.${req.orgNamespace}`;
+    req.namespace = `${this.ENSPrefixes.Application}.${req.orgNamespace}`;
     req.data = JSON.stringify(req.data);
     delete req.orgNamespace;
     

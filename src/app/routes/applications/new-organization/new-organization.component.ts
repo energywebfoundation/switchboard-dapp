@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatStepper } from '@angular/material';
-import { ENSPrefixes } from 'iam-client-lib';
+import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -21,7 +21,7 @@ export class NewOrganizationComponent implements OnInit {
   public orgForm: FormGroup;
   public environment = environment;
   public isChecking = false;
-  public ENSPrefixes = ENSPrefixes;
+  public ENSPrefixes = ENSNamespaceTypes;
 
   public constructor(
     private fb: FormBuilder,

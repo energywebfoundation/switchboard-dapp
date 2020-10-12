@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatStepper, MatTableDataSource } from '@angular/material';
-import { ENSPrefixes } from 'iam-client-lib';
+import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -50,7 +50,7 @@ export class NewRoleComponent implements OnInit {
   public isChecking   = false;
   public RoleType     = RoleType;
   public RoleTypeList = RoleTypeList;
-  public ENSPrefixes  = ENSPrefixes;
+  public ENSPrefixes  = ENSNamespaceTypes;
   public issuerList   : string[];
 
   IssuerType    = {
@@ -232,7 +232,7 @@ export class NewRoleComponent implements OnInit {
       // Check if namespace is taken
       let orgData = this.roleForm.value;
       let exists = await this.iamService.iam.checkExistenceOfDomain({
-        domain: `${orgData.roleName}.${ENSPrefixes.Roles}.${orgData.parentNamespace}`
+        domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
       });
 
       if (exists) {
@@ -293,7 +293,7 @@ export class NewRoleComponent implements OnInit {
         if (exists) {
           // Check if role sub-domain exists in this namespace
           exists = await this.iamService.iam.checkExistenceOfDomain({
-            domain: `${ENSPrefixes.Roles}.${this.roleForm.value.parentNamespace}`
+            domain: `${this.ENSPrefixes.Roles}.${this.roleForm.value.parentNamespace}`
           });
 
           if (exists) {
@@ -333,7 +333,7 @@ export class NewRoleComponent implements OnInit {
   async confirmRole() {
     let req = { ...this.roleForm.value, returnSteps: true };
 
-    req.namespace = `${ENSPrefixes.Roles}.${req.parentNamespace}`;
+    req.namespace = `${this.ENSPrefixes.Roles}.${req.parentNamespace}`;
     delete req.parentNamespace;
 
     req.data.roleType = req.roleType;
