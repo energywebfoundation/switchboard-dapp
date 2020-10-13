@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  goToApplications() {
+  goToGovernance() {
     this.route.navigate(['applications']); 
   }
 

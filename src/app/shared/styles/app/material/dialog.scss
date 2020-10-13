@@ -5,6 +5,10 @@
 
     .mat-icon-button {
         color: #7FADFF;
+
+        &:hover {
+            color: #33CBCB;
+        }
     }
 }
 
@@ -58,11 +62,20 @@ mat-datetimepicker-content {
     margin: 0 !important;
 }
 
+@include media-breakpoint-down(xl) {
+    .mat-dialog-content {
+        max-height: 88vh !important;
+    }
+}
+
+.ext-toaster {
+    height: auto !important;
+}
+
 @include media-breakpoint-down(sm) {
     .mat-dialog-container {
         height: 100vh !important;
     }
-
     .mat-dialog-content {
         max-height: 90vh !important;
     }
@@ -214,11 +227,11 @@ mat-checkbox {
 }
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-    background: #105DE7 !important;
+    background: #A567FF !important;
 }
 
 .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element, .mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element {
-    background: #105DE7 !important;
+    background: #A567FF !important;
 }
 
 .mat-stepper-horizontal, .mat-stepper-vertical {
@@ -368,4 +381,14 @@ mat-checkbox {
     .warned-wrapper {
         width: 120px !important;
         height: auto !important;
-    }   
+    }  
+    
+    .toast-container .ngx-toastr {
+        box-shadow: none !important;
+
+        .toast-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 16px !important;
+            font-weight: 600;
+        }
+    }    

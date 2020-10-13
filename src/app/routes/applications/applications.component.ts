@@ -14,6 +14,9 @@ export class ApplicationsComponent implements OnInit {
   organizationsColumns: string[] = ['imageURL', 'orgNameSpace', 'orgName', 'websiteURL', 'actions'];
   dataSourceOrganizations: OrganizationsLists[] = ORGANIZATIONS_DATA;
 
+  roleGovernanceColumns: string[] = ['creationDate', 'roleType', 'roleName', 'ensName', 'actions'];
+  dataSourceRoleGov: EnrollmentRoles[] = ROLE_DATA;
+
   constructor(public dialog: MatDialog) { }
 
   openNewOrgComponent(): void {
@@ -69,4 +72,19 @@ const ORGANIZATIONS_DATA: OrganizationsLists[] = [
   {imageUrl: 'https://www.energyweb.org/wp-content/uploads/2019/04/logo-knockout.png', orgNameSpace: 'organization1 namespace', orgName: 'Organization Name 1', websiteURL: 'www.organizations1.com', actions: ''},
   {imageUrl: 'https://www.energyweb.org/wp-content/uploads/2019/04/logo-knockout.png', orgNameSpace: 'organization2 namespace', orgName: 'Organization Name 2', websiteURL: 'www.organizations2.com', actions: ''},
   {imageUrl: 'https://www.energyweb.org/wp-content/uploads/2019/04/logo-knockout.png', orgNameSpace: 'organization3 namespace', orgName: 'Organization Name 3', websiteURL: 'www.organizations3.com', actions: ''},
+];
+
+export interface EnrollmentRoles {
+  creationDate: string;
+  roleType: string;
+  roleName: string;
+  ensName: string;
+  actions: string;
+}
+
+const ROLE_DATA: EnrollmentRoles[] = [
+  {creationDate: '01/28/2020', roleType: 'Custom Role', roleName: 'Device Owner', ensName: 'device.roles.switchboard.ewc', actions: ''},
+  {creationDate: '02/01/2020', roleType: 'Custom Role', roleName: 'Trader', ensName: 'trader.roles.switchboard.ewc', actions: ''},
+  {creationDate: '03/16/2020', roleType: 'Custome Role', roleName: 'Admin', ensName: 'admin.roles.switchboard.ewc', actions: ''},
+
 ];

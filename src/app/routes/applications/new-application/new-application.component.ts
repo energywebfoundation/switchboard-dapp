@@ -194,6 +194,7 @@ export class NewApplicationComponent implements OnInit {
     if (this.appForm.touched) {
       this.dialog.open(ConfirmationDialogComponent, {
         width: '400px',
+        maxHeight: '180px',
         data: {
           header: TOASTR_HEADER,
           message: 'There are unsaved changes. Do you wish to continue?'
