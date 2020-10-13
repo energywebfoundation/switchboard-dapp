@@ -9,9 +9,9 @@ import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 
 export const RoleType = {
-  ORG: 'ORG',
-  APP: 'APP',
-  CUSTOM: 'CUSTOM'
+  ORG: 'org',
+  APP: 'app',
+  CUSTOM: 'custom'
 };
 
 const RoleTypeList = [{
@@ -91,7 +91,7 @@ export class NewRoleComponent implements OnInit {
       });
 
       this.fieldsForm = fb.group({
-        type: ['', Validators.required],
+        fieldType: ['', Validators.required],
         label: ['', Validators.required],
         validation: ''
       });
@@ -339,9 +339,12 @@ export class NewRoleComponent implements OnInit {
     req.data.roleType = req.roleType;
     delete req.roleType;
 
+    req.data.roleName = req.roleName;
+    delete req.data.ensName;
+
     req.data.issuer.did = this.issuerList;
     req.data.fields = this.dataSource.data;
-    req.data = JSON.stringify(req.data);
+    req.data.metadata = {};
     
     console.log('req', req);
 
@@ -376,7 +379,7 @@ export class NewRoleComponent implements OnInit {
   }
 
   closeDialog(isSuccess?: boolean) {
-    if (this.roleForm.touched) {
+    if (this.roleForm.touched && !isSuccess) {
       this.dialog.open(ConfirmationDialogComponent, {
         width: '400px',
         maxHeight: '180px',

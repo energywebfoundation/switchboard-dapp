@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
-import { IAM, DIDAttribute } from 'iam-client-lib';
+import { IAM, DIDAttribute, CacheServerClient, MessagingMethod } from 'iam-client-lib';
 import { environment } from 'src/environments/environment';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
-const { walletConnectOptions } = environment;
+const { walletConnectOptions, cacheServerUrl, natsServerUrl } = environment;
+
+const cacheClient = new CacheServerClient({
+  url: cacheServerUrl,
+})
 
 export enum LoginType {
   LOCAL = 'local',
@@ -25,7 +29,12 @@ export class IamService {
 
   constructor() {
     // Initialize Data
-    this._iam = new IAM(walletConnectOptions);
+    this._iam = new IAM({
+      ...walletConnectOptions,
+      cacheClient,
+      messagingMethod: MessagingMethod.CacheServer,
+      natsServerUrl
+    });
   }
 
   /**

@@ -138,10 +138,27 @@ export class NewApplicationComponent implements OnInit {
         this.toastr.error('Application namespace already exists.', TOASTR_HEADER);
       }
       else {
-        // Let the user confirm the info before proceeding to the next step
-        this.stepper.selected.editable = false;
-        this.stepper.selected.completed = true;
-        this.stepper.next();
+        if (!orgData.data.others || !orgData.data.others.trim()) {
+          // Let the user confirm the info before proceeding to the next step
+          this.stepper.selected.editable = false;
+          this.stepper.selected.completed = true;
+          this.stepper.next();
+        }
+        else {
+          try {
+            // Check if others is in JSON Format
+            console.info(JSON.parse(orgData.data.others));
+
+            // Let the user confirm the info before proceeding to the next step
+            this.stepper.selected.editable = false;
+            this.stepper.selected.completed = true;
+            this.stepper.next();
+          }
+          catch (e) {
+            console.error(orgData.data.others, e);
+            this.toastr.error('Others must be in JSON format.', TOASTR_HEADER);
+          }
+        }
       }
     }
     else {
@@ -154,11 +171,28 @@ export class NewApplicationComponent implements OnInit {
 
   async confirmApp() {
     let req = { ...this.appForm.value, returnSteps: true };
+
     req.namespace = `${this.ENSPrefixes.Application}.${req.orgNamespace}`;
-    req.data = JSON.stringify(req.data);
     delete req.orgNamespace;
-    
-    console.log('req', req);
+
+    req.data.appName = req.data.applicationName;
+    delete req.data.applicationName;
+
+    // Make sure others is in correct JSON Format
+    if (req.data.others && req.data.others.trim()) {
+      try {
+        req.data.others = JSON.parse(req.data.others);
+      }
+      catch (e) {
+        this.toastr.error('Others must be in JSON format.', TOASTR_HEADER);
+        return;
+      }
+    }
+    else {
+      delete req.data.others;
+    }
+
+    console.info('myreq', req);
 
     // Set the second step to non-editable
     let list = this.stepper.steps.toArray();
@@ -191,7 +225,7 @@ export class NewApplicationComponent implements OnInit {
   }
 
   closeDialog(isSuccess?: boolean) {
-    if (this.appForm.touched) {
+    if (this.appForm.touched && !isSuccess) {
       this.dialog.open(ConfirmationDialogComponent, {
         width: '400px',
         maxHeight: '180px',

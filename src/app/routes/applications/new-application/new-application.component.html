@@ -210,42 +210,8 @@
         </mat-step>
         <mat-step [completed]="false">
             <ng-template matStepLabel>Application Created</ng-template>
-            <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-              <div class="d-flex justify-content-center">
-                <div class="image-wrapper w-50 d-flex align-items-center justify-content-center mb-3">
-                  <span class="opacity-50" *ngIf="!appForm?.value?.data?.logoUrl">No image</span>
-                  <img class="w-50" *ngIf="appForm?.value?.data?.logoUrl" src="{{ appForm?.value?.data?.logoUrl }}"/>
-                </div>
-              </div>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Application Namespace</div>
-                <span class="color-white mb-0">{{ appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace }}</span>
-              </div>
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Application Name</div>
-                <span class="color-white mb-0">{{ appForm?.value?.data?.applicationName }}</span>
-              </div>
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Website URL</div>
-                <span class="color-white mb-0">{{ appForm?.value?.data?.websiteUrl || 'None' }}</span>
-              </div>
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Description</div>
-                <span class="color-white mb-0">{{ appForm?.value?.data?.description || 'None' }}</span>
-              </div>
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Others (JSON)</div>
-                <span class="color-white mb-0">{{ appForm?.value?.data?.others || 'None' }}</span>
-              </div>
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Roles Namespace</div>
-                <span class="color-white mb-0">{{ ENSPrefixes.Roles }}.{{ appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace }}</span>
-              </div>
+            <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              <mat-icon>notifications_none</mat-icon><span class="pb-2">All transactions are completely processed.</span>
             </div>
             <div>
               <div class="d-flex justify-content-end mb-2">

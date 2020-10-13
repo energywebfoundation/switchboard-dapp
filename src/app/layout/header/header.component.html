@@ -7,35 +7,35 @@
         </a>
     </div>
     <ul class="menu-top navbar-nav mx-auto flex-row align-items-center" *ngIf="isNavMenuVisible">
-        <li class="nav-item">
+        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'assets' }">
             <img src="../assets/img/icons/assets-icon.png" width="auto" height="21"
             alt="assets image">
             <a class="nav-link d-lg-block d-xl-block cursor-pointer">
                 <h6 class="mb-0">Assets</h6>
             </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'governance' }">
             <img src="../assets/img/icons/governance-icon.png" width="auto" height="21"
             alt="Governance image">
-            <a class="nav-link d-lg-block d-xl-block cursor-pointer" routerLink="applications">
+            <a class="nav-link d-lg-block d-xl-block cursor-pointer" routerLink="/governance">
                 <h6 class="mb-0">Governance</h6>
             </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'services' }">
             <img src="../assets/img/icons/services-icon.png" width="auto" height="21"
             alt="Services image">
             <a class="nav-link d-lg-block d-xl-block cursor-pointer">
                 <h6 class="mb-0">Services</h6>
             </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'enrolment' }">
             <img src="../assets/img/icons/enrollment-icon.png" width="auto" height="21"
             alt="Enrollments image">
-            <a class="nav-link d-lg-block d-xl-block cursor-pointer" routerLink="enrolment">
+            <a class="nav-link d-lg-block d-xl-block cursor-pointer" routerLink="/enrolment">
                 <h6 class="mb-0">Enrollments</h6>
             </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'applications' }">
             <img src="../assets/img/icons/applications-icon.png" width="auto" height="21"
                 alt="Dashboard image">
             <a class="nav-link d-lg-block d-xl-block cursor-pointer">

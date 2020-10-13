@@ -13,12 +13,12 @@ export class RequestClaimComponent implements OnInit {
   constructor(private fb: FormBuilder) { 
     // Get data here
     this.fieldList = [{
-      type: 'text',
-      label: 'Name',
-      validation: ''
-    },{
       type: 'number',
       label: 'Age',
+      validation: ''
+    },{
+      type: 'text',
+      label: 'Name',
       validation: ''
     },{
       type: 'date',

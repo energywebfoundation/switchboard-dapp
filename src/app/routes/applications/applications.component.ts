@@ -11,11 +11,8 @@ import { NewRoleComponent } from './new-role/new-role.component';
 })
 export class ApplicationsComponent implements OnInit {
 
-  organizationsColumns: string[] = ['imageURL', 'orgNameSpace', 'orgName', 'websiteURL', 'actions'];
-  dataSourceOrganizations: OrganizationsLists[] = ORGANIZATIONS_DATA;
-
-  roleGovernanceColumns: string[] = ['creationDate', 'roleType', 'roleName', 'ensName', 'actions'];
-  dataSourceRoleGov: EnrollmentRoles[] = ROLE_DATA;
+  isAppShown = false;
+  isRoleShown = false;
 
   constructor(public dialog: MatDialog) { }
 
@@ -58,6 +55,14 @@ export class ApplicationsComponent implements OnInit {
   ngOnInit() {
   }
 
+  showMe(i: any) {
+    if (i.index === 1) {
+      this.isAppShown = true;
+    }
+    else if (i.index === 2) {
+      this.isRoleShown = true;
+    }
+  }
 }
 
 export interface OrganizationsLists {

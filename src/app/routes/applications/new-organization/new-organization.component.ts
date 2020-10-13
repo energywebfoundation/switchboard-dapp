@@ -39,7 +39,7 @@ export class NewOrganizationComponent implements OnInit {
         logoUrl: ['', Validators.pattern('https?://.*')],
         websiteUrl: ['', Validators.pattern('https?://.*')],
         description: '',
-        others: ''
+        others: undefined
       })
     });
   }
@@ -74,9 +74,25 @@ export class NewOrganizationComponent implements OnInit {
         this.toastr.error('Organization namespace already exists.', TOASTR_HEADER);
       }
       else {
-        // Let the user confirm the info before proceeding to the next step
-        this.stepper.selected.completed = true;
-        this.stepper.next();
+        if (!orgData.data.others || !orgData.data.others.trim()) {
+          // Let the user confirm the info before proceeding to the next step
+          this.stepper.selected.completed = true;
+          this.stepper.next();
+        }
+        else {
+          try {
+            // Check if others is in JSON Format
+            console.info(JSON.parse(orgData.data.others));
+
+            // Let the user confirm the info before proceeding to the next step
+            this.stepper.selected.completed = true;
+            this.stepper.next();
+          }
+          catch (e) {
+            console.error(orgData.data.others, e);
+            this.toastr.error('Others must be in JSON format.', TOASTR_HEADER);
+          }
+        }
       }
     }
     else {
@@ -89,8 +105,24 @@ export class NewOrganizationComponent implements OnInit {
 
   async confirmOrg() {
     let req = { ...this.orgForm.value, returnSteps: true };
-    req.data = JSON.stringify(req.data);
-    console.log('req', req);
+    req.data.orgName = req.data.organizationName;
+    delete req.data.organizationName;
+
+    // Make sure others is in correct JSON Format
+    if (req.data.others && req.data.others.trim()) {
+      try {
+        req.data.others = JSON.parse(req.data.others);
+      }
+      catch (e) {
+        this.toastr.error('Others must be in JSON format.', TOASTR_HEADER);
+        return;
+      }
+    }
+    else {
+      delete req.data.others;
+    }
+
+    console.info('myreq', req);
 
     // Set the first step to non-editable
     this.stepper.steps.first.editable = false;
@@ -127,7 +159,7 @@ export class NewOrganizationComponent implements OnInit {
   }
 
   closeDialog(isSuccess?: boolean) {
-    if (this.orgForm.touched) {
+    if (this.orgForm.touched && !isSuccess) {
       this.dialog.open(ConfirmationDialogComponent, {
         width: '400px',
         maxHeight: '180px',
