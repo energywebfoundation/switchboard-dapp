@@ -16,9 +16,6 @@ export class EnrolmentComponent implements OnInit {
     myEnrollmentsColumns: string[] = ['roleType', 'namespace', 'metadata', 'actions'];
     dataSourceMyEn: MyEnrollments[] = MY_ENROLLMENTS_DATA;
 
-    roleGovernanceColumns: string[] = ['creationDate', 'roleType', 'roleName', 'ensName', 'actions'];
-    dataSourceRoleGov: EnrollmentRoles[] = ROLE_DATA;
-
   constructor(public dialog: MatDialog) { }
 
   openNewRoleComponent(): void {
@@ -86,20 +83,5 @@ const MY_ENROLLMENTS_DATA: MyEnrollments[] = [
   {roleType: 'Custom Role', namespace: 'Name', metadata: 'metadata', actions: ''},
   {roleType: 'Custom Role', namespace: 'Name', metadata: 'metadata', actions: ''},
   {roleType: 'Custom Role', namespace: 'Name', metadata: 'metadata', actions: ''},
-];
-
-export interface EnrollmentRoles {
-  creationDate: string;
-  roleType: string;
-  roleName: string;
-  ensName: string;
-  actions: string;
-}
-
-const ROLE_DATA: EnrollmentRoles[] = [
-  {creationDate: '01/28/2020', roleType: 'Custom Role', roleName: 'Device Owner', ensName: 'device.roles.switchboard.ewc', actions: ''},
-  {creationDate: '02/01/2020', roleType: 'Custom Role', roleName: 'Trader', ensName: 'trader.roles.switchboard.ewc', actions: ''},
-  {creationDate: '03/16/2020', roleType: 'Custome Role', roleName: 'Admin', ensName: 'admin.roles.switchboard.ewc', actions: ''},
-
 ];
 
