@@ -7,7 +7,7 @@ const LS_KEY_CONNECTED = 'connected';
 const { walletConnectOptions, cacheServerUrl, natsServerUrl } = environment;
 
 const cacheClient = new CacheServerClient({
-  url: cacheServerUrl,
+  url: cacheServerUrl
 })
 
 export enum LoginType {
