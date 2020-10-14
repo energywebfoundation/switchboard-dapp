@@ -1,89 +1,95 @@
-<div class="overflow-hidden h-100">
-  <div class="d-flex justify-content-center justify-content-lg-start ml-0 ml-lg-4 my-2">
-    <img src="{{ appDetails?.logoUrl }}" height="48px" *ngIf="appDetails?.logoUrl"/>
+<div
+  class="header-enroll d-flex justify-content-center justify-content-lg-start position-fixed ml-0 ml-lg-4 py-2 w-100">
+  <img src="{{ appDetails?.logoUrl }}" height="48px" *ngIf="appDetails?.logoUrl" />
+</div>
+<ngx-spinner [fullScreen]="false" type="ball-spin-fade" size="medium" bdColor="rgba(24,20,36,0.8)" bdOpacity=0.9
+  color="#A567FF">
+  <p class="label-role" *ngIf="!submitting">Loading...</p>
+  <p class="label-role" *ngIf="submitting">Please confirm this transaction in your connected wallet.</p>
+</ngx-spinner>
+<div class="d-flex justify-content-center flex-column align-items-center w-100">
+  <div
+    class="content-enroll d-flex justify-content-start justify-content-md-center align-items-md-center flex-column color-white px-3 mb-1 w-100">
+    <h2 class="color-default font-weight-600 mb-1">Enrol to {{ appDetails?.appName }}</h2>
+    <span class="opacity-50">Please fill in below details</span>
   </div>
-  <ngx-spinner [fullScreen]="false" type="ball-spin-fade" size="medium" bdColor="rgba(24,20,36,0.8)" bdOpacity=0.9
-    color="#A567FF">
-    <p class="label-role" *ngIf="!submitting">Loading...</p>
-    <p class="label-role" *ngIf="submitting">Please confirm this transaction in your connected wallet.</p>
-  </ngx-spinner>
-  <div class="d-flex justify-content-center justify-content-lg-center align-items-lg-center align-items-center" *ngIf="appDetails?.appName">
-    <h4 class="color-white">Enrol to <strong>{{ appDetails?.appName }}</strong></h4>
-  </div>
-  <div class="d-flex justify-content-center justify-content-lg-center align-items-lg-center align-items-center">
-    <mat-card class="card-enroll h-100" *ngIf="!appError && !enrolSuccess">
-      <div class="top-layer enroll-height p-2">
-        <form role="form" [formGroup]="roleTypeForm">
-          <div class="row">
-            <div class="col-lg-12">
-              <mat-label class="ml-3 pl-1">Role</mat-label>
-              <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                <mat-select placeholder="Role" formControlName="roleType" (selectionChange)="roleTypeSelected($event)">
-                  <mat-option *ngFor="let role of roleList" [value]="role">{{ role.name | uppercase }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-        </form>
-        <form role="form" [formGroup]="enrolmentForm" *ngIf="roleTypeForm?.value?.roleType">
-          <div class="row">
-            <!-- START: Dynamic Form Fields -->
-            <ng-container *ngFor="let field of enrolmentForm?.get('fields')?.controls; let i = index;">
-              <div [ngClass]="{ 'col-lg-12': (fieldList[i].fieldType === 'text' || fieldList[i].fieldType === 'boolean'), 'col-lg-6': (fieldList[i].fieldType === 'number' || fieldList[i].fieldType === 'date') }">
-                <mat-label class="ml-3 pl-1" *ngIf="fieldList[i].fieldType !== 'boolean'">{{ fieldList[i].label }}</mat-label>
-
-                <!-- TYPE: Text -->
-                <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never" *ngIf="fieldList[i].fieldType === 'text'">
-                  <input matInput type="text" placeholder="{{ fieldList[i].label }}" [formControl]="enrolmentForm?.get('fields')?.controls[i]" />
-                </mat-form-field>
-
-                <!-- TYPE: Number -->
-                <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never" *ngIf="fieldList[i].fieldType === 'number'">
-                  <input matInput type="number" placeholder="{{ fieldList[i].label }}" [formControl]="enrolmentForm?.get('fields')?.controls[i]"/>
-                </mat-form-field>
-
-                <!-- TYPE: Date -->
-                <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never" *ngIf="fieldList[i].fieldType === 'date'">
-                  <input [matDatepicker]="picker" matInput placeholder="{{ fieldList[i].label }}" autocomplete="off" [formControl]="enrolmentForm?.get('fields')?.controls[i]" (keypress)="$event.preventDefault()">
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-
-                <!-- TYPE: Boolean -->
-                <mat-checkbox class="pl-3" *ngIf="fieldList[i].fieldType === 'boolean'" [formControl]="enrolmentForm?.get('fields')?.controls[i]"><span class="mb-3 d-inline-flex">{{ fieldList[i].label }}</span></mat-checkbox>
-              </div>
-            </ng-container>
-            <!-- END: Dynamic Form Fields -->
-          </div>
-        </form>
-        <div class="my-3">
-          <button mat-raised-button class="btn btn-primary w-100" type="submit" (click)="submit()" [disabled]="!roleTypeForm?.value?.roleType">Register</button>
+  <mat-card class="card-enroll" *ngIf="!appError && !enrolSuccess">
+    <form role="form" [formGroup]="roleTypeForm">
+      <div class="row">
+        <div class="col-lg-12">
+          <mat-label class="ml-3 pl-1">Role</mat-label>
+          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+            <mat-select placeholder="Role" formControlName="roleType" (selectionChange)="roleTypeSelected($event)">
+              <mat-option *ngFor="let role of roleList" [value]="role">{{ role.name | uppercase }}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
-    </mat-card>
+    </form>
+    <form role="form" [formGroup]="enrolmentForm" *ngIf="roleTypeForm?.value?.roleType">
+      <div class="row">
+        <!-- START: Dynamic Form Fields -->
+        <ng-container *ngFor="let field of enrolmentForm?.get('fields')?.controls; let i = index;">
+          <div
+            [ngClass]="{ 'col-lg-12': (fieldList[i].fieldType === 'text' || fieldList[i].fieldType === 'boolean'), 'col-lg-6': (fieldList[i].fieldType === 'number' || fieldList[i].fieldType === 'date') }">
+            <mat-label class="ml-3 pl-1" *ngIf="fieldList[i].fieldType !== 'boolean'">{{ fieldList[i].label }}
+            </mat-label>
 
-    <!-- ERROR: App Details cannot be retrieved -->
-    <mat-card class="card-enroll h-100" *ngIf="appError && !enrolSuccess">
-      <div class="top-layer enroll-height p-2">
-        <p class="label-role">ERROR: Application Details cannot be retrieved.</p>
-      </div>
-    </mat-card>
+            <!-- TYPE: Text -->
+            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never"
+              *ngIf="fieldList[i].fieldType === 'text'">
+              <input matInput type="text" placeholder="{{ fieldList[i].label }}"
+                [formControl]="enrolmentForm?.get('fields')?.controls[i]" />
+            </mat-form-field>
 
-    <!-- SUCCESS -->
-    <mat-card class="card-enroll h-100" *ngIf="enrolSuccess">
-      <div class="top-layer enroll-height p-2">
-        <p class="label-role">SUCCESS: Request to enrol as <strong>{{ roleTypeForm?.value?.roleType?.name | uppercase }}</strong> is successful.</p>
-        <a href="{{ appCallbackUrl }}" *ngIf="appCallbackUrl">Return to <strong>{{ appDetails?.appName }}</strong></a>
-      </div>
-    </mat-card>
+            <!-- TYPE: Number -->
+            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never"
+              *ngIf="fieldList[i].fieldType === 'number'">
+              <input matInput type="number" placeholder="{{ fieldList[i].label }}"
+                [formControl]="enrolmentForm?.get('fields')?.controls[i]" />
+            </mat-form-field>
 
-    <div class="welcome-footer">
-      <div class="d-flex justify-content-start align-items-center mx-4 my-2">
-        <img src="assets/img/icons/ew-logo-white.png" width="120px" height="auto"/>
+            <!-- TYPE: Date -->
+            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never"
+              *ngIf="fieldList[i].fieldType === 'date'">
+              <input [matDatepicker]="picker" matInput placeholder="{{ fieldList[i].label }}" autocomplete="off"
+                [formControl]="enrolmentForm?.get('fields')?.controls[i]" (keypress)="$event.preventDefault()">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <!-- TYPE: Boolean -->
+            <mat-checkbox class="pl-3" *ngIf="fieldList[i].fieldType === 'boolean'"
+              [formControl]="enrolmentForm?.get('fields')?.controls[i]"><span
+                class="mb-3 d-inline-flex">{{ fieldList[i].label }}</span></mat-checkbox>
+          </div>
+        </ng-container>
+        <!-- END: Dynamic Form Fields -->
       </div>
+    </form>
+    <div class="mt-3">
+      <button mat-raised-button class="btn btn-primary w-100" type="submit" (click)="submit()"
+        [disabled]="!roleTypeForm?.value?.roleType">Register</button>
     </div>
-    <div class="welcome-bottom-footer d-flex justify-content-end justify-content-lg-between">
-      <span>Energy Web is incorporated in Zug, Switzerland</span>
+  </mat-card>
+
+  <!-- ERROR: App Details cannot be retrieved -->
+  <mat-card class="card-enroll" *ngIf="appError && !enrolSuccess">
+    <p class="label-role">ERROR: Application Details cannot be retrieved.</p>
+  </mat-card>
+
+  <!-- SUCCESS -->
+  <mat-card class="card-enroll" *ngIf="enrolSuccess">
+    <p class="label-role">SUCCESS: Request to enrol as
+      <strong>{{ roleTypeForm?.value?.roleType | uppercase }}</strong> is successful.</p>
+    <a href="{{ appCallbackUrl }}" *ngIf="appCallbackUrl">Return to <strong>{{ appDetails?.appName }}</strong></a>
+  </mat-card>
+
+  <div class="footer-enroll">
+    <div class="d-flex justify-content-between align-items-center mx-3 mx-md-4 h-100">
+      <div>
+        <img src="assets/img/icons/ew-logo-white.png" width="98px" height="auto" />
+      </div>
       <div>
         <a class="color-white mx-2" href="#">Privacy Policy</a>
         <a class="color-white mx-2" href="#">Cookies Policy</a>
