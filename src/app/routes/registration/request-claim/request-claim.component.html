@@ -13,7 +13,7 @@
     <h2 class="color-default font-weight-600 mb-1">Enrol to {{ appDetails?.appName }}</h2>
     <span class="opacity-50">Please fill in below details</span>
   </div>
-  <mat-card class="card-enroll" *ngIf="!appError && !enrolSuccess">
+  <mat-card class="card-enroll">
     <form role="form" [formGroup]="roleTypeForm">
       <div class="row">
         <div class="col-lg-12">
@@ -71,18 +71,6 @@
       <button mat-raised-button class="btn btn-primary w-100" type="submit" (click)="submit()"
         [disabled]="!roleTypeForm?.value?.roleType">Register</button>
     </div>
-  </mat-card>
-
-  <!-- ERROR: App Details cannot be retrieved -->
-  <mat-card class="card-enroll" *ngIf="appError && !enrolSuccess">
-    <p class="label-role">ERROR: Application Details cannot be retrieved.</p>
-  </mat-card>
-
-  <!-- SUCCESS -->
-  <mat-card class="card-enroll" *ngIf="enrolSuccess">
-    <p class="label-role">SUCCESS: Request to enrol as
-      <strong>{{ roleTypeForm?.value?.roleType | uppercase }}</strong> is successful.</p>
-    <a href="{{ appCallbackUrl }}" *ngIf="appCallbackUrl">Return to <strong>{{ appDetails?.appName }}</strong></a>
   </mat-card>
 
   <div class="footer-enroll">

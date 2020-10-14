@@ -6,6 +6,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 
+const SWAL = require('sweetalert');
+
 const TOASTR_HEADER = 'Enrolment';
 
 @Component({
@@ -24,7 +26,6 @@ export class RequestClaimComponent implements OnInit {
 
   public submitting     = false;
   public appError       = false;
-  public enrolSuccess   = false;
 
   private appNamespace  : string;
   private appCallbackUrl: string;
@@ -67,7 +68,7 @@ export class RequestClaimComponent implements OnInit {
           }
           else {
             // Display Error
-            this.appError = true;
+            this.displayAlert('Application Details cannot be retrieved.', 'error');
           }
         } 
         catch (e) {
@@ -84,8 +85,34 @@ export class RequestClaimComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    
+  private async displayAlert(text: string, icon: string) {
+    let config = {
+      title: TOASTR_HEADER,
+      text: text,
+      icon: icon,
+      button: 'Back to Application',
+      closeOnClickOutside: false
+    };
+
+    // Hide button if callback url is not available
+    if (!this.appCallbackUrl) {
+      delete config.button;
+      config['buttons'] = false;
+    }
+
+    // Navigate to callback URL
+    let result = await SWAL(config);
+    if (result && this.appCallbackUrl) {
+      location.href = this.appCallbackUrl;
+    }
+  }
+
+  async ngOnInit() {
+    // login
+    await this.iamService.login();
+
+    // Setup User Data
+    await this.iamService.setupUser();
   }
 
   private async initRoles() {
@@ -123,7 +150,6 @@ export class RequestClaimComponent implements OnInit {
   private resetData() {
     this.submitting = false;
     this.appError = false;
-    this.enrolSuccess = false;
     this.selectedRole = undefined;
 
     this.roleTypeForm.reset();
@@ -181,6 +207,8 @@ export class RequestClaimComponent implements OnInit {
         this.submitting = true;
         this.spinner.show();
 
+        let success = true;
+
         try {
           // Check if user has already enrolled in this role
 
@@ -204,23 +232,27 @@ export class RequestClaimComponent implements OnInit {
               issuerDID: this.selectedRole.issuer.did[0],
               claim: claim
           });
-          
+
           await this.iamService.iam.createClaimRequest({
             issuerDID: this.selectedRole.issuer.did[0],
             claim: claim
           });
-
-          this.toastr.success('Request is sent for review and approval.', TOASTR_HEADER);
-          this.enrolSuccess = true;
+          
+          success = true;
         }
         catch (e) {
           console.error('Enrolment Failed', e);
           this.toastr.error(e, TOASTR_HEADER);
+          this.submitting = false;
         }
         finally {
           this.spinner.hide();
-          this.submitting = false;
         }
+
+        if (success) {
+          this.displayAlert('Request to enrol as ' + this.roleTypeForm.value.roleType.name.toUpperCase() + ' is submitted for review and approval.',
+            'success');
+        } 
       }
       else {
         this.toastr.error('Cannot identify issuer for this role.', TOASTR_HEADER);
