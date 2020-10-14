@@ -10,9 +10,9 @@
     <div class="row">
       <div class="card card-default w-100 shadow-none d-flex pt-3 mb-3">
         <div class="d-flex justify-content-center" *ngIf="data?.type !== ListType.ROLE">
-          <div class="image-wrapper w-50 d-flex align-items-center justify-content-center mb-3">
+          <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
             <span class="opacity-50" *ngIf="!formData?.definition?.logoUrl">No image</span>
-            <img class="w-50" *ngIf="formData?.definition?.logoUrl" src="{{ formData?.definition?.logoUrl }}"/>
+            <img class="img-logo" *ngIf="formData?.definition?.logoUrl" src="{{ formData?.definition?.logoUrl }}"/>
           </div>
         </div>
         <div class="text-left my-3">

@@ -29,6 +29,12 @@ export const routes = [
         ]
     },
     {
+        path: 'login',
+        children: [
+            { path: '', loadChildren: './login/login.module#LoginModule' }
+        ]
+    },
+    {
         path: 'registration',
         children: [
             { path: '', loadChildren: './registration/registration.module#RegistrationModule' }
