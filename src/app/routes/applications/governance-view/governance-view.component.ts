@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { DialogData } from 'src/app/layout/header/dialog-user/dialog-user-data';
+import { RoleType } from '../new-role/new-role.component';
 
 const ListType = {
   ORG: 'org',
@@ -17,6 +18,7 @@ export class GovernanceViewComponent implements OnInit {
   typeLabel : string;
   formData  : any;
   ListType  = ListType;
+  RoleType  = RoleType;
   
   displayedColumnsView: string[] = ['type', 'label', 'validation'];
 

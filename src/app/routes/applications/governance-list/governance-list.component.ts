@@ -4,6 +4,7 @@ import { ENSNamespaceTypes } from 'iam-client-lib';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
+import { RoleType } from '../new-role/new-role.component';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -24,6 +25,7 @@ export class GovernanceListComponent implements OnInit {
   @Input('list-type') listType: string;
 
   ListType        = ListType;
+  RoleType        = RoleType;
   dataSource      = [];
   displayedColumns: string[];
   listTypeLabel   : string;

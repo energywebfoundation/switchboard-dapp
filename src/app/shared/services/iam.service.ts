@@ -28,13 +28,17 @@ export class IamService {
   private _didDocument: any;
 
   constructor() {
-    // Initialize Data
-    this._iam = new IAM({
+    let options = {
       ...walletConnectOptions,
       cacheClient,
       messagingMethod: MessagingMethod.CacheServer,
       natsServerUrl
-    });
+    };
+
+    console.info('IAM Service Options', options);
+
+    // Initialize Data
+    this._iam = new IAM(options);
   }
 
   /**

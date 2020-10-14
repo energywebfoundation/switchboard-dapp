@@ -28,6 +28,8 @@ export class RequestClaimComponent implements OnInit {
 
   private appNamespace  : string;
   private appCallbackUrl: string;
+  private appDefaultRole: string;
+
   private selectedRole  : any;
   
   constructor(private fb: FormBuilder, 
@@ -41,8 +43,10 @@ export class RequestClaimComponent implements OnInit {
     });
     this.activeRoute.queryParams.subscribe(async (params: any) => {
       if (params.app) {
+        // URL Params
         this.appNamespace = params.app;
         this.appCallbackUrl = params.returnUrl;
+        this.appDefaultRole = params.roleName;
 
         // Show loading and reset data
         this.spinner.show();
@@ -94,6 +98,19 @@ export class RequestClaimComponent implements OnInit {
 
       if (this.roleList && this.roleList.length) {
         this.roleList = this.roleList[0].roles;
+
+        // Set Default Selected
+        if (this.appDefaultRole) {
+          for (let i = 0; i < this.roleList.length; i++) {
+            if (this.roleList[i].name.toUpperCase() === this.appDefaultRole.toUpperCase()) {
+              this.selectedRole = this.roleList[i].definition;
+              this.fieldList = this.selectedRole.fields;
+              this.updateForm();
+
+              this.roleTypeForm.get('roleType').setValue(this.roleList[i]);
+            }
+          }
+        }
       }
       
       console.log('this.roleList', this.roleList);
@@ -120,52 +137,90 @@ export class RequestClaimComponent implements OnInit {
     }
   }
 
+  private updateForm() {
+    let controls = [];
+    for (let { type, label, validation} of this.fieldList) {
+      let control = new FormControl();
+      switch (type) {
+        case 'text':
+          break;
+        case 'number':
+          break;
+        case 'date':
+          break;
+        case 'boolean':
+          break;
+      }
+
+      // TODO: add validations
+
+      // add control to array
+      controls.push(control);
+    }
+
+    this.enrolmentForm = this.fb.group({
+      fields: this.fb.array(controls)
+    });
+
+    console.log(this.enrolmentForm);
+  }
+
   roleTypeSelected(e: any) {
     console.log('roleTypeSelected', e);
     if (e && e.value && e.value.definition && e.value.definition.fields) {
       this.fieldList = e.value.definition.fields;
       this.selectedRole = e.value.definition;
 
-      let controls = [];
-      for (let { type, label, validation} of this.fieldList) {
-        let control = new FormControl();
-        switch (type) {
-          case 'text':
-            break;
-          case 'number':
-            break;
-          case 'date':
-            break;
-          case 'boolean':
-            break;
-        }
-
-        // TODO: add validations
-
-        // add control to array
-        controls.push(control);
-      }
-
-      this.enrolmentForm = this.fb.group({
-        fields: this.fb.array(controls)
-      });
-
-      console.log(this.enrolmentForm);
+      this.updateForm();
     }
   }
 
   async submit() {
     if (this.enrolmentForm.valid) {
       if (this.selectedRole.issuer && this.selectedRole.issuer.did && this.selectedRole.issuer.did.length) {
-        let claim = {
-          fields: this.enrolmentForm.value,
-          claimType: this.appNamespace
-        };
-        
-        await this.iamService.iam.createClaimRequest({
-          issuerDID: this.selectedRole.issuer.did[0],
-          claim: claim
-        });
+        this.submitting = true;
+        this.spinner.show();
+
+        try {
+          // Check if user has already enrolled in this role
+
+          // Construct Fields
+          let fields = [];
+          let values = this.enrolmentForm.value.fields;
+          for (let i = 0; i < this.fieldList.length; i++) {
+            fields.push({
+              key: this.fieldList[i].label,
+              value: values[i]
+            });
+          }
+
+          // Submit
+          let claim = {
+            fields: JSON.parse(JSON.stringify(fields)),
+            claimType: this.appNamespace
+          };
+          
+          console.info('createClaimRequest', {
+              issuerDID: this.selectedRole.issuer.did[0],
+              claim: claim
+          });
+          
+          await this.iamService.iam.createClaimRequest({
+            issuerDID: this.selectedRole.issuer.did[0],
+            claim: claim
+          });
+
+          this.toastr.success('Request is sent for review and approval.', TOASTR_HEADER);
+          this.enrolSuccess = true;
+        }
+        catch (e) {
+          console.error('Enrolment Failed', e);
+          this.toastr.error(e, TOASTR_HEADER);
+        }
+        finally {
+          this.spinner.hide();
+          this.submitting = false;
+        }
       }
       else {
         this.toastr.error('Cannot identify issuer for this role.', TOASTR_HEADER);

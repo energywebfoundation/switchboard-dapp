@@ -1,4 +1,4 @@
-<div class="card card-default mb-3 pb-0">
+<div class="card card-default mb-3 pb-3">
   <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
     <!-- Filter -->
 
@@ -15,7 +15,11 @@
       <th mat-header-cell *matHeaderCellDef>
         <ng-container> Role Type </ng-container>
       </th>
-      <td mat-cell *matCellDef="let element" data-label="Role Type"> {{element?.definition?.roleType | uppercase }} </td>
+      <td mat-cell *matCellDef="let element" data-label="Role Type">
+        <ng-container *ngIf="element?.definition?.roleType === RoleType.ORG"> Organization </ng-container>
+        <ng-container *ngIf="element?.definition?.roleType === RoleType.APP"> Application </ng-container>
+        <ng-container *ngIf="element?.definition?.roleType === RoleType.CUSTOM"> Custom </ng-container>
+      </td>
     </ng-container>
 
     <!-- Namespace Column -->
