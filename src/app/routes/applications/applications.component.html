@@ -10,7 +10,7 @@
               </button>
           </span>
         </div>
-        <app-governance-list list-type="org"></app-governance-list>
+        <app-governance-list list-type="org" #listOrg></app-governance-list>
       </div>
     </div>
   </mat-tab>
@@ -26,7 +26,7 @@
           </span>
         </div>
         <ng-container *ngIf="isAppShown">
-          <app-governance-list list-type="app"></app-governance-list>
+          <app-governance-list list-type="app" #listApp></app-governance-list>
         </ng-container>
       </div>
     </div>
@@ -42,7 +42,7 @@
           </span>
         </div>
         <ng-container *ngIf="isRoleShown">
-          <app-governance-list list-type="role"></app-governance-list>
+          <app-governance-list list-type="role" #listRole></app-governance-list>
         </ng-container>
       </div>
     </div>

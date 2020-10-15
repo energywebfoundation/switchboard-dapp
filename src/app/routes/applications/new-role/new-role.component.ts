@@ -229,6 +229,8 @@ export class NewRoleComponent implements OnInit {
     this.isChecking = true;
 
     if (this.roleForm.value.roleName) {
+      let allowToProceed = true;
+      
       // Check if namespace is taken
       let orgData = this.roleForm.value;
       let exists = await this.iamService.iam.checkExistenceOfDomain({
@@ -236,10 +238,31 @@ export class NewRoleComponent implements OnInit {
       });
 
       if (exists) {
-        // Do not allow to proceed if namespace already exists
-        this.toastr.error('Role namespace already exists.', TOASTR_HEADER);
+        // If exists check if current user is the owner of this namespace and allow him/her to overwrite
+        let isOwner = await this.iamService.iam.isOwner({
+          domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
+        });
+
+        if (!isOwner) {
+          allowToProceed = false;
+
+          // Do not allow to proceed if namespace already exists
+          this.toastr.error('Role namespace already exists. You have no access rights to it.', TOASTR_HEADER);
+        }
+        else {
+          this.spinner.hide();
+          
+          // Prompt if user wants to overwrite this namespace
+          if (!await this.confirm('Role namespace already exists. Do you wish to continue?')) {
+            allowToProceed = false;
+          }
+          else {
+            this.spinner.show();
+          }
+        }
       }
-      else {
+
+      if (allowToProceed) {
         // Proceed
         this.roleForm.get('data').get('issuer').get('issuerType').setValue(this.IssuerType.DID);
         this.stepper.selected.editable = false;
@@ -378,22 +401,24 @@ export class NewRoleComponent implements OnInit {
     }
   }
 
-  closeDialog(isSuccess?: boolean) {
+  private async confirm(confirmationMsg: string) {
+    return this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      maxHeight: '180px',
+      data: {
+        header: TOASTR_HEADER,
+        message: confirmationMsg
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().toPromise();
+  }
+
+  async closeDialog(isSuccess?: boolean) {
     if (this.roleForm.touched && !isSuccess) {
-      this.dialog.open(ConfirmationDialogComponent, {
-        width: '400px',
-        maxHeight: '180px',
-        data: {
-          header: TOASTR_HEADER,
-          message: 'There are unsaved changes. Do you wish to continue?'
-        },
-        maxWidth: '100%',
-        disableClose: true
-      }).afterClosed().subscribe((exit: any) => {
-        if (exit) {
-          this.dialogRef.close(false);
-        }
-      });
+      if (await this.confirm('There are unsaved changes. Do you wish to continue?')) {
+        this.dialogRef.close(false);
+      }
     }
     else {
       if (isSuccess) {

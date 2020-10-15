@@ -59,7 +59,7 @@ export class GovernanceListComponent implements OnInit {
     await this.getList();
   }
 
-  private async getList() {
+  public async getList() {
     this.loadingService.show();
     const $getOrgList = await this.iamService.iam.getENSTypesByOwner({
       type: this.ensType,

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
 import { MatDialog } from '@angular/material';
 import { NewApplicationComponent } from './new-application/new-application.component';
 import { NewRoleComponent } from './new-role/new-role.component';
+import { GovernanceListComponent } from './governance-list/governance-list.component';
 
 @Component({
   selector: 'app-applications',
@@ -10,6 +11,9 @@ import { NewRoleComponent } from './new-role/new-role.component';
   styleUrls: ['./applications.component.scss']
 })
 export class ApplicationsComponent implements OnInit {
+  @ViewChild('listOrg', undefined ) listOrg: GovernanceListComponent;
+  @ViewChild('listApp', undefined ) listApp: GovernanceListComponent;
+  @ViewChild('listRole', undefined ) listRole: GovernanceListComponent;
 
   isAppShown = false;
   isRoleShown = false;
@@ -25,6 +29,10 @@ export class ApplicationsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+
+      if (result) {
+        this.listOrg.getList();
+      }
     });
   }
 
@@ -37,6 +45,9 @@ export class ApplicationsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      if (result) {
+        this.listApp.getList();
+      }
     });
   }
 
@@ -49,6 +60,9 @@ export class ApplicationsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      if (result) {
+        this.listRole.getList();
+      }
     });
   }
 
@@ -57,10 +71,23 @@ export class ApplicationsComponent implements OnInit {
 
   showMe(i: any) {
     if (i.index === 1) {
-      this.isAppShown = true;
+      if (this.isAppShown) {
+        this.listApp.getList();
+      }
+      else {
+        this.isAppShown = true;
+      }
     }
     else if (i.index === 2) {
-      this.isRoleShown = true;
+      if (this.isRoleShown) {
+        this.listRole.getList();
+      }
+      else {
+        this.isRoleShown = true;
+      }
+    }
+    else {
+      this.listOrg.getList();
     }
   }
 }
