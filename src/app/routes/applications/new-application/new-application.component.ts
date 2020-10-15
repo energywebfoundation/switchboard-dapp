@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatStepper } from '@angular/material';
-import { ENSPrefixes } from 'iam-client-lib';
+import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -21,7 +21,7 @@ export class NewApplicationComponent implements OnInit {
   public appForm: FormGroup;
   public environment = environment;
   public isChecking = false;
-  public ENSPrefixes = ENSPrefixes;
+  public ENSPrefixes = ENSNamespaceTypes;
   
   constructor(private fb: FormBuilder,
     private iamService: IamService,
@@ -71,7 +71,7 @@ export class NewApplicationComponent implements OnInit {
         if (exists) {
           // Check if application sub-domain exists in this organization
           exists = await this.iamService.iam.checkExistenceOfDomain({
-            domain: `${ENSPrefixes.Application}.${this.appForm.value.orgNamespace}`
+            domain: `${this.ENSPrefixes.Application}.${this.appForm.value.orgNamespace}`
           });
 
           if (exists) {
@@ -127,21 +127,61 @@ export class NewApplicationComponent implements OnInit {
     this.isChecking = true;
 
     if (this.appForm.valid) {
+      let allowToProceed = true;
+
       // Check if app namespace is taken
       let orgData = this.appForm.value;
       let exists = await this.iamService.iam.checkExistenceOfDomain({
-        domain: `${orgData.appName}.${ENSPrefixes.Application}.${orgData.orgNamespace}`
+        domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
       });
 
       if (exists) {
-        // Do not allow to proceed if app namespace already exists
-        this.toastr.error('Application namespace already exists.', TOASTR_HEADER);
+        // If exists check if current user is the owner of this namespace and allow him/her to overwrite
+        let isOwner = await this.iamService.iam.isOwner({
+          domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
+        });
+
+        if (!isOwner) {
+          allowToProceed = false;
+
+          // Do not allow to proceed if app namespace already exists
+          this.toastr.error('Application namespace already exists. You have no access rights to it.', TOASTR_HEADER);
+        }
+        else {
+          this.spinner.hide();
+          
+          // Prompt if user wants to overwrite this namespace
+          if (!await this.confirm('Application namespace already exists. Do you wish to continue?')) {
+            allowToProceed = false;
+          }
+          else {
+            this.spinner.show();
+          }
+        }
       }
-      else {
-        // Let the user confirm the info before proceeding to the next step
-        this.stepper.selected.editable = false;
-        this.stepper.selected.completed = true;
-        this.stepper.next();
+
+      if (allowToProceed) {
+        if (!orgData.data.others || !orgData.data.others.trim()) {
+          // Let the user confirm the info before proceeding to the next step
+          this.stepper.selected.editable = false;
+          this.stepper.selected.completed = true;
+          this.stepper.next();
+        }
+        else {
+          try {
+            // Check if others is in JSON Format
+            console.info(JSON.parse(orgData.data.others));
+
+            // Let the user confirm the info before proceeding to the next step
+            this.stepper.selected.editable = false;
+            this.stepper.selected.completed = true;
+            this.stepper.next();
+          }
+          catch (e) {
+            console.error(orgData.data.others, e);
+            this.toastr.error('Others must be in JSON format.', TOASTR_HEADER);
+          }
+        }
       }
     }
     else {
@@ -154,11 +194,28 @@ export class NewApplicationComponent implements OnInit {
 
   async confirmApp() {
     let req = { ...this.appForm.value, returnSteps: true };
-    req.namespace = `${ENSPrefixes.Application}.${req.orgNamespace}`;
-    req.data = JSON.stringify(req.data);
+
+    req.namespace = `${this.ENSPrefixes.Application}.${req.orgNamespace}`;
     delete req.orgNamespace;
-    
-    console.log('req', req);
+
+    req.data.appName = req.data.applicationName;
+    delete req.data.applicationName;
+
+    // Make sure others is in correct JSON Format
+    if (req.data.others && req.data.others.trim()) {
+      try {
+        req.data.others = JSON.parse(req.data.others);
+      }
+      catch (e) {
+        this.toastr.error('Others must be in JSON format.', TOASTR_HEADER);
+        return;
+      }
+    }
+    else {
+      delete req.data.others;
+    }
+
+    console.info('myreq', req);
 
     // Set the second step to non-editable
     let list = this.stepper.steps.toArray();
@@ -190,21 +247,24 @@ export class NewApplicationComponent implements OnInit {
     }
   }
 
-  closeDialog(isSuccess?: boolean) {
-    if (this.appForm.pristine) {
-      this.dialog.open(ConfirmationDialogComponent, {
-        width: '400px',
-        data: {
-          header: TOASTR_HEADER,
-          message: 'There are unsaved changes. Do you wish to continue?'
-        },
-        maxWidth: '100%',
-        disableClose: true
-      }).afterClosed().subscribe((exit: any) => {
-        if (exit) {
-          this.dialogRef.close(false);
-        }
-      });
+  private async confirm(confirmationMsg: string) {
+    return this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      maxHeight: '180px',
+      data: {
+        header: TOASTR_HEADER,
+        message: confirmationMsg
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().toPromise();
+  }
+
+  async closeDialog(isSuccess?: boolean) {
+    if (this.appForm.touched && !isSuccess) {
+      if (await this.confirm('There are unsaved changes. Do you wish to continue?')) {
+        this.dialogRef.close(false);
+      }
     }
     else {
       if (isSuccess) {

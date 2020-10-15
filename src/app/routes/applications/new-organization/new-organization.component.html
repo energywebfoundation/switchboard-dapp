@@ -42,9 +42,9 @@
                       <mat-error>Organization Namespace is <strong>required</strong></mat-error>
                   </mat-form-field>
                 </div>
-                <div *ngIf="orgForm.get('orgName').value" class="ml-3 card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-                  <mat-icon>notifications_none</mat-icon>
+                <div *ngIf="orgForm.get('orgName').value" class="mx-3 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
                   <span class="pb-2">{{ orgForm.get('orgName').value + '.' + environment.orgNamespace}}</span>
+                  <!-- <mat-icon>check</mat-icon> -->
                 </div>
                 <ng-container formGroupName="data">
                   <div class="col-lg-12">
@@ -86,9 +86,9 @@
             <ng-template matStepLabel>Confirm Details</ng-template>
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
               <div class="d-flex justify-content-center">
-                <div class="image-wrapper w-50 d-flex align-items-center justify-content-center mb-3">
+                <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
                   <span class="opacity-50" *ngIf="!orgForm?.value?.data?.logoUrl">No image</span>
-                  <img class="w-50" *ngIf="orgForm?.value?.data?.logoUrl" src="{{ orgForm?.value?.data?.logoUrl }}"/>
+                  <img class="img-logo" *ngIf="orgForm?.value?.data?.logoUrl" src="{{ orgForm?.value?.data?.logoUrl }}"/>
                 </div>
               </div>
               <div class="text-left my-3">
@@ -142,7 +142,7 @@
             <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
+            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
             <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
           </div>
         </mat-step>
@@ -153,7 +153,7 @@
             <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
+            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
             <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
           </div>
         </mat-step>
@@ -166,7 +166,7 @@
             <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
+            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
             <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
           </div>
         </mat-step>
@@ -176,7 +176,7 @@
             <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
+            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
             <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
           </div>
         </mat-step>
@@ -189,7 +189,7 @@
             <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
+            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
             <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
           </div>
         </mat-step>
@@ -199,53 +199,14 @@
             <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2">Cancel</button>
+            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
             <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
           </div>
         </mat-step>
         <mat-step [completed]="false">
             <ng-template matStepLabel>Organization Created</ng-template>
-            <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-              <div class="d-flex justify-content-center">
-                <div class="image-wrapper w-50 d-flex align-items-center justify-content-center mb-3">
-                  <span class="opacity-50" *ngIf="!orgForm?.value?.data?.logoUrl">No image</span>
-                  <img class="w-50" *ngIf="orgForm?.value?.data?.logoUrl" src="{{ orgForm?.value?.data?.logoUrl }}"/>
-                </div>
-              </div>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Organization Namespace</div>
-                <span class="color-white mb-0">{{ orgForm?.value?.orgName + '.' + orgForm?.value?.namespace }}</span>
-              </div>
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Organization Name</div>
-                <span class="color-white mb-0">{{ orgForm?.value?.data?.organizationName }}</span>
-              </div>
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Website URL</div>
-                <span class="color-white mb-0">{{ orgForm?.value?.data?.websiteUrl || 'None' }}</span>
-              </div>
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Description</div>
-                <span class="color-white mb-0">{{ orgForm?.value?.data?.description || 'None' }}</span>
-              </div>
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Others (JSON)</div>
-                <span class="color-white mb-0">{{ orgForm?.value?.data?.others || 'None' }}</span>
-              </div>
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Roles Namespace</div>
-                <span class="color-white mb-0">{{ ENSPrefixes.Roles }}.{{ orgForm?.value?.orgName }}.{{ orgForm?.value?.namespace }}</span>
-              </div>
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Application Namespace</div>
-                <span class="color-white mb-0">{{ ENSPrefixes.Application }}.{{ orgForm?.value?.orgName }}.{{ orgForm?.value?.namespace }}</span>
-              </div>
+            <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              <mat-icon>notifications_none</mat-icon><span class="pb-2">All transactions are completely processed.</span>
             </div>
             <div>
               <div class="d-flex justify-content-end mb-2">

@@ -135,6 +135,12 @@ fieldset[disabled] .mda-radio input+em:before {
 
 }
 
+@include media-breakpoint-down(sm) {
+  .mat-form-field, .ngx-select__toggle, .form-control, .ngx-select__item {
+    font-size: 14px !important;
+  }
+}
+
 .mat-form-field-appearance-outline .mat-form-field-outline {
   background: #1C1726 !important;
   color: #52436E !important;

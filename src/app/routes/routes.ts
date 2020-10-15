@@ -1,6 +1,7 @@
 import { LayoutComponent } from '../layout/layout.component';
 import { AuthGuard } from '../shared/services/auth.guard';
 import { LogOutComponent } from './profile/logout/logout.component';
+import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 
 
 
@@ -13,14 +14,24 @@ export const routes = [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
             { path: 'profile', loadChildren: './profile/profile.module#ProfileModule' },
-            { path: 'applications', loadChildren: './applications/applications.module#ApplicationsModule' },
+            { path: 'governance', loadChildren: './applications/applications.module#ApplicationsModule' },
             { path: 'enrolment', loadChildren: './enrolment/enrolment.module#EnrolmentModule' }
         ]
+    },
+    {
+        path: 'enrol',
+        component: RequestClaimComponent
     },
     {
         path: 'welcome',
         children: [
             { path: '', loadChildren: './welcome/welcome.module#WelcomeModule' }
+        ]
+    },
+    {
+        path: 'login',
+        children: [
+            { path: '', loadChildren: './login/login.module#LoginModule' }
         ]
     },
     {

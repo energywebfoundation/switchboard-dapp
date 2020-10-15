@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatStepper, MatTableDataSource } from '@angular/material';
-import { ENSPrefixes } from 'iam-client-lib';
+import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -9,9 +9,9 @@ import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 
 export const RoleType = {
-  ORG: 'ORG',
-  APP: 'APP',
-  CUSTOM: 'CUSTOM'
+  ORG: 'org',
+  APP: 'app',
+  CUSTOM: 'custom'
 };
 
 const RoleTypeList = [{
@@ -50,7 +50,7 @@ export class NewRoleComponent implements OnInit {
   public isChecking   = false;
   public RoleType     = RoleType;
   public RoleTypeList = RoleTypeList;
-  public ENSPrefixes  = ENSPrefixes;
+  public ENSPrefixes  = ENSNamespaceTypes;
   public issuerList   : string[];
 
   IssuerType    = {
@@ -91,7 +91,7 @@ export class NewRoleComponent implements OnInit {
       });
 
       this.fieldsForm = fb.group({
-        type: ['', Validators.required],
+        fieldType: ['', Validators.required],
         label: ['', Validators.required],
         validation: ''
       });
@@ -229,17 +229,40 @@ export class NewRoleComponent implements OnInit {
     this.isChecking = true;
 
     if (this.roleForm.value.roleName) {
+      let allowToProceed = true;
+      
       // Check if namespace is taken
       let orgData = this.roleForm.value;
       let exists = await this.iamService.iam.checkExistenceOfDomain({
-        domain: `${orgData.roleName}.${ENSPrefixes.Roles}.${orgData.parentNamespace}`
+        domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
       });
 
       if (exists) {
-        // Do not allow to proceed if namespace already exists
-        this.toastr.error('Role namespace already exists.', TOASTR_HEADER);
+        // If exists check if current user is the owner of this namespace and allow him/her to overwrite
+        let isOwner = await this.iamService.iam.isOwner({
+          domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
+        });
+
+        if (!isOwner) {
+          allowToProceed = false;
+
+          // Do not allow to proceed if namespace already exists
+          this.toastr.error('Role namespace already exists. You have no access rights to it.', TOASTR_HEADER);
+        }
+        else {
+          this.spinner.hide();
+          
+          // Prompt if user wants to overwrite this namespace
+          if (!await this.confirm('Role namespace already exists. Do you wish to continue?')) {
+            allowToProceed = false;
+          }
+          else {
+            this.spinner.show();
+          }
+        }
       }
-      else {
+
+      if (allowToProceed) {
         // Proceed
         this.roleForm.get('data').get('issuer').get('issuerType').setValue(this.IssuerType.DID);
         this.stepper.selected.editable = false;
@@ -293,7 +316,7 @@ export class NewRoleComponent implements OnInit {
         if (exists) {
           // Check if role sub-domain exists in this namespace
           exists = await this.iamService.iam.checkExistenceOfDomain({
-            domain: `${ENSPrefixes.Roles}.${this.roleForm.value.parentNamespace}`
+            domain: `${this.ENSPrefixes.Roles}.${this.roleForm.value.parentNamespace}`
           });
 
           if (exists) {
@@ -333,15 +356,18 @@ export class NewRoleComponent implements OnInit {
   async confirmRole() {
     let req = { ...this.roleForm.value, returnSteps: true };
 
-    req.namespace = `${ENSPrefixes.Roles}.${req.parentNamespace}`;
+    req.namespace = `${this.ENSPrefixes.Roles}.${req.parentNamespace}`;
     delete req.parentNamespace;
 
     req.data.roleType = req.roleType;
     delete req.roleType;
 
+    req.data.roleName = req.roleName;
+    delete req.data.ensName;
+
     req.data.issuer.did = this.issuerList;
     req.data.fields = this.dataSource.data;
-    req.data = JSON.stringify(req.data);
+    req.data.metadata = {};
     
     console.log('req', req);
 
@@ -375,21 +401,24 @@ export class NewRoleComponent implements OnInit {
     }
   }
 
-  closeDialog(isSuccess?: boolean) {
-    if (this.roleForm.pristine) {
-      this.dialog.open(ConfirmationDialogComponent, {
-        width: '400px',
-        data: {
-          header: TOASTR_HEADER,
-          message: 'There are unsaved changes. Do you wish to continue?'
-        },
-        maxWidth: '100%',
-        disableClose: true
-      }).afterClosed().subscribe((exit: any) => {
-        if (exit) {
-          this.dialogRef.close(false);
-        }
-      });
+  private async confirm(confirmationMsg: string) {
+    return this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      maxHeight: '180px',
+      data: {
+        header: TOASTR_HEADER,
+        message: confirmationMsg
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().toPromise();
+  }
+
+  async closeDialog(isSuccess?: boolean) {
+    if (this.roleForm.touched && !isSuccess) {
+      if (await this.confirm('There are unsaved changes. Do you wish to continue?')) {
+        this.dialogRef.close(false);
+      }
     }
     else {
       if (isSuccess) {

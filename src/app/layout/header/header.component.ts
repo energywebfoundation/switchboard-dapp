@@ -32,6 +32,8 @@ export class HeaderComponent implements OnInit {
     isNavSearchVisible: boolean;
     isNavMenuVisible = true;
 
+    currentNav = '';
+
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
     constructor(public menu: MenuService, 
@@ -58,6 +60,9 @@ export class HeaderComponent implements OnInit {
                 if (event.url  === '/dashboard') {
                     this.isNavMenuVisible = false;
                 }
+
+                let pathArr = event.url.split('/');
+                this.currentNav = pathArr[1];
             }
         });
     }

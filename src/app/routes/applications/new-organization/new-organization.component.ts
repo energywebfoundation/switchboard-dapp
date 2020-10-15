@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatStepper } from '@angular/material';
-import { ENSPrefixes } from 'iam-client-lib';
+import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -21,7 +21,7 @@ export class NewOrganizationComponent implements OnInit {
   public orgForm: FormGroup;
   public environment = environment;
   public isChecking = false;
-  public ENSPrefixes = ENSPrefixes;
+  public ENSPrefixes = ENSNamespaceTypes;
 
   public constructor(
     private fb: FormBuilder,
@@ -39,7 +39,7 @@ export class NewOrganizationComponent implements OnInit {
         logoUrl: ['', Validators.pattern('https?://.*')],
         websiteUrl: ['', Validators.pattern('https?://.*')],
         description: '',
-        others: ''
+        others: undefined
       })
     });
   }
@@ -63,6 +63,8 @@ export class NewOrganizationComponent implements OnInit {
     this.isChecking = true;
 
     if (this.orgForm.valid) {
+      let allowToProceed = true;
+
       // Check if org namespace is taken
       let orgData = this.orgForm.value;
       let exists = await this.iamService.iam.checkExistenceOfDomain({
@@ -70,13 +72,50 @@ export class NewOrganizationComponent implements OnInit {
       });
 
       if (exists) {
-        // Do not allow to proceed if org namespace already exists
-        this.toastr.error('Organization namespace already exists.', TOASTR_HEADER);
+        // If exists check if current user is the owner of this namespace and allow him/her to overwrite
+        let isOwner = await this.iamService.iam.isOwner({
+          domain: `${orgData.orgName}.${orgData.namespace}`
+        });
+
+        if (!isOwner) {
+          allowToProceed = false;
+
+          // Do not allow to overwrite if user is not the owner
+          this.toastr.error('Organization namespace exists. You have no access rights to it.', TOASTR_HEADER);
+        }
+        else {
+          this.spinner.hide();
+          
+          // Prompt if user wants to overwrite this namespace
+          if (!await this.confirm('Organization namespace already exists. Do you wish to continue?')) {
+            allowToProceed = false;
+          }
+          else {
+            this.spinner.show();
+          }
+        }
       }
-      else {
-        // Let the user confirm the info before proceeding to the next step
-        this.stepper.selected.completed = true;
-        this.stepper.next();
+
+      if (allowToProceed) {
+        if (!orgData.data.others || !orgData.data.others.trim()) {
+          // Let the user confirm the info before proceeding to the next step
+          this.stepper.selected.completed = true;
+          this.stepper.next();
+        }
+        else {
+          try {
+            // Check if others is in JSON Format
+            console.info(JSON.parse(orgData.data.others));
+
+            // Let the user confirm the info before proceeding to the next step
+            this.stepper.selected.completed = true;
+            this.stepper.next();
+          }
+          catch (e) {
+            console.error(orgData.data.others, e);
+            this.toastr.error('Others must be in JSON format.', TOASTR_HEADER);
+          }
+        }
       }
     }
     else {
@@ -89,8 +128,24 @@ export class NewOrganizationComponent implements OnInit {
 
   async confirmOrg() {
     let req = { ...this.orgForm.value, returnSteps: true };
-    req.data = JSON.stringify(req.data);
-    console.log('req', req);
+    req.data.orgName = req.data.organizationName;
+    delete req.data.organizationName;
+
+    // Make sure others is in correct JSON Format
+    if (req.data.others && req.data.others.trim()) {
+      try {
+        req.data.others = JSON.parse(req.data.others);
+      }
+      catch (e) {
+        this.toastr.error('Others must be in JSON format.', TOASTR_HEADER);
+        return;
+      }
+    }
+    else {
+      delete req.data.others;
+    }
+
+    console.info('myreq', req);
 
     // Set the first step to non-editable
     this.stepper.steps.first.editable = false;
@@ -126,21 +181,24 @@ export class NewOrganizationComponent implements OnInit {
     this.stepper.selected.completed = false;
   }
 
-  closeDialog(isSuccess?: boolean) {
-    if (this.orgForm.pristine) {
-      this.dialog.open(ConfirmationDialogComponent, {
-        width: '400px',
-        data: {
-          header: TOASTR_HEADER,
-          message: 'There are unsaved changes. Do you wish to continue?'
-        },
-        maxWidth: '100%',
-        disableClose: true
-      }).afterClosed().subscribe((exit: any) => {
-        if (exit) {
-          this.dialogRef.close(false);
-        }
-      });
+  private async confirm(confirmationMsg: string) {
+    return this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      maxHeight: '180px',
+      data: {
+        header: TOASTR_HEADER,
+        message: confirmationMsg
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().toPromise();
+  }
+
+  async closeDialog(isSuccess?: boolean) {
+    if (this.orgForm.touched && !isSuccess) {
+      if (await this.confirm('There are unsaved changes. Do you wish to continue?')) {
+        this.dialogRef.close(false);
+      }
     }
     else {
       if (isSuccess) {
