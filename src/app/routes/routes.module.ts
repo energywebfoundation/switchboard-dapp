@@ -10,6 +10,7 @@ import { WelcomeModule } from './welcome/welcome.module';
 import { EnrolmentModule } from './enrolment/enrolment.module';
 import { ApplicationsModule } from './applications/applications.module';
 import { WidgetsModule } from './widgets/widgets.module';
+import { LoginModule } from './login/login.module';
 
 
 
@@ -22,7 +23,8 @@ import { WidgetsModule } from './widgets/widgets.module';
         WelcomeModule,
         ApplicationsModule,
         EnrolmentModule,
-        WidgetsModule
+        WidgetsModule,
+        LoginModule
     ],
     declarations: [],
     exports: [

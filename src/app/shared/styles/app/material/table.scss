@@ -31,8 +31,8 @@ td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:la
 td.mat-cell {
     border-bottom: none !important;
     font-size: 14px !important;
-    padding-top: 14px !important;
-    padding-bottom: 14px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
 }
 
 tr.mat-header-row {
@@ -136,6 +136,11 @@ mat-paginator {
 
 .row-view {
     display: none;
+}
+
+.img-logo-list {
+    width: auto !important;
+    height: 32px;
 }
 
 @media screen and (max-width: 960px) {

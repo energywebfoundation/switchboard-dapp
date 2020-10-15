@@ -42,9 +42,9 @@
                       <mat-error>Organization Namespace is <strong>required</strong></mat-error>
                   </mat-form-field>
                 </div>
-                <div *ngIf="orgForm.get('orgName').value" class="ml-3 card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-                  <mat-icon>notifications_none</mat-icon>
+                <div *ngIf="orgForm.get('orgName').value" class="mx-3 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
                   <span class="pb-2">{{ orgForm.get('orgName').value + '.' + environment.orgNamespace}}</span>
+                  <!-- <mat-icon>check</mat-icon> -->
                 </div>
                 <ng-container formGroupName="data">
                   <div class="col-lg-12">
@@ -86,9 +86,9 @@
             <ng-template matStepLabel>Confirm Details</ng-template>
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
               <div class="d-flex justify-content-center">
-                <div class="image-wrapper w-50 d-flex align-items-center justify-content-center mb-3">
+                <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
                   <span class="opacity-50" *ngIf="!orgForm?.value?.data?.logoUrl">No image</span>
-                  <img class="w-50" *ngIf="orgForm?.value?.data?.logoUrl" src="{{ orgForm?.value?.data?.logoUrl }}"/>
+                  <img class="img-logo" *ngIf="orgForm?.value?.data?.logoUrl" src="{{ orgForm?.value?.data?.logoUrl }}"/>
                 </div>
               </div>
               <div class="text-left my-3">

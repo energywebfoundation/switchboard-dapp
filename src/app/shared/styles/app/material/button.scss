@@ -26,6 +26,8 @@
 
 .mat-raised-button[disabled] {
     color: rgba(255, 255, 255, 0.3) !important;
+    background-color: rgb(33 29 47) !important;
+    
 }
 
 @include media-breakpoint-down(sm) {

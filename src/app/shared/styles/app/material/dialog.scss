@@ -301,6 +301,12 @@ mat-checkbox {
     padding: 5px;
 }
 
+.img-logo {
+    width: auto !important;
+    height: 100px;
+    background-size: contain;
+}
+
 @media (max-width: 768px) {
     .mat-horizontal-stepper-header-container {
         width: auto !important;
