@@ -32,6 +32,7 @@
         &:hover {
             color: #4199fc;
             box-shadow: 0 8px 20px 0 #000 !important;
+            background-color: rgb(228 223 249);
         }
         &:not(:disabled):not(.disabled):active:focus, :not(:disabled):not(.disabled).active:focus, .show > .dropdown-toggle:focus {
             background-color: $inverse;
