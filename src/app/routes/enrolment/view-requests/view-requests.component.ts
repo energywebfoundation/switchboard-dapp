@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+import { IamService } from 'src/app/shared/services/iam.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
+
+const TOASTR_HEADER = 'Enrolment Request';
 
 @Component({
   selector: 'app-view-requests',
@@ -7,25 +12,57 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./view-requests.component.scss']
 })
 export class ViewRequestsComponent implements OnInit {
+  listType: string;
+  claim: any;
+  fields = [];
 
-  displayedColumns: string[] = ['type', 'label', 'validation', 'actions'];
-  dataSource: RolesFields[] = FIELD_DATA;
+  constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private iamService: IamService,
+    private toastr: ToastrService,
+    private loadingService: LoadingService) { }
 
-  constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>) { }
+  async ngOnInit() {
+    this.listType = this.data.listType;
+    this.claim = this.data.claimData;
 
-  ngOnInit() {
+    if (this.claim && this.claim.token) {
+      let decoded = await this.iamService.iam.decodeJWTToken({
+        token: this.claim.token
+      });
+
+      if (decoded['claimData'] && decoded['claimData']['fields']) {
+        this.fields = decoded['claimData']['fields'];
+      }
+    }
   }
 
+  async approve() {
+    this.loadingService.show('Please confirm this transaction in your connected wallet.');
+
+    try {
+      let req = {
+        requesterDID: this.claim.requester,
+        id: this.claim.id,
+        token: this.claim.token
+      };
+
+      console.log('issue claim', req);
+      await this.iamService.iam.issueClaimRequest(req);
+
+      this.toastr.success('Request is approved.', TOASTR_HEADER);
+      this.dialogRef.close(true);
+    }
+    catch (e) {
+      this.toastr.error(e, TOASTR_HEADER);
+    }
+    finally {
+      this.loadingService.hide();
+    }
+  }
+
+  reject() {
+    this.toastr.warning('Request is rejected.', TOASTR_HEADER);
+    this.dialogRef.close(true);
+  }
 }
-
-export interface RolesFields {
-  type: string;
-  label: string;
-  validation: string;
-  actions: string;
-}
-
-const FIELD_DATA: RolesFields[] = [
-  {type: 'Date', label: 'My Label', validation: 'maxLength:30', actions: ''},
-
-];

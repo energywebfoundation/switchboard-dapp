@@ -10,13 +10,14 @@ import { NgxSelectModule } from 'ngx-select-ex';
 import { ViewRequestsComponent } from './view-requests/view-requests.component';
 import { ViewRoleComponent } from './view-role/view-role.component';
 import { EnrolmentFormComponent } from './enrolment-form/enrolment-form.component';
+import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 
 const routes: Routes = [
   { path: '', component: EnrolmentComponent }
 ];
 
 @NgModule({
-  declarations: [EnrolmentComponent, EnrolToRoleComponent, ViewRequestsComponent, ViewRoleComponent, EnrolmentFormComponent],
+  declarations: [EnrolmentComponent, EnrolToRoleComponent, ViewRequestsComponent, ViewRoleComponent, EnrolmentFormComponent, EnrolmentListComponent],
   imports: [
     SharedModule,
     RouterModule.forChild(routes),

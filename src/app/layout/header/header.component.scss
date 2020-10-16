@@ -1,6 +1,15 @@
 .mat-dialog-content {
     padding: 0!important;
 }
+
+.border-bottom-1 {
+    border-bottom: 1px solid #3c3b4c;  
+}
+
+::ng-deep .mat-menu-content:not(:empty) {
+    padding: 0 !important;
+}
+
 .mt-2, .my-2 {
     margin-top: 0.6rem !important;
 }

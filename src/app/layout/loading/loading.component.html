@@ -5,6 +5,7 @@
     color="#a567ff"
     type="ball-spin-fade"
   >
-    <p class="label-role">Loading...</p>
+    <p class="label-role" *ngIf='!msg'>Loading...</p>
+    <p class="label-role" *ngIf='msg'>{{ msg }}</p>
   </ngx-spinner>
 </div>

@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ViewRoleComponent } from './view-role/view-role.component';
-import { ViewRequestsComponent } from './view-requests/view-requests.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 
 @Component({
   selector: 'app-enrolment',
@@ -9,79 +8,46 @@ import { ViewRequestsComponent } from './view-requests/view-requests.component';
   styleUrls: ['./enrolment.component.scss']
 })
 export class EnrolmentComponent implements OnInit {
+  @ViewChild('issuerList', undefined ) issuerList       : EnrolmentListComponent;
+  @ViewChild('enrolmentList', undefined ) enrolmentList : EnrolmentListComponent;
 
-    enrollmentRequestsColumns: string[] = ['did', 'roleType', 'namespace', 'metadata', 'actions'];
-    dataSourceEnRequests: EnrollmentRquests[] = ENROLLMENT_REQUESTS_DATA;
+  issuerDropdown = new FormControl('false');
+  enrolmentDropdown = new FormControl('none');
 
-    myEnrollmentsColumns: string[] = ['roleType', 'namespace', 'metadata', 'actions'];
-    dataSourceMyEn: MyEnrollments[] = MY_ENROLLMENTS_DATA;
+  public dropdownValue = {
+    all: 'none',
+    pending: 'false',
+    approved: 'true'
+  };
 
-  constructor(public dialog: MatDialog) { }
+  public isMyEnrolmentShown = false;
 
-  openNewRoleComponent(): void {
-    // const dialogRef = this.dialog.open(NewRoleComponent, {
-    //   width: '600px',data:{},
-    //   maxWidth: '100%',
-    //   disableClose: true
-    // });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
-    // });
-  }
-
-  openViewRequestsComponent(): void {
-    const dialogRef = this.dialog.open(ViewRequestsComponent, {
-      width: '600px',data:{},
-      maxWidth: '100%'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
-  }
-
-  openViewRoleComponent(): void {
-    const dialogRef = this.dialog.open(ViewRoleComponent, {
-      width: '600px',data:{},
-      maxWidth: '100%'
-
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
-  }
+  constructor() { }
 
   ngOnInit() {
   }
 
+  showMe(i: any) {
+    if (i.index === 1) {
+      if (this.isMyEnrolmentShown) {
+        this.enrolmentList.getList(this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
+      }
+      else {
+        this.isMyEnrolmentShown = true;
+      }
+    }
+    else {
+      this.issuerList.getList(this.issuerDropdown.value === 'true' ? true : this.issuerDropdown.value === 'false' ? false : undefined);
+    }
+  }
+
+  updateEnrolmentList (e: any) {
+    let value = e.value;
+    this.enrolmentList.getList(value === 'true' ? true : value === 'false' ? false : undefined);
+  }
+
+  updateIssuerList (e: any) {
+    let value = e.value;
+    this.issuerList.getList(value === 'true' ? true : value === 'false' ? false : undefined);
+  }
 }
-
-export interface EnrollmentRquests {
-  did: string;
-  roleType: string;
-  namespace: string;
-  metadata: string;
-  actions: string;
-}
-
-const ENROLLMENT_REQUESTS_DATA: EnrollmentRquests[] = [
-  {did: 'did', roleType: 'Custom Role', namespace: 'Name', metadata: 'metadata', actions: ''},
-  {did: 'did', roleType: 'Custom Role', namespace: 'Name', metadata: 'metadata', actions: ''},
-  {did: 'did', roleType: 'Custom Role', namespace: 'Name', metadata: 'metadata', actions: ''},
-];
-
-export interface MyEnrollments {
-  roleType: string;
-  namespace: string;
-  metadata: string;
-  actions: string;
-}
-
-const MY_ENROLLMENTS_DATA: MyEnrollments[] = [
-  {roleType: 'Custom Role', namespace: 'Name', metadata: 'metadata', actions: ''},
-  {roleType: 'Custom Role', namespace: 'Name', metadata: 'metadata', actions: ''},
-  {roleType: 'Custom Role', namespace: 'Name', metadata: 'metadata', actions: ''},
-];
-

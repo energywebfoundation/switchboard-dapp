@@ -32,6 +32,10 @@ export class RequestClaimComponent implements OnInit {
   private appDefaultRole: string;
 
   private selectedRole  : any;
+  private selectedNamespace: string;
+
+  public bgColor        : Object = undefined;
+  public txtColor       : Object = undefined;
   
   constructor(private fb: FormBuilder, 
       private activeRoute: ActivatedRoute,
@@ -42,12 +46,11 @@ export class RequestClaimComponent implements OnInit {
     this.roleTypeForm = fb.group({
       roleType: ''
     });
+    
     this.activeRoute.queryParams.subscribe(async (params: any) => {
       if (params.app) {
         // URL Params
-        this.appNamespace = params.app;
-        this.appCallbackUrl = params.returnUrl;
-        this.appDefaultRole = params.roleName;
+        this.setUrlParams(params);
 
         // Show loading and reset data
         this.spinner.show();
@@ -82,7 +85,37 @@ export class RequestClaimComponent implements OnInit {
       else {
         console.error('Enrolment Param Error', params);
       }
+
+      // Update Colors
+      this.updateColors(params);
     });
+  }
+
+  private setUrlParams(params: any) {
+    this.appNamespace = params.app;
+    this.appCallbackUrl = params.returnUrl;
+    this.appDefaultRole = params.roleName;
+  }
+
+  private updateColors(params: any) {
+    if (this.appDetails) {
+      if (params.bgcolor) {
+        this.bgColor = { 'background-color': `#${params.bgcolor}` };
+      }
+      else if (this.appDetails.others && this.appDetails.others.bgcolor) {
+        this.bgColor = { 'background-color': `#${this.appDetails.others.bgcolor}` };
+      }
+
+      if (params.txtcolor) {
+        this.txtColor = { 'color': `#${params.txtColor}` };
+      }
+      else if (this.appDetails.others && this.appDetails.others.txtcolor) {
+        this.txtColor = { 'color': `#${this.appDetails.others.txtcolor}` };
+      }
+      else {
+        this.txtColor = { 'color': 'white' };
+      }
+    }
   }
 
   private async displayAlert(text: string, icon: string) {
@@ -123,14 +156,16 @@ export class RequestClaimComponent implements OnInit {
         namespace: this.appNamespace
       });
 
+      console.log('Role List', this.roleList);
+
       if (this.roleList && this.roleList.length) {
-        this.roleList = this.roleList[0].roles;
 
         // Set Default Selected
         if (this.appDefaultRole) {
           for (let i = 0; i < this.roleList.length; i++) {
             if (this.roleList[i].name.toUpperCase() === this.appDefaultRole.toUpperCase()) {
               this.selectedRole = this.roleList[i].definition;
+              this.selectedNamespace = this.roleList[i].namespace;
               this.fieldList = this.selectedRole.fields;
               this.updateForm();
 
@@ -151,6 +186,7 @@ export class RequestClaimComponent implements OnInit {
     this.submitting = false;
     this.appError = false;
     this.selectedRole = undefined;
+    this.selectedNamespace = undefined;
 
     this.roleTypeForm.reset();
     
@@ -196,6 +232,7 @@ export class RequestClaimComponent implements OnInit {
     if (e && e.value && e.value.definition && e.value.definition.fields) {
       this.fieldList = e.value.definition.fields;
       this.selectedRole = e.value.definition;
+      this.selectedNamespace = e.value.namespace;
 
       this.updateForm();
     }
@@ -225,7 +262,7 @@ export class RequestClaimComponent implements OnInit {
           // Submit
           let claim = {
             fields: JSON.parse(JSON.stringify(fields)),
-            claimType: this.appNamespace
+            claimType: this.selectedNamespace
           };
           
           console.info('createClaimRequest', {

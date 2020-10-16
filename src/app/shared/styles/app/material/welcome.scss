@@ -1,33 +1,20 @@
-
-.md-welcome {
-  margin: -20px;
-  margin-bottom: 0;
-  .md-welcome-msg {
-    background-color: $primary;
-    background-position: 0 75%;
-    color: #fff;
-    padding: 80px 30px;
-    margin-bottom: 40px;
-    h1 {
-      color: #fff;
-      font-size: 56px;
-      font-weight: 400;
-      line-height: 1.5;
-      margin: 0
-    }
-    h2 {
-      font-weight: 300;
-      margin: 0;
-    }
-  }
+.header-enroll {
+  height: 60px; 
+  background-color: #181524;
+  z-index: 9
 }
 
-.md-welcome-row {
-    margin-top: 40px;
-    margin-bottom: 40px;
+.content-enroll {
+  margin-top: 75px;
+}
 
-    @include media-breakpoint-up(md) {
-        margin-top: 80px;
-        margin-bottom: 80px;
-    }
+.footer-enroll {
+  background-color: #382856; 
+  width: 100%; 
+  height: 48px; 
+  font-size: 12px; 
+  color: rgba(255, 255, 255, 0.5); 
+  position: fixed;
+  bottom:0;
+  z-index: 8;
 }
