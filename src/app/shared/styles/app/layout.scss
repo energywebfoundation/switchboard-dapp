@@ -412,6 +412,10 @@ body {
         }
     }
 
+    .img-dashboard {
+        height: 52px !important;
+    }
+
     .bg-register {
         background-position: right bottom !important;
         background-size: auto 140px !important;
@@ -742,6 +746,10 @@ _:-ms-lang(x),
     100% { -webkit-transform: rotate(360deg); }
 }
 
+.img-dashboard {
+    width: auto;
+    height: 70px;
+}
 
 .welcome-footer {
     background-color: transparent; 
