@@ -86,22 +86,11 @@ ul {
   margin: 15px 15px 65px 15px;
   border-radius: 15px;
   border: 0;
-  background: transparent;
   color: #FFF !important;
   z-index: 7;
 
-  &::before {
-    content: "";
-    background-image: linear-gradient(180deg, #1D1929 0%, #161220 100%);
-    border: 1px solid #2A2837;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.14);
-    border-radius: 8px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-  }
+  background-color: #181524;
+  border: 1px solid #1c1b2b;
 }
 
 @include media-breakpoint-down(sm) {
@@ -298,22 +287,22 @@ ul {
   }
 
   @media (max-width: 700px){
-    .card-enroll {
-      box-shadow: none !important;
+    // .card-enroll {
+    //   box-shadow: none !important;
     
-      &::after {
-        content: "";
-        background-image: none;
-        background-color: transparent;
-        backdrop-filter: blur(0px); 
-        -webkit-backdrop-filter: blur(0px);
-        -moz-backdrop-filter: blur(0px);
-        -o-backdrop-filter: blur(0px);
-        box-shadow: none;
-        border: none !important;
-        border-radius: 0 !important;
-      }
-    }
+    //   &::after {
+    //     content: "";
+    //     background-image: none;
+    //     background-color: transparent;
+    //     backdrop-filter: blur(0px); 
+    //     -webkit-backdrop-filter: blur(0px);
+    //     -moz-backdrop-filter: blur(0px);
+    //     -o-backdrop-filter: blur(0px);
+    //     box-shadow: none;
+    //     border: none !important;
+    //     border-radius: 0 !important;
+    //   }
+    // }
 
     .card-register {
       height: 150px;
@@ -382,21 +371,21 @@ ul {
 
   @media (max-width: 320px){
 
-    .card-enroll {
-      box-shadow: none !important;
-      position: unset !important;
+    // .card-enroll {
+    //   box-shadow: none !important;
+    //   position: unset !important;
     
-      &::after {
-        content: "";
-        background-image: none;
-        background-color: transparent;
-        backdrop-filter: blur(0px); 
-        -webkit-backdrop-filter: blur(0px);
-        -moz-backdrop-filter: blur(0px);
-        -o-backdrop-filter: blur(0px);
-        box-shadow: none;
-      }
-    }
+    //   &::after {
+    //     content: "";
+    //     background-image: none;
+    //     background-color: transparent;
+    //     backdrop-filter: blur(0px); 
+    //     -webkit-backdrop-filter: blur(0px);
+    //     -moz-backdrop-filter: blur(0px);
+    //     -o-backdrop-filter: blur(0px);
+    //     box-shadow: none;
+    //   }
+    // }
 
     .card-register {
       width: 360px;
