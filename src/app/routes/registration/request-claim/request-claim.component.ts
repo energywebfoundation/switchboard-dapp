@@ -32,6 +32,9 @@ export class RequestClaimComponent implements OnInit {
   private appDefaultRole: string;
 
   private selectedRole  : any;
+
+  public bgColor        : Object = undefined;
+  public txtColor       : Object = undefined;
   
   constructor(private fb: FormBuilder, 
       private activeRoute: ActivatedRoute,
@@ -42,12 +45,11 @@ export class RequestClaimComponent implements OnInit {
     this.roleTypeForm = fb.group({
       roleType: ''
     });
+    
     this.activeRoute.queryParams.subscribe(async (params: any) => {
       if (params.app) {
         // URL Params
-        this.appNamespace = params.app;
-        this.appCallbackUrl = params.returnUrl;
-        this.appDefaultRole = params.roleName;
+        this.setUrlParams(params);
 
         // Show loading and reset data
         this.spinner.show();
@@ -82,7 +84,37 @@ export class RequestClaimComponent implements OnInit {
       else {
         console.error('Enrolment Param Error', params);
       }
+
+      // Update Colors
+      this.updateColors(params);
     });
+  }
+
+  private setUrlParams(params: any) {
+    this.appNamespace = params.app;
+    this.appCallbackUrl = params.returnUrl;
+    this.appDefaultRole = params.roleName;
+  }
+
+  private updateColors(params: any) {
+    if (this.appDetails && this.appDetails.others) {
+      if (params.bgcolor) {
+        this.bgColor = { 'background-color': `#${params.bgcolor}` };
+      }
+      else if (this.appDetails.others.bgcolor) {
+        this.bgColor = { 'background-color': `#${this.appDetails.others.bgcolor}` };
+      }
+
+      if (params.txtcolor) {
+        this.txtColor = { 'color': `#${params.txtColor}` };
+      }
+      else if (this.appDetails.others.txtcolor) {
+        this.txtColor = { 'color': `#${this.appDetails.others.txtcolor}` };
+      }
+      else {
+        this.txtColor = { 'color': 'white' };
+      }
+    }
   }
 
   private async displayAlert(text: string, icon: string) {
