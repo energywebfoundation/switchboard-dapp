@@ -1,4 +1,4 @@
-<mat-tab-group mat-align-tabs="start">
+<mat-tab-group mat-align-tabs="start" (selectedTabChange)="showMe($event)">
   <mat-tab label="Enrollment Requests">
     <div class="row mx-0 mt-1">
       <div class="col-xl-12">
@@ -12,64 +12,15 @@
               <!-- <div class="filter-label mr-1">Group by:</div> -->
               <mat-form-field appearance="outline" floatPlaceholder="never"
                 class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
-                <mat-select placeholder="Pending">
-                  <mat-option>Pending</mat-option>
-                  <mat-option>Issued</mat-option>
-                  <mat-option>Rejected</mat-option>
-                  <mat-option>Revoked</mat-option>
+                <mat-select [formControl]="issuerDropdown" (selectionChange)="updateIssuerList($event)">
+                  <mat-option [value]="dropdownValue.all">All</mat-option>
+                  <mat-option [value]="dropdownValue.pending">Pending</mat-option>
+                  <mat-option [value]="dropdownValue.approved">Approved</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
-
           </div>
-          <app-enrolment-list></app-enrolment-list>
-          <table mat-table [dataSource]="dataSourceEnRequests">
-            <!-- Role Type Column -->
-            <ng-container matColumnDef="did">
-              <th mat-header-cell *matHeaderCellDef> DID </th>
-              <td mat-cell *matCellDef="let element" data-label="DID"> {{element.did}} </td>
-            </ng-container>
-
-            <!-- Namespace Column -->
-            <ng-container matColumnDef="roleType">
-              <th mat-header-cell *matHeaderCellDef> Role Type </th>
-              <td mat-cell *matCellDef="let element" data-label="roleType"> {{element.roleType}} </td>
-            </ng-container>
-
-            <!-- Weight Column -->
-            <ng-container matColumnDef="namespace">
-              <th mat-header-cell *matHeaderCellDef> Namespace </th>
-              <td mat-cell *matCellDef="let element" data-label="Role Name"> {{element.namespace}} </td>
-            </ng-container>
-
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="metadata">
-              <th mat-header-cell *matHeaderCellDef> Metadata </th>
-              <td mat-cell *matCellDef="let element" data-label="Metadata"> {{element.metadata}} </td>
-            </ng-container>
-
-             <!-- Symbol Column -->
-             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef> Actions </th>
-              <td mat-cell *matCellDef="let element"> 
-                <button mat-icon-button matTooltip="View">
-                  <mat-icon class="btn-color-primary" (click)="openViewRequestsComponent()">preview</mat-icon>
-                </button>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="enrollmentRequestsColumns"></tr>
-            <tr class="cursor-pointer" mat-row *matRowDef="let row; columns: enrollmentRequestsColumns;"></tr>
-          </table>
-          <!-- Shows when table is empty -->
-          <!-- <div class="d-flex justify-content-center align-items-center">
-              <div class="d-flex align-items-center no-record color-white">
-                <mat-icon class="mr-2">info</mat-icon>
-                <i>No Record Found</i>
-              </div>
-            </div> -->
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
-          </mat-paginator>
+          <app-enrolment-list [list-type]="'issuer'" accepted="false" #issuerList></app-enrolment-list>
         </div>
       </div>
     </div>
@@ -81,59 +32,21 @@
           <h4 class="color-white strong my-4">My Enrollments</h4>
         </div>
         <div class="card card-default mb-3 pb-0">
-          <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-end align-lg-items-center mb-3">
+          <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
             <!-- Filter -->
+            <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0">
+              <!-- <div class="filter-label mr-1">Group by:</div> -->
+              <mat-form-field appearance="outline" floatPlaceholder="never"
+                class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+                <mat-select [formControl]="enrolmentDropdown" (selectionChange)="updateEnrolmentList($event)">
+                  <mat-option [value]="dropdownValue.all">All</mat-option>
+                  <mat-option [value]="dropdownValue.pending">Pending</mat-option>
+                  <mat-option [value]="dropdownValue.approved">Approved</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
-          <table mat-table [dataSource]="dataSourceMyEn">
-            <!-- Role Type Column -->
-            <ng-container matColumnDef="roleType">
-              <th mat-header-cell *matHeaderCellDef> Role Type </th>
-              <td mat-cell *matCellDef="let element" data-label="Role Type"> {{element.roleType}} </td>
-            </ng-container>
-
-            <!-- Namespace Column -->
-            <ng-container matColumnDef="namespace">
-              <th mat-header-cell *matHeaderCellDef> Namespace </th>
-              <td mat-cell *matCellDef="let element" data-label="Namespace"> {{element.namespace}} </td>
-            </ng-container>
-
-            <!-- Role Nane Column -->
-            <ng-container matColumnDef="roleName">
-              <th mat-header-cell *matHeaderCellDef> Role Name </th>
-              <td mat-cell *matCellDef="let element" data-label="Role Name"> {{element.roleName}} </td>
-            </ng-container>
-
-            <!-- Metadata Column -->
-            <ng-container matColumnDef="metadata">
-              <th mat-header-cell *matHeaderCellDef> Metadata </th>
-              <td mat-cell *matCellDef="let element" data-label="Metadata"> {{element.metadata}} </td>
-            </ng-container>
-
-             <!-- Actions Column -->
-             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef> Actions </th>
-              <td mat-cell *matCellDef="let element" > 
-                <button mat-icon-button matTooltip="View">
-                  <mat-icon class="btn-color-primary">preview</mat-icon>
-                </button>
-                <button mat-icon-button matTooltip="View">
-                  <mat-icon class="btn-color-error">delete_outline</mat-icon>
-                </button>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="myEnrollmentsColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: myEnrollmentsColumns;"></tr>
-          </table>
-          <!-- Shows when table is empty -->
-          <!-- <div class="d-flex justify-content-center align-items-center">
-              <div class="d-flex align-items-center no-record color-white">
-                <mat-icon class="mr-2">info</mat-icon>
-                <i>No Record Found</i>
-              </div>
-            </div> -->
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
-          </mat-paginator>
+          <app-enrolment-list [list-type]="'applicant'" #enrolmentList *ngIf="isMyEnrolmentShown"></app-enrolment-list>
         </div>
       </div>
     </div>

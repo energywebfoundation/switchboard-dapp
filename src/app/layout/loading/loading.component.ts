@@ -10,9 +10,18 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 export class LoadingComponent implements OnInit {
 
   public showLoadingOverlay = false;
+  public msg = '';
   constructor(private spinner: NgxSpinnerService, private loadingService: LoadingService) { }
 
   ngOnInit() {
+    // Subscribe to msg event
+    this.loadingService.message.subscribe((message: string) => {
+      let $setTimeout = setTimeout(() => {
+        this.msg = message;
+        clearTimeout($setTimeout);
+      }, 30);
+    });
+
     // Subscribe to isLoading event
     this.loadingService.isLoading.subscribe((isLoading: number) => {
       let $setTimeout = setTimeout(() => {
