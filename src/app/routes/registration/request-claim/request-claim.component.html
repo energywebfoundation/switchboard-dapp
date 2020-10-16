@@ -20,13 +20,13 @@
           <mat-label class="ml-3 pl-1">Role</mat-label>
           <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
             <mat-select placeholder="Role" formControlName="roleType" (selectionChange)="roleTypeSelected($event)">
-              <mat-option *ngFor="let role of roleList" [value]="role">{{ role.name | uppercase }}</mat-option>
+              <mat-option *ngFor="let role of roleList" [value]="role">{{ role.name | titlecase }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
       </div>
     </form>
-    <form role="form" [formGroup]="enrolmentForm" *ngIf="roleTypeForm?.value?.roleType">
+    <form role="form" [formGroup]="enrolmentForm" *ngIf="roleTypeForm?.value?.roleType && fieldList.length">
       <div class="row">
         <!-- START: Dynamic Form Fields -->
         <ng-container *ngFor="let field of enrolmentForm?.get('fields')?.controls; let i = index;">

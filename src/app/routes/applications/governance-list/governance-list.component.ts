@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
+import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
@@ -8,7 +9,7 @@ import { RoleType } from '../new-role/new-role.component';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
-const RoleColumns: string[] = ['type', 'namespace', 'actions'];
+const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
 
 const ListType = {
   ORG: 'org',
@@ -33,7 +34,8 @@ export class GovernanceListComponent implements OnInit {
   
   constructor(private loadingService: LoadingService,
       private iamService: IamService,
-      private dialog: MatDialog
+      private dialog: MatDialog,
+      private toastr: ToastrService
     ) { }
 
   async ngOnInit() {
@@ -82,5 +84,31 @@ export class GovernanceListComponent implements OnInit {
       maxWidth: '100%',
       disableClose: true
     });
+  }
+
+  private constructEnrolmentUrl(listType: string,roleDefinition: any) {
+    let name = roleDefinition.name;
+    let arr = roleDefinition.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
+    let namespace = '';
+
+    if (arr.length > 1) {
+      namespace = arr[1];
+    }
+
+    return `${location.origin}/#/enrol?${listType}=${namespace}&roleName=${name}`;
+  }
+
+  copyToClipboard(listType: string, roleDefinition: any) {
+    let listener = (e: ClipboardEvent) => {
+      let clipboard = e.clipboardData || window["clipboardData"];
+      clipboard.setData("text", this.constructEnrolmentUrl(listType, roleDefinition));
+      e.preventDefault();
+    }
+
+    document.addEventListener("copy", listener, false)
+    document.execCommand("copy");
+    document.removeEventListener("copy", listener, false);
+
+    this.toastr.success('Role Enrolment URL is copied to clipboard.');
   }
 }

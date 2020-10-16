@@ -123,8 +123,9 @@ export class RequestClaimComponent implements OnInit {
         namespace: this.appNamespace
       });
 
+      console.log('Role List', this.roleList);
+
       if (this.roleList && this.roleList.length) {
-        this.roleList = this.roleList[0].roles;
 
         // Set Default Selected
         if (this.appDefaultRole) {
