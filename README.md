@@ -1,11 +1,11 @@
 # Switchboard dApp
 
-`Switchboard dApp` is a revolutionary decentralized application for identity and access management.
+`Switchboard dApp` is a revolutionary decentralized application that alllows management of identities, assets, applications, services and access controls with DIDs(Decentralised Identifiers) and VCs(Verifiable Credentials)
 
 ##
 
 
-![Identity Creation](screenshots/registration.png)
+![Identity Creation](screenshots/switchboard.png)
 
 ## Maintainers
 - Mani Hagh Sefat (@manihagh)
