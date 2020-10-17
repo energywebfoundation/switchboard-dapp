@@ -99,18 +99,28 @@ export class RequestClaimComponent implements OnInit {
 
   private updateColors(params: any) {
     if (this.appDetails) {
+      let others = undefined;
+
+      // re-construct others
+      if (this.appDetails.others) {
+        others = {};
+        for (let item of this.appDetails.others) {
+          others[item.key] = item.value;
+        }
+      }
+
       if (params.bgcolor) {
         this.bgColor = { 'background-color': `#${params.bgcolor}` };
       }
-      else if (this.appDetails.others && this.appDetails.others.bgcolor) {
-        this.bgColor = { 'background-color': `#${this.appDetails.others.bgcolor}` };
+      else if (others && others.bgcolor) {
+        this.bgColor = { 'background-color': `#${others.bgcolor}` };
       }
 
       if (params.txtcolor) {
         this.txtColor = { 'color': `#${params.txtColor}` };
       }
-      else if (this.appDetails.others && this.appDetails.others.txtcolor) {
-        this.txtColor = { 'color': `#${this.appDetails.others.txtcolor}` };
+      else if (others && others.txtcolor) {
+        this.txtColor = { 'color': `#${others.txtcolor}` };
       }
       else {
         this.txtColor = { 'color': 'white' };
