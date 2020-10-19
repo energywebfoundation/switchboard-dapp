@@ -1,0 +1,33 @@
+::ng-deep .md-enroll {
+
+    .mat-form-field-appearance-outline .mat-form-field-outline {
+        background: rgba(255,255,255,0.03);
+        color: rgba(255,255,255,0.2) !important;
+        border-radius: 5px;
+    }
+
+    .mat-select-placeholder, .mat-placeholder {
+        color: currentColor; 
+    }
+
+    .mat-select-value {
+        color: currentColor;  
+    }
+
+    .mat-select-arrow {
+        color: currentColor; 
+    }
+
+        .mat-input-element {
+          color: currentColor; 
+        }
+        
+        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: currentColor; 
+        }  
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: currentColor; 
+        }
+      
+  }
+  

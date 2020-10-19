@@ -59,7 +59,7 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
     .navbar-header {
         position: relative;
         z-index: 11;
-        padding-left: 2rem;
+        padding-left: 34px;
 
         @include media-breakpoint-up(md) {
             // padding-left: 0;

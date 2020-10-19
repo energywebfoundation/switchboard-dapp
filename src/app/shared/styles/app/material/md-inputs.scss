@@ -142,8 +142,8 @@ fieldset[disabled] .mda-radio input+em:before {
 }
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
-  background: #1C1726 !important;
-  color: #52436E !important;
+  background: rgba(255,255,255,0.03);
+  color: #52436E;
   border-radius: 5px;
 }
 
@@ -154,7 +154,7 @@ fieldset[disabled] .mda-radio input+em:before {
 .mat-input-element {
   position: relative;
   top: -4px;
-  color: #FFF !important;
+  color: #FFF;
   caret-color: #FFF;
 }
 
@@ -174,15 +174,15 @@ fieldset[disabled] .mda-radio input+em:before {
 .mat-select-value {
   position: relative;
   top: -4px;
-  color: #FFF !important;
+  color: #ffffff;
 }
 
 .mat-select-arrow {
-  color: #FFF !important;
+  color: #FFF;
 }
 
 .mat-select-placeholder, .mat-placeholder {
-  color: #B0ADDC !important;
+  color: #B0ADDC;
 }
 
 .mat-datepicker-content {

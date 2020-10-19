@@ -86,11 +86,13 @@ ul {
   margin: 15px 15px 65px 15px;
   border-radius: 15px;
   border: 0;
-  color: #FFF !important;
   z-index: 7;
 
-  background-color: #181524;
-  border: 1px solid #1c1b2b;
+  // background-color: #181524;
+  // border: 1px solid #1c1b2b;
+
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 @include media-breakpoint-down(sm) {
