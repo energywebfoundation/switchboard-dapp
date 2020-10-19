@@ -95,6 +95,11 @@ body {
         }
     }
 
+    .logo-ew {
+        width: 150px;
+        height: auto;
+    }
+
     // Contains the main content
     .section-container {
         position: relative;
@@ -240,6 +245,10 @@ body {
         }
     }
 
+    .logo-ew {
+        width: 130px !important;
+    }
+
     ul.menu-top {
         background-color: rgb(21 17 31 / 95%);
         padding: 15px 0;
@@ -303,6 +312,10 @@ body {
     }
 }
 
+.h-responsive {
+    height: 100%;
+}  
+
 // Toggle and collapsed behavior overrides
 @include media-breakpoint-down(sm) {
 
@@ -325,6 +338,9 @@ body {
         }
     }
 
+    .h-responsive {
+        height: 100vh;
+    }  
 
     .csstransforms3d {
 

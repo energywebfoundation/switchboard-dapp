@@ -117,7 +117,7 @@ export class RequestClaimComponent implements OnInit {
       }
 
       if (params.txtcolor) {
-        this.txtColor = { 'color': `#${params.txtColor}` };
+        this.txtColor = { 'color': `#${params.txtcolor}` };
       }
       else if (others && others.txtcolor) {
         this.txtColor = { 'color': `#${others.txtcolor}` };

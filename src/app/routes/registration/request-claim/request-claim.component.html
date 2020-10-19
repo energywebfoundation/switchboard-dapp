@@ -1,4 +1,4 @@
-<div class="w-100 h-100 bg-color" [ngStyle]="bgColor">
+<div class="w-100 h-responsive bg-color" [ngStyle]="bgColor">
   <div
     class="header-enroll bg-color d-flex justify-content-center justify-content-lg-start position-fixed pl-0 pl-lg-4 py-2 w-100"
     [ngStyle]="bgColor">
@@ -63,7 +63,7 @@
 
               <!-- TYPE: Boolean -->
               <mat-checkbox class="pl-3" *ngIf="fieldList[i].fieldType === 'boolean'"
-                [formControl]="enrolmentForm?.get('fields')?.controls[i]"><span
+                [formControl]="enrolmentForm?.get('fields')?.controls[i]" [ngStyle]="txtColor"><span
                   class="mb-3 d-inline-flex">{{ fieldList[i].label }}</span></mat-checkbox>
             </div>
           </ng-container>

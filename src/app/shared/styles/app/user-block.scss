@@ -70,6 +70,13 @@
     letter-spacing: 0.3px;
     font-weight: 500 !important;
 }
+
+@include media-breakpoint-down(sm) {
+    .label-role {
+        font-size: 12px;
+    }
+}
+
 .label-role-white {
     color: #9080BA;
     letter-spacing: 0.5px;
