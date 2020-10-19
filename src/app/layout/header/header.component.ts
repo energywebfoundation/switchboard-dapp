@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit {
     isNavMenuVisible = true;
 
     currentNav = '';
+    userName = '';
 
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
@@ -65,16 +66,26 @@ export class HeaderComponent implements OnInit {
                 this.currentNav = pathArr[1];
             }
         });
+
+        // Stay in current screen and display user name if available
+        this.iamService.userProfile.subscribe((data: any) => {
+            if (data && data.name) {
+                this.userName = data.name;
+            }
+        });
     }
 
     openDialogUser(): void {
         const dialogRef = this.dialog.open(DialogUser, {
           width: '440px',data:{},
-          maxWidth: '100%'
+          maxWidth: '100%',
+          disableClose: true
         });
     
         dialogRef.afterClosed().subscribe(result => {
-          console.log('The dialog was closed');
+          if (result) {
+            // Update User Name
+          }
         });
       }
 

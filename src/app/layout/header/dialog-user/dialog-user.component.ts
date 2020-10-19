@@ -1,41 +1,99 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DialogData } from './dialog-user-data';
+import { ToastrService } from 'ngx-toastr';
+import { IamService } from 'src/app/shared/services/iam.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 
 @Component({
     selector: 'dialog-user',
     templateUrl: 'dialog-user.component.html',
     styleUrls: ['../header.component.scss']
 })
-export class DialogUser {
+export class DialogUser implements OnInit {
 
-    public currentUserKey = '';
-    public currentUserData = {};
-    public exampleHeader = '';
+    public profileForm      : FormGroup;
+    public maxDate          : Date;
+    public isSaving         = false;
 
     constructor(
         public dialogRef: MatDialogRef<DialogUser>,
-        @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+        private fb: FormBuilder,
+        private iamService: IamService,
+        private toastr: ToastrService,
+        private loadingService: LoadingService) {
+            this.profileForm = fb.group({
+                name: ['', Validators.compose([
+                    Validators.maxLength(256),
+                    Validators.required
+                ])],
+                birthdate: ['', Validators.required],
+                address: ['', Validators.compose([
+                    Validators.maxLength(500),
+                    Validators.required
+                ])]
+            });
+            
+            let today = new Date();
+            today.setFullYear(today.getFullYear() - 18);
+            this.maxDate = today;    
+    }
 
-        if (localStorage.getItem('EW-DID-CONFIG')) {
-            this.currentUserKey = JSON.parse(localStorage.getItem('EW-DID-CONFIG')).privateKey;
+    async ngOnInit() {
+        this.loadingService.show();
+
+        // Get User Claims
+        let data: any[] = await this.iamService.iam.getUserClaims();
+        console.log('getUserClaims()', JSON.parse(JSON.stringify(data)));
+
+        // Get Profile Related Claims
+        data = data.filter((item: any) => item.profile ? true : false );
+        console.log('Profile Claims', JSON.parse(JSON.stringify(data)));
+
+        // Get the most recent claim
+        if (data.length) {
+            let tmp: any = data[0].profile;
+            this.profileForm.patchValue({
+                name: tmp.name,
+                birthdate: new Date(tmp.birthdate),
+                address: tmp.address
+            });
         }
 
-        if (localStorage.getItem('EW-DID-CONFIG') && localStorage.getItem('currentUser')) {
-            let didConfig: any = JSON.parse(localStorage.getItem('EW-DID-CONFIG'));
-            let currentUser: any = JSON.parse(localStorage.getItem('currentUser'));
-            this.currentUserData = {
-                'privateKey': didConfig.privateKey,
-                'currentUser': currentUser
+        this.loadingService.hide();
+    }
+
+    async save() {
+        if (this.profileForm.valid) {
+            this.loadingService.show('Please confirm this transaction in your connected wallet.');
+            this.isSaving = true;
+
+            let data = this.profileForm.getRawValue();
+
+            if (data.birthdate) {
+                let date = data.birthdate.getTime();
+                data = JSON.parse(JSON.stringify(data));
+                data.birthdate = date;    
+            }
+            
+            console.log('data', data);
+            try {
+                await this.iamService.iam.createSelfSignedClaim({
+                    data: {
+                        profile: data
+                    }
+                });
+                this.toastr.success('Identity is updated.', 'Success');
+                this.dialogRef.close(true);
+            }
+            catch (e) {
+                console.error('Saving Identity Error', e);
+                this.toastr.error(e.message, 'System Error')
+            }
+            finally {
+                this.isSaving = false;
+                this.loadingService.hide();
             }
         }
-    }
-
-    onNoClick(): void {
-        this.dialogRef.close();
-    }
-
-    getUserData() {
-        return JSON.stringify(this.currentUserData);
     }
 }
