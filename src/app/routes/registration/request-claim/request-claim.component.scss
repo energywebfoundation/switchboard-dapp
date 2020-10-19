@@ -7,14 +7,17 @@
     }
 
     .mat-select-placeholder, .mat-placeholder {
-        color: #B0ADDC; 
+        color: currentColor; 
+    }
+
+    .mat-select-value {
+        color: currentColor;  
     }
 
     .mat-select-arrow {
         color: currentColor; 
     }
 
-    .mat-form-field {    
         .mat-input-element {
           color: currentColor; 
         }
@@ -26,6 +29,5 @@
             color: currentColor; 
         }
       
-      }
   }
   
