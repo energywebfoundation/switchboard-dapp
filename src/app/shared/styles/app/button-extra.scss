@@ -65,6 +65,15 @@
         }
 }
 
+.md-enroll.btn-primary {
+    color:currentColor;
+    background: currentColor;
+}
+
+.md-enroll.mat-raised-button[disabled] {
+    color: rgba(0,0,0,.26) !important;
+    background: rgba(0,0,0,.12) !important;     
+}
 
 //
 // Extension for Bootstrap buttons

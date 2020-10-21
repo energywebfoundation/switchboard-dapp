@@ -206,7 +206,7 @@ ngx-material-timepicker-toggle {
 }
 
 .mat-checkbox-frame {
-    border-color: #FFF;
+    border-color: currentColor;
 }
 
 .mat-checkbox-layout {
@@ -227,7 +227,7 @@ mat-checkbox {
 }
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-    background: #A567FF !important;
+    background: #A567FF;
 }
 
 .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element, .mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element {
