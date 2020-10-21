@@ -135,6 +135,51 @@ fieldset[disabled] .mda-radio input+em:before {
 
 }
 
+.mat-select-panel {
+  background: #343242;
+}
+
+.md-enroll.mat-form-field-appearance-outline .mat-form-field-outline {
+      background: rgba(255,255,255,0.03);
+      color: currentColor;
+  }
+
+.md-enroll.mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
+    color: currentColor !important;
+}
+
+.md-enroll.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background: currentColor;
+}
+
+.md-enroll.mat-input-element {
+  color: currentColor;
+  caret-color: currentColor;
+}
+
+.md-enroll.mat-option.mat-selected:not(.mat-option-disabled) {
+  color: #FFF;
+}
+
+
+.md-enroll {
+  .mat-option {
+    color: currentColor;
+    background: currentColor;
+  
+    &:nth-child(odd) {
+      background: currentColor;
+    }
+  
+    .mat-active {
+      background: currentColor;
+    }
+  }
+  .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color: currentColor;
+  }
+}
+
 @include media-breakpoint-down(sm) {
   .mat-form-field, .ngx-select__toggle, .form-control, .ngx-select__item {
     font-size: 14px !important;
@@ -159,16 +204,17 @@ fieldset[disabled] .mda-radio input+em:before {
 }
 
 .mat-option {
-  color: #FFF !important;
-  background: #343242 !important;
+  color: #FFF;
+  background: #343242;
 
   &:nth-child(odd) {
-    background: #383746 !important;
+    background: #383746;
   }
+}
 
-  .mat-active {
-    background: #424150 !important;
-  }
+.mat-option.mat-active {
+  color: #FFF;
+  background: rgba(0,0,0,.04);
 }
 
 .mat-select-value {
@@ -195,7 +241,7 @@ fieldset[disabled] .mda-radio input+em:before {
 }
 
 .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
-  color: rgba(255,255,255,.54) !important;
+  color: rgba(255,255,255,.54);
 }
 
 .mat-calendar-body-label {
@@ -219,7 +265,7 @@ fieldset[disabled] .mda-radio input+em:before {
 }
 
 .mat-calendar-body-selected {
-  background-color: #105ee8 !important;
+  background-color: #673ab7 !important;
 }
 
 .mat-calendar-table-header-divider::after {
@@ -248,7 +294,7 @@ fieldset[disabled] .mda-radio input+em:before {
 
   .mat-form-field-outline {
     background: #181522 !important;
-    color: #554675 !important;
+    color: #554675;
   }
 
   .mat-form-field-flex {
