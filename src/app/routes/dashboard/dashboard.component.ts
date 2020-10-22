@@ -10,29 +10,27 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 })
 export class DashboardComponent implements OnInit {
   public accountDid = "";
+  public userName = "";
   private loginStatus = undefined;
 
   constructor(private iamService: IamService, 
     private route: Router,
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService) { 
+      this.loadingService.show();
       this.loginStatus = this.iamService.getLoginStatus();
-      if (this.loginStatus === LoginType.LOCAL) {
-        this.loadingService.show();
-      }
-      
   }
 
   ngOnInit() {
-    console.log('accountAddress', this.iamService.user);
-
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
+
       let returnUrl = undefined;
 
       // Check Login
       if (this.loginStatus) {
         console.log(this.loginStatus);
         if (this.loginStatus === LoginType.LOCAL) {
+          console.log('local > login');
           await this.iamService.login();
         }
 
@@ -54,6 +52,14 @@ export class DashboardComponent implements OnInit {
       this.loadingService.hide();
       if (returnUrl) {
         this.route.navigateByUrl(returnUrl);
+      }
+      else {
+        // Stay in current screen and display user name if available
+        this.iamService.userProfile.subscribe((data: any) => {
+          if (data && data.name) {
+            this.userName = data.name;
+          }
+        });
       }
     });
   }

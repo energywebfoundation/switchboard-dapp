@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IAM, DIDAttribute, CacheServerClient, MessagingMethod } from 'iam-client-lib';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 const LS_WALLETCONNECT = 'walletconnect';
@@ -16,7 +17,9 @@ export enum LoginType {
 };
 
 declare type User = {
-  accountAddress: string
+  name: string,
+  birthdate: Date,
+  address: string
 };
 
 @Injectable({
@@ -24,8 +27,9 @@ declare type User = {
 })
 export class IamService {
   private _iam: IAM;
-  private _user: User;
+  private _user: BehaviorSubject<User | undefined>;
   private _didDocument: any;
+  public accountAddress = undefined;
 
   constructor() {
     let options = {
@@ -38,6 +42,7 @@ export class IamService {
     console.info('IAM Service Options', options);
 
     // Initialize Data
+    this._user = new BehaviorSubject<User>(undefined);
     this._iam = new IAM(options);
   }
 
@@ -48,7 +53,7 @@ export class IamService {
     let retVal = false;
 
     // Check if account address exists
-    if (!this._user) {
+    if (!this._user.getValue()) {
       const { did, connected, userClosedModal } = await this._iam.initializeConnection();
       console.log(did, connected, userClosedModal);
       if (did && connected && !userClosedModal) {
@@ -64,15 +69,34 @@ export class IamService {
   }
 
   async setupUser() {
+    // No need to setup user again
+    if (this.accountAddress) {
+      return;
+    }
+
+    // Get Account Address
     const signer = this._iam.getSigner();
-    const account = await signer.getAddress();
+    this.accountAddress = await signer.getAddress();
+
+    // Setup DID Document
     this._didDocument = await this._iam.getDidDocument();
 
-    // Retrieve account address
-    if (account) {
-      this._user = {
-        accountAddress: account
-      };
+    // Get User Claims
+    let data: any[] = await this.iam.getUserClaims();
+    console.log('getUserClaims()', JSON.parse(JSON.stringify(data)));
+
+    // Get Profile Related Claims
+    data = data.filter((item: any) => item.profile ? true : false );
+    console.log('Profile Claims', JSON.parse(JSON.stringify(data)));
+
+    // Get the most recent claim
+    if (data.length) {
+        let tmp: any = data[0].profile;
+        this._user.next({
+          name: tmp.name,
+          birthdate: new Date(tmp.birthdate),
+          address: tmp.address
+      });
     }
   }
 
@@ -119,10 +143,11 @@ export class IamService {
     return this._iam;
   }
 
-  /**
-   * Retreive User Details
-   */
-  get user() {
-    return this._user ? JSON.parse(JSON.stringify(this._user)) : this._user;
+  get userProfile() {
+    return this._user.asObservable();
+  }
+
+  setUserProfile(data: any) {
+    this._user.next(data);
   }
 }

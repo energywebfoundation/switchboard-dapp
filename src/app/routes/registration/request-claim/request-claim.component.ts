@@ -276,12 +276,12 @@ export class RequestClaimComponent implements OnInit {
           };
           
           console.info('createClaimRequest', {
-              issuerDID: this.selectedRole.issuer.did[0],
-              claim: claim
+            issuer: this.selectedRole.issuer.did,
+            claim: claim
           });
 
           await this.iamService.iam.createClaimRequest({
-            issuerDID: this.selectedRole.issuer.did[0],
+            issuer: this.selectedRole.issuer.did,
             claim: claim
           });
           

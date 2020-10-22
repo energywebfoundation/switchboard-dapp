@@ -6,7 +6,8 @@
             <div class="text-center cursor-pointer m-4">
               <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="64" height="64"
                 alt="identity image">
-              <h2 class="color-white mt-4 mb-0">My Decentralised Identifier:</h2>
+              <h2 class="color-white mt-4 mb-0" *ngIf="!userName">My Decentralised Identifier:</h2>
+              <h2 class="color-white mt-4 mb-0" *ngIf="userName"> {{ userName }} </h2>
               <div class="opacity-50 text-truncate-middle did-wrapper">{{ accountDid }}</div>
             </div>
           </div>

@@ -65,7 +65,7 @@ export class GovernanceListComponent implements OnInit {
     this.loadingService.show();
     const $getOrgList = await this.iamService.iam.getENSTypesByOwner({
       type: this.ensType,
-      owner: this.iamService.user['accountAddress']
+      owner: this.iamService.accountAddress
     });
 
     this.dataSource = $getOrgList;

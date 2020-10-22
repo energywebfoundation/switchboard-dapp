@@ -48,7 +48,8 @@
             <div class="cursor-pointer" [matMenuTriggerFor]="menu">
                 <div class="d-flex align-items-center flex-row">
                     <div class="d-flex flex-column align-items-end ml-2 mr-2">
-                        <div class="label-role">Manage Profile</div>
+                        <div class="label-role" *ngIf="!userName">Manage Profile</div>
+                        <div class="label-role" *ngIf="userName"> {{ userName }} </div>
                         <!-- <div class="label-did">0x5B1B89A48C1fB….6d45</div> -->
                     </div>
                     <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="34"
