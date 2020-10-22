@@ -63,8 +63,8 @@
 
               <!-- TYPE: Boolean -->
               <mat-checkbox class="pl-3 md-enroll" *ngIf="fieldList[i].fieldType === 'boolean'"
-                [formControl]="enrolmentForm?.get('fields')?.controls[i]" [ngStyle]="btnColor"><span
-                  class="mb-3 d-inline-flex">{{ fieldList[i].label }}</span></mat-checkbox>
+                [formControl]="enrolmentForm?.get('fields')?.controls[i]" [ngStyle]="txtboxColor"><span
+                  class="mb-3 d-inline-flex" [ngStyle]="txtColor">{{ fieldList[i].label }}</span></mat-checkbox>
             </div>
           </ng-container>
           <!-- END: Dynamic Form Fields -->

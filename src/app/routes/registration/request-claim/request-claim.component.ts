@@ -38,6 +38,7 @@ export class RequestClaimComponent implements OnInit {
   public txtColor       : Object = undefined;
   public btnColor       : Object = {};
   public listColor      : Object = {};
+  public txtboxColor    : Object = {};
   
   constructor(private fb: FormBuilder, 
       private activeRoute: ActivatedRoute,
@@ -122,9 +123,11 @@ export class RequestClaimComponent implements OnInit {
 
       if (params.btncolor) {
         this.btnColor['background-color'] = `#${params.btncolor}`;
+        this.txtboxColor['color'] = `#${params.btncolor}`;
       }
       else if (others && others.btncolor) {
         this.btnColor['background-color'] = `#${others.btncolor}`;
+        this.txtboxColor['color'] = `#${others.btncolor}`;
       }
 
       if (params.txtcolor) {
