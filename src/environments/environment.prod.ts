@@ -5,7 +5,8 @@ export const environment = {
   cacheServerUrl: 'http://13.52.78.249:3333/',
   natsServerUrl: 'http://13.52.78.249:9222',
   walletConnectOptions: {
-    rpcUrl: 'https://volta-rpc.energyweb.org/',
+    // rpcUrl: 'https://volta-rpc.energyweb.org/',
+    rpcUrl: 'https://volta-internal-archive.energyweb.org/',
     chainId: 73799
   },
   ...constants

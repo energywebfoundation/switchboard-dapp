@@ -21,7 +21,7 @@
                     <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                         <input [matDatepicker]="picker" [max]="maxDate" formControlName="birthdate" matInput required (keypress)="$event.preventDefault()" placeholder="Date of Birth" autocomplete="off">
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+                        <mat-datepicker #picker></mat-datepicker>
                         <mat-error *ngIf="">Date of birth is <strong>required</strong></mat-error>
                     </mat-form-field>
                 </div>
