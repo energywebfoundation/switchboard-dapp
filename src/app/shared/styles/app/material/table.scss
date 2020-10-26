@@ -183,15 +183,17 @@ mat-paginator {
     .mat-table tr.mat-row:nth-child(odd) {background: #FFF}
     */
     .mat-table td.mat-cell {
-        display: block;
+        display: flex;
+        border-bottom: 1px solid #2b2a3a !important;
+        flex-direction: column;
         font-size: 1em;
-        text-align: right;
         font-weight: bold;
-        padding-top: 15px;
         padding-left: 10px !important;
-        padding-right: 15px !important;
-        padding-bottom: 5px;
+        word-break: break-all;
+        margin: 0 8px;
+        margin-bottom: 0;
     }
+
     .mat-table td.mat-cell:before {
 
       content: attr(data-label);
@@ -203,7 +205,9 @@ mat-paginator {
       font-size: 14px;
     }
     .mat-table td.mat-cell:last-child {
-      border-bottom: 0;
+      border-bottom: 0 !important;
+      display: flex;
+      align-items: flex-end;
     }
       .mat-table td.mat-cell:first-child {
       margin-top: 3%;
