@@ -43,49 +43,37 @@
             </a>
         </li>
     </ul>
-    <ul class="navbar-nav flex-row align-items-center profile-wrapper">
-        <!-- <li class="nav-item dropdown dropdown-list" dropdown>
+    <ul class="navbar-nav flex-row align-items-center profile-wrapper cursor-pointer">
+        <li class="nav-item dropdown dropdown-list" dropdown>
             <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" dropdownToggle>
                 <em class="icon-bell"></em>
-                <span class="badge badge-danger">11</span>
+                <span class="badge badge-danger">14</span>
             </a>
-            <div *dropdownMenu class="dropdown-menu dropdown-menu-right animated flipInX">
+            <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-item">
                     
                     <div class="list-group">
                        
                        <div class="list-group-item list-group-item-action">
-                          <div class="media">
+                          <div class="media d-flex align-items-center cursor-pointer">
                              <div class="align-self-start mr-2">
-                                <em class="fab fa-twitter fa-2x text-info"></em>
+                                <mat-icon svgIcon="new-claim-icon"></mat-icon>
                              </div>
-                             <div class="media-body">
-                                <p class="m-0">New followers</p>
-                                <p class="m-0 text-muted text-sm">1 new follower</p>
+                             <div class="media-body d-flex flex-row justify-content-between align-items-center">
+                                <p class="m-0">New claim requests</p>
+                                <span class="badge badge-danger ml-2">6</span>
                              </div>
                           </div>
                        </div>
                        
                        <div class="list-group-item list-group-item-action">
-                          <div class="media">
+                          <div class="media d-flex align-items-center cursor-pointer">
                              <div class="align-self-start mr-2">
-                                <em class="fa fa-envelope fa-2x text-warning"></em>
+                                <mat-icon svgIcon="approved-claim-icon"></mat-icon>
                              </div>
-                             <div class="media-body">
-                                <p class="m-0">New e-mails</p>
-                                <p class="m-0 text-muted text-sm">You have 10 new emails</p>
-                             </div>
-                          </div>
-                       </div>
-                       
-                       <div class="list-group-item list-group-item-action">
-                          <div class="media">
-                             <div class="align-self-start mr-2">
-                                <em class="fa fa-tasks fa-2x text-success"></em>
-                             </div>
-                             <div class="media-body">
-                                <p class="m-0">Pending Tasks</p>
-                                <p class="m-0 text-muted text-sm">11 pending task</p>
+                             <div class="media-body d-flex flex-row justify-content-between align-items-center">
+                                <p class="m-0">Approved claim requests</p>
+                                <span class="badge badge-danger ml-2">8</span>
                              </div>
                           </div>
                        </div>
@@ -94,7 +82,7 @@
                 </div>
             </div>
             
-        </li> -->
+        </li>
         <li class="nav-item">
             <div class="cursor-pointer" [matMenuTriggerFor]="menu">
                 <div class="d-flex align-items-center flex-row">

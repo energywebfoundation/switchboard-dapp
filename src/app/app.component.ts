@@ -95,6 +95,14 @@ export class AppComponent implements OnInit {
             "scan-qr-icon",
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/scan-qr-icon.svg")
         );
+        this.matIconRegistry.addSvgIcon(
+            "new-claim-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/new-claim-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "approved-claim-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/approved-claim-icon.svg")
+        );
     }
 
     ngOnInit() {
