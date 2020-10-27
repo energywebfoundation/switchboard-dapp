@@ -1,0 +1,76 @@
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">Transfer Ownership
+  <button mat-icon-button (click)="closeDialog()">
+    <mat-icon>close</mat-icon>
+  </button>
+</h4>
+
+<div mat-dialog-content>
+  <!-- START: New Owner Form -->
+  <ng-container *ngIf="!isProcessing">
+    <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3">
+      <mat-icon>info</mat-icon><span class="pb-2">NAMESPACE: {{ namespace }}</span>
+    </div>
+    <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+      <div class="row">
+        <div class="col-lg-12">
+          <mat-label class="ml-3 pl-1">New Owner Address</mat-label>
+          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+            <input matInput autocomplete="off" [formControl]="newOwnerAddress" type="text" placeholder="New Owner Address" 
+                required maxlength="256"/>
+              <mat-error>New Owner Address is <strong>required</strong></mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end mb-3" *ngIf="!mySteps?.length">
+      <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
+      <button mat-raised-button class="btn btn-small btn-primary" (click)="submit()" [disabled]="newOwnerAddress.invalid">Next</button>
+    </div>
+  </ng-container>
+  <!-- END: New Owner Form -->
+
+  <div class="mb-2 mt-3" *ngIf="isProcessing">
+    <div class="row">
+      <div class="w-100 card card-default d-flex shadow-none d-flex pt-3 mx-3">
+        <div class="text-left my-3">
+          <div class="label opacity-50 mb-2">Namespace</div>
+          <span class="color-white mb-0">{{ namespace }}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="text-left my-3">
+          <div class="label opacity-50 mb-2">New Owner Address</div>
+          <span class="color-white mb-0">{{ newOwnerAddress?.value }}</span>
+        </div>
+      </div>
+      <mat-vertical-stepper class="w-100" [linear]="true" #stepper *ngIf="mySteps?.length">
+        <ng-template matStepperIcon="edit">
+          <mat-icon>check</mat-icon>
+        </ng-template>
+        <mat-step [completed]="false" *ngFor="let step of mySteps; let i = index;">
+          <ng-template matStepLabel>Transfer Ownership</ng-template>
+          <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            <mat-icon>info</mat-icon><span class="pb-2">{{ step.info }}</span>
+          </div>
+          <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
+          </div>
+          <div class="d-flex justify-content-end mb-3">
+            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
+            <button mat-raised-button class="btn btn-small btn-primary" (click)="submit()" [disabled]="true">Next</button>
+          </div>
+        </mat-step>
+        <mat-step [completed]="false">
+          <ng-template matStepLabel>Complete</ng-template>
+          <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            <mat-icon>notifications_none</mat-icon><span class="pb-2">All transactions are completely processed.</span>
+          </div>
+          <div>
+            <div class="d-flex justify-content-end mb-2">
+              <button mat-raised-button class="btn btn-small btn-primary" (click)="closeDialog(true)">Complete</button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-vertical-stepper>
+    </div>
+  </div>
+</div>
