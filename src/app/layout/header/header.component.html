@@ -47,36 +47,38 @@
         <li class="nav-item dropdown dropdown-list" dropdown>
             <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" dropdownToggle>
                 <em class="icon-bell"></em>
-                <span class="badge badge-danger">14</span>
+                <span class="badge badge-danger" *ngIf="notif?.totalCount">{{ notif?.totalCount }}</span>
             </a>
             <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-item">
                     
                     <div class="list-group">
-                       
-                       <div class="list-group-item list-group-item-action">
-                          <div class="media d-flex align-items-center cursor-pointer">
-                             <div class="align-self-start mr-2">
-                                <mat-icon svgIcon="new-claim-icon"></mat-icon>
-                             </div>
-                             <div class="media-body d-flex flex-row justify-content-between align-items-center">
-                                <p class="m-0">New claim requests</p>
-                                <span class="badge badge-danger ml-2">6</span>
-                             </div>
-                          </div>
-                       </div>
-                       
-                       <div class="list-group-item list-group-item-action">
-                          <div class="media d-flex align-items-center cursor-pointer">
-                             <div class="align-self-start mr-2">
-                                <mat-icon svgIcon="approved-claim-icon"></mat-icon>
-                             </div>
-                             <div class="media-body d-flex flex-row justify-content-between align-items-center">
-                                <p class="m-0">Approved claim requests</p>
-                                <span class="badge badge-danger ml-2">8</span>
-                             </div>
-                          </div>
-                       </div>
+                        <a routerLink="/enrolment" routerLinkActive="active">
+                            <div class="list-group-item list-group-item-action">
+                                <div class="media d-flex align-items-center cursor-pointer">
+                                    <div class="align-self-start mr-2">
+                                        <mat-icon svgIcon="new-claim-icon"></mat-icon>
+                                    </div>
+                                    <div class="media-body d-flex flex-row justify-content-between align-items-center">
+                                        <p class="m-0">Claim Requests Pending for Approval</p>
+                                        <span class="badge badge-danger ml-2">{{ notif?.pendingApprovalCount }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a [routerLink]="['/enrolment']" routerLinkActive="active" [queryParams]="{notif: 'pendingSyncToDidDoc'}">
+                            <div class="list-group-item list-group-item-action">
+                            <div class="media d-flex align-items-center cursor-pointer">
+                                <div class="align-self-start mr-2">
+                                    <mat-icon svgIcon="approved-claim-icon"></mat-icon>
+                                </div>
+                                <div class="media-body d-flex flex-row justify-content-between align-items-center">
+                                    <p class="m-0">Claims Pending Sync to DID Document</p>
+                                    <span class="badge badge-danger ml-2">{{ notif?.pendingSyncCount }}</span>
+                                </div>
+                            </div>
+                            </div>
+                        </a>
                     </div>
                    
                 </div>

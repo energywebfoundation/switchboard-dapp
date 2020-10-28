@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { DialogUser } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { Router, NavigationEnd } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-header',
@@ -35,12 +36,20 @@ export class HeaderComponent implements OnInit {
     currentNav = '';
     userName = '';
 
+    // Notifications
+    notif = {
+        totalCount: 0,
+        pendingApprovalCount: 0,
+        pendingSyncCount: 0
+    };
+
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
     constructor(public menu: MenuService, 
         // private authenticationService: AuthService,
         private iamService: IamService,
         private router: Router,
+        private toastr: ToastrService,
         public userblockService: UserblockService, private http: HttpClient,
         public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer) {
 
@@ -103,6 +112,44 @@ export class HeaderComponent implements OnInit {
         //     if (el)
         //         el.className = screenfull.isFullscreen ? 'fa fa-compress' : 'fa fa-expand';
         // });
+
+        // Initialize Notifications
+        this.initNotifications();
+
+    }
+
+    private initNotifications() {
+        // Init Notif Count
+        this.initNotificationCount();
+    }
+
+    private async initNotificationCount() {
+        try {
+            // Get Pending Claims to be Approved
+            let pendingClaimsList = await this.iamService.iam.getIssuedClaims({
+                did: this.iamService.iam.getDid(),
+                isAccepted: false
+            });
+            this.notif.pendingApprovalCount = pendingClaimsList.length;
+
+            // Get Approved Claims
+            let approvedClaimsList = await this.iamService.iam.getRequestedClaims({
+                did: this.iamService.iam.getDid(),
+                isAccepted: true
+            });
+
+            // Get Did Doc
+            let didDoc = await this.iamService.iam.getDidDocument();
+
+            this.notif.pendingSyncCount = approvedClaimsList.length;
+        }
+        catch (e) {
+            console.error(e);
+            this.toastr.error(e);
+        }
+        finally {
+            this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
+        }
     }
 
     getUserIdenticon() {

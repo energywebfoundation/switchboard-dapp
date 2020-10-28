@@ -1,4 +1,4 @@
-<mat-tab-group mat-align-tabs="start" (selectedTabChange)="showMe($event)">
+<mat-tab-group mat-align-tabs="start" #enrolmentTabGroup (selectedTabChange)="showMe($event)">
   <mat-tab label="Enrollment Requests">
     <div class="row mx-0 mt-1">
       <div class="col-xl-12">
@@ -20,7 +20,7 @@
               </mat-form-field>
             </div>
           </div>
-          <app-enrolment-list [list-type]="'issuer'" accepted="false" #issuerList></app-enrolment-list>
+          <app-enrolment-list [list-type]="'issuer'" [accepted]="issuerListAccepted" #issuerList></app-enrolment-list>
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@
               </mat-form-field>
             </div>
           </div>
-          <app-enrolment-list [list-type]="'applicant'" #enrolmentList *ngIf="isMyEnrolmentShown"></app-enrolment-list>
+          <app-enrolment-list [list-type]="'applicant'" [accepted]="enrolmentListAccepted" #enrolmentList *ngIf="isMyEnrolmentShown"></app-enrolment-list>
         </div>
       </div>
     </div>

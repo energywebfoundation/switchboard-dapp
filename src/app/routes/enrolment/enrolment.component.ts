@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatTabGroup } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 
 @Component({
@@ -7,9 +9,13 @@ import { EnrolmentListComponent } from './enrolment-list/enrolment-list.componen
   templateUrl: './enrolment.component.html',
   styleUrls: ['./enrolment.component.scss']
 })
-export class EnrolmentComponent implements OnInit {
+export class EnrolmentComponent implements OnInit, AfterViewInit {
+  @ViewChild("enrolmentTabGroup", { static: false }) enrolmentTabGroup: MatTabGroup;
   @ViewChild('issuerList', undefined ) issuerList       : EnrolmentListComponent;
   @ViewChild('enrolmentList', undefined ) enrolmentList : EnrolmentListComponent;
+
+  issuerListAccepted = false;;
+  enrolmentListAccepted = undefined;
 
   issuerDropdown = new FormControl('false');
   enrolmentDropdown = new FormControl('none');
@@ -22,10 +28,45 @@ export class EnrolmentComponent implements OnInit {
 
   public isMyEnrolmentShown = false;
 
-  constructor() { }
+  constructor(private activeRoute: ActivatedRoute) { 
+    this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
+      if (queryParams && queryParams.notif) {
+        if (queryParams.notif === 'pendingSyncToDidDoc') {
+          // Display Approved Claims
+          this.enrolmentListAccepted = true;
+          this.enrolmentDropdown.setValue(this.dropdownValue.approved);
+          console.log('hey');
 
-  ngOnInit() {
+          if (this.enrolmentTabGroup) {
+            this.enrolmentTabGroup.selectedIndex = 1;
+          }
+        }
+        else {
+          this.initDefault();
+        }
+      }
+      else {
+        this.initDefault();
+      }
+    });
   }
+
+  private initDefault() {
+    this.issuerListAccepted = false;
+    this.issuerDropdown.setValue(this.dropdownValue.pending);
+
+    if (this.enrolmentTabGroup) {
+      this.enrolmentTabGroup.selectedIndex = 0;
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.enrolmentListAccepted) {
+      this.enrolmentTabGroup.selectedIndex = 1;
+    }
+  }
+
+  ngOnInit() {}
 
   showMe(i: any) {
     if (i.index === 1) {
