@@ -55,8 +55,8 @@
           <mat-icon class="btn-color-primary">content_copy</mat-icon>
         </button>
 
-        <!-- Copy Role to Clipboard -->
-        <button mat-icon-button matTooltip="Transfer Ownership">
+        <!-- Transfer Ownership -->
+        <button mat-icon-button matTooltip="Transfer Ownership" (click)="transferOwnership(listType, element)" *ngIf="listType === ListType.ORG">
           <mat-icon class="btn-color-primary">directions</mat-icon>
         </button>
       </td>

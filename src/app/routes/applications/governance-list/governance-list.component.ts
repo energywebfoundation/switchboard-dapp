@@ -6,6 +6,7 @@ import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { RoleType } from '../new-role/new-role.component';
+import { TransferOwnershipComponent } from '../transfer-ownership/transfer-ownership.component';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -83,6 +84,26 @@ export class GovernanceListComponent implements OnInit {
       },
       maxWidth: '100%',
       disableClose: true
+    });
+  }
+
+  transferOwnership(type: any, data: any) {
+    console.log('data', data);
+    const dialogRef = this.dialog.open(TransferOwnershipComponent, {
+      width: '600px',data:{
+        namespace: data.namespace,
+        type: type
+      },
+      maxWidth: '100%',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+
+      if (result) {
+        this.getList();
+      }
     });
   }
 
