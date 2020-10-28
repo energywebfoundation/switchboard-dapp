@@ -148,6 +148,24 @@ ul {
     }
   }
 
+  .card-overlay {
+    background-color: rgba(0,0,0,0.5);
+    cursor: none;
+    opacity: 0.5;
+
+    &::before {
+      content: '';
+      position: relative;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+    } 
+  }
+
   .card-icon {
     background: rgba(132,131,144,0.06);
     border: 1px solid #232131;
@@ -157,13 +175,26 @@ ul {
     position: relative;
     top: 0;
     transition: top ease 0.5s;
-
+    
     &:hover {
       background: #A567FF;
       border: 1px solid #c6a0ff;
       top: -5px; 
       box-shadow: rgba(0,0,0,0.1) 0px 20px 20px 0px;
     }
+  }
+
+  .card-icon-disabled {
+    background: rgb(24 21 35);
+    border: 1px solid rgb(24 21 35);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+    position: relative;
+    top: 0;
+  }
+
+  .opacity-01 {
+    opacity: 0.08;
   }
 
   .height-log {
