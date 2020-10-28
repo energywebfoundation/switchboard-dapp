@@ -2,12 +2,12 @@ import { constants } from './constants';
 
 export const environment = {
   production: true,  
-  cacheServerUrl: 'http://13.52.78.249:3333/',
-  natsServerUrl: 'http://13.52.78.249:9222',
+  cacheServerUrl: 'https://volta-iam-cacheserver.energyweb.org/',
+  natsServerUrl: 'https://dsb-dev.energyweb.org/',
   walletConnectOptions: {
     // rpcUrl: 'https://volta-rpc.energyweb.org/',
-    rpcUrl: 'https://volta-internal-archive.energyweb.org/',
+    rpcUrl: 'https://volta-switchboard.energyweb.org/',
     chainId: 73799
   },
-  ...constants
+  ...constants  
 };
