@@ -98,6 +98,9 @@ export class IamService {
           address: tmp.address
       });
     }
+    else {
+      this._user.next(undefined);
+    }
   }
 
   /**

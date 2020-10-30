@@ -4,6 +4,8 @@ import { ENSNamespaceTypes } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { NotificationService } from 'src/app/shared/services/notification.service';
+import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewRequestsComponent } from '../view-requests/view-requests.component';
 
 export const EnrolmentListType = {
@@ -30,7 +32,8 @@ export class EnrolmentListComponent implements OnInit {
   constructor(private loadingService: LoadingService,
     private iamService: IamService,
     private dialog: MatDialog,
-    private toastr: ToastrService) {}
+    private toastr: ToastrService,
+    private notifService: NotificationService) {}
 
   async ngOnInit() { 
     if (this.listType === EnrolmentListType.APPLICANT) {
@@ -69,6 +72,10 @@ export class EnrolmentListComponent implements OnInit {
           item.roleName = arr[0];
           item.requestDate = new Date(parseInt(item.createdAt));
         }
+
+        if (this.listType === EnrolmentListType.APPLICANT) {
+          await this.appendDidDocSyncStatus(list);
+        }
       }
     }
     catch (e) {
@@ -79,6 +86,30 @@ export class EnrolmentListComponent implements OnInit {
     console.log(this.listType, 'list', list);
     this.dataSource = list;
     this.loadingService.hide();
+  }
+
+  private async appendDidDocSyncStatus(list: any[]) {
+    // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
+    let claims: any[] = await this.iamService.iam.getUserClaims();
+    claims = claims.filter((item: any) => {
+        if (item && item.claimType) {
+            let arr = item.claimType.split('.');
+            if (arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles) {
+                return true;
+            }
+            return false;
+        }
+    });
+
+    if (claims && claims.length) {
+      claims.forEach((item: any) => {
+        for (let i = 0; i < list.length; i++) {
+          if (item.claimType === list[i].claimType) {
+            list[i].isSynced = true;
+          }
+        }
+      });
+    }
   }
 
   view (element: any) {
@@ -96,5 +127,56 @@ export class EnrolmentListComponent implements OnInit {
         this.getList(this.dynamicAccepted);
       }
     });
+  }
+
+  async addToDidDoc (element: any) {
+    console.log('claimToSync', element);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      maxHeight: '180px',
+      data: {
+        header: TOASTR_HEADER,
+        message: 'This role will be added to your DID Document. Do you wish to continue?'
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().toPromise();
+
+    if (await dialogRef) {
+      this.syncClaimToDidDoc(element);
+    }
+  }
+
+  private async syncClaimToDidDoc(element: any) {
+    this.loadingService.show('Please confirm this transaction in your connected wallet.');
+
+    try {
+      let decoded: any = await this.iamService.iam.decodeJWTToken({
+        token: element.issuedToken
+      });
+
+      console.log('decoded', decoded);
+
+      let retVal = await this.iamService.iam.publishPublicClaim({
+        token: element.issuedToken,
+        claimData: decoded.claimData
+      });
+
+      console.log('Publish Public Claim Result: ', retVal);
+      if (retVal) {
+        element.isSynced = true;
+        this.notifService.decreasePendingDidDocSyncCount();
+        this.toastr.success('Action is successful.', 'Sync to DID Document');
+      }
+      else {
+        this.toastr.warning('Unable to proceed with this action. Please contact system administrator.', 'Sync to DID Document');
+      }
+    }
+    catch (e) {
+      console.error(e);
+      this.toastr.error(e, 'Sync to DID Document');
+    }
+
+    this.loadingService.hide();
   }
 }
