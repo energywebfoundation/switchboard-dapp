@@ -196,7 +196,7 @@ export class RequestClaimComponent implements OnInit {
             if (this.roleList[i].name.toUpperCase() === this.appDefaultRole.toUpperCase()) {
               this.selectedRole = this.roleList[i].definition;
               this.selectedNamespace = this.roleList[i].namespace;
-              this.fieldList = this.selectedRole.fields;
+              this.fieldList = this.selectedRole.fields || [];
               this.updateForm();
 
               this.roleTypeForm.get('roleType').setValue(this.roleList[i]);
@@ -259,8 +259,8 @@ export class RequestClaimComponent implements OnInit {
 
   roleTypeSelected(e: any) {
     console.log('roleTypeSelected', e);
-    if (e && e.value && e.value.definition && e.value.definition.fields) {
-      this.fieldList = e.value.definition.fields;
+    if (e && e.value && e.value.definition) {
+      this.fieldList = e.value.definition.fields || [];
       this.selectedRole = e.value.definition;
       this.selectedNamespace = e.value.namespace;
 
