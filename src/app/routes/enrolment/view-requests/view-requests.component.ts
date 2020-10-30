@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -20,7 +21,8 @@ export class ViewRequestsComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private iamService: IamService,
     private toastr: ToastrService,
-    private loadingService: LoadingService) { }
+    private loadingService: LoadingService,
+    private notifService: NotificationService) { }
 
   async ngOnInit() {
     this.listType = this.data.listType;
@@ -50,6 +52,7 @@ export class ViewRequestsComponent implements OnInit {
       console.log('issue claim', req);
       await this.iamService.iam.issueClaimRequest(req);
 
+      this.notifService.decreasePendingApprovalCount();
       this.toastr.success('Request is approved.', TOASTR_HEADER);
       this.dialogRef.close(true);
     }

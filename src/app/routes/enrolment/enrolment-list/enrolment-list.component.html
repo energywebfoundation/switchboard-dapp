@@ -45,9 +45,17 @@
      <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
       <td mat-cell *matCellDef="let element">
+        
         <!-- View Details -->
         <button mat-icon-button matTooltip="View" (click)="view(element)">
           <mat-icon class="btn-color-primary">preview</mat-icon>
+        </button>
+
+        <!-- Sync to DID -->
+        <button mat-icon-button matTooltip="Add to DID Document" 
+            (click)="addToDidDoc(element)"
+            *ngIf="listType === ListType.APPLICANT && element?.isAccepted && !element?.isSynced">
+          <mat-icon class="btn-color-primary">note_add</mat-icon>
         </button>
       </td>
     </ng-container>

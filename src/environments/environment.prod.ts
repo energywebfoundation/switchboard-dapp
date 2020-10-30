@@ -6,7 +6,7 @@ export const environment = {
   natsServerUrl: 'https://dsb-dev.energyweb.org/',
   walletConnectOptions: {
     // rpcUrl: 'https://volta-rpc.energyweb.org/',
-    rpcUrl: 'https://volta-switchboard.energyweb.org/',
+    rpcUrl: 'https://volta-internal-archive.energyweb.org/',
     chainId: 73799
   },
   ...constants  

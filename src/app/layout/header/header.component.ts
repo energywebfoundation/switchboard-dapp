@@ -11,6 +11,9 @@ import { HttpClient } from '@angular/common/http';
 import { DialogUser } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { Router, NavigationEnd } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { ENSNamespaceTypes } from 'iam-client-lib';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 
 @Component({
     selector: 'app-header',
@@ -35,12 +38,21 @@ export class HeaderComponent implements OnInit {
     currentNav = '';
     userName = '';
 
+    // Notifications
+    notif = {
+        totalCount: 0,
+        pendingApprovalCount: 0,
+        pendingSyncCount: 0
+    };
+
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
     constructor(public menu: MenuService, 
         // private authenticationService: AuthService,
         private iamService: IamService,
         private router: Router,
+        private toastr: ToastrService,
+        private notifService: NotificationService,
         public userblockService: UserblockService, private http: HttpClient,
         public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer) {
 
@@ -71,6 +83,11 @@ export class HeaderComponent implements OnInit {
         this.iamService.userProfile.subscribe((data: any) => {
             if (data && data.name) {
                 this.userName = data.name;
+            }
+        
+            if (this.iamService.accountAddress) {
+                // Initialize Notifications
+                this.initNotifications();
             }
         });
     }
@@ -103,6 +120,83 @@ export class HeaderComponent implements OnInit {
         //     if (el)
         //         el.className = screenfull.isFullscreen ? 'fa fa-compress' : 'fa fa-expand';
         // });
+    }
+
+    private initNotifications() {
+        // Init Notif Count
+        this.initNotificationCount();
+    }
+
+    private async initNotificationListeners(pendingApprovalCount: number, pendingSyncCount: number) {
+        // Initialize Notif Counts
+        this.notifService.initNotifCounts(pendingApprovalCount, pendingSyncCount);
+
+        // Listen to Count Changes
+        this.notifService.pendingApproval.subscribe((count: number) => {
+            this.notif.pendingApprovalCount = count;
+            this.notif.totalCount = this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
+        });
+        this.notifService.pendingDidDocSync.subscribe((count: number) => {
+            this.notif.pendingSyncCount = count;
+            this.notif.totalCount = this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
+        });
+
+        // Listen to External Messages
+        await this.iamService.iam.subscribeToMessages({
+            messageHandler: this.handleMessage
+        });
+    }
+
+    private handleMessage(message: any) {
+        if (message.issuedToken) {
+            // Message has issued token ===> Newly Approved Claim
+            this.notifService.increasePendingDidDocSyncCount.bind(this)();
+        }
+        else {
+            // Message has no issued token ===> Newly Requested Claim
+            this.notifService.increasePendingApprovalCount.bind(this)();
+        }
+    }
+
+    private async initNotificationCount() {
+        try {
+            // Get Pending Claims to be Approved
+            let pendingClaimsList = await this.iamService.iam.getIssuedClaims({
+                did: this.iamService.iam.getDid(),
+                isAccepted: false
+            });
+            this.notif.pendingApprovalCount = pendingClaimsList.length;
+
+            // Get Approved Claims
+            let approvedClaimsList = await this.iamService.iam.getRequestedClaims({
+                did: this.iamService.iam.getDid(),
+                isAccepted: true
+            });
+
+            // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
+            let claims: any[] = await this.iamService.iam.getUserClaims();
+            claims = claims.filter((item: any) => {
+                if (item && item.claimType) {
+                    let arr = item.claimType.split('.');
+                    if (arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles) {
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            console.log('approved claims', approvedClaimsList.length);
+            console.log('synced claims', claims.length);
+
+            this.notif.pendingSyncCount = approvedClaimsList.length - claims.length;
+        }
+        catch (e) {
+            console.error(e);
+            this.toastr.error(e);
+        }
+        finally {
+            await this.initNotificationListeners(this.notif.pendingApprovalCount, this.notif.pendingSyncCount);
+        }
     }
 
     getUserIdenticon() {
