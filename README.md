@@ -1,4 +1,6 @@
 # Switchboard dApp
+[![Build Status](https://travis-ci.com/energywebfoundation/switchboard-dapp.svg?token=vNERWfuroqqJygVa7Km9&branch=develop)](https://travis-ci.com/energywebfoundation/switchboard-dapp)
+
 
 `Switchboard dApp` is a revolutionary decentralized application that alllows management of identities, assets, applications, services and access controls with DIDs(Decentralised Identifiers) and VCs(Verifiable Credentials)
 
