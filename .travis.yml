@@ -20,4 +20,4 @@ deploy:
   skip_cleanup: true
   script: rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* $SB_WEB_HOST:~/switchboard-dapp/${TRAVIS_BRANCH}
   on:
-    branch: $TRAVIS_BRANCH =~ ^(develop|main)$
+    branch: $TRAVIS_BRANCH =~ ^(develop|master)$
