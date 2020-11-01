@@ -158,8 +158,7 @@ export class EnrolmentListComponent implements OnInit {
       console.log('decoded', decoded);
 
       let retVal = await this.iamService.iam.publishPublicClaim({
-        token: element.issuedToken,
-        claimData: decoded.claimData
+        token: element.issuedToken
       });
 
       console.log('Publish Public Claim Result: ', retVal);
