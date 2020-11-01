@@ -18,6 +18,6 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* $SB_WEB_HOST:~/switchboad-dapp
+  script: rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* $SB_WEB_HOST:~/switchboard-dapp
   on:
     branch: develop
