@@ -16,8 +16,13 @@ install:
 script:
 - echo "skipping tests"
 deploy:
-  provider: script
+- provider: script
   skip_cleanup: true
-  script: rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* $SB_WEB_HOST:~/switchboard-dapp/${TRAVIS_BRANCH}
+  script: rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* $SB_WEB_HOST:~/switchboard-dapp/develop
   on:
-    branch: $TRAVIS_BRANCH =~ ^(develop|master)$
+    branch: develop
+- provider: script
+  skip_cleanup: true
+  script: rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* $SB_WEB_HOST:~/switchboard-dapp/master
+  on:
+  branch: master
