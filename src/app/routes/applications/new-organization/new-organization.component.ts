@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MatStepper } from '@angular/material';
+import { MatDialog, MatDialogRef, MatStepper, MAT_DIALOG_DATA } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -8,7 +8,10 @@ import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from '../../../../environments/environment'
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 
-const TOASTR_HEADER = 'Create New Organization';
+export const ViewType = {
+  UPDATE: 'update',
+  NEW: 'new'
+};
 
 @Component({
   selector: 'app-new-organization',
@@ -22,6 +25,12 @@ export class NewOrganizationComponent implements OnInit {
   public environment = environment;
   public isChecking = false;
   public ENSPrefixes = ENSNamespaceTypes;
+  public ViewType = ViewType;
+
+  viewType: string;
+  origData: any;
+
+  private TOASTR_HEADER = 'Create New Organization';
 
   public constructor(
     private fb: FormBuilder,
@@ -29,7 +38,8 @@ export class NewOrganizationComponent implements OnInit {
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<NewOrganizationComponent>,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { 
     this.orgForm = fb.group({
       orgName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
@@ -42,9 +52,49 @@ export class NewOrganizationComponent implements OnInit {
         others: undefined
       })
     });
+
+    if (data && data.viewType && data.origData) {
+      this.viewType = data.viewType;
+      this.origData = data.origData;
+
+      if (this.viewType === ViewType.UPDATE) {
+        this.TOASTR_HEADER = 'Update Organization';
+      }
+
+      this.initFormData();
+    }
   }
 
   ngOnInit() {
+  }
+
+  private initFormData() {
+    if (this.origData) {
+      let def = this.origData.definition;
+      let others = undefined;
+
+      if (def.others) {
+        let tmp: any[] = def.others;
+        others = {};
+
+        for (let item of tmp) {
+          others[item.key] = item.value;
+        }
+
+        others = JSON.stringify(others);
+      }
+
+      this.orgForm.patchValue({
+        orgName: this.origData.name,
+        data: {
+          organizationName: def.orgName,
+          logoUrl: def.logoUrl,
+          websiteUrl: def.websiteUrl,
+          description: def.description,
+          others: others
+        }
+      });
+    }
   }
 
   alphaNumericOnly(event: any) {
@@ -81,7 +131,7 @@ export class NewOrganizationComponent implements OnInit {
           allowToProceed = false;
 
           // Do not allow to overwrite if user is not the owner
-          this.toastr.error('Organization namespace exists. You have no access rights to it.', TOASTR_HEADER);
+          this.toastr.error('Organization namespace exists. You have no access rights to it.', this.TOASTR_HEADER);
         }
         else {
           this.spinner.hide();
@@ -97,33 +147,80 @@ export class NewOrganizationComponent implements OnInit {
       }
 
       if (allowToProceed) {
-        if (!orgData.data.others || !orgData.data.others.trim()) {
-          // Let the user confirm the info before proceeding to the next step
-          this.stepper.selected.completed = true;
-          this.stepper.next();
-        }
-        else {
-          try {
-            // Check if others is in JSON Format
-            console.info(JSON.parse(orgData.data.others));
-
-            // Let the user confirm the info before proceeding to the next step
-            this.stepper.selected.completed = true;
-            this.stepper.next();
-          }
-          catch (e) {
-            console.error(orgData.data.others, e);
-            this.toastr.error('Others must be in JSON format.', TOASTR_HEADER);
-          }
-        }
+        this.allowToProceed(orgData);
       }
     }
     else {
-      this.toastr.error('Form is invalid.', TOASTR_HEADER);
+      this.toastr.error('Form is invalid.', this.TOASTR_HEADER);
     }
 
     this.isChecking = false;
     this.spinner.hide();
+  }
+
+  async updateOrg() {
+    this.spinner.show();
+    this.isChecking = true;
+
+    if (this.orgForm.valid) {
+      let allowToProceed = true;
+      let orgData = this.orgForm.value;
+
+      // If exists check if current user is the owner of this namespace and allow him/her to overwrite
+      let isOwner = await this.iamService.iam.isOwner({
+        domain: `${orgData.orgName}.${orgData.namespace}`
+      });
+
+      if (!isOwner) {
+        allowToProceed = false;
+
+        // Do not allow to overwrite if user is not the owner
+        this.toastr.error('You have no update rights to this namespace.', this.TOASTR_HEADER);
+      }
+      else {
+        this.spinner.hide();
+        
+        // Prompt if user wants to overwrite this namespace
+        if (!await this.confirm('You are updating details of this organization. Do you wish to continue?')) {
+          allowToProceed = false;
+        }
+        else {
+          this.spinner.show();
+        }
+      }
+
+      if (allowToProceed) {
+        this.allowToProceed(orgData);
+      }
+    }
+    else {
+      this.toastr.error('Form is invalid.', this.TOASTR_HEADER);
+    }
+
+    this.isChecking = false;
+    this.spinner.hide();
+  }
+
+  private allowToProceed(orgData: any) {
+    if (!orgData.data.others || !orgData.data.others.trim()) {
+      // Let the user confirm the info before proceeding to the next step
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+    }
+    else {
+      try {
+        // Check if others is in JSON Format
+        console.info(JSON.parse(orgData.data.others));
+
+        // Let the user confirm the info before proceeding to the next step
+        this.stepper.selected.completed = true;
+        this.stepper.next();
+      }
+      catch (e) {
+        console.error(orgData.data.others, e);
+        this.toastr.error('Others must be in JSON format.', this.TOASTR_HEADER);
+      }
+    }
   }
 
   async confirmOrg() {
@@ -137,7 +234,7 @@ export class NewOrganizationComponent implements OnInit {
         req.data.others = JSON.parse(req.data.others);
       }
       catch (e) {
-        this.toastr.error('Others must be in JSON format.', TOASTR_HEADER);
+        this.toastr.error('Others must be in JSON format.', this.TOASTR_HEADER);
         return;
       }
     }
@@ -150,6 +247,15 @@ export class NewOrganizationComponent implements OnInit {
     // Set the first step to non-editable
     this.stepper.steps.first.editable = false;
 
+    if (this.viewType === ViewType.UPDATE) {
+      this.proceedUpdateStep(req);
+    }
+    else {
+      this.proceedCreateSteps(req);
+    }
+  }
+
+  private async proceedCreateSteps(req: any) {
     try {
       // Retrieve the steps to create an organization
       let steps = await this.iamService.iam.createOrganization(req);
@@ -176,6 +282,30 @@ export class NewOrganizationComponent implements OnInit {
     }
   }
 
+  private async proceedUpdateStep(req: any) {
+    try {
+      // Update steps
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+
+      // Set Definition
+      const newDomain = `${req.orgName}.${req.namespace}`;
+      await this.iamService.iam.setRoleDefinition({
+        data: req.data,
+        domain: newDomain
+      });
+
+      // Move to Complete Step
+      this.toastr.info('Set definition for organization', 'Transaction Success');
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+    }
+    catch (e) {
+      console.error('Update Org Error', e);
+      this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+    }
+  }
+
   cancelOrgDetails() {
     this.stepper.previous();
     this.stepper.selected.completed = false;
@@ -186,7 +316,7 @@ export class NewOrganizationComponent implements OnInit {
       width: '400px',
       maxHeight: '180px',
       data: {
-        header: TOASTR_HEADER,
+        header: this.TOASTR_HEADER,
         message: confirmationMsg
       },
       maxWidth: '100%',
@@ -202,7 +332,7 @@ export class NewOrganizationComponent implements OnInit {
     }
     else {
       if (isSuccess) {
-        this.toastr.success('Organization is successfully created.', TOASTR_HEADER);
+        this.toastr.success('Organization is successfully created.', this.TOASTR_HEADER);
       }
       this.dialogRef.close(isSuccess);
     }

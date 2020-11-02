@@ -5,7 +5,9 @@ import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
-import { RoleType } from '../new-role/new-role.component';
+import { NewApplicationComponent } from '../new-application/new-application.component';
+import { NewOrganizationComponent, ViewType } from '../new-organization/new-organization.component';
+import { NewRoleComponent, RoleType } from '../new-role/new-role.component';
 import { TransferOwnershipComponent } from '../transfer-ownership/transfer-ownership.component';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -85,6 +87,42 @@ export class GovernanceListComponent implements OnInit {
       maxWidth: '100%',
       disableClose: true
     });
+  }
+
+  edit(type: string, data: any) {
+    console.log('type', type);
+    console.log('data', data);
+
+    let component = undefined;
+
+    switch (type) {
+      case ListType.ORG:
+        component = NewOrganizationComponent;
+        break;
+      case ListType.APP:
+        component = NewApplicationComponent;
+        break;
+      case ListType.ROLE:
+        component = NewRoleComponent;
+        break;
+    }
+
+    if (component) {
+      const dialogRef = this.dialog.open(component, {
+        width: '600px',data:{
+          viewType: ViewType.UPDATE,
+          origData: data
+        },
+        maxWidth: '100%',
+        disableClose: true
+      });
+
+      dialogRef.afterClosed().subscribe(async (res: any) => {
+        if (res) {
+          await this.getList();
+        }
+      });
+    }
   }
 
   transferOwnership(type: any, data: any) {
