@@ -45,6 +45,8 @@ export class HeaderComponent implements OnInit {
         pendingSyncCount: 0
     };
 
+    isLoadingNotif = true;
+
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
     constructor(public menu: MenuService, 
@@ -195,6 +197,7 @@ export class HeaderComponent implements OnInit {
             this.toastr.error(e);
         }
         finally {
+            this.isLoadingNotif = false;
             await this.initNotificationListeners(this.notif.pendingApprovalCount, this.notif.pendingSyncCount);
         }
     }

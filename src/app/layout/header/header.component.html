@@ -47,12 +47,17 @@
         <li class="nav-item dropdown dropdown-list" dropdown>
             <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" dropdownToggle>
                 <!-- loading here -->
-                
-                <!-- <div class="position-fixed">
-                    <mat-spinner diameter="21" class="color-white"></mat-spinner>
-                </div> -->
-                <em class="icon-bell"></em>
-                <span class="badge badge-danger" *ngIf="notif?.totalCount">{{ notif?.totalCount }}</span>
+                <ng-container *ngIf="isLoadingNotif">
+                    <div>
+                        <mat-spinner diameter="21" class="color-white"></mat-spinner>
+                    </div>
+                </ng-container>
+
+                <!-- notif count here -->
+                <ng-container *ngIf="!isLoadingNotif">
+                    <em class="icon-bell"></em>
+                    <span class="badge badge-danger" *ngIf="notif?.totalCount">{{ notif?.totalCount }}</span>
+                </ng-container>
             </a>
             <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-item">
