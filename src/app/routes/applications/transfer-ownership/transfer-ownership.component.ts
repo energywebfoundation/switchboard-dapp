@@ -100,7 +100,7 @@ export class TransferOwnershipComponent implements OnInit {
             break;
         }
 
-        this.mySteps = items.reverse();
+        this.mySteps = items;
         this.newOwnerAddress.disable();
         this.isProcessing = true;
         this.changeDetector.detectChanges();
