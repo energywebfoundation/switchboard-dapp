@@ -99,6 +99,7 @@ export class EnrolmentListComponent implements OnInit {
             }
             return false;
         }
+        return false;
     });
 
     if (claims && claims.length) {

@@ -183,6 +183,9 @@ export class HeaderComponent implements OnInit {
                     }
                     return false;
                 }
+                else {
+                    return false;
+                }
             });
 
             console.log('approved claims', approvedClaimsList.length);
