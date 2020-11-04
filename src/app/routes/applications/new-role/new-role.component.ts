@@ -1,12 +1,13 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MatStepper, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogRef, MatStepper, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
+import { ViewType } from '../new-organization/new-organization.component';
 
 export const RoleType = {
   ORG: 'org',
@@ -33,8 +34,6 @@ export interface RolesFields {
 const FIELD_TYPES = [
   'text', 'number', 'date', 'boolean'
 ];
-
-const TOASTR_HEADER = 'Create New Role';
 
 @Component({
   selector: 'app-new-role',
@@ -67,20 +66,26 @@ export class NewRoleComponent implements OnInit {
   displayedColumnsView: string[] = ['type', 'label', 'validation'];
   dataSource          = new MatTableDataSource([]);
 
+  public ViewType = ViewType;
+  viewType: string;
+  origData: any;
+
+  private TOASTR_HEADER = 'Create New Role';
+
   constructor(private fb: FormBuilder,
     private iamService: IamService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
     private changeDetectorRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<NewRoleComponent>,
-    public dialog: MatDialog) { 
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any) { 
       this.roleForm = fb.group({
         roleType: [null, Validators.required],
         parentNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
         roleName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
         namespace: '',
         data: fb.group({
-          ensName: '',
           version: '1.0.0',
           issuer: fb.group({
             issuerType: this.IssuerType.DID,
@@ -102,9 +107,57 @@ export class NewRoleComponent implements OnInit {
 
       this.issuerList = [];
       this.issuerList.push(this.iamService.iam.getDid());
+
+      if (data && data.viewType && data.origData) {
+        this.viewType = data.viewType;
+        this.origData = data.origData;
+  
+        if (this.viewType === ViewType.UPDATE) {
+          this.TOASTR_HEADER = 'Update Role';
+        }
+  
+        this.initFormData();
+      }
     }
 
   ngOnInit() {
+  }
+
+  private initFormData() {
+    if (this.origData) {
+      console.log('origData', this.origData);
+      let def = this.origData.definition;
+
+      // Construct Parent Namespace
+      let arrParentNamespace = this.origData.namespace.split(ENSNamespaceTypes.Roles);
+      let parentNamespace = arrParentNamespace[1].substring(1);
+
+      // Construct Version
+      let arrVersion = def.version.split('.');
+      let version = `${parseInt(arrVersion[0]) + 1}.0.0`;
+
+      // Construct Fields
+      this.dataSource.data = [...def.fields];
+
+      this.roleForm.patchValue({
+        roleType: def.roleType,
+        parentNamespace: parentNamespace,
+        roleName: def.roleName,
+        namespace: `${this.ENSPrefixes.Roles}.${parentNamespace}`,
+        data: {
+          version: version,
+          issuer: {
+            issuerType: def.issuer.issuerType,
+            roleName: def.issuer.roleName,
+            did: [...def.issuer.did]
+          }
+        }
+      });
+
+      if (def.issuer.did && def.issuer.did.length) {
+        this.issuerList = [...def.issuer.did];
+      }
+    }
   }
 
   alphaNumericOnly(event: any, includeDot?: boolean) {
@@ -145,7 +198,7 @@ export class NewRoleComponent implements OnInit {
     let newIssuerDid = this.issuerGroup.get('newIssuer').value.trim();
 
     if (!newIssuerDid) {
-      this.toastr.error('Issuer DID is empty.', TOASTR_HEADER);
+      this.toastr.error('Issuer DID is empty.', this.TOASTR_HEADER);
       return;
     }
 
@@ -247,7 +300,7 @@ export class NewRoleComponent implements OnInit {
           allowToProceed = false;
 
           // Do not allow to proceed if namespace already exists
-          this.toastr.error('Role namespace already exists. You have no access rights to it.', TOASTR_HEADER);
+          this.toastr.error('Role namespace already exists. You have no access rights to it.', this.TOASTR_HEADER);
         }
         else {
           this.spinner.hide();
@@ -271,7 +324,7 @@ export class NewRoleComponent implements OnInit {
       }
     }
     else {
-      this.toastr.error('Form is invalid.', TOASTR_HEADER);
+      this.toastr.error('Form is invalid.', this.TOASTR_HEADER);
     }
 
     this.isChecking = false;
@@ -281,10 +334,10 @@ export class NewRoleComponent implements OnInit {
   proceedAddingFields() {
     let issuerType = this.roleForm.value.data.issuer.issuerType;
     if (this.IssuerType.DID === issuerType && !this.issuerList.length) {
-      this.toastr.error('Issuer list is empty.', TOASTR_HEADER);
+      this.toastr.error('Issuer list is empty.', this.TOASTR_HEADER);
     }
     else if (this.IssuerType.Role === issuerType && !this.roleForm.value.data.issuer.roleName) {
-      this.toastr.error('Issuer Role is empty.', TOASTR_HEADER);
+      this.toastr.error('Issuer Role is empty.', this.TOASTR_HEADER);
     }
     else {
       // Proceed to Adding Fields Step
@@ -332,15 +385,15 @@ export class NewRoleComponent implements OnInit {
               this.stepper.next();
             }
             else {
-              this.toastr.error('You are not authorized to create a role under this namespace.', TOASTR_HEADER);
+              this.toastr.error('You are not authorized to create a role under this namespace.', this.TOASTR_HEADER);
             }
           }
           else {
-            this.toastr.error('Role subdomain in this namespace does not exist.', TOASTR_HEADER);
+            this.toastr.error('Role subdomain in this namespace does not exist.', this.TOASTR_HEADER);
           }
         }
         else {
-          this.toastr.error('Namespace does not exist.', TOASTR_HEADER);
+          this.toastr.error('Namespace does not exist.', this.TOASTR_HEADER);
         }
       }
       catch (e) {
@@ -363,7 +416,6 @@ export class NewRoleComponent implements OnInit {
     delete req.roleType;
 
     req.data.roleName = req.roleName;
-    delete req.data.ensName;
 
     req.data.issuer.did = this.issuerList;
     req.data.fields = this.dataSource.data;
@@ -375,6 +427,15 @@ export class NewRoleComponent implements OnInit {
     let list = this.stepper.steps.toArray();
     list[1].editable = false;
 
+    if (this.viewType === ViewType.UPDATE) {
+      this.proceedUpdateStep(req);
+    }
+    else {
+      this.proceedCreateSteps(req);
+    }
+  }
+
+  private async proceedCreateSteps(req: any) {
     try {
       // Retrieve the steps to create an application
       let steps = await this.iamService.iam.createRole(req);
@@ -401,12 +462,36 @@ export class NewRoleComponent implements OnInit {
     }
   }
 
+  private async proceedUpdateStep(req: any) {
+    try {
+      // Update steps
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+
+      // Set Definition
+      const newDomain = `${req.roleName}.${req.namespace}`;
+      await this.iamService.iam.setRoleDefinition({
+        data: req.data,
+        domain: newDomain
+      });
+
+      // Move to Complete Step
+      this.toastr.info('Set definition for role', 'Transaction Success');
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+    }
+    catch (e) {
+      console.error('Update Role Error', e);
+      this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+    }
+  }
+
   private async confirm(confirmationMsg: string) {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
       maxHeight: '180px',
       data: {
-        header: TOASTR_HEADER,
+        header: this.TOASTR_HEADER,
         message: confirmationMsg
       },
       maxWidth: '100%',
@@ -422,7 +507,7 @@ export class NewRoleComponent implements OnInit {
     }
     else {
       if (isSuccess) {
-        this.toastr.success('Role is successfully created.', TOASTR_HEADER);
+        this.toastr.success('Role is successfully created.', this.TOASTR_HEADER);
       }
       this.dialogRef.close(isSuccess);
     }
