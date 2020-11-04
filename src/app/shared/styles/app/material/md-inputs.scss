@@ -161,6 +161,10 @@ fieldset[disabled] .mda-radio input+em:before {
   color: #FFF;
 }
 
+.line-height-filter {
+  line-height: 1px !important;
+}
+
 
 .md-enroll {
   .mat-option {
@@ -280,6 +284,10 @@ fieldset[disabled] .mda-radio input+em:before {
     .mat-form-field {
       font-size: 13px !important;
     }
+    .mat-label {
+      color: #FFF;
+    }
+
     .mat-form-field-wrapper {
       padding-bottom: 0 !important;
       margin: 0 !important;
@@ -290,6 +298,11 @@ fieldset[disabled] .mda-radio input+em:before {
 
     .mat-form-field-infix {
       padding: 0.2em 0.2em !important;
+  }
+
+  .mat-input-element {
+    color: #FFF;
+    font-size: 14px;
   }
 
   .mat-form-field-outline {

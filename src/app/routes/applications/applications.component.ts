@@ -18,6 +18,8 @@ export class ApplicationsComponent implements OnInit {
   isAppShown = false;
   isRoleShown = false;
 
+  isFilterShown: boolean = false;
+
   constructor(public dialog: MatDialog) { }
 
   openNewOrgComponent(): void {
@@ -90,6 +92,12 @@ export class ApplicationsComponent implements OnInit {
       this.listOrg.getList();
     }
   }
+
+  toggleFilter() {
+
+    this.isFilterShown = ! this.isFilterShown;
+    
+    }
 }
 
 export interface OrganizationsLists {
