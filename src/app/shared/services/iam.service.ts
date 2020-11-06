@@ -49,15 +49,29 @@ export class IamService {
   /**
    * Login via IAM and retrieve basic user info
    */
-  async login(): Promise<boolean> {
+  async login(useMetamaskExtension?: boolean, reinitializeMetamask?: boolean): Promise<boolean> {
     let retVal = false;
 
     // Check if account address exists
     if (!this._user.getValue()) {
-      const { did, connected, userClosedModal } = await this._iam.initializeConnection();
-      console.log(did, connected, userClosedModal);
-      if (did && connected && !userClosedModal) {
-        retVal = true;
+      console.log('Initializing connections...');
+      let metamaskOpts = undefined;
+      if (useMetamaskExtension) {
+        metamaskOpts = {
+          useMetamaskExtension: useMetamaskExtension,
+          reinitializeMetamask: !!reinitializeMetamask
+        };
+      }
+
+      try {
+        const { did, connected, userClosedModal } = await this._iam.initializeConnection(metamaskOpts);
+        console.log(did, connected, userClosedModal);
+        if (did && connected && !userClosedModal) {
+          retVal = true;
+        }
+      }
+      catch (e) {
+        console.error(e);
       }
     }
     else {
@@ -109,6 +123,11 @@ export class IamService {
   logout() {
     this._iam.closeConnection();
     this._user = undefined;
+
+    // Logout for Metamask Extension
+    if (localStorage['METAMASK_EXT_CONNECTED']) {
+      localStorage.removeItem('METAMASK_EXT_CONNECTED');
+    }
   }
 
   /**
@@ -122,10 +141,16 @@ export class IamService {
     else {
       let isLocallyLoggedIn = false;
 
-      // Check if there is an existing walletconnect session locally
-      if (window.localStorage && window.localStorage.getItem(LS_WALLETCONNECT)) {
-        let walletconnectData = JSON.parse(window.localStorage.getItem(LS_WALLETCONNECT));
-        isLocallyLoggedIn = walletconnectData[LS_KEY_CONNECTED];
+      // Check if there is an existing walletconnect or metamask session locally
+      if (window.localStorage) {
+        if (window.localStorage.getItem(LS_WALLETCONNECT)) {
+          let walletconnectData = JSON.parse(window.localStorage.getItem(LS_WALLETCONNECT));
+          isLocallyLoggedIn = walletconnectData[LS_KEY_CONNECTED];
+        }
+        else if (window.localStorage.getItem('METAMASK_EXT_CONNECTED')) {
+          isLocallyLoggedIn = true;
+        }
+        
       }
       
       if (isLocallyLoggedIn) {
