@@ -31,7 +31,15 @@ export class DashboardComponent implements OnInit {
         console.log(this.loginStatus);
         if (this.loginStatus === LoginType.LOCAL) {
           console.log('local > login');
-          await this.iamService.login();
+
+          // Set metamask extension options if connecting with metamask extension
+          let useMetamaskExtension = undefined;
+          if (window.localStorage.getItem('METAMASK_EXT_CONNECTED')) {
+            useMetamaskExtension = true;
+          }
+
+          // Proceed Login
+          await this.iamService.login(useMetamaskExtension);
         }
 
         // Setup User Data

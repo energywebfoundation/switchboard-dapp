@@ -23,8 +23,8 @@
                 width="48px" class="float-left pt-1" src="assets/img/icons/wallet-connect-icon.svg" /> Connect to your
               wallet</button>
           </div>
-          <div class="mt-4 mb-3">
-            <button mat-raised-button class="btn btn-connect-2 w-100" type="submit"><img
+          <div class="mt-4 mb-3" *ngIf="isMetamaskExtensionAvailable">
+            <button mat-raised-button (click)="connectToMetamask()" class="btn btn-connect-2 w-100" type="submit"><img
                 width="36px" class="float-left pt-1 ml-2" src="assets/img/icons/metamask-logo.svg" /> Login with Metamask</button>
           </div>
         </div>
