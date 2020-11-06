@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IamService, LoginType } from 'src/app/shared/services/iam.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +17,8 @@ export class DashboardComponent implements OnInit {
   constructor(private iamService: IamService, 
     private route: Router,
     private activeRoute: ActivatedRoute,
-    private loadingService: LoadingService) { 
+    private loadingService: LoadingService,
+    private toastr: ToastrService) { 
       this.loadingService.show();
       this.loginStatus = this.iamService.getLoginStatus();
   }
@@ -42,10 +44,6 @@ export class DashboardComponent implements OnInit {
           await this.iamService.login(useMetamaskExtension);
         }
 
-        // Setup User Data
-        await this.iamService.setupUser();
-        this.accountDid = this.iamService.iam.getDid();
-
         // Check if returnUrl is available or just redirect to dashboard
         if (queryParams && queryParams.returnUrl) {
           returnUrl = queryParams.returnUrl;
@@ -62,6 +60,9 @@ export class DashboardComponent implements OnInit {
         this.route.navigateByUrl(returnUrl);
       }
       else {
+        // Setup User Data
+        this.setupUser();
+
         // Stay in current screen and display user name if available
         this.iamService.userProfile.subscribe((data: any) => {
           if (data && data.name) {
@@ -72,6 +73,15 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  private async setupUser() {
+    // Format DID
+    let did = this.iamService.iam.getDid();
+    this.accountDid = `${did.substr(0, 15)}...${did.substring(did.length - 5)}`;
+
+    // Setup User Data
+    await this.iamService.setupUser();
+  }
+
   goToGovernance() {
     this.route.navigate(['governance']); 
   }
@@ -80,4 +90,17 @@ export class DashboardComponent implements OnInit {
     this.route.navigate(['enrolment']); 
   }
 
+  copyToClipboard() {
+    let listener = (e: ClipboardEvent) => {
+      let clipboard = e.clipboardData || window["clipboardData"];
+      clipboard.setData("text", this.iamService.iam.getDid());
+      e.preventDefault();
+    }
+
+    document.addEventListener("copy", listener, false)
+    document.execCommand("copy");
+    document.removeEventListener("copy", listener, false);
+
+    this.toastr.success('User DID is copied to clipboard.');
+  }
 }

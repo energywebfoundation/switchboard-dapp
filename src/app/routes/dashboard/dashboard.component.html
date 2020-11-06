@@ -8,7 +8,8 @@
                 alt="identity image">
               <h2 class="color-white mt-4 mb-0" *ngIf="!userName">My Decentralised Identifier:</h2>
               <h2 class="color-white mt-4 mb-0" *ngIf="userName"> {{ userName }} </h2>
-              <div class="opacity-50 text-truncate-middle did-wrapper">{{ accountDid }}</div>
+              <div class="opacity-50 text-truncate-middle did-wrapper" *ngIf="accountDid" (click)="copyToClipboard()">{{ accountDid }}</div>
+              <div class="opacity-50 text-truncate-middle did-wrapper" *ngIf="!accountDid">Fetching decentralised identifier...</div>
             </div>
           </div>
       </div>
