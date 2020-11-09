@@ -122,6 +122,9 @@ export class HeaderComponent implements OnInit {
         //     if (el)
         //         el.className = screenfull.isFullscreen ? 'fa fa-compress' : 'fa fa-expand';
         // });
+
+        // Make sure that when user changes guarded screen, walletconnect session is checked
+        
     }
 
     private initNotifications() {

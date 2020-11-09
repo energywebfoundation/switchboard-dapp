@@ -64,6 +64,11 @@
         <button mat-icon-button matTooltip="Transfer Ownership" (click)="transferOwnership(listType, element)" *ngIf="listType === ListType.ORG">
           <mat-icon class="btn-color-primary">directions</mat-icon>
         </button>
+
+        <!-- Remove -->
+        <button mat-icon-button matTooltip="Delete" (click)="remove(listType, element)" *ngIf="listType === ListType.ORG || listType === ListType.APP">
+          <mat-icon class="btn-color-primary">delete</mat-icon>
+        </button>
       </td>
     </ng-container>
 

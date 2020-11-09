@@ -26,7 +26,7 @@ export class TransferOwnershipComponent implements OnInit {
     if(content) { // initially setter gets called with undefined
         this.stepper = content;
     }
- }
+  }
 
   namespace       = '';
   type            : string;

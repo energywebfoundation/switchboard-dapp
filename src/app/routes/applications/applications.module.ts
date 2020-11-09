@@ -14,13 +14,14 @@ import { NewRoleComponent } from './new-role/new-role.component';
 import { GovernanceListComponent } from './governance-list/governance-list.component';
 import { GovernanceViewComponent } from './governance-view/governance-view.component';
 import { TransferOwnershipComponent } from './transfer-ownership/transfer-ownership.component';
+import { RemoveOrgAppComponent } from './remove-org-app/remove-org-app.component';
 
 const routes: Routes = [
   { path: '', component: ApplicationsComponent }
 ];
 
 @NgModule({
-  declarations: [ApplicationsComponent, NewOrganizationComponent, ViewOrganizationComponent, NewApplicationComponent, NewRoleComponent, GovernanceListComponent, GovernanceViewComponent, TransferOwnershipComponent],
+  declarations: [ApplicationsComponent, NewOrganizationComponent, ViewOrganizationComponent, NewApplicationComponent, NewRoleComponent, GovernanceListComponent, GovernanceViewComponent, TransferOwnershipComponent, RemoveOrgAppComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -38,6 +39,12 @@ const routes: Routes = [
     NgxSelectModule,
     MatInputModule
   ],
-  entryComponents: [NewOrganizationComponent, NewApplicationComponent, NewRoleComponent, GovernanceViewComponent, TransferOwnershipComponent]
+  entryComponents: [
+    NewOrganizationComponent, 
+    NewApplicationComponent, 
+    NewRoleComponent, 
+    GovernanceViewComponent, 
+    TransferOwnershipComponent,
+    RemoveOrgAppComponent]
 })
 export class ApplicationsModule { }
