@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ENSNamespaceTypes, IAppDefinition, IRole } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -43,8 +43,18 @@ export class RequestClaimComponent implements OnInit {
   public txtboxColor    : Object = {};
 
   public isLoggedIn     = false;
+
+
+  @HostListener('window:beforeunload', ['$event'])
+  public onPageUnload($event: BeforeUnloadEvent) {
+    if (this.isLoggedIn) {
+      // Always logout if user refreshes this screen or closes this tab
+      this.iamService.logout();
+    }
+  }
   
   constructor(private fb: FormBuilder, 
+      private route: Router,
       private activeRoute: ActivatedRoute,
       private iamService: IamService,
       private toastr: ToastrService,
@@ -167,14 +177,25 @@ export class RequestClaimComponent implements OnInit {
 
     // Hide button if callback url is not available
     if (!this.appCallbackUrl) {
-      delete config.button;
-      config['buttons'] = false;
+      // delete config.button;
+      // config['buttons'] = false;
+      config.button = 'View My Enrolments'
     }
 
     // Navigate to callback URL
     let result = await SWAL(config);
-    if (result && this.appCallbackUrl) {
-      location.href = this.appCallbackUrl;
+    if (result) {
+      if (this.appCallbackUrl) {
+        // Logout
+        this.iamService.logout();
+
+        // Redirect to Callback URL
+        location.href = this.appCallbackUrl;
+      }
+      else {
+        // Navigate to My Enrolments Page
+        this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/enrolment?notif=myEnrolments' }});
+      }
     }
   }
 
