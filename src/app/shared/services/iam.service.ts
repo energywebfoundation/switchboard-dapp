@@ -67,6 +67,10 @@ export class IamService {
         const { did, connected, userClosedModal } = await this._iam.initializeConnection(metamaskOpts);
         console.log(did, connected, userClosedModal);
         if (did && connected && !userClosedModal) {
+          // Setup Account Address
+          const signer = this._iam.getSigner();
+          this.accountAddress = await signer.getAddress();
+
           retVal = true;
         }
       }
@@ -87,10 +91,6 @@ export class IamService {
     if (this.accountAddress) {
       return;
     }
-
-    // Get Account Address
-    const signer = this._iam.getSigner();
-    this.accountAddress = await signer.getAddress();
 
     // Setup DID Document
     this._didDocument = await this._iam.getDidDocument();
