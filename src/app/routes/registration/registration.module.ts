@@ -16,6 +16,7 @@ import { RegistrationService } from './registration.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { GoverningBodyComponent } from './governing-body/governing-body.component';
 import { RequestClaimComponent } from './request-claim/request-claim.component';
+import { ConnectToWalletDialogComponent } from './connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 // import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 /* Use this routes definition in case you want to make them lazy-loaded */
@@ -53,9 +54,10 @@ const routes: Routes = [
         RegisterComponent,
         GoverningBodyComponent,
         SignInQr,
-        RequestClaimComponent
+        RequestClaimComponent,
+        ConnectToWalletDialogComponent
     ],
-    entryComponents: [SignInQr],
+    entryComponents: [SignInQr, ConnectToWalletDialogComponent],
     providers: [RegistrationService],
     exports: [
         AssetOwnerComponent,
