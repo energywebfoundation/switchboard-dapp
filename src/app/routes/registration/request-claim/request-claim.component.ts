@@ -41,6 +41,8 @@ export class RequestClaimComponent implements OnInit {
   public btnColor       : Object = {};
   public listColor      : Object = {};
   public txtboxColor    : Object = {};
+
+  public isLoggedIn     = false;
   
   constructor(private fb: FormBuilder, 
       private activeRoute: ActivatedRoute,
@@ -74,7 +76,7 @@ export class RequestClaimComponent implements OnInit {
           if (this.appDetails) {
             // Check Login Status
             this.initLoginUser(this.appDetails.appName);
-            
+
             // Initialize Roles
             await this.initRoles();
           }
@@ -210,6 +212,9 @@ export class RequestClaimComponent implements OnInit {
         maxWidth: '100%',
         disableClose: true
       }).afterClosed().toPromise();
+
+      // Set Loggedin Flag to true
+      this.isLoggedIn = true;
     }
   }
 
