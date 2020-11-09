@@ -14,7 +14,7 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   @ViewChild('issuerList', undefined ) issuerList       : EnrolmentListComponent;
   @ViewChild('enrolmentList', undefined ) enrolmentList : EnrolmentListComponent;
 
-  issuerListAccepted = false;;
+  issuerListAccepted = false;
   enrolmentListAccepted = undefined;
 
   issuerDropdown = new FormControl('false');
@@ -27,15 +27,24 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   };
 
   public isMyEnrolmentShown = false;
+  private notif = undefined;
 
   constructor(private activeRoute: ActivatedRoute) { 
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
       if (queryParams && queryParams.notif) {
+        this.notif = queryParams.notif;
         if (queryParams.notif === 'pendingSyncToDidDoc') {
           // Display Approved Claims
           this.enrolmentListAccepted = true;
           this.enrolmentDropdown.setValue(this.dropdownValue.approved);
-          console.log('hey');
+
+          if (this.enrolmentTabGroup) {
+            this.enrolmentTabGroup.selectedIndex = 1;
+          }
+        }
+        else if (queryParams.notif === 'myEnrolments') {
+          // Display All Claims
+          this.enrolmentDropdown.setValue(this.dropdownValue.all);
 
           if (this.enrolmentTabGroup) {
             this.enrolmentTabGroup.selectedIndex = 1;
@@ -61,7 +70,7 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.enrolmentListAccepted) {
+    if (['pendingSyncToDidDoc', 'myEnrolments'].indexOf(this.notif) >= 0) {
       this.enrolmentTabGroup.selectedIndex = 1;
     }
   }
