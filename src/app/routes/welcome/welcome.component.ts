@@ -36,6 +36,9 @@ export class WelcomeComponent implements OnInit {
       // Navigate to dashboard to initalize user data
       this.route.navigate(['dashboard']);
     }
+    else {
+      await this.cleanMe();
+    }
   }
 
   async connectToMetamask() {
@@ -57,5 +60,16 @@ export class WelcomeComponent implements OnInit {
       // Navigate to dashboard to initalize user data
       this.route.navigate(['dashboard']);
     }
+    else {
+      await this.cleanMe();
+    }
+  }
+  
+  private async cleanMe() {
+    this.iamService.logout();
+    let $navigate = setTimeout(() => {
+        clearTimeout($navigate);
+        location.reload();
+    }, 100);
   }
 }

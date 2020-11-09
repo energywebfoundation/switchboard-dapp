@@ -38,6 +38,9 @@ export class ConnectToWalletDialogComponent implements OnInit {
       // Close Login Dialog
       this.dialogRef.close();
     }
+    else {
+      await this.cleanMe();
+    }
   }
 
   async connectToMetamask() {
@@ -59,5 +62,16 @@ export class ConnectToWalletDialogComponent implements OnInit {
       // Close Login Dialog
       this.dialogRef.close();
     }
+    else {
+      await this.cleanMe();
+    }
+  }
+
+  private async cleanMe() {
+    this.iamService.logout();
+    let $navigate = setTimeout(() => {
+        clearTimeout($navigate);
+        location.reload();
+    }, 100);
   }
 }
