@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { ENSNamespaceTypes, IAppDefinition, IRole } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { IamService } from 'src/app/shared/services/iam.service';
+import { IamService, LoginType } from 'src/app/shared/services/iam.service';
+import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 
 const SWAL = require('sweetalert');
 
@@ -44,6 +46,7 @@ export class RequestClaimComponent implements OnInit {
       private activeRoute: ActivatedRoute,
       private iamService: IamService,
       private toastr: ToastrService,
+      public dialog: MatDialog,
       private spinner: NgxSpinnerService) { 
     
     this.roleTypeForm = fb.group({
@@ -69,6 +72,9 @@ export class RequestClaimComponent implements OnInit {
           console.log('appDetails', this.appDetails);
 
           if (this.appDetails) {
+            // Check Login Status
+            this.initLoginUser(this.appDetails.appName);
+            
             // Initialize Roles
             await this.initRoles();
           }
@@ -170,12 +176,41 @@ export class RequestClaimComponent implements OnInit {
     }
   }
 
-  async ngOnInit() {
-    // login
-    await this.iamService.login();
+  ngOnInit() {}
 
-    // Setup User Data
-    await this.iamService.setupUser();
+  private async initLoginUser(appName: string) {
+    let loginStatus = this.iamService.getLoginStatus();
+
+    // Check Login
+    if (loginStatus) {
+      console.log(loginStatus);
+      if (loginStatus === LoginType.LOCAL) {
+        console.log('local > login');
+
+        // Set metamask extension options if connecting with metamask extension
+        let useMetamaskExtension = undefined;
+        if (window.localStorage.getItem('METAMASK_EXT_CONNECTED')) {
+          useMetamaskExtension = true;
+        }
+
+        // Proceed Login
+        await this.iamService.login(useMetamaskExtension);
+
+        // Setup User Data
+        await this.iamService.setupUser();
+      }
+    }
+    else {
+      // Launch Login Dialog
+      await this.dialog.open(ConnectToWalletDialogComponent, {
+        width: '500px',
+        data: {
+          appName: appName
+        },
+        maxWidth: '100%',
+        disableClose: true
+      }).afterClosed().toPromise();
+    }
   }
 
   private async initRoles() {
@@ -328,5 +363,13 @@ export class RequestClaimComponent implements OnInit {
     else {
       this.toastr.error('Enrolment Form is invalid.', TOASTR_HEADER);
     }
+  }
+
+  logout() {
+    this.iamService.logout();
+    let $navigate = setTimeout(() => {
+        clearTimeout($navigate);
+        location.reload();
+    }, 100);
   }
 }
