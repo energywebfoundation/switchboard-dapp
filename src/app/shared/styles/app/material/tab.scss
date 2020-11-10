@@ -1,0 +1,86 @@
+.mat-tab-header {
+    border-bottom: none;
+}
+
+.mat-tab-labels {
+    display: inline-block !important;
+    border-radius: 50px;
+    background-color: #13162F;
+    .mat-ripple {
+        border-radius: 50px !important;
+    }
+}
+
+.mat-tab-label {
+    height: 40px !important;
+    font-family: 'Rajdhani', sans-serif;
+    color: #9080BA;
+    font-weight: 700 !important;
+    opacity: 1 !important;
+    letter-spacing: 1px !important;
+    font-size: 14px;
+    text-transform: uppercase;
+    z-index: 4;
+
+    .mat-tab-label-content {
+        position: relative;
+        z-index: 3;
+    }
+
+}
+
+.mat-tab-header-pagination-disabled .mat-tab-header-pagination-chevron, .mat-tab-header-pagination-chevron {
+    border-color: #9080BA;
+}
+
+@media (max-width: 600px) {
+    .mat-tab-labels {
+        display: flex !important;
+    }
+}
+
+.mat-tab-label-active {
+    color: #FFF !important;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar {
+    background-color: #242330;
+    height: 100%;
+    border-radius: 50px;
+}
+
+.pending-reg-bg {
+    background-image: linear-gradient(0deg, rgba(23, 23, 37, 0.8) 0%, rgba(62, 61, 82, 0.8) 100%) !important;
+    padding: 20px 40px;
+    border-radius: 5px;
+}
+
+.pending-reg-icon.mat-icon {
+    font-size: 140px !important;
+    height: 140px !important;
+    width: 140px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.pending-reg-title {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 24px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    text-align: center;
+
+}
+
+@include media-breakpoint-down(sm) {
+    .mat-tab-label {
+        height: 34px !important;
+        letter-spacing: 0.5px;
+        font-size: 12px;
+        text-transform: capitalize;
+        padding: 0 12px !important;
+    }
+
+    .mat-tab-labels {
+        display: inline-flex !important;
+    }
+}

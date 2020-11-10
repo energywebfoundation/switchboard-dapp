@@ -1,0 +1,11 @@
+<div style="height: 100%; width: 100%">
+  <ngx-spinner
+    bdColor="rgba(24,20,36,0.8)"
+    size="medium"
+    color="#a567ff"
+    type="ball-spin-fade"
+  >
+    <p class="label-role" *ngIf='!msg'>Loading...</p>
+    <p class="label-role" *ngIf='msg'>{{ msg }}</p>
+  </ngx-spinner>
+</div>

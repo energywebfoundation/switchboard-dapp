@@ -1,0 +1,50 @@
+<div class="w-100 h-100 bg-color">
+  <div
+    class="header-enroll bg-color d-flex justify-content-center justify-content-lg-start position-fixed pl-0 pl-lg-4 py-2 w-100">
+    <img src="assets/img/logo-ew-switchboard.svg" height="48px" />
+  </div>
+
+  <div class="d-flex justify-content-center flex-column align-items-center w-100">
+    <div
+      class="content-enroll color-white d-flex justify-content-start justify-content-md-center align-items-md-center flex-column px-3 mb-1 w-100">
+      <h2 class="font-weight-600 mb-1">App/Tenant Name</h2>
+      <span class="opacity-50">Please select below details</span>
+    </div>
+    <mat-card class="card-enroll">
+      <form role="form">
+        <div class="row">
+          <div class="col-lg-12">
+            <mat-label>Owned Roles</mat-label>
+            <div class="card selection-list d-flex shadow-none p-0 my-3">
+              <mat-selection-list #own>
+                <mat-list-option *ngFor="let own of ownedRoles" [value]="own">
+                  {{own}}
+                </mat-list-option>
+              </mat-selection-list>
+            </div>
+          </div>
+          <div class="col-lg-12 my-2">
+            <div class="d-flex flex-column text-center">
+              <div class="my-2">
+                <div style="font-size: 16px;"><span class="opacity-50 mr-2">Enroll to other roles?</span><a href="#"
+                    class="font-weight-700">Enroll</a></div>
+                <!-- <span class="opacity-50">Eg: Installer, DSO, TSO, OEM</span> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </mat-card>
+    <div class="footer-enroll">
+      <div class="d-flex justify-content-between align-items-center mx-3 mx-md-4 h-100">
+        <div>
+          <img src="assets/img/icons/ew-logo-white.png" width="98px" height="auto" />
+        </div>
+        <div>
+          <a class="color-white mx-2" href="#">Privacy Policy</a>
+          <a class="color-white mx-2" href="#">Cookies Policy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

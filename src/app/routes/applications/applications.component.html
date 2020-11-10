@@ -1,0 +1,119 @@
+<mat-tab-group mat-align-tabs="start" (selectedTabChange)="showMe($event)">
+
+  <mat-tab label="Organization Management">
+    <div class="row mx-0 mt-1">
+      <div class="col-xl-12">
+        <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
+          <h4 class="color-white strong my-4">Organization Management</h4>
+          <div class="d-flex align-item-center">
+            <button (click)="toggleFilter()" class="btn mat-stroked-filter-button btn-small mb-3 mb-lg-0 mr-2">Filter
+            </button>
+            <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
+              (click)="openNewOrgComponent()">Create Organization
+            </button>
+          </div>
+        </div>
+        <div *ngIf="isFilterShown" class="card card-filter d-flex justify-content-end pt-2 pb-3">
+          <div class="row">
+            <div class="col-md-4">
+              <mat-label class="color-white ml-2 pl-1">Application</mat-label>
+              <mat-form-field appearance="outline" floatPlaceholder="never"
+                class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+                <input matInput autocomplete="off" type="text" placeholder="Application" />
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-label class="color-white ml-2 pl-1">Role</mat-label>
+              <mat-form-field appearance="outline" floatPlaceholder="never"
+                class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+                <input matInput autocomplete="off" type="text" placeholder="Role" />
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 d-flex justify-content-center justify-content-lg-end align-items-end mb-1">
+              <button mat-stroked-button class="btn btn-small mb-0 mt-2 mt-lg-0 mb-md-2 mb-lg-0">Clear All
+              </button>
+            </div>
+          </div>
+        </div>
+        <app-governance-list list-type="org" #listOrg></app-governance-list>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Application Management">
+    <div class="row mx-0 mt-1">
+      <div class="col-xl-12">
+        <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
+          <h4 class="color-white strong my-4">Application Management</h4>
+          <div class="d-flex align-item-center">
+            <button (click)="toggleFilter()" class="btn mat-stroked-filter-button btn-small mb-3 mb-lg-0 mr-2">Filter
+            </button>
+            <button mat-raised-button class="btn btn-primary btn-small mb-3 ml-2 mb-lg-0"
+              (click)="openNewAppComponent()">Create Application
+            </button>
+          </div>
+        </div>
+        <div *ngIf="isFilterShown" class="card card-filter d-flex justify-content-end pt-2 pb-3">
+          <div class="row">
+            <div class="col-md-4">
+              <mat-label class="color-white ml-2 pl-1">Role</mat-label>
+              <mat-form-field appearance="outline" floatPlaceholder="never"
+                class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+                <input matInput autocomplete="off" type="text" placeholder="Role" />
+              </mat-form-field>
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4 d-flex justify-content-center justify-content-lg-end align-items-end mb-1">
+              <button mat-stroked-button class="btn btn-small mb-0 mt-2 mt-lg-0 mb-md-2 mb-lg-0">Clear
+              </button>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="isAppShown">
+          <app-governance-list list-type="app" #listApp></app-governance-list>
+        </ng-container>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Role Governance">
+    <div class="row mx-0 mt-1">
+      <div class="col-xl-12">
+        <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
+          <h4 class="color-white strong my-4">Role Governance</h4>
+          <div class="d-flex align-item-center">
+            <button (click)="toggleFilter()" class="btn mat-stroked-filter-button btn-small mb-3 mb-lg-0 mr-2">Filter
+            </button>
+            <button mat-raised-button class="btn btn-primary btn-small mb-3 ml-2 mb-lg-0"
+              (click)="openNewRoleComponent()">Create New Role
+            </button>
+          </div>
+        </div>
+        <div *ngIf="isFilterShown" class="card card-filter d-flex justify-content-end pt-2 pb-3">
+          <div class="row">
+            <div class="col-md-4">
+              <mat-label class="color-white ml-2 pl-1">Organization</mat-label>
+              <mat-form-field appearance="outline" floatPlaceholder="never"
+                class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+                <input matInput autocomplete="off" type="text" placeholder="Organization" />
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-label class="color-white ml-2 pl-1">Application</mat-label>
+              <mat-form-field appearance="outline" floatPlaceholder="never"
+                class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+                <input matInput autocomplete="off" type="text" placeholder="Application" />
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 d-flex justify-content-center justify-content-lg-end align-items-end mb-1">
+              <button mat-stroked-button class="btn btn-small mb-0 mt-2 mt-lg-0 mb-md-2 mb-lg-0">Clear All
+              </button>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="isRoleShown">
+          <app-governance-list list-type="role" #listRole></app-governance-list>
+        </ng-container>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

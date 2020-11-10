@@ -1,0 +1,118 @@
+.btn-color-primary {
+    color: #33CBCB;
+}
+.btn-color-error {
+    color: #C82E2E;
+}
+.btn-color-success {
+    color: #0FB544;
+}
+.btn-color-warn {
+    color: #FFA500;
+}
+
+.icon-color {
+    color: #9080BA;
+}
+
+.menu-icon {
+    width: 42px !important;
+    height: auto !important;
+}
+
+.mat-raised-button {
+    min-width: 100px !important;
+}
+
+.mat-raised-button[disabled] {
+    color: rgba(255, 255, 255, 0.3) !important;
+    background-color: rgb(33 29 47) !important;
+    
+}
+
+@include media-breakpoint-down(sm) {
+    .mat-raised-button, .mat-stroked-button {
+        padding: 0 16px !important;
+        font-size: 14px !important;
+    }
+
+    .btn-connect {
+        padding: 6px 15px 3px 15px !important;
+    }
+}
+
+.mat-stroked-button {
+    border-color: #33CBCB !important;
+    color: #33CBCB !important;
+    border-radius: 4px !important;
+    line-height: 36px !important;
+    font-size: 16px !important;
+    font-weight: 600;
+    padding: 8px 16px !important;
+    letter-spacing: 0.33px;
+    min-width: 100px !important;
+}
+
+.mat-stroked-filter-button {
+    border-color: #8677ae !important;
+    color: #8677ae !important; 
+    border-radius: 4px !important;
+    line-height: 36px !important;
+    font-size: 16px !important;
+    font-weight: 600;
+    padding: 8px 16px !important;
+    letter-spacing: 0.33px;
+    min-width: 100px !important;
+
+    &:hover {
+        border-color: #33CBCB !important;
+        color: #33CBCB !important; 
+    }
+}
+
+.btn-qr {
+    position: absolute !important;
+    bottom: 15px;
+    left: 32px;
+    color: #FFF !important;
+}
+
+.mat-mini-fab.mat-accent, .mat-raised-button.mat-accent {
+    background-color: #323855;
+
+    .mat-button-wrapper {
+        padding: 0 !important;
+    }
+}
+
+.profile-wrapper {
+    // position: absolute;
+    // right: 0;
+    margin-right: 34px;
+
+    span {
+        color: #FFF;
+        // margin-left: 10px;
+    }
+}
+
+.btn-small {
+    line-height: 12px !important;
+    font-size: 14px !important;
+    height: 32px;
+    min-height: 32px !important;
+}
+
+.mat-icon-button.icon-btn-small {
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+    line-height: 24px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+    &:hover {
+        opacity: 0.8;
+    }
+}

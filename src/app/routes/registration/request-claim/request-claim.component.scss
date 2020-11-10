@@ -1,0 +1,27 @@
+::ng-deep .md-enroll {
+
+    .mat-select-placeholder, .mat-placeholder {
+        color: currentColor; 
+    }
+
+    .mat-select-value {
+        color: currentColor;  
+    }
+
+    .mat-select-arrow {
+        color: currentColor; 
+    }
+
+        .mat-input-element {
+          color: currentColor; 
+        }
+        
+        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: currentColor; 
+        }  
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: currentColor; 
+        }
+      
+  }
+  

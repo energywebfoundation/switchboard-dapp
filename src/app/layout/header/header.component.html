@@ -1,0 +1,118 @@
+<!-- START Top Navbar-->
+<nav class="navbar topnavbar" role="navigation">
+    <!-- START navbar header-->
+    <div class="navbar-header">
+        <a href="#/">
+            <img src="assets/img/logo-ew-switchboard.svg" class="logo-ew" />
+        </a>
+    </div>
+    <ul class="menu-top navbar-nav mx-auto flex-row align-items-center" *ngIf="isNavMenuVisible">
+        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'assets' }">
+            <img src="../assets/img/icons/assets-icon.png" width="auto" height="21"
+            alt="assets image">
+            <a class="nav-link d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Assets</h6>
+            </a>
+        </li>
+        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'governance' }">
+            <img src="../assets/img/icons/governance-icon.png" width="auto" height="21"
+            alt="Governance image">
+            <a class="nav-link d-lg-block d-xl-block cursor-pointer" routerLink="/governance">
+                <h6 class="mb-0">Governance</h6>
+            </a>
+        </li>
+        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'services' }">
+            <img src="../assets/img/icons/services-icon.png" width="auto" height="21"
+            alt="Services image">
+            <a class="nav-link d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Services</h6>
+            </a>
+        </li>
+        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'enrolment' }">
+            <img src="../assets/img/icons/enrollment-icon.png" width="auto" height="21"
+            alt="Enrollments image">
+            <a class="nav-link d-lg-block d-xl-block cursor-pointer" routerLink="/enrolment">
+                <h6 class="mb-0">Enrollments</h6>
+            </a>
+        </li>
+        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'applications' }">
+            <img src="../assets/img/icons/applications-icon.png" width="auto" height="21"
+                alt="Dashboard image">
+            <a class="nav-link d-lg-block d-xl-block cursor-pointer">
+                <h6 class="mb-0">Applications</h6>
+            </a>
+        </li>
+    </ul>
+    <ul class="navbar-nav flex-row align-items-center profile-wrapper cursor-pointer">
+        <li class="nav-item dropdown dropdown-list" dropdown>
+            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" dropdownToggle>
+                <!-- loading here -->
+                <ng-container *ngIf="isLoadingNotif">
+                    <div>
+                        <mat-spinner diameter="21" class="color-white"></mat-spinner>
+                    </div>
+                </ng-container>
+
+                <!-- notif count here -->
+                <ng-container *ngIf="!isLoadingNotif">
+                    <em class="icon-bell"></em>
+                    <span class="badge badge-danger" *ngIf="notif?.totalCount">{{ notif?.totalCount }}</span>
+                </ng-container>
+            </a>
+            <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-item">
+                    
+                    <div class="list-group">
+                        <a routerLink="/enrolment" routerLinkActive="active">
+                            <div class="list-group-item list-group-item-action">
+                                <div class="media d-flex align-items-center cursor-pointer">
+                                    <div class="align-self-start mr-2">
+                                        <mat-icon svgIcon="new-claim-icon"></mat-icon>
+                                    </div>
+                                    <div class="media-body d-flex flex-row justify-content-between align-items-center">
+                                        <p class="m-0">Claim Requests Pending for Approval</p>
+                                        <span class="badge badge-danger ml-2">{{ notif?.pendingApprovalCount }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a [routerLink]="['/enrolment']" routerLinkActive="active" [queryParams]="{notif: 'pendingSyncToDidDoc'}">
+                            <div class="list-group-item list-group-item-action">
+                            <div class="media d-flex align-items-center cursor-pointer">
+                                <div class="align-self-start mr-2">
+                                    <mat-icon svgIcon="approved-claim-icon"></mat-icon>
+                                </div>
+                                <div class="media-body d-flex flex-row justify-content-between align-items-center">
+                                    <p class="m-0">Claims Pending Sync to DID Document</p>
+                                    <span class="badge badge-danger ml-2">{{ notif?.pendingSyncCount }}</span>
+                                </div>
+                            </div>
+                            </div>
+                        </a>
+                    </div>
+                   
+                </div>
+            </div>
+            
+        </li>
+        <li class="nav-item">
+            <div class="cursor-pointer" [matMenuTriggerFor]="menu">
+                <div class="d-flex align-items-center ml-3 ml-md-0 flex-row">
+                    <div class="d-none d-md-flex flex-column align-items-end ml-2 mr-2">
+                        <div class="label-role" *ngIf="!userName">Manage Profile</div>
+                        <div class="label-role" *ngIf="userName"> {{ userName }} </div>
+                        <!-- <div class="label-did">0x5B1B89A48C1fB….6d45</div> -->
+                    </div>
+                    <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="34"
+                        height="34" alt="avatar">
+                </div>
+            </div>
+        </li>
+    </ul>
+    <!-- END navbar header-->
+</nav>
+<!-- END Top Navbar-->
+<mat-menu #menu="matMenu" xPosition="before">
+    <button class="color-link border-bottom-1 px-4" mat-menu-item (click)="openDialogUser()">Update Identity</button>
+    <button class="color-link px-4" mat-menu-item (click)="logout()">Logout</button>
+</mat-menu>

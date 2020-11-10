@@ -1,0 +1,327 @@
+// Bootstrap
+@import "../bootstrap/functions";
+@import "../bootstrap/variables";
+@import "../bootstrap/mixins";
+@import '../app/variables';
+@import '../app/material/colors';
+
+
+// LAYOUT
+
+$content-bg:                    #181423;
+$aside-bg:                      #181423;
+
+// NAVBAR TOP
+
+$nav-top-bg:                     #181523;
+$nav-top-bg-start:              $nav-top-bg;
+$nav-top-bg-end:                $nav-top-bg;
+$nav-header-bg:                 transparent;
+
+$nav-top-item:                  #fff;
+$nav-top-item-active:           darken(#FFF, 60%);
+
+// SIDEBAR
+
+$sidebar-bg:                      $aside-bg;
+
+$sidebar-item-color:              #515253;
+$sidebar-item-color-active:       $nav-top-bg;
+$sidebar-item-bg-active:          darken($sidebar-bg, 3%);
+
+$sidebar-icon-color:              inherits;
+$sidebar-icon-color-active:       $nav-top-bg;
+$sidebar-icon-color-inactive:     #9080BA;
+
+$sidebar-bullet-color:            rgba(0,0,0,.25);
+$sidebar-bullet-color-active:     $sidebar-icon-color-active;
+
+$sidebar-heading-color:           #919DA8;
+$sidebar-label-color:             $sidebar-item-color;
+
+// OFFSIDEBAR
+
+$offsidebar-bg:           #fff;
+$offsidebar-border-color: greyscale(darken($offsidebar-bg, 20%));
+$offsidebar-color:        $body-color;
+
+
+/* ========================================================================
+   Component: layout
+ ========================================================================== */
+body, .wrapper .section-container {
+    background-color: $content-bg;
+}
+
+.wrapper .aside-container {
+    background-color: $aside-bg;
+}
+
+/* ========================================================================
+   Component: top-navbar
+ ========================================================================== */
+.topnavbar {
+    background-color: $nav-top-bg;
+    @include gradient-x($nav-top-bg-start, $nav-top-bg-end);
+
+    @include media-breakpoint-up(lg) {
+        .navbar-nav > .nav-item.show > .nav-link {
+            &, &:hover, &:focus {
+                box-shadow: 0 -3px 0 darken($nav-top-bg, 6%) inset;
+            }
+        }
+    }
+
+    .navbar-nav > .nav-item > .navbar-text {
+        color: $nav-top-item;
+    }
+
+    .navbar-nav > .nav-item > .nav-link,
+    .navbar-nav > .nav-item.show > .nav-link {
+        color: #9080BA;
+        &:hover, &:focus {
+            color: $inverse;
+        }
+    }
+
+    .navbar-nav>.nav-item.active {
+        &,
+        &:hover,
+        &:focus {
+            color: #33CBCB;
+            background-color: transparent;
+        }
+    }
+
+    .dropdown-item.active, .dropdown-item:active {
+        background-color: $nav-top-bg;
+    }
+}
+
+// .brand-logo {
+//     img {
+//         content: url("/assets/img/ew-flex-logo.png") no-repeat;
+//     }
+// }
+
+
+.logo-wrapper {
+    background: url("/assets/img/ewflex-logo.svg") no-repeat;
+    margin: 0 auto;
+    width: 110px;
+    max-width: 100%;
+    height: 40.625px;
+    margin-top: 22px;
+}
+
+/* ========================================================================
+   Component: sidebar
+ ========================================================================== */
+.sidebar {
+    background-color: $sidebar-bg;
+
+    .nav-heading {
+        color: $sidebar-heading-color;
+    }
+}
+
+// Items
+.sidebar-nav {
+    > li {
+        > a, > .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: $sidebar-icon-color-inactive;
+
+            &:focus, &:hover {
+                color: $sidebar-item-color;
+            }
+
+            // Item icon
+            > em {
+                color: $sidebar-icon-color;
+            }
+
+        }
+
+        // Active item state
+        &.active, &.open {
+            &, > a, > .nav-item, .sidebar-nav {
+                background-color: $sidebar-item-bg-active;
+                color: $sidebar-item-color;
+            }
+
+            > .nav-item > em, > a > em {
+                color: $sidebar-item-color;
+            }
+
+        }
+
+        &.active {
+            border-left-color: $sidebar-item-color;
+        }
+
+    }
+
+}
+
+.mat-menu-panel {
+    background: #2A2837;
+}
+
+.sidebar-subnav {
+    background-color: $sidebar-bg;
+
+    > .sidebar-subnav-header {
+        color: $sidebar-item-color;
+    }
+
+    > li {
+        > a, > .nav-item {
+            color: $sidebar-item-color;
+
+            &:focus, &:hover {
+                color: $sidebar-item-color;
+            }
+
+        }
+
+        &.active {
+            > a, > .nav-item {
+                color: $sidebar-icon-color-active;
+
+                &:after {
+                    border-color: $sidebar-bullet-color-active;
+                    background-color: $sidebar-bullet-color-active;
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+
+/* ========================================================================
+   Cards
+ ========================================================================== */
+
+ .card-register {
+    &::after {
+        content: "";
+        background-image: linear-gradient(0deg, rgba(23, 23, 37, 0.52) 0%, rgba(57, 55, 101, 0.41) 100%);
+    }
+}
+
+.card-default {
+    background-color: #242230 !important;
+
+    .card-header {
+        background-color: #242230 !important;
+    }
+}
+
+.bg-register {
+background-image: url("/assets/img/bg-energy.svg");
+}
+
+.mat-paginator-outer-container {
+    background-color: #242230 !important;
+}
+
+/* ========================================================================
+   Table
+ ========================================================================== */
+
+ th.mat-header-cell {
+    background-color: #24222F !important;
+} 
+
+.mat-row:nth-child(odd){
+    background-color: #2A2833 important;
+}
+
+tr.mat-row {
+    border-bottom: 5px solid #24222F;
+}
+
+/* ========================================================================
+   Tabs
+ ========================================================================== */
+
+.mat-tab-labels {
+    background-color: #120e19;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar {
+    background-color: #282239;
+}
+
+/* ========================================================================
+   Dialog
+ ========================================================================== */
+
+.cdk-overlay-dark-backdrop {
+    background: rgba(38, 33, 51, 0.88) !important;
+}
+
+.mat-dialog-container {
+    background: #2A2837;
+}
+
+.mat-dialog-title {
+    color: #bcb1e0;
+    border-bottom: 1px solid #272237;
+} 
+
+.mat-dialog-container .mat-icon-button {
+    color: #726690;
+}
+
+.mat-dialog-actions {
+    border-top: 1px solid #272237;
+}
+
+/* ========================================================================
+   Input fields
+ ========================================================================== */
+
+.mat-form-field, .mat-select {
+    font-family: 'Source Sans Pro', sans-serif !important;
+  }
+
+.mat-option-text {
+    font-size: 14px;
+}
+
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+    background: #1C1726;
+    color: #52436E;
+}
+
+.btn-primary {
+    background-color: #33CBCB;
+
+    &:hover {
+        background-color: #5bd6d6;
+    }
+}
+
+.btn-color-primary {
+    color: #33CBCB;
+}
+
+.mat-stroked-button {
+    border-color: #33CBCB !important;
+    color: #33CBCB !important;
+    text-transform: uppercase;
+
+    &:hover {
+        border-color: #33CBCB !important;
+        color: #33CBCB!important; 
+    }
+}

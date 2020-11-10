@@ -1,0 +1,139 @@
+/* ========================================================================
+     Component: user-block
+ ========================================================================== */
+
+// for use as navbar item
+.has-user-block {
+    display: block;
+    overflow: hidden;
+    border: 0 !important;
+    // width: 100% !important;
+}
+
+.user-block {
+    position: relative;
+    padding: 25px 0 10px;
+    cursor: pointer;
+    @include clearfix();
+
+    background: url('assets/img/user-bg.jpg') no-repeat left top;
+    background-size: cover;
+
+    > .user-block-picture {
+        position: relative;
+        width: 90px;
+        margin: 0 auto;
+
+        > img {
+            max-width: 100%;
+            height: auto;
+        }
+
+    }
+
+    .user-block-info {
+        padding-top: 15px;
+        text-align: center;
+        white-space: nowrap;
+
+        .user-block-name, .user-block-role {
+            display: block;
+        }
+
+        .user-block-name {
+            color: #585D66;
+        }
+
+        .user-block-role {
+            font-size: 12px;
+            color: #777B83;
+        }
+
+    }
+
+}
+
+.user-block-status {
+    position: relative;
+
+    > .circle {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        border: 2px solid #fff;
+    }
+
+}
+
+.label-role {
+    color: #9080BA;
+    letter-spacing: 0.3px;
+    font-weight: 500 !important;
+}
+
+@include media-breakpoint-down(sm) {
+    .label-role {
+        font-size: 12px;
+    }
+}
+
+.label-role-white {
+    color: #9080BA;
+    letter-spacing: 0.5px;
+    font-weight: 600 !important;
+    margin-left: 10px;
+}
+.label-did {
+    font-size: 12px;
+    color: #9080BA;
+    opacity: 0.8;
+    display: initial;
+}
+
+@media (max-width: 1024px){
+    .label-did {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        white-space: nowrap;
+        max-width: 180px;
+    }
+}
+
+@media (max-width: 910px){
+    .label-did {
+        display: none;
+    } 
+}
+
+// Adapt to collapsed mode
+.aside-collapsed, .aside-collapsed-text {
+    .user-block {
+        padding: 15px 0 14px;
+        margin: 0;
+        text-align: center;
+
+        > .user-block-picture {
+            float: none;
+            margin: 0  auto;
+            width: 50px;
+
+            > .user-block-status {
+                display: block;
+            }
+
+        }
+
+        .user-block-info {
+            display: none;
+        }
+
+    }
+
+    .user-block-status {
+        > .circle {
+            bottom: 0;
+            right: 0;
+        }
+    }
+}

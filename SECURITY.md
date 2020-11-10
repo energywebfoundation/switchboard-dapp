@@ -1,0 +1,1 @@
+If you find security vulnerabilities we kindly ask you not to disclose it in public. Please let the EWF team (core@energyweb.org) know upfront. We will assess the issue as soon as possible on a best-effort basis and will give you an estimate for when we have a fix and release available for an eventual public disclosure.

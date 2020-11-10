@@ -1,0 +1,96 @@
+/* ========================================================================
+     Component: typo
+ ========================================================================== */
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    color: $body-color;
+    font-size: 0.875rem; // 14px
+}
+
+a {
+    color: #33CBCB;
+
+    &:hover {
+        color: #33CBCB;
+        text-decoration: none;
+    }
+}
+
+h1,h2,h3,h4 {
+    font-weight: normal;
+    letter-spacing: 0.25px;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+h1,h2,h3,h4,h5
+.h1,.h2,.h3,.h4,.h5{
+    margin-bottom: 0.65625rem;
+    small {
+        font-size: 65%;
+    }
+}
+
+h1,.h1 {
+    font-size: 24px; // 34px
+}
+
+h2,.h2 {
+    font-size: 1.875rem; // 30px
+}
+
+h3,.h3 {
+    font-size: 1.3125rem; // 21px
+}
+
+h4,.h4 {
+    font-size: 1.125rem; // 18px
+}
+
+h5,.h5 {
+    font-size: .875rem;
+}
+
+h6,.h6 {
+    font-size: 1rem;
+}
+
+p {
+    margin-bottom: .65rem; // ~10px
+}
+
+.article {
+  font-size: 20px;
+  line-height: 32px;
+}
+
+.filter-label {
+    color: #9080bb;
+    font-weight: 400;
+}
+
+.font-weight-700 {
+    font-weight: 700;
+}
+
+.font-weight-600 {
+    font-weight: 600;
+}
+
+.strong {
+    font-weight: 700;
+}
+
+.small {
+    font-size: 12px !important;
+}
+
+@include media-breakpoint-down(sm) {
+    h2,.h2 {
+        font-size: 21px;
+    }
+
+    h4,.h4  {
+        font-size: 16px !important;
+    }
+}

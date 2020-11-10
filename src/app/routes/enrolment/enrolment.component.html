@@ -1,0 +1,54 @@
+<mat-tab-group mat-align-tabs="start" #enrolmentTabGroup (selectedTabChange)="showMe($event)">
+  <mat-tab label="Enrollment Requests">
+    <div class="row mx-0 mt-1">
+      <div class="col-xl-12">
+        <div class="d-flex flex-column flex-md-row justify-content-md-start align-items-center">
+          <h4 class="color-white strong my-4">Enrollment Requests</h4>
+        </div>
+        <div class="card card-default mb-3 pb-0">
+          <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
+            <!-- Filter -->
+            <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0">
+              <!-- <div class="filter-label mr-1">Group by:</div> -->
+              <mat-form-field appearance="outline" floatPlaceholder="never"
+                class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+                <mat-select [formControl]="issuerDropdown" (selectionChange)="updateIssuerList($event)">
+                  <mat-option [value]="dropdownValue.all">All</mat-option>
+                  <mat-option [value]="dropdownValue.pending">Pending</mat-option>
+                  <mat-option [value]="dropdownValue.approved">Approved</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <app-enrolment-list [list-type]="'issuer'" [accepted]="issuerListAccepted" #issuerList></app-enrolment-list>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="My Enrollments">
+    <div class="row mx-0 mt-1">
+      <div class="col-xl-12">
+        <div class="d-flex flex-column flex-md-row justify-content-md-start align-items-center">
+          <h4 class="color-white strong my-4">My Enrollments</h4>
+        </div>
+        <div class="card card-default mb-3 pb-0">
+          <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
+            <!-- Filter -->
+            <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0">
+              <!-- <div class="filter-label mr-1">Group by:</div> -->
+              <mat-form-field appearance="outline" floatPlaceholder="never"
+                class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+                <mat-select [formControl]="enrolmentDropdown" (selectionChange)="updateEnrolmentList($event)">
+                  <mat-option [value]="dropdownValue.all">All</mat-option>
+                  <mat-option [value]="dropdownValue.pending">Pending</mat-option>
+                  <mat-option [value]="dropdownValue.approved">Approved</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <app-enrolment-list [list-type]="'applicant'" [accepted]="enrolmentListAccepted" #enrolmentList *ngIf="isMyEnrolmentShown"></app-enrolment-list>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

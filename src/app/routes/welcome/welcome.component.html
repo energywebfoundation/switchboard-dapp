@@ -1,0 +1,47 @@
+<div class="overflow-hidden h-100">
+  <div class="position-brand m-lg-4">
+    <img src="assets/img/logo-ew-switchboard.svg" />
+    <div _ngcontent-ogl-c12="" class="user-block-status cursor-pointer">
+      <div _ngcontent-ogl-c12="" class="d-flex align-items-center flex-lg-row flex-row-reverse">
+        <div _ngcontent-ogl-c12="" class="d-flex flex-column align-items-lg-end mt-2 mr-lg-2">
+          <!-- <div _ngcontent-ogl-c12="" class="label-role-white">[{{flexNode}}]</div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <ngx-spinner [fullScreen]="false" type="ball-spin-fade" size="medium" bdColor="rgba(24,20,36,0.8)" bdOpacity=0.9 color="#A567FF"></ngx-spinner>
+  <div class="bg-register wrapper d-flex justify-content-center justify-content-lg-center align-items-lg-center align-items-center">
+    <div class="bg-energy-cloud"></div>
+    <!-- <div class="bg-energy-turbine-1"></div> -->
+    <div>
+      <!-- START card-->
+      <mat-card class="card-register">
+        <div class="top-layer">
+          <h1 class="font-weight-600 text-center mt-5 mt-md-2 pt-5 pt-md-0 mb-4 pb-2 pb-md-5">Welcome to Energy Web Switchboard</h1>
+          <div class="my-3">
+            <button mat-raised-button (click)="connectToWallet()" class="btn btn-connect-1 w-100" type="submit"><img
+                width="48px" class="float-left pt-1" src="assets/img/icons/wallet-connect-icon.svg" /> Connect to your
+              wallet</button>
+          </div>
+          <div class="mt-4 mb-3" *ngIf="isMetamaskExtensionAvailable">
+            <button mat-raised-button (click)="connectToMetamask()" class="btn btn-connect-2 w-100" type="submit"><img
+                width="36px" class="float-left pt-1 ml-2" src="assets/img/icons/metamask-logo.svg" /> Login with Metamask</button>
+          </div>
+        </div>
+      </mat-card>
+      <!-- END card-->
+    </div>
+    <div class="welcome-footer">
+      <div class="d-flex justify-content-start align-items-center mx-4 mt-3 mb-1">
+        <img src="assets/img/icons/ew-logo-white.png" width="100px" height="auto"/>
+      </div>
+    </div>
+    <div class="welcome-bottom-footer d-flex justify-content-center justify-content-lg-between">
+      <span>Energy Web is incorporated in Zug, Switzerland</span>
+      <div>
+        <a class="color-white mx-2" href="#">Privacy Policy</a>
+        <a class="color-white mx-2" href="#">Cookies Policy</a>
+      </div>
+    </div>
+  </div>
+</div>

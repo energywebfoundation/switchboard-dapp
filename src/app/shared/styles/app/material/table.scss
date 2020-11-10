@@ -1,0 +1,235 @@
+.mat-table {
+    background-color: transparent;
+    width: 100%;
+}
+
+.widget-container {
+    min-height: 252px;
+    height: 252px;
+    overflow: auto;
+}
+
+th.mat-header-cell {
+    background-color: #12162e;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600 !important;
+    font-size: 12px;
+    color: #FFFFFF !important;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-bottom-style: none !important;
+} 
+
+.mat-header-cell, .mat-cell, .mat-footer-cell {
+    color: #FFF !important;
+}
+
+td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:last-of-type {
+    padding-right: 10px !important;
+}
+
+td.mat-cell {
+    border-bottom: none !important;
+    font-size: 14px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+tr.mat-header-row {
+    height: 30px !important;
+}
+
+tr.mat-row {
+    border-bottom: 5px solid #13172f;
+}
+
+.mat-row:nth-child(odd){
+    background-color: #201E2B;
+}
+
+.mat-row:nth-child(even){
+    background-color: #1E1C29;
+}
+
+.mat-paginator-outer-container {
+    background-color: #13172f;
+}
+
+.mat-paginator-range-actions {
+    color: rgba(255,255,255,0.5);
+    .mat-icon-button {
+        color: #FFF !important;
+    }
+}
+
+.mat-paginator-range-actions {
+    color: transparent !important;
+}
+
+.mat-paginator-page-size-label {
+    color: #FFF;
+}
+
+mat-paginator {
+    .mat-form-field-appearance-legacy .mat-form-field-underline {
+        background-color: #FFF;
+    }
+
+    .mat-paginator-icon {
+        color: #726690;
+    }
+}
+
+.color-primary {
+    color: #9253ec!important;
+}
+
+.border-default {
+    border-left: 3px solid #FFF;
+  }
+
+.color-default {
+    color: #FFF !important;
+}  
+
+.border-warned {
+    border-left: 3px solid #FFA500 !important;
+}
+
+.color-warned {
+    color: #FFA500 !important;
+}
+
+.border-error {
+    border-left: 3px solid #C82E2E !important;
+}
+
+.color-error {
+    color: #C82E2E !important;
+}
+
+.border-success {
+    border-left: 3px solid #0FB544 !important;
+}
+
+.color-success {
+    color: #0FB544 !important;
+}
+
+.k-chart-surface {
+    text {
+        fill: #FFF;
+    }
+
+}
+// Kendo Chart
+
+.k-chart {
+    max-height:262px;
+    height: 262px !important;
+}
+
+.k-chart.chart-full {
+    max-height:300px;
+    height: 300px !important;
+}
+
+.row-view {
+    display: none;
+}
+
+.img-logo-list {
+    width: auto !important;
+    height: 32px;
+}
+
+@media screen and (max-width: 960px) {
+    .mat-table {
+      border: 0;
+      vertical-align: middle
+    }
+
+    .row-view {
+        display: initial;
+    }
+  
+    .mat-table caption {
+      font-size: 1em;
+    }
+    
+    // to hide header
+    .mat-table th.mat-header-cell {
+      border: 10px solid;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+    tr.mat-header-row {
+        height: 0 !important;
+        display: none;
+    }
+
+    .mat-table tr.mat-row {
+      display: block;
+      height: auto;
+      padding-bottom: 10px;
+    }
+    /*
+    .mat-table tr.mat-row:nth-child(even) {background: #CCC}
+    .mat-table tr.mat-row:nth-child(odd) {background: #FFF}
+    */
+    .mat-table td.mat-cell {
+        display: flex;
+        border-bottom: 1px solid #2b2a3a !important;
+        flex-direction: column;
+        font-size: 1em;
+        font-weight: bold;
+        padding-left: 10px !important;
+        word-break: break-all;
+        margin: 0 8px;
+        margin-bottom: 0;
+    }
+
+    .mat-table td.mat-cell:before {
+
+      content: attr(data-label);
+      float: left;
+      text-transform: capitalize;
+      font-weight: normal;
+      color: #888790 !important;
+      padding-right: 8px;    
+      font-size: 14px;
+    }
+    .mat-table td.mat-cell:last-child {
+      border-bottom: 0 !important;
+      display: flex;
+      align-items: flex-end;
+    }
+      .mat-table td.mat-cell:first-child {
+      margin-top: 3%;
+    }
+
+    .widget-container {
+        min-height: 320px;
+        height: 320px;
+    }
+
+    .widget-activation {
+        min-height: 320px;
+        height: 320px;
+    }
+
+  }
+
+  .no-record {
+      opacity: 0.6;
+      letter-spacing: 0.4px;
+  }
+
+  .opacity-50 {
+      opacity: .5;
+  }
