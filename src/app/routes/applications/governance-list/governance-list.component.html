@@ -1,8 +1,40 @@
-<div class="card card-default mb-3 pb-3">
-  <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
-    <!-- Filter -->
 
+<!-- START: Filter-->
+<form [formGroup]="filterForm">
+  <div *ngIf="isFilterShown && listType !== ListType.ORG" class="card card-filter d-flex justify-content-end pt-2 pb-3">
+    <div class="row">
+      <div class="col-md-4" *ngIf="listType === ListType.APP || listType === ListType.ROLE">
+        <mat-label class="color-white ml-2 pl-1">Organization</mat-label>
+        <mat-form-field appearance="outline" floatPlaceholder="never"
+          class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+          <input matInput autocomplete="off" formControlName="organization" type="text" placeholder="Organization" maxlength="256" (input)="filter()"/>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4" *ngIf="listType === ListType.ROLE"> 
+        <mat-label class="color-white ml-2 pl-1">Application</mat-label>
+        <mat-form-field appearance="outline" floatPlaceholder="never"
+          class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+          <input matInput autocomplete="off" formControlName="application" type="text" placeholder="Application" maxlength="256" (input)="filter()"/>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4" *ngIf="listType === ListType.APP"></div>
+      <!-- <div class="col-md-4">
+        <mat-label class="color-white ml-2 pl-1">Role</mat-label>
+        <mat-form-field appearance="outline" floatPlaceholder="never"
+          class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+          <input matInput autocomplete="off" formControlName="role" type="text" placeholder="Role" maxlength="256" (input)="filter()"/>
+        </mat-form-field>
+      </div> -->
+      <div class="col-md-4 d-flex justify-content-center justify-content-lg-end align-items-end mb-1">
+        <button mat-stroked-button class="btn btn-small mb-0 mt-2 mt-lg-0 mb-md-2 mb-lg-0" (click)="resetFilter()">Clear All
+        </button>
+      </div>
+    </div>
   </div>
+</form>
+
+<!-- START TABLE -->
+<div class="card card-default mb-3 pb-3">
   <table mat-table [dataSource]="dataSource">
     <!-- Logo Column -->
     <ng-container matColumnDef="logoUrl" *ngIf="ListType.ROLE !== listType">
@@ -45,8 +77,18 @@
       <th mat-header-cell *matHeaderCellDef> Actions </th>
       <td mat-cell *matCellDef="let element">
         <!-- View Details -->
-        <button mat-icon-button matTooltip="View" (click)="view(listType, element)">
+        <button mat-icon-button matTooltip="View Details" (click)="view(listType, element)">
           <mat-icon class="btn-color-primary">preview</mat-icon>
+        </button>
+
+        <!-- View Applications -->
+        <button mat-icon-button matTooltip="View Applications" (click)="viewApps(listType, element)" *ngIf="listType === ListType.ORG">
+          <mat-icon class="btn-color-primary">apps</mat-icon>
+        </button>
+
+        <!-- View Roles -->
+        <button mat-icon-button matTooltip="View Roles" (click)="viewRoles(listType, element)" *ngIf="listType !== ListType.ROLE">
+          <mat-icon class="btn-color-primary">supervised_user_circle</mat-icon>
         </button>
 
         <!-- Edit Details -->
