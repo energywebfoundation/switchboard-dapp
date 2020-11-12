@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTabGroup } from '@angular/material';
 import { NewApplicationComponent } from './new-application/new-application.component';
 import { NewRoleComponent } from './new-role/new-role.component';
 import { GovernanceListComponent } from './governance-list/governance-list.component';
+import { ListType } from 'src/app/shared/constants/shared-constants';
+import { IamService } from 'src/app/shared/services/iam.service';
 
 @Component({
   selector: 'app-applications',
@@ -11,16 +13,29 @@ import { GovernanceListComponent } from './governance-list/governance-list.compo
   styleUrls: ['./applications.component.scss']
 })
 export class ApplicationsComponent implements OnInit {
+  @ViewChild("governanceTabGroup", { static: false }) governanceTabGroup: MatTabGroup;
   @ViewChild('listOrg', undefined ) listOrg: GovernanceListComponent;
   @ViewChild('listApp', undefined ) listApp: GovernanceListComponent;
   @ViewChild('listRole', undefined ) listRole: GovernanceListComponent;
 
   isAppShown = false;
   isRoleShown = false;
-
   isFilterShown: boolean = false;
+  isIamEwcOwner = false;
 
-  constructor(public dialog: MatDialog) { }
+  showFilter = {
+    org: false,
+    app: false,
+    role: false
+  };
+  defaultFilterOptions = {
+    app: undefined,
+    role: undefined
+  };
+
+  ListType = ListType;
+
+  constructor(public dialog: MatDialog, private iamService: IamService) { }
 
   openNewOrgComponent(): void {
     const dialogRef = this.dialog.open(NewOrganizationComponent, {
@@ -68,36 +83,71 @@ export class ApplicationsComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.isIamEwcOwner = await this.iamService.iam.isOwner({
+      domain: 'iam.ewc'
+    });
   }
 
-  showMe(i: any) {
+  async showMe(i: any) {
     if (i.index === 1) {
+      console.log('Showing App List');
       if (this.isAppShown) {
-        this.listApp.getList();
+        await this.listApp.getList(this.defaultFilterOptions.app);
+        this.defaultFilterOptions.app = undefined;
       }
       else {
         this.isAppShown = true;
       }
     }
     else if (i.index === 2) {
+      console.log('Showing Role List');
       if (this.isRoleShown) {
-        this.listRole.getList();
+        await this.listRole.getList(this.defaultFilterOptions.role);
+        this.defaultFilterOptions.role = undefined;
       }
       else {
         this.isRoleShown = true;
       }
     }
-    else {
+    else if (i.index === 0) {
+      console.log('Showing Org List');
       this.listOrg.getList();
     }
   }
 
-  toggleFilter() {
-
-    this.isFilterShown = ! this.isFilterShown;
-    
+  toggleFilter(listType: string) {
+    switch (listType) {
+      case ListType.ORG:
+        this.showFilter.org = !this.showFilter.org;
+        break;
+      case ListType.APP:
+        this.showFilter.app = !this.showFilter.app;
+        break;
+      case ListType.ROLE:
+        this.showFilter.role = !this.showFilter.role;
+        break;
     }
+  }
+
+  updateFilter(filterOptions: any) {
+    console.log('updateFilter', filterOptions);
+    let tabIdx = 0;
+    switch (filterOptions.listType) {
+      case ListType.APP:
+        this.showFilter.app = true;
+        tabIdx = 1;
+        this.defaultFilterOptions.app = filterOptions;
+        break;
+      case ListType.ROLE:
+        this.showFilter.role = true;
+        tabIdx = 2;
+        this.defaultFilterOptions.role = filterOptions;
+        break;
+    }
+
+    this.governanceTabGroup.selectedIndex = tabIdx;
+  }
 }
 
 export interface OrganizationsLists {
@@ -108,12 +158,6 @@ export interface OrganizationsLists {
   actions: string;
 }
 
-const ORGANIZATIONS_DATA: OrganizationsLists[] = [
-  {imageUrl: 'https://www.energyweb.org/wp-content/uploads/2019/04/logo-knockout.png', orgNameSpace: 'organization1 namespace', orgName: 'Organization Name 1', websiteURL: 'www.organizations1.com', actions: ''},
-  {imageUrl: 'https://www.energyweb.org/wp-content/uploads/2019/04/logo-knockout.png', orgNameSpace: 'organization2 namespace', orgName: 'Organization Name 2', websiteURL: 'www.organizations2.com', actions: ''},
-  {imageUrl: 'https://www.energyweb.org/wp-content/uploads/2019/04/logo-knockout.png', orgNameSpace: 'organization3 namespace', orgName: 'Organization Name 3', websiteURL: 'www.organizations3.com', actions: ''},
-];
-
 export interface EnrollmentRoles {
   creationDate: string;
   roleType: string;
@@ -121,10 +165,3 @@ export interface EnrollmentRoles {
   ensName: string;
   actions: string;
 }
-
-const ROLE_DATA: EnrollmentRoles[] = [
-  {creationDate: '01/28/2020', roleType: 'Custom Role', roleName: 'Device Owner', ensName: 'device.roles.switchboard.ewc', actions: ''},
-  {creationDate: '02/01/2020', roleType: 'Custom Role', roleName: 'Trader', ensName: 'trader.roles.switchboard.ewc', actions: ''},
-  {creationDate: '03/16/2020', roleType: 'Custome Role', roleName: 'Admin', ensName: 'admin.roles.switchboard.ewc', actions: ''},
-
-];
