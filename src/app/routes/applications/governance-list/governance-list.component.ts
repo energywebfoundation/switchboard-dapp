@@ -1,7 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
+import { ListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -16,12 +18,6 @@ const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
 
-export const ListType = {
-  ORG: 'org',
-  APP: 'app',
-  ROLE: 'role'
-};
-
 @Component({
   selector: 'app-governance-list',
   templateUrl: './governance-list.component.html',
@@ -29,19 +25,32 @@ export const ListType = {
 })
 export class GovernanceListComponent implements OnInit {
   @Input('list-type') listType: string;
+  @Input('isFilterShown') isFilterShown: boolean;
+  @Input() defaultFilterOptions: any;
+  @Output() updateFilter = new EventEmitter<any>();
 
   ListType        = ListType;
   RoleType        = RoleType;
   dataSource      = [];
+  origDatasource  = [];
   displayedColumns: string[];
   listTypeLabel   : string;
   ensType         : any;
+
+  filterForm      : FormGroup;
   
   constructor(private loadingService: LoadingService,
       private iamService: IamService,
       private dialog: MatDialog,
+      private fb: FormBuilder,
       private toastr: ToastrService
-    ) { }
+    ) { 
+      this.filterForm = fb.group({
+        organization: '',
+        application: '',
+        role: ''
+      });
+    }
 
   async ngOnInit() {
     console.log('listType', this.listType);
@@ -63,17 +72,29 @@ export class GovernanceListComponent implements OnInit {
         break;
     }
 
-    await this.getList();
+    await this.getList(this.defaultFilterOptions);
   }
 
-  public async getList() {
+  public async getList(filterOptions?: any) {
     this.loadingService.show();
     const $getOrgList = await this.iamService.iam.getENSTypesByOwner({
       type: this.ensType,
       owner: this.iamService.accountAddress
     });
 
-    this.dataSource = $getOrgList;
+    this.origDatasource = $getOrgList;
+
+    // Setup Filter
+    if (filterOptions) {
+      this.filterForm.patchValue({ 
+        organization: filterOptions.organization || '',
+        application: filterOptions.application || '',
+        role: ''
+      });
+      console.log('setting up filter', this.filterForm.value);
+    }
+    this.filter();
+
     console.log($getOrgList);
     this.loadingService.hide();
   }
@@ -88,6 +109,36 @@ export class GovernanceListComponent implements OnInit {
       },
       maxWidth: '100%',
       disableClose: true
+    });
+  }
+
+  viewApps(type: string, data: any) {
+    this.updateFilter.emit({
+      listType: ListType.APP,
+      organization: data.namespace.split('.iam.ewc')[0]
+    });
+  }
+
+  viewRoles(type: string, data: any) {
+    let org = undefined;
+    let app = undefined;
+
+    if (type === ListType.ORG) {
+      org = data.namespace.split('.iam.ewc')[0];
+    }
+    else {
+      let arr = data.namespace.split('.iam.ewc')[0].split('.');
+      org = arr[arr.length - 1];
+    }
+
+    if (type === ListType.APP) {
+      app = data.namespace.split(`.${ENSNamespaceTypes.Application}.`)[0];
+    }
+
+    this.updateFilter.emit({
+      listType: ListType.ROLE,
+      organization: org,
+      application: app
     });
   }
 
@@ -233,5 +284,53 @@ export class GovernanceListComponent implements OnInit {
     finally {
       this.loadingService.hide();
     }
+  }
+
+  filter() {
+    let tmpData = JSON.parse(JSON.stringify(this.origDatasource));
+    
+    // Trim Filters
+    this.filterForm.get('organization').setValue(this.filterForm.value.organization.trim());
+    this.filterForm.get('application').setValue(this.filterForm.value.application.trim());
+    this.filterForm.get('role').setValue(this.filterForm.value.role.trim());
+
+    // Filter By Org
+    if (this.filterForm.value.organization) {
+      tmpData = tmpData.filter((item: any) => {
+        let arr = item.namespace.split('.iam.ewc');
+        arr = arr[0].split('.');
+        return (arr[arr.length - 1].toUpperCase().indexOf(this.filterForm.value.organization.toUpperCase()) >= 0);
+      });
+    }
+
+    // Filter By App
+    if (this.filterForm.value.application) {
+      tmpData = tmpData.filter((item: any) => {
+        let arr = item.namespace.split(`.${ENSNamespaceTypes.Application}.`);
+        arr = arr[0].split('.');
+        return (arr[arr.length - 1].toUpperCase().indexOf(this.filterForm.value.application.toUpperCase()) >= 0);
+      });
+    }
+
+    // Filter By Role
+    /* if (this.filterForm.value.role) {
+      tmpData = tmpData.filter((item: any) => {
+        let arr = item.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
+        arr = arr[0].split('.');
+        return (arr[arr.length - 1].toUpperCase().indexOf(this.filterForm.value.role.toUpperCase()) >= 0);
+      });
+    } */
+
+    this.dataSource = tmpData;
+  }
+
+  resetFilter() {
+    this.filterForm.patchValue({
+      organization: '',
+      application: '',
+      role: ''
+    });
+
+    this.dataSource = JSON.parse(JSON.stringify(this.origDatasource));
   }
 }
