@@ -330,7 +330,5 @@ export class GovernanceListComponent implements OnInit {
       application: '',
       role: ''
     });
-
-    this.dataSource = JSON.parse(JSON.stringify(this.origDatasource));
   }
 }
