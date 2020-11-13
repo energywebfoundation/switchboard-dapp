@@ -1,0 +1,72 @@
+<div>
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex align-items-center justify-content-center w-100">
+      <form class="w-50">
+        <mat-form-field class="md-search" appearance="outline">
+          <input type="text" placeholder="Search" aria-label="Number" matInput [formControl]="myControl"
+            [matAutocomplete]="auto">
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+  <div>
+    <div class="d-flex justify-content-start">Filter</div>
+  </div>
+
+  <div>
+    <mat-grid-list cols="5" rowHeight="2:1">
+      <mat-grid-tile>
+        <div class="grid-item">
+          <div>
+            <img class="grid-image" src="">
+            <h4>Title</h4>
+            <p>Description</p>
+          </div>
+        </div>
+
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="grid-item">
+          <div>
+            <img class="grid-image" src="">
+            <h4>Title</h4>
+            <p>Description</p>
+          </div>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="grid-item">
+          <div>
+            <img class="grid-image" src="">
+            <h4>Title</h4>
+            <p>Description</p>
+          </div>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="grid-item">
+          <div>
+            <img class="grid-image" src="#">
+            <h4>Title</h4>
+            <p>Description</p>
+          </div>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="grid-item">
+          <div>
+            <img class="grid-image" src="">
+            <h4>Title</h4>
+            <p>Description</p>
+          </div>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</div>
