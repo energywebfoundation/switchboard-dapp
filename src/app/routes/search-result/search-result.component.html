@@ -4,9 +4,7 @@
       <mat-form-field class="md-search" appearance="outline">
         <input type="text" placeholder="Search" aria-label="Number" matInput [matAutocomplete]="auto">
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-            {{option}}
-          </mat-option>
+          <mat-option></mat-option>
         </mat-autocomplete>
         <button mat-button matSuffix mat-icon-button>
           <mat-icon>search</mat-icon>
