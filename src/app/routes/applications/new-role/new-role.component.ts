@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MatStepper, MatTableDataSource, MAT_DIALOG_DAT
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { ListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -108,12 +109,27 @@ export class NewRoleComponent implements OnInit {
       this.issuerList = [];
       this.issuerList.push(this.iamService.iam.getDid());
 
-      if (data && data.viewType && data.origData) {
+      if (data && data.viewType) {
         this.viewType = data.viewType;
-        this.origData = data.origData;
   
-        if (this.viewType === ViewType.UPDATE) {
+        if (this.viewType === ViewType.UPDATE && data.origData) {
+          this.origData = data.origData;
           this.TOASTR_HEADER = 'Update Role';
+        }
+        else if (this.viewType === ViewType.NEW && data.namespace) {
+          let tmp = {
+            parentNamespace: data.namespace,
+            roleType: undefined
+          };
+
+          if (data.listType === ListType.ORG) {
+            tmp.roleType = RoleType.ORG;
+          }
+          else if (data.listType === ListType.APP) {
+            tmp.roleType = RoleType.APP;
+          }
+
+          this.roleForm.patchValue(tmp);
         }
   
         this.initFormData();

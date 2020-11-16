@@ -261,6 +261,43 @@ export class GovernanceListComponent implements OnInit {
     }
   }
 
+  async newApp(roleDefinition: any) {
+    const dialogRef = this.dialog.open(NewApplicationComponent, {
+      width: '600px',data:{
+        viewType: ViewType.NEW,
+        organizationNamespace: roleDefinition.namespace
+      },
+      maxWidth: '100%',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(async (res: any) => {
+      if (res) {
+        // Redirect to Application List
+        this.viewApps(ListType.ORG, roleDefinition);
+      }
+    });
+  }
+
+  async newRole(listType: string, roleDefinition: any) {
+    const dialogRef = this.dialog.open(NewRoleComponent, {
+      width: '600px',data:{
+        viewType: ViewType.NEW,
+        namespace: roleDefinition.namespace,
+        listType: listType
+      },
+      maxWidth: '100%',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(async (res: any) => {
+      if (res) {
+        // Redirect to Role List
+        this.viewRoles(listType, roleDefinition);
+      }
+    });
+  }
+
   private async getRemovalSteps(listType: string, roleDefinition: any) {
     this.loadingService.show();
     try {
@@ -311,15 +348,6 @@ export class GovernanceListComponent implements OnInit {
         return (arr[arr.length - 1].toUpperCase().indexOf(this.filterForm.value.application.toUpperCase()) >= 0);
       });
     }
-
-    // Filter By Role
-    /* if (this.filterForm.value.role) {
-      tmpData = tmpData.filter((item: any) => {
-        let arr = item.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
-        arr = arr[0].split('.');
-        return (arr[arr.length - 1].toUpperCase().indexOf(this.filterForm.value.role.toUpperCase()) >= 0);
-      });
-    } */
 
     this.dataSource = tmpData;
   }

@@ -48,13 +48,17 @@ export class NewApplicationComponent implements OnInit {
         })
       });
 
-      if (data && data.viewType && data.origData) {
+      if (data && data.viewType) {
         console.log('origData', this.origData);
         this.viewType = data.viewType;
-        this.origData = data.origData;
+        
   
-        if (this.viewType === ViewType.UPDATE) {
+        if (this.viewType === ViewType.UPDATE && data.origData) {
+          this.origData = data.origData;
           this.TOASTR_HEADER = 'Update Application';
+        }
+        else if (this.viewType === ViewType.NEW && data.organizationNamespace) {
+          this.appForm.patchValue({ orgNamespace: data.organizationNamespace });
         }
   
         this.initFormData();
