@@ -15,8 +15,12 @@ export const routes = [
             { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
             { path: 'profile', loadChildren: './profile/profile.module#ProfileModule' },
             { path: 'governance', loadChildren: './applications/applications.module#ApplicationsModule' },
-            { path: 'enrolment', loadChildren: './enrolment/enrolment.module#EnrolmentModule' }
+            { path: 'enrolment', loadChildren: './enrolment/enrolment.module#EnrolmentModule' },
+            
         ]
+    },
+    { 
+        path: 'search-result', loadChildren: './search-result/search-result.module#SearchResultModule' 
     },
     {
         path: 'enrol',
