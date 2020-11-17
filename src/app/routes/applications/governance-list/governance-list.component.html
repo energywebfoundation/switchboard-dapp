@@ -83,22 +83,22 @@
 
         <!-- View Applications -->
         <button mat-icon-button matTooltip="View Applications" (click)="viewApps(listType, element)" *ngIf="listType === ListType.ORG">
-          <mat-icon class="btn-color-primary">apps</mat-icon>
+          <mat-icon class="btn-color-primary" svgIcon="view-application-icon"></mat-icon>
         </button>
 
         <!-- View Roles -->
         <button mat-icon-button matTooltip="View Roles" (click)="viewRoles(listType, element)" *ngIf="listType !== ListType.ROLE">
-          <mat-icon class="btn-color-primary">supervised_user_circle</mat-icon>
+          <mat-icon class="btn-color-primary" svgIcon="view-role-icon"></mat-icon>
         </button>
 
         <!-- Create New Application -->
         <button mat-icon-button matTooltip="Create Application" (click)="newApp(element)" *ngIf="listType === ListType.ORG">
-          <mat-icon class="btn-color-primary">add</mat-icon>
+          <mat-icon class="btn-color-primary" svgIcon="add-application-icon"></mat-icon>
         </button>
 
         <!-- Create New Role -->
         <button mat-icon-button matTooltip="Create Role" (click)="newRole(listType, element)" *ngIf="listType !== ListType.ROLE">
-          <mat-icon class="btn-color-primary">person_add</mat-icon>
+          <mat-icon class="btn-color-primary" svgIcon="add-role-icon"></mat-icon>
         </button>
 
         <!-- Edit Details -->
@@ -109,12 +109,12 @@
         <!-- Copy Role to Clipboard -->
         <button mat-icon-button matTooltip="Copy Role Enrolment URL" *ngIf="element?.definition?.roleType === RoleType.APP" 
             (click)="copyToClipboard(element?.definition?.roleType, element)">
-          <mat-icon class="btn-color-primary">content_copy</mat-icon>
+          <mat-icon class="btn-color-primary" svgIcon="copy-url-icon"></mat-icon>
         </button>
 
         <!-- Transfer Ownership -->
         <button mat-icon-button matTooltip="Transfer Ownership" (click)="transferOwnership(listType, element)" *ngIf="listType === ListType.ORG">
-          <mat-icon class="btn-color-primary">directions</mat-icon>
+          <mat-icon class="btn-color-primary" svgIcon="transfer-ownership-icon"></mat-icon>
         </button>
 
         <!-- Remove -->

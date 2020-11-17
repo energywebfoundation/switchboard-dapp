@@ -103,6 +103,47 @@ export class AppComponent implements OnInit {
             "approved-claim-icon",
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/approved-claim-icon.svg")
         );
+        this.matIconRegistry.addSvgIcon(
+            "view-application-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/view-application-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "view-role-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/view-role-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "view-role-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/view-role-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "view-organization-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/view-organization-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "transfer-ownership-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/transfer-ownership-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "copy-url-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/copy-url-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "add-application-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/add-application-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "add-role-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/add-role-icon.svg")
+        );
+        // for search list
+        this.matIconRegistry.addSvgIcon(
+            "application-list-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/application-list-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "organization-list-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/organization-list-icon.svg")
+        );
     }
 
     ngOnInit() {
