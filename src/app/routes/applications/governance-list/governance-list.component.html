@@ -91,6 +91,16 @@
           <mat-icon class="btn-color-primary">supervised_user_circle</mat-icon>
         </button>
 
+        <!-- Create New Application -->
+        <button mat-icon-button matTooltip="Create Application" (click)="newApp(element)" *ngIf="listType === ListType.ORG">
+          <mat-icon class="btn-color-primary">add</mat-icon>
+        </button>
+
+        <!-- Create New Role -->
+        <button mat-icon-button matTooltip="Create Role" (click)="newRole(listType, element)" *ngIf="listType !== ListType.ROLE">
+          <mat-icon class="btn-color-primary">person_add</mat-icon>
+        </button>
+
         <!-- Edit Details -->
         <button mat-icon-button matTooltip="Edit" (click)="edit(listType, element)">
           <mat-icon class="btn-color-primary">edit</mat-icon>
