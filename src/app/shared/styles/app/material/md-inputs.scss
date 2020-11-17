@@ -229,7 +229,11 @@ fieldset[disabled] .mda-radio input+em:before {
 
 .mat-option.mat-active {
   color: #FFF;
-  background: rgba(0,0,0,.04);
+  background: #2A2837;
+}
+
+.mat-autocomplete-panel {
+  background: #2A2837;
 }
 
 .mat-select-value {

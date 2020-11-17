@@ -21,9 +21,8 @@
                        matInput
                        [matAutocomplete]="auto">
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                    {{option}}
-                  </mat-option>
+                  <mat-option>Organization</mat-option>
+                  <mat-option>Application</mat-option>
                 </mat-autocomplete>
                 <button mat-button matSuffix mat-icon-button>
                   <mat-icon>search</mat-icon>
@@ -34,7 +33,7 @@
       </div>
     </div>
     <div class="col-6 col-md-3 col-lg-2 col-lg-offset-1">
-      <div class="card card-icon-disabled d-flex justify-content-center align-items-center py-md-2 mb-3">
+      <div class="card card-icon-disabled d-flex justify-content-center align-items-center py-3 mb-3">
         <div class="position-fixed d-flex align-items-center text-center">
           <h3 class="color-white opacity-50">Coming Soon</h3>
         </div>
@@ -44,14 +43,14 @@
       </div>
     </div>
     <div class="col-6 col-md-3 col-lg-2">
-      <div class="card card-icon d-flex justify-content-center align-items-center py-md-2 mb-3" (click)="goToGovernance()">
+      <div class="card card-icon d-flex justify-content-center align-items-center py-3 mb-3" (click)="goToGovernance()">
         <img class="img-dashboard mt-4 m-3 m-lg-4" src="../assets/img/icons/governance-icon.png"
                 alt="assets image">
         <h4 class="color-white mt-3 mb-4 my-lg-4">Governance</h4>        
       </div>
     </div>
     <div class="col-6 col-md-3 col-lg-2">
-      <div class="card card-icon-disabled d-flex justify-content-center align-items-center py-md-2 mb-3">
+      <div class="card card-icon-disabled d-flex justify-content-center align-items-center py-3 mb-3">
         <div class="position-fixed d-flex align-items-center text-center">
           <h3 class="color-white opacity-50">Coming Soon</h3>
         </div>
@@ -61,13 +60,13 @@
       </div>
     </div>
     <div class="col-6 col-md-3 col-lg-2">
-      <div class="card card-icon d-flex justify-content-center align-items-center py-md-2 mb-3" (click)="goToEnrolment()">
+      <div class="card card-icon d-flex justify-content-center align-items-center py-3 mb-3" (click)="goToEnrolment()">
         <img class="img-dashboard mt-4 m-3 m-lg-4" src="../assets/img/icons/enrollment-icon.png" alt="assets image">
         <h4 class="color-white mt-3 mb-4 my-lg-4">Enrollments</h4>         
       </div>
     </div>
     <div class="col-6 col-md-3 col-lg-2">
-      <div class="card card-icon-disabled d-flex justify-content-center align-items-center py-md-2 mb-3" alt="applications image">
+      <div class="card card-icon-disabled d-flex justify-content-center align-items-center py-3 mb-3" alt="applications image">
         <div class="position-fixed d-flex align-items-center text-center">
           <h3 class="color-white opacity-50">Coming Soon</h3>
         </div>
