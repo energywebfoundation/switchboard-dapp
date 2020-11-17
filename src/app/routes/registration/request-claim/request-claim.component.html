@@ -3,9 +3,11 @@
     class="header-enroll bg-color d-flex justify-content-center justify-content-between position-fixed pl-0 pl-lg-4 py-2 w-100"
     [ngStyle]="bgColor">
     <img src="{{ appDetails?.logoUrl }}" height="48px" *ngIf="appDetails?.logoUrl" />
-    <span>
-      <button class="color-link px-4" mat-menu-item (click)="logout()" *ngIf="isLoggedIn">Logout</button>
-    </span>
+    <div>
+      <button mat-button class="btn btn-small md-enroll px-4 mr-2" (click)="logout()" *ngIf="isLoggedIn">
+        <div [ngStyle]="txtColor">Logout</div>
+      </button>
+    </div>
   </div>
   <ngx-spinner [fullScreen]="false" type="ball-spin-fade" size="medium" bdColor="rgba(24,20,36,0.8)" bdOpacity=0.9
     color="#A567FF">
