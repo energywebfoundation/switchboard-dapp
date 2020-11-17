@@ -51,8 +51,12 @@ tr.mat-row {
     background-color: #1E1C29;
 }
 
+.mat-paginator {
+    background: transparent !important;
+}
+
 .mat-paginator-outer-container {
-    background-color: #13172f;
+    background-color: transparent;
 }
 
 .mat-paginator-range-actions {

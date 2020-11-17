@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTooltipModule, MatSelectModule, MatCheckboxModule, MatStepperModule } from '@angular/material';
+import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTooltipModule, MatSelectModule, MatCheckboxModule, MatStepperModule, MatAutocompleteModule } from '@angular/material';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule, Routes } from '@angular/router';
@@ -44,6 +44,7 @@ const routes: Routes = [
         MatTableModule,
         MatDialogModule,
         MatFormFieldModule,
+        MatAutocompleteModule,
         MatDatepickerModule,
         NgxMaterialTimepickerModule,
         WidgetsModule,

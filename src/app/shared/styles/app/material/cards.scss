@@ -95,9 +95,51 @@ ul {
   border: 1px solid rgba(255,255,255,0.05);
 }
 
+.img-container {
+  background-color: #201F28 !important;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.img-wrapper{
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  background-position: center center !important;
+  width: 100%;
+  height: 150px;
+}
+
 @include media-breakpoint-down(sm) {
   .card-enroll {
     width: 93%; 
+  }
+
+  .search-field {
+    width: 100% !important;
+  }
+}
+
+.search-field {
+  width: 50%;
+}
+
+.card-search-body {
+  background-color: #363443;
+  color: #FFF;
+  border-radius: 5px;
+
+  h4 {
+      font-weight: 600;
+      font-size: 16px !important;
+  }
+
+  h5 {
+      font-size: 12px !important;
+  }
+
+  p {
+      font-size: 12px !important;
+      opacity: 0.5;
   }
 }
 
