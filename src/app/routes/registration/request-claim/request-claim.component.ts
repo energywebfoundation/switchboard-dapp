@@ -221,6 +221,9 @@ export class RequestClaimComponent implements OnInit {
 
         // Setup User Data
         await this.iamService.setupUser();
+
+        // Set Loggedin Flag to true
+        this.isLoggedIn = true;
       }
     }
     else {
