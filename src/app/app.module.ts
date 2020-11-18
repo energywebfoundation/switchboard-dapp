@@ -14,6 +14,8 @@ import { ChartsModule } from '@progress/kendo-angular-charts';
 import 'hammerjs';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { ToastrModule } from 'ngx-toastr';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -41,7 +43,8 @@ export function createTranslateLoader(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
-        ChartsModule        
+        ChartsModule,
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })        
     ],
     providers: [
     ],
