@@ -16,11 +16,8 @@ export const routes = [
             { path: 'profile', loadChildren: './profile/profile.module#ProfileModule' },
             { path: 'governance', loadChildren: './applications/applications.module#ApplicationsModule' },
             { path: 'enrolment', loadChildren: './enrolment/enrolment.module#EnrolmentModule' },
-            
+            { path: 'search-result', loadChildren: './search-result/search-result.module#SearchResultModule' }
         ]
-    },
-    { 
-        path: 'search-result', loadChildren: './search-result/search-result.module#SearchResultModule' 
     },
     {
         path: 'enrol',
