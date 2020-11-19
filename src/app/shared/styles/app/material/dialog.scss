@@ -257,6 +257,12 @@ mat-checkbox {
     font-weight: 500;
     letter-spacing: 0.2px !important;
     opacity: 1;
+    font-family: 'Rajdhani', sans-serif !important;
+}
+
+.mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
+    border: 1px solid #a467ff !important;
+    color: #a467ff !important;
 }
 
 .mat-step-header .mat-step-icon-state-edit {
@@ -284,6 +290,8 @@ mat-checkbox {
 .mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
     color: #9080BA; 
     font-size: 16px !important;
+    font-family: 'Rajdhani', sans-serif !important;
+    font-weight: 500;
 }
 
 .mat-horizontal-stepper-header::after, .mat-horizontal-stepper-header::before, .mat-stepper-horizontal-line {
