@@ -5,7 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { HttpClientModule } from '@angular/common/http';
-import { MatPaginatorModule, MatSelectModule, MatTooltipModule, MatIconModule, MatInputModule, MatTableModule, MatDialogModule, MatFormFieldModule, MatAutocompleteModule } from '@angular/material';
+import { MatPaginatorModule, MatSelectModule, MatTooltipModule, MatIconModule, MatInputModule, MatTableModule, MatDialogModule, MatFormFieldModule, MatAutocompleteModule, MatSidenavModule } from '@angular/material';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
 const routes: Routes = [
@@ -31,6 +31,7 @@ const routes: Routes = [
     MatDialogModule,
     MatFormFieldModule,
     MatAutocompleteModule,
+    MatSidenavModule,
     NgxSpinnerModule,
   ]
 })
