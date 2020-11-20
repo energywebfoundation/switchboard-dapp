@@ -134,7 +134,7 @@ export class EnrolmentListComponent implements OnInit {
     console.log('claimToSync', element);
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      maxHeight: '180px',
+      maxHeight: '195px',
       data: {
         header: TOASTR_HEADER,
         message: 'This role will be added to your DID Document. Do you wish to continue?'

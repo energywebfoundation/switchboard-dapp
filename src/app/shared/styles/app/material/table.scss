@@ -147,6 +147,25 @@ mat-paginator {
     height: 32px;
 }
 
+.btn-action-1 {
+    position: relative;
+    top: -1px;
+}
+
+.btn-action-3 {
+    position: relative;
+    top: -3px;
+}
+
+@include media-breakpoint-down(sm) {
+
+    .img-logo-list {
+        width: auto !important;
+        height: 72px;
+    }
+
+}
+
 @media screen and (max-width: 960px) {
     .mat-table {
       border: 0;
@@ -191,7 +210,6 @@ mat-paginator {
         border-bottom: 1px solid #2b2a3a !important;
         flex-direction: column;
         font-size: 1em;
-        font-weight: bold;
         padding-left: 10px !important;
         word-break: break-all;
         margin: 0 8px;
@@ -203,10 +221,11 @@ mat-paginator {
       content: attr(data-label);
       float: left;
       text-transform: capitalize;
-      font-weight: normal;
+      font-weight: 500;
       color: #888790 !important;
       padding-right: 8px;    
       font-size: 14px;
+      font-family: 'Rajdhani', sans-serif;
     }
     .mat-table td.mat-cell:last-child {
       border-bottom: 0 !important;

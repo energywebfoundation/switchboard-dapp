@@ -228,7 +228,7 @@ export class GovernanceListComponent implements OnInit {
     // Make sure that user confirms the removal of this namespace
     let isConfirmed = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      maxHeight: '180px',
+      maxHeight: '195px',
       data: {
         header: 'Remove ' + (listType === ListType.APP ? 'Application' : 'Organization'),
         message: 'Do you wish to continue?'
