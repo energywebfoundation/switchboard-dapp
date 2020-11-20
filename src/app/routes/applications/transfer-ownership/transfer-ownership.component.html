@@ -7,7 +7,7 @@
 <div mat-dialog-content>
   <!-- START: New Owner Form -->
   <ng-container *ngIf="!isProcessing">
-    <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3">
+    <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3">
       <mat-icon>info</mat-icon><span class="pb-2">NAMESPACE: {{ namespace }}</span>
     </div>
     <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
@@ -48,7 +48,7 @@
         </ng-template>
         <mat-step [completed]="false" *ngFor="let step of mySteps; let i = index;">
           <ng-template matStepLabel>Transfer Ownership</ng-template>
-          <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+          <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
             <mat-icon>info</mat-icon><span class="pb-2">{{ step.info }}</span>
           </div>
           <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">

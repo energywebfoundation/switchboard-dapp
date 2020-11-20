@@ -15,7 +15,7 @@
         <mat-step [completed]="false" *ngIf="viewType !== ViewType.UPDATE">
           <form [formGroup]="appForm">
             <ng-template matStepLabel>Set Organization Namespace</ng-template>
-            <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon>info</mat-icon><span class="pb-2">Make sure you are the owner of this organization namespace.</span>
             </div>
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
@@ -40,7 +40,7 @@
         <mat-step [completed]="false">
           <form [formGroup]="appForm">
             <ng-template matStepLabel>{{ viewType === ViewType.UPDATE ? 'Update' : 'New' }} Application</ng-template>
-            <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon>info</mat-icon><span class="pb-2">ORGANIZATION: {{ appForm.value.orgNamespace }}</span>
             </div>
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
@@ -116,7 +116,7 @@
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
               <div class="d-flex justify-content-center">
                 <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
-                  <span class="opacity-50" *ngIf="!appForm?.value?.data?.logoUrl">No image</span>
+                  <span class="opacity-50 px-3" *ngIf="!appForm?.value?.data?.logoUrl">No image</span>
                   <img class="img-logo" *ngIf="appForm?.value?.data?.logoUrl" src="{{ appForm?.value?.data?.logoUrl }}"/>
                 </div>
               </div>
@@ -188,7 +188,7 @@
         </mat-step>
         <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
           <ng-template matStepLabel>Creating Role Sub-domain</ng-template>
-          <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+          <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
             <mat-icon>info</mat-icon><span class="pb-2">Creating below sub-domain: <br>{{ ENSPrefixes.Roles }}.{{ appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace }}</span>
           </div>
           <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">

@@ -30,7 +30,7 @@
                 </div>
               </div>
             </div>
-            <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3" *ngIf="roleForm?.value?.roleType">
+            <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3" *ngIf="roleForm?.value?.roleType">
               <mat-icon>info</mat-icon><span class="pb-2">Make sure you are the owner of this {{ (roleForm.value.roleType === RoleType.ORG) ? 'organization' : 'application' }} namespace.</span>
             </div>
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" *ngIf="roleForm?.value?.roleType">
@@ -55,7 +55,7 @@
         <mat-step [completed]="false" *ngIf="viewType !== ViewType.UPDATE">
           <form [formGroup]="roleForm">
             <ng-template matStepLabel>New Role</ng-template>
-            <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon>info</mat-icon><span class="pb-2">{{ (roleForm.value.roleType === RoleType.ORG) ? 'ORGANIZATION' : 'APPLICATION' }}: {{ roleForm.value.parentNamespace }}</span>
             </div>
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">

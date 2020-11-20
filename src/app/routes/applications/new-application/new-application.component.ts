@@ -402,7 +402,7 @@ export class NewApplicationComponent implements OnInit {
   private async confirm(confirmationMsg: string) {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      maxHeight: '180px',
+      maxHeight: '195px',
       data: {
         header: this.TOASTR_HEADER,
         message: confirmationMsg
