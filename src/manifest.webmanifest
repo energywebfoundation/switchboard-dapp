@@ -1,6 +1,6 @@
 {
-  "name": "Energy Web - Switchboard",
-  "short_name": "Energy Web - Switchboard",
+  "name": "Switchboard",
+  "short_name": "Switchboard",
   "theme_color": "#A566FF",
   "background_color": "#181524",
   "display": "standalone",
