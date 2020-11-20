@@ -15,6 +15,7 @@ import { GovernanceListComponent } from './governance-list/governance-list.compo
 import { GovernanceViewComponent } from './governance-view/governance-view.component';
 import { TransferOwnershipComponent } from './transfer-ownership/transfer-ownership.component';
 import { RemoveOrgAppComponent } from './remove-org-app/remove-org-app.component';
+import { GovernanceDetailsModule } from './governance-view/governance-details/governance-details.module';
 
 const routes: Routes = [
   { path: '', component: ApplicationsComponent }
@@ -37,7 +38,8 @@ const routes: Routes = [
     NgxSpinnerModule,
     MatDialogModule,
     NgxSelectModule,
-    MatInputModule
+    MatInputModule,
+    GovernanceDetailsModule
   ],
   entryComponents: [
     NewOrganizationComponent, 

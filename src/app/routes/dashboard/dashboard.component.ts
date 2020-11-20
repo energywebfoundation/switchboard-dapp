@@ -157,12 +157,7 @@ export class DashboardComponent implements OnInit {
   }
 
   search(namespace?: string) {
-    console.log('searched namespace', namespace);
-    if (namespace) {
-
-    }
-
-    this.route.navigate(['search-result'], { queryParams: { keyword: this.searchTxtFieldValue } });
+    this.route.navigate(['search-result'], { queryParams: { keyword: this.searchTxtFieldValue, namespace: namespace } });
   }
 
   onSelectedItem(event: any) {

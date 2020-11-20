@@ -1,4 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { ENSNamespaceTypes } from 'iam-client-lib';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
+import { ListType } from 'src/app/shared/constants/shared-constants';
+import { IamService } from 'src/app/shared/services/iam.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
+import { GovernanceDetailsComponent } from '../applications/governance-view/governance-details/governance-details.component';
 
 @Component({
   selector: 'app-search-result',
@@ -6,17 +15,172 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./search-result.component.scss']
 })
 export class SearchResultComponent implements OnInit {
-  screenWidth: number;
+  @ViewChild('detailView', undefined) detailView: GovernanceDetailsComponent;
 
-  constructor() {
-    this.screenWidth = window.innerWidth;
-    window.onresize = () => {
-    // set screenWidth on screen size change
-    this.screenWidth = window.innerWidth;
-  };
-   }
+  screenWidth: number;
+  opened = false;
+  data: any;
+  
+  private _searchList: any[];
+  filteredOptions: Observable<any[]>;
+  searchForm: FormGroup;
+  searchTxtFieldValue: string;
+
+  constructor(private activeRoute: ActivatedRoute,
+      private loadingService: LoadingService,
+      private fb: FormBuilder,
+      private iamService: IamService) {
+    this._manageScreenWidth();
+    this._initList();
+  }
 
   ngOnInit() {
   }
 
+  private _initList() {
+    this.loadingService.show();
+    // Initialize Search Field and Options
+    this.searchForm = this.fb.group({
+      searchTxt: new FormControl('')
+    });
+    this.filteredOptions = this.searchForm.get('searchTxt')
+      .valueChanges.pipe(
+        startWith(undefined),
+        map(value => this._filterOrgsAndApps(value))
+      );
+
+    this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
+      // Retrieve List - Orgs & Apps
+      await this._getOrgsAndApps();
+
+      if (queryParams.keyword) {
+        this.searchForm.get('searchTxt').setValue(queryParams.keyword);
+      }
+
+      if (queryParams.namespace) {
+        this._initView(queryParams.namespace);
+      }
+      
+      this.loadingService.hide();
+    });
+  }
+
+  private _manageScreenWidth() {
+    this.screenWidth = window.innerWidth;
+    window.onresize = () => {
+      // set screenWidth on screen size change
+      this.screenWidth = window.innerWidth;
+    };
+
+    // Init 
+    if (this.screenWidth > 840) {
+      this.opened = true;
+    }
+  }
+
+  private _initView(namespace: string) {
+    for (let i = 0; i < this._searchList.length; i++) {
+      if (this._searchList[i].namespace === namespace) {
+        this.data = { 
+          type: this._searchList[i].definition && this._searchList[i].definition.orgName ? ListType.ORG : ListType.APP,
+          definition: this._searchList[i] 
+        };
+        break;
+      }
+    }
+  }
+
+  private _filterOrgsAndApps(keyword: any): any[] {
+    let retVal = [];
+
+    if (keyword) {
+      let word = undefined;
+      if (!keyword.trim && keyword.name) {
+        word = keyword.name;
+      }
+      else {
+        word = keyword.trim();
+      }
+
+      if (word.length > 2) {
+        word = word.toLowerCase();
+        retVal = this._searchList.filter((item: any) => {
+          return item.namespace.toLowerCase().includes(word) ||
+            (item.definition.description && item.definition.description.toLowerCase().includes(word)) ||
+            (item.definition.orgName && item.definition.orgName.toLowerCase().includes(word)) ||
+            (item.definition.appName && item.definition.appName.toLowerCase().includes(word))
+        });
+      }
+    }
+
+    return retVal;
+  }
+
+  private async _getOrgsAndApps() {
+    let orgList = await this.iamService.iam.getENSTypesBySearchPhrase({
+      search: '',
+      type: ENSNamespaceTypes.Organization
+    });
+
+    let appList = await this.iamService.iam.getENSTypesBySearchPhrase({
+      search: '',
+      type: ENSNamespaceTypes.Application
+    });
+    this._searchList = [...orgList, ...appList];
+  }
+
+  private _updateData(data: any) {
+    if (data) {
+      this.data = { 
+        type: data.definition && data.definition.orgName ? ListType.ORG : ListType.APP,
+        definition: data
+      };
+      this.detailView.setData(this.data);
+    }
+    else {
+      this.data = data;
+    }
+  }
+
+  viewDetails(data: any, el: HTMLElement) {
+    console.log('view details', data);
+    this.opened = true;
+    this._updateData(data);
+
+    // Scroll Up
+    el.scrollIntoView(true);
+    let body = document.getElementsByTagName('app-header');
+    if (body.length) {
+      body[0].scrollTop -= 78;
+    }
+  }
+
+  displayFn(selected: any) {
+    return selected && selected.name ? selected.name : '';
+  }
+
+  search(namespace?: string) {
+    this._updateData(undefined);
+  }
+
+  onSelectedItem(event: any) {
+    console.log('onSelectedItem', event);
+    this.search(event.option.value.namespace);
+  }
+
+  updateSearchTxtFieldValue(event: any) {
+    if (typeof this.searchForm.value.searchTxt === 'string') {
+      this.searchTxtFieldValue = this.searchForm.value.searchTxt;
+    }
+    else { 
+      this.searchTxtFieldValue = this.searchForm.value.searchTxt.option.value.name;
+    }
+    this._updateData(undefined);
+  }
+
+  clearSearchTxt() {
+    this.searchTxtFieldValue = '';
+    this.searchForm.get('searchTxt').setValue('');
+    this._updateData(undefined);
+  }
 }

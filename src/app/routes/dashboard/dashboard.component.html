@@ -31,6 +31,8 @@
                     <ng-container *ngIf="item?.definition?.appName">
                       <mat-icon svgIcon="application-list-icon"></mat-icon> {{ item?.definition?.appName }}
                     </ng-container>
+                    {{ item?.namespace }}
+                    {{ item?.definition?.description?.substr(0, 25)}}
                   </mat-option>
                 </mat-autocomplete>
                 <button *ngIf="searchTxtFieldValue?.trim()?.length > 2" mat-button matSuffix mat-icon-button>
