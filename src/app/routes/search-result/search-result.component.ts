@@ -6,8 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./search-result.component.scss']
 })
 export class SearchResultComponent implements OnInit {
+  screenWidth: number;
 
-  constructor() { }
+  constructor() {
+    this.screenWidth = window.innerWidth;
+    window.onresize = () => {
+    // set screenWidth on screen size change
+    this.screenWidth = window.innerWidth;
+  };
+   }
 
   ngOnInit() {
   }
