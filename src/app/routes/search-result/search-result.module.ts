@@ -8,6 +8,7 @@ import { MatPaginatorModule, MatSelectModule, MatTooltipModule, MatIconModule, M
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { GovernanceDetailsModule } from '../applications/governance-view/governance-details/governance-details.module';
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 const routes: Routes = [
   { path: '', component: SearchResultComponent }
@@ -34,7 +35,8 @@ const routes: Routes = [
     MatAutocompleteModule,
     MatSidenavModule,
     NgxSpinnerModule,
-    GovernanceDetailsModule
+    GovernanceDetailsModule,
+    FlexLayoutModule
   ]
 })
 export class SearchResultModule { }

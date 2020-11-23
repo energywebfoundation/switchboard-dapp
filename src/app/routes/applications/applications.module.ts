@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgxSelectModule } from 'ngx-select-ex';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { MatCardModule, MatFormFieldModule, MatButtonModule, MatDividerModule, MatDialogModule, MatSelectModule, MatInputModule, MatProgressSpinnerModule } from '@angular/material';
+import { MatCardModule, MatFormFieldModule, MatButtonModule, MatDividerModule, MatDialogModule, MatSelectModule, MatInputModule, MatProgressSpinnerModule, MatExpansionModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { ApplicationsComponent } from './applications.component';
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
@@ -39,7 +39,8 @@ const routes: Routes = [
     MatDialogModule,
     NgxSelectModule,
     MatInputModule,
-    GovernanceDetailsModule
+    GovernanceDetailsModule,
+    MatExpansionModule
   ],
   entryComponents: [
     NewOrganizationComponent, 
