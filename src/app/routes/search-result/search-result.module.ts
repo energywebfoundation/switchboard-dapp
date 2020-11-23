@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { SearchResultComponent } from './search-result.component';
 import { Routes, RouterModule } from '@angular/router';
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { HttpClientModule } from '@angular/common/http';
-import { MatPaginatorModule, MatSelectModule, MatTooltipModule, MatIconModule, MatInputModule, MatTableModule, MatDialogModule, MatFormFieldModule, MatAutocompleteModule } from '@angular/material';
+import { MatPaginatorModule, MatSelectModule, MatTooltipModule, MatIconModule, MatInputModule, MatTableModule, MatDialogModule, MatFormFieldModule, MatAutocompleteModule, MatSidenavModule } from '@angular/material';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { GovernanceDetailsModule } from '../applications/governance-view/governance-details/governance-details.module';
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 const routes: Routes = [
   { path: '', component: SearchResultComponent }
@@ -15,7 +17,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [SearchResultComponent],
   imports: [
-    CommonModule,
+    SharedModule,
     RouterModule.forChild(routes), 
     RouterModule,
     HttpClientModule,
@@ -31,7 +33,10 @@ const routes: Routes = [
     MatDialogModule,
     MatFormFieldModule,
     MatAutocompleteModule,
+    MatSidenavModule,
     NgxSpinnerModule,
+    GovernanceDetailsModule,
+    FlexLayoutModule
   ]
 })
 export class SearchResultModule { }

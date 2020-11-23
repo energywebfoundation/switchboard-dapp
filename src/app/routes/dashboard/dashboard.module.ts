@@ -43,7 +43,6 @@ const routes: Routes = [
         MatInputModule,
         MatTableModule,
         MatDialogModule,
-        MatFormFieldModule,
         MatAutocompleteModule,
         MatDatepickerModule,
         NgxMaterialTimepickerModule,

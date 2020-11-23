@@ -109,9 +109,50 @@ ul {
   height: 150px;
 }
 
+.side-panel {
+  max-width: 300px;
+  overflow-x: hidden;
+}
+
+.side-panel-content {
+  max-width: 300px; 
+  width: 300px;
+}
+
+mat-drawer {
+  background-color: #242330 !important;
+}
+
+.mat-expansion-panel {
+  background: #353540;
+  color: #FFF;
+}
+.mat-expansion-panel-header-title, .mat-expansion-indicator::after {
+  color: #9081ba !important;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+}
+
+.mat-expansion-indicator::after {
+  position: relative;
+  top: -3px;
+
+}
+
+
 @include media-breakpoint-down(sm) {
   .card-enroll {
     width: 93%; 
+  }
+
+  .side-panel {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .side-panel-content {
+    max-width: auto; 
+    width: 100%;
   }
 
   .search-field {
@@ -303,7 +344,11 @@ ul {
         font-size: 26px !important;
       }
       .border-bottom-widget {
-        border-bottom: 1px solid #313766;
+        border-bottom: 1px solid #414152;
+      }
+
+      .border-bottom-list {
+        border-bottom: 1px solid #414152;
       }
 
       .f-16 {

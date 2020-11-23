@@ -13,20 +13,38 @@
             </div> 
           </div>
           <div class="d-flex align-items-center justify-content-center w-100">
-            <form class="search-field px-0 px-md-2 pb-0 py-md-2">
+            <form class="search-field px-0 px-md-2 pb-0 py-md-2" [formGroup]="searchForm">
               <mat-form-field class="md-search" appearance="outline">
                 <input type="text"
                        placeholder="Search"
                        aria-label="Number"
                        matInput
-                       [matAutocomplete]="auto">
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                  <mat-option>Organization</mat-option>
-                  <mat-option>Application</mat-option>
-                </mat-autocomplete>
-                <button mat-button matSuffix mat-icon-button>
-                  <mat-icon>search</mat-icon>
-                </button>
+                       formControlName="searchTxt"
+                       [matAutocomplete]="auto"
+                       (keyup.enter)="search()"
+                       (input)="updateSearchTxtFieldValue($event)">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelectedItem($event)">
+                  <mat-option *ngFor="let item of filteredOptions | async" [value]="item" class="d-flex align-items-start" style="height: 90px;">
+                    <ng-container *ngIf="item?.definition?.orgName">
+                      <mat-icon svgIcon="organization-list-icon"></mat-icon> <span class="search-title">{{ item?.definition?.orgName }}</span>
+                    </ng-container>
+                    <ng-container *ngIf="item?.definition?.appName">
+                      <mat-icon svgIcon="application-list-icon"></mat-icon> <span class="search-title">{{ item?.definition?.appName }}</span>
+                    </ng-container>
+                    <div class="search-preview d-flex flex-column">
+                      <span>{{ item?.namespace }}</span>
+                      <span class="opacity-50">{{ item?.definition?.description?.substr(0, 25)}}</span>
+                    </div>
+                  </mat-option>
+                </mat-autocomplete>                
+                  <div matSuffix class="d-flex" *ngIf="searchTxtFieldValue?.trim()?.length > 2">
+                    <button mat-icon-button (click)="clearSearchTxt()">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="search()">
+                      <mat-icon>search</mat-icon>
+                    </button>
+                  </div>
               </mat-form-field>
             </form>
             </div>
