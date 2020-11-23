@@ -160,6 +160,7 @@ export class SearchResultComponent implements OnInit {
   }
 
   search(namespace?: string) {
+    this.opened = false;
     this._updateData(undefined);
   }
 
