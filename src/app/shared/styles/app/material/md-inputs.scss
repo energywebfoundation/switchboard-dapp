@@ -136,12 +136,28 @@ mat-label {
 
 }
 
+.search-title {
+  font-size: 16px;
+  font-weight: 600 !important;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.search-preview {
+  line-height: 21px;
+  padding-left: 43px;
+  position: relative;
+  top: -12px;
+  .preview-namespace {
+    font-weight: 500 !important;
+    font-family: 'Source Sans Pro', sans-serif !important;
+  }
+}
+
 .md-search.mat-form-field {
   .mat-input-element {
     color: #FFF;
   }
 }
-
 
 .md-search.mat-form-field-prefix, .mat-form-field-suffix {
   color: rgba(255,255,255,0.5);

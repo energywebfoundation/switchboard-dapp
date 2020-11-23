@@ -24,21 +24,27 @@
                        (keyup.enter)="search()"
                        (input)="updateSearchTxtFieldValue($event)">
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelectedItem($event)">
-                  <mat-option *ngFor="let item of filteredOptions | async" [value]="item">
+                  <mat-option *ngFor="let item of filteredOptions | async" [value]="item" class="d-flex align-items-start" style="height: 90px;">
                     <ng-container *ngIf="item?.definition?.orgName">
-                      <mat-icon svgIcon="organization-list-icon"></mat-icon> {{ item?.definition?.orgName }}
+                      <mat-icon svgIcon="organization-list-icon"></mat-icon> <span class="search-title">{{ item?.definition?.orgName }}</span>
                     </ng-container>
                     <ng-container *ngIf="item?.definition?.appName">
-                      <mat-icon svgIcon="application-list-icon"></mat-icon> {{ item?.definition?.appName }}
+                      <mat-icon svgIcon="application-list-icon"></mat-icon> <span class="search-title">{{ item?.definition?.appName }}</span>
                     </ng-container>
-                    {{ item?.namespace }}
-                    {{ item?.definition?.description?.substr(0, 25)}}
+                    <div class="search-preview d-flex flex-column">
+                      <span>{{ item?.namespace }}</span>
+                      <span class="opacity-50">{{ item?.definition?.description?.substr(0, 25)}}</span>
+                    </div>
                   </mat-option>
-                </mat-autocomplete>
-                <button *ngIf="searchTxtFieldValue?.trim()?.length > 2" mat-button matSuffix mat-icon-button>
-                  <mat-icon (click)="search()">search</mat-icon>
-                  <mat-icon (click)="clearSearchTxt()">close</mat-icon>
-                </button>
+                </mat-autocomplete>                
+                  <div matSuffix class="d-flex" *ngIf="searchTxtFieldValue?.trim()?.length > 2">
+                    <button mat-icon-button (click)="clearSearchTxt()">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="search()">
+                      <mat-icon>search</mat-icon>
+                    </button>
+                  </div>
               </mat-form-field>
             </form>
             </div>
