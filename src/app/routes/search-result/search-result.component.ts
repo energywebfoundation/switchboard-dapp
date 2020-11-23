@@ -169,6 +169,7 @@ export class SearchResultComponent implements OnInit {
   }
 
   updateSearchTxtFieldValue(event: any) {
+    this.opened = false;
     if (typeof this.searchForm.value.searchTxt === 'string') {
       this.searchTxtFieldValue = this.searchForm.value.searchTxt;
     }
@@ -179,8 +180,14 @@ export class SearchResultComponent implements OnInit {
   }
 
   clearSearchTxt() {
+    this.opened = false;
     this.searchTxtFieldValue = '';
     this.searchForm.get('searchTxt').setValue('');
+    this._updateData(undefined);
+  }
+
+  clearSelectedItem() {
+    this.opened = false;
     this._updateData(undefined);
   }
 }

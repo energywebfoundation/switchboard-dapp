@@ -43,11 +43,11 @@ export class RequestClaimComponent implements OnInit {
   public txtboxColor    : Object = {};
 
   public isLoggedIn     = false;
-
+  private stayLoggedIn  = false;
 
   @HostListener('window:beforeunload', ['$event'])
   public onPageUnload($event: BeforeUnloadEvent) {
-    if (this.isLoggedIn) {
+    if (this.isLoggedIn && !this.stayLoggedIn) {
       // Always logout if user refreshes this screen or closes this tab
       this.iamService.logout();
     }
@@ -66,6 +66,8 @@ export class RequestClaimComponent implements OnInit {
     });
     
     this.activeRoute.queryParams.subscribe(async (params: any) => {
+      this.stayLoggedIn = params.stayLoggedIn;
+
       if (params.app) {
         // URL Params
         this.setUrlParams(params);
@@ -185,7 +187,7 @@ export class RequestClaimComponent implements OnInit {
     // Navigate to callback URL
     let result = await SWAL(config);
     if (result) {
-      if (this.appCallbackUrl) {
+      if (this.appCallbackUrl && !this.stayLoggedIn) {
         // Logout
         this.iamService.logout();
 

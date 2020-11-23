@@ -1,4 +1,4 @@
-<div class="drawer-container">
+<div class="drawer-container" #searchResultDrawer>
   <mat-drawer-container class="h-100 bg-transparent" autosize>
     <mat-drawer mode="side" [opened]="opened" [mode]="(screenWidth > 840) ? 'side' : 'over'" #drawer position="end"
       class="p-3 color-white">
@@ -6,7 +6,7 @@
       <div class="d-flex flex-column side-panel">
         <!-- NOTE: This component is shared with Governance List - View Org/App/Roles -->
         <div class="d-flex justify-content-end">
-          <button mat-icon-button>
+          <button mat-icon-button (click)="clearSelectedItem()">
             <mat-icon>close</mat-icon>
           </button>
         </div>
@@ -19,10 +19,10 @@
         <form class="search-field px-0 px-md-2 pb-0 py-md-2" [formGroup]="searchForm">
           <mat-form-field class="md-search" appearance="outline">
             <input type="text" placeholder="Search" aria-label="Number" matInput formControlName="searchTxt"
-              (keyup.enter)="search()" (input)="updateSearchTxtFieldValue($event)">
+              (keyup.enter)="search()" (input)="updateSearchTxtFieldValue($event)" autocomplete="off">
             <button mat-button matSuffix mat-icon-button *ngIf="searchForm?.value?.searchTxt?.trim()?.length > 2">
               <mat-icon (click)="search()">search</mat-icon>
-              <!-- <mat-icon (click)="clearSearchTxt()">close</mat-icon> -->
+              <mat-icon (click)="clearSearchTxt()">close</mat-icon>
             </button>
           </mat-form-field>
         </form>
@@ -33,7 +33,7 @@
         </div>
         <div fxFlex="0 1 calc(25% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
           *ngFor="let item of (filteredOptions | async)">
-          <mat-card class="card-search-body p-0 mb-3 cursor-pointer" (click)="viewDetails(item, detailViewContainer)">
+          <mat-card class="card-search-body p-0 mb-3 cursor-pointer" (click)="viewDetails(item, searchResultDrawer)">
             <div class="img-container p-4">
               <div *ngIf="!item?.definition?.logoUrl"
                 style="background:url(https://www.energyweb.org/wp-content/uploads/2019/04/logo-knockout.png)"
@@ -54,10 +54,10 @@
           </mat-card>
         </div>
       </div>
-      <div class="d-flex justify-content-end">
+      <!-- <div class="d-flex justify-content-end">
         <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
         </mat-paginator>
-      </div>
+      </div> -->
     </mat-drawer-content>
   </mat-drawer-container>
 </div>
