@@ -50,7 +50,7 @@
               <h5>{{ item?.namespace }}</h5>
               <div class="d-block" style="height:60px; overflow-y: auto;">
                 <p *ngIf="item?.definition?.description?.trim().length">
-                  {{ item?.definition?.description?.trim().substr(0, 25) }}</p>
+                  {{ item?.definition?.description }}</p>
               </div>
               <h5 *ngIf="item?.definition?.orgName" class="mt-3">Organization</h5>
               <h5 *ngIf="item?.definition?.appName" class="mt-3">Application</h5>
