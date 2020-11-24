@@ -25,7 +25,7 @@ export class GovernanceDetailsComponent implements OnInit {
 
   typeLabel: string;
   formData  : any;
-  displayedColumnsView: string[] = ['type', 'label', 'validation'];
+  displayedColumnsView: string[] = ['type', 'label'/*, 'validation'*/];
 
   appList: any[];
   roleList: any[];

@@ -63,8 +63,8 @@ export class NewRoleComponent implements OnInit {
   fieldsForm          : FormGroup;
   showFieldsForm      = false;
   isEditFieldForm     = false;
-  displayedColumns    : string[] = ['type', 'label', 'validation', 'actions'];
-  displayedColumnsView: string[] = ['type', 'label', 'validation'];
+  displayedColumns    : string[] = ['type', 'label'/*, 'validation'*/, 'actions'];
+  displayedColumnsView: string[] = ['type', 'label'/*, 'validation'*/];
   dataSource          = new MatTableDataSource([]);
 
   public ViewType = ViewType;
