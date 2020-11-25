@@ -4,23 +4,16 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule, Routes } from '@angular/router';
 import { ChartsModule as Ng2ChartsModule } from 'ng2-charts/ng2-charts';
-import { ChartsModule } from '@progress/kendo-angular-charts';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DashboardComponent } from './dashboard.component';
 import { WidgetsModule } from '../widgets/widgets.module';
-// import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { GoverningBodyComponent, DialogHistory } from './governing-body/governing-body.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ProfileModule } from '../profile/profile.module';
 
 
 const routes: Routes = [
-    { path: '', component: DashboardComponent },
-    { path: 'owner', component: GoverningBodyComponent },
-    { path: 'installer', component: GoverningBodyComponent },
-    { path: 'governing', component: GoverningBodyComponent },
-    { path: 'tso', component: GoverningBodyComponent }
+    { path: '', component: DashboardComponent }
 ];
 
 
@@ -38,7 +31,6 @@ const routes: Routes = [
         Ng2ChartsModule,
         MatFormFieldModule,
         MatCheckboxModule,
-        ChartsModule,
         MatStepperModule,
         MatInputModule,
         MatTableModule,
@@ -47,16 +39,15 @@ const routes: Routes = [
         MatDatepickerModule,
         NgxMaterialTimepickerModule,
         WidgetsModule,
-        // ZXingScannerModule,
         NgxSpinnerModule,
         ProfileModule
         
         
 
     ],
-    entryComponents: [DialogHistory],
+    entryComponents: [],
 
-    declarations: [DashboardComponent,  GoverningBodyComponent, DialogHistory],
+    declarations: [DashboardComponent],
     exports: [
         RouterModule
     ]

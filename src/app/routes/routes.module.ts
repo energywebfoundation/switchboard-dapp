@@ -10,7 +10,6 @@ import { WelcomeModule } from './welcome/welcome.module';
 import { EnrolmentModule } from './enrolment/enrolment.module';
 import { ApplicationsModule } from './applications/applications.module';
 import { WidgetsModule } from './widgets/widgets.module';
-import { LoginModule } from './login/login.module';
 import { SearchResultModule } from './search-result/search-result.module';
 
 
@@ -25,8 +24,7 @@ import { SearchResultModule } from './search-result/search-result.module';
         ApplicationsModule,
         EnrolmentModule,
         SearchResultModule,
-        WidgetsModule,
-        LoginModule
+        WidgetsModule
     ],
     declarations: [],
     exports: [
