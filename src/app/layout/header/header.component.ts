@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 const screenfull = require('screenfull');
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import {Md5} from 'ts-md5/dist/md5';
 import { UserblockService } from '../sidebar/userblock/userblock.service';
 import { SettingsService } from '../../core/settings/settings.service';
@@ -30,8 +30,6 @@ export class HeaderComponent implements OnInit {
 
     currentTheme: any;
 
-    flexNode="";
-
     isNavSearchVisible: boolean;
     isNavMenuVisible = true;
 
@@ -60,9 +58,6 @@ export class HeaderComponent implements OnInit {
 
         // show only a few items on demo
         this.menuItems = menu.getMenu().slice(0, 4); // for horizontal layout
-        this.http.get('assets/flexhub/flexnode.json').toPromise().then((data:any) => {
-            this.flexNode = data.NODENAME;
-        });
         
         if (localStorage.getItem('currentUser')) {
             this.currentUserDid = JSON.parse(localStorage.getItem('currentUser')).did;

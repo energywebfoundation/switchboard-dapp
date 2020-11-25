@@ -3,8 +3,6 @@ import { AuthGuard } from '../shared/services/auth.guard';
 import { LogOutComponent } from './profile/logout/logout.component';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 
-
-
 export const routes = [
     {
         path: '',
@@ -27,18 +25,6 @@ export const routes = [
         path: 'welcome',
         children: [
             { path: '', loadChildren: './welcome/welcome.module#WelcomeModule' }
-        ]
-    },
-    {
-        path: 'login',
-        children: [
-            { path: '', loadChildren: './login/login.module#LoginModule' }
-        ]
-    },
-    {
-        path: 'registration',
-        children: [
-            { path: '', loadChildren: './registration/registration.module#RegistrationModule' }
         ]
     },
 
