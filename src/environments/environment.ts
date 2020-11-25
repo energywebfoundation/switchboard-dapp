@@ -13,7 +13,6 @@ export const environment = {
     rpcUrl: 'https://volta-internal-archive.energyweb.org/',
     chainId: 73799
   },
-  userIdle: 900, // 15 mins in seconds
   ...constants  
 };
 
