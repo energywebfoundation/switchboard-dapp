@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { UserIdleModule } from 'angular-user-idle';
 
 import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -16,13 +17,16 @@ import { DialogUser } from './header/dialog-user/dialog-user.component';
 import { LoadingComponent } from './loading/loading.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
+import { environment } from '../../environments/environment';
+
 @NgModule({
     imports: [
         SharedModule,
         MatDialogModule,
         MatMenuModule,
         QRCodeModule,
-        NgxSpinnerModule
+        NgxSpinnerModule,
+        UserIdleModule.forRoot({idle: environment.userIdle, timeout: environment.userIdle})
     ],
     providers: [
         UserblockService
