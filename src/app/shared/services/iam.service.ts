@@ -71,6 +71,11 @@ export class IamService {
           const signer = this._iam.getSigner();
           this.accountAddress = await signer.getAddress();
 
+          // Listen to Account Change
+          if (useMetamaskExtension) {
+            this._listenToMetamaskAccountChange();
+          }
+
           retVal = true;
         }
       }
@@ -177,5 +182,14 @@ export class IamService {
 
   setUserProfile(data: any) {
     this._user.next(data);
+  }
+
+  private _listenToMetamaskAccountChange() {
+    // Listen to account changes in metamask
+    if (window['ethereum']) {
+      window['ethereum'].on('accountsChanged', () => {
+        location.reload();
+      });
+    }
   }
 }
