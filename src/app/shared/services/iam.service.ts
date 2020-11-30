@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { IAM, DIDAttribute, CacheServerClient, MessagingMethod } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { LoadingService } from './loading.service';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
 const { walletConnectOptions, cacheServerUrl, natsServerUrl } = environment;
+
+const SWAL = require('sweetalert');
 
 const cacheClient = new CacheServerClient({
   url: cacheServerUrl
@@ -31,7 +34,10 @@ export class IamService {
   private _didDocument: any;
   public accountAddress = undefined;
 
-  constructor() {
+  private _throwTimeoutError = false;
+  private _timer = undefined;
+
+  constructor(private loadingService: LoadingService) {
     let options = {
       ...walletConnectOptions,
       cacheClient,
@@ -71,6 +77,8 @@ export class IamService {
           const signer = this._iam.getSigner();
           this.accountAddress = await signer.getAddress();
 
+          console.log('signer', signer);
+
           // Listen to Account Change
           if (useMetamaskExtension) {
             this._listenToMetamaskAccountChange();
@@ -81,6 +89,8 @@ export class IamService {
       }
       catch (e) {
         console.error(e);
+        this.logout();
+        location.reload();
       }
     }
     else {
@@ -133,6 +143,14 @@ export class IamService {
     if (localStorage['METAMASK_EXT_CONNECTED']) {
       localStorage.removeItem('METAMASK_EXT_CONNECTED');
     }
+  }
+
+  logoutAndRefresh() {
+    this.logout();
+    let $navigate = setTimeout(() => {
+      clearTimeout($navigate);
+      location.reload();
+  }, 100);
   }
 
   /**
@@ -190,6 +208,53 @@ export class IamService {
       window['ethereum'].on('accountsChanged', () => {
         location.reload();
       });
+    }
+  }
+
+  public waitForSignature(isConnectAndSign?: boolean) {
+    this._throwTimeoutError = false;
+    let timeout = 10000;
+    let messageType = 'sign';
+    if (isConnectAndSign) {
+      timeout = 20000;
+      messageType = 'connect to your wallet and sign';
+    }
+
+    this.loadingService.show(['Your signature is being requested.', `Please ${messageType} within ${timeout / 1000} seconds or you will be automatically logged-out.`]);
+    this._timer = setTimeout(() => {
+      this._displayTimeout(timeout / 1000, isConnectAndSign);
+      this.clearWaitSignatureTimer();
+      this._throwTimeoutError = true;
+    }, timeout);
+  }
+
+  public clearWaitSignatureTimer(throwError?: boolean) {
+    clearTimeout(this._timer);
+    this._timer = undefined;
+    this.loadingService.hide();
+
+    if (this._throwTimeoutError) {
+      throw new Error('Wallet Signature Timeout');
+      this._throwTimeoutError = false;
+    }
+  }
+
+  private async _displayTimeout(timeout: number, isConnectAndSign?: boolean) {
+    let message = 'sign';
+    if (isConnectAndSign) {
+      message = 'connect with your wallet and sign'
+    }
+    let config = {
+        title: 'Wallet Signature Timeout',
+        text: `The period to ${message} the requested signature has elapsed. Please login again.`,
+        icon: 'error',
+        button: 'Proceed',
+        closeOnClickOutside: false
+      };
+
+    let result = await SWAL(config);
+    if (result) {
+        this.logoutAndRefresh();
     }
   }
 }

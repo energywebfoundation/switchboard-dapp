@@ -29,7 +29,6 @@ export class DashboardComponent implements OnInit {
     private loadingService: LoadingService,
     private toastr: ToastrService,
     private fb: FormBuilder) { 
-      this.loadingService.show();
 
       // Init Search
       this.searchForm = fb.group({
@@ -43,6 +42,15 @@ export class DashboardComponent implements OnInit {
 
       // Check Login Status
       this._loginStatus = this.iamService.getLoginStatus();
+      let extras: any = this.route.getCurrentNavigation().extras.state;
+      if (this._loginStatus) {
+        if (extras && extras.data && extras.data.fresh) {
+          this.loadingService.show();
+        }
+        else {
+          this.iamService.waitForSignature();
+        }
+      }
   }
 
   ngOnInit() {
@@ -64,6 +72,7 @@ export class DashboardComponent implements OnInit {
 
           // Proceed Login
           await this.iamService.login(useMetamaskExtension);
+          this.iamService.clearWaitSignatureTimer();
         }
 
         // Check if returnUrl is available or just redirect to dashboard

@@ -250,11 +250,6 @@ export class HeaderComponent implements OnInit {
     }
 
     logout() {
-        this.iamService.logout();
-        let $navigate = setTimeout(() => {
-            clearTimeout($navigate);
-            location.reload();
-        }, 100);
-        
+        this.iamService.logoutAndRefresh();
     }
 }

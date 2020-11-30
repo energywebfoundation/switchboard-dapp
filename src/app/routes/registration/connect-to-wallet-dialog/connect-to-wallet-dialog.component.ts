@@ -30,9 +30,9 @@ export class ConnectToWalletDialogComponent implements OnInit {
   }
 
   async connectToWallet() {
-    this.spinner.show();
+    this.iamService.waitForSignature(true);
     let isLoggedIn = await this.iamService.login();
-    this.spinner.hide();
+    this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
       // Close Login Dialog
@@ -51,9 +51,9 @@ export class ConnectToWalletDialogComponent implements OnInit {
     }
 
     // Proceed with Login Process
-    this.spinner.show();
+    this.iamService.waitForSignature(true);
     let isLoggedIn = await this.iamService.login(true, true);
-    this.spinner.hide();
+    this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
       // Set LocalStorage for Metamask
@@ -68,10 +68,6 @@ export class ConnectToWalletDialogComponent implements OnInit {
   }
 
   private async cleanMe() {
-    this.iamService.logout();
-    let $navigate = setTimeout(() => {
-        clearTimeout($navigate);
-        location.reload();
-    }, 100);
+    this.iamService.logoutAndRefresh();
   }
 }

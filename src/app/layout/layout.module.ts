@@ -50,7 +50,8 @@ import { environment } from '../../environments/environment';
         HeaderComponent,
         NavsearchComponent,
         OffsidebarComponent,
-        FooterComponent
+        FooterComponent,
+        LoadingComponent
     ]
 })
 export class LayoutModule { }
