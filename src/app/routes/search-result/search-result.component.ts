@@ -30,7 +30,6 @@ export class SearchResultComponent implements OnInit {
       private loadingService: LoadingService,
       private fb: FormBuilder,
       private iamService: IamService) {
-    this._manageScreenWidth();
     this._initList();
   }
 
@@ -60,7 +59,7 @@ export class SearchResultComponent implements OnInit {
       if (queryParams.namespace) {
         this._initView(queryParams.namespace);
       }
-      
+      this._manageScreenWidth();
       this.loadingService.hide();
     });
   }
@@ -73,7 +72,7 @@ export class SearchResultComponent implements OnInit {
     };
 
     // Init 
-    if (this.screenWidth > 840) {
+    if (this.screenWidth > 840 && this.data) {
       this.opened = true;
     }
   }

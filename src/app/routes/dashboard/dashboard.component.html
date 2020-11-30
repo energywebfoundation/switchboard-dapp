@@ -38,11 +38,11 @@
                   </mat-option>
                 </mat-autocomplete>                
                   <div matSuffix class="d-flex" *ngIf="searchTxtFieldValue?.trim()?.length > 2">
-                    <button mat-icon-button (click)="clearSearchTxt()">
-                      <mat-icon>close</mat-icon>
-                    </button>
                     <button mat-icon-button (click)="search()">
                       <mat-icon>search</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="clearSearchTxt()">
+                      <mat-icon>close</mat-icon>
                     </button>
                   </div>
               </mat-form-field>
