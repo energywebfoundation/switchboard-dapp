@@ -20,9 +20,11 @@ export class LoadingComponent implements OnInit {
       let $setTimeout = setTimeout(() => {
         if (typeof message === 'string') {
           this.msg = message;
+          this.msgList = undefined;
         }
         else {
           this.msgList = message;
+          this.msg = '';
         }
         clearTimeout($setTimeout);
       }, 30);
