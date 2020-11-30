@@ -7,11 +7,11 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 export class LoadingService {
   private _isLoading : BehaviorSubject<Number>;
   private _counter = 0;
-  private _msg : BehaviorSubject<String>;
+  private _msg : BehaviorSubject<any>;
 
   constructor() {
     this._isLoading = new BehaviorSubject<Number>(this._counter);
-    this._msg = new BehaviorSubject<String>('');
+    this._msg = new BehaviorSubject<any>('');
   }
 
   get isLoading() {
@@ -22,9 +22,9 @@ export class LoadingService {
     return this._msg.asObservable();
   }
 
-  show(msg?: string) {
-    if (msg && msg.trim()) {
-      this._msg.next(msg.trim());
+  show(msg?: any) {
+    if (msg) {
+      this._msg.next(msg);
     }
     this._isLoading.next(++this._counter);
   }

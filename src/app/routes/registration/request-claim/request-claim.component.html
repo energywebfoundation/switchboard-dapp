@@ -9,7 +9,8 @@
       </button>
     </div>
   </div>
-  <ngx-spinner [fullScreen]="false" type="ball-spin-fade" size="medium" bdColor="rgba(24,20,36,0.8)" bdOpacity=0.9
+  <app-loading *ngIf="!isLoggedIn"></app-loading>
+  <ngx-spinner *ngIf="isLoggedIn" [fullScreen]="false" type="ball-spin-fade" size="medium" bdColor="rgba(24,20,36,0.8)" bdOpacity=0.9
     color="#A567FF">
     <p class="label-role" *ngIf="!submitting">Loading...</p>
     <p class="label-role" *ngIf="submitting">Please confirm this transaction in your connected wallet.</p>

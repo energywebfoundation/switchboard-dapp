@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { WelcomeComponent } from './welcome.component';
 import { Routes, RouterModule } from '@angular/router';
 import { MatCardModule, MatFormFieldModule, MatButtonModule, MatDividerModule } from '@angular/material';
-import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { LayoutModule } from 'src/app/layout/layout.module';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const routes: Routes = [
   { path: '', component: WelcomeComponent }
@@ -21,7 +22,8 @@ const routes: Routes = [
     MatFormFieldModule,
     MatButtonModule,
     MatDividerModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    LayoutModule
   ]
 })
 export class WelcomeModule { }
