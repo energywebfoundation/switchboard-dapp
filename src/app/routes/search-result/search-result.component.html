@@ -21,11 +21,11 @@
             <input type="text" placeholder="Search" aria-label="Number" matInput formControlName="searchTxt"
               (keyup.enter)="search()" (input)="updateSearchTxtFieldValue($event)" autocomplete="off">
             <div matSuffix class="d-flex" *ngIf="searchForm?.value?.searchTxt?.trim()?.length > 2">
-              <button mat-icon-button (click)="clearSearchTxt()">
-                <mat-icon>close</mat-icon>
-              </button>
               <button mat-icon-button (click)="search()">
                 <mat-icon>search</mat-icon>
+              </button>
+              <button mat-icon-button (click)="clearSearchTxt()">
+                <mat-icon>close</mat-icon>
               </button>
             </div>
           </mat-form-field>
