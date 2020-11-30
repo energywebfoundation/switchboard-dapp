@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
       this._loginStatus = this.iamService.getLoginStatus();
       let extras: any = this.route.getCurrentNavigation().extras.state;
       if (this._loginStatus) {
-        if (extras && extras.data && extras.data.fresh) {
+        if ((extras && extras.data && extras.data.fresh) || this._loginStatus === LoginType.REMOTE) {
           this.loadingService.show();
         }
         else {
