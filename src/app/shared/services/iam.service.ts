@@ -213,16 +213,15 @@ export class IamService {
 
   public waitForSignature(isConnectAndSign?: boolean) {
     this._throwTimeoutError = false;
-    let timeout = 10000;
+    let timeout = 20000;
     let messageType = 'sign';
     if (isConnectAndSign) {
-      timeout = 20000;
       messageType = 'connect to your wallet and sign';
     }
 
-    this.loadingService.show(['Your signature is being requested.', `Please ${messageType} within ${timeout / 1000} seconds or you will be automatically logged-out.`]);
+    this.loadingService.show(['Your signature is being requested.', `Please ${messageType} within ${timeout / 2000} seconds or you will be automatically logged-out.`]);
     this._timer = setTimeout(() => {
-      this._displayTimeout(timeout / 1000, isConnectAndSign);
+      this._displayTimeout(timeout / 2000, isConnectAndSign);
       this.clearWaitSignatureTimer();
       this._throwTimeoutError = true;
     }, timeout);
