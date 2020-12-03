@@ -9,20 +9,14 @@
       </button>
     </div>
   </div>
-  <app-loading *ngIf="!isLoggedIn"></app-loading>
-  <ngx-spinner *ngIf="isLoggedIn" [fullScreen]="false" type="ball-spin-fade" size="medium" bdColor="rgba(24,20,36,0.8)" bdOpacity=0.9
-    color="#A567FF">
-    <p class="label-role" *ngIf="!submitting">Loading...</p>
-    <p class="label-role" *ngIf="submitting">Please confirm this transaction in your connected wallet.</p>
-  </ngx-spinner>
   <div class="d-flex justify-content-center flex-column align-items-center w-100">
     <div
       class="content-enroll d-flex txt-color justify-content-start justify-content-md-center align-items-md-center flex-column px-3 mb-1 w-100"
-      [ngStyle]="txtColor">
+      [ngStyle]="txtColor" *ngIf="isLoggedIn">
       <h2 class="font-weight-600 mb-1">Enrol to {{ appDetails?.appName }}</h2>
       <span class="opacity-50">Please fill in below details</span>
     </div>
-    <mat-card class="card-enroll">
+    <mat-card class="card-enroll" *ngIf="isLoggedIn">
       <form role="form" [formGroup]="roleTypeForm">
         <div class="row">
           <div class="col-lg-12">
@@ -81,6 +75,7 @@
           [disabled]="!roleTypeForm?.value?.roleType || submitting" [ngStyle]="btnColor">Register</button>
       </div>
     </mat-card>
+    <app-loading></app-loading>
 
     <div class="footer-enroll">
       <div class="d-flex justify-content-between align-items-center mx-3 mx-md-4 h-100">

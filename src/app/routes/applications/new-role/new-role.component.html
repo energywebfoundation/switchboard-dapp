@@ -137,7 +137,7 @@
                     </div>
                     <mat-label class="ml-3 pl-1">Issuer Role Namespace</mat-label>
                     <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                      <input matInput autocomplete="off" formControlName="roleNmae" type="text" placeholder="Example: {{ 'issuerrole.' + ENSPrefixes.Roles + '.myorg.iam.ewc' }}"
+                      <input matInput autocomplete="off" formControlName="roleName" type="text" placeholder="Example: {{ 'issuerrole.' + ENSPrefixes.Roles + '.myorg.iam.ewc' }}"
                         required oninput="this.value = this.value.toLowerCase()" (keypress)="alphaNumericOnly($event, true)"
                         minlength="3" maxlength="256" />
                       <mat-error>Issuer Role Namespace is <strong>required</strong></mat-error>

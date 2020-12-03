@@ -165,7 +165,7 @@ export class NewRoleComponent implements OnInit {
           issuer: {
             issuerType: def.issuer.issuerType,
             roleName: def.issuer.roleName,
-            did: [...def.issuer.did]
+            did: def.issuer.did ? [...def.issuer.did] : []
           }
         }
       });
@@ -347,7 +347,7 @@ export class NewRoleComponent implements OnInit {
     this.spinner.hide();
   }
 
-  proceedAddingFields() {
+  async proceedAddingFields() {
     let issuerType = this.roleForm.value.data.issuer.issuerType;
     if (this.IssuerType.DID === issuerType && !this.issuerList.length) {
       this.toastr.error('Issuer list is empty.', this.TOASTR_HEADER);
@@ -356,10 +356,25 @@ export class NewRoleComponent implements OnInit {
       this.toastr.error('Issuer Role is empty.', this.TOASTR_HEADER);
     }
     else {
-      // Proceed to Adding Fields Step
-      this.stepper.selected.editable = false;
-      this.stepper.selected.completed = true;
-      this.stepper.next();
+      let allowToProceed = true;
+      if (this.IssuerType.Role === issuerType) {
+        this.spinner.show();
+        let did = await this.iamService.iam.getRoleDIDs({
+          namespace: this.roleForm.value.data.issuer.roleName
+        });
+        this.spinner.hide();
+        if (!did || !did.length) {
+          allowToProceed = false;
+          this.toastr.error('Issuer Role has no approved users.', this.TOASTR_HEADER);
+        }
+      }
+      
+      if (allowToProceed) {
+        // Proceed to Adding Fields Step
+        this.stepper.selected.editable = false;
+        this.stepper.selected.completed = true;
+        this.stepper.next();
+      }
     }
   }
 
