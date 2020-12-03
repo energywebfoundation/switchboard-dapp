@@ -3,9 +3,9 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ENSNamespaceTypes, IAppDefinition, IRole } from 'iam-client-lib';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService, LoginType } from 'src/app/shared/services/iam.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 
 const SWAL = require('sweetalert');
@@ -59,58 +59,10 @@ export class RequestClaimComponent implements OnInit {
       private iamService: IamService,
       private toastr: ToastrService,
       public dialog: MatDialog,
-      private spinner: NgxSpinnerService) { 
+      private loadingService: LoadingService) { 
     
     this.roleTypeForm = fb.group({
       roleType: ''
-    });
-    
-    this.activeRoute.queryParams.subscribe(async (params: any) => {
-      this.stayLoggedIn = params.stayLoggedIn;
-
-      if (params.app) {
-        // URL Params
-        this.setUrlParams(params);
-
-        // Show loading and reset data
-        this.spinner.show();
-        this.resetData();
-        
-        try {
-          // Get app definition
-          this.appDetails = await this.iamService.iam.getDefinition({
-            type: ENSNamespaceTypes.Application,
-            namespace: this.appNamespace
-          });
-
-          console.log('appDetails', this.appDetails);
-
-          if (this.appDetails) {
-            // Check Login Status
-            this.initLoginUser(this.appDetails.appName);
-
-            // Initialize Roles
-            await this.initRoles();
-          }
-          else {
-            // Display Error
-            this.displayAlert('Application Details cannot be retrieved.', 'error');
-          }
-        } 
-        catch (e) {
-          console.error(TOASTR_HEADER, e);
-          this.toastr.error(e, TOASTR_HEADER);
-        }
-        finally {
-          this.spinner.hide();
-        }
-      }
-      else {
-        console.error('Enrolment Param Error', params);
-      }
-
-      // Update Colors
-      this.updateColors(params);
     });
   }
 
@@ -201,7 +153,51 @@ export class RequestClaimComponent implements OnInit {
     }
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.activeRoute.queryParams.subscribe(async (params: any) => {
+      this.stayLoggedIn = params.stayLoggedIn;
+
+      if (params.app) {
+        // URL Params
+        this.setUrlParams(params);
+
+        // Show loading and reset data
+        this.resetData();
+        
+        try {
+          // Get app definition
+          this.appDetails = await this.iamService.iam.getDefinition({
+            type: ENSNamespaceTypes.Application,
+            namespace: this.appNamespace
+          });
+
+          console.log('appDetails', this.appDetails);
+
+          if (this.appDetails) {
+            // Check Login Status
+            await this.initLoginUser(this.appDetails.appName);
+
+            // Initialize Roles
+            await this.initRoles();
+          }
+          else {
+            // Display Error
+            this.displayAlert('Application Details cannot be retrieved.', 'error');
+          }
+        } 
+        catch (e) {
+          console.error(TOASTR_HEADER, e);
+          this.toastr.error(e, TOASTR_HEADER);
+        }
+      }
+      else {
+        console.error('Enrolment Param Error', params);
+      }
+
+      // Update Colors
+      this.updateColors(params);
+    });
+  }
 
   private async initLoginUser(appName: string) {
     let loginStatus = this.iamService.getLoginStatus();
@@ -219,7 +215,9 @@ export class RequestClaimComponent implements OnInit {
         }
 
         // Proceed Login
+        this.iamService.waitForSignature();
         await this.iamService.login(useMetamaskExtension);
+        this.iamService.clearWaitSignatureTimer();
 
         // Setup User Data
         await this.iamService.setupUser();
@@ -244,15 +242,44 @@ export class RequestClaimComponent implements OnInit {
     }
   }
 
+  private async getNotEnrolledRoles() {
+    let roleList = await this.iamService.iam.getRolesByNamespace({
+      parentType: ENSNamespaceTypes.Application,
+      namespace: this.appNamespace
+    });
+    let enrolledRoles = await this.iamService.iam.getRequestedClaims({
+      did: this.iamService.iam.getDid()
+    });
+
+    console.log('enrolledRoles', enrolledRoles);
+
+    if (roleList && roleList.length) {
+      roleList = roleList.filter((role: any) => {
+        let retVal = true;
+        let defaultRole = `${this.appDefaultRole}.${ENSNamespaceTypes.Roles}.${this.appNamespace}`;
+        for (let i = 0; i < enrolledRoles.length; i++) {
+          if (role.namespace === enrolledRoles[i].claimType) {
+            if (role.namespace === defaultRole) {
+              // Display Error
+              this.displayAlert('You have already enrolled to this role.', 'error');
+            }
+            retVal = false;
+            break;
+          }
+        }
+  
+        return retVal;
+      });
+    }
+
+    return roleList;
+  }
+
   private async initRoles() {
     // Change it later to GET NOT ENROLLED ROLES BY USER
     try {
-      this.roleList = await this.iamService.iam.getRolesByNamespace({
-        parentType: ENSNamespaceTypes.Application,
-        namespace: this.appNamespace
-      });
-
-      console.log('Role List', this.roleList);
+      this.loadingService.show();
+      this.roleList = await this.getNotEnrolledRoles();
 
       if (this.roleList && this.roleList.length) {
 
@@ -275,6 +302,9 @@ export class RequestClaimComponent implements OnInit {
     }
     catch (e) {
       throw e;
+    }
+    finally {
+      this.loadingService.hide();
     }
   }
 
@@ -335,16 +365,29 @@ export class RequestClaimComponent implements OnInit {
   }
 
   async submit() {
+    this.loadingService.show();
     if (this.enrolmentForm.valid) {
-      if (this.selectedRole.issuer && this.selectedRole.issuer.did && this.selectedRole.issuer.did.length) {
+      let did = undefined;
+      if (this.selectedRole.issuer) {
+        if (this.selectedRole.issuer.roleName) {
+          // Retrieve list of issuers by roleName
+          did = await this.iamService.iam.getRoleDIDs({
+            namespace: this.selectedRole.issuer.roleName
+          });
+          console.log('dids by role', did);
+        }
+        else if (this.selectedRole.issuer.did) {
+          did = this.selectedRole.issuer.did;
+        }
+      }
+
+      if (did && did.length) {
         this.submitting = true;
-        this.spinner.show();
+        this.loadingService.show('Please confirm this transaction in your connected wallet.');
 
         let success = true;
 
         try {
-          // Check if user has already enrolled in this role
-
           // Construct Fields
           let fields = [];
           let values = this.enrolmentForm.value.fields;
@@ -362,12 +405,12 @@ export class RequestClaimComponent implements OnInit {
           };
           
           console.info('createClaimRequest', {
-            issuer: this.selectedRole.issuer.did,
+            issuer: did,
             claim: claim
           });
 
           await this.iamService.iam.createClaimRequest({
-            issuer: this.selectedRole.issuer.did,
+            issuer: did,
             claim: claim
           });
           
@@ -379,7 +422,7 @@ export class RequestClaimComponent implements OnInit {
           this.submitting = false;
         }
         finally {
-          this.spinner.hide();
+          this.loadingService.hide();
         }
 
         if (success) {
@@ -394,6 +437,8 @@ export class RequestClaimComponent implements OnInit {
     else {
       this.toastr.error('Enrolment Form is invalid.', TOASTR_HEADER);
     }
+
+    this.loadingService.hide();
   }
 
   logout() {

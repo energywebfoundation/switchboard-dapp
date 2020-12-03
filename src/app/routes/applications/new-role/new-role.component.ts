@@ -165,7 +165,7 @@ export class NewRoleComponent implements OnInit {
           issuer: {
             issuerType: def.issuer.issuerType,
             roleName: def.issuer.roleName,
-            did: [...def.issuer.did]
+            did: def.issuer.did ? [...def.issuer.did] : []
           }
         }
       });

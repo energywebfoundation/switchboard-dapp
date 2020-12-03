@@ -111,7 +111,7 @@ export class GovernanceDetailsComponent implements OnInit {
       window.open(url, '_blank');
     }
     else {
-      this.toastr.warning('You are currently enrolled in this role.', 'Enrolment');
+      this.toastr.warning('You either have an approved/pending enrolment request for this role.', 'Enrolment');
     }
   }
 
@@ -124,7 +124,6 @@ export class GovernanceDetailsComponent implements OnInit {
       this.loadingService.show();
       let enrolledList = await this.iamService.iam.getRequestedClaims({
         did: this.iamService.iam.getDid(),
-        isAccepted: true,
         parentNamespace: namespaceArr.join('')
       });
 
