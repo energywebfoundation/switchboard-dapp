@@ -16,19 +16,32 @@
     </mat-drawer>
     <mat-drawer-content>
       <div class="d-flex align-items-center justify-content-center w-100">
-        <form class="search-field px-0 px-md-2 pb-0 py-md-2" [formGroup]="searchForm">
-          <mat-form-field class="md-search" appearance="outline">
-            <input type="text" placeholder="Search" aria-label="Number" matInput formControlName="searchTxt"
-              (keyup.enter)="search()" (input)="updateSearchTxtFieldValue($event)" autocomplete="off">
-            <div matSuffix class="d-flex" *ngIf="searchForm?.value?.searchTxt?.trim()?.length > 2">
-              <button mat-icon-button (click)="search()">
-                <mat-icon>search</mat-icon>
-              </button>
-              <button mat-icon-button (click)="clearSearchTxt()">
-                <mat-icon>close</mat-icon>
-              </button>
+        <form class="search-field search-field-results px-0 px-md-2 pb-0 py-md-2" [formGroup]="searchForm">
+          <div class="row">
+            <div class="col-lg-8">
+              <mat-label class="ml-3 pl-1"></mat-label>
+              <mat-form-field class="md-search" appearance="outline">
+                <input type="text" placeholder="Search" aria-label="Number" matInput formControlName="searchTxt"
+                  (keyup.enter)="search()" (input)="updateSearchTxtFieldValue($event)" autocomplete="off">
+                <div matSuffix class="d-flex" *ngIf="searchForm?.value?.searchTxt?.trim()?.length > 2">
+                  <button mat-icon-button (click)="search()">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="clearSearchTxt()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              </mat-form-field>
             </div>
-          </mat-form-field>
+            <div class="col-lg-4">
+              <mat-label class="ml-3 pl-1">Filter By</mat-label>
+              <mat-form-field class="md-search" appearance="outline">
+                <mat-select placeholder="Filter By" formControlName="filterType">
+                  <mat-option *ngFor="let filterTypeItem of FilterList" [value]="filterTypeItem.value">{{ filterTypeItem.label }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
         </form>
       </div>
       <div class="container justify-content-center" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="flex-start">

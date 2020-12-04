@@ -2,12 +2,19 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ENSNamespaceTypes } from 'iam-client-lib';
-import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { GovernanceDetailsComponent } from '../applications/governance-view/governance-details/governance-details.component';
+
+
+const FilterTypes = {
+  ALL: 'all',
+  APP: 'app',
+  ORG: 'org'
+};
 
 @Component({
   selector: 'app-search-result',
@@ -21,10 +28,23 @@ export class SearchResultComponent implements OnInit {
   opened = false;
   data: any;
   
+  private _isDuplicate = false;
   private _searchList: any[];
-  filteredOptions: Observable<any[]>;
+  filteredOptions: BehaviorSubject<any[]>;
+
   searchForm: FormGroup;
   searchTxtFieldValue: string;
+
+  FilterList      = [{
+    label: 'All',
+    value: FilterTypes.ALL
+  }, {
+    label: 'Organization',
+    value: FilterTypes.ORG
+  }, {
+    label: 'Application',
+    value: FilterTypes.APP
+  }];
 
   constructor(private activeRoute: ActivatedRoute,
       private loadingService: LoadingService,
@@ -40,13 +60,15 @@ export class SearchResultComponent implements OnInit {
     this.loadingService.show();
     // Initialize Search Field and Options
     this.searchForm = this.fb.group({
-      searchTxt: new FormControl('')
+      searchTxt: new FormControl(''),
+      filterType: new FormControl(FilterTypes.ALL)
     });
-    this.filteredOptions = this.searchForm.get('searchTxt')
-      .valueChanges.pipe(
-        startWith(undefined),
-        map(value => this._filterOrgsAndApps(value))
-      );
+    this.filteredOptions = new BehaviorSubject([]);
+    this.searchForm.valueChanges
+      .pipe(distinctUntilChanged((a: any, b: any) => a.searchTxt === b.searchTxt && a.filterType === b.filterType))
+      .subscribe((value: any) => {
+        this.filteredOptions.next(this._filterOrgsAndApps(value.searchTxt, value.filterType));
+      });
 
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
       // Retrieve List - Orgs & Apps
@@ -89,7 +111,7 @@ export class SearchResultComponent implements OnInit {
     }
   }
 
-  private _filterOrgsAndApps(keyword: any): any[] {
+  private _filterOrgsAndApps(keyword: any, listType: any): any[] {
     let retVal = [];
 
     if (keyword) {
@@ -104,10 +126,13 @@ export class SearchResultComponent implements OnInit {
       if (word.length > 2) {
         word = word.toLowerCase();
         retVal = this._searchList.filter((item: any) => {
-          return item.namespace.toLowerCase().includes(word) ||
+          return (item.namespace.toLowerCase().includes(word) ||
             (item.definition.description && item.definition.description.toLowerCase().includes(word)) ||
             (item.definition.orgName && item.definition.orgName.toLowerCase().includes(word)) ||
-            (item.definition.appName && item.definition.appName.toLowerCase().includes(word))
+            (item.definition.appName && item.definition.appName.toLowerCase().includes(word))) &&
+              (listType === FilterTypes.ALL ||
+            (listType === FilterTypes.ORG && item.definition.orgName) ||
+            (listType === FilterTypes.APP && item.definition.appName))
         });
       }
     }
