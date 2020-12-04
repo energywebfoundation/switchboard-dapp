@@ -19,9 +19,8 @@
         <form class="search-field search-field-results px-0 px-md-2 pb-0 py-md-2" [formGroup]="searchForm">
           <div class="row">
             <div class="col-lg-8">
-              <mat-label class="ml-3 pl-1"></mat-label>
               <mat-form-field class="md-search" appearance="outline">
-                <input type="text" placeholder="Search" aria-label="Number" matInput formControlName="searchTxt"
+                <input type="text" placeholder="Search" aria-label="Search" matInput formControlName="searchTxt"
                   (keyup.enter)="search()" (input)="updateSearchTxtFieldValue($event)" autocomplete="off">
                 <div matSuffix class="d-flex" *ngIf="searchForm?.value?.searchTxt?.trim()?.length > 2">
                   <button mat-icon-button (click)="search()">
@@ -34,12 +33,10 @@
               </mat-form-field>
             </div>
             <div class="col-lg-4">
-              <mat-label class="ml-3 pl-1">Filter By</mat-label>
-              <mat-form-field class="md-search" appearance="outline">
-                <mat-select placeholder="Filter By" formControlName="filterType">
-                  <mat-option *ngFor="let filterTypeItem of FilterList" [value]="filterTypeItem.value">{{ filterTypeItem.label }}</mat-option>
-                </mat-select>
-              </mat-form-field>
+              <mat-button-toggle-group multiple formControlName="filterType" class="mt-1 mb-4 float-right" aria-label="Filter By">
+                <mat-button-toggle [value]="FilterTypes.ORG">Organization</mat-button-toggle>
+                <mat-button-toggle [value]="FilterTypes.APP">Application</mat-button-toggle>
+              </mat-button-toggle-group>
             </div>
           </div>
         </form>

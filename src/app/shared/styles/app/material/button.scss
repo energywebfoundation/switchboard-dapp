@@ -116,3 +116,26 @@
         opacity: 0.8;
     }
 }
+
+.mat-button-toggle-label-content {
+    text-transform: uppercase;
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 700;
+}
+
+.mat-button-toggle-group {
+    border: solid 1px #8677ae;
+}
+
+.mat-button-toggle {
+    color: #8677ae !important;
+    background-color: transparent;
+}
+
+.mat-button-toggle-checked {
+    background-color: #33CBCB;
+}
+
+.mat-button-toggle-checked .mat-button-toggle-label-content {
+    color: white;
+}

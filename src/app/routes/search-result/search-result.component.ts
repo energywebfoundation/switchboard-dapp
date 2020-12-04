@@ -11,7 +11,6 @@ import { GovernanceDetailsComponent } from '../applications/governance-view/gove
 
 
 const FilterTypes = {
-  ALL: 'all',
   APP: 'app',
   ORG: 'org'
 };
@@ -24,27 +23,16 @@ const FilterTypes = {
 export class SearchResultComponent implements OnInit {
   @ViewChild('detailView', undefined) detailView: GovernanceDetailsComponent;
 
+  FilterTypes = FilterTypes;
   screenWidth: number;
   opened = false;
   data: any;
   
-  private _isDuplicate = false;
   private _searchList: any[];
   filteredOptions: BehaviorSubject<any[]>;
 
   searchForm: FormGroup;
   searchTxtFieldValue: string;
-
-  FilterList      = [{
-    label: 'All',
-    value: FilterTypes.ALL
-  }, {
-    label: 'Organization',
-    value: FilterTypes.ORG
-  }, {
-    label: 'Application',
-    value: FilterTypes.APP
-  }];
 
   constructor(private activeRoute: ActivatedRoute,
       private loadingService: LoadingService,
@@ -61,7 +49,7 @@ export class SearchResultComponent implements OnInit {
     // Initialize Search Field and Options
     this.searchForm = this.fb.group({
       searchTxt: new FormControl(''),
-      filterType: new FormControl(FilterTypes.ALL)
+      filterType: new FormControl([FilterTypes.ORG, FilterTypes.APP])
     });
     this.filteredOptions = new BehaviorSubject([]);
     this.searchForm.valueChanges
@@ -130,9 +118,8 @@ export class SearchResultComponent implements OnInit {
             (item.definition.description && item.definition.description.toLowerCase().includes(word)) ||
             (item.definition.orgName && item.definition.orgName.toLowerCase().includes(word)) ||
             (item.definition.appName && item.definition.appName.toLowerCase().includes(word))) &&
-              (listType === FilterTypes.ALL ||
-            (listType === FilterTypes.ORG && item.definition.orgName) ||
-            (listType === FilterTypes.APP && item.definition.appName))
+            ((listType.includes(FilterTypes.ORG) && item.definition.orgName) ||
+            (listType.includes(FilterTypes.APP) && item.definition.appName))
         });
       }
     }
@@ -214,5 +201,9 @@ export class SearchResultComponent implements OnInit {
   clearSelectedItem() {
     this.opened = false;
     this._updateData(undefined);
+  }
+
+  onChangeFlag(e: any) {
+    console.log(e);
   }
 }
