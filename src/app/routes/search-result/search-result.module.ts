@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { HttpClientModule } from '@angular/common/http';
-import { MatPaginatorModule, MatSelectModule, MatTooltipModule, MatIconModule, MatInputModule, MatTableModule, MatDialogModule, MatFormFieldModule, MatAutocompleteModule, MatSidenavModule } from '@angular/material';
+import { MatPaginatorModule, MatSelectModule, MatTooltipModule, MatIconModule, MatInputModule, MatTableModule, MatDialogModule, MatFormFieldModule, MatAutocompleteModule, MatSidenavModule, MatButtonToggleModule } from '@angular/material';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { GovernanceDetailsModule } from '../applications/governance-view/governance-details/governance-details.module';
@@ -36,7 +36,8 @@ const routes: Routes = [
     MatSidenavModule,
     NgxSpinnerModule,
     GovernanceDetailsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatButtonToggleModule
   ]
 })
 export class SearchResultModule { }
