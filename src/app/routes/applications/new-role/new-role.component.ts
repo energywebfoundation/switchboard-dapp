@@ -157,7 +157,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       let version = `${parseInt(arrVersion[0]) + 1}.0.0`;
 
       // Construct Fields
-      this.dataSource.data = [...def.fields];
+      this.dataSource.data = def.fields ? [...def.fields] : [];
 
       this.roleForm.patchValue({
         roleType: def.roleType,

@@ -56,7 +56,7 @@
       <td mat-cell *matCellDef="let element" data-label="Name">
         <ng-container *ngIf="ListType.ORG === listType"> {{element?.definition?.orgName}} </ng-container>
         <ng-container *ngIf="ListType.APP === listType"> {{element?.definition?.appName}} </ng-container>
-        <ng-container *ngIf="ListType.ROLE === listType"> {{element?.definition?.roleName | titlecase }} </ng-container>
+        <ng-container *ngIf="ListType.ROLE === listType"> {{element?.definition?.roleName }} </ng-container>
       </td>
     </ng-container>
 
@@ -121,7 +121,7 @@
 
           <!-- Copy Role to Clipboard -->
           <button mat-icon-button matTooltip="Copy Role Enrolment URL"
-            *ngIf="element?.definition?.roleType === RoleType.APP"
+            *ngIf="listType === ListType.ROLE"
             (click)="copyToClipboard(element?.definition?.roleType, element)">
             <mat-icon class="btn-color-primary btn-action-3" svgIcon="copy-url-icon"></mat-icon>
           </button>
@@ -183,7 +183,7 @@
             </button>
 
             <!-- Copy Role to Clipboard -->
-            <button mat-menu-item class="btn-color-primary" *ngIf="element?.definition?.roleType === RoleType.APP"
+            <button mat-menu-item class="btn-color-primary" *ngIf="listType === ListType.ROLE"
               (click)="copyToClipboard(element?.definition?.roleType, element)">
               <mat-icon class="btn-color-primary btn-action-3" svgIcon="copy-url-icon"></mat-icon>
               <span>Copy Role Enrolment URL</span>
