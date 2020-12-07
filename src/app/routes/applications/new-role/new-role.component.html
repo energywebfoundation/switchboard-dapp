@@ -21,11 +21,11 @@
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
               <div class="row">
                 <div class="col-lg-12">
-                  <mat-label class="ml-3 pl-1">Role Namespace</mat-label>
+                  <mat-label class="ml-3 pl-1">Role Name</mat-label>
                   <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                    <input matInput autocomplete="off" formControlName="roleName" type="text" placeholder="Role Namespace" required
+                    <input matInput autocomplete="off" formControlName="roleName" type="text" placeholder="Role Name" required
                       oninput="this.value = this.value.toLowerCase()" (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256"/>
-                      <mat-error>Role Namespace is <strong>required</strong></mat-error>
+                      <mat-error>Role Name is <strong>required</strong></mat-error>
                   </mat-form-field>
                 </div>
                 <div *ngIf="roleForm.get('roleName').value" class="ml-3 card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">

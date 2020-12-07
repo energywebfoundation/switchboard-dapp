@@ -6,6 +6,7 @@ import { ENSNamespaceTypes, IAppDefinition, IRole } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { IamService, LoginType } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { RoleType } from '../../applications/new-role/new-role.component';
 import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 
 const SWAL = require('sweetalert');
@@ -23,16 +24,17 @@ export class RequestClaimComponent implements OnInit {
   public roleTypeForm   : FormGroup;
   public fieldList      : {type: string, label: string, validation: string}[];
   
-  public appDetails     : any;
+  public orgAppDetails  : any;
   public roleList       : any;
 
   public submitting     = false;
   public appError       = false;
 
-  private appNamespace  : string;
-  private appCallbackUrl: string;
-  private appDefaultRole: string;
+  private namespace  : string;
+  private callbackUrl: string;
+  private defaultRole: string;
 
+  private roleType      : string;
   private selectedRole  : any;
   private selectedNamespace: string;
 
@@ -67,19 +69,19 @@ export class RequestClaimComponent implements OnInit {
   }
 
   private setUrlParams(params: any) {
-    this.appNamespace = params.app;
-    this.appCallbackUrl = params.returnUrl;
-    this.appDefaultRole = params.roleName;
+    this.namespace = params.app || params.org;
+    this.callbackUrl = params.returnUrl;
+    this.defaultRole = params.roleName;
   }
 
   private updateColors(params: any) {
-    if (this.appDetails) {
+    if (this.orgAppDetails) {
       let others = undefined;
 
       // re-construct others
-      if (this.appDetails.others) {
+      if (this.orgAppDetails.others) {
         others = {};
-        for (let item of this.appDetails.others) {
+        for (let item of this.orgAppDetails.others) {
           others[item.key] = item.value;
         }
       }
@@ -125,26 +127,31 @@ export class RequestClaimComponent implements OnInit {
       title: TOASTR_HEADER,
       text: text,
       icon: icon,
-      button: 'Back to Application',
+      button: this.roleType === RoleType.APP ? 'Back to Application' : 'Back',
       closeOnClickOutside: false
     };
 
     // Hide button if callback url is not available
-    if (!this.appCallbackUrl) {
-      // delete config.button;
-      // config['buttons'] = false;
-      config.button = 'View My Enrolments'
+    if (!this.callbackUrl) {
+      if (this.iamService.getLoginStatus()) {
+        config.button = 'View My Enrolments';
+      }
+      else {
+        // No Buttons
+        delete config.button;
+        config['buttons'] = false;
+      }
     }
 
     // Navigate to callback URL
     let result = await SWAL(config);
     if (result) {
-      if (this.appCallbackUrl && !this.stayLoggedIn) {
+      if (this.callbackUrl && !this.stayLoggedIn) {
         // Logout
         this.iamService.logout();
 
         // Redirect to Callback URL
-        location.href = this.appCallbackUrl;
+        location.href = this.callbackUrl;
       }
       else {
         // Navigate to My Enrolments Page
@@ -157,7 +164,16 @@ export class RequestClaimComponent implements OnInit {
     this.activeRoute.queryParams.subscribe(async (params: any) => {
       this.stayLoggedIn = params.stayLoggedIn;
 
-      if (params.app) {
+      if (params.app || params.org) {
+        // Check if namespace is correct
+        if (!this.isCorrectNamespace(params)) {
+          this.displayAlert('Namespace provided is incorrect.', 'error');
+          return;
+        }
+
+        // Set Role Type
+        this.roleType = params.app ? RoleType.APP : RoleType.ORG;
+
         // URL Params
         this.setUrlParams(params);
 
@@ -165,24 +181,27 @@ export class RequestClaimComponent implements OnInit {
         this.resetData();
         
         try {
-          // Get app definition
-          this.appDetails = await this.iamService.iam.getDefinition({
-            type: ENSNamespaceTypes.Application,
-            namespace: this.appNamespace
+          // Get org/app definition
+          this.orgAppDetails = await this.iamService.iam.getDefinition({
+            type: this.roleType === RoleType.APP ? ENSNamespaceTypes.Application : ENSNamespaceTypes.Organization,
+            namespace: this.namespace
           });
 
-          console.log('appDetails', this.appDetails);
-
-          if (this.appDetails) {
+          if (this.orgAppDetails) {
             // Check Login Status
-            await this.initLoginUser(this.appDetails.appName);
+            await this.initLoginUser(this.orgAppDetails.appName || this.orgAppDetails.orgName);
 
             // Initialize Roles
             await this.initRoles();
           }
           else {
             // Display Error
-            this.displayAlert('Application Details cannot be retrieved.', 'error');
+            if (this.roleType === RoleType.APP) {
+              this.displayAlert('Application Details cannot be retrieved.', 'error');
+            }
+            else {
+              this.displayAlert('Organization Details cannot be retrieved.', 'error');
+            }
           }
         } 
         catch (e) {
@@ -192,11 +211,29 @@ export class RequestClaimComponent implements OnInit {
       }
       else {
         console.error('Enrolment Param Error', params);
+        this.displayAlert('URL is invalid.', 'error');
       }
 
       // Update Colors
       this.updateColors(params);
     });
+  }
+
+  private isCorrectNamespace(params: any) {
+    let retVal = false;
+
+    if (params.app && 
+      params.app.includes(`.${ENSNamespaceTypes.Application}.`) && 
+      !params.app.includes(`.${ENSNamespaceTypes.Roles}.`)) {
+        retVal = true;
+    }
+    else if (params.org && 
+      !params.org.includes(`.${ENSNamespaceTypes.Application}.`) && 
+      !params.org.includes(`.${ENSNamespaceTypes.Roles}.`)) {
+        retVal = true;
+    }
+
+    return retVal;
   }
 
   private async initLoginUser(appName: string) {
@@ -244,8 +281,8 @@ export class RequestClaimComponent implements OnInit {
 
   private async getNotEnrolledRoles() {
     let roleList = await this.iamService.iam.getRolesByNamespace({
-      parentType: ENSNamespaceTypes.Application,
-      namespace: this.appNamespace
+      parentType: this.roleType === RoleType.APP ? ENSNamespaceTypes.Application : ENSNamespaceTypes.Organization,
+      namespace: this.namespace
     });
     let enrolledRoles = await this.iamService.iam.getRequestedClaims({
       did: this.iamService.iam.getDid()
@@ -256,7 +293,7 @@ export class RequestClaimComponent implements OnInit {
     if (roleList && roleList.length) {
       roleList = roleList.filter((role: any) => {
         let retVal = true;
-        let defaultRole = `${this.appDefaultRole}.${ENSNamespaceTypes.Roles}.${this.appNamespace}`;
+        let defaultRole = `${this.defaultRole}.${ENSNamespaceTypes.Roles}.${this.namespace}`;
         for (let i = 0; i < enrolledRoles.length; i++) {
           if (role.namespace === enrolledRoles[i].claimType) {
             if (role.namespace === defaultRole) {
@@ -284,9 +321,9 @@ export class RequestClaimComponent implements OnInit {
       if (this.roleList && this.roleList.length) {
 
         // Set Default Selected
-        if (this.appDefaultRole) {
+        if (this.defaultRole) {
           for (let i = 0; i < this.roleList.length; i++) {
-            if (this.roleList[i].name.toUpperCase() === this.appDefaultRole.toUpperCase()) {
+            if (this.roleList[i].name.toUpperCase() === this.defaultRole.toUpperCase()) {
               this.selectedRole = this.roleList[i].definition;
               this.selectedNamespace = this.roleList[i].namespace;
               this.fieldList = this.selectedRole.fields || [];

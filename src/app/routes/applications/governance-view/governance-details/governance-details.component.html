@@ -128,12 +128,12 @@
           </mat-expansion-panel-header>
           <div class="color-white mb-0" *ngIf="!roleList?.length"> None </div>
           <div class="d-flex justify-content-between align-items-center border-bottom-list" *ngFor="let role of roleList">
-            {{ role.name | titlecase }}
+            {{ role.name }}
             <div>
               <button mat-icon-button matTooltip="View Details" (click)="viewDetails(role, ListType.ROLE)">
                 <mat-icon class="btn-color-primary">preview</mat-icon>
               </button>
-              <button mat-icon-button matTooltip="Enrol" (click)="enrol(data?.type, role)" *ngIf="data?.type === ListType.APP">
+              <button mat-icon-button matTooltip="Enrol" (click)="enrol(data?.type, role)">
                 <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-role-icon"></mat-icon>
               </button>
             </div>
