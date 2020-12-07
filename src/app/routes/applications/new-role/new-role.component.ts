@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatStepper, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
@@ -41,7 +41,7 @@ const FIELD_TYPES = [
   templateUrl: './new-role.component.html',
   styleUrls: ['./new-role.component.scss']
 })
-export class NewRoleComponent implements OnInit {
+export class NewRoleComponent implements OnInit, AfterViewInit {
   @ViewChild('stepper', { static: false }) private stepper: MatStepper;
 
   public roleForm     : FormGroup;
@@ -135,6 +135,10 @@ export class NewRoleComponent implements OnInit {
         this.initFormData();
       }
     }
+
+  async ngAfterViewInit() {
+    await this.confirmParentNamespace();
+  }
 
   ngOnInit() {
   }
@@ -394,8 +398,6 @@ export class NewRoleComponent implements OnInit {
         let exists = await this.iamService.iam.checkExistenceOfDomain({
           domain: this.roleForm.value.parentNamespace
         });
-
-        // TODO: check if namespace is a valid org or app namespace
         
         if (exists) {
           // Check if role sub-domain exists in this namespace
@@ -409,22 +411,19 @@ export class NewRoleComponent implements OnInit {
               domain: this.roleForm.value.parentNamespace
             });
 
-            if (isOwner) {
-              this.roleForm.get('roleName').reset();
-              this.stepper.selected.editable = false;
-              this.stepper.selected.completed = true;
-              this.stepper.next();
-            }
-            else {
+            if (!isOwner) {
               this.toastr.error('You are not authorized to create a role under this namespace.', this.TOASTR_HEADER);
+              this.dialog.closeAll();
             }
           }
           else {
             this.toastr.error('Role subdomain in this namespace does not exist.', this.TOASTR_HEADER);
+            this.dialog.closeAll();
           }
         }
         else {
           this.toastr.error('Namespace does not exist.', this.TOASTR_HEADER);
+          this.dialog.closeAll();
         }
       }
       catch (e) {
@@ -538,7 +537,12 @@ export class NewRoleComponent implements OnInit {
     }
     else {
       if (isSuccess) {
-        this.toastr.success('Role is successfully created.', this.TOASTR_HEADER);
+        if (this.origData) {
+          this.toastr.success('Role is successfully updated.', this.TOASTR_HEADER);
+        }
+        else {
+          this.toastr.success('Role is successfully created.', this.TOASTR_HEADER);
+        }
       }
       this.dialogRef.close(isSuccess);
     }
