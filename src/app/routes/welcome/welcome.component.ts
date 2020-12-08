@@ -5,6 +5,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 
+import { version } from '../../../../package.json';
+
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
@@ -12,6 +14,7 @@ import { IamService } from 'src/app/shared/services/iam.service';
 })
 export class WelcomeComponent implements OnInit {
   isMetamaskExtensionAvailable = false;
+  version: string = version;
 
   constructor(private route: Router, private iamService: IamService, private spinner: NgxSpinnerService,
     private toastr: ToastrService) { }
