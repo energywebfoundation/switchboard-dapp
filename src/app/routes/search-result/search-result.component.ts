@@ -146,7 +146,9 @@ export class SearchResultComponent implements OnInit {
         type: data.definition && data.definition.orgName ? ListType.ORG : ListType.APP,
         definition: data
       };
-      this.detailView.setData(this.data);
+      if (this.detailView) {
+        this.detailView.setData(this.data);
+      }
     }
     else {
       this.data = data;
