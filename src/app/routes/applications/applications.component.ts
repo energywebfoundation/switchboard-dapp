@@ -149,19 +149,3 @@ export class ApplicationsComponent implements OnInit {
     this.governanceTabGroup.selectedIndex = tabIdx;
   }
 }
-
-export interface OrganizationsLists {
-  imageUrl: string;
-  orgNameSpace: string;
-  orgName: string;
-  websiteURL: string;
-  actions: string;
-}
-
-export interface EnrollmentRoles {
-  creationDate: string;
-  roleType: string;
-  roleName: string;
-  ensName: string;
-  actions: string;
-}
