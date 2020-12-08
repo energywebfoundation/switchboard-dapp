@@ -1,6 +1,6 @@
 {
   "name": "switchboard-iam",
-  "version": "0.0.1",
+  "version": "0.8.0",
   "description": "Decentralized Identity and Access Management Switchboard",
   "author": "EWF",
   "license": "GPL-3.0-or-later",
