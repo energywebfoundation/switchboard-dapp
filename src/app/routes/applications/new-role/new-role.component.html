@@ -107,7 +107,8 @@
               </div>
             </ng-container>
             <div class="d-flex justify-content-end mb-2">
-              <button mat-stroked-button class="btn btn-small mr-2" (click)="back()">Back</button>
+              <button mat-stroked-button class="btn btn-small mr-2" *ngIf="origData" (click)="closeDialog()">Cancel</button>
+              <button mat-stroked-button class="btn btn-small mr-2" *ngIf="!origData" (click)="back()">Back</button>
               <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="proceedAddingFields()">Next</button>
             </div>
           </form>
