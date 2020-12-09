@@ -420,7 +420,12 @@ export class NewApplicationComponent implements OnInit {
     }
     else {
       if (isSuccess) {
-        this.toastr.success('Application is successfully created.', this.TOASTR_HEADER);
+        if (this.origData) {
+          this.toastr.success('Application is successfully updated.', this.TOASTR_HEADER);
+        }
+        else {
+          this.toastr.success('Application is successfully created.', this.TOASTR_HEADER);
+        }
       }
       this.dialogRef.close(isSuccess);
     }

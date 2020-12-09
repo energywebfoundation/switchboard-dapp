@@ -332,7 +332,12 @@ export class NewOrganizationComponent implements OnInit {
     }
     else {
       if (isSuccess) {
-        this.toastr.success('Organization is successfully created.', this.TOASTR_HEADER);
+        if (this.origData) {
+          this.toastr.success('Organization is successfully updated.', this.TOASTR_HEADER);
+        }
+        else {
+          this.toastr.success('Organization is successfully created.', this.TOASTR_HEADER);
+        }
       }
       this.dialogRef.close(isSuccess);
     }
