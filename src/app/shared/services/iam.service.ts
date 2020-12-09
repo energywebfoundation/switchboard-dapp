@@ -103,7 +103,7 @@ export class IamService {
 
   async setupUser() {
     // No need to setup user again
-    if (this.accountAddress) {
+    if (this._didDocument) {
       return;
     }
 

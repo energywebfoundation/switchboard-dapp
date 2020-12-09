@@ -84,6 +84,9 @@ export class DashboardComponent implements OnInit {
         // Redirect to login screen if user  is not yet logged-in
         returnUrl = '/welcome';
       }
+
+      // Setup User Data
+      await this._setupUser();
       
       // Redirect to actual screen
       if (returnUrl) {
@@ -94,9 +97,6 @@ export class DashboardComponent implements OnInit {
         // Init Orgs & Apps
         await this._getOrgsAndApps();
         this.loadingService.hide();
-
-        // Setup User Data
-        this._setupUser();
 
         // Stay in current screen and display user name if available
         this.iamService.userProfile.subscribe((data: any) => {
