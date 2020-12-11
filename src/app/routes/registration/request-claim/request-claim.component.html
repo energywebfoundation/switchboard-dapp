@@ -3,10 +3,10 @@
     class="header-enroll bg-color d-flex justify-content-center justify-content-between position-fixed pl-0 pl-lg-4 py-2 w-100"
     [ngStyle]="bgColor">
     <img src="{{ orgAppDetails?.logoUrl }}" height="48px" *ngIf="orgAppDetails?.logoUrl" />
-    <!-- <ng-container *ngIf="!orgAppDetails?.logoUrl">
-      <img src="/org/logo/here" height="48px" *ngIf="roleType === RoleType.ORG" />
-      <img src="/app/logo/here" height="48px" *ngIf="roleType === RoleType.APP" />
-    </ng-container> -->
+    <ng-container *ngIf="!orgAppDetails?.logoUrl">
+      <img src="../assets/img/no-organization-image.png" height="48px" *ngIf="roleType === RoleType.ORG" />
+      <img src="../assets/img/no-application-image.png" height="48px" *ngIf="roleType === RoleType.APP" />
+    </ng-container>
     <div>
       <button mat-button class="btn btn-small md-enroll px-4 mr-2" (click)="logout()" *ngIf="isLoggedIn">
         <div [ngStyle]="txtColor">Logout</div>
