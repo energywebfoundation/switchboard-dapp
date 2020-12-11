@@ -46,7 +46,6 @@ export class RequestClaimComponent implements OnInit {
   public txtboxColor    : Object = {};
 
   public isLoggedIn     = false;
-  public isApp          = false;
   private stayLoggedIn  = false;
 
   @HostListener('window:beforeunload', ['$event'])
@@ -87,9 +86,7 @@ export class RequestClaimComponent implements OnInit {
         }
       }
 
-      if (params.returnUrl || others.returnUrl) {
-        this.callbackUrl = params.returnUrl || others.returnUrl;
-      }
+      this.callbackUrl = params.returnUrl || others.returnUrl;
 
       if (params.bgcolor) {
         this.bgColor = { 'background-color': `#${params.bgcolor}` };
