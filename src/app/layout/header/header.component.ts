@@ -188,8 +188,8 @@ export class HeaderComponent implements OnInit {
                 }
             });
 
-            console.log('approved claims', approvedClaimsList.length);
-            console.log('synced claims', claims.length);
+            // console.log('approved claims', approvedClaimsList.length);
+            // console.log('synced claims', claims.length);
 
             this.notif.pendingSyncCount = approvedClaimsList.length - claims.length;
         }

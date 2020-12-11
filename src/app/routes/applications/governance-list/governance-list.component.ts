@@ -53,7 +53,7 @@ export class GovernanceListComponent implements OnInit {
     }
 
   async ngOnInit() {
-    console.log('listType', this.listType);
+    // console.log('listType', this.listType);
     switch (this.listType) {
       case ListType.ORG:
         this.displayedColumns = OrgColumns;
@@ -91,17 +91,17 @@ export class GovernanceListComponent implements OnInit {
         application: filterOptions.application || '',
         role: ''
       });
-      console.log('setting up filter', this.filterForm.value);
+      // console.log('setting up filter', this.filterForm.value);
     }
     this.filter();
 
-    console.log($getOrgList);
+    // console.log($getOrgList);
     this.loadingService.hide();
   }
 
   view(type: string, data: any) {
-    console.log('type', type);
-    console.log('data', data);
+    // console.log('type', type);
+    // console.log('data', data);
     const dialogRef = this.dialog.open(GovernanceViewComponent, {
       width: '600px',data:{
         type: type,
@@ -143,8 +143,8 @@ export class GovernanceListComponent implements OnInit {
   }
 
   edit(type: string, data: any) {
-    console.log('type', type);
-    console.log('data', data);
+    // console.log('type', type);
+    // console.log('data', data);
 
     let component = undefined;
 
@@ -179,7 +179,7 @@ export class GovernanceListComponent implements OnInit {
   }
 
   transferOwnership(type: any, data: any) {
-    console.log('data', data);
+    // console.log('data', data);
     const dialogRef = this.dialog.open(TransferOwnershipComponent, {
       width: '600px',data:{
         namespace: data.namespace,
@@ -190,7 +190,7 @@ export class GovernanceListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
 
       if (result) {
         this.getList();

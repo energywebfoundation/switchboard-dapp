@@ -40,6 +40,6 @@ export class NavsearchComponent implements OnInit, OnChanges {
     }
 
     handleForm() {
-        console.log('Form submit: ' + this.term);
+        // console.log('Form submit: ' + this.term);
     }
 }

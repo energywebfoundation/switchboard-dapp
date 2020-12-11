@@ -62,7 +62,7 @@ export class GovernanceDetailsComponent implements OnInit {
       }
       this.formData.definition.others = JSON.stringify(tmp);
     }
-    console.log('formData', this.formData);
+    // console.log('formData', this.formData);
 
     if (this.isEmbedded) {
       await this._getAppsAndRoles();
@@ -88,8 +88,8 @@ export class GovernanceDetailsComponent implements OnInit {
       namespace: this.formData.namespace
     });
 
-    console.log('appList', this.appList);
-    console.log('roleList', this.roleList);
+    // console.log('appList', this.appList);
+    // console.log('roleList', this.roleList);
     this.loadingService.hide();
   }
 

@@ -10,11 +10,11 @@ export class ScrollableDirective implements OnInit {
     defaultHeight = 250;
 
     constructor(public element: ElementRef) { 
-        console.log("jjjjjj");
+        // console.log("jjjjjj");
     }
 
     ngOnInit() {
-        console.log("jjjjj2j");
+        // console.log("jjjjj2j");
         $(this.element.nativeElement).slimScroll({
             height: (this.height || this.defaultHeight)
         });

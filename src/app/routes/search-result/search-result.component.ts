@@ -156,7 +156,7 @@ export class SearchResultComponent implements OnInit {
   }
 
   viewDetails(data: any, el: HTMLElement) {
-    console.log('view details', data);
+    // console.log('view details', data);
     this.opened = true;
     this._updateData(data);
 
@@ -178,7 +178,7 @@ export class SearchResultComponent implements OnInit {
   }
 
   onSelectedItem(event: any) {
-    console.log('onSelectedItem', event);
+    // console.log('onSelectedItem', event);
     this.search(event.option.value.namespace);
   }
 
@@ -206,6 +206,6 @@ export class SearchResultComponent implements OnInit {
   }
 
   onChangeFlag(e: any) {
-    console.log(e);
+    // console.log(e);
   }
 }

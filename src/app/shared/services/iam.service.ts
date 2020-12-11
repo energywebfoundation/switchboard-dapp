@@ -60,7 +60,7 @@ export class IamService {
 
     // Check if account address exists
     if (!this._user.getValue()) {
-      console.log('Initializing connections...');
+      // console.log('Initializing connections...');
       let metamaskOpts = undefined;
       if (useMetamaskExtension) {
         metamaskOpts = {
@@ -71,13 +71,13 @@ export class IamService {
 
       try {
         const { did, connected, userClosedModal } = await this._iam.initializeConnection(metamaskOpts);
-        console.log(did, connected, userClosedModal);
+        // console.log(did, connected, userClosedModal);
         if (did && connected && !userClosedModal) {
           // Setup Account Address
           const signer = this._iam.getSigner();
           this.accountAddress = await signer.getAddress();
 
-          console.log('signer', signer);
+          // console.log('signer', signer);
 
           // Listen to Account Change
           if (useMetamaskExtension) {
@@ -112,11 +112,11 @@ export class IamService {
 
     // Get User Claims
     let data: any[] = await this.iam.getUserClaims();
-    console.log('getUserClaims()', JSON.parse(JSON.stringify(data)));
+    // console.log('getUserClaims()', JSON.parse(JSON.stringify(data)));
 
     // Get Profile Related Claims
     data = data.filter((item: any) => item.profile ? true : false );
-    console.log('Profile Claims', JSON.parse(JSON.stringify(data)));
+    // console.log('Profile Claims', JSON.parse(JSON.stringify(data)));
 
     // Get the most recent claim
     if (data.length) {

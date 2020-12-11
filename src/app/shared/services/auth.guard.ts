@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
         let loginStatus = this.iamService.getLoginStatus();
         if (loginStatus) {
             if (state.url === 'welcome' || loginStatus === LoginType.LOCAL) {
-                console.log(state.url);
+                // console.log(state.url);
                 if (state.url === 'welcome') {
                     this.router.navigate(['dashboard']);
                 }

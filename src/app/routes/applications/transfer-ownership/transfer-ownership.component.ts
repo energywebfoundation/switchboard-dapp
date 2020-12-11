@@ -127,7 +127,7 @@ export class TransferOwnershipComponent implements OnInit {
       if (steps) {
         for (let index = 0; index < steps.length; index++) {
           let step = steps[index];
-          console.log('Processing', step.info);
+          // console.log('Processing', step.info);
 
           // Process the next steap
           await step.next();
