@@ -428,11 +428,16 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       }
       catch (e) {
         this.toastr.error(e.message, 'System Error');
+        this.dialog.closeAll();
       } 
       finally {
         this.isChecking = false;
         this.spinner.hide();
       }
+    }
+    else {
+      this.toastr.error('Parent Namespace is missing.', this.TOASTR_HEADER);
+      this.dialog.closeAll();
     }
   }
 
