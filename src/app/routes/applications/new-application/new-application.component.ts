@@ -106,15 +106,8 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
     }
   }
 
-  alphaNumericOnly(event: any, includeDot?: boolean) {
-    let charCode = (event.which) ? event.which : event.keyCode;
-    
-    // Check if key is alphanumeric key
-    if ((charCode > 96 && charCode < 123) || (charCode > 47 && charCode < 58) || (includeDot && charCode === 46)) {
-      return true;
-    }
-
-    return false;
+  alphaNumericOnly(event: any) {
+    return this.iamService.isAlphaNumericOnly(event);
   }
 
   async confirmOrgNamespace() {

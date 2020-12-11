@@ -181,14 +181,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   alphaNumericOnly(event: any, includeDot?: boolean) {
-    let charCode = (event.which) ? event.which : event.keyCode;
-    
-    // Check if key is alphanumeric key
-    if ((charCode > 96 && charCode < 123) || (charCode > 47 && charCode < 58) || (includeDot && charCode === 46)) {
-      return true;
-    }
-
-    return false;
+    return this.iamService.isAlphaNumericOnly(event, includeDot);
   }
 
   issuerTypeChanged(data: any) {

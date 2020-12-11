@@ -39,7 +39,7 @@
                   <mat-label class="ml-3 pl-1">Organization Namespace</mat-label>
                   <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                     <input matInput autocomplete="off" formControlName="orgName" type="text" placeholder="Organization Namespace" required
-                      oninput="this.value = this.value.toLowerCase()" (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256"/>
+                      oninput="this.value = this.value.toLowerCase()" appBlockPaste (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256"/>
                       <mat-error>Organization Namespace is <strong>required</strong></mat-error>
                   </mat-form-field>
                 </div>
