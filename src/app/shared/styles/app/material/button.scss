@@ -142,3 +142,17 @@
 .mat-button-toggle-checked .mat-button-toggle-label-content {
     color: white;
 }
+
+.multiline-tooltip {
+    white-space: pre-line;
+}
+
+.tooltip-color {
+    color:#9080BA;
+}
+
+.tooltip-wrapper {
+    position: absolute;
+    top: -5px;
+    right: 30px;
+}
