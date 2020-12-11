@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatStepper, MAT_DIALOG_DATA } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
@@ -14,7 +14,7 @@ import { ViewType } from '../new-organization/new-organization.component';
   templateUrl: './new-application.component.html',
   styleUrls: ['./new-application.component.scss']
 })
-export class NewApplicationComponent implements OnInit {
+export class NewApplicationComponent implements OnInit, AfterViewInit {
   @ViewChild('stepper', { static: false }) private stepper: MatStepper;
 
   public appForm: FormGroup;
@@ -64,6 +64,10 @@ export class NewApplicationComponent implements OnInit {
         this.initFormData();
       }
     }
+
+  async ngAfterViewInit() {
+    await this.confirmOrgNamespace();
+  }
 
   ngOnInit() {
   }
@@ -136,30 +140,33 @@ export class NewApplicationComponent implements OnInit {
               domain: this.appForm.value.orgNamespace
             });
 
-            if (isOwner) {
-              this.stepper.selected.editable = false;
-              this.stepper.selected.completed = true;
-              this.stepper.next();
-            }
-            else {
+            if (!isOwner) {
               this.toastr.error('You are not authorized to create an application in this organization.', this.TOASTR_HEADER);
+              this.dialog.closeAll();
             }
           }
           else {
             this.toastr.error('Application subdomain in this organization does not exist.', this.TOASTR_HEADER);
+            this.dialog.closeAll();
           }
         }
         else {
           this.toastr.error('Organization namespace does not exist.', this.TOASTR_HEADER);
+          this.dialog.closeAll();
         }
       }
       catch (e) {
         this.toastr.error(e.message, 'System Error');
+        this.dialog.closeAll();
       } 
       finally {
         this.isChecking = false;
         this.spinner.hide();
       }
+    }
+    else {
+      this.toastr.error('Organization Namespace is missing.', this.TOASTR_HEADER);
+      this.dialog.closeAll();
     }
   }
 
@@ -172,7 +179,7 @@ export class NewApplicationComponent implements OnInit {
   cancelAppDetails() {
     // Set the second step to editable
     let list = this.stepper.steps.toArray();
-    list[1].editable = true;
+    list[0].editable = true;
 
     this.stepper.previous();
     this.stepper.selected.completed = false;

@@ -44,7 +44,7 @@
           <form [formGroup]="roleForm">
             <ng-template matStepLabel>Set Role Issuers</ng-template>
             <ng-container formGroupName="data">
-              <div *ngIf="viewType === ViewType.UPDATE" class="ml-3 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
+              <div *ngIf="viewType === ViewType.UPDATE" class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
                 <span class="pb-2">{{ roleForm?.value?.roleName + '.' + ENSPrefixes.Roles + '.' + roleForm?.value?.parentNamespace }}</span>
               </div>
               <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer">
