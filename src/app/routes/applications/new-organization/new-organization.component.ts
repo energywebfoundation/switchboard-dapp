@@ -304,13 +304,14 @@ export class NewOrganizationComponent implements OnInit {
     this.stepper.selected.completed = false;
   }
 
-  private async confirm(confirmationMsg: string) {
+  private async confirm(confirmationMsg: string, isDiscardButton?: boolean) {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
       maxHeight: '195px',
       data: {
         header: this.TOASTR_HEADER,
-        message: confirmationMsg
+        message: confirmationMsg,
+        isDiscardButton: isDiscardButton
       },
       maxWidth: '100%',
       disableClose: true
@@ -319,7 +320,7 @@ export class NewOrganizationComponent implements OnInit {
 
   async closeDialog(isSuccess?: boolean) {
     if (this.orgForm.touched && !isSuccess) {
-      if (await this.confirm('There are unsaved changes. Do you wish to continue?')) {
+      if (await this.confirm('There are unsaved changes.', true)) {
         this.dialogRef.close(false);
       }
     }

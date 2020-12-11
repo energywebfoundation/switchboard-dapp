@@ -7,9 +7,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./confirmation-dialog.component.scss']
 })
 export class ConfirmationDialogComponent implements OnInit {
+  isDiscardButton = false;
 
   constructor(public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) { 
+      this.isDiscardButton = data && data.isDiscardButton ? true : false;
+    }
 
   ngOnInit() {}
 
