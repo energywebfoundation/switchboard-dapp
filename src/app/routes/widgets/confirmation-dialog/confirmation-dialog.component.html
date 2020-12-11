@@ -5,7 +5,11 @@
   </div>
 </div>
 
-<div class="d-flex justify-content-end align-items-bottom my-4 mx-4">
+<div class="d-flex justify-content-end align-items-bottom my-4 mx-4" *ngIf="!isDiscardButton">
   <button mat-stroked-button class="btn btn-small mr-2" type="submit" (click)="closeMe(false)">Cancel</button>
   <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="closeMe(true)">Confirm</button>
+</div>
+<div class="d-flex justify-content-end align-items-bottom my-4 mx-4" *ngIf="isDiscardButton">
+  <button mat-stroked-button class="btn btn-small mr-2" type="submit" (click)="closeMe(false)">Continue</button>
+  <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="closeMe(true)">Discard</button>
 </div>
