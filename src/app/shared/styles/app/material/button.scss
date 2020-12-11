@@ -119,17 +119,20 @@
 
 .mat-button-toggle-label-content {
     text-transform: uppercase;
-    font-family: "Rajdhani", sans-serif;
-    font-weight: 700;
+    font-family: "Rajdhani", sans-serif !important;
+    font-weight: 600;
+    line-height: 31px !important;
+    letter-spacing: 0.2px;
 }
 
 .mat-button-toggle-group {
-    border: solid 1px #8677ae;
+    border: solid 1px #33CBCB;
 }
 
 .mat-button-toggle {
-    color: #8677ae !important;
+    color: #33CBCB!important;
     background-color: transparent;
+    font-family: 'Rajdhani', sans-serif;
 }
 
 .mat-button-toggle-checked {
