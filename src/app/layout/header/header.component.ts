@@ -143,18 +143,20 @@ export class HeaderComponent implements OnInit {
 
         // Listen to External Messages
         await this.iamService.iam.subscribeToMessages({
-            messageHandler: this.handleMessage
+            messageHandler: this.handleMessage.bind(this)
         });
     }
 
     private handleMessage(message: any) {
         if (message.issuedToken) {
             // Message has issued token ===> Newly Approved Claim
-            this.notifService.increasePendingDidDocSyncCount.bind(this)();
+            this.notifService.increasePendingDidDocSyncCount();
+            this.toastr.info('Your claim request has been approved. Please sync your approved claims in your DID Document.', 'Enrolment Approved');
         }
         else {
             // Message has no issued token ===> Newly Requested Claim
-            this.notifService.increasePendingApprovalCount.bind(this)();
+            this.notifService.increasePendingApprovalCount();
+            this.toastr.info('A new enrolment request is waiting for your approval.', 'New Enrolment Request');
         }
     }
 

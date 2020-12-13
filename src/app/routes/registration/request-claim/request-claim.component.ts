@@ -86,7 +86,7 @@ export class RequestClaimComponent implements OnInit {
         }
       }
 
-      this.callbackUrl = params.returnUrl || others.returnUrl;
+      this.callbackUrl = params.returnUrl || (others ? others.returnUrl : undefined);
 
       if (params.bgcolor) {
         this.bgColor = { 'background-color': `#${params.bgcolor}` };
