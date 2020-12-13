@@ -226,7 +226,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         else {
           try {
             // Check if others is in JSON Format
-            console.info(JSON.parse(orgData.data.others));
+            // console.info(JSON.parse(orgData.data.others));
 
             // Let the user confirm the info before proceeding to the next step
             this.stepper.selected.editable = false;
@@ -289,7 +289,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         else {
           try {
             // Check if others is in JSON Format
-            console.info(JSON.parse(orgData.data.others));
+            // console.info(JSON.parse(orgData.data.others));
 
             // Let the user confirm the info before proceeding to the next step
             this.stepper.selected.editable = false;
@@ -334,7 +334,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       delete req.data.others;
     }
 
-    console.info('myreq', req);
+    // console.info('myreq', req);
 
     // Set the second step to non-editable
     let list = this.stepper.steps.toArray();
