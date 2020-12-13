@@ -356,14 +356,29 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       let allowToProceed = true;
       if (this.IssuerType.Role === issuerType) {
         this.spinner.show();
-        let did = await this.iamService.iam.getRoleDIDs({
-          namespace: this.roleForm.value.data.issuer.roleName
+
+        // Check if rolename exists or valid
+        let exists = await this.iamService.iam.checkExistenceOfDomain({
+          domain: this.roleForm.value.data.issuer.roleName
         });
-        this.spinner.hide();
-        if (!did || !did.length) {
+
+        if (!exists || !this.roleForm.value.data.issuer.roleName.includes(`.${ENSNamespaceTypes.Roles}.`)) {
+          this.toastr.error('Issuer Role Namespace does not exist or is invalid.', this.TOASTR_HEADER);
           allowToProceed = false;
-          this.toastr.error('Issuer Role has no approved users.', this.TOASTR_HEADER);
         }
+        else {
+          // Check if there are approved users to issue the claim
+          let did = await this.iamService.iam.getRoleDIDs({
+            namespace: this.roleForm.value.data.issuer.roleName
+          });
+
+          if (!did || !did.length) {
+            allowToProceed = false;
+            this.toastr.error('Issuer Role has no approved users.', this.TOASTR_HEADER);
+          }
+        }
+
+        this.spinner.hide();
       }
       
       if (allowToProceed) {
