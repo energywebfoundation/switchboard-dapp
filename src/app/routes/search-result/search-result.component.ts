@@ -34,11 +34,13 @@ export class SearchResultComponent implements OnInit {
   searchForm: FormGroup;
   searchTxtFieldValue: string;
 
+  requestedClaims: any[];
+
   constructor(private activeRoute: ActivatedRoute,
       private loadingService: LoadingService,
       private fb: FormBuilder,
       private iamService: IamService) {
-    this._initList();
+        this._initList();
   }
 
   ngOnInit() {
@@ -46,6 +48,7 @@ export class SearchResultComponent implements OnInit {
 
   private _initList() {
     this.loadingService.show();
+
     // Initialize Search Field and Options
     this.searchForm = this.fb.group({
       searchTxt: new FormControl(''),
@@ -59,6 +62,11 @@ export class SearchResultComponent implements OnInit {
       });
 
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
+      // Get requested claims
+      this.requestedClaims = await this.iamService.iam.getRequestedClaims({
+        did: this.iamService.iam.getDid()
+      });
+      
       // Retrieve List - Orgs & Apps
       await this._getOrgsAndApps();
 
