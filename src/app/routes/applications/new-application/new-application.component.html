@@ -102,7 +102,7 @@
               <div class="d-flex justify-content-center">
                 <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
                   <img class="img-logo" src="../assets/img/no-application-image.png" height="48px" *ngIf="!appForm?.value?.data?.logoUrl" />
-                  <img class="img-logo" *ngIf="appForm?.value?.data?.logoUrl" src="{{ appForm?.value?.data?.logoUrl }}"/>
+                  <img class="img-logo" *ngIf="appForm?.value?.data?.logoUrl" (error)="logoUrlError()" src="{{ appForm?.value?.data?.logoUrl }}"/>
                 </div>
               </div>
               <div class="text-left my-3">

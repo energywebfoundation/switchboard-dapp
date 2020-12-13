@@ -20,6 +20,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   public appForm: FormGroup;
   public environment = environment;
   public isChecking = false;
+  private _isLogoUrlValid = true;
   public ENSPrefixes = ENSNamespaceTypes;
   public ViewType = ViewType;
 
@@ -169,7 +170,13 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
     this.stepper.selected.completed = false;
   }
 
+  logoUrlError() {
+    this._isLogoUrlValid = false;
+  }
+
   cancelAppDetails() {
+    this._isLogoUrlValid = true;
+
     // Set the second step to editable
     let list = this.stepper.steps.toArray();
     list[0].editable = true;
@@ -319,6 +326,12 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
     req.data.appName = req.data.applicationName;
     delete req.data.applicationName;
+
+    // Check if logoUrl resolves
+    if (req.data.logoUrl && !this._isLogoUrlValid) {
+      this.toastr.error('Logo URL cannot be resolved. Please change it to a correct and valid image URL.', this.TOASTR_HEADER);
+      return;
+    }
 
     // Make sure others is in correct JSON Format
     if (req.data.others && req.data.others.trim()) {
