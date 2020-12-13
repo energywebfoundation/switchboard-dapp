@@ -49,7 +49,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       });
 
       if (data && data.viewType) {
-        console.log('origData', this.origData);
+        // console.log('origData', this.origData);
         this.viewType = data.viewType;
         
   
@@ -354,7 +354,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       let steps = await this.iamService.iam.createApplication(req);
       for (let index = 0; index < steps.length; index++) {
         let step = steps[index];
-        console.log('Processing', step.info);
+        // console.log('Processing', step.info);
         
         // Show the next step
         this.stepper.selected.completed = true;

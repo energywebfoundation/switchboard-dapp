@@ -60,9 +60,9 @@ export class DashboardComponent implements OnInit {
 
       // Check Login
       if (this._loginStatus) {
-        console.log(this._loginStatus);
+        // console.log(this._loginStatus);
         if (this._loginStatus === LoginType.LOCAL) {
-          console.log('local > login');
+          // console.log('local > login');
 
           // Set metamask extension options if connecting with metamask extension
           let useMetamaskExtension = undefined;
@@ -128,11 +128,11 @@ export class DashboardComponent implements OnInit {
       type: ENSNamespaceTypes.Application
     });
 
-    console.log('orgList', orgList);
-    console.log('appList', appList);
+    // console.log('orgList', orgList);
+    // console.log('appList', appList);
     this._searchList = [...orgList, ...appList];
 
-    console.log('searchList', this._searchList);
+    // console.log('searchList', this._searchList);
   }
 
   private _filterOrgsAndApps(keyword: any): any[] {
@@ -170,7 +170,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onSelectedItem(event: any) {
-    console.log('onSelectedItem', event);
+    // console.log('onSelectedItem', event);
     this.search(event.option.value.namespace);
   }
 

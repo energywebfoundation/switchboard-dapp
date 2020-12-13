@@ -145,7 +145,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   private initFormData() {
     if (this.origData) {
-      console.log('origData', this.origData);
+      // console.log('origData', this.origData);
       let def = this.origData.definition;
 
       // Construct Parent Namespace
@@ -449,7 +449,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     req.data.fields = this.dataSource.data;
     req.data.metadata = {};
     
-    console.log('req', req);
+    // console.log('req', req);
 
     // Set the second step to non-editable
     let list = this.stepper.steps.toArray();
@@ -469,7 +469,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       let steps = await this.iamService.iam.createRole(req);
       for (let index = 0; index < steps.length; index++) {
         let step = steps[index];
-        console.log('Processing', step.info);
+        // console.log('Processing', step.info);
         
         // Show the next step
         this.stepper.selected.completed = true;
