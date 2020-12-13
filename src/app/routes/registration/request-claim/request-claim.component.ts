@@ -20,6 +20,7 @@ const TOASTR_HEADER = 'Enrolment';
 })
 export class RequestClaimComponent implements OnInit {
 
+  public RoleType       = RoleType;
   public enrolmentForm  : FormGroup;
   public roleTypeForm   : FormGroup;
   public fieldList      : {type: string, label: string, validation: string}[];
@@ -70,7 +71,6 @@ export class RequestClaimComponent implements OnInit {
 
   private setUrlParams(params: any) {
     this.namespace = params.app || params.org;
-    this.callbackUrl = params.returnUrl;
     this.defaultRole = params.roleName;
   }
 
@@ -85,6 +85,8 @@ export class RequestClaimComponent implements OnInit {
           others[item.key] = item.value;
         }
       }
+
+      this.callbackUrl = params.returnUrl || others.returnUrl;
 
       if (params.bgcolor) {
         this.bgColor = { 'background-color': `#${params.bgcolor}` };
@@ -241,9 +243,9 @@ export class RequestClaimComponent implements OnInit {
 
     // Check Login
     if (loginStatus) {
-      console.log(loginStatus);
+      // console.log(loginStatus);
       if (loginStatus === LoginType.LOCAL) {
-        console.log('local > login');
+        // console.log('local > login');
 
         // Set metamask extension options if connecting with metamask extension
         let useMetamaskExtension = undefined;
@@ -288,7 +290,7 @@ export class RequestClaimComponent implements OnInit {
       did: this.iamService.iam.getDid()
     });
 
-    console.log('enrolledRoles', enrolledRoles);
+    // console.log('enrolledRoles', enrolledRoles);
 
     if (roleList && roleList.length) {
       roleList = roleList.filter((role: any) => {
@@ -335,7 +337,7 @@ export class RequestClaimComponent implements OnInit {
         }
       }
       
-      console.log('this.roleList', this.roleList);
+      // console.log('this.roleList', this.roleList);
     }
     catch (e) {
       throw e;
@@ -387,11 +389,11 @@ export class RequestClaimComponent implements OnInit {
       fields: this.fb.array(controls)
     });
 
-    console.log(this.enrolmentForm);
+    // console.log(this.enrolmentForm);
   }
 
   roleTypeSelected(e: any) {
-    console.log('roleTypeSelected', e);
+    // console.log('roleTypeSelected', e);
     if (e && e.value && e.value.definition) {
       this.fieldList = e.value.definition.fields || [];
       this.selectedRole = e.value.definition;
@@ -411,7 +413,7 @@ export class RequestClaimComponent implements OnInit {
           did = await this.iamService.iam.getRoleDIDs({
             namespace: this.selectedRole.issuer.roleName
           });
-          console.log('dids by role', did);
+          // console.log('dids by role', did);
         }
         else if (this.selectedRole.issuer.did) {
           did = this.selectedRole.issuer.did;

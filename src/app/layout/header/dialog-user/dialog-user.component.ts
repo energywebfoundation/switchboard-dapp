@@ -44,11 +44,11 @@ export class DialogUser implements OnInit {
 
         // Get User Claims
         let data: any[] = await this.iamService.iam.getUserClaims();
-        console.log('getUserClaims()', JSON.parse(JSON.stringify(data)));
+        // console.log('getUserClaims()', JSON.parse(JSON.stringify(data)));
 
         // Get Profile Related Claims
         data = data.filter((item: any) => item.profile ? true : false );
-        console.log('Profile Claims', JSON.parse(JSON.stringify(data)));
+        // console.log('Profile Claims', JSON.parse(JSON.stringify(data)));
 
         // Get the most recent claim
         if (data.length) {
@@ -76,7 +76,7 @@ export class DialogUser implements OnInit {
                 data.birthdate = date;    
             }
             
-            console.log('data', data);
+            // console.log('data', data);
             try {
                 await this.iamService.iam.createSelfSignedClaim({
                     data: {

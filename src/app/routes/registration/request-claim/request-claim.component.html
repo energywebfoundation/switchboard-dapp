@@ -3,6 +3,10 @@
     class="header-enroll bg-color d-flex justify-content-center justify-content-between position-fixed pl-0 pl-lg-4 py-2 w-100"
     [ngStyle]="bgColor">
     <img src="{{ orgAppDetails?.logoUrl }}" height="48px" *ngIf="orgAppDetails?.logoUrl" />
+    <ng-container *ngIf="!orgAppDetails?.logoUrl">
+      <img src="../assets/img/no-organization-image.png" height="48px" *ngIf="roleType === RoleType.ORG" />
+      <img src="../assets/img/no-application-image.png" height="48px" *ngIf="roleType === RoleType.APP" />
+    </ng-container>
     <div>
       <button mat-button class="btn btn-small md-enroll px-4 mr-2" (click)="logout()" *ngIf="isLoggedIn">
         <div [ngStyle]="txtColor">Logout</div>
@@ -13,7 +17,7 @@
     <div
       class="content-enroll d-flex txt-color justify-content-start justify-content-md-center align-items-md-center flex-column px-3 mb-1 w-100"
       [ngStyle]="txtColor" *ngIf="isLoggedIn">
-      <h2 class="font-weight-600 mb-1">Enrol to {{ orgAppDetails?.appName }}</h2>
+      <h2 class="font-weight-600 mb-1">Enrol to {{ orgAppDetails?.appName || orgAppDetails?.orgName }}</h2>
       <span class="opacity-50">Please fill in below details</span>
     </div>
     <mat-card class="card-enroll" *ngIf="isLoggedIn">

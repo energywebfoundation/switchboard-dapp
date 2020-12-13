@@ -32,7 +32,7 @@ export class RemoveOrgAppComponent implements OnInit {
     public dialogRef: MatDialogRef<RemoveOrgAppComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { 
-    console.log(data);
+    // console.log(data);
     this.listType = data.listType;
     this.namespace = data.namespace;
     this.steps = data.steps;
@@ -50,7 +50,7 @@ export class RemoveOrgAppComponent implements OnInit {
       if (this.steps) {
         for (let index = 0; index < this.steps.length; index++) {
           let step = this.steps[index];
-          console.log('Processing', step.info);
+          // console.log('Processing', step.info);
 
           // Process the next steap
           await step.next();

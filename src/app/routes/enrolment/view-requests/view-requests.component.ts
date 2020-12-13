@@ -49,7 +49,7 @@ export class ViewRequestsComponent implements OnInit {
         token: this.claim.token
       };
 
-      console.log('issue claim', req);
+      // console.log('issue claim', req);
       await this.iamService.iam.issueClaimRequest(req);
 
       this.notifService.decreasePendingApprovalCount();
