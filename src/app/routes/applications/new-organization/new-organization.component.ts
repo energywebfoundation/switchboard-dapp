@@ -24,6 +24,7 @@ export class NewOrganizationComponent implements OnInit {
   public orgForm: FormGroup;
   public environment = environment;
   public isChecking = false;
+  private _isLogoUrlValid = true;
   public ENSPrefixes = ENSNamespaceTypes;
   public ViewType = ViewType;
 
@@ -221,6 +222,12 @@ export class NewOrganizationComponent implements OnInit {
     req.data.orgName = req.data.organizationName;
     delete req.data.organizationName;
 
+    // Check if logoUrl resolves
+    if (req.data.logoUrl && !this._isLogoUrlValid) {
+      this.toastr.error('Logo URL cannot be resolved. Please change it to a correct and valid image URL.', this.TOASTR_HEADER);
+      return;
+    }
+
     // Make sure others is in correct JSON Format
     if (req.data.others && req.data.others.trim()) {
       try {
@@ -297,7 +304,12 @@ export class NewOrganizationComponent implements OnInit {
     }
   }
 
+  logoUrlError() {
+    this._isLogoUrlValid = false;
+  }
+
   cancelOrgDetails() {
+    this._isLogoUrlValid = true;
     this.stepper.previous();
     this.stepper.selected.completed = false;
   }
