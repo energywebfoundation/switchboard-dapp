@@ -17,6 +17,7 @@ import { GovernanceViewComponent } from '../governance-view.component';
 export class GovernanceDetailsComponent implements OnInit {
   @Input('data') origData: any;
   @Input('is-embedded') isEmbedded: boolean;
+  @Input('requestedClaims') requestedClaims: any[];
 
   data: any;
 
@@ -88,9 +89,25 @@ export class GovernanceDetailsComponent implements OnInit {
       namespace: this.formData.namespace
     });
 
+    if (this.roleList && this.roleList.length) {
+      this.roleList.forEach((item: any) => {
+        item['isEnrolled'] = this._isEnrolledNamespace(item.namespace);
+      });
+    }
+
     // console.log('appList', this.appList);
     // console.log('roleList', this.roleList);
     this.loadingService.hide();
+  }
+
+  private _isEnrolledNamespace(namespace: string) {
+    let retVal = false;
+    if (namespace && this.requestedClaims && this.requestedClaims.length) {
+      retVal = this.requestedClaims.some((value: any) => {
+        return value.claimType === namespace;
+      });
+    }
+    return retVal;
   }
 
   viewDetails(data: any, type: string) {
