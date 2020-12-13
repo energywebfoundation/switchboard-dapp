@@ -45,7 +45,7 @@ export class IamService {
       natsServerUrl
     };
 
-    console.info('IAM Service Options', options);
+    // console.info('IAM Service Options', options);
 
     // Initialize Data
     this._user = new BehaviorSubject<User>(undefined);

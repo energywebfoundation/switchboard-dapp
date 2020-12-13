@@ -203,7 +203,7 @@ export class NewOrganizationComponent implements OnInit {
     else {
       try {
         // Check if others is in JSON Format
-        console.info(JSON.parse(orgData.data.others));
+        // console.info(JSON.parse(orgData.data.others));
 
         // Let the user confirm the info before proceeding to the next step
         this.stepper.selected.completed = true;
@@ -234,8 +234,6 @@ export class NewOrganizationComponent implements OnInit {
     else {
       delete req.data.others;
     }
-
-    console.info('myreq', req);
 
     // Set the first step to non-editable
     this.stepper.steps.first.editable = false;

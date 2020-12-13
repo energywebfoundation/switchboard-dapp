@@ -442,11 +442,6 @@ export class RequestClaimComponent implements OnInit {
             fields: JSON.parse(JSON.stringify(fields)),
             claimType: this.selectedNamespace
           };
-          
-          console.info('createClaimRequest', {
-            issuer: did,
-            claim: claim
-          });
 
           await this.iamService.iam.createClaimRequest({
             issuer: did,
