@@ -20,6 +20,7 @@ const TOASTR_HEADER = 'Enrolment';
 })
 export class RequestClaimComponent implements OnInit {
 
+  public RoleType       = RoleType;
   public enrolmentForm  : FormGroup;
   public roleTypeForm   : FormGroup;
   public fieldList      : {type: string, label: string, validation: string}[];
@@ -70,7 +71,6 @@ export class RequestClaimComponent implements OnInit {
 
   private setUrlParams(params: any) {
     this.namespace = params.app || params.org;
-    this.callbackUrl = params.returnUrl;
     this.defaultRole = params.roleName;
   }
 
@@ -85,6 +85,8 @@ export class RequestClaimComponent implements OnInit {
           others[item.key] = item.value;
         }
       }
+
+      this.callbackUrl = params.returnUrl || others.returnUrl;
 
       if (params.bgcolor) {
         this.bgColor = { 'background-color': `#${params.bgcolor}` };

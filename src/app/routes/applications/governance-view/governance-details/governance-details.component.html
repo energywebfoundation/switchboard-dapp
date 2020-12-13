@@ -4,6 +4,10 @@
       <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
         <span class="opacity-50 px-3" *ngIf="!formData?.definition?.logoUrl">No image</span>
         <img class="img-logo" *ngIf="formData?.definition?.logoUrl" src="{{ formData?.definition?.logoUrl }}" />
+        <ng-container *ngIf="!formData?.definition?.logoUrl">
+          <img src="../assets/img/no-organization-image.png" height="48px" *ngIf="roleType === RoleType.ORG" />
+          <img src="../assets/img/no-application-image.png" height="48px" *ngIf="roleType === RoleType.APP" />
+        </ng-container>
       </div>
     </div>
     <div class="text-left my-3">
