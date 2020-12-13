@@ -46,9 +46,16 @@
           *ngFor="let item of (filteredOptions | async)">
           <mat-card class="card-search-body p-0 mb-3 cursor-pointer" (click)="viewDetails(item, searchResultDrawer)">
             <div class="img-container p-4">
-              <div *ngIf="!item?.definition?.logoUrl"
-                style="background:url(https://www.energyweb.org/wp-content/uploads/2019/04/logo-knockout.png)"
-                class="img-wrapper px-2"></div>
+              <!-- Placeholder Logo -->
+              <ng-container *ngIf="!item?.definition?.logoUrl">
+                <div *ngIf="item?.definition?.orgName"
+                  style="background:url(../assets/img/no-organization-image.png)"
+                  class="img-wrapper px-2"></div>
+                <div *ngIf="item?.definition?.appName"
+                  style="background:url(../assets/img/no-application-image.png)"
+                  class="img-wrapper px-2"></div>
+              </ng-container>
+              <!-- Actual Logo -->
               <div *ngIf="item?.definition?.logoUrl"
                 [ngStyle]="{ 'background': 'url(' + item?.definition?.logoUrl + ')' }" class="img-wrapper px-2"></div>
             </div>

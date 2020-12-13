@@ -101,7 +101,7 @@
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
               <div class="d-flex justify-content-center">
                 <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
-                  <span class="opacity-50 px-3" *ngIf="!appForm?.value?.data?.logoUrl">No image</span>
+                  <img class="img-logo" src="../assets/img/no-application-image.png" height="48px" *ngIf="!appForm?.value?.data?.logoUrl" />
                   <img class="img-logo" *ngIf="appForm?.value?.data?.logoUrl" src="{{ appForm?.value?.data?.logoUrl }}"/>
                 </div>
               </div>

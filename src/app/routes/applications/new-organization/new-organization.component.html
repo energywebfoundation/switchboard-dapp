@@ -116,7 +116,7 @@
           <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
             <div class="d-flex justify-content-center">
               <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
-                <span class="opacity-50 px-3" *ngIf="!orgForm?.value?.data?.logoUrl">No image</span>
+                <img class="img-logo" src="../assets/img/no-organization-image.png" height="48px" *ngIf="!orgForm?.value?.data?.logoUrl" />
                 <img class="img-logo" *ngIf="orgForm?.value?.data?.logoUrl" src="{{ orgForm?.value?.data?.logoUrl }}" />
               </div>
             </div>
