@@ -174,9 +174,11 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
     this._isLogoUrlValid = false;
   }
 
-  cancelAppDetails() {
+  logoUrlSuccess() {
     this._isLogoUrlValid = true;
+  }
 
+  cancelAppDetails() {
     // Set the second step to editable
     let list = this.stepper.steps.toArray();
     list[0].editable = true;
