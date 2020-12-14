@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit {
     };
 
     isLoadingNotif = true;
+    isNotifInitialized = false;
 
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
@@ -82,7 +83,7 @@ export class HeaderComponent implements OnInit {
                 this.userName = data.name;
             }
         
-            if (this.iamService.accountAddress) {
+            if (this.iamService.accountAddress && !this.isNotifInitialized) {
                 // Initialize Notifications
                 this.initNotifications();
             }
@@ -125,6 +126,7 @@ export class HeaderComponent implements OnInit {
     private initNotifications() {
         // Init Notif Count
         this.initNotificationCount();
+        this.isNotifInitialized = true;
     }
 
     private async initNotificationListeners(pendingApprovalCount: number, pendingSyncCount: number) {
