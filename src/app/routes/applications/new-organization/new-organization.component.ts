@@ -308,8 +308,11 @@ export class NewOrganizationComponent implements OnInit {
     this._isLogoUrlValid = false;
   }
 
-  cancelOrgDetails() {
+  logoUrlSuccess() {
     this._isLogoUrlValid = true;
+  }
+
+  cancelOrgDetails() {
     this.stepper.previous();
     this.stepper.selected.completed = false;
   }
