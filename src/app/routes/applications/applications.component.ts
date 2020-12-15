@@ -45,7 +45,7 @@ export class ApplicationsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
 
       if (result) {
         this.listOrg.getList();
@@ -61,7 +61,7 @@ export class ApplicationsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
       if (result) {
         this.listApp.getList();
       }
@@ -76,7 +76,7 @@ export class ApplicationsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
       if (result) {
         this.listRole.getList();
       }
@@ -91,7 +91,7 @@ export class ApplicationsComponent implements OnInit {
 
   async showMe(i: any) {
     if (i.index === 1) {
-      console.log('Showing App List');
+      // console.log('Showing App List');
       if (this.isAppShown) {
         await this.listApp.getList(this.defaultFilterOptions.app);
         this.defaultFilterOptions.app = undefined;
@@ -101,7 +101,7 @@ export class ApplicationsComponent implements OnInit {
       }
     }
     else if (i.index === 2) {
-      console.log('Showing Role List');
+      // console.log('Showing Role List');
       if (this.isRoleShown) {
         await this.listRole.getList(this.defaultFilterOptions.role);
         this.defaultFilterOptions.role = undefined;
@@ -111,7 +111,7 @@ export class ApplicationsComponent implements OnInit {
       }
     }
     else if (i.index === 0) {
-      console.log('Showing Org List');
+      // console.log('Showing Org List');
       this.listOrg.getList();
     }
   }
@@ -131,7 +131,7 @@ export class ApplicationsComponent implements OnInit {
   }
 
   updateFilter(filterOptions: any) {
-    console.log('updateFilter', filterOptions);
+    // console.log('updateFilter', filterOptions);
     let tabIdx = 0;
     switch (filterOptions.listType) {
       case ListType.APP:
@@ -148,20 +148,4 @@ export class ApplicationsComponent implements OnInit {
 
     this.governanceTabGroup.selectedIndex = tabIdx;
   }
-}
-
-export interface OrganizationsLists {
-  imageUrl: string;
-  orgNameSpace: string;
-  orgName: string;
-  websiteURL: string;
-  actions: string;
-}
-
-export interface EnrollmentRoles {
-  creationDate: string;
-  roleType: string;
-  roleName: string;
-  ensName: string;
-  actions: string;
 }

@@ -60,6 +60,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ColorsService } from './colors/colors.service';
 import { ScrollableDirective } from './directives/scrollable/scrollable.directive';
 import { JAllowByDirective } from './directives/j-allow-by.directive';
+import { PreventPasteDirective } from './directives/prevent-paste.directive';
 
 
 
@@ -126,7 +127,8 @@ import { JAllowByDirective } from './directives/j-allow-by.directive';
     ],
     declarations: [
         ScrollableDirective,
-        JAllowByDirective
+        JAllowByDirective,
+        PreventPasteDirective
     ],
     exports: [
         CommonModule,
@@ -153,6 +155,7 @@ import { JAllowByDirective } from './directives/j-allow-by.directive';
         TypeaheadModule,
         ScrollableDirective,
         JAllowByDirective,
+        PreventPasteDirective,
         // Material Modules
         MatAutocompleteModule,
         MatButtonModule,

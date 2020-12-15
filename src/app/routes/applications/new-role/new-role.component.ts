@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatStepper, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { ListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -40,7 +41,7 @@ const FIELD_TYPES = [
   templateUrl: './new-role.component.html',
   styleUrls: ['./new-role.component.scss']
 })
-export class NewRoleComponent implements OnInit {
+export class NewRoleComponent implements OnInit, AfterViewInit {
   @ViewChild('stepper', { static: false }) private stepper: MatStepper;
 
   public roleForm     : FormGroup;
@@ -62,8 +63,8 @@ export class NewRoleComponent implements OnInit {
   fieldsForm          : FormGroup;
   showFieldsForm      = false;
   isEditFieldForm     = false;
-  displayedColumns    : string[] = ['type', 'label', 'validation', 'actions'];
-  displayedColumnsView: string[] = ['type', 'label', 'validation'];
+  displayedColumns    : string[] = ['type', 'label'/*, 'validation'*/, 'actions'];
+  displayedColumnsView: string[] = ['type', 'label'/*, 'validation'*/];
   dataSource          = new MatTableDataSource([]);
 
   public ViewType = ViewType;
@@ -108,24 +109,43 @@ export class NewRoleComponent implements OnInit {
       this.issuerList = [];
       this.issuerList.push(this.iamService.iam.getDid());
 
-      if (data && data.viewType && data.origData) {
+      if (data && data.viewType) {
         this.viewType = data.viewType;
-        this.origData = data.origData;
   
-        if (this.viewType === ViewType.UPDATE) {
+        if (this.viewType === ViewType.UPDATE && data.origData) {
+          this.origData = data.origData;
           this.TOASTR_HEADER = 'Update Role';
+        }
+        else if (this.viewType === ViewType.NEW && data.namespace) {
+          let tmp = {
+            parentNamespace: data.namespace,
+            roleType: undefined
+          };
+
+          if (data.listType === ListType.ORG) {
+            tmp.roleType = RoleType.ORG;
+          }
+          else if (data.listType === ListType.APP) {
+            tmp.roleType = RoleType.APP;
+          }
+
+          this.roleForm.patchValue(tmp);
         }
   
         this.initFormData();
       }
     }
 
+  async ngAfterViewInit() {
+    await this.confirmParentNamespace();
+  }
+
   ngOnInit() {
   }
 
   private initFormData() {
     if (this.origData) {
-      console.log('origData', this.origData);
+      // console.log('origData', this.origData);
       let def = this.origData.definition;
 
       // Construct Parent Namespace
@@ -137,7 +157,7 @@ export class NewRoleComponent implements OnInit {
       let version = `${parseInt(arrVersion[0]) + 1}.0.0`;
 
       // Construct Fields
-      this.dataSource.data = [...def.fields];
+      this.dataSource.data = def.fields ? [...def.fields] : [];
 
       this.roleForm.patchValue({
         roleType: def.roleType,
@@ -149,7 +169,7 @@ export class NewRoleComponent implements OnInit {
           issuer: {
             issuerType: def.issuer.issuerType,
             roleName: def.issuer.roleName,
-            did: [...def.issuer.did]
+            did: def.issuer.did ? [...def.issuer.did] : []
           }
         }
       });
@@ -161,14 +181,7 @@ export class NewRoleComponent implements OnInit {
   }
 
   alphaNumericOnly(event: any, includeDot?: boolean) {
-    let charCode = (event.which) ? event.which : event.keyCode;
-    
-    // Check if key is alphanumeric key
-    if ((charCode > 96 && charCode < 123) || (charCode > 47 && charCode < 58) || (includeDot && charCode === 46)) {
-      return true;
-    }
-
-    return false;
+    return this.iamService.isAlphaNumericOnly(event, includeDot);
   }
 
   issuerTypeChanged(data: any) {
@@ -331,7 +344,7 @@ export class NewRoleComponent implements OnInit {
     this.spinner.hide();
   }
 
-  proceedAddingFields() {
+  async proceedAddingFields() {
     let issuerType = this.roleForm.value.data.issuer.issuerType;
     if (this.IssuerType.DID === issuerType && !this.issuerList.length) {
       this.toastr.error('Issuer list is empty.', this.TOASTR_HEADER);
@@ -340,10 +353,40 @@ export class NewRoleComponent implements OnInit {
       this.toastr.error('Issuer Role is empty.', this.TOASTR_HEADER);
     }
     else {
-      // Proceed to Adding Fields Step
-      this.stepper.selected.editable = false;
-      this.stepper.selected.completed = true;
-      this.stepper.next();
+      let allowToProceed = true;
+      if (this.IssuerType.Role === issuerType) {
+        this.spinner.show();
+
+        // Check if rolename exists or valid
+        let exists = await this.iamService.iam.checkExistenceOfDomain({
+          domain: this.roleForm.value.data.issuer.roleName
+        });
+
+        if (!exists || !this.roleForm.value.data.issuer.roleName.includes(`.${ENSNamespaceTypes.Roles}.`)) {
+          this.toastr.error('Issuer Role Namespace does not exist or is invalid.', this.TOASTR_HEADER);
+          allowToProceed = false;
+        }
+        else {
+          // Check if there are approved users to issue the claim
+          let did = await this.iamService.iam.getRoleDIDs({
+            namespace: this.roleForm.value.data.issuer.roleName
+          });
+
+          if (!did || !did.length) {
+            allowToProceed = false;
+            this.toastr.error('Issuer Role has no approved users.', this.TOASTR_HEADER);
+          }
+        }
+
+        this.spinner.hide();
+      }
+      
+      if (allowToProceed) {
+        // Proceed to Adding Fields Step
+        this.stepper.selected.editable = false;
+        this.stepper.selected.completed = true;
+        this.stepper.next();
+      }
     }
   }
 
@@ -363,8 +406,6 @@ export class NewRoleComponent implements OnInit {
         let exists = await this.iamService.iam.checkExistenceOfDomain({
           domain: this.roleForm.value.parentNamespace
         });
-
-        // TODO: check if namespace is a valid org or app namespace
         
         if (exists) {
           // Check if role sub-domain exists in this namespace
@@ -378,31 +419,33 @@ export class NewRoleComponent implements OnInit {
               domain: this.roleForm.value.parentNamespace
             });
 
-            if (isOwner) {
-              this.roleForm.get('roleName').reset();
-              this.stepper.selected.editable = false;
-              this.stepper.selected.completed = true;
-              this.stepper.next();
-            }
-            else {
+            if (!isOwner) {
               this.toastr.error('You are not authorized to create a role under this namespace.', this.TOASTR_HEADER);
+              this.dialog.closeAll();
             }
           }
           else {
             this.toastr.error('Role subdomain in this namespace does not exist.', this.TOASTR_HEADER);
+            this.dialog.closeAll();
           }
         }
         else {
           this.toastr.error('Namespace does not exist.', this.TOASTR_HEADER);
+          this.dialog.closeAll();
         }
       }
       catch (e) {
         this.toastr.error(e.message, 'System Error');
+        this.dialog.closeAll();
       } 
       finally {
         this.isChecking = false;
         this.spinner.hide();
       }
+    }
+    else {
+      this.toastr.error('Parent Namespace is missing.', this.TOASTR_HEADER);
+      this.dialog.closeAll();
     }
   }
 
@@ -421,7 +464,7 @@ export class NewRoleComponent implements OnInit {
     req.data.fields = this.dataSource.data;
     req.data.metadata = {};
     
-    console.log('req', req);
+    // console.log('req', req);
 
     // Set the second step to non-editable
     let list = this.stepper.steps.toArray();
@@ -441,7 +484,7 @@ export class NewRoleComponent implements OnInit {
       let steps = await this.iamService.iam.createRole(req);
       for (let index = 0; index < steps.length; index++) {
         let step = steps[index];
-        console.log('Processing', step.info);
+        // console.log('Processing', step.info);
         
         // Show the next step
         this.stepper.selected.completed = true;
@@ -486,13 +529,14 @@ export class NewRoleComponent implements OnInit {
     }
   }
 
-  private async confirm(confirmationMsg: string) {
+  private async confirm(confirmationMsg: string, isDiscardButton?: boolean) {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      maxHeight: '180px',
+      maxHeight: '195px',
       data: {
         header: this.TOASTR_HEADER,
-        message: confirmationMsg
+        message: confirmationMsg,
+        isDiscardButton: isDiscardButton
       },
       maxWidth: '100%',
       disableClose: true
@@ -501,13 +545,18 @@ export class NewRoleComponent implements OnInit {
 
   async closeDialog(isSuccess?: boolean) {
     if (this.roleForm.touched && !isSuccess) {
-      if (await this.confirm('There are unsaved changes. Do you wish to continue?')) {
+      if (await this.confirm('There are unsaved changes.', true)) {
         this.dialogRef.close(false);
       }
     }
     else {
       if (isSuccess) {
-        this.toastr.success('Role is successfully created.', this.TOASTR_HEADER);
+        if (this.origData) {
+          this.toastr.success('Role is successfully updated.', this.TOASTR_HEADER);
+        }
+        else {
+          this.toastr.success('Role is successfully created.', this.TOASTR_HEADER);
+        }
       }
       this.dialogRef.close(isSuccess);
     }

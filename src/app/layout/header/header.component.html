@@ -1,7 +1,7 @@
 <!-- START Top Navbar-->
 <nav class="navbar topnavbar" role="navigation">
     <!-- START navbar header-->
-    <div class="navbar-header">
+    <div class="navbar-header" id="navbarHeader">
         <a href="#/">
             <img src="assets/img/logo-ew-switchboard.svg" class="logo-ew" />
         </a>
@@ -30,9 +30,9 @@
         </li>
         <li class="nav-item" [ngClass]="{ 'active': currentNav === 'enrolment' }">
             <img src="../assets/img/icons/enrollment-icon.png" width="auto" height="21"
-            alt="Enrollments image">
+            alt="Enrolments image">
             <a class="nav-link d-lg-block d-xl-block cursor-pointer" routerLink="/enrolment">
-                <h6 class="mb-0">Enrollments</h6>
+                <h6 class="mb-0">Enrolments</h6>
             </a>
         </li>
         <li class="nav-item" [ngClass]="{ 'active': currentNav === 'applications' }">
@@ -94,6 +94,11 @@
                 </div>
             </div>
             
+        </li>
+        <li class="nav-item d-block">
+            <a matTooltip="Help" class="nav-link" #fsbutton href="https://energyweb.atlassian.net/wiki/spaces/SWITCH/pages/1712554033/Using+Switchboard" target="_blank">
+                <em class="far fa-lg fa-question-circle"></em>
+            </a>
         </li>
         <li class="nav-item">
             <div class="cursor-pointer" [matMenuTriggerFor]="menu">

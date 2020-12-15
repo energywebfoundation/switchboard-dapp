@@ -1,8 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
 import { NgModule } from '@angular/core';
-import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TranslateService, TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
@@ -10,10 +9,11 @@ import { LayoutModule } from './layout/layout.module';
 import { SharedModule } from './shared/shared.module';
 import { RoutesModule } from './routes/routes.module';
 import { MatIconModule } from '@angular/material';
-import { ChartsModule } from '@progress/kendo-angular-charts';
 import 'hammerjs';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { ToastrModule } from 'ngx-toastr';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -41,7 +41,7 @@ export function createTranslateLoader(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
-        ChartsModule        
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })        
     ],
     providers: [
     ],

@@ -54,7 +54,7 @@ export class TransferOwnershipComponent implements OnInit {
   private async confirm(confirmationMsg: string) {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      maxHeight: '180px',
+      maxHeight: '195px',
       data: {
         header: TOASTR_HEADER,
         message: confirmationMsg
@@ -88,26 +88,33 @@ export class TransferOwnershipComponent implements OnInit {
           returnSteps: true
         };
         let items = undefined;
-        switch (this.type) {
-          case ListType.ORG:
-            items = await this.iamService.iam.changeOrgOwnership(req);
-            break;
-          case ListType.APP:
-            items = await this.iamService.iam.changeAppOwnership(req);
-            break;
-          case ListType.ROLE:
-            items = await this.iamService.iam.changeRoleOwnership(req);
-            break;
+        try {
+          switch (this.type) {
+            case ListType.ORG:
+              items = await this.iamService.iam.changeOrgOwnership(req);
+              break;
+            case ListType.APP:
+              items = await this.iamService.iam.changeAppOwnership(req);
+              break;
+            case ListType.ROLE:
+              items = await this.iamService.iam.changeRoleOwnership(req);
+              break;
+          }
+
+          this.mySteps = items;
+          this.newOwnerAddress.disable();
+          this.isProcessing = true;
+          this.changeDetector.detectChanges();
+          this.spinner.hide();
+
+          // Proceed
+          this.proceedSteps(this.mySteps);
         }
-
-        this.mySteps = items;
-        this.newOwnerAddress.disable();
-        this.isProcessing = true;
-        this.changeDetector.detectChanges();
-        this.spinner.hide();
-
-        // Proceed
-        this.proceedSteps(this.mySteps);
+        catch (e) {
+          console.error(e);
+          this.spinner.hide();
+          this.toastr.error(e.message || 'Please contact system administrator.', TOASTR_HEADER);
+        }
       }
       else {
         this.dialogRef.close(false);
@@ -120,7 +127,7 @@ export class TransferOwnershipComponent implements OnInit {
       if (steps) {
         for (let index = 0; index < steps.length; index++) {
           let step = steps[index];
-          console.log('Processing', step.info);
+          // console.log('Processing', step.info);
 
           // Process the next steap
           await step.next();

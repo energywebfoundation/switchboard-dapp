@@ -95,9 +95,96 @@ ul {
   border: 1px solid rgba(255,255,255,0.05);
 }
 
+.img-container {
+  background-color: #201F28 !important;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.img-wrapper{
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  background-position: center center !important;
+  width: 100%;
+  height: 150px;
+}
+
+.side-panel {
+  max-width: 300px;
+  overflow-x: hidden;
+}
+
+.side-panel-content {
+  max-width: 300px; 
+  width: 300px;
+}
+
+mat-drawer {
+  background-color: #242330 !important;
+}
+
+.mat-expansion-panel {
+  background: #353540;
+  color: #FFF;
+}
+.mat-expansion-panel-header-title, .mat-expansion-indicator::after {
+  color: #9081ba !important;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+}
+
+.mat-expansion-indicator::after {
+  position: relative;
+  top: -3px;
+
+}
+
+
 @include media-breakpoint-down(sm) {
   .card-enroll {
     width: 93%; 
+  }
+
+  .side-panel {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .side-panel-content {
+    max-width: auto; 
+    width: 100%;
+  }
+
+  .search-field {
+    width: 100% !important;
+  }
+}
+
+.search-field {
+  width: 50%;
+}
+
+.search-field-results {
+  width: 70%;
+}
+
+.card-search-body {
+  background-color: #363443;
+  color: #FFF;
+  border-radius: 5px;
+
+  h4 {
+      font-weight: 600;
+      font-size: 16px !important;
+  }
+
+  h5 {
+      font-size: 12px !important;
+  }
+
+  p {
+      font-size: 12px !important;
+      opacity: 0.5;
   }
 }
 
@@ -261,7 +348,11 @@ ul {
         font-size: 26px !important;
       }
       .border-bottom-widget {
-        border-bottom: 1px solid #313766;
+        border-bottom: 1px solid #414152;
+      }
+
+      .border-bottom-list {
+        border-bottom: 1px solid #414152;
       }
 
       .f-16 {
@@ -288,10 +379,18 @@ ul {
     } 
   }
 
+  .label {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+  }
+
   .color-white {
     color: #FFF;
-    font-weight: 600;
-    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+  }
+
+  .color-white-flat {
+    color: #FFF;
   }
 
   .color-link {
@@ -401,6 +500,21 @@ ul {
     border-radius: 5px;
     font-size: 12px;
     color: #fff2c1;
+
+    .mat-icon {
+      font-size: 16px;
+    }
+  }
+
+  .card-info {
+    border: 1px solid rgb(193 255 249 / 50%);
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    background-color: rgb(193 255 249 / 8%);
+    border-radius: 5px;
+    font-size: 12px;
+    color: #c1fff9;
 
     .mat-icon {
       font-size: 16px;

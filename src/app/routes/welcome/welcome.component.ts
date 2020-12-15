@@ -5,6 +5,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 
+import { version } from '../../../../package.json';
+
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
@@ -12,6 +14,7 @@ import { IamService } from 'src/app/shared/services/iam.service';
 })
 export class WelcomeComponent implements OnInit {
   isMetamaskExtensionAvailable = false;
+  version: string = version;
 
   constructor(private route: Router, private iamService: IamService, private spinner: NgxSpinnerService,
     private toastr: ToastrService) { }
@@ -29,12 +32,12 @@ export class WelcomeComponent implements OnInit {
   }
 
   async connectToWallet() {
-    this.spinner.show();
+    this.iamService.waitForSignature(true);
     let isLoggedIn = await this.iamService.login();
-    this.spinner.hide();
+    this.iamService.clearWaitSignatureTimer();
     if (isLoggedIn) {
       // Navigate to dashboard to initalize user data
-      this.route.navigate(['dashboard']);
+      this.route.navigate(['dashboard'], { state: { data: { fresh: true }}});
     }
     else {
       await this.cleanMe();
@@ -49,16 +52,16 @@ export class WelcomeComponent implements OnInit {
     }
 
     // Proceed with Login Process
-    this.spinner.show();
+    this.iamService.waitForSignature(true);
     let isLoggedIn = await this.iamService.login(true, true);
-    this.spinner.hide();
+    this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
       // Set LocalStorage for Metamask
       localStorage['METAMASK_EXT_CONNECTED'] = true;
 
       // Navigate to dashboard to initalize user data
-      this.route.navigate(['dashboard']);
+      this.route.navigate(['dashboard'], { state: { data: { fresh: true }}});
     }
     else {
       await this.cleanMe();
@@ -66,10 +69,6 @@ export class WelcomeComponent implements OnInit {
   }
   
   private async cleanMe() {
-    this.iamService.logout();
-    let $navigate = setTimeout(() => {
-        clearTimeout($navigate);
-        location.reload();
-    }, 100);
+    this.iamService.logoutAndRefresh();
   }
 }

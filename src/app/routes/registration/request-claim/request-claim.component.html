@@ -2,31 +2,32 @@
   <div
     class="header-enroll bg-color d-flex justify-content-center justify-content-between position-fixed pl-0 pl-lg-4 py-2 w-100"
     [ngStyle]="bgColor">
-    <img src="{{ appDetails?.logoUrl }}" height="48px" *ngIf="appDetails?.logoUrl" />
-    <span>
-      <button class="color-link px-4" mat-menu-item (click)="logout()" *ngIf="isLoggedIn">Logout</button>
-    </span>
+    <img src="{{ orgAppDetails?.logoUrl }}" height="48px" *ngIf="orgAppDetails?.logoUrl" />
+    <ng-container *ngIf="!orgAppDetails?.logoUrl">
+      <img src="../assets/img/no-organization-image.png" height="48px" *ngIf="roleType === RoleType.ORG" />
+      <img src="../assets/img/no-application-image.png" height="48px" *ngIf="roleType === RoleType.APP" />
+    </ng-container>
+    <div>
+      <button mat-button class="btn btn-small md-enroll px-4 mr-2" (click)="logout()" *ngIf="isLoggedIn">
+        <div [ngStyle]="txtColor">Logout</div>
+      </button>
+    </div>
   </div>
-  <ngx-spinner [fullScreen]="false" type="ball-spin-fade" size="medium" bdColor="rgba(24,20,36,0.8)" bdOpacity=0.9
-    color="#A567FF">
-    <p class="label-role" *ngIf="!submitting">Loading...</p>
-    <p class="label-role" *ngIf="submitting">Please confirm this transaction in your connected wallet.</p>
-  </ngx-spinner>
   <div class="d-flex justify-content-center flex-column align-items-center w-100">
     <div
       class="content-enroll d-flex txt-color justify-content-start justify-content-md-center align-items-md-center flex-column px-3 mb-1 w-100"
-      [ngStyle]="txtColor">
-      <h2 class="font-weight-600 mb-1">Enrol to {{ appDetails?.appName }}</h2>
+      [ngStyle]="txtColor" *ngIf="isLoggedIn">
+      <h2 class="font-weight-600 mb-1">Enrol to {{ orgAppDetails?.appName || orgAppDetails?.orgName }}</h2>
       <span class="opacity-50">Please fill in below details</span>
     </div>
-    <mat-card class="card-enroll">
+    <mat-card class="card-enroll" *ngIf="isLoggedIn">
       <form role="form" [formGroup]="roleTypeForm">
         <div class="row">
           <div class="col-lg-12">
             <mat-label class="ml-3 pl-1" [ngStyle]="txtColor">Role</mat-label>
             <mat-form-field class="mt-2 md-enroll" appearance="outline" floatPlaceholder="never" [ngStyle]="txtColor">
               <mat-select class="md-enroll" placeholder="Role" formControlName="roleType" (selectionChange)="roleTypeSelected($event)">
-                <mat-option class="md-enroll" [ngStyle]="listColor" *ngFor="let role of roleList" [value]="role">{{ role.name | titlecase }}</mat-option>
+                <mat-option class="md-enroll" [ngStyle]="listColor" *ngFor="let role of roleList" [value]="role">{{ role.name }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -78,6 +79,7 @@
           [disabled]="!roleTypeForm?.value?.roleType || submitting" [ngStyle]="btnColor">Register</button>
       </div>
     </mat-card>
+    <app-loading></app-loading>
 
     <div class="footer-enroll">
       <div class="d-flex justify-content-between align-items-center mx-3 mx-md-4 h-100">

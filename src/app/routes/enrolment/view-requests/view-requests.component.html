@@ -7,10 +7,10 @@
       <div class="row">
         <div class="col-lg-12 w-100">
           <div class="card card-default text-center mb-3 p-3 shadow-none">
-            <h4 class="color-white mb-0">{{ claim?.roleName | uppercase }}</h4>
+            <h3 class="color-white mb-2">{{ claim?.roleName | uppercase }}</h3>
             <div class="label color-white opacity-50 text-truncate-middle ">{{ claim?.parentNamespace }}</div>
-            <div class="label color-orange opacity-50 text-truncate-middle " *ngIf="!claim?.isAccepted">PENDING</div>
-            <div class="label color-green opacity-50 text-truncate-middle " *ngIf="claim?.isAccepted">APPROVED</div>
+            <div class="btn-color-warn text-truncate-middle " *ngIf="!claim?.isAccepted">Pending</div>
+            <div class="btn-color-success text-truncate-middle " *ngIf="claim?.isAccepted">Approved</div>
           </div>
         </div>
 

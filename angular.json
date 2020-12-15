@@ -24,12 +24,10 @@
             "tsConfig": "tsconfig.app.json",            
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.webmanifest"
             ],
             "styles": [
-              {
-                "input": "node_modules/@progress/kendo-theme-default/dist/all.css"
-              },
               "src/app/core/preloader/preloader.scss",
               "src/styles.scss"
             ],
@@ -82,7 +80,9 @@
                   "maximumWarning": "15mb",
                   "maximumError": "30mb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
             },
             "stag": {
               "fileReplacements": [
@@ -144,12 +144,10 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.webmanifest"
             ],
             "styles": [
-              {
-                "input": "node_modules/@progress/kendo-theme-default/dist/all.css"
-              },
               "src/app/core/preloader/preloader.scss",
               "src/styles.scss"
             ],

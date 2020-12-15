@@ -14,58 +14,18 @@
         </ng-template>
         <mat-step [completed]="false" *ngIf="viewType !== ViewType.UPDATE">
           <form [formGroup]="roleForm">
-            <ng-template matStepLabel>Set Role Type</ng-template>
-            <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-              <div class="row mt-2">
-                <div class="col-lg-12">
-                  <mat-label class="ml-3 pl-1">Role Type</mat-label>
-                  <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                    <mat-select placeholder="Role Type" formControlName="roleType"
-                      required>
-                      <mat-option *ngFor="let roleType of RoleTypeList" [value]="roleType.value">{{ roleType.label }}
-                      </mat-option>
-                    </mat-select>
-                    <mat-error>Role Type is <strong>required</strong></mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-            <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3" *ngIf="roleForm?.value?.roleType">
-              <mat-icon>info</mat-icon><span class="pb-2">Make sure you are the owner of this {{ (roleForm.value.roleType === RoleType.ORG) ? 'organization' : 'application' }} namespace.</span>
-            </div>
-            <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" *ngIf="roleForm?.value?.roleType">
-              <div class="row mt-2">
-                <div class="col-lg-12">
-                  <mat-label class="ml-3 pl-1">Full {{ (roleForm.value.roleType === RoleType.ORG) ? 'Organization' : 'Application' }} Namespace</mat-label>
-                  <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                    <input matInput autocomplete="off" formControlName="parentNamespace" type="text" placeholder="Example: {{ (roleForm.value.roleType === RoleType.ORG) ? 'myorg.iam.ewc' : 'myapp.apps.myorg.iam.ewc' }}"
-                      required oninput="this.value = this.value.toLowerCase()" (keypress)="alphaNumericOnly($event, true)"
-                      minlength="3" maxlength="256" />
-                    <mat-error>Full {{ (roleForm.value.roleType === RoleType.ORG) ? 'Organization' : 'Application' }} Namespace is <strong>required</strong></mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-            <div class="d-flex justify-content-end mb-2">
-              <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-              <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking || !roleForm?.value?.roleType" (click)="confirmParentNamespace()">Next</button>
-            </div>
-          </form>
-        </mat-step>
-        <mat-step [completed]="false" *ngIf="viewType !== ViewType.UPDATE">
-          <form [formGroup]="roleForm">
             <ng-template matStepLabel>New Role</ng-template>
-            <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon>info</mat-icon><span class="pb-2">{{ (roleForm.value.roleType === RoleType.ORG) ? 'ORGANIZATION' : 'APPLICATION' }}: {{ roleForm.value.parentNamespace }}</span>
             </div>
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
               <div class="row">
                 <div class="col-lg-12">
-                  <mat-label class="ml-3 pl-1">Role Namespace</mat-label>
+                  <mat-label class="ml-3 pl-1">Role Name</mat-label>
                   <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                    <input matInput autocomplete="off" formControlName="roleName" type="text" placeholder="Role Namespace" required
+                    <input matInput autocomplete="off" formControlName="roleName" appBlockPaste type="text" placeholder="Role Name" required
                       oninput="this.value = this.value.toLowerCase()" (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256"/>
-                      <mat-error>Role Namespace is <strong>required</strong></mat-error>
+                      <mat-error>Role Name is <strong>required</strong></mat-error>
                   </mat-form-field>
                 </div>
                 <div *ngIf="roleForm.get('roleName').value" class="ml-3 card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
@@ -75,7 +35,7 @@
               </div>
             </div>
             <div class="d-flex justify-content-end mb-2">
-              <button mat-stroked-button class="btn btn-small mr-2" (click)="back()">Back</button>
+              <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
               <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="proceedSettingIssuer()">Next</button>
             </div>
           </form>
@@ -84,7 +44,7 @@
           <form [formGroup]="roleForm">
             <ng-template matStepLabel>Set Role Issuers</ng-template>
             <ng-container formGroupName="data">
-              <div *ngIf="viewType === ViewType.UPDATE" class="ml-3 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
+              <div *ngIf="viewType === ViewType.UPDATE" class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
                 <span class="pb-2">{{ roleForm?.value?.roleName + '.' + ENSPrefixes.Roles + '.' + roleForm?.value?.parentNamespace }}</span>
               </div>
               <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer">
@@ -137,7 +97,7 @@
                     </div>
                     <mat-label class="ml-3 pl-1">Issuer Role Namespace</mat-label>
                     <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                      <input matInput autocomplete="off" formControlName="roleNmae" type="text" placeholder="Example: {{ 'issuerrole.' + ENSPrefixes.Roles + '.myorg.iam.ewc' }}"
+                      <input matInput autocomplete="off" formControlName="roleName" type="text" placeholder="Example: {{ 'issuerrole.' + ENSPrefixes.Roles + '.myorg.iam.ewc' }}"
                         required oninput="this.value = this.value.toLowerCase()" (keypress)="alphaNumericOnly($event, true)"
                         minlength="3" maxlength="256" />
                       <mat-error>Issuer Role Namespace is <strong>required</strong></mat-error>
@@ -147,7 +107,8 @@
               </div>
             </ng-container>
             <div class="d-flex justify-content-end mb-2">
-              <button mat-stroked-button class="btn btn-small mr-2" (click)="back()">Back</button>
+              <button mat-stroked-button class="btn btn-small mr-2" *ngIf="origData" (click)="closeDialog()">Cancel</button>
+              <button mat-stroked-button class="btn btn-small mr-2" *ngIf="!origData" (click)="back()">Back</button>
               <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="proceedAddingFields()">Next</button>
             </div>
           </form>
@@ -186,13 +147,13 @@
                               <mat-error>Label is <strong>required</strong></mat-error>
                             </mat-form-field>
                           </div>
-                          <div class="col-lg-12">
+                          <!-- <div class="col-lg-12">
                             <mat-label class="ml-3 pl-1">Validation</mat-label>
                             <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                               <input matInput placeholder="Validation" autocomplete="off" formControlName="label"
                                 maxlength="256">
                             </mat-form-field>
-                          </div>
+                          </div> -->
                         </div>
                         <div class="d-flex justify-content-end mb-2">
                           <button mat-stroked-button class="btn-small mr-2" (click)="cancelAddField()">Cancel</button>
@@ -215,10 +176,10 @@
                             <td mat-cell *matCellDef="let element" data-label="Label"> {{element.label}} </td>
                           </ng-container>
         
-                          <ng-container matColumnDef="validation">
+                          <!-- <ng-container matColumnDef="validation">
                             <th mat-header-cell *matHeaderCellDef> Validation </th>
                             <td mat-cell *matCellDef="let element" data-label="Validation"> {{element.validation}} </td>
-                          </ng-container>
+                          </ng-container> -->
         
                           <ng-container matColumnDef="actions">
                             <th mat-header-cell *matHeaderCellDef> Actions </th>
@@ -305,10 +266,10 @@
                     <td mat-cell *matCellDef="let element" data-label="Label"> {{element.label}} </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="validation">
+                  <!-- <ng-container matColumnDef="validation">
                     <th mat-header-cell *matHeaderCellDef> Validation </th>
                     <td mat-cell *matCellDef="let element" data-label="Validation"> {{element.validation || 'None'}} </td>
-                  </ng-container>
+                  </ng-container> -->
 
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsView"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumnsView;"></tr>

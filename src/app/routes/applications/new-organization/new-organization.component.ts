@@ -24,6 +24,7 @@ export class NewOrganizationComponent implements OnInit {
   public orgForm: FormGroup;
   public environment = environment;
   public isChecking = false;
+  private _isLogoUrlValid = true;
   public ENSPrefixes = ENSNamespaceTypes;
   public ViewType = ViewType;
 
@@ -98,14 +99,7 @@ export class NewOrganizationComponent implements OnInit {
   }
 
   alphaNumericOnly(event: any) {
-    let charCode = (event.which) ? event.which : event.keyCode;
-    
-    // Check if key is alphanumeric key
-    if ((charCode > 96 && charCode < 123) || (charCode > 47 && charCode < 58)) {
-      return true;
-    }
-
-    return false;
+    return this.iamService.isAlphaNumericOnly(event);
   }
 
   async createNewOrg() {
@@ -210,7 +204,7 @@ export class NewOrganizationComponent implements OnInit {
     else {
       try {
         // Check if others is in JSON Format
-        console.info(JSON.parse(orgData.data.others));
+        // console.info(JSON.parse(orgData.data.others));
 
         // Let the user confirm the info before proceeding to the next step
         this.stepper.selected.completed = true;
@@ -228,6 +222,12 @@ export class NewOrganizationComponent implements OnInit {
     req.data.orgName = req.data.organizationName;
     delete req.data.organizationName;
 
+    // Check if logoUrl resolves
+    if (req.data.logoUrl && !this._isLogoUrlValid) {
+      this.toastr.error('Logo URL cannot be resolved. Please change it to a correct and valid image URL.', this.TOASTR_HEADER);
+      return;
+    }
+
     // Make sure others is in correct JSON Format
     if (req.data.others && req.data.others.trim()) {
       try {
@@ -241,8 +241,6 @@ export class NewOrganizationComponent implements OnInit {
     else {
       delete req.data.others;
     }
-
-    console.info('myreq', req);
 
     // Set the first step to non-editable
     this.stepper.steps.first.editable = false;
@@ -261,7 +259,7 @@ export class NewOrganizationComponent implements OnInit {
       let steps = await this.iamService.iam.createOrganization(req);
       for (let index = 0; index < steps.length; index++) {
         let step = steps[index];
-        console.log('Processing', step.info);
+        // console.log('Processing', step.info);
         
         // Show the next step
         this.stepper.selected.completed = true;
@@ -306,18 +304,27 @@ export class NewOrganizationComponent implements OnInit {
     }
   }
 
+  logoUrlError() {
+    this._isLogoUrlValid = false;
+  }
+
+  logoUrlSuccess() {
+    this._isLogoUrlValid = true;
+  }
+
   cancelOrgDetails() {
     this.stepper.previous();
     this.stepper.selected.completed = false;
   }
 
-  private async confirm(confirmationMsg: string) {
+  private async confirm(confirmationMsg: string, isDiscardButton?: boolean) {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      maxHeight: '180px',
+      maxHeight: '195px',
       data: {
         header: this.TOASTR_HEADER,
-        message: confirmationMsg
+        message: confirmationMsg,
+        isDiscardButton: isDiscardButton
       },
       maxWidth: '100%',
       disableClose: true
@@ -326,13 +333,18 @@ export class NewOrganizationComponent implements OnInit {
 
   async closeDialog(isSuccess?: boolean) {
     if (this.orgForm.touched && !isSuccess) {
-      if (await this.confirm('There are unsaved changes. Do you wish to continue?')) {
+      if (await this.confirm('There are unsaved changes.', true)) {
         this.dialogRef.close(false);
       }
     }
     else {
       if (isSuccess) {
-        this.toastr.success('Organization is successfully created.', this.TOASTR_HEADER);
+        if (this.origData) {
+          this.toastr.success('Organization is successfully updated.', this.TOASTR_HEADER);
+        }
+        else {
+          this.toastr.success('Organization is successfully created.', this.TOASTR_HEADER);
+        }
       }
       this.dialogRef.close(isSuccess);
     }

@@ -1,0 +1,148 @@
+<div class="row">
+  <div class="card card-default w-100 shadow-none d-flex pt-3">
+    <div class="d-flex justify-content-center" *ngIf="data?.type !== ListType.ROLE">
+      <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
+        <img class="img-logo" *ngIf="formData?.definition?.logoUrl" src="{{ formData?.definition?.logoUrl }}" />
+        <ng-container *ngIf="!formData?.definition?.logoUrl">
+          <img class="img-logo" src="../assets/img/no-organization-image.png" height="48px" *ngIf="data?.type === RoleType.ORG" />
+          <img class="img-logo" src="../assets/img/no-application-image.png" height="48px" *ngIf="data?.type === RoleType.APP" />
+        </ng-container>
+      </div>
+    </div>
+    <div class="text-left my-3">
+      <div class="label opacity-50 mb-2">{{ typeLabel }} Namespace</div>
+      <span class="color-white mb-0"> {{ formData?.namespace }} </span>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="text-left my-3">
+      <div class="label opacity-50 mb-2">{{ typeLabel }} Name</div>
+      <span class="color-white mb-0">
+        <ng-container *ngIf="data?.type === ListType.ORG"> {{ formData?.definition?.orgName }} </ng-container>
+        <ng-container *ngIf="data?.type === ListType.APP"> {{ formData?.definition?.appName }} </ng-container>
+        <ng-container *ngIf="data?.type === ListType.ROLE"> {{ formData?.name | uppercase }} </ng-container>
+      </span>
+    </div>
+    <ng-container *ngIf="data?.type !== ListType.ROLE">
+      <mat-divider></mat-divider>
+      <div class="text-left my-3">
+        <div class="label opacity-50 mb-2">Website URL</div>
+        <span class="color-white mb-0"> {{ formData?.definition?.websiteUrl || 'None' }} </span>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="text-left my-3">
+        <div class="label opacity-50 mb-2">Description</div>
+        <span class="color-white mb-0"> {{ formData?.definition?.description || 'None' }} </span>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="text-left my-3">
+        <div class="label opacity-50 mb-2">Others (JSON)</div>
+        <span class="color-white mb-0"> {{ formData?.definition?.others || 'None' }} </span>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="data?.type === ListType.ROLE">
+      <mat-divider></mat-divider>
+      <div class="text-left my-3">
+        <div class="label opacity-50 mb-2">Role Type</div>
+        <span class="color-white mb-0">
+          <ng-container *ngIf="formData?.definition?.roleType === RoleType.ORG"> Organization </ng-container>
+          <ng-container *ngIf="formData?.definition?.roleType === RoleType.APP"> Application </ng-container>
+          <ng-container *ngIf="formData?.definition?.roleType === RoleType.CUSTOM"> Custom </ng-container>
+        </span>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="text-left my-3">
+        <div class="label opacity-50 mb-2">Version</div>
+        <span class="color-white mb-0"> {{ formData?.definition?.version }} </span>
+      </div>
+      <ng-container *ngIf="formData?.definition?.issuer">
+        <mat-divider></mat-divider>
+        <div class="text-left my-3">
+          <div class="label opacity-50 mb-2">Issuer Type</div>
+          <span class="color-white mb-0"> {{ formData?.definition?.issuer?.issuerType }} </span>
+        </div>
+        <mat-divider></mat-divider>
+        <ng-container *ngIf="formData?.definition?.issuer?.issuerType === 'Role'">
+          <div class="text-left my-3">
+            <div class="label opacity-50 mb-2">Role</div>
+            <span class="color-white mb-0"> {{ formData?.definition?.issuer?.roleName }} </span>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="formData?.definition?.issuer?.issuerType === 'DID'">
+          <div class="text-left my-3">
+            <div class="label opacity-50 mb-2">Issuer List</div>
+            <div class="color-white mb-0" *ngFor="let did of formData?.definition?.issuer?.did"> {{ did }} </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <mat-divider></mat-divider>
+      <div class="text-left my-3">
+        <div class="label opacity-50 mb-2">Fields</div>
+        <span class="color-white mb-0" *ngIf="!formData?.definition?.fields?.length">None</span>
+        <table mat-table [dataSource]="formData?.definition?.fields" *ngIf="formData?.definition?.fields?.length">
+
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef> Type </th>
+            <td mat-cell *matCellDef="let element" data-label="Type"> {{element.fieldType}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="label">
+            <th mat-header-cell *matHeaderCellDef> Label </th>
+            <td mat-cell *matCellDef="let element" data-label="Label"> {{element.label}} </td>
+          </ng-container>
+
+          <!-- <ng-container matColumnDef="validation">
+            <th mat-header-cell *matHeaderCellDef> Validation </th>
+            <td mat-cell *matCellDef="let element" data-label="Validation"> {{element.validation || 'NONE'}} </td>
+          </ng-container> -->
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsView"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsView;"></tr>
+        </table>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isEmbedded && data?.type === ListType.ORG">
+      <mat-divider></mat-divider>
+      <mat-accordion>
+        <mat-expansion-panel class="mt-2" [expanded]="true" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Application List
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="color-white mb-0" *ngIf="!appList?.length"> None </div>
+          <div class="d-flex justify-content-between align-items-center border-bottom-list" *ngFor="let app of appList">
+            <div>{{ app?.definition?.appName }}</div>
+            <button mat-icon-button matTooltip="View Details" (click)="viewDetails(app, ListType.APP)">
+              <mat-icon class="btn-color-primary">preview</mat-icon>
+            </button>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+    </ng-container>
+    <ng-container *ngIf="isEmbedded">
+      <mat-divider></mat-divider>
+      <mat-accordion>
+        <mat-expansion-panel class="mt-2" [expanded]="true" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Roles List
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="color-white mb-0" *ngIf="!roleList?.length"> None </div>
+          <div class="d-flex justify-content-between align-items-center border-bottom-list" *ngFor="let role of roleList">
+            {{ role.name }}
+            <div>
+              <button mat-icon-button matTooltip="View Details" (click)="viewDetails(role, ListType.ROLE)">
+                <mat-icon class="btn-color-primary">preview</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Enrol" (click)="enrol(data?.type, role)" [disabled]="role?.isEnrolled">
+                <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-role-icon"></mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </ng-container>
+  </div>
+</div>

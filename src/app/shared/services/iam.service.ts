@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { IAM, DIDAttribute, CacheServerClient, MessagingMethod } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { LoadingService } from './loading.service';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
 const { walletConnectOptions, cacheServerUrl, natsServerUrl } = environment;
+
+const SWAL = require('sweetalert');
 
 const cacheClient = new CacheServerClient({
   url: cacheServerUrl
@@ -31,7 +34,10 @@ export class IamService {
   private _didDocument: any;
   public accountAddress = undefined;
 
-  constructor() {
+  private _throwTimeoutError = false;
+  private _timer = undefined;
+
+  constructor(private loadingService: LoadingService) {
     let options = {
       ...walletConnectOptions,
       cacheClient,
@@ -39,7 +45,7 @@ export class IamService {
       natsServerUrl
     };
 
-    console.info('IAM Service Options', options);
+    // console.info('IAM Service Options', options);
 
     // Initialize Data
     this._user = new BehaviorSubject<User>(undefined);
@@ -54,7 +60,7 @@ export class IamService {
 
     // Check if account address exists
     if (!this._user.getValue()) {
-      console.log('Initializing connections...');
+      // console.log('Initializing connections...');
       let metamaskOpts = undefined;
       if (useMetamaskExtension) {
         metamaskOpts = {
@@ -65,17 +71,26 @@ export class IamService {
 
       try {
         const { did, connected, userClosedModal } = await this._iam.initializeConnection(metamaskOpts);
-        console.log(did, connected, userClosedModal);
+        // console.log(did, connected, userClosedModal);
         if (did && connected && !userClosedModal) {
           // Setup Account Address
           const signer = this._iam.getSigner();
           this.accountAddress = await signer.getAddress();
+
+          // console.log('signer', signer);
+
+          // Listen to Account Change
+          if (useMetamaskExtension) {
+            this._listenToMetamaskAccountChange();
+          }
 
           retVal = true;
         }
       }
       catch (e) {
         console.error(e);
+        this.logout();
+        location.reload();
       }
     }
     else {
@@ -88,7 +103,7 @@ export class IamService {
 
   async setupUser() {
     // No need to setup user again
-    if (this.accountAddress) {
+    if (this._didDocument) {
       return;
     }
 
@@ -97,11 +112,11 @@ export class IamService {
 
     // Get User Claims
     let data: any[] = await this.iam.getUserClaims();
-    console.log('getUserClaims()', JSON.parse(JSON.stringify(data)));
+    // console.log('getUserClaims()', JSON.parse(JSON.stringify(data)));
 
     // Get Profile Related Claims
     data = data.filter((item: any) => item.profile ? true : false );
-    console.log('Profile Claims', JSON.parse(JSON.stringify(data)));
+    // console.log('Profile Claims', JSON.parse(JSON.stringify(data)));
 
     // Get the most recent claim
     if (data.length) {
@@ -128,6 +143,14 @@ export class IamService {
     if (localStorage['METAMASK_EXT_CONNECTED']) {
       localStorage.removeItem('METAMASK_EXT_CONNECTED');
     }
+  }
+
+  logoutAndRefresh() {
+    this.logout();
+    let $navigate = setTimeout(() => {
+      clearTimeout($navigate);
+      location.reload();
+  }, 100);
   }
 
   /**
@@ -177,5 +200,71 @@ export class IamService {
 
   setUserProfile(data: any) {
     this._user.next(data);
+  }
+
+  private _listenToMetamaskAccountChange() {
+    // Listen to account changes in metamask
+    if (window['ethereum']) {
+      window['ethereum'].on('accountsChanged', () => {
+        location.reload();
+      });
+    }
+  }
+
+  public waitForSignature(isConnectAndSign?: boolean) {
+    this._throwTimeoutError = false;
+    let timeout = 60000;
+    let messageType = 'sign';
+    if (isConnectAndSign) {
+      messageType = 'connect to your wallet and sign';
+    }
+
+    this.loadingService.show(['Your signature is being requested.', `Please ${messageType} within ${timeout / 1000} seconds or you will be automatically logged-out.`]);
+    this._timer = setTimeout(() => {
+      this._displayTimeout(timeout / 1000, isConnectAndSign);
+      this.clearWaitSignatureTimer();
+      this._throwTimeoutError = true;
+    }, timeout);
+  }
+
+  public clearWaitSignatureTimer(throwError?: boolean) {
+    clearTimeout(this._timer);
+    this._timer = undefined;
+    this.loadingService.hide();
+
+    if (this._throwTimeoutError) {
+      throw new Error('Wallet Signature Timeout');
+      this._throwTimeoutError = false;
+    }
+  }
+
+  private async _displayTimeout(timeout: number, isConnectAndSign?: boolean) {
+    let message = 'sign';
+    if (isConnectAndSign) {
+      message = 'connect with your wallet and sign'
+    }
+    let config = {
+        title: 'Wallet Signature Timeout',
+        text: `The period to ${message} the requested signature has elapsed. Please login again.`,
+        icon: 'error',
+        button: 'Proceed',
+        closeOnClickOutside: false
+      };
+
+    let result = await SWAL(config);
+    if (result) {
+        this.logoutAndRefresh();
+    }
+  }
+
+  isAlphaNumericOnly(event: any, includeDot?: boolean) {
+    let charCode = (event.which) ? event.which : event.keyCode;
+    
+    // Check if key is alphanumeric key
+    if ((charCode > 96 && charCode < 123) || (charCode > 47 && charCode < 58) || (includeDot && charCode === 46)) {
+      return true;
+    }
+
+    return false;
   }
 }

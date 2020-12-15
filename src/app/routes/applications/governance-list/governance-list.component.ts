@@ -53,7 +53,7 @@ export class GovernanceListComponent implements OnInit {
     }
 
   async ngOnInit() {
-    console.log('listType', this.listType);
+    // console.log('listType', this.listType);
     switch (this.listType) {
       case ListType.ORG:
         this.displayedColumns = OrgColumns;
@@ -91,17 +91,17 @@ export class GovernanceListComponent implements OnInit {
         application: filterOptions.application || '',
         role: ''
       });
-      console.log('setting up filter', this.filterForm.value);
+      // console.log('setting up filter', this.filterForm.value);
     }
     this.filter();
 
-    console.log($getOrgList);
+    // console.log($getOrgList);
     this.loadingService.hide();
   }
 
   view(type: string, data: any) {
-    console.log('type', type);
-    console.log('data', data);
+    // console.log('type', type);
+    // console.log('data', data);
     const dialogRef = this.dialog.open(GovernanceViewComponent, {
       width: '600px',data:{
         type: type,
@@ -143,8 +143,8 @@ export class GovernanceListComponent implements OnInit {
   }
 
   edit(type: string, data: any) {
-    console.log('type', type);
-    console.log('data', data);
+    // console.log('type', type);
+    // console.log('data', data);
 
     let component = undefined;
 
@@ -179,7 +179,7 @@ export class GovernanceListComponent implements OnInit {
   }
 
   transferOwnership(type: any, data: any) {
-    console.log('data', data);
+    // console.log('data', data);
     const dialogRef = this.dialog.open(TransferOwnershipComponent, {
       width: '600px',data:{
         namespace: data.namespace,
@@ -190,7 +190,7 @@ export class GovernanceListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
 
       if (result) {
         this.getList();
@@ -228,7 +228,7 @@ export class GovernanceListComponent implements OnInit {
     // Make sure that user confirms the removal of this namespace
     let isConfirmed = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      maxHeight: '180px',
+      maxHeight: '195px',
       data: {
         header: 'Remove ' + (listType === ListType.APP ? 'Application' : 'Organization'),
         message: 'Do you wish to continue?'
@@ -259,6 +259,43 @@ export class GovernanceListComponent implements OnInit {
         }
       }
     }
+  }
+
+  async newApp(roleDefinition: any) {
+    const dialogRef = this.dialog.open(NewApplicationComponent, {
+      width: '600px',data:{
+        viewType: ViewType.NEW,
+        organizationNamespace: roleDefinition.namespace
+      },
+      maxWidth: '100%',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(async (res: any) => {
+      if (res) {
+        // Redirect to Application List
+        this.viewApps(ListType.ORG, roleDefinition);
+      }
+    });
+  }
+
+  async newRole(listType: string, roleDefinition: any) {
+    const dialogRef = this.dialog.open(NewRoleComponent, {
+      width: '600px',data:{
+        viewType: ViewType.NEW,
+        namespace: roleDefinition.namespace,
+        listType: listType
+      },
+      maxWidth: '100%',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(async (res: any) => {
+      if (res) {
+        // Redirect to Role List
+        this.viewRoles(listType, roleDefinition);
+      }
+    });
   }
 
   private async getRemovalSteps(listType: string, roleDefinition: any) {
@@ -311,15 +348,6 @@ export class GovernanceListComponent implements OnInit {
         return (arr[arr.length - 1].toUpperCase().indexOf(this.filterForm.value.application.toUpperCase()) >= 0);
       });
     }
-
-    // Filter By Role
-    /* if (this.filterForm.value.role) {
-      tmpData = tmpData.filter((item: any) => {
-        let arr = item.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
-        arr = arr[0].split('.');
-        return (arr[arr.length - 1].toUpperCase().indexOf(this.filterForm.value.role.toUpperCase()) >= 0);
-      });
-    } */
 
     this.dataSource = tmpData;
   }

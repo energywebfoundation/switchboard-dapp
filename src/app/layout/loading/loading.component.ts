@@ -11,13 +11,21 @@ export class LoadingComponent implements OnInit {
 
   public showLoadingOverlay = false;
   public msg = '';
+  public msgList: string[];
   constructor(private spinner: NgxSpinnerService, private loadingService: LoadingService) { }
 
   ngOnInit() {
     // Subscribe to msg event
-    this.loadingService.message.subscribe((message: string) => {
+    this.loadingService.message.subscribe((message: any) => {
       let $setTimeout = setTimeout(() => {
-        this.msg = message;
+        if (typeof message === 'string') {
+          this.msg = message;
+          this.msgList = undefined;
+        }
+        else {
+          this.msgList = message;
+          this.msg = '';
+        }
         clearTimeout($setTimeout);
       }, 30);
     });

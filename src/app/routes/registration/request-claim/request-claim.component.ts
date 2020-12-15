@@ -3,9 +3,10 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ENSNamespaceTypes, IAppDefinition, IRole } from 'iam-client-lib';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService, LoginType } from 'src/app/shared/services/iam.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
+import { RoleType } from '../../applications/new-role/new-role.component';
 import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 
 const SWAL = require('sweetalert');
@@ -19,20 +20,22 @@ const TOASTR_HEADER = 'Enrolment';
 })
 export class RequestClaimComponent implements OnInit {
 
+  public RoleType       = RoleType;
   public enrolmentForm  : FormGroup;
   public roleTypeForm   : FormGroup;
   public fieldList      : {type: string, label: string, validation: string}[];
   
-  public appDetails     : any;
+  public orgAppDetails  : any;
   public roleList       : any;
 
   public submitting     = false;
   public appError       = false;
 
-  private appNamespace  : string;
-  private appCallbackUrl: string;
-  private appDefaultRole: string;
+  private namespace  : string;
+  private callbackUrl: string;
+  private defaultRole: string;
 
+  private roleType      : string;
   private selectedRole  : any;
   private selectedNamespace: string;
 
@@ -43,11 +46,11 @@ export class RequestClaimComponent implements OnInit {
   public txtboxColor    : Object = {};
 
   public isLoggedIn     = false;
-
+  private stayLoggedIn  = false;
 
   @HostListener('window:beforeunload', ['$event'])
   public onPageUnload($event: BeforeUnloadEvent) {
-    if (this.isLoggedIn) {
+    if (this.isLoggedIn && !this.stayLoggedIn) {
       // Always logout if user refreshes this screen or closes this tab
       this.iamService.logout();
     }
@@ -59,76 +62,31 @@ export class RequestClaimComponent implements OnInit {
       private iamService: IamService,
       private toastr: ToastrService,
       public dialog: MatDialog,
-      private spinner: NgxSpinnerService) { 
+      private loadingService: LoadingService) { 
     
     this.roleTypeForm = fb.group({
       roleType: ''
     });
-    
-    this.activeRoute.queryParams.subscribe(async (params: any) => {
-      if (params.app) {
-        // URL Params
-        this.setUrlParams(params);
-
-        // Show loading and reset data
-        this.spinner.show();
-        this.resetData();
-        
-        try {
-          // Get app definition
-          this.appDetails = await this.iamService.iam.getDefinition({
-            type: ENSNamespaceTypes.Application,
-            namespace: this.appNamespace
-          });
-
-          console.log('appDetails', this.appDetails);
-
-          if (this.appDetails) {
-            // Check Login Status
-            this.initLoginUser(this.appDetails.appName);
-
-            // Initialize Roles
-            await this.initRoles();
-          }
-          else {
-            // Display Error
-            this.displayAlert('Application Details cannot be retrieved.', 'error');
-          }
-        } 
-        catch (e) {
-          console.error(TOASTR_HEADER, e);
-          this.toastr.error(e, TOASTR_HEADER);
-        }
-        finally {
-          this.spinner.hide();
-        }
-      }
-      else {
-        console.error('Enrolment Param Error', params);
-      }
-
-      // Update Colors
-      this.updateColors(params);
-    });
   }
 
   private setUrlParams(params: any) {
-    this.appNamespace = params.app;
-    this.appCallbackUrl = params.returnUrl;
-    this.appDefaultRole = params.roleName;
+    this.namespace = params.app || params.org;
+    this.defaultRole = params.roleName;
   }
 
   private updateColors(params: any) {
-    if (this.appDetails) {
+    if (this.orgAppDetails) {
       let others = undefined;
 
       // re-construct others
-      if (this.appDetails.others) {
+      if (this.orgAppDetails.others) {
         others = {};
-        for (let item of this.appDetails.others) {
+        for (let item of this.orgAppDetails.others) {
           others[item.key] = item.value;
         }
       }
+
+      this.callbackUrl = params.returnUrl || (others ? others.returnUrl : undefined);
 
       if (params.bgcolor) {
         this.bgColor = { 'background-color': `#${params.bgcolor}` };
@@ -171,26 +129,31 @@ export class RequestClaimComponent implements OnInit {
       title: TOASTR_HEADER,
       text: text,
       icon: icon,
-      button: 'Back to Application',
+      button: this.roleType === RoleType.APP ? 'Back to Application' : 'Back',
       closeOnClickOutside: false
     };
 
     // Hide button if callback url is not available
-    if (!this.appCallbackUrl) {
-      // delete config.button;
-      // config['buttons'] = false;
-      config.button = 'View My Enrolments'
+    if (!this.callbackUrl) {
+      if (this.iamService.getLoginStatus()) {
+        config.button = 'View My Enrolments';
+      }
+      else {
+        // No Buttons
+        delete config.button;
+        config['buttons'] = false;
+      }
     }
 
     // Navigate to callback URL
     let result = await SWAL(config);
     if (result) {
-      if (this.appCallbackUrl) {
+      if (this.callbackUrl && !this.stayLoggedIn) {
         // Logout
         this.iamService.logout();
 
         // Redirect to Callback URL
-        location.href = this.appCallbackUrl;
+        location.href = this.callbackUrl;
       }
       else {
         // Navigate to My Enrolments Page
@@ -199,16 +162,90 @@ export class RequestClaimComponent implements OnInit {
     }
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.activeRoute.queryParams.subscribe(async (params: any) => {
+      this.stayLoggedIn = params.stayLoggedIn;
+
+      if (params.app || params.org) {
+        // Check if namespace is correct
+        if (!this.isCorrectNamespace(params)) {
+          this.displayAlert('Namespace provided is incorrect.', 'error');
+          return;
+        }
+
+        // Set Role Type
+        this.roleType = params.app ? RoleType.APP : RoleType.ORG;
+
+        // URL Params
+        this.setUrlParams(params);
+
+        // Show loading and reset data
+        this.resetData();
+        
+        try {
+          // Get org/app definition
+          this.orgAppDetails = await this.iamService.iam.getDefinition({
+            type: this.roleType === RoleType.APP ? ENSNamespaceTypes.Application : ENSNamespaceTypes.Organization,
+            namespace: this.namespace
+          });
+
+          if (this.orgAppDetails) {
+            // Check Login Status
+            await this.initLoginUser(this.orgAppDetails.appName || this.orgAppDetails.orgName);
+
+            // Initialize Roles
+            await this.initRoles();
+          }
+          else {
+            // Display Error
+            if (this.roleType === RoleType.APP) {
+              this.displayAlert('Application Details cannot be retrieved.', 'error');
+            }
+            else {
+              this.displayAlert('Organization Details cannot be retrieved.', 'error');
+            }
+          }
+        } 
+        catch (e) {
+          console.error(TOASTR_HEADER, e);
+          this.toastr.error(e, TOASTR_HEADER);
+        }
+      }
+      else {
+        console.error('Enrolment Param Error', params);
+        this.displayAlert('URL is invalid.', 'error');
+      }
+
+      // Update Colors
+      this.updateColors(params);
+    });
+  }
+
+  private isCorrectNamespace(params: any) {
+    let retVal = false;
+
+    if (params.app && 
+      params.app.includes(`.${ENSNamespaceTypes.Application}.`) && 
+      !params.app.includes(`.${ENSNamespaceTypes.Roles}.`)) {
+        retVal = true;
+    }
+    else if (params.org && 
+      !params.org.includes(`.${ENSNamespaceTypes.Application}.`) && 
+      !params.org.includes(`.${ENSNamespaceTypes.Roles}.`)) {
+        retVal = true;
+    }
+
+    return retVal;
+  }
 
   private async initLoginUser(appName: string) {
     let loginStatus = this.iamService.getLoginStatus();
 
     // Check Login
     if (loginStatus) {
-      console.log(loginStatus);
+      // console.log(loginStatus);
       if (loginStatus === LoginType.LOCAL) {
-        console.log('local > login');
+        // console.log('local > login');
 
         // Set metamask extension options if connecting with metamask extension
         let useMetamaskExtension = undefined;
@@ -217,10 +254,15 @@ export class RequestClaimComponent implements OnInit {
         }
 
         // Proceed Login
+        this.iamService.waitForSignature();
         await this.iamService.login(useMetamaskExtension);
+        this.iamService.clearWaitSignatureTimer();
 
         // Setup User Data
         await this.iamService.setupUser();
+
+        // Set Loggedin Flag to true
+        this.isLoggedIn = true;
       }
     }
     else {
@@ -239,22 +281,51 @@ export class RequestClaimComponent implements OnInit {
     }
   }
 
+  private async getNotEnrolledRoles() {
+    let roleList = await this.iamService.iam.getRolesByNamespace({
+      parentType: this.roleType === RoleType.APP ? ENSNamespaceTypes.Application : ENSNamespaceTypes.Organization,
+      namespace: this.namespace
+    });
+    let enrolledRoles = await this.iamService.iam.getRequestedClaims({
+      did: this.iamService.iam.getDid()
+    });
+
+    // console.log('enrolledRoles', enrolledRoles);
+
+    if (roleList && roleList.length) {
+      roleList = roleList.filter((role: any) => {
+        let retVal = true;
+        let defaultRole = `${this.defaultRole}.${ENSNamespaceTypes.Roles}.${this.namespace}`;
+        for (let i = 0; i < enrolledRoles.length; i++) {
+          if (role.namespace === enrolledRoles[i].claimType) {
+            if (role.namespace === defaultRole) {
+              // Display Error
+              this.displayAlert('You have already enrolled to this role.', 'error');
+            }
+            retVal = false;
+            break;
+          }
+        }
+  
+        return retVal;
+      });
+    }
+
+    return roleList;
+  }
+
   private async initRoles() {
     // Change it later to GET NOT ENROLLED ROLES BY USER
     try {
-      this.roleList = await this.iamService.iam.getRolesByNamespace({
-        parentType: ENSNamespaceTypes.Application,
-        namespace: this.appNamespace
-      });
-
-      console.log('Role List', this.roleList);
+      this.loadingService.show();
+      this.roleList = await this.getNotEnrolledRoles();
 
       if (this.roleList && this.roleList.length) {
 
         // Set Default Selected
-        if (this.appDefaultRole) {
+        if (this.defaultRole) {
           for (let i = 0; i < this.roleList.length; i++) {
-            if (this.roleList[i].name.toUpperCase() === this.appDefaultRole.toUpperCase()) {
+            if (this.roleList[i].name.toUpperCase() === this.defaultRole.toUpperCase()) {
               this.selectedRole = this.roleList[i].definition;
               this.selectedNamespace = this.roleList[i].namespace;
               this.fieldList = this.selectedRole.fields || [];
@@ -266,10 +337,13 @@ export class RequestClaimComponent implements OnInit {
         }
       }
       
-      console.log('this.roleList', this.roleList);
+      // console.log('this.roleList', this.roleList);
     }
     catch (e) {
       throw e;
+    }
+    finally {
+      this.loadingService.hide();
     }
   }
 
@@ -315,11 +389,11 @@ export class RequestClaimComponent implements OnInit {
       fields: this.fb.array(controls)
     });
 
-    console.log(this.enrolmentForm);
+    // console.log(this.enrolmentForm);
   }
 
   roleTypeSelected(e: any) {
-    console.log('roleTypeSelected', e);
+    // console.log('roleTypeSelected', e);
     if (e && e.value && e.value.definition) {
       this.fieldList = e.value.definition.fields || [];
       this.selectedRole = e.value.definition;
@@ -330,16 +404,29 @@ export class RequestClaimComponent implements OnInit {
   }
 
   async submit() {
+    this.loadingService.show();
     if (this.enrolmentForm.valid) {
-      if (this.selectedRole.issuer && this.selectedRole.issuer.did && this.selectedRole.issuer.did.length) {
+      let did = undefined;
+      if (this.selectedRole.issuer) {
+        if (this.selectedRole.issuer.roleName) {
+          // Retrieve list of issuers by roleName
+          did = await this.iamService.iam.getRoleDIDs({
+            namespace: this.selectedRole.issuer.roleName
+          });
+          // console.log('dids by role', did);
+        }
+        else if (this.selectedRole.issuer.did) {
+          did = this.selectedRole.issuer.did;
+        }
+      }
+
+      if (did && did.length) {
         this.submitting = true;
-        this.spinner.show();
+        this.loadingService.show('Please confirm this transaction in your connected wallet.');
 
         let success = true;
 
         try {
-          // Check if user has already enrolled in this role
-
           // Construct Fields
           let fields = [];
           let values = this.enrolmentForm.value.fields;
@@ -355,14 +442,9 @@ export class RequestClaimComponent implements OnInit {
             fields: JSON.parse(JSON.stringify(fields)),
             claimType: this.selectedNamespace
           };
-          
-          console.info('createClaimRequest', {
-            issuer: this.selectedRole.issuer.did,
-            claim: claim
-          });
 
           await this.iamService.iam.createClaimRequest({
-            issuer: this.selectedRole.issuer.did,
+            issuer: did,
             claim: claim
           });
           
@@ -374,7 +456,7 @@ export class RequestClaimComponent implements OnInit {
           this.submitting = false;
         }
         finally {
-          this.spinner.hide();
+          this.loadingService.hide();
         }
 
         if (success) {
@@ -389,13 +471,11 @@ export class RequestClaimComponent implements OnInit {
     else {
       this.toastr.error('Enrolment Form is invalid.', TOASTR_HEADER);
     }
+
+    this.loadingService.hide();
   }
 
   logout() {
-    this.iamService.logout();
-    let $navigate = setTimeout(() => {
-        clearTimeout($navigate);
-        location.reload();
-    }, 100);
+    this.iamService.logoutAndRefresh();
   }
 }

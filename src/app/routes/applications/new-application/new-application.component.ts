@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatStepper, MAT_DIALOG_DATA } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
@@ -14,12 +14,13 @@ import { ViewType } from '../new-organization/new-organization.component';
   templateUrl: './new-application.component.html',
   styleUrls: ['./new-application.component.scss']
 })
-export class NewApplicationComponent implements OnInit {
+export class NewApplicationComponent implements OnInit, AfterViewInit {
   @ViewChild('stepper', { static: false }) private stepper: MatStepper;
 
   public appForm: FormGroup;
   public environment = environment;
   public isChecking = false;
+  private _isLogoUrlValid = true;
   public ENSPrefixes = ENSNamespaceTypes;
   public ViewType = ViewType;
 
@@ -48,18 +49,26 @@ export class NewApplicationComponent implements OnInit {
         })
       });
 
-      if (data && data.viewType && data.origData) {
-        console.log('origData', this.origData);
+      if (data && data.viewType) {
+        // console.log('origData', this.origData);
         this.viewType = data.viewType;
-        this.origData = data.origData;
+        
   
-        if (this.viewType === ViewType.UPDATE) {
+        if (this.viewType === ViewType.UPDATE && data.origData) {
+          this.origData = data.origData;
           this.TOASTR_HEADER = 'Update Application';
+        }
+        else if (this.viewType === ViewType.NEW && data.organizationNamespace) {
+          this.appForm.patchValue({ orgNamespace: data.organizationNamespace });
         }
   
         this.initFormData();
       }
     }
+
+  async ngAfterViewInit() {
+    await this.confirmOrgNamespace();
+  }
 
   ngOnInit() {
   }
@@ -98,15 +107,8 @@ export class NewApplicationComponent implements OnInit {
     }
   }
 
-  alphaNumericOnly(event: any, includeDot?: boolean) {
-    let charCode = (event.which) ? event.which : event.keyCode;
-    
-    // Check if key is alphanumeric key
-    if ((charCode > 96 && charCode < 123) || (charCode > 47 && charCode < 58) || (includeDot && charCode === 46)) {
-      return true;
-    }
-
-    return false;
+  alphaNumericOnly(event: any) {
+    return this.iamService.isAlphaNumericOnly(event);
   }
 
   async confirmOrgNamespace() {
@@ -132,30 +134,33 @@ export class NewApplicationComponent implements OnInit {
               domain: this.appForm.value.orgNamespace
             });
 
-            if (isOwner) {
-              this.stepper.selected.editable = false;
-              this.stepper.selected.completed = true;
-              this.stepper.next();
-            }
-            else {
+            if (!isOwner) {
               this.toastr.error('You are not authorized to create an application in this organization.', this.TOASTR_HEADER);
+              this.dialog.closeAll();
             }
           }
           else {
             this.toastr.error('Application subdomain in this organization does not exist.', this.TOASTR_HEADER);
+            this.dialog.closeAll();
           }
         }
         else {
           this.toastr.error('Organization namespace does not exist.', this.TOASTR_HEADER);
+          this.dialog.closeAll();
         }
       }
       catch (e) {
         this.toastr.error(e.message, 'System Error');
+        this.dialog.closeAll();
       } 
       finally {
         this.isChecking = false;
         this.spinner.hide();
       }
+    }
+    else {
+      this.toastr.error('Organization Namespace is missing.', this.TOASTR_HEADER);
+      this.dialog.closeAll();
     }
   }
 
@@ -165,10 +170,18 @@ export class NewApplicationComponent implements OnInit {
     this.stepper.selected.completed = false;
   }
 
+  logoUrlError() {
+    this._isLogoUrlValid = false;
+  }
+
+  logoUrlSuccess() {
+    this._isLogoUrlValid = true;
+  }
+
   cancelAppDetails() {
     // Set the second step to editable
     let list = this.stepper.steps.toArray();
-    list[1].editable = true;
+    list[0].editable = true;
 
     this.stepper.previous();
     this.stepper.selected.completed = false;
@@ -222,7 +235,7 @@ export class NewApplicationComponent implements OnInit {
         else {
           try {
             // Check if others is in JSON Format
-            console.info(JSON.parse(orgData.data.others));
+            // console.info(JSON.parse(orgData.data.others));
 
             // Let the user confirm the info before proceeding to the next step
             this.stepper.selected.editable = false;
@@ -285,7 +298,7 @@ export class NewApplicationComponent implements OnInit {
         else {
           try {
             // Check if others is in JSON Format
-            console.info(JSON.parse(orgData.data.others));
+            // console.info(JSON.parse(orgData.data.others));
 
             // Let the user confirm the info before proceeding to the next step
             this.stepper.selected.editable = false;
@@ -316,6 +329,12 @@ export class NewApplicationComponent implements OnInit {
     req.data.appName = req.data.applicationName;
     delete req.data.applicationName;
 
+    // Check if logoUrl resolves
+    if (req.data.logoUrl && !this._isLogoUrlValid) {
+      this.toastr.error('Logo URL cannot be resolved. Please change it to a correct and valid image URL.', this.TOASTR_HEADER);
+      return;
+    }
+
     // Make sure others is in correct JSON Format
     if (req.data.others && req.data.others.trim()) {
       try {
@@ -330,7 +349,7 @@ export class NewApplicationComponent implements OnInit {
       delete req.data.others;
     }
 
-    console.info('myreq', req);
+    // console.info('myreq', req);
 
     // Set the second step to non-editable
     let list = this.stepper.steps.toArray();
@@ -350,7 +369,7 @@ export class NewApplicationComponent implements OnInit {
       let steps = await this.iamService.iam.createApplication(req);
       for (let index = 0; index < steps.length; index++) {
         let step = steps[index];
-        console.log('Processing', step.info);
+        // console.log('Processing', step.info);
         
         // Show the next step
         this.stepper.selected.completed = true;
@@ -395,13 +414,14 @@ export class NewApplicationComponent implements OnInit {
     }
   }
 
-  private async confirm(confirmationMsg: string) {
+  private async confirm(confirmationMsg: string, isDiscardButton?: boolean) {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      maxHeight: '180px',
+      maxHeight: '195px',
       data: {
         header: this.TOASTR_HEADER,
-        message: confirmationMsg
+        message: confirmationMsg,
+        isDiscardButton: isDiscardButton
       },
       maxWidth: '100%',
       disableClose: true
@@ -410,13 +430,18 @@ export class NewApplicationComponent implements OnInit {
 
   async closeDialog(isSuccess?: boolean) {
     if (this.appForm.touched && !isSuccess) {
-      if (await this.confirm('There are unsaved changes. Do you wish to continue?')) {
+      if (await this.confirm('There are unsaved changes.', true)) {
         this.dialogRef.close(false);
       }
     }
     else {
       if (isSuccess) {
-        this.toastr.success('Application is successfully created.', this.TOASTR_HEADER);
+        if (this.origData) {
+          this.toastr.success('Application is successfully updated.', this.TOASTR_HEADER);
+        }
+        else {
+          this.toastr.success('Application is successfully created.', this.TOASTR_HEADER);
+        }
       }
       this.dialogRef.close(isSuccess);
     }

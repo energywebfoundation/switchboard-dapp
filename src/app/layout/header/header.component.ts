@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 const screenfull = require('screenfull');
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import {Md5} from 'ts-md5/dist/md5';
 import { UserblockService } from '../sidebar/userblock/userblock.service';
 import { SettingsService } from '../../core/settings/settings.service';
@@ -30,8 +30,6 @@ export class HeaderComponent implements OnInit {
 
     currentTheme: any;
 
-    flexNode="";
-
     isNavSearchVisible: boolean;
     isNavMenuVisible = true;
 
@@ -46,6 +44,7 @@ export class HeaderComponent implements OnInit {
     };
 
     isLoadingNotif = true;
+    isNotifInitialized = false;
 
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
@@ -60,9 +59,6 @@ export class HeaderComponent implements OnInit {
 
         // show only a few items on demo
         this.menuItems = menu.getMenu().slice(0, 4); // for horizontal layout
-        this.http.get('assets/flexhub/flexnode.json').toPromise().then((data:any) => {
-            this.flexNode = data.NODENAME;
-        });
         
         if (localStorage.getItem('currentUser')) {
             this.currentUserDid = JSON.parse(localStorage.getItem('currentUser')).did;
@@ -87,7 +83,7 @@ export class HeaderComponent implements OnInit {
                 this.userName = data.name;
             }
         
-            if (this.iamService.accountAddress) {
+            if (this.iamService.accountAddress && !this.isNotifInitialized) {
                 // Initialize Notifications
                 this.initNotifications();
             }
@@ -130,6 +126,7 @@ export class HeaderComponent implements OnInit {
     private initNotifications() {
         // Init Notif Count
         this.initNotificationCount();
+        this.isNotifInitialized = true;
     }
 
     private async initNotificationListeners(pendingApprovalCount: number, pendingSyncCount: number) {
@@ -148,18 +145,20 @@ export class HeaderComponent implements OnInit {
 
         // Listen to External Messages
         await this.iamService.iam.subscribeToMessages({
-            messageHandler: this.handleMessage
+            messageHandler: this.handleMessage.bind(this)
         });
     }
 
     private handleMessage(message: any) {
         if (message.issuedToken) {
             // Message has issued token ===> Newly Approved Claim
-            this.notifService.increasePendingDidDocSyncCount.bind(this)();
+            this.notifService.increasePendingDidDocSyncCount();
+            this.toastr.info('Your claim request has been approved. Please sync your approved claims in your DID Document.', 'Enrolment Approved');
         }
         else {
             // Message has no issued token ===> Newly Requested Claim
-            this.notifService.increasePendingApprovalCount.bind(this)();
+            this.notifService.increasePendingApprovalCount();
+            this.toastr.info('A new enrolment request is waiting for your approval.', 'New Enrolment Request');
         }
     }
 
@@ -193,8 +192,8 @@ export class HeaderComponent implements OnInit {
                 }
             });
 
-            console.log('approved claims', approvedClaimsList.length);
-            console.log('synced claims', claims.length);
+            // console.log('approved claims', approvedClaimsList.length);
+            // console.log('synced claims', claims.length);
 
             this.notif.pendingSyncCount = approvedClaimsList.length - claims.length;
         }
@@ -255,11 +254,6 @@ export class HeaderComponent implements OnInit {
     }
 
     logout() {
-        this.iamService.logout();
-        let $navigate = setTimeout(() => {
-            clearTimeout($navigate);
-            location.reload();
-        }, 100);
-        
+        this.iamService.logoutAndRefresh();
     }
 }

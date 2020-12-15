@@ -47,7 +47,7 @@ export class EnrolmentListComponent implements OnInit {
   }
 
   public async getList(isAccepted?: boolean) {
-    console.log(this.listType, 'isAccepted', isAccepted);
+    // console.log(this.listType, 'isAccepted', isAccepted);
     this.loadingService.show();
     this.dynamicAccepted = isAccepted;
     let list = [];
@@ -83,7 +83,7 @@ export class EnrolmentListComponent implements OnInit {
       this.toastr.error(e, TOASTR_HEADER);
     }
 
-    console.log(this.listType, 'list', list);
+    // console.log(this.listType, 'list', list);
     this.dataSource = list;
     this.loadingService.hide();
   }
@@ -114,7 +114,7 @@ export class EnrolmentListComponent implements OnInit {
   }
 
   view (element: any) {
-    console.log('view element', element);
+    // console.log('view element', element);
 
     const dialogRef = this.dialog.open(ViewRequestsComponent, {
       width: '600px',data:{
@@ -131,10 +131,10 @@ export class EnrolmentListComponent implements OnInit {
   }
 
   async addToDidDoc (element: any) {
-    console.log('claimToSync', element);
+    // console.log('claimToSync', element);
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      maxHeight: '180px',
+      maxHeight: '195px',
       data: {
         header: TOASTR_HEADER,
         message: 'This role will be added to your DID Document. Do you wish to continue?'
@@ -156,13 +156,13 @@ export class EnrolmentListComponent implements OnInit {
         token: element.issuedToken
       });
 
-      console.log('decoded', decoded);
+      // console.log('decoded', decoded);
 
       let retVal = await this.iamService.iam.publishPublicClaim({
         token: element.issuedToken
       });
 
-      console.log('Publish Public Claim Result: ', retVal);
+      // console.log('Publish Public Claim Result: ', retVal);
       if (retVal) {
         element.isSynced = true;
         this.notifService.decreasePendingDidDocSyncCount();

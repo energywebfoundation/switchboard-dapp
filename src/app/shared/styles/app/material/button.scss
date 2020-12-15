@@ -1,8 +1,8 @@
 .btn-color-primary {
-    color: #33CBCB;
+    color: #33CBCB !important;
 }
 .btn-color-error {
-    color: #C82E2E;
+    color: #C82E2E !important;
 }
 .btn-color-success {
     color: #0FB544;
@@ -115,4 +115,44 @@
     &:hover {
         opacity: 0.8;
     }
+}
+
+.mat-button-toggle-label-content {
+    text-transform: uppercase;
+    font-family: "Rajdhani", sans-serif !important;
+    font-weight: 600;
+    line-height: 31px !important;
+    letter-spacing: 0.2px;
+}
+
+.mat-button-toggle-group {
+    border: solid 1px #33CBCB;
+}
+
+.mat-button-toggle {
+    color: #33CBCB!important;
+    background-color: transparent;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.mat-button-toggle-checked {
+    background-color: #33CBCB;
+}
+
+.mat-button-toggle-checked .mat-button-toggle-label-content {
+    color: white;
+}
+
+.multiline-tooltip {
+    white-space: pre-line;
+}
+
+.tooltip-color {
+    color:#9080BA;
+}
+
+.tooltip-wrapper {
+    position: absolute;
+    top: -5px;
+    right: 30px;
 }

@@ -3,8 +3,6 @@ import { AuthGuard } from '../shared/services/auth.guard';
 import { LogOutComponent } from './profile/logout/logout.component';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 
-
-
 export const routes = [
     {
         path: '',
@@ -15,7 +13,8 @@ export const routes = [
             { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
             { path: 'profile', loadChildren: './profile/profile.module#ProfileModule' },
             { path: 'governance', loadChildren: './applications/applications.module#ApplicationsModule' },
-            { path: 'enrolment', loadChildren: './enrolment/enrolment.module#EnrolmentModule' }
+            { path: 'enrolment', loadChildren: './enrolment/enrolment.module#EnrolmentModule' },
+            { path: 'search-result', loadChildren: './search-result/search-result.module#SearchResultModule' }
         ]
     },
     {
@@ -26,18 +25,6 @@ export const routes = [
         path: 'welcome',
         children: [
             { path: '', loadChildren: './welcome/welcome.module#WelcomeModule' }
-        ]
-    },
-    {
-        path: 'login',
-        children: [
-            { path: '', loadChildren: './login/login.module#LoginModule' }
-        ]
-    },
-    {
-        path: 'registration',
-        children: [
-            { path: '', loadChildren: './registration/registration.module#RegistrationModule' }
         ]
     },
 

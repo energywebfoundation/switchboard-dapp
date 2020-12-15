@@ -117,9 +117,10 @@ fieldset[disabled] .mda-radio input+em:before {
   z-index: 2;
 }
 
-.mat-label {
+mat-label {
   color: #FFF !important;
-  letter-spacing: 0.5px;
+  font-family: 'Rajdhani', sans-serif !important;
+  font-weight: 500;
 } 
 
 .mat-form-field {
@@ -133,6 +134,33 @@ fieldset[disabled] .mda-radio input+em:before {
     color: #B0ADDC;
   }
 
+}
+
+.search-title {
+  font-size: 16px;
+  font-weight: 600 !important;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.search-preview {
+  line-height: 21px;
+  padding-left: 40px;
+  position: relative;
+  top: -12px;
+  .preview-namespace {
+    font-weight: 500 !important;
+    font-family: 'Source Sans Pro', sans-serif !important;
+  }
+}
+
+.md-search.mat-form-field {
+  .mat-input-element {
+    color: #FFF;
+  }
+}
+
+.md-search.mat-form-field-prefix, .mat-form-field-suffix {
+  color: rgba(255,255,255,0.5);
 }
 
 .mat-select-panel {
@@ -218,7 +246,11 @@ fieldset[disabled] .mda-radio input+em:before {
 
 .mat-option.mat-active {
   color: #FFF;
-  background: rgba(0,0,0,.04);
+  background: #2A2837;
+}
+
+.mat-autocomplete-panel {
+  background: #2A2837;
 }
 
 .mat-select-value {
