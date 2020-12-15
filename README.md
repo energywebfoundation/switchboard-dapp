@@ -9,10 +9,6 @@
 
 ![Identity Creation](screenshots/switchboard.png)
 
-## Maintainers
-- Mani Hagh Sefat (@manihagh)
-- Kim Honoridez (@kim-energyweb)
-- Davy Jones Castillo (@davycastillo)
 
 ## Getting Started
 
@@ -48,6 +44,11 @@ npm run build
 
 
 End with an example of getting some data out of the system or using it for a little demo
+
+## Active Maintainers
+- Mani H. (@manihagh)
+- Kim Honoridez (@kim-energyweb)
+- Davy Jones Castillo (@davycastillo)
 
 ## Contributing
 
