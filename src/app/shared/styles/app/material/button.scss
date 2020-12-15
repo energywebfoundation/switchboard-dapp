@@ -155,24 +155,4 @@
     position: absolute;
     top: -5px;
     right: 30px;
-    
-}
-.help-wrapper {
-    top: 0; 
-    right: 10px; 
-    z-index: 9;
-    font-family: "Rajdhani", sans-serif;
-    font-weight: 600;
-
-    .help-color {
-        color: #9080BA;
-
-        &:hover {
-            color: #33CBCB;
-        }
-    }
-
-    .help-icon {
-        top: -1px;
-    }
 }
