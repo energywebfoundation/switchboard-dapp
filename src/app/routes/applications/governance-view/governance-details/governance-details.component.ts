@@ -124,8 +124,18 @@ export class GovernanceDetailsComponent implements OnInit {
   async enrol(type: string, role: any) {
     // check if currently enrolled in this role
     if (!await this._isEnrolled(role)) {
-      let url = this._constructEnrolmentUrl(type, role);
-      window.open(url, '_blank');
+      try {
+        let url = this._constructEnrolmentUrl(type, role);
+        let newWindowRef = window.open();
+        newWindowRef.location = <any>url;
+        if (!newWindowRef || newWindowRef.closed || typeof newWindowRef.closed == 'undefined') {
+          this.toastr.error('A new window cannot be opened. Please allow popups for this application in your browser.', 'Enrolment');
+        }
+      }
+      catch (e) {
+        console.error('Cannot open new window.', e);
+        this.toastr.error('A new window cannot be opened. Please allow popups for this application in your browser.', 'Enrolment');
+      }
     }
     else {
       this.toastr.warning('You either have an approved/pending enrolment request for this role.', 'Enrolment');
