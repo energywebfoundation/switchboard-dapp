@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-const screenfull = require('screenfull');
 import { MatDialog } from '@angular/material/dialog';
 import {Md5} from 'ts-md5/dist/md5';
 import { UserblockService } from '../sidebar/userblock/userblock.service';
@@ -111,16 +110,6 @@ export class HeaderComponent implements OnInit {
         if (ua.indexOf("MSIE ") > 0 || !!ua.match(/Trident.*rv\:11\./)) { // Not supported under IE
             this.fsbutton.nativeElement.style.display = 'none';
         }
-
-        // // Switch fullscreen icon indicator
-        // const el = this.fsbutton.nativeElement.firstElementChild;
-        // screenfull.on('change', () => {
-        //     if (el)
-        //         el.className = screenfull.isFullscreen ? 'fa fa-compress' : 'fa fa-expand';
-        // });
-
-        // Make sure that when user changes guarded screen, walletconnect session is checked
-        
     }
 
     private initNotifications() {
@@ -245,12 +234,6 @@ export class HeaderComponent implements OnInit {
 
     isCollapsedText() {
         return this.settings.getLayoutSetting('isCollapsedText');
-    }
-
-    toggleFullScreen(event) {
-        if (screenfull.enabled) {
-            screenfull.toggle();
-        }
     }
 
     logout() {

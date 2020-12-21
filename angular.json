@@ -44,17 +44,12 @@
               "node_modules/jquery.flot.spline/jquery.flot.spline.js",
               "node_modules/jquery-sparkline/jquery.sparkline.js",
               "node_modules/chart.js/dist/Chart.bundle.js",
-              "node_modules/jqcloud2/dist/jqcloud.js",
               "node_modules/bootstrap/js/dist/util.js",
               "node_modules/bootstrap/js/dist/modal.js",
               "node_modules/bootstrap/js/dist/dropdown.js",
               "node_modules/bootstrap/js/dist/tooltip.js",
-              "node_modules/summernote/dist/summernote.js",
               "node_modules/moment/min/moment-with-locales.min.js",
-              "node_modules/fullcalendar/dist/fullcalendar.js",
-              "node_modules/ika.jvectormap/jquery-jvectormap-1.2.2.min.js",
-              "node_modules/ika.jvectormap/jquery-jvectormap-world-mill-en.js",
-              "node_modules/ika.jvectormap/jquery-jvectormap-us-mill-en.js"
+              "node_modules/fullcalendar/dist/fullcalendar.js"
             ]
           },
           "configurations": {
@@ -164,17 +159,12 @@
               "node_modules/jquery.flot.spline/jquery.flot.spline.js",
               "node_modules/jquery-sparkline/jquery.sparkline.js",
               "node_modules/chart.js/dist/Chart.bundle.js",
-              "node_modules/jqcloud2/dist/jqcloud.js",
               "node_modules/bootstrap/js/dist/util.js",
               "node_modules/bootstrap/js/dist/modal.js",
               "node_modules/bootstrap/js/dist/dropdown.js",
               "node_modules/bootstrap/js/dist/tooltip.js",
-              "node_modules/summernote/dist/summernote.js",
               "node_modules/moment/min/moment-with-locales.min.js",
-              "node_modules/fullcalendar/dist/fullcalendar.js",
-              "node_modules/ika.jvectormap/jquery-jvectormap-1.2.2.min.js",
-              "node_modules/ika.jvectormap/jquery-jvectormap-world-mill-en.js",
-              "node_modules/ika.jvectormap/jquery-jvectormap-us-mill-en.js"
+              "node_modules/fullcalendar/dist/fullcalendar.js"
             ]
           }
         },
