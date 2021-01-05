@@ -45,7 +45,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
           logoUrl: ['', Validators.pattern('https?://.*')],
           websiteUrl: ['', Validators.pattern('https?://.*')],
           description: '',
-          others: ''
+          others: ['', this.iamService.isValidJsonFormat]
         })
       });
 

@@ -33,7 +33,7 @@ export class TransferOwnershipComponent implements OnInit {
 
   newOwnerAddress = new FormControl('', Validators.compose([Validators.required, 
     Validators.maxLength(256),
-    Validators.minLength(3)]));
+    this.iamService.isValidEthAddress]));
 
   public mySteps           = [];
   isProcessing             = false;
@@ -57,7 +57,8 @@ export class TransferOwnershipComponent implements OnInit {
       maxHeight: '195px',
       data: {
         header: TOASTR_HEADER,
-        message: confirmationMsg
+        message: confirmationMsg,
+        isDiscardButton: true
       },
       maxWidth: '100%',
       disableClose: true
@@ -79,6 +80,9 @@ export class TransferOwnershipComponent implements OnInit {
   }
 
   async submit() {
+    console.log(this.newOwnerAddress, this.newOwnerAddress.valid);
+
+    return;
     if (this.newOwnerAddress.valid) {
       if (await this.confirm('You will no longer be the owner of this namespace. Do you wish to continue?')) {
         this.spinner.show();

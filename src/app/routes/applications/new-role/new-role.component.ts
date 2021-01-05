@@ -103,7 +103,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       });
 
       this.issuerGroup = fb.group({
-        newIssuer: ['', Validators.required]
+        newIssuer: ['', Validators.compose([Validators.required, this.iamService.isValidDid])]
       });
 
       this.issuerList = [];

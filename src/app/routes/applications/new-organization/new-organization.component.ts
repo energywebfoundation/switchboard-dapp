@@ -50,7 +50,7 @@ export class NewOrganizationComponent implements OnInit {
         logoUrl: ['', Validators.pattern('https?://.*')],
         websiteUrl: ['', Validators.pattern('https?://.*')],
         description: '',
-        others: undefined
+        others: [undefined, this.iamService.isValidJsonFormat]
       })
     });
 
