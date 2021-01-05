@@ -3,10 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { MatButtonModule, MatPaginatorModule, MatIconModule, MatTooltipModule, MatInputModule, MatTableModule, MatDialogModule, MatFormFieldModule, MatDatepickerModule, MatTabsModule, MatSelectModule } from '@angular/material';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { ChartsModule as Ng2ChartsModule } from 'ng2-charts/ng2-charts';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatNativeDatetimeModule, MatDatetimepickerModule } from '@mat-datetimepicker/core';
-import { QRCodeModule } from 'angular2-qrcode';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 const routes: Routes = [
@@ -25,17 +22,14 @@ const routes: Routes = [
     MatSelectModule,
     MatIconModule,
     MatTooltipModule,
-    Ng2ChartsModule,
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
     MatDialogModule,
     MatFormFieldModule,
     MatDatepickerModule,
-    NgxMaterialTimepickerModule,
     MatNativeDatetimeModule,
-    MatDatetimepickerModule,    
-    QRCodeModule
+    MatDatetimepickerModule
   ],
   entryComponents: [
     ConfirmationDialogComponent

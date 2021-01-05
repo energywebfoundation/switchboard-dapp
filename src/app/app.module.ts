@@ -10,7 +10,6 @@ import { SharedModule } from './shared/shared.module';
 import { RoutesModule } from './routes/routes.module';
 import { MatIconModule } from '@angular/material';
 import 'hammerjs';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { ToastrModule } from 'ngx-toastr';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -30,7 +29,6 @@ export function createTranslateLoader(http: HttpClient) {
         BrowserAnimationsModule, // required for ng2-tag-input
         CoreModule,
         LayoutModule,
-        NgxMaterialTimepickerModule,
         SharedModule.forRoot(),
         ToastrModule.forRoot(),
         RoutesModule,
