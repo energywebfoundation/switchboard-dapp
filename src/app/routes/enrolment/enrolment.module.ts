@@ -6,7 +6,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { EnrolmentComponent } from './enrolment.component';
 import { EnrolToRoleComponent } from './enrol-to-role/enrol-to-role.component';
 import { FormsModule } from '@angular/forms';
-import { NgxSelectModule } from 'ngx-select-ex';
 import { ViewRequestsComponent } from './view-requests/view-requests.component';
 import { ViewRoleComponent } from './view-role/view-role.component';
 import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
@@ -30,7 +29,6 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     NgxSpinnerModule,
     MatDialogModule,
-    NgxSelectModule,
     MatInputModule
   ],
   entryComponents: [ViewRequestsComponent,ViewRoleComponent],
