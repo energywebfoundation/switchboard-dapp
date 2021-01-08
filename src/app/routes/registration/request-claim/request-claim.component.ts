@@ -268,7 +268,8 @@ export class RequestClaimComponent implements OnInit {
     else {
       // Launch Login Dialog
       await this.dialog.open(ConnectToWalletDialogComponent, {
-        width: '500px',
+        width: '434px',
+        panelClass: 'connect-to-wallet',
         data: {
           appName: appName
         },
