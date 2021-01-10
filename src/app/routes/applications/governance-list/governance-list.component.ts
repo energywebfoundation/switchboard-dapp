@@ -349,6 +349,15 @@ export class GovernanceListComponent implements OnInit {
       });
     }
 
+    // Filter By Role
+    if (this.filterForm.value.role) {
+      tmpData = tmpData.filter((item: any) => {
+        let arr = item.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
+        arr = arr[0].split('.');
+        return (arr[arr.length - 1].toUpperCase().indexOf(this.filterForm.value.role.toUpperCase()) >= 0);
+      });
+    }
+
     this.dataSource = tmpData;
   }
 
