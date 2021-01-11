@@ -148,12 +148,6 @@ export class IamService {
     if (localStorage['METAMASK_EXT_CONNECTED']) {
       localStorage.removeItem('METAMASK_EXT_CONNECTED');
     }
-
-    // Save Deep Link
-    localStorage.removeItem('DEEP_LINK');
-    if (saveDeepLink) {
-      localStorage['DEEP_LINK'] = this._deepLink;
-    }
   }
 
   setDeepLink(deepLink: any) {
@@ -164,6 +158,9 @@ export class IamService {
     this.logout(saveDeepLink);
     let $navigate = setTimeout(() => {
       clearTimeout($navigate);
+      if (saveDeepLink) {
+        location.href = location.origin + '/#/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
+      }
       location.reload();
   }, 100);
   }
