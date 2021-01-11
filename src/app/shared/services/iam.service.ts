@@ -40,6 +40,7 @@ export class IamService {
 
   private _throwTimeoutError = false;
   private _timer = undefined;
+  private _deepLink = '';
 
   constructor(private loadingService: LoadingService) {
     let options = {
@@ -139,7 +140,7 @@ export class IamService {
   /**
    * Disconnect from IAM
    */
-  logout() {
+  logout(saveDeepLink?: boolean) {
     this._iam.closeConnection();
     this._user = undefined;
 
@@ -149,10 +150,17 @@ export class IamService {
     }
   }
 
-  logoutAndRefresh() {
-    this.logout();
+  setDeepLink(deepLink: any) {
+    this._deepLink = deepLink;
+  }
+
+  logoutAndRefresh(saveDeepLink?: boolean) {
+    this.logout(saveDeepLink);
     let $navigate = setTimeout(() => {
       clearTimeout($navigate);
+      if (saveDeepLink) {
+        location.href = location.origin + '/#/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
+      }
       location.reload();
   }, 100);
   }

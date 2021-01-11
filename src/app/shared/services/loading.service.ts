@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 @Injectable({
@@ -23,10 +24,14 @@ export class LoadingService {
   }
 
   show(msg?: any) {
-    if (msg) {
-      this._msg.next(msg);
-    }
-    this._isLoading.next(++this._counter);
+    let timeout$ = setTimeout(() => {
+      if (msg) {
+        this._msg.next(msg);
+      }
+      this._isLoading.next(++this._counter);
+      clearTimeout(timeout$);
+    }, 100);
+    
   }
 
   hide() {
@@ -35,5 +40,6 @@ export class LoadingService {
     }
     this._msg.next('');
     this._isLoading.next(this._counter);
+    
   }
 }

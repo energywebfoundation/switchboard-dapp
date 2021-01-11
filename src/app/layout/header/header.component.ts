@@ -66,6 +66,7 @@ export class HeaderComponent implements OnInit {
 
         this.router.events.subscribe((event: any) => {
             if (event instanceof NavigationEnd) {
+                this.iamService.setDeepLink(event.url);
                 this.isNavMenuVisible = true;
                 if (event.url  === '/dashboard') {
                     this.isNavMenuVisible = false;

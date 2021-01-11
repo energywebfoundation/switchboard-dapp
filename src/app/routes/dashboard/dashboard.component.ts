@@ -149,12 +149,14 @@ export class DashboardComponent implements OnInit {
 
       if (word.length > 2) {
         word = word.toLowerCase();
-        retVal = this._searchList.filter((item: any) => {
-          return item.namespace.toLowerCase().includes(word) ||
-            (item.definition.description && item.definition.description.toLowerCase().includes(word)) ||
-            (item.definition.orgName && item.definition.orgName.toLowerCase().includes(word)) ||
-            (item.definition.appName && item.definition.appName.toLowerCase().includes(word))
-        });
+        if (this._searchList) {
+          retVal = this._searchList.filter((item: any) => {
+            return item.namespace.toLowerCase().includes(word) ||
+              (item.definition.description && item.definition.description.toLowerCase().includes(word)) ||
+              (item.definition.orgName && item.definition.orgName.toLowerCase().includes(word)) ||
+              (item.definition.appName && item.definition.appName.toLowerCase().includes(word))
+          });
+        }
       }
     }
 
