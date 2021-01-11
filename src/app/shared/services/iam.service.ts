@@ -40,6 +40,7 @@ export class IamService {
 
   private _throwTimeoutError = false;
   private _timer = undefined;
+  private _deepLink = '';
 
   constructor(private loadingService: LoadingService) {
     let options = {
@@ -139,7 +140,7 @@ export class IamService {
   /**
    * Disconnect from IAM
    */
-  logout() {
+  logout(saveDeepLink?: boolean) {
     this._iam.closeConnection();
     this._user = undefined;
 
@@ -147,10 +148,20 @@ export class IamService {
     if (localStorage['METAMASK_EXT_CONNECTED']) {
       localStorage.removeItem('METAMASK_EXT_CONNECTED');
     }
+
+    // Save Deep Link
+    localStorage.removeItem('DEEP_LINK');
+    if (saveDeepLink) {
+      localStorage['DEEP_LINK'] = this._deepLink;
+    }
   }
 
-  logoutAndRefresh() {
-    this.logout();
+  setDeepLink(deepLink: any) {
+    this._deepLink = deepLink;
+  }
+
+  logoutAndRefresh(saveDeepLink?: boolean) {
+    this.logout(saveDeepLink);
     let $navigate = setTimeout(() => {
       clearTimeout($navigate);
       location.reload();

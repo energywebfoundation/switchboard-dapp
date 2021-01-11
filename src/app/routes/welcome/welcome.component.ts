@@ -1,3 +1,4 @@
+import { query } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IAM } from 'iam-client-lib';
@@ -36,8 +37,17 @@ export class WelcomeComponent implements OnInit {
     let isLoggedIn = await this.iamService.login();
     this.iamService.clearWaitSignatureTimer();
     if (isLoggedIn) {
+      // Check deep link
+      let queryParams = undefined;
+      if (localStorage['DEEP_LINK']) {
+        queryParams = { returnUrl: localStorage['DEEP_LINK'] };
+      }
+
       // Navigate to dashboard to initalize user data
-      this.route.navigate(['dashboard'], { state: { data: { fresh: true }}});
+      this.route.navigate(['dashboard'], { 
+        state: { data: { fresh: true }},
+        queryParams: queryParams
+      });
     }
     else {
       await this.cleanMe();
@@ -60,8 +70,18 @@ export class WelcomeComponent implements OnInit {
       // Set LocalStorage for Metamask
       localStorage['METAMASK_EXT_CONNECTED'] = true;
 
+      // Check deep link
+      let queryParams = undefined;
+      if (localStorage['DEEP_LINK']) {
+        queryParams = { returnUrl: localStorage['DEEP_LINK'] };
+        localStorage.removeItem('DEEP_LINK');
+      }
+
       // Navigate to dashboard to initalize user data
-      this.route.navigate(['dashboard'], { state: { data: { fresh: true }}});
+      this.route.navigate(['dashboard'], { 
+        state: { data: { fresh: true }},
+        queryParams: queryParams
+      });
     }
     else {
       await this.cleanMe();
