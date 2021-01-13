@@ -1,5 +1,5 @@
 <div class="drawer-container" #searchResultDrawer>
-  <mat-drawer-container class="h-100 bg-transparent" autosize>
+  <mat-drawer-container class="h-100 bg-transparent" autosize [hasBackdrop]="false">
     <mat-drawer mode="side" [opened]="opened" [mode]="(screenWidth > 840) ? 'side' : 'over'" #drawer position="end"
       class="p-3 color-white">
       <!-- NOTE: added padding-top because of scrolling issue -->
