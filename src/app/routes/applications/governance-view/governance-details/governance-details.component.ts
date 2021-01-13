@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
-import { type } from 'os';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -21,26 +20,28 @@ export class GovernanceDetailsComponent implements OnInit {
 
   data: any;
 
-  ListType  = ListType;
-  RoleType  = RoleType;
+  ListType = ListType;
+  RoleType = RoleType;
 
   typeLabel: string;
-  formData  : any;
-  displayedColumnsView: string[] = ['type', 'label'/*, 'validation'*/];
+  formData: any;
+  displayedColumnsView: string[] = ['type', 'label' /*, 'validation'*/];
 
   appList: any[];
   roleList: any[];
 
-  constructor(private iamService: IamService, 
+  constructor(
+    private iamService: IamService,
     private loadingService: LoadingService,
     private dialog: MatDialog,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.data = this.origData;
     this.setData(this.data);
   }
-  
+
   public async setData(data: any) {
     this.data = data;
     switch (this.data.type) {
@@ -72,7 +73,7 @@ export class GovernanceDetailsComponent implements OnInit {
 
   private async _getAppsAndRoles() {
     this.loadingService.show();
-    
+
     this.appList = [];
     this.roleList = [];
 
@@ -83,12 +84,11 @@ export class GovernanceDetailsComponent implements OnInit {
         namespace: this.formData.namespace
       });
     }
-    
+
     this.roleList = await this.iamService.iam.getRolesByNamespace({
       parentType: type,
       namespace: this.formData.namespace
     });
-
     if (this.roleList && this.roleList.length) {
       this.roleList.forEach((item: any) => {
         item['isEnrolled'] = this._isEnrolledNamespace(item.namespace);
@@ -112,7 +112,8 @@ export class GovernanceDetailsComponent implements OnInit {
 
   viewDetails(data: any, type: string) {
     const dialogRef = this.dialog.open(GovernanceViewComponent, {
-      width: '600px', data:{
+      width: '600px',
+      data: {
         type: type,
         definition: data
       },
@@ -123,22 +124,33 @@ export class GovernanceDetailsComponent implements OnInit {
 
   async enrol(type: string, role: any) {
     // check if currently enrolled in this role
-    if (!await this._isEnrolled(role)) {
+    if (!(await this._isEnrolled(role))) {
       try {
         let url = this._constructEnrolmentUrl(type, role);
         let newWindowRef = window.open();
         newWindowRef.location = <any>url;
-        if (!newWindowRef || newWindowRef.closed || typeof newWindowRef.closed == 'undefined') {
-          this.toastr.error('A new window cannot be opened. Please allow popups for this application in your browser.', 'Enrolment');
+        if (
+          !newWindowRef ||
+          newWindowRef.closed ||
+          typeof newWindowRef.closed == 'undefined'
+        ) {
+          this.toastr.error(
+            'A new window cannot be opened. Please allow popups for this application in your browser.',
+            'Enrolment'
+          );
         }
-      }
-      catch (e) {
+      } catch (e) {
         console.error('Cannot open new window.', e);
-        this.toastr.error('A new window cannot be opened. Please allow popups for this application in your browser.', 'Enrolment');
+        this.toastr.error(
+          'A new window cannot be opened. Please allow popups for this application in your browser.',
+          'Enrolment'
+        );
       }
-    }
-    else {
-      this.toastr.warning('You either have an approved/pending enrolment request for this role.', 'Enrolment');
+    } else {
+      this.toastr.warning(
+        'You either have an approved/pending enrolment request for this role.',
+        'Enrolment'
+      );
     }
   }
 
@@ -162,19 +174,17 @@ export class GovernanceDetailsComponent implements OnInit {
           }
         }
       }
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
       this.toastr.error(e);
-    }
-    finally {
+    } finally {
       this.loadingService.hide();
     }
 
     return isEnrolled;
   }
 
-  private _constructEnrolmentUrl(listType: string,roleDefinition: any) {
+  private _constructEnrolmentUrl(listType: string, roleDefinition: any) {
     let name = roleDefinition.name;
     let arr = roleDefinition.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
     let namespace = '';
