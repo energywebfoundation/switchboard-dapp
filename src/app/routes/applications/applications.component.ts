@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
 import { MatDialog, MatTabGroup } from '@angular/material';
 import { NewApplicationComponent } from './new-application/new-application.component';
@@ -6,13 +6,15 @@ import { NewRoleComponent } from './new-role/new-role.component';
 import { GovernanceListComponent } from './governance-list/governance-list.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
+import { UrlParamService } from 'src/app/shared/services/url-param.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-applications',
   templateUrl: './applications.component.html',
   styleUrls: ['./applications.component.scss']
 })
-export class ApplicationsComponent implements OnInit {
+export class ApplicationsComponent implements OnInit, AfterViewInit {
   @ViewChild("governanceTabGroup", { static: false }) governanceTabGroup: MatTabGroup;
   @ViewChild('listOrg', undefined ) listOrg: GovernanceListComponent;
   @ViewChild('listApp', undefined ) listApp: GovernanceListComponent;
@@ -35,7 +37,19 @@ export class ApplicationsComponent implements OnInit {
 
   ListType = ListType;
 
-  constructor(public dialog: MatDialog, private iamService: IamService) { }
+  constructor(public dialog: MatDialog, 
+    private iamService: IamService, 
+    private urlParamService: UrlParamService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) { }
+
+  ngAfterViewInit(): void {
+   this.activatedRoute.queryParams.subscribe((params: any) => {
+      if (params && params.selectedTab) {
+        this.governanceTabGroup.selectedIndex = params.selectedTab;
+      }
+    }).unsubscribe();
+  }
 
   openNewOrgComponent(): void {
     const dialogRef = this.dialog.open(NewOrganizationComponent, {
@@ -90,6 +104,11 @@ export class ApplicationsComponent implements OnInit {
   }
 
   async showMe(i: any) {
+    // Preserve Selected Tab
+    this.urlParamService.updateQueryParams(this.router, this.activatedRoute, {
+      selectedTab: i.index
+    });
+
     if (i.index === 1) {
       // console.log('Showing App List');
       if (this.isAppShown) {
