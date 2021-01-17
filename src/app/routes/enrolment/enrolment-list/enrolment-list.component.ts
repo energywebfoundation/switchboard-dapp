@@ -47,7 +47,7 @@ export class EnrolmentListComponent implements OnInit {
   }
 
   public async getList(isAccepted?: boolean) {
-    // console.log(this.listType, 'isAccepted', isAccepted);
+    console.log(this.listType, 'isAccepted', isAccepted);
     this.loadingService.show();
     this.dynamicAccepted = isAccepted;
     let list = [];
