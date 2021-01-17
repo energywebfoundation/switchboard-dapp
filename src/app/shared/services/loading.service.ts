@@ -24,13 +24,10 @@ export class LoadingService {
   }
 
   show(msg?: any) {
-    let timeout$ = setTimeout(() => {
-      if (msg) {
-        this._msg.next(msg);
-      }
-      this._isLoading.next(++this._counter);
-      clearTimeout(timeout$);
-    }, 100);
+    if (msg) {
+      this._msg.next(msg);
+    }
+    this._isLoading.next(++this._counter);
     
   }
 

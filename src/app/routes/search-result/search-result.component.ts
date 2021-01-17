@@ -40,10 +40,11 @@ export class SearchResultComponent implements OnInit {
       private loadingService: LoadingService,
       private fb: FormBuilder,
       private iamService: IamService) {
-        this._initList();
+        
   }
 
   ngOnInit() {
+    this._initList();
   }
 
   private _initList() {

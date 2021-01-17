@@ -91,7 +91,11 @@ export class DashboardComponent implements OnInit {
       // Redirect to actual screen
       if (returnUrl) {
         this.loadingService.hide();
-        this.route.navigateByUrl(returnUrl);
+        
+        let timeout$ = setTimeout(() => {
+          this.route.navigateByUrl(returnUrl);
+          clearTimeout(timeout$);
+        }, 30);
       }
       else {
         // Init Orgs & Apps
