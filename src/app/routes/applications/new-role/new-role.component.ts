@@ -4,7 +4,9 @@ import { MatDialog, MatDialogRef, MatStepper, MatTableDataSource, MAT_DIALOG_DAT
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { filter } from 'rxjs/operators';
 import { ListType } from 'src/app/shared/constants/shared-constants';
+import { FieldValidationService } from 'src/app/shared/services/field-validation.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -63,8 +65,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   fieldsForm          : FormGroup;
   showFieldsForm      = false;
   isEditFieldForm     = false;
-  displayedColumns    : string[] = ['type', 'label'/*, 'validation'*/, 'actions'];
-  displayedColumnsView: string[] = ['type', 'label'/*, 'validation'*/];
+  displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
+  displayedColumns    : string[] = [...this.displayedColumnsView, 'actions'];
   dataSource          = new MatTableDataSource([]);
 
   public ViewType = ViewType;
@@ -77,6 +79,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     private iamService: IamService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
+    private fieldValidationService: FieldValidationService,
     private changeDetectorRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<NewRoleComponent>,
     public dialog: MatDialog,
@@ -99,8 +102,29 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       this.fieldsForm = fb.group({
         fieldType: ['', Validators.required],
         label: ['', Validators.required],
-        validation: ''
+        validation: fb.group({
+          required: undefined,
+          minLength: [undefined, {
+            validators: Validators.min(0),
+            updateOn: 'blur'
+          }],
+          maxLength: [undefined, {
+            validators: Validators.min(1),
+            updateOn: 'blur'
+          }],
+          pattern: undefined,
+          minValue: [undefined, {
+            updateOn: 'blur'
+          }],
+          maxValue: [undefined, {
+            updateOn: 'blur'
+          }],
+          minDate: undefined,
+          maxDate: undefined
+        })
       });
+      this._induceInt();
+      this._induceRanges();
 
       this.issuerGroup = fb.group({
         newIssuer: ['', Validators.compose([Validators.required, this.iamService.isValidDid])]
@@ -109,31 +133,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       this.issuerList = [];
       this.issuerList.push(this.iamService.iam.getDid());
 
-      if (data && data.viewType) {
-        this.viewType = data.viewType;
-  
-        if (this.viewType === ViewType.UPDATE && data.origData) {
-          this.origData = data.origData;
-          this.TOASTR_HEADER = 'Update Role';
-        }
-        else if (this.viewType === ViewType.NEW && data.namespace) {
-          let tmp = {
-            parentNamespace: data.namespace,
-            roleType: undefined
-          };
-
-          if (data.listType === ListType.ORG) {
-            tmp.roleType = RoleType.ORG;
-          }
-          else if (data.listType === ListType.APP) {
-            tmp.roleType = RoleType.APP;
-          }
-
-          this.roleForm.patchValue(tmp);
-        }
-  
-        this.initFormData();
-      }
+      this._init(data);
     }
 
   async ngAfterViewInit() {
@@ -143,7 +143,36 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   ngOnInit() {
   }
 
-  private initFormData() {
+  private _init(data: any) {
+    console.log('data', data);
+    if (data && data.viewType) {
+      this.viewType = data.viewType;
+
+      if (this.viewType === ViewType.UPDATE && data.origData) {
+        this.origData = data.origData;
+        this.TOASTR_HEADER = 'Update Role';
+      }
+      else if (this.viewType === ViewType.NEW && data.namespace) {
+        let tmp = {
+          parentNamespace: data.namespace,
+          roleType: undefined
+        };
+
+        if (data.listType === ListType.ORG) {
+          tmp.roleType = RoleType.ORG;
+        }
+        else if (data.listType === ListType.APP) {
+          tmp.roleType = RoleType.APP;
+        }
+
+        this.roleForm.patchValue(tmp);
+      }
+
+      this._initFormData();
+    }
+  }
+
+  private _initFormData() {
     if (this.origData) {
       // console.log('origData', this.origData);
       let def = this.origData.definition;
@@ -178,6 +207,43 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         this.issuerList = [...def.issuer.did];
       }
     }
+  }
+
+  private _induceInt() {
+    let minLength = this.fieldsForm.get('validation').get('minLength');
+    let maxLength = this.fieldsForm.get('validation').get('maxLength');
+
+    minLength.valueChanges.subscribe(data => {
+      if (data) {
+        minLength.setValue(parseInt(data), { emitEvent: false });
+      }
+    });
+
+    maxLength.valueChanges.subscribe(data => {
+      if (data) {
+        maxLength.setValue(parseInt(data), { emitEvent: false });
+      }
+    });
+  }
+
+  private _induceRanges() {
+    // Min & Max Length Range
+    this.fieldValidationService.autoRangeControls(
+      this.fieldsForm.get('validation').get('minLength'),
+      this.fieldsForm.get('validation').get('maxLength')
+    );
+
+    // Min & Max Value Range
+    this.fieldValidationService.autoRangeControls(
+      this.fieldsForm.get('validation').get('minValue'),
+      this.fieldsForm.get('validation').get('maxValue')
+    );
+
+    // Min & Max Date Range
+    this.fieldValidationService.autoRangeControls(
+      this.fieldsForm.get('validation').get('minDate'),
+      this.fieldsForm.get('validation').get('maxDate')
+    );
   }
 
   alphaNumericOnly(event: any, includeDot?: boolean) {
@@ -249,11 +315,76 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   
   addField() {
     if (this.fieldsForm.valid) {
-      this.dataSource.data = [...this.dataSource.data, this.fieldsForm.value];
+      this.dataSource.data = [...this.dataSource.data, this._extractValidationObject(this.fieldsForm.value)];
       this.fieldsForm.reset();
       this.showFieldsForm = false;
       this.changeDetectorRef.detectChanges();
     }
+  }
+
+  private _extractValidationObject(value: any) {
+    let retVal: any = value;
+
+    if (value && value.fieldType) {
+      let validation = undefined;
+      let { 
+        required,
+        minLength,
+        maxLength,
+        pattern,
+        minValue,
+        maxValue,
+        minDate,
+        maxDate
+      } = value.validation;
+
+      switch (this.fieldsForm.value.fieldType) {
+        case 'text':
+          validation = {
+            required,
+            minLength,
+            maxLength,
+            pattern
+          };
+          break;
+        case 'number':
+          validation = {
+            required,
+            minValue,
+            maxValue
+          };
+          break;
+        case 'date':
+          minDate = this._getDate(minDate);
+          maxDate = this._getDate(maxDate);
+          validation = {
+            required,
+            minDate,
+            maxDate
+          };
+          break;
+        case 'boolean':
+          validation = {
+            required
+          };
+          break;
+        default: 
+          validation = value.validation;
+      }
+      retVal.validation = validation;
+    }
+
+    return retVal;
+  }
+
+  private _getDate(origDate: any) {
+    let retVal = origDate;
+
+    if (origDate) {
+      retVal = origDate.getTime();
+    }
+
+    return retVal;
   }
 
   deleteField(i: number) {
