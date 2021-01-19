@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { IAM, DIDAttribute, CacheServerClient, MessagingMethod } from 'iam-client-lib';
+import { IAM, DIDAttribute, CacheServerClient, MessagingMethod, WalletProvider } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
@@ -60,22 +60,15 @@ export class IamService {
   /**
    * Login via IAM and retrieve basic user info
    */
-  async login(useMetamaskExtension?: boolean, reinitializeMetamask?: boolean): Promise<boolean> {
+  async login(walletProvider: WalletProvider, reinitializeMetamask?: boolean): Promise<boolean> {
     let retVal = false;
 
     // Check if account address exists
     if (!this._user.getValue()) {
       // console.log('Initializing connections...');
-      let metamaskOpts = undefined;
-      if (useMetamaskExtension) {
-        metamaskOpts = {
-          useMetamaskExtension: useMetamaskExtension,
-          reinitializeMetamask: !!reinitializeMetamask
-        };
-      }
-
+      const connectionOpts = { walletProvider, reinitializeMetamask };
       try {
-        const { did, connected, userClosedModal } = await this._iam.initializeConnection(metamaskOpts);
+        const { did, connected, userClosedModal } = await this._iam.initializeConnection(connectionOpts);
         // console.log(did, connected, userClosedModal);
         if (did && connected && !userClosedModal) {
           // Setup Account Address
@@ -85,7 +78,7 @@ export class IamService {
           // console.log('signer', signer);
 
           // Listen to Account Change
-          if (useMetamaskExtension) {
+          if (walletProvider == WalletProvider.MetaMask) {
             this._listenToMetamaskAccountChange();
           }
 
