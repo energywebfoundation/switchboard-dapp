@@ -370,4 +370,23 @@ export class GovernanceListComponent implements OnInit {
 
     this.dataSource = JSON.parse(JSON.stringify(this.origDatasource));
   }
+
+  newSubOrg(parentOrg: any) {
+    const dialogRef = this.dialog.open(NewOrganizationComponent, {
+      width: '600px',
+      data: {
+        viewType: ViewType.NEW,
+        parentOrg: JSON.parse(JSON.stringify(parentOrg))
+      },
+      maxWidth: '100%',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(async (res: any) => {
+      if (res) {
+        // Refresh Screen
+        await this.getList();
+      }
+    });
+  }
 }
