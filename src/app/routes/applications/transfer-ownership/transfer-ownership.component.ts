@@ -51,14 +51,14 @@ export class TransferOwnershipComponent implements OnInit {
 
   ngOnInit() { }
 
-  private async confirm(confirmationMsg: string) {
+  private async confirm(confirmationMsg: string, showDiscardButton?: boolean) {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
       maxHeight: '195px',
       data: {
         header: TOASTR_HEADER,
         message: confirmationMsg,
-        isDiscardButton: true
+        isDiscardButton: showDiscardButton
       },
       maxWidth: '100%',
       disableClose: true
@@ -67,7 +67,7 @@ export class TransferOwnershipComponent implements OnInit {
 
   async closeDialog(isSuccess?: boolean) {
     if (this.newOwnerAddress.touched && !isSuccess) {
-      if (await this.confirm('There are unsaved changes. Do you wish to continue?')) {
+      if (await this.confirm('There are unsaved changes. Do you wish to continue?', true)) {
         this.dialogRef.close(false);
       }
     }
@@ -80,9 +80,6 @@ export class TransferOwnershipComponent implements OnInit {
   }
 
   async submit() {
-    console.log(this.newOwnerAddress, this.newOwnerAddress.valid);
-
-    return;
     if (this.newOwnerAddress.valid) {
       if (await this.confirm('You will no longer be the owner of this namespace. Do you wish to continue?')) {
         this.spinner.show();

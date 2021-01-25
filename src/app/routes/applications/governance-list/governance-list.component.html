@@ -97,7 +97,7 @@
 
           <!-- Create Sub-Organization -->
           <button mat-icon-button matTooltip="Create Sub-Organization" (click)="newSubOrg(element)"
-            *ngIf="listType === ListType.ORG">
+            *ngIf="listType === ListType.ORG && !element.isSubOrg">
             <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-application-icon"></mat-icon>
           </button>
 

@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
+import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -19,6 +20,7 @@ export class ViewRequestsComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialog: MatDialog,
     private iamService: IamService,
     private toastr: ToastrService,
     private loadingService: LoadingService,
@@ -65,7 +67,35 @@ export class ViewRequestsComponent implements OnInit {
   }
 
   reject() {
-    this.toastr.warning('Request is rejected.', TOASTR_HEADER);
-    this.dialogRef.close(true);
+    this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      maxHeight: '195px',
+      data: {
+        header: TOASTR_HEADER,
+        message: 'Are you sure to reject this request?',
+        isDiscardButton: false
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().subscribe(async (res: any) => {
+      if (res) {
+        this.loadingService.show();
+        try {
+          await this.iamService.iam.rejectClaimRequest({
+            id: this.claim.id,
+            requesterDID: this.claim.requester
+          });
+          this.notifService.decreasePendingApprovalCount();
+          this.toastr.success('Request is rejected successfully.', TOASTR_HEADER);
+          this.dialogRef.close(true);
+        }
+        catch (e) {
+          console.error(e);
+        }
+        finally {
+          this.loadingService.hide();
+        }
+      }
+    });
   }
 }
