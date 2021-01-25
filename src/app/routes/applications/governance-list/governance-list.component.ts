@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { ENSNamespaceTypes, IApp, IOrganization, IRole } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -77,10 +77,19 @@ export class GovernanceListComponent implements OnInit {
 
   public async getList(filterOptions?: any) {
     this.loadingService.show();
-    const $getOrgList = await this.iamService.iam.getENSTypesByOwner({
+    let $getOrgList = await this.iamService.iam.getENSTypesByOwner({
       type: this.ensType,
       owner: this.iamService.accountAddress
     });
+
+    if (this.ensType === ENSNamespaceTypes.Organization) {
+      for (let orgItem of $getOrgList) {
+        let arr = orgItem.namespace.split('.');
+        if (arr.length > 3) {
+          orgItem['isSubOrg'] = true;
+        }
+      }
+    }
 
     this.origDatasource = $getOrgList;
 
@@ -335,8 +344,11 @@ export class GovernanceListComponent implements OnInit {
     if (this.filterForm.value.organization) {
       tmpData = tmpData.filter((item: any) => {
         let arr = item.namespace.split('.iam.ewc');
-        arr = arr[0].split('.');
-        return (arr[arr.length - 1].toUpperCase().indexOf(this.filterForm.value.organization.toUpperCase()) >= 0);
+        arr = arr[0].split(ENSNamespaceTypes.Roles);
+        arr = arr[arr.length - 1].split(ENSNamespaceTypes.Application);
+
+        let org = arr[arr.length - 1];
+        return (org.toUpperCase().indexOf(this.filterForm.value.organization.toUpperCase()) >= 0);
       });
     }
 
