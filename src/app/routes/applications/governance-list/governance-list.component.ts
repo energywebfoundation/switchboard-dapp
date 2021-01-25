@@ -136,8 +136,14 @@ export class GovernanceListComponent implements OnInit {
       org = data.namespace.split('.iam.ewc')[0];
     }
     else {
-      let arr = data.namespace.split('.iam.ewc')[0].split('.');
+      let arr = data.namespace.split('.iam.ewc');
+      arr = arr[0].split(ENSNamespaceTypes.Roles);
+      arr = arr[arr.length - 1].split(ENSNamespaceTypes.Application);
       org = arr[arr.length - 1];
+
+      if (org.indexOf('.') === 0) {
+        org = (org as string).substr(1);
+      }
     }
 
     if (type === ListType.APP) {
