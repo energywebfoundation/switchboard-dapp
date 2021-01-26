@@ -29,9 +29,17 @@ export class ConnectToWalletDialogComponent implements OnInit {
     }
   }
 
-  async connectToWallet() {
+  async connectToEwKeyManager() {
+    await this.connectToWallet(WalletProvider.EwKeyManager);
+  }
+
+  async connectToWalletConnect() {
+    await this.connectToWallet(WalletProvider.WalletConnect)
+  }
+
+  async connectToWallet(walletProvider: WalletProvider) {
     this.iamService.waitForSignature(true);
-    let isLoggedIn = await this.iamService.login(WalletProvider.WalletConnect);
+    let isLoggedIn = await this.iamService.login(walletProvider);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {

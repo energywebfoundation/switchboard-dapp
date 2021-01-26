@@ -48,7 +48,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   async connectToWalletConnect() {
-    await this.connectToWallet(WalletProvider.WalletConnect)
+    await this.connectToWallet(WalletProvider.WalletConnect);
   }
 
   private async connectToWallet(walletProvider: WalletProvider) {
