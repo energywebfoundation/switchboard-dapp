@@ -1,0 +1,74 @@
+
+  
+  tr.example-element-row:not(.example-expanded-row):hover {
+    background: #777;
+  }
+  
+  tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+  }
+  
+  .example-element-row td {
+    border-bottom-width: 0;
+  }
+  
+  .example-element-detail {
+    overflow: hidden;
+    display: flex;
+  }
+  
+  .example-element-diagram {
+    min-width: 80px;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 104px;
+  }
+  
+  .example-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+  }
+  
+  .example-element-description {
+    padding: 16px;
+  }
+  
+  .example-element-description-attribution {
+    opacity: 0.5;
+  }
+  
+  .inner-table {
+    width: 100%;
+  }
+  
+  .inner-table mat-form-field {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+.table-expand {
+  .mat-row:nth-child(even) {
+    background-color: transparent;
+  }
+
+  .mat-table td.mat-cell:last-child {
+    align-items: flex-start;
+  }
+
+  tr.mat-row {
+    border-bottom: 5px solid transparent;
+  }
+
+  tr.mat-row {
+    border-bottom: none;
+  }
+}  
+
+.detail-expand {
+  overflow: hidden;
+  display: flex;
+}
+
