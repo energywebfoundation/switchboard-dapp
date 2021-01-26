@@ -56,7 +56,7 @@
     "flot": "themicon/flot",
     "fullcalendar": "3.9.0",
     "hammerjs": "^2.0.0",
-    "iam-client-lib": "git@github.com:energywebfoundation/iam-client-lib.git#develop",
+    "iam-client-lib": "1.0.4",
     "ika.jvectormap": "themicon/ika.jvectormap",
     "intl": "1.2.5",
     "jqcloud2": "2.0.3",
