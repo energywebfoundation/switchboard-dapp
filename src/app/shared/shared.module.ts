@@ -61,6 +61,7 @@ import { ColorsService } from './colors/colors.service';
 import { ScrollableDirective } from './directives/scrollable/scrollable.directive';
 import { JAllowByDirective } from './directives/j-allow-by.directive';
 import { PreventPasteDirective } from './directives/prevent-paste.directive';
+import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
 
 
 
@@ -128,7 +129,8 @@ import { PreventPasteDirective } from './directives/prevent-paste.directive';
     declarations: [
         ScrollableDirective,
         JAllowByDirective,
-        PreventPasteDirective
+        PreventPasteDirective,
+        RetryBtnDirective
     ],
     exports: [
         CommonModule,
@@ -156,6 +158,7 @@ import { PreventPasteDirective } from './directives/prevent-paste.directive';
         ScrollableDirective,
         JAllowByDirective,
         PreventPasteDirective,
+        RetryBtnDirective,
         // Material Modules
         MatAutocompleteModule,
         MatButtonModule,
