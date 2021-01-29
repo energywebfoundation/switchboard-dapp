@@ -3,8 +3,6 @@ import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule, Ma
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule, Routes } from '@angular/router';
-import { ChartsModule as Ng2ChartsModule } from 'ng2-charts/ng2-charts';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DashboardComponent } from './dashboard.component';
 import { WidgetsModule } from '../widgets/widgets.module';
@@ -28,7 +26,6 @@ const routes: Routes = [
         MatSelectModule,
         MatIconModule,
         MatTooltipModule,
-        Ng2ChartsModule,
         MatFormFieldModule,
         MatCheckboxModule,
         MatStepperModule,
@@ -37,7 +34,6 @@ const routes: Routes = [
         MatDialogModule,
         MatAutocompleteModule,
         MatDatepickerModule,
-        NgxMaterialTimepickerModule,
         WidgetsModule,
         NgxSpinnerModule,
         ProfileModule

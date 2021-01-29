@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-const screenfull = require('screenfull');
 import { MatDialog } from '@angular/material/dialog';
 import {Md5} from 'ts-md5/dist/md5';
 import { UserblockService } from '../sidebar/userblock/userblock.service';
@@ -67,6 +66,7 @@ export class HeaderComponent implements OnInit {
 
         this.router.events.subscribe((event: any) => {
             if (event instanceof NavigationEnd) {
+                this.iamService.setDeepLink(event.url);
                 this.isNavMenuVisible = true;
                 if (event.url  === '/dashboard') {
                     this.isNavMenuVisible = false;
@@ -111,16 +111,6 @@ export class HeaderComponent implements OnInit {
         if (ua.indexOf("MSIE ") > 0 || !!ua.match(/Trident.*rv\:11\./)) { // Not supported under IE
             this.fsbutton.nativeElement.style.display = 'none';
         }
-
-        // // Switch fullscreen icon indicator
-        // const el = this.fsbutton.nativeElement.firstElementChild;
-        // screenfull.on('change', () => {
-        //     if (el)
-        //         el.className = screenfull.isFullscreen ? 'fa fa-compress' : 'fa fa-expand';
-        // });
-
-        // Make sure that when user changes guarded screen, walletconnect session is checked
-        
     }
 
     private initNotifications() {
@@ -153,7 +143,10 @@ export class HeaderComponent implements OnInit {
         if (message.issuedToken) {
             // Message has issued token ===> Newly Approved Claim
             this.notifService.increasePendingDidDocSyncCount();
-            this.toastr.info('Your claim request has been approved. Please sync your approved claims in your DID Document.', 'Enrolment Approved');
+            this.toastr.info('Your enrolment request is approved. Please sync your approved claims in your DID Document.', 'Enrolment Approved');
+        }
+        else if (message.isRejected) {
+            this.toastr.warning('Your enrolment request is rejected.', 'New Enrolment Request');
         }
         else {
             // Message has no issued token ===> Newly Requested Claim
@@ -165,10 +158,10 @@ export class HeaderComponent implements OnInit {
     private async initNotificationCount() {
         try {
             // Get Pending Claims to be Approved
-            let pendingClaimsList = await this.iamService.iam.getIssuedClaims({
+            let pendingClaimsList = (await this.iamService.iam.getIssuedClaims({
                 did: this.iamService.iam.getDid(),
                 isAccepted: false
-            });
+            })).filter(item => !item['isRejected']);
             this.notif.pendingApprovalCount = pendingClaimsList.length;
 
             // Get Approved Claims
@@ -245,12 +238,6 @@ export class HeaderComponent implements OnInit {
 
     isCollapsedText() {
         return this.settings.getLayoutSetting('isCollapsedText');
-    }
-
-    toggleFullScreen(event) {
-        if (screenfull.enabled) {
-            screenfull.toggle();
-        }
     }
 
     logout() {

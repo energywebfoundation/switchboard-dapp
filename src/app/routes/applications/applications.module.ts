@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { NgxSelectModule } from 'ngx-select-ex';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatCardModule, MatFormFieldModule, MatButtonModule, MatDividerModule, MatDialogModule, MatSelectModule, MatInputModule, MatProgressSpinnerModule, MatExpansionModule } from '@angular/material';
@@ -37,7 +36,6 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     NgxSpinnerModule,
     MatDialogModule,
-    NgxSelectModule,
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule

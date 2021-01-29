@@ -57,6 +57,21 @@ mat-datetimepicker-content {
     font-family: 'Rajdhani', sans-serif;
 }
 
+.connect-to-wallet .mat-dialog-container {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+    border-radius: 5px;
+
+    .mat-dialog-title {
+        border-bottom: none !important;
+    }
+
+    .cdk-overlay-dark-backdrop {
+        background: rgba(24, 20, 32, 0) !important;
+    }
+}
+
 .mat-dialog-content {
     padding: 0 24px !important;
     margin: 0 !important;
@@ -73,6 +88,14 @@ mat-datetimepicker-content {
 }
 
 @include media-breakpoint-down(sm) {
+
+    .connect-to-wallet .mat-dialog-container {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        height: auto !important;
+    }
+
     .mat-dialog-container {
         height: 100vh !important;
     }
@@ -82,7 +105,7 @@ mat-datetimepicker-content {
 }
 
 .cdk-overlay-dark-backdrop {
-    background: rgba(22, 26, 58, 0.88) !important;
+    background: transparent !important;
 }
 
 .mat-dialog-actions {
@@ -157,13 +180,6 @@ mat-datetimepicker-content {
     button:not(.timepicker-dial__item) {
       color: #FFF !important;
     }
-}
-
-ngx-material-timepicker-toggle {
-    svg {
-        fill: #b9a9de;
-    }
-
 }
 
 .result-filter {

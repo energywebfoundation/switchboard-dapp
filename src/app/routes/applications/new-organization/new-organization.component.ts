@@ -30,6 +30,7 @@ export class NewOrganizationComponent implements OnInit {
 
   viewType: string;
   origData: any;
+  parentOrg: any;
 
   private TOASTR_HEADER = 'Create New Organization';
 
@@ -50,23 +51,50 @@ export class NewOrganizationComponent implements OnInit {
         logoUrl: ['', Validators.pattern('https?://.*')],
         websiteUrl: ['', Validators.pattern('https?://.*')],
         description: '',
-        others: undefined
+        others: [undefined, this.iamService.isValidJsonFormat]
       })
     });
 
-    if (data && data.viewType && data.origData) {
-      this.viewType = data.viewType;
-      this.origData = data.origData;
+    if (data && data.viewType && (data.origData || data.parentOrg)) {
+      this.viewType   = data.viewType;
+      this.origData   = data.origData;
+      this.parentOrg  = data.parentOrg;
 
       if (this.viewType === ViewType.UPDATE) {
         this.TOASTR_HEADER = 'Update Organization';
+        this.initFormData();
       }
-
-      this.initFormData();
+      
+      if (this.parentOrg) {
+        this.orgForm.get('namespace').setValue(this.parentOrg.namespace);
+      }
+      else if (this._isSubOrg(this.origData)) {
+        this.orgForm.get('namespace').setValue(this._constructParentOrg(this.origData.namespace));
+      }
     }
   }
 
   ngOnInit() {
+  }
+
+  private _isSubOrg(origData: any) {
+    let retVal = false;
+
+    if (origData && origData.namespace) {
+      let arr = origData.namespace.split('.');
+    
+      if (arr.length === 4) {
+        retVal = true;
+      }
+    }
+
+    return retVal;
+  }
+
+  private _constructParentOrg(subOrgNamespace: string) {
+    let arr = subOrgNamespace.split('.');
+    arr.splice(0, 1);
+    return arr.join('.');
   }
 
   private initFormData() {

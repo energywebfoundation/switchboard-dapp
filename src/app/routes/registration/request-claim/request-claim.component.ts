@@ -190,6 +190,9 @@ export class RequestClaimComponent implements OnInit {
           });
 
           if (this.orgAppDetails) {
+            // Update Colors
+            this.updateColors(params);
+
             // Check Login Status
             await this.initLoginUser(this.orgAppDetails.appName || this.orgAppDetails.orgName);
 
@@ -215,9 +218,6 @@ export class RequestClaimComponent implements OnInit {
         console.error('Enrolment Param Error', params);
         this.displayAlert('URL is invalid.', 'error');
       }
-
-      // Update Colors
-      this.updateColors(params);
     });
   }
 
@@ -268,7 +268,8 @@ export class RequestClaimComponent implements OnInit {
     else {
       // Launch Login Dialog
       await this.dialog.open(ConnectToWalletDialogComponent, {
-        width: '500px',
+        width: '434px',
+        panelClass: 'connect-to-wallet',
         data: {
           appName: appName
         },

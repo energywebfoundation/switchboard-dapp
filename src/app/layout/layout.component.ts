@@ -40,6 +40,6 @@ export class LayoutComponent implements OnInit {
     }
 
     private _logout() {
-        this.iamService.logoutAndRefresh();
+        this.iamService.logoutAndRefresh(true);
     }
 }

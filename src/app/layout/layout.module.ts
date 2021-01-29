@@ -9,7 +9,6 @@ import { OffsidebarComponent } from './offsidebar/offsidebar.component';
 import { UserblockComponent } from './sidebar/userblock/userblock.component';
 import { UserblockService } from './sidebar/userblock/userblock.service';
 import { FooterComponent } from './footer/footer.component';
-import { QRCodeModule } from 'angular2-qrcode';
 import { SharedModule } from '../shared/shared.module';
 import { MatDialogModule } from '@angular/material';
 import {MatMenuModule} from '@angular/material/menu';
@@ -24,7 +23,6 @@ import { environment } from '../../environments/environment';
         SharedModule,
         MatDialogModule,
         MatMenuModule,
-        QRCodeModule,
         NgxSpinnerModule,
         UserIdleModule.forRoot({idle: environment.userIdle, timeout: environment.userIdle})
     ],

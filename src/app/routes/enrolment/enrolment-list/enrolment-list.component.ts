@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
+import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -23,11 +24,13 @@ const TOASTR_HEADER = 'Enrolment';
 export class EnrolmentListComponent implements OnInit {
   @Input('list-type') listType  : string;
   @Input('accepted') accepted   : boolean;
+  @Input('rejected') rejected   : boolean;
 
   ListType        = EnrolmentListType;
   dataSource      = [];
   displayedColumns: string[];
   dynamicAccepted : boolean;
+  dynamicRejected : boolean;
 
   constructor(private loadingService: LoadingService,
     private iamService: IamService,
@@ -43,27 +46,37 @@ export class EnrolmentListComponent implements OnInit {
       this.displayedColumns = ['requestDate', 'name', 'namespace', 'requestor', 'status', 'actions'];
     }
 
-    await this.getList(this.accepted);
+    await this.getList(this.rejected, this.accepted);
   }
 
-  public async getList(isAccepted?: boolean) {
-    // console.log(this.listType, 'isAccepted', isAccepted);
+  private _getRejectedOnly(isRejected: boolean, isAccepted: boolean | undefined, list: any[]) {
+    if (list.length && isRejected) {
+      list = list.filter(item => item.isRejected === true);
+    }
+    else if (isAccepted === false) {
+      list = list.filter(item => (item.isAccepted === false && !item.isRejected));
+    }
+    return list;
+  }
+
+  public async getList(isRejected: boolean, isAccepted?: boolean) {
     this.loadingService.show();
+    this.dynamicRejected = isRejected;
     this.dynamicAccepted = isAccepted;
     let list = [];
     
     try {
       if (this.listType === EnrolmentListType.ISSUER) {
-        list = await this.iamService.iam.getIssuedClaims({
+        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getIssuedClaims({
           did: this.iamService.iam.getDid(),
           isAccepted: isAccepted
-        });
+        }));
       }
       else {
-        list = await this.iamService.iam.getRequestedClaims({
+        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getRequestedClaims({
           did: this.iamService.iam.getDid(),
           isAccepted: isAccepted
-        });
+        }));
       }
       
       if (list && list.length) {
@@ -83,7 +96,6 @@ export class EnrolmentListComponent implements OnInit {
       this.toastr.error(e, TOASTR_HEADER);
     }
 
-    // console.log(this.listType, 'list', list);
     this.dataSource = list;
     this.loadingService.hide();
   }
@@ -125,7 +137,7 @@ export class EnrolmentListComponent implements OnInit {
       disableClose: true
     }).afterClosed().subscribe((reloadList: any) => {
       if (reloadList) {
-        this.getList(this.dynamicAccepted);
+        this.getList(this.dynamicRejected, this.dynamicAccepted);
       }
     });
   }

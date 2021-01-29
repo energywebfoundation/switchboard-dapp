@@ -33,7 +33,7 @@ export class TransferOwnershipComponent implements OnInit {
 
   newOwnerAddress = new FormControl('', Validators.compose([Validators.required, 
     Validators.maxLength(256),
-    Validators.minLength(3)]));
+    this.iamService.isValidEthAddress]));
 
   public mySteps           = [];
   isProcessing             = false;
@@ -51,13 +51,14 @@ export class TransferOwnershipComponent implements OnInit {
 
   ngOnInit() { }
 
-  private async confirm(confirmationMsg: string) {
+  private async confirm(confirmationMsg: string, showDiscardButton?: boolean) {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
       maxHeight: '195px',
       data: {
         header: TOASTR_HEADER,
-        message: confirmationMsg
+        message: confirmationMsg,
+        isDiscardButton: showDiscardButton
       },
       maxWidth: '100%',
       disableClose: true
@@ -66,7 +67,7 @@ export class TransferOwnershipComponent implements OnInit {
 
   async closeDialog(isSuccess?: boolean) {
     if (this.newOwnerAddress.touched && !isSuccess) {
-      if (await this.confirm('There are unsaved changes. Do you wish to continue?')) {
+      if (await this.confirm('There are unsaved changes. Do you wish to continue?', true)) {
         this.dialogRef.close(false);
       }
     }

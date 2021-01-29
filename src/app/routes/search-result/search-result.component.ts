@@ -9,10 +9,9 @@ import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { GovernanceDetailsComponent } from '../applications/governance-view/governance-details/governance-details.component';
 
-
 const FilterTypes = {
-  APP: 'app',
-  ORG: 'org'
+  APP: 'App',
+  ORG: 'Org'
 };
 
 @Component({
@@ -27,8 +26,7 @@ export class SearchResultComponent implements OnInit {
   screenWidth: number;
   opened = false;
   data: any;
-  
-  private _searchList: any[];
+
   filteredOptions: BehaviorSubject<any[]>;
 
   searchForm: FormGroup;
@@ -36,14 +34,15 @@ export class SearchResultComponent implements OnInit {
 
   requestedClaims: any[];
 
-  constructor(private activeRoute: ActivatedRoute,
-      private loadingService: LoadingService,
-      private fb: FormBuilder,
-      private iamService: IamService) {
-        this._initList();
-  }
+  constructor(
+    private activeRoute: ActivatedRoute,
+    private loadingService: LoadingService,
+    private fb: FormBuilder,
+    private iamService: IamService
+  ) {}
 
   ngOnInit() {
+    this._initList();
   }
 
   private _initList() {
@@ -56,29 +55,40 @@ export class SearchResultComponent implements OnInit {
     });
     this.filteredOptions = new BehaviorSubject([]);
     this.searchForm.valueChanges
-      .pipe(distinctUntilChanged((a: any, b: any) => a.searchTxt === b.searchTxt && a.filterType === b.filterType))
-      .subscribe((value: any) => {
-        this.filteredOptions.next(this._filterOrgsAndApps(value.searchTxt, value.filterType));
+      .pipe(
+        distinctUntilChanged(
+          (a: any, b: any) =>
+            a.searchTxt === b.searchTxt && a.filterType === b.filterType
+        )
+      )
+      .subscribe(async (value: any) => {
+        const options = await this._filterOrgsAndApps(
+          value.searchTxt,
+          value.filterType
+        );
+        this.filteredOptions.next(options);
       });
 
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
       // Get requested claims
-      this.requestedClaims = await this.iamService.iam.getRequestedClaims({
-        did: this.iamService.iam.getDid()
-      });
-      
-      // Retrieve List - Orgs & Apps
-      await this._getOrgsAndApps();
+      try {
+        this.requestedClaims = await this.iamService.iam.getRequestedClaims({
+          did: this.iamService.iam.getDid()
+        });
 
-      if (queryParams.keyword) {
-        this.searchForm.get('searchTxt').setValue(queryParams.keyword);
-      }
+        if (queryParams.keyword) {
+          this.searchForm.get('searchTxt').setValue(queryParams.keyword);
+        }
 
-      if (queryParams.namespace) {
-        this._initView(queryParams.namespace);
+        if (queryParams.namespace) {
+          await this._initView(queryParams.namespace);
+        }
+        this._manageScreenWidth();
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.loadingService.hide();
       }
-      this._manageScreenWidth();
-      this.loadingService.hide();
     });
   }
 
@@ -89,45 +99,48 @@ export class SearchResultComponent implements OnInit {
       this.screenWidth = window.innerWidth;
     };
 
-    // Init 
+    // Init
     if (this.screenWidth > 840 && this.data) {
       this.opened = true;
     }
   }
 
-  private _initView(namespace: string) {
-    for (let i = 0; i < this._searchList.length; i++) {
-      if (this._searchList[i].namespace === namespace) {
-        this.data = { 
-          type: this._searchList[i].definition && this._searchList[i].definition.orgName ? ListType.ORG : ListType.APP,
-          definition: this._searchList[i] 
-        };
-        break;
-      }
+  private async _initView(namespace: string) {
+    const [
+      foundNamespace
+    ] = await this.iamService.iam.getENSTypesBySearchPhrase({
+      search: namespace,
+      types: ['App', 'Org']
+    });
+    if (foundNamespace) {
+      this.data = {
+        type: (foundNamespace.definition as { orgName?: string }).orgName
+          ? ListType.ORG
+          : ListType.APP,
+        definition: foundNamespace
+      };
     }
   }
 
-  private _filterOrgsAndApps(keyword: any, listType: any): any[] {
+  private async _filterOrgsAndApps(
+    keyword: any,
+    listType: any
+  ): Promise<any[]> {
     let retVal = [];
 
     if (keyword) {
       let word = undefined;
       if (!keyword.trim && keyword.name) {
         word = keyword.name;
-      }
-      else {
+      } else {
         word = keyword.trim();
       }
 
       if (word.length > 2) {
         word = word.toLowerCase();
-        retVal = this._searchList.filter((item: any) => {
-          return (item.namespace.toLowerCase().includes(word) ||
-            (item.definition.description && item.definition.description.toLowerCase().includes(word)) ||
-            (item.definition.orgName && item.definition.orgName.toLowerCase().includes(word)) ||
-            (item.definition.appName && item.definition.appName.toLowerCase().includes(word))) &&
-            ((listType.includes(FilterTypes.ORG) && item.definition.orgName) ||
-            (listType.includes(FilterTypes.APP) && item.definition.appName))
+        retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
+          search: word,
+          types: listType
         });
       }
     }
@@ -135,36 +148,24 @@ export class SearchResultComponent implements OnInit {
     return retVal;
   }
 
-  private async _getOrgsAndApps() {
-    let orgList = await this.iamService.iam.getENSTypesBySearchPhrase({
-      search: '',
-      type: ENSNamespaceTypes.Organization
-    });
-
-    let appList = await this.iamService.iam.getENSTypesBySearchPhrase({
-      search: '',
-      type: ENSNamespaceTypes.Application
-    });
-    this._searchList = [...orgList, ...appList];
-  }
-
-  private _updateData(data: any) {
+  private async _updateData(data: any) {
     if (data) {
-      this.data = { 
-        type: data.definition && data.definition.orgName ? ListType.ORG : ListType.APP,
+      this.data = {
+        type:
+          data.definition && data.definition.orgName
+            ? ListType.ORG
+            : ListType.APP,
         definition: data
       };
       if (this.detailView) {
-        this.detailView.setData(this.data);
+        await this.detailView.setData(this.data);
       }
-    }
-    else {
+    } else {
       this.data = data;
     }
   }
 
   viewDetails(data: any, el: HTMLElement) {
-    // console.log('view details', data);
     this.opened = true;
     this._updateData(data);
 
@@ -194,8 +195,7 @@ export class SearchResultComponent implements OnInit {
     this.opened = false;
     if (typeof this.searchForm.value.searchTxt === 'string') {
       this.searchTxtFieldValue = this.searchForm.value.searchTxt;
-    }
-    else { 
+    } else {
       this.searchTxtFieldValue = this.searchForm.value.searchTxt.option.value.name;
     }
     this._updateData(undefined);

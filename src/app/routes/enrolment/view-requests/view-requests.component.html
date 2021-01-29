@@ -9,7 +9,8 @@
           <div class="card card-default text-center mb-3 p-3 shadow-none">
             <h3 class="color-white mb-2">{{ claim?.roleName | uppercase }}</h3>
             <div class="label color-white opacity-50 text-truncate-middle ">{{ claim?.parentNamespace }}</div>
-            <div class="btn-color-warn text-truncate-middle " *ngIf="!claim?.isAccepted">Pending</div>
+            <div class="btn-color-warn text-truncate-middle " *ngIf="!claim?.isAccepted && !claim?.isRejected">Pending</div>
+            <div class="btn-color-error text-truncate-middle " *ngIf="!claim?.isAccepted && claim?.isRejected">Rejected</div>
             <div class="btn-color-success text-truncate-middle " *ngIf="claim?.isAccepted">Approved</div>
           </div>
         </div>
@@ -55,8 +56,8 @@
       </div>
     </form>
   </div>
-  <div mat-dialog-actions *ngIf="listType === 'issuer' && !claim?.isAccepted">
+  <div mat-dialog-actions *ngIf="listType === 'issuer' && !claim?.isAccepted && !claim?.isRejected">
     <button mat-raised-button class="btn btn-primary w-100 mx-3" type="submit" (click)="approve()">Approve</button>
-    <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit">Reject</button>
+    <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit" (click)="reject()">Reject</button>
   </div>
 </div>

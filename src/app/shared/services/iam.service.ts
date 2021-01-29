@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { IAM, DIDAttribute, CacheServerClient, MessagingMethod } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -12,7 +13,10 @@ const SWAL = require('sweetalert');
 
 const cacheClient = new CacheServerClient({
   url: cacheServerUrl
-})
+});
+
+const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
+const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
 
 export enum LoginType {
   LOCAL = 'local',
@@ -36,6 +40,7 @@ export class IamService {
 
   private _throwTimeoutError = false;
   private _timer = undefined;
+  private _deepLink = '';
 
   constructor(private loadingService: LoadingService) {
     let options = {
@@ -135,7 +140,7 @@ export class IamService {
   /**
    * Disconnect from IAM
    */
-  logout() {
+  logout(saveDeepLink?: boolean) {
     this._iam.closeConnection();
     this._user = undefined;
 
@@ -145,10 +150,17 @@ export class IamService {
     }
   }
 
-  logoutAndRefresh() {
-    this.logout();
+  setDeepLink(deepLink: any) {
+    this._deepLink = deepLink;
+  }
+
+  logoutAndRefresh(saveDeepLink?: boolean) {
+    this.logout(saveDeepLink);
     let $navigate = setTimeout(() => {
       clearTimeout($navigate);
+      if (saveDeepLink) {
+        location.href = location.origin + '/#/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
+      }
       location.reload();
   }, 100);
   }
@@ -266,5 +278,43 @@ export class IamService {
     }
 
     return false;
+  }
+
+  isValidEthAddress(ethAddressCtrl: AbstractControl) : { [key: string]: boolean } | null {
+    let retVal = null;
+    let ethAddress = ethAddressCtrl.value;
+
+    if (ethAddress && !RegExp(ethAddrPattern).test(ethAddress.trim())) {
+      retVal = { invalidEthAddress: true };
+    }
+
+    return retVal;
+  }
+
+  isValidDid(didCtrl: AbstractControl) : { [key: string]: boolean } | null {
+    let retVal = null;
+    let did = didCtrl.value;
+
+    if (did && !RegExp(DIDPattern).test(did.trim())) {
+      retVal = { invalidDid: true };
+    }
+
+    return retVal;
+  }
+
+  isValidJsonFormat(jsonFormatCtrl: AbstractControl) : { [key: string]: boolean } | null {
+    let retVal = null;
+    let jsonStr = jsonFormatCtrl.value;
+
+    if (jsonStr && jsonStr.trim()) {
+      try {
+        JSON.parse(jsonStr);
+      }
+      catch(e) {
+        retVal = { invalidJsonFormat: true };
+      }
+    }
+
+    return retVal;
   }
 }
