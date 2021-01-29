@@ -1,0 +1,28 @@
+input[type="color"] {
+    -webkit-appearance: none;
+    width: 25px;
+    height: 25px;
+    float: right;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+    border: none;
+}
+
+.no-color {
+  border: 2px solid #52436e;
+  position: relative;
+  cursor: pointer;
+}
+
+.no-color::after {
+  content: '';
+  position: absolute;
+  width: 32px;
+  height: 2px;
+  background: red;
+  transform: rotate(45deg) translate(-6px, 6px);
+  transform-origin: 100% 0%;
+}

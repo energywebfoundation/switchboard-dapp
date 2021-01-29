@@ -29,6 +29,21 @@
 
 }
 
+.demi-tab .mat-card {
+    background-color: #21202c;
+}
+
+.demi-tab {
+    .mat-tab-label {
+        padding: 0 18px;
+        min-width: 40px;
+    }
+
+    .mat-tab-body-wrapper {
+        width: 100%;
+    }
+}
+
 .mat-tab-header-pagination-disabled .mat-tab-header-pagination-chevron, .mat-tab-header-pagination-chevron {
     border-color: #9080BA;
 }
