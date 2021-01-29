@@ -21,6 +21,9 @@ export const ViewType = {
 export class NewOrganizationComponent implements OnInit {
   @ViewChild('stepper', { static: false }) private stepper: MatStepper;
 
+  color = '#fff';
+  selectedColor;
+
   public orgForm: FormGroup;
   public environment = environment;
   public isChecking = false;
