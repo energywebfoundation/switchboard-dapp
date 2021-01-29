@@ -4,15 +4,15 @@
   <div class="py-3 px-2">
     <div class="my-3">
       <button mat-raised-button (click)="connectToWalletConnect()" class="btn btn-connect-1 w-100" type="submit"><img
-          width="48px" class="float-left pt-1" src="assets/img/icons/wallet-connect-icon.svg" /> USE MOBILE WALLET</button>
+          width="48px" height="40px" class="float-left pt-1 pl-1" src="assets/img/icons/wallet-connect-icon.svg" /> USE MOBILE WALLET</button>
     </div>
     <div class="my-3">
       <button mat-raised-button (click)="connectToEwKeyManager()" class="btn btn-connect-3 w-100" type="submit"><img
-          width="48px" class="float-left pt-1" src="assets/img/icons/key-manager-icon.svg" /> USE EW KEY MANAGER</button>
+          width="48px" height="40px" class="float-left pt-1 ml-1" src="assets/img/icons/key-manager-icon.svg" /> USE EW KEY MANAGER</button>
     </div>
     <div class="mt-4 mb-3" *ngIf="isMetamaskExtensionAvailable">
       <button mat-raised-button (click)="connectToMetamask()" class="btn btn-connect-2 w-100" type="submit"><img
-          width="36px" class="float-left pt-1 ml-2" src="assets/img/icons/metamask-logo.svg" /> USE METAMASK</button>
+          width="48px" height="40px" class="float-left pt-1 ml-1" src="assets/img/icons/metamask-logo.svg" /> USE METAMASK</button>
     </div>
   </div>
 </div>
