@@ -1,7 +1,7 @@
 import { query } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IAM } from 'iam-client-lib';
+import { IAM, WalletProvider } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -43,9 +43,17 @@ export class WelcomeComponent implements OnInit {
     }
   }
 
-  async connectToWallet() {
+  async connectToEwKeyManager() {
+    await this.connectToWallet(WalletProvider.EwKeyManager);
+  }
+
+  async connectToWalletConnect() {
+    await this.connectToWallet(WalletProvider.WalletConnect);
+  }
+
+  private async connectToWallet(walletProvider: WalletProvider) {
     this.iamService.waitForSignature(true);
-    let isLoggedIn = await this.iamService.login();
+    let isLoggedIn = await this.iamService.login(walletProvider);
     this.iamService.clearWaitSignatureTimer();
     if (isLoggedIn) {
       // Check deep link
@@ -74,7 +82,7 @@ export class WelcomeComponent implements OnInit {
 
     // Proceed with Login Process
     this.iamService.waitForSignature(true);
-    let isLoggedIn = await this.iamService.login(true, true);
+    let isLoggedIn = await this.iamService.login(WalletProvider.MetaMask, true);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
