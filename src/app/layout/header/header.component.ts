@@ -143,7 +143,10 @@ export class HeaderComponent implements OnInit {
         if (message.issuedToken) {
             // Message has issued token ===> Newly Approved Claim
             this.notifService.increasePendingDidDocSyncCount();
-            this.toastr.info('Your claim request has been approved. Please sync your approved claims in your DID Document.', 'Enrolment Approved');
+            this.toastr.info('Your enrolment request is approved. Please sync your approved claims in your DID Document.', 'Enrolment Approved');
+        }
+        else if (message.isRejected) {
+            this.toastr.warning('Your enrolment request is rejected.', 'New Enrolment Request');
         }
         else {
             // Message has no issued token ===> Newly Requested Claim
@@ -155,10 +158,10 @@ export class HeaderComponent implements OnInit {
     private async initNotificationCount() {
         try {
             // Get Pending Claims to be Approved
-            let pendingClaimsList = await this.iamService.iam.getIssuedClaims({
+            let pendingClaimsList = (await this.iamService.iam.getIssuedClaims({
                 did: this.iamService.iam.getDid(),
                 isAccepted: false
-            });
+            })).filter(item => !item['isRejected']);
             this.notif.pendingApprovalCount = pendingClaimsList.length;
 
             // Get Approved Claims
