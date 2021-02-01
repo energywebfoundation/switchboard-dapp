@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map, switchMap } from 'rxjs/operators';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { ENSNamespaceTypes, WalletProvider } from 'iam-client-lib';
 
 @Component({
   selector: 'app-dashboard',
@@ -65,13 +65,13 @@ export class DashboardComponent implements OnInit {
           // console.log('local > login');
 
           // Set metamask extension options if connecting with metamask extension
-          let useMetamaskExtension = undefined;
+          let walletProvider = WalletProvider.WalletConnect;
           if (window.localStorage.getItem('METAMASK_EXT_CONNECTED')) {
-            useMetamaskExtension = true;
+            walletProvider = WalletProvider.MetaMask;
           }
 
           // Proceed Login
-          await this.iamService.login(useMetamaskExtension);
+          await this.iamService.login(walletProvider);
           this.iamService.clearWaitSignatureTimer();
         }
 
