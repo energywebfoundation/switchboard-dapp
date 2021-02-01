@@ -2,8 +2,8 @@ import { constants } from './constants';
 
 export const environment = {
   production: true,  
-  cacheServerUrl: 'https://volta-iam-cacheserver.energyweb.org/',
-  natsServerUrl: 'https://dsb-dev.energyweb.org/',
+  cacheServerUrl: 'https://volta-identitycache.energyweb.org/',
+  natsServerUrl: 'https://volta-identityevents.energyweb.org/',
   walletConnectOptions: {
     // rpcUrl: 'https://volta-rpc.energyweb.org/',
     // rpcUrl: 'https://volta-internal-archive.energyweb.org/',
