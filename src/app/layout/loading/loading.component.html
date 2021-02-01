@@ -6,13 +6,14 @@
     type="ball-spin-fade"
     class="text-center"
   >
-    <p class="label-role" *ngIf='!msg && !msgList'>Loading...</p>
-    <p class="label-role" *ngIf='msg'>{{ msg }}</p>
+    <p class="label-role mt-4" *ngIf='!msg && !msgList'>Loading...</p>
+    <p class="label-role mt-4" *ngIf='msg'>{{ msg }}</p>
     <ng-container *ngIf='msgList'>
       <ng-container *ngFor="let message of msgList; let i = index;">
         <p class="label-role position-relative" style="top: 10px" *ngIf="!i">{{ message }}</p>
         <p class="label-role position-relative" *ngIf="i">{{ message }}</p>
       </ng-container>
     </ng-container>
+    <button mat-stroked-button *ngIf="isCancellable" class="btn btn-small" (click)="cancel()">Cancel</button>
   </ngx-spinner>
 </div>
