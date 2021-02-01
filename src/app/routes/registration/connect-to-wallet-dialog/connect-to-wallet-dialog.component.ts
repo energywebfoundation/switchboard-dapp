@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IAM } from 'iam-client-lib';
+import { IAM, WalletProvider } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -29,9 +29,17 @@ export class ConnectToWalletDialogComponent implements OnInit {
     }
   }
 
-  async connectToWallet() {
+  async connectToEwKeyManager() {
+    await this.connectToWallet(WalletProvider.EwKeyManager);
+  }
+
+  async connectToWalletConnect() {
+    await this.connectToWallet(WalletProvider.WalletConnect)
+  }
+
+  async connectToWallet(walletProvider: WalletProvider) {
     this.iamService.waitForSignature(true);
-    let isLoggedIn = await this.iamService.login();
+    let isLoggedIn = await this.iamService.login(walletProvider);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
@@ -52,7 +60,7 @@ export class ConnectToWalletDialogComponent implements OnInit {
 
     // Proceed with Login Process
     this.iamService.waitForSignature(true);
-    let isLoggedIn = await this.iamService.login(true, true);
+    let isLoggedIn = await this.iamService.login(WalletProvider.MetaMask, true);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
