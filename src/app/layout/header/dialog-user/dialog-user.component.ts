@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { CancelButton } from '../../loading/loading.component';
 
 @Component({
     selector: 'dialog-user',
@@ -14,7 +15,6 @@ export class DialogUser implements OnInit {
 
     public profileForm      : FormGroup;
     public maxDate          : Date;
-    public isSaving         = false;
 
     constructor(
         public dialogRef: MatDialogRef<DialogUser>,
@@ -65,8 +65,7 @@ export class DialogUser implements OnInit {
 
     async save() {
         if (this.profileForm.valid) {
-            this.loadingService.show('Please confirm this transaction in your connected wallet.');
-            this.isSaving = true;
+            this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
 
             let data = this.profileForm.getRawValue();
 
@@ -91,7 +90,6 @@ export class DialogUser implements OnInit {
                 this.toastr.error(e.message, 'System Error')
             }
             finally {
-                this.isSaving = false;
                 this.loadingService.hide();
             }
         }
