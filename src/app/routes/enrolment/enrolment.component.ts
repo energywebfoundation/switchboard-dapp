@@ -24,7 +24,8 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   public dropdownValue = {
     all: 'none',
     pending: 'false',
-    approved: 'true'
+    approved: 'true',
+    rejected: 'rejected'
   };
 
   public isMyEnrolmentShown = false;
@@ -52,11 +53,14 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   }
 
   private asyncSetDropdownValue(value: any) {
-    let timeout$ = setTimeout(() => {
-      this.enrolmentDropdown.setValue(value);
-      this.enrolmentList.getList(this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
-      clearTimeout(timeout$);
-    }, 30);
+    if (this.enrolmentList) {
+      let timeout$ = setTimeout(() => {
+        this.enrolmentDropdown.setValue(value);
+        this.enrolmentList.getList(this.enrolmentDropdown.value === 'rejected',
+          this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
+        clearTimeout(timeout$);
+      }, 30);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -113,26 +117,30 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
     
     if (i.index === 1) {
       if (this.isMyEnrolmentShown) {
-        this.enrolmentList.getList(this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
+        this.enrolmentList.getList(this.enrolmentDropdown.value === 'rejected',
+          this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
       }
       else {
         this.isMyEnrolmentShown = true;
       }
     }
     else {
-      this.issuerList.getList(this.issuerDropdown.value === 'true' ? true : this.issuerDropdown.value === 'false' ? false : undefined);
+      this.issuerList.getList(this.enrolmentDropdown.value === 'rejected',
+        this.issuerDropdown.value === 'true' ? true : this.issuerDropdown.value === 'false' ? false : undefined);
     }
   }
 
   updateEnrolmentList (e: any) {
     console.log('enrolement list');
     let value = e.value;
-    this.enrolmentList.getList(value === 'true' ? true : value === 'false' ? false : undefined);
+    this.enrolmentList.getList(value === 'rejected',
+      value === 'true' ? true : value === 'false' ? false : undefined);
   }
 
   updateIssuerList (e: any) {
     console.log('issuer list');
     let value = e.value;
-    this.issuerList.getList(value === 'true' ? true : value === 'false' ? false : undefined);
+    this.issuerList.getList(value === 'rejected',
+      value === 'true' ? true : value === 'false' ? false : undefined);
   }
 }

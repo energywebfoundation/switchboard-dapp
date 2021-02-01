@@ -127,7 +127,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       this._induceRanges();
 
       this.issuerGroup = fb.group({
-        newIssuer: ['', Validators.compose([Validators.required, this.iamService.isValidDid])]
+        newIssuer: ['', this.iamService.isValidDid]
       });
 
       this.issuerList = [];

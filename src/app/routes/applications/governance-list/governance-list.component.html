@@ -95,6 +95,12 @@
             <mat-icon class="btn-color-primary">preview</mat-icon>
           </button>
 
+          <!-- Create Sub-Organization -->
+          <button mat-icon-button matTooltip="Create Sub-Organization" (click)="newSubOrg(element)"
+            *ngIf="listType === ListType.ORG && !element.isSubOrg">
+            <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-application-icon"></mat-icon>
+          </button>
+
           <!-- View Applications -->
           <button mat-icon-button matTooltip="View Applications" (click)="viewApps(listType, element)"
             *ngIf="listType === ListType.ORG">

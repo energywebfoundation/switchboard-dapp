@@ -17,8 +17,8 @@
           <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
             <input matInput autocomplete="off" [formControl]="newOwnerAddress" type="text" placeholder="New Owner Address" 
                 required maxlength="256"/>
-              <mat-error *ngIf="newOwnerAddress.errors.required">New Owner Address is <strong>required</strong></mat-error>
-              <mat-error *ngIf="newOwnerAddress.errors.invalidEthAddress">ETH Address format is invalid</mat-error>
+              <mat-error *ngIf="newOwnerAddress?.errors?.required">New Owner Address is <strong>required</strong></mat-error>
+              <mat-error *ngIf="newOwnerAddress?.errors?.invalidEthAddress">ETH Address format is invalid</mat-error>
           </mat-form-field>
         </div>
       </div>
