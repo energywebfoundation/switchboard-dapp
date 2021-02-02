@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ENSNamespaceTypes, IAppDefinition, IRole } from 'iam-client-lib';
+import { ENSNamespaceTypes, WalletProvider } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { IamService, LoginType } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -247,15 +247,13 @@ export class RequestClaimComponent implements OnInit {
       if (loginStatus === LoginType.LOCAL) {
         // console.log('local > login');
 
-        // Set metamask extension options if connecting with metamask extension
-        let useMetamaskExtension = undefined;
-        if (window.localStorage.getItem('METAMASK_EXT_CONNECTED')) {
-          useMetamaskExtension = true;
-        }
+        const walletProvider = window.localStorage.getItem('METAMASK_EXT_CONNECTED') ?
+          WalletProvider.MetaMask :
+          WalletProvider.WalletConnect;
 
         // Proceed Login
         this.iamService.waitForSignature();
-        await this.iamService.login(useMetamaskExtension);
+        await this.iamService.login(walletProvider);
         this.iamService.clearWaitSignatureTimer();
 
         // Setup User Data

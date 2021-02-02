@@ -64,11 +64,9 @@ export class DashboardComponent implements OnInit {
         if (this._loginStatus === LoginType.LOCAL) {
           // console.log('local > login');
 
-          // Set metamask extension options if connecting with metamask extension
-          let walletProvider = WalletProvider.WalletConnect;
-          if (window.localStorage.getItem('METAMASK_EXT_CONNECTED')) {
-            walletProvider = WalletProvider.MetaMask;
-          }
+          const walletProvider = window.localStorage.getItem('METAMASK_EXT_CONNECTED') ?
+            WalletProvider.MetaMask :
+            WalletProvider.WalletConnect;
 
           // Proceed Login
           await this.iamService.login(walletProvider);
