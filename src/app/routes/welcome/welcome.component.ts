@@ -52,7 +52,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   private async connectToWallet(walletProvider: WalletProvider) {
-    this.iamService.waitForSignature(true);
+    this.iamService.waitForSignature(walletProvider, true);
     let isLoggedIn = await this.iamService.login(walletProvider);
     this.iamService.clearWaitSignatureTimer();
     if (isLoggedIn) {
@@ -81,8 +81,9 @@ export class WelcomeComponent implements OnInit {
     }
 
     // Proceed with Login Process
-    this.iamService.waitForSignature(true);
-    let isLoggedIn = await this.iamService.login(WalletProvider.MetaMask, true);
+    const walletProvider = WalletProvider.MetaMask;
+    this.iamService.waitForSignature(walletProvider, true);
+    let isLoggedIn = await this.iamService.login(walletProvider, true);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {

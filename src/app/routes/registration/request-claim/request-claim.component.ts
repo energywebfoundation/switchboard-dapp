@@ -252,7 +252,7 @@ export class RequestClaimComponent implements OnInit {
           WalletProvider.WalletConnect;
 
         // Proceed Login
-        this.iamService.waitForSignature();
+        this.iamService.waitForSignature(walletProvider);
         await this.iamService.login(walletProvider);
         this.iamService.clearWaitSignatureTimer();
 
