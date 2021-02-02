@@ -11,7 +11,15 @@ before_install:
   - ssh-add /tmp/deploy_rsa
 install:
 - yes n | npm install
-- cp src/environments/environment.prod.ts src/environments/environment.ts
+- echo concat("ENV_TYPE = ", env(ENV_TYPE))
+- |
+  if [ env(ENV_TYPE) = "prod" ]; then
+    cp src/environments/environment.prod.ts src/environments/environment.ts
+  fi
+- |
+  if [ env(ENV_TYPE) != "prod" ]; then
+    cp src/environments/environment.dev.ts src/environments/environment.ts
+  fi
 - npm run build
 script:
 - echo "skipping tests"
