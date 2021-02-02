@@ -11,7 +11,6 @@ before_install:
   - ssh-add /tmp/deploy_rsa
 install:
 - yes n | npm install
-- echo concat("Branch - ", branch)
 - |
   if [ branch = master ]; then
     cp src/environments/environment.prod.ts src/environments/environment.ts
