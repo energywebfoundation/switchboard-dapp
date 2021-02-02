@@ -3,10 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatStepper, MAT_DIALOG_DATA } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { AbstractControl, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from '../../../../environments/environment'
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
+import { ThemePalette } from '@angular/material/core';
 
 export const ViewType = {
   UPDATE: 'update',
@@ -21,8 +23,14 @@ export const ViewType = {
 export class NewOrganizationComponent implements OnInit {
   @ViewChild('stepper', { static: false }) private stepper: MatStepper;
 
-  color = '#fff';
-  selectedColor;
+ 
+  public disabled = false;
+  public color: ThemePalette = 'primary';
+  public touchUi = false;
+
+  colorCtr1: AbstractControl = new FormControl(null);
+  colorCtr2: AbstractControl = new FormControl(null);
+  colorCtr3: AbstractControl = new FormControl(null);
 
   public orgForm: FormGroup;
   public environment = environment;

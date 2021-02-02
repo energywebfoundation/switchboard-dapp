@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatCardModule, MatFormFieldModule, MatButtonModule, MatDividerModule, MatDialogModule, MatSelectModule, MatInputModule, MatProgressSpinnerModule, MatExpansionModule } from '@angular/material';
@@ -31,6 +32,7 @@ const routes: Routes = [
     MatCardModule,
     FormsModule,
     MatFormFieldModule,
+    NgxMatColorPickerModule,
     MatButtonModule,
     MatDividerModule,
     MatProgressSpinnerModule,
@@ -40,12 +42,15 @@ const routes: Routes = [
     GovernanceDetailsModule,
     MatExpansionModule
   ],
+  providers: [
+    { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }
+   ], 
   entryComponents: [
     NewOrganizationComponent, 
     NewApplicationComponent, 
     NewRoleComponent, 
     GovernanceViewComponent, 
     TransferOwnershipComponent,
-    RemoveOrgAppComponent]
+    RemoveOrgAppComponent] 
 })
 export class ApplicationsModule { }

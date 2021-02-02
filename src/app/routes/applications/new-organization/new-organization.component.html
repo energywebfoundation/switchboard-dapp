@@ -106,26 +106,31 @@
                             <mat-error>Invalid JSON Format</mat-error>
                           </mat-form-field>
                         </mat-tab>
-                        <mat-tab label="Form">
+                        <mat-tab label="Color Pick">
                           <ng-template mat-tab-label>
-                            <mat-icon matTooltipPosition="above" matTooltip="Form">toc</mat-icon>
+                            <mat-icon matTooltipPosition="above" matTooltip="Color Pick">palette</mat-icon>
                           </ng-template>
                           <mat-card class="mt-2">
                           <mat-label class="ml-3 pl-1 mt-2">Background Color</mat-label>
                           <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                            <input matInput type="color" name="color" [ngClass]="{'no-color': !selectedColor}"
-                              [(ngModel)]="color" (ngModelChange)="selectedColor=$event" required placeholder="Color">
+                            <input matInput [ngxMatColorPicker]="picker1" [formControl]="colorCtr1" [style.background-color]="colorCtr1.value?.rgba">
+                            <ngx-mat-color-toggle matSuffix [for]="picker1"></ngx-mat-color-toggle>
+                            <ngx-mat-color-picker #picker1 [touchUi]="touchUi" [color]="color"></ngx-mat-color-picker>
                           </mat-form-field>
-                          <mat-label class="ml-3 pl-1">Font Color</mat-label>
+
+                        <mat-label class="ml-3 pl-1 mt-2">Button Color</mat-label>
                           <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                            <input matInput type="color" name="color" [ngClass]="{'no-color': !selectedColor}"
-                              [(ngModel)]="color" (ngModelChange)="selectedColor=$event" required placeholder="Color">
-                          </mat-form-field>
-                          <mat-label class="ml-3 pl-1">Button Color</mat-label>
-                          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                            <input matInput type="color" name="color" [ngClass]="{'no-color': !selectedColor}"
-                              [(ngModel)]="color" (ngModelChange)="selectedColor=$event" required placeholder="Color">
-                          </mat-form-field>
+                            <input matInput [ngxMatColorPicker]="picker2" [formControl]="colorCtr2" [style.background-color]="colorCtr2.value?.rgba">
+                            <ngx-mat-color-toggle matSuffix [for]="picker2"></ngx-mat-color-toggle>
+                            <ngx-mat-color-picker #picker2 [touchUi]="touchUi" [color]="color"></ngx-mat-color-picker>
+                        </mat-form-field>
+
+                        <mat-label class="ml-3 pl-1 mt-2">Text Color</mat-label>
+                          <mat-form-field class="mt-2 color-white" appearance="outline" floatPlaceholder="never">
+                            <input matInput [ngxMatColorPicker]="picker3" [formControl]="colorCtr3" [style.color]="colorCtr3.value?.rgba">
+                            <ngx-mat-color-toggle matSuffix [for]="picker3"></ngx-mat-color-toggle>
+                            <ngx-mat-color-picker #picker3 [touchUi]="touchUi" [color]="color"></ngx-mat-color-picker>
+                        </mat-form-field>
                           </mat-card>
                         </mat-tab>
                       </mat-tab-group>
