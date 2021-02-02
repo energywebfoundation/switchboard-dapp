@@ -11,13 +11,13 @@ before_install:
   - ssh-add /tmp/deploy_rsa
 install:
 - yes n | npm install
-- echo env(ENV_TYPE)
+- echo branch
 - |
-  if [ env(ENV_TYPE) = "prod" ]; then
+  if [ branch = master ]; then
     cp src/environments/environment.prod.ts src/environments/environment.ts
   fi
 - |
-  if [ env(ENV_TYPE) != "prod" ]; then
+  if [ branch != master ]; then
     cp src/environments/environment.dev.ts src/environments/environment.ts
   fi
 - npm run build
