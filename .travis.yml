@@ -15,13 +15,14 @@ install:
   if [ branch = master ]; then
     cp src/environments/environment.prod.ts src/environments/environment.ts
     echo "Prod Env Enabled"
+    npm run build-prod
   fi
 - |
   if [ branch != master ]; then
     cp src/environments/environment.dev.ts src/environments/environment.ts
     echo "Prod Env Disabled"
+    npm run build
   fi
-- npm run build
 script:
 - echo "skipping tests"
 deploy:
