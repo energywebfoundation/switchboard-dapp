@@ -138,7 +138,7 @@
               </div>
             </div>
         </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
+        <mat-step #s1 [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
           <ng-template matStepLabel>Creating Application Namespace</ng-template>
           <div
             class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
@@ -147,10 +147,10 @@
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
+            <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper.selected === s1" (appRetryBtn)="retry()">Retry</button>
           </div>
         </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
+        <mat-step #s2 [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
           <ng-template matStepLabel>Registering Reverse Name for Namespace</ng-template>
           <div
             class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
@@ -158,10 +158,10 @@
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
+            <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper.selected === s2" (appRetryBtn)="retry()">Retry</button>
           </div>
         </mat-step>
-        <mat-step [editable]="false" [completed]="false">
+        <mat-step #s3 [editable]="false" [completed]="false">
           <ng-template matStepLabel>Setting up definitions</ng-template>
           <div
             class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
@@ -169,10 +169,10 @@
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
+            <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper.selected === s3" (appRetryBtn)="retry()">Retry</button>
           </div>
         </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
+        <mat-step #s4 [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
           <ng-template matStepLabel>Creating Role Sub-domain</ng-template>
           <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
             <mat-icon>info</mat-icon><span class="pb-2">Creating below sub-domain: <br>{{ ENSPrefixes.Roles }}.{{ appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace }}</span>
@@ -182,17 +182,17 @@
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
+            <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper.selected === s4" (appRetryBtn)="retry()">Retry</button>
           </div>
         </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
+        <mat-step #s5 [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
           <ng-template matStepLabel>Registering Reverse Name for Role Sub-domain</ng-template>
           <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
             <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
+            <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper.selected === s5" (appRetryBtn)="retry()">Retry</button>
           </div>
         </mat-step>
         <mat-step [completed]="false">

@@ -8,10 +8,12 @@ export class LoadingService {
   private _isLoading: BehaviorSubject<Number>;
   private _counter = 0;
   private _msg: BehaviorSubject<any>;
+  private _isCancellable: BehaviorSubject<boolean>;
 
   constructor() {
     this._isLoading = new BehaviorSubject<Number>(this._counter);
     this._msg = new BehaviorSubject<any>('');
+    this._isCancellable = new BehaviorSubject<any>(false);
   }
 
   get isLoading() {
@@ -22,10 +24,20 @@ export class LoadingService {
     return this._msg.asObservable();
   }
 
+  get isCancellable() {
+    return this._isCancellable.asObservable();
+  }
+
   // adding timeout wil cause endless loading when this.hide() was called earlier then 100ms after this.show()
-  show(msg?: any) {
+  show(msg?: any, cancellable?: boolean) {
     if (msg) {
       this._msg.next(msg);
+    }
+    if (cancellable) {
+      this._isCancellable.next(true);
+    }
+    else {
+      this._isCancellable.next(false);
     }
     this._isLoading.next(++this._counter);
   }

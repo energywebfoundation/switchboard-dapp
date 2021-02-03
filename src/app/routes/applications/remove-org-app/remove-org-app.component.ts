@@ -2,6 +2,8 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MatStepper, MAT_DIALOG_DATA } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { ListType } from 'src/app/shared/constants/shared-constants';
+import { ExpiredRequestError } from 'src/app/shared/errors/errors';
+import { IamRequestService } from 'src/app/shared/services/iam-request.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 
@@ -25,10 +27,13 @@ export class RemoveOrgAppComponent implements OnInit {
   namespace: string;
   steps: any[];
 
+  private _currentIdx = 0;
+
   constructor(
     private iamService: IamService,
     private toastr: ToastrService,
     private loadingService: LoadingService,
+    private iamRequestService: IamRequestService,
     public dialogRef: MatDialogRef<RemoveOrgAppComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { 
@@ -46,26 +51,37 @@ export class RemoveOrgAppComponent implements OnInit {
   }
 
   async ngOnInit() {
-    try {
-      if (this.steps) {
-        for (let index = 0; index < this.steps.length; index++) {
-          let step = this.steps[index];
-          // console.log('Processing', step.info);
+    this._processSteps(0);
+  }
 
-          // Process the next steap
-          await step.next();
+  private async _processSteps(startIndex: number) {
+    if (this.steps) {
+      for (let index = startIndex; index < this.steps.length; index++) {
+        this._currentIdx = index;
+        let step = this.steps[index];
+
+        // Process the next step
+        try {
+          await this.iamRequestService.enqueue(step.next);
           this.toastr.info(step.info, `Transaction Success (${index + 1}/${this.steps.length})`);
-  
+
           // Move to Complete Step
           this.stepper.selected.completed = true;
           this.stepper.next();
-        };
-      }
+        }
+        catch (e) {
+          if (!(e instanceof ExpiredRequestError)) {
+            console.error(this.TOASTR_HEADER, e);
+            this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+          }
+          break;
+        }
+      };
     }
-    catch (e) {
-      console.error(this.TOASTR_HEADER, e);
-      this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
-    }
+  }
+
+  retry() {
+    this._processSteps(this._currentIdx);
   }
 
   async closeDialog(isSuccess?: boolean) {
