@@ -34,6 +34,11 @@ export class NewOrganizationComponent implements OnInit {
 
   private TOASTR_HEADER = 'Create New Organization';
 
+  private _steps: any[];
+  private _retryCount = 0;
+  private _currentIdx = 0;
+  private _requests = {};
+
   public constructor(
     private fb: FormBuilder,
     private iamService: IamService,
@@ -245,8 +250,8 @@ export class NewOrganizationComponent implements OnInit {
     }
   }
 
-  async confirmOrg() {
-    let req = { ...this.orgForm.value, returnSteps: true };
+  async confirmOrg(skipNextStep?: boolean) {
+    let req = JSON.parse(JSON.stringify({ ...this.orgForm.value, returnSteps: true }));
     req.data.orgName = req.data.organizationName;
     delete req.data.organizationName;
 
@@ -270,37 +275,68 @@ export class NewOrganizationComponent implements OnInit {
       delete req.data.others;
     }
 
-    // Set the first step to non-editable
-    this.stepper.steps.first.editable = false;
+    if (!skipNextStep) {
+      // Set the first step to non-editable
+      this.stepper.steps.first.editable = false;
+    }
 
     if (this.viewType === ViewType.UPDATE) {
-      this.proceedUpdateStep(req);
+      this.proceedUpdateStep(req, skipNextStep);
     }
     else {
       this.proceedCreateSteps(req);
     }
   }
 
-  private async proceedCreateSteps(req: any) {
-    try {
-      // Retrieve the steps to create an organization
-      let steps = await this.iamService.iam.createOrganization(req);
-      for (let index = 0; index < steps.length; index++) {
-        let step = steps[index];
-        // console.log('Processing', step.info);
-        
+  private async next(requestIdx: number, skipNextStep?: boolean) {
+    let steps = this._requests[`${requestIdx}`];
+
+    if (steps && steps.length) {
+      let step = steps[0];
+
+      if (!skipNextStep) {
         // Show the next step
         this.stepper.selected.completed = true;
         this.stepper.next();
-
-        // Process the next step
-        await step.next();
-        this.toastr.info(step.info, `Transaction Success (${index + 1}/${steps.length})`);
       }
 
-      // Move to Complete Step
-      this.stepper.selected.completed = true;
-      this.stepper.next();
+      try {
+        // Process the next step
+        await step.next();
+
+        // Make sure that the current step is not retried
+        if (this._requests[`${requestIdx}`]) {
+          this._currentIdx++;
+          this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this._steps.length})`);
+  
+          // Remove 1st element
+          steps.shift();
+  
+          // Process
+          await this.next(requestIdx);
+        }
+      }
+      catch (e) {
+        console.error('New Org Error', e);
+        this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+      }
+    }
+  }
+
+  async proceedCreateSteps(req: any) {
+    try {
+      // Retrieve the steps to create an organization
+      this._steps = await this.iamService.iam.createOrganization(req);
+      this._requests[`${this._retryCount}`] = [...this._steps];
+      
+      // Process
+      await this.next(0);
+
+      if (this._requests['0']) {
+        // Move to Complete Step
+        this.stepper.selected.completed = true;
+        this.stepper.next();
+      }
     }
     catch (e) {
       console.error('New Org Error', e);
@@ -308,11 +344,44 @@ export class NewOrganizationComponent implements OnInit {
     }
   }
 
-  private async proceedUpdateStep(req: any) {
+  async retry() {
+    if (this.viewType === ViewType.NEW) {
+      // Copy pending steps
+      this._requests[`${this._retryCount + 1}`] = [...this._requests[`${this._retryCount}`]];
+
+      //Remove previous request
+      delete this._requests[`${this._retryCount}`];
+      const retryCount = ++this._retryCount;
+
+      try {
+        // Process
+        await this.next(retryCount, true);
+
+        if (this._requests[retryCount]) {
+          // Move to Complete Step
+          this.stepper.selected.completed = true;
+          this.stepper.next();
+        }
+      }
+      catch (e) {
+        console.error(e);
+      }
+    }
+    else {
+      this._retryCount++;
+      await this.confirmOrg(true);
+    }
+    
+  }
+
+  private async proceedUpdateStep(req: any, skipNextStep?: boolean) {
     try {
-      // Update steps
-      this.stepper.selected.completed = true;
-      this.stepper.next();
+      let retryCount = this._retryCount;
+      if (!skipNextStep) {
+        // Update steps
+        this.stepper.selected.completed = true;
+        this.stepper.next();
+      }
 
       // Set Definition
       const newDomain = `${req.orgName}.${req.namespace}`;
@@ -321,10 +390,13 @@ export class NewOrganizationComponent implements OnInit {
         domain: newDomain
       });
 
-      // Move to Complete Step
-      this.toastr.info('Set definition for organization', 'Transaction Success');
-      this.stepper.selected.completed = true;
-      this.stepper.next();
+      // Make sure that all steps are not yet complete
+      if (this.stepper.selectedIndex !== 3 && retryCount === this._retryCount) {
+        // Move to Complete Step
+        this.toastr.info('Set definition for organization', 'Transaction Success');
+        this.stepper.selected.completed = true;
+        this.stepper.next();
+      }
     }
     catch (e) {
       console.error('Update Org Error', e);

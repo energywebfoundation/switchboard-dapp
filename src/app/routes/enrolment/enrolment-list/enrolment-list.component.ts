@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { ToastrService } from 'ngx-toastr';
+import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -161,7 +162,7 @@ export class EnrolmentListComponent implements OnInit {
   }
 
   private async syncClaimToDidDoc(element: any) {
-    this.loadingService.show('Please confirm this transaction in your connected wallet.');
+    this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
 
     try {
       let decoded: any = await this.iamService.iam.decodeJWTToken({

@@ -37,5 +37,5 @@
     </div>
 </div>
 <div mat-dialog-actions class="d-flex justify-content-center">
-    <button mat-raised-button class="btn btn-primary w-100" type="submit" [disabled]="profileForm.pristine || profileForm.invalid || isSaving" (click)="save()">Update</button>
+    <button mat-raised-button class="btn btn-primary w-100" type="submit" [disabled]="profileForm.pristine || profileForm.invalid" (click)="save()">Update</button>
 </div>
