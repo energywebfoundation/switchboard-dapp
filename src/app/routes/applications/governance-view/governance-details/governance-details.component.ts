@@ -122,69 +122,7 @@ export class GovernanceDetailsComponent implements OnInit {
     });
   }
 
-  async enrol(type: string, role: any) {
-    // check if currently enrolled in this role
-    if (!(await this._isEnrolled(role))) {
-      try {
-        let url = this._constructEnrolmentUrl(type, role);
-        let newWindowRef = window.open();
-        newWindowRef.location = <any>url;
-        if (
-          !newWindowRef ||
-          newWindowRef.closed ||
-          typeof newWindowRef.closed == 'undefined'
-        ) {
-          this.toastr.error(
-            'A new window cannot be opened. Please allow popups for this application in your browser.',
-            'Enrolment'
-          );
-        }
-      } catch (e) {
-        console.error('Cannot open new window.', e);
-        this.toastr.error(
-          'A new window cannot be opened. Please allow popups for this application in your browser.',
-          'Enrolment'
-        );
-      }
-    } else {
-      this.toastr.warning(
-        'You either have an approved/pending enrolment request for this role.',
-        'Enrolment'
-      );
-    }
-  }
-
-  private async _isEnrolled(role: any): Promise<boolean> {
-    let isEnrolled = false;
-    let namespaceArr: string[] = role.namespace.split('.');
-    namespaceArr.splice(0, 2);
-
-    try {
-      this.loadingService.show();
-      let enrolledList = await this.iamService.iam.getRequestedClaims({
-        did: this.iamService.iam.getDid(),
-        parentNamespace: namespaceArr.join('')
-      });
-
-      if (enrolledList) {
-        for (let i = 0; i < enrolledList.length; i++) {
-          if (enrolledList[i].claimType === role.namespace) {
-            isEnrolled = true;
-            break;
-          }
-        }
-      }
-    } catch (e) {
-      console.error(e);
-      this.toastr.error(e);
-    } finally {
-      this.loadingService.hide();
-    }
-
-    return isEnrolled;
-  }
-
-  private _constructEnrolmentUrl(listType: string, roleDefinition: any) {
+  getQueryParams(listType: string, roleDefinition: any) {
     let name = roleDefinition.name;
     let arr = roleDefinition.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
     let namespace = '';
@@ -193,6 +131,12 @@ export class GovernanceDetailsComponent implements OnInit {
       namespace = arr[1];
     }
 
-    return `${location.origin}/#/enrol?${listType}=${namespace}&roleName=${name}&stayLoggedIn=true`;
+    let retVal = {
+      roleName: name,
+      stayLoggedIn: true
+    };
+    retVal[listType] = namespace;
+
+    return retVal;
   }
 }
