@@ -75,6 +75,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   private TOASTR_HEADER = 'Create New Role';
 
+  private _steps: any[];
+  private _retryCount = 0;
+  private _currentIdx = 0;
+  private _requests = {};
+
   constructor(private fb: FormBuilder,
     private iamService: IamService,
     private toastr: ToastrService,
@@ -174,7 +179,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   private _initFormData() {
     if (this.origData) {
-      // console.log('origData', this.origData);
       let def = this.origData.definition;
 
       // Construct Parent Namespace
@@ -580,8 +584,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async confirmRole() {
-    let req = { ...this.roleForm.value, returnSteps: true };
+  async confirmRole(skipNextStep?: boolean) {
+    let req = JSON.parse(JSON.stringify({ ...this.roleForm.value, returnSteps: true }));
 
     req.namespace = `${this.ENSPrefixes.Roles}.${req.parentNamespace}`;
     delete req.parentNamespace;
@@ -594,41 +598,70 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     req.data.issuer.did = this.issuerList;
     req.data.fields = this.dataSource.data;
     req.data.metadata = {};
-    
-    // console.log('req', req);
 
-    // Set the second step to non-editable
-    let list = this.stepper.steps.toArray();
-    list[1].editable = false;
+    if (!skipNextStep) {
+      // Set the second step to non-editable
+      let list = this.stepper.steps.toArray();
+      list[1].editable = false;
+    }
 
     if (this.viewType === ViewType.UPDATE) {
-      this.proceedUpdateStep(req);
+      this.proceedUpdateStep(req, skipNextStep);
     }
     else {
       this.proceedCreateSteps(req);
     }
   }
+  
+  private async next(requestIdx: number, skipNextStep?: boolean) {
+    let steps = this._requests[`${requestIdx}`];
 
-  private async proceedCreateSteps(req: any) {
-    try {
-      // Retrieve the steps to create an application
-      let steps = await this.iamService.iam.createRole(req);
-      for (let index = 0; index < steps.length; index++) {
-        let step = steps[index];
-        // console.log('Processing', step.info);
-        
+    if (steps && steps.length) {
+      let step = steps[0];
+
+      if (!skipNextStep) {
         // Show the next step
         this.stepper.selected.completed = true;
         this.stepper.next();
-
-        // Process the next steap
-        await step.next();
-        this.toastr.info(step.info, `Transaction Success (${index + 1}/${steps.length})`);
       }
 
-      // Move to Complete Step
-      this.stepper.selected.completed = true;
-      this.stepper.next();
+      try {
+        // Process the next step
+        await step.next();
+
+        // Make sure that the current step is not retried
+        if (this._requests[`${requestIdx}`]) {
+          this._currentIdx++;
+          this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this._steps.length})`);
+  
+          // Remove 1st element
+          steps.shift();
+  
+          // Process
+          await this.next(requestIdx);
+        }
+      }
+      catch (e) {
+        console.error('New Role Error', e);
+        this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+      }
+    }
+  }
+
+  private async proceedCreateSteps(req: any) {
+    try {
+      // Retrieve the steps to create role
+      this._steps = await this.iamService.iam.createRole(req);
+      this._requests[`${this._retryCount}`] = [...this._steps];
+      
+      // Process
+      await this.next(0);
+
+      if (this._requests['0']) {
+        // Move to Complete Step
+        this.stepper.selected.completed = true;
+        this.stepper.next();
+      }
     }
     catch (e) {
       console.error('New Role Error', e);
@@ -636,11 +669,43 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private async proceedUpdateStep(req: any) {
+  async retry() {
+    if (this.viewType === ViewType.NEW) {
+      // Copy pending steps
+      this._requests[`${this._retryCount + 1}`] = [...this._requests[`${this._retryCount}`]];
+
+      //Remove previous request
+      delete this._requests[`${this._retryCount}`];
+      const retryCount = ++this._retryCount;
+      
+      try {
+        // Process
+        await this.next(retryCount, true);
+
+        if (this._requests[retryCount]) {
+          // Move to Complete Step
+          this.stepper.selected.completed = true;
+          this.stepper.next();
+        }
+      }
+      catch (e) {
+        console.error(e);
+      }
+    }
+    else {
+      this._retryCount++;
+      await this.confirmRole(true);
+    }
+  }
+
+  private async proceedUpdateStep(req: any, skipNextStep?: boolean) {
     try {
-      // Update steps
-      this.stepper.selected.completed = true;
-      this.stepper.next();
+      let retryCount = this._retryCount;
+      if (!skipNextStep) {
+        // Update steps
+        this.stepper.selected.completed = true;
+        this.stepper.next();
+      }
 
       // Set Definition
       const newDomain = `${req.roleName}.${req.namespace}`;
@@ -649,10 +714,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         domain: newDomain
       });
 
-      // Move to Complete Step
-      this.toastr.info('Set definition for role', 'Transaction Success');
-      this.stepper.selected.completed = true;
-      this.stepper.next();
+      // Make sure that all steps are not yet complete
+      if (this.stepper.selectedIndex !== 4 && retryCount === this._retryCount) {
+        // Move to Complete Step
+        this.toastr.info('Set definition for role', 'Transaction Success');
+        this.stepper.selected.completed = true;
+        this.stepper.next();
+      }
     }
     catch (e) {
       console.error('Update Role Error', e);

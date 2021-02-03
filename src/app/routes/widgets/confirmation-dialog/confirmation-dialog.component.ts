@@ -8,10 +8,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class ConfirmationDialogComponent implements OnInit {
   isDiscardButton = false;
+  isProceedButton = false;
 
   constructor(public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { 
       this.isDiscardButton = data && data.isDiscardButton ? true : false;
+      this.isProceedButton = data && data.isProceedButton ? true : false;
     }
 
   ngOnInit() {}

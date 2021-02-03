@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -42,7 +43,7 @@ export class ViewRequestsComponent implements OnInit {
   }
 
   async approve() {
-    this.loadingService.show('Please confirm this transaction in your connected wallet.');
+    this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
 
     try {
       let req = {
