@@ -124,12 +124,12 @@ export class HeaderComponent implements OnInit {
         this.notifService.initNotifCounts(pendingApprovalCount, pendingSyncCount);
 
         // Listen to Count Changes
-        this.notifService.pendingApproval.subscribe((count: number) => {
-            this.notif.pendingApprovalCount = count;
+        this.notifService.pendingApproval.subscribe(async (count: number) => {
+            await this.initPendingClaimsCount();
             this.notif.totalCount = this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
         });
-        this.notifService.pendingDidDocSync.subscribe((count: number) => {
-            this.notif.pendingSyncCount = count;
+        this.notifService.pendingDidDocSync.subscribe(async (count: number) => {
+            await this.initApprovedClaimsForSyncCount();
             this.notif.totalCount = this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
         });
 
@@ -155,7 +155,7 @@ export class HeaderComponent implements OnInit {
         }
     }
 
-    private async initNotificationCount() {
+    private async initPendingClaimsCount() {
         try {
             // Get Pending Claims to be Approved
             let pendingClaimsList = (await this.iamService.iam.getIssuedClaims({
@@ -163,7 +163,14 @@ export class HeaderComponent implements OnInit {
                 isAccepted: false
             })).filter(item => !item['isRejected']);
             this.notif.pendingApprovalCount = pendingClaimsList.length;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
 
+    private async initApprovedClaimsForSyncCount() {
+        try {
             // Get Approved Claims
             let approvedClaimsList = await this.iamService.iam.getRequestedClaims({
                 did: this.iamService.iam.getDid(),
@@ -185,10 +192,17 @@ export class HeaderComponent implements OnInit {
                 }
             });
 
-            // console.log('approved claims', approvedClaimsList.length);
-            // console.log('synced claims', claims.length);
-
             this.notif.pendingSyncCount = approvedClaimsList.length - claims.length;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+
+    private async initNotificationCount() {
+        try {
+            await this.initPendingClaimsCount();
+            await this.initApprovedClaimsForSyncCount();
         }
         catch (e) {
             console.error(e);
