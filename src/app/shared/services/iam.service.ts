@@ -216,15 +216,28 @@ export class IamService {
     }
   }
 
-  public waitForSignature(isConnectAndSign?: boolean) {
+  public waitForSignature(walletProvider: WalletProvider, isConnectAndSign?: boolean) {
     this._throwTimeoutError = false;
-    let timeout = 60000;
-    let messageType = 'sign';
-    if (isConnectAndSign) {
-      messageType = 'connect to your wallet and sign';
-    }
-
-    this.loadingService.show(['Your signature is being requested.', `Please ${messageType} within ${timeout / 1000} seconds or you will be automatically logged-out.`]);
+    const timeout = 60000;
+    const connectionMessage = isConnectAndSign ? 'connection to a wallet and ' : '';
+    const messages = [
+      {
+        message: `Your ${connectionMessage}signature is being requested.`,
+        relevantProviders: 'all'
+      },
+      {
+        message: 'EW Key Manager should appear in a new browser tab or window. If you do not see it, please check your browser settings.',
+        relevantProviders: WalletProvider.EwKeyManager
+      },
+      {
+        message: `If you do not complete this within ${timeout / 1000} seconds, your browser will refresh automatically.`,
+        relevantProviders: 'all'
+      },
+    ];
+    const waitForSignatureMessage = messages
+      .filter(m => m.relevantProviders === walletProvider || m.relevantProviders === 'all')
+      .map(m => m.message);
+    this.loadingService.show(waitForSignatureMessage);
     this._timer = setTimeout(() => {
       this._displayTimeout(timeout / 1000, isConnectAndSign);
       this.clearWaitSignatureTimer();
