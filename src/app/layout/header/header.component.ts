@@ -126,11 +126,17 @@ export class HeaderComponent implements OnInit {
         // Listen to Count Changes
         this.notifService.pendingApproval.subscribe(async (count: number) => {
             await this.initPendingClaimsCount();
-            this.notif.totalCount = this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
+            this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
+            if (this.notif.totalCount < 0) {
+                this.notif.totalCount = 0;
+            }
         });
         this.notifService.pendingDidDocSync.subscribe(async (count: number) => {
             await this.initApprovedClaimsForSyncCount();
-            this.notif.totalCount = this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
+            this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
+            if (this.notif.totalCount < 0) {
+                this.notif.totalCount = 0;
+            }
         });
 
         // Listen to External Messages
@@ -163,6 +169,9 @@ export class HeaderComponent implements OnInit {
                 isAccepted: false
             })).filter(item => !item['isRejected']);
             this.notif.pendingApprovalCount = pendingClaimsList.length;
+            if (this.notif.pendingApprovalCount < 0) {
+                this.notif.pendingApprovalCount = 0;
+            }
         }
         catch (e) {
             throw e;
@@ -193,6 +202,9 @@ export class HeaderComponent implements OnInit {
             });
 
             this.notif.pendingSyncCount = approvedClaimsList.length - claims.length;
+            if (this.notif.pendingSyncCount < 0) {
+                this.notif.pendingSyncCount = 0;
+            }
         }
         catch (e) {
             throw e;
