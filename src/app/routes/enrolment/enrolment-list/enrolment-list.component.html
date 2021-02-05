@@ -57,6 +57,12 @@
             *ngIf="listType === ListType.APPLICANT && element?.isAccepted && !element?.isSynced">
             <mat-icon class="btn-color-primary">note_add</mat-icon>
           </button>
+
+          <!-- Cancel Claim Request -->
+          <button mat-icon-button matTooltip="Cancel Claim Request" (click)="cancelClaimRequest(element)"
+            *ngIf="listType === ListType.APPLICANT && !element?.isAccepted && !element?.isRejected">
+            <mat-icon class="btn-color-error">delete_outline</mat-icon>
+          </button>
         </div>
 
         <div class="d-block d-md-none">
@@ -75,6 +81,13 @@
             *ngIf="listType === ListType.APPLICANT && element?.isAccepted && !element?.isSynced">
             <mat-icon class="btn-color-primary">note_add</mat-icon>
             <span>Add to DID Document</span>
+          </button>
+
+          <!-- Cancel Claim Request -->
+          <button mat-menu-item class="btn-color-primary" (click)="cancelClaimRequest(element)"
+            *ngIf="listType === ListType.APPLICANT && !element?.isAccepted && !element?.isRejected">
+            <mat-icon class="btn-color-error">delete_outline</mat-icon>
+            <span>Cancel Claim Request</span> 
           </button>
           </mat-menu>
         </div>

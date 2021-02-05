@@ -192,4 +192,34 @@ export class EnrolmentListComponent implements OnInit {
 
     this.loadingService.hide();
   }
+
+  async cancelClaimRequest(element: any) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      maxHeight: '195px',
+      data: {
+        header: TOASTR_HEADER,
+        message: 'Are you sure to cancel this enrolment request?'
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().toPromise();
+
+    if (await dialogRef) {
+      this.loadingService.show();
+
+      try {
+        await this.iamService.iam.deleteClaim({
+          id: element.id
+        });
+      }
+      catch (e) {
+        console.error(e);
+        this.toastr.error('Failed to cancel the enrolment request.', TOASTR_HEADER)
+      }
+      finally {
+        this.loadingService.hide();
+      }
+    }
+  }
 }
