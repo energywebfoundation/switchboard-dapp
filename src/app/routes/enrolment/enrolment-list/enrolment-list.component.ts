@@ -212,6 +212,7 @@ export class EnrolmentListComponent implements OnInit {
         await this.iamService.iam.deleteClaim({
           id: element.id
         });
+        this.toastr.success('Action is successful.', 'Cancel Enrolment Request');
       }
       catch (e) {
         console.error(e);
