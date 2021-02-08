@@ -59,6 +59,14 @@ p {
     margin-bottom: .65rem; // ~10px
 }
 
+.filter-link {
+    position: relative;
+    font-size: 12px;
+    top: -1px;
+    letter-spacing: 0.8px;
+    font-weight: 400;
+}
+
 .article {
   font-size: 20px;
   line-height: 32px;

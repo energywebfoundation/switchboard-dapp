@@ -129,6 +129,18 @@ mat-paginator {
     height: 32px;
 }
 
+.img-logo-list-sm {
+    width: auto !important;
+    height: 18px;
+}
+
+.filter-list-item {
+    display: flex;
+    align-items: center;
+    padding: 3px 0 3px 0;
+    
+}
+
 .btn-action-1 {
     position: relative;
     top: -1px;
