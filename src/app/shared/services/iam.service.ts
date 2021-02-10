@@ -18,6 +18,8 @@ const cacheClient = new CacheServerClient({
 const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
 const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
 
+export const VOLTA_CHAIN_ID = 73799;
+
 export enum LoginType {
   LOCAL = 'local',
   REMOTE = 'remote'
