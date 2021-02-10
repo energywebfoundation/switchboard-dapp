@@ -220,7 +220,7 @@ export class IamService {
 
   public waitForSignature(walletProvider: WalletProvider, isConnectAndSign?: boolean) {
     this._throwTimeoutError = false;
-    const timeout = 60000;
+    const timeoutInMinutes = walletProvider === WalletProvider.EwKeyManager ? 2 : 1;
     const connectionMessage = isConnectAndSign ? 'connection to a wallet and ' : '';
     const messages = [
       {
@@ -232,7 +232,8 @@ export class IamService {
         relevantProviders: WalletProvider.EwKeyManager
       },
       {
-        message: `If you do not complete this within ${timeout / 1000} seconds, your browser will refresh automatically.`,
+        message: `If you do not complete this within ${timeoutInMinutes} minute${timeoutInMinutes === 1 ? '' : 's'},
+          your browser will refresh automatically.`,
         relevantProviders: 'all'
       },
     ];
@@ -241,10 +242,10 @@ export class IamService {
       .map(m => m.message);
     this.loadingService.show(waitForSignatureMessage);
     this._timer = setTimeout(() => {
-      this._displayTimeout(timeout / 1000, isConnectAndSign);
+      this._displayTimeout(isConnectAndSign);
       this.clearWaitSignatureTimer();
       this._throwTimeoutError = true;
-    }, timeout);
+    }, timeoutInMinutes * 60000);
   }
 
   public clearWaitSignatureTimer(throwError?: boolean) {
@@ -258,7 +259,7 @@ export class IamService {
     }
   }
 
-  private async _displayTimeout(timeout: number, isConnectAndSign?: boolean) {
+  private async _displayTimeout(isConnectAndSign?: boolean) {
     let message = 'sign';
     if (isConnectAndSign) {
       message = 'connect with your wallet and sign'
