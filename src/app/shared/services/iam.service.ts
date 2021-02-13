@@ -67,11 +67,11 @@ export class IamService {
 
     // Check if account address exists
     if (!this._user.getValue()) {
-      // console.log('Initializing connections...');
+      console.log('Initializing connections...');
       const connectionOpts = { walletProvider, reinitializeMetamask };
       try {
         const { did, connected, userClosedModal } = await this._iam.initializeConnection(connectionOpts);
-        // console.log(did, connected, userClosedModal);
+        console.log(did, connected, userClosedModal);
         if (did && connected && !userClosedModal) {
           // Setup Account Address
           const signer = this._iam.getSigner();
