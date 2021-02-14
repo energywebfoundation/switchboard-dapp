@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IAM, WalletProvider } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { IamService } from 'src/app/shared/services/iam.service';
+import { IamService, VOLTA_CHAIN_ID } from 'src/app/shared/services/iam.service';
 
 import { version } from '../../../../package.json';
 
@@ -15,6 +15,7 @@ import { version } from '../../../../package.json';
 })
 export class WelcomeComponent implements OnInit {
   isMetamaskExtensionAvailable = false;
+  disableMetamaskButton = false;
   version: string = version;
 
   private _returnUrl = undefined;
@@ -38,8 +39,13 @@ export class WelcomeComponent implements OnInit {
     }
 
     // Check metamask availability
-    if (await IAM.isMetamaskExtensionPresent()) {
+    let { isMetamaskPresent, chainId } = await IAM.isMetamaskExtensionPresent();
+    if (isMetamaskPresent) {
       this.isMetamaskExtensionAvailable = true;
+
+      if (chainId && parseInt(`${chainId}`, 16) !== VOLTA_CHAIN_ID) {
+        this.disableMetamaskButton = true;
+      }
     }
   }
 
@@ -52,7 +58,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   private async connectToWallet(walletProvider: WalletProvider) {
-    this.iamService.waitForSignature(true);
+    this.iamService.waitForSignature(walletProvider, true);
     let isLoggedIn = await this.iamService.login(walletProvider);
     this.iamService.clearWaitSignatureTimer();
     if (isLoggedIn) {
@@ -81,8 +87,9 @@ export class WelcomeComponent implements OnInit {
     }
 
     // Proceed with Login Process
-    this.iamService.waitForSignature(true);
-    let isLoggedIn = await this.iamService.login(WalletProvider.MetaMask, true);
+    const walletProvider = WalletProvider.MetaMask;
+    this.iamService.waitForSignature(walletProvider, true);
+    let isLoggedIn = await this.iamService.login(walletProvider, true);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {

@@ -18,6 +18,8 @@ const cacheClient = new CacheServerClient({
 const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
 const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
 
+export const VOLTA_CHAIN_ID = 73799;
+
 export enum LoginType {
   LOCAL = 'local',
   REMOTE = 'remote'
@@ -65,11 +67,11 @@ export class IamService {
 
     // Check if account address exists
     if (!this._user.getValue()) {
-      // console.log('Initializing connections...');
+      console.log('Initializing connections...');
       const connectionOpts = { walletProvider, reinitializeMetamask };
       try {
         const { did, connected, userClosedModal } = await this._iam.initializeConnection(connectionOpts);
-        // console.log(did, connected, userClosedModal);
+        console.log(did, connected, userClosedModal);
         if (did && connected && !userClosedModal) {
           // Setup Account Address
           const signer = this._iam.getSigner();
@@ -216,20 +218,34 @@ export class IamService {
     }
   }
 
-  public waitForSignature(isConnectAndSign?: boolean) {
+  public waitForSignature(walletProvider: WalletProvider, isConnectAndSign?: boolean) {
     this._throwTimeoutError = false;
-    let timeout = 60000;
-    let messageType = 'sign';
-    if (isConnectAndSign) {
-      messageType = 'connect to your wallet and sign';
-    }
-
-    this.loadingService.show(['Your signature is being requested.', `Please ${messageType} within ${timeout / 1000} seconds or you will be automatically logged-out.`]);
+    const timeoutInMinutes = walletProvider === WalletProvider.EwKeyManager ? 2 : 1;
+    const connectionMessage = isConnectAndSign ? 'connection to a wallet and ' : '';
+    const messages = [
+      {
+        message: `Your ${connectionMessage}signature is being requested.`,
+        relevantProviders: 'all'
+      },
+      {
+        message: 'EW Key Manager should appear in a new browser tab or window. If you do not see it, please check your browser settings.',
+        relevantProviders: WalletProvider.EwKeyManager
+      },
+      {
+        message: `If you do not complete this within ${timeoutInMinutes} minute${timeoutInMinutes === 1 ? '' : 's'},
+          your browser will refresh automatically.`,
+        relevantProviders: 'all'
+      },
+    ];
+    const waitForSignatureMessage = messages
+      .filter(m => m.relevantProviders === walletProvider || m.relevantProviders === 'all')
+      .map(m => m.message);
+    this.loadingService.show(waitForSignatureMessage);
     this._timer = setTimeout(() => {
-      this._displayTimeout(timeout / 1000, isConnectAndSign);
+      this._displayTimeout(isConnectAndSign);
       this.clearWaitSignatureTimer();
       this._throwTimeoutError = true;
-    }, timeout);
+    }, timeoutInMinutes * 60000);
   }
 
   public clearWaitSignatureTimer(throwError?: boolean) {
@@ -243,7 +259,7 @@ export class IamService {
     }
   }
 
-  private async _displayTimeout(timeout: number, isConnectAndSign?: boolean) {
+  private async _displayTimeout(isConnectAndSign?: boolean) {
     let message = 'sign';
     if (isConnectAndSign) {
       message = 'connect with your wallet and sign'

@@ -1,5 +1,3 @@
-
-<div mat-dialog-title class="mt-0 mt-md-4 mb-0 d-flex justify-content-center text-center align-items-center mat-dialog-title"><h1 class="font-weight-600 text-center mt-2 pt-2 pt-md-0 mb-2 pb-0 pb-md-1">Welcome to {{ appName }}</h1></div>
 <div mat-dialog-content class="connect-wallet-dialog">
   <div class="py-3 px-2">
     <div class="my-3">
@@ -11,8 +9,11 @@
           width="48px" height="40px" class="float-left pt-1 ml-1" src="assets/img/icons/key-manager-icon.svg" /> USE EW KEY MANAGER</button>
     </div>
     <div class="mt-4 mb-3" *ngIf="isMetamaskExtensionAvailable">
-      <button mat-raised-button (click)="connectToMetamask()" class="btn btn-connect-2 w-100" type="submit"><img
+      <button mat-raised-button (click)="connectToMetamask()" class="btn btn-connect-2 w-100" type="submit" [disabled]="disableMetamaskButton"><img
           width="48px" height="40px" class="float-left pt-1 ml-1" src="assets/img/icons/metamask-logo.svg" /> USE METAMASK</button>
+          <div class="d-flex justify-content-center mt-1" *ngIf="disableMetamaskButton">
+            <span class="opacity-50 pr-1">You are not connected to Volta Network.</span> <a href="https://energyweb.atlassian.net/wiki/spaces/EWF/pages/703201459/Volta+Connecting+to+Remote+RPC+and+Metamask" target="_blank">Help?</a>
+          </div>
     </div>
   </div>
 </div>

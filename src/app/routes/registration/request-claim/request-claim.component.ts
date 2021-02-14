@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ENSNamespaceTypes, IAppDefinition, IRole } from 'iam-client-lib';
+import { ENSNamespaceTypes, WalletProvider } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { IamService, LoginType } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -166,6 +166,9 @@ export class RequestClaimComponent implements OnInit {
     this.activeRoute.queryParams.subscribe(async (params: any) => {
       this.stayLoggedIn = params.stayLoggedIn;
 
+      // Check Login Status
+      await this.initLoginUser();
+
       if (params.app || params.org) {
         // Check if namespace is correct
         if (!this.isCorrectNamespace(params)) {
@@ -192,9 +195,6 @@ export class RequestClaimComponent implements OnInit {
           if (this.orgAppDetails) {
             // Update Colors
             this.updateColors(params);
-
-            // Check Login Status
-            await this.initLoginUser(this.orgAppDetails.appName || this.orgAppDetails.orgName);
 
             // Initialize Roles
             await this.initRoles();
@@ -238,32 +238,28 @@ export class RequestClaimComponent implements OnInit {
     return retVal;
   }
 
-  private async initLoginUser(appName: string) {
+  private async initLoginUser() {
     let loginStatus = this.iamService.getLoginStatus();
 
     // Check Login
     if (loginStatus) {
-      // console.log(loginStatus);
       if (loginStatus === LoginType.LOCAL) {
-        // console.log('local > login');
 
-        // Set metamask extension options if connecting with metamask extension
-        let useMetamaskExtension = undefined;
-        if (window.localStorage.getItem('METAMASK_EXT_CONNECTED')) {
-          useMetamaskExtension = true;
-        }
+        const walletProvider = window.localStorage.getItem('METAMASK_EXT_CONNECTED') ?
+          WalletProvider.MetaMask :
+          WalletProvider.WalletConnect;
 
         // Proceed Login
-        this.iamService.waitForSignature();
-        await this.iamService.login(useMetamaskExtension);
+        this.iamService.waitForSignature(walletProvider);
+        await this.iamService.login(walletProvider);
         this.iamService.clearWaitSignatureTimer();
 
         // Setup User Data
         await this.iamService.setupUser();
-
-        // Set Loggedin Flag to true
-        this.isLoggedIn = true;
       }
+
+      // Set Loggedin Flag to true
+      this.isLoggedIn = true;
     }
     else {
       // Launch Login Dialog
@@ -271,7 +267,7 @@ export class RequestClaimComponent implements OnInit {
         width: '434px',
         panelClass: 'connect-to-wallet',
         data: {
-          appName: appName
+          appName: ''
         },
         maxWidth: '100%',
         disableClose: true
@@ -290,8 +286,6 @@ export class RequestClaimComponent implements OnInit {
     let enrolledRoles = await this.iamService.iam.getRequestedClaims({
       did: this.iamService.iam.getDid()
     });
-
-    // console.log('enrolledRoles', enrolledRoles);
 
     if (roleList && roleList.length) {
       roleList = roleList.filter((role: any) => {
@@ -337,8 +331,6 @@ export class RequestClaimComponent implements OnInit {
           }
         }
       }
-      
-      // console.log('this.roleList', this.roleList);
     }
     catch (e) {
       throw e;
@@ -389,12 +381,9 @@ export class RequestClaimComponent implements OnInit {
     this.enrolmentForm = this.fb.group({
       fields: this.fb.array(controls)
     });
-
-    // console.log(this.enrolmentForm);
   }
 
   roleTypeSelected(e: any) {
-    // console.log('roleTypeSelected', e);
     if (e && e.value && e.value.definition) {
       this.fieldList = e.value.definition.fields || [];
       this.selectedRole = e.value.definition;
@@ -414,7 +403,6 @@ export class RequestClaimComponent implements OnInit {
           did = await this.iamService.iam.getRoleDIDs({
             namespace: this.selectedRole.issuer.roleName
           });
-          // console.log('dids by role', did);
         }
         else if (this.selectedRole.issuer.did) {
           did = this.selectedRole.issuer.did;

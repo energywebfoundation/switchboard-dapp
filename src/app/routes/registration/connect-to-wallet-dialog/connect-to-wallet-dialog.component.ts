@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IAM, WalletProvider } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { IamService } from 'src/app/shared/services/iam.service';
+import { IamService, VOLTA_CHAIN_ID } from 'src/app/shared/services/iam.service';
 
 @Component({
   selector: 'app-connect-to-wallet-dialog',
@@ -12,6 +12,7 @@ import { IamService } from 'src/app/shared/services/iam.service';
 })
 export class ConnectToWalletDialogComponent implements OnInit {
   isMetamaskExtensionAvailable = false;
+  disableMetamaskButton = false;
   appName: string;
 
   constructor(private iamService: IamService, 
@@ -24,8 +25,13 @@ export class ConnectToWalletDialogComponent implements OnInit {
 
   async ngOnInit() {
     // Check metamask availability
-    if (await IAM.isMetamaskExtensionPresent()) {
+    let { isMetamaskPresent, chainId } = await IAM.isMetamaskExtensionPresent();
+    if (isMetamaskPresent) {
       this.isMetamaskExtensionAvailable = true;
+
+      if (chainId && parseInt(`${chainId}`, 16) !== VOLTA_CHAIN_ID) {
+        this.disableMetamaskButton = true;
+      }
     }
   }
 
@@ -38,7 +44,7 @@ export class ConnectToWalletDialogComponent implements OnInit {
   }
 
   async connectToWallet(walletProvider: WalletProvider) {
-    this.iamService.waitForSignature(true);
+    this.iamService.waitForSignature(walletProvider, true);
     let isLoggedIn = await this.iamService.login(walletProvider);
     this.iamService.clearWaitSignatureTimer();
 
@@ -59,8 +65,9 @@ export class ConnectToWalletDialogComponent implements OnInit {
     }
 
     // Proceed with Login Process
-    this.iamService.waitForSignature(true);
-    let isLoggedIn = await this.iamService.login(WalletProvider.MetaMask, true);
+    const walletProvider = WalletProvider.MetaMask;
+    this.iamService.waitForSignature(walletProvider, true);
+    let isLoggedIn = await this.iamService.login(walletProvider, true);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {

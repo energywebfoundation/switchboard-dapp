@@ -17,6 +17,7 @@ export class DashboardComponent implements OnInit {
   public accountDid = '';
   public userName = '';
   private _loginStatus = undefined;
+  private readonly walletProvider: WalletProvider = undefined;
 
   public filteredOptions: Observable<any[]>;
   public searchForm: FormGroup;
@@ -49,7 +50,10 @@ export class DashboardComponent implements OnInit {
       ) {
         this.loadingService.show();
       } else {
-        this.iamService.waitForSignature();
+        this.walletProvider = window.localStorage.getItem('METAMASK_EXT_CONNECTED') ?
+          WalletProvider.MetaMask :
+          WalletProvider.WalletConnect;
+        this.iamService.waitForSignature(this.walletProvider);
       }
     }
   }
@@ -63,15 +67,7 @@ export class DashboardComponent implements OnInit {
         // console.log(this._loginStatus);
         if (this._loginStatus === LoginType.LOCAL) {
           // console.log('local > login');
-
-          // Set metamask extension options if connecting with metamask extension
-          let walletProvider = WalletProvider.WalletConnect;
-          if (window.localStorage.getItem('METAMASK_EXT_CONNECTED')) {
-            walletProvider = WalletProvider.MetaMask;
-          }
-
-          // Proceed Login
-          await this.iamService.login(walletProvider);
+          await this.iamService.login(this.walletProvider);
           this.iamService.clearWaitSignatureTimer();
         }
 

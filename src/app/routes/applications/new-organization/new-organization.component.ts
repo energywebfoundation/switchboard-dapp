@@ -88,7 +88,7 @@ export class NewOrganizationComponent implements OnInit {
     if (origData && origData.namespace) {
       let arr = origData.namespace.split('.');
     
-      if (arr.length === 4) {
+      if (arr.length > 3) {
         retVal = true;
       }
     }
@@ -237,7 +237,7 @@ export class NewOrganizationComponent implements OnInit {
     else {
       try {
         // Check if others is in JSON Format
-        // console.info(JSON.parse(orgData.data.others));
+        JSON.parse(orgData.data.others);
 
         // Let the user confirm the info before proceeding to the next step
         this.stepper.selected.completed = true;
