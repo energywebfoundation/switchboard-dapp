@@ -62,7 +62,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit {
       // console.log('The dialog was closed');
 
       if (result) {
-        this.listOrg.getList();
+        this.listOrg.getList(undefined, true);
       }
     });
   }

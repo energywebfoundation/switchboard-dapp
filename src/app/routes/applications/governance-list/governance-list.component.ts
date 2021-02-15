@@ -18,6 +18,8 @@ const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
 
+const ALLOW_NO_SUBORG = true;
+
 @Component({
   selector: 'app-governance-list',
   templateUrl: './governance-list.component.html',
@@ -38,6 +40,11 @@ export class GovernanceListComponent implements OnInit {
   ensType         : any;
 
   filterForm      : FormGroup;
+
+  orgHierarchy    = [];
+
+  DRILL_DOWN_SUBORG = true;
+  currentUserEthAddress = undefined;
   
   constructor(private loadingService: LoadingService,
       private iamService: IamService,
@@ -50,10 +57,10 @@ export class GovernanceListComponent implements OnInit {
         application: '',
         role: ''
       });
+      this.currentUserEthAddress = this.iamService.accountAddress;
     }
 
   async ngOnInit() {
-    // console.log('listType', this.listType);
     switch (this.listType) {
       case ListType.ORG:
         this.displayedColumns = OrgColumns;
@@ -75,21 +82,16 @@ export class GovernanceListComponent implements OnInit {
     await this.getList(this.defaultFilterOptions);
   }
 
-  public async getList(filterOptions?: any) {
+  public async getList(filterOptions?: any, resetList?: boolean) {
+    if (this.orgHierarchy.length && !resetList) {
+      return;
+    }
     this.loadingService.show();
     let $getOrgList = await this.iamService.iam.getENSTypesByOwner({
       type: this.ensType,
-      owner: this.iamService.accountAddress
+      owner: this.iamService.accountAddress,
+      excludeSubOrgs: false
     });
-
-    if (this.ensType === ENSNamespaceTypes.Organization) {
-      for (let orgItem of $getOrgList) {
-        let arr = orgItem.namespace.split('.');
-        if (arr.length > 3) {
-          orgItem['isSubOrg'] = true;
-        }
-      }
-    }
 
     this.origDatasource = $getOrgList;
 
@@ -100,17 +102,12 @@ export class GovernanceListComponent implements OnInit {
         application: filterOptions.application || '',
         role: ''
       });
-      // console.log('setting up filter', this.filterForm.value);
     }
     this.filter();
-
-    // console.log($getOrgList);
     this.loadingService.hide();
   }
 
   view(type: string, data: any) {
-    // console.log('type', type);
-    // console.log('data', data);
     const dialogRef = this.dialog.open(GovernanceViewComponent, {
       width: '600px',data:{
         type: type,
@@ -158,9 +155,6 @@ export class GovernanceListComponent implements OnInit {
   }
 
   edit(type: string, data: any) {
-    // console.log('type', type);
-    // console.log('data', data);
-
     let component = undefined;
 
     switch (type) {
@@ -187,14 +181,18 @@ export class GovernanceListComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(async (res: any) => {
         if (res) {
-          await this.getList();
+          if (this.orgHierarchy.length) {
+            await this.viewSubOrgs(this.orgHierarchy.pop());
+          }
+          else {
+            await this.getList();
+          }
         }
       });
     }
   }
 
   transferOwnership(type: any, data: any) {
-    // console.log('data', data);
     const dialogRef = this.dialog.open(TransferOwnershipComponent, {
       width: '600px',data:{
         namespace: data.namespace,
@@ -204,11 +202,21 @@ export class GovernanceListComponent implements OnInit {
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog was closed');
+    dialogRef.afterClosed().subscribe(async result => {
 
       if (result) {
-        this.getList();
+        if (this.orgHierarchy.length) {
+          let currentOrg = this.orgHierarchy.pop();
+          if (this.dataSource.length === 1) {
+            await this.viewSubOrgs(this.orgHierarchy.pop());
+          }
+          else {
+            await this.viewSubOrgs(currentOrg);
+          }
+        }
+        else {
+          await this.getList();
+        }
       }
     });
   }
@@ -270,7 +278,18 @@ export class GovernanceListComponent implements OnInit {
 
         // Refresh the list after successful removal
         if (await isRemoved) {
-          await this.getList();
+          if (this.orgHierarchy.length) {
+            let currentOrg = this.orgHierarchy.pop();
+            if (this.dataSource.length === 1) {
+              await this.viewSubOrgs(this.orgHierarchy.pop());
+            }
+            else {
+              await this.viewSubOrgs(currentOrg);
+            }
+          }
+          else {
+            await this.getList();
+          }
         }
       }
     }
@@ -389,7 +408,7 @@ export class GovernanceListComponent implements OnInit {
     this.dataSource = JSON.parse(JSON.stringify(this.origDatasource));
   }
 
-  newSubOrg(parentOrg: any) {
+  newSubOrg(parentOrg: any, displayMode?: boolean) {
     const dialogRef = this.dialog.open(NewOrganizationComponent, {
       width: '600px',
       data: {
@@ -403,8 +422,49 @@ export class GovernanceListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async (res: any) => {
       if (res) {
         // Refresh Screen
-        await this.getList();
+        let currentOrg = displayMode === this.DRILL_DOWN_SUBORG ? parentOrg : this.orgHierarchy.pop();
+        await this.viewSubOrgs(currentOrg, ALLOW_NO_SUBORG);
       }
     });
+  }
+
+  async viewSubOrgs(element: any, allowNoSubOrg?: boolean) {
+    if (element && ((element.subOrgs && element.subOrgs.length) || allowNoSubOrg)) {
+      this.loadingService.show();
+      try {
+        let $getSubOrgs = await this.iamService.iam.getOrgHierarchy({
+          namespace: element.namespace
+        });
+
+        if ($getSubOrgs.subOrgs && $getSubOrgs.subOrgs.length) {
+          this.dataSource = JSON.parse(JSON.stringify($getSubOrgs.subOrgs));
+          this.orgHierarchy.push(element);
+        }
+        else {
+          this.toastr.warning('Sub-Organization List is empty.', 'Sub-Organization')
+        }
+      }
+      catch (e) {
+        console.error(e);
+        this.toastr.error('An error has occured while retrieving the list.', 'Sub-Organization');
+      }
+      finally {
+        this.loadingService.hide();
+      }
+    }
+  }
+
+  async resetOrgList(e: any, idx?: number) {
+    e.preventDefault();
+
+    if (idx === undefined) {
+      this.dataSource = JSON.parse(JSON.stringify(this.origDatasource));
+      this.orgHierarchy.length = 0;
+    }
+    else {
+      let element = this.orgHierarchy[idx];
+      this.orgHierarchy.length = idx
+      await this.viewSubOrgs(element);
+    }
   }
 }
