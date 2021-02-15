@@ -232,35 +232,35 @@
         
                           <ng-container matColumnDef="required">
                             <th mat-header-cell *matHeaderCellDef> Required </th>
-                            <td mat-cell *matCellDef="let element" data-label="Required"> {{ element.validation?.required ? 'Yes' : 'No' }} </td>
+                            <td mat-cell *matCellDef="let element" data-label="Required"> {{ element?.required ? 'Yes' : 'No' }} </td>
                           </ng-container>
         
                           <ng-container matColumnDef="minLength">
                             <th mat-header-cell *matHeaderCellDef> Min Length </th>
-                            <td mat-cell *matCellDef="let element" data-label="Min Length"> {{element.validation?.minLength}} </td>
+                            <td mat-cell *matCellDef="let element" data-label="Min Length"> {{element?.minLength}} </td>
                           </ng-container>
         
                           <ng-container matColumnDef="maxLength">
                             <th mat-header-cell *matHeaderCellDef> Max Length </th>
-                            <td mat-cell *matCellDef="let element" data-label="Max Length"> {{element.validation?.maxLength}} </td>
+                            <td mat-cell *matCellDef="let element" data-label="Max Length"> {{element?.maxLength}} </td>
                           </ng-container>
         
                           <ng-container matColumnDef="pattern">
                             <th mat-header-cell *matHeaderCellDef> Pattern </th>
-                            <td mat-cell *matCellDef="let element" data-label="Pattern"> {{element.validation?.pattern}} </td>
+                            <td mat-cell *matCellDef="let element" data-label="Pattern"> {{element?.pattern}} </td>
                           </ng-container>
         
                           <ng-container matColumnDef="minValue">
                             <th mat-header-cell *matHeaderCellDef> Min Value </th>
                             <td mat-cell *matCellDef="let element" data-label="Min Value"> 
-                              {{ element.fieldType === 'date' ? (element.validation?.minDate | date: 'd/M/yyyy') : element.validation?.minValue }} 
+                              {{ element.fieldType === 'date' ? (element?.minDate | date: 'd/M/yyyy') : element?.minValue }} 
                             </td>
                           </ng-container>
         
                           <ng-container matColumnDef="maxValue">
                             <th mat-header-cell *matHeaderCellDef> Max Value </th>
                             <td mat-cell *matCellDef="let element" data-label="Max Value"> 
-                              {{ element.fieldType === 'date' ? (element.validation?.maxDate | date: 'd/M/yyyy') : element.validation?.maxValue }} 
+                              {{ element.fieldType === 'date' ? (element?.maxDate | date: 'd/M/yyyy') : element?.maxValue }} 
                             </td>
                           </ng-container>
         
@@ -351,35 +351,35 @@
 
                   <ng-container matColumnDef="required">
                     <th mat-header-cell *matHeaderCellDef> Required </th>
-                    <td mat-cell *matCellDef="let element" data-label="Required"> {{ element.validation?.required ? 'Yes' : 'No' }} </td>
+                    <td mat-cell *matCellDef="let element" data-label="Required"> {{ element?.required ? 'Yes' : 'No' }} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="minLength">
                     <th mat-header-cell *matHeaderCellDef> Min Length </th>
-                    <td mat-cell *matCellDef="let element" data-label="Min Length"> {{element.validation?.minLength}} </td>
+                    <td mat-cell *matCellDef="let element" data-label="Min Length"> {{element?.minLength}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="maxLength">
                     <th mat-header-cell *matHeaderCellDef> Max Length </th>
-                    <td mat-cell *matCellDef="let element" data-label="Max Length"> {{element.validation?.maxLength}} </td>
+                    <td mat-cell *matCellDef="let element" data-label="Max Length"> {{element?.maxLength}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="pattern">
                     <th mat-header-cell *matHeaderCellDef> Pattern </th>
-                    <td mat-cell *matCellDef="let element" data-label="Pattern"> {{element.validation?.pattern}} </td>
+                    <td mat-cell *matCellDef="let element" data-label="Pattern"> {{element?.pattern}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="minValue">
                     <th mat-header-cell *matHeaderCellDef> Min Value </th>
                     <td mat-cell *matCellDef="let element" data-label="Min Value"> 
-                      {{ element.fieldType === 'date' ? (element.validation?.minDate | date: 'd/M/yyyy') : element.validation?.minValue }} 
+                      {{ element.fieldType === 'date' ? (element?.minDate | date: 'd/M/yyyy') : element?.minValue }} 
                     </td>
                   </ng-container>
 
                   <ng-container matColumnDef="maxValue">
                     <th mat-header-cell *matHeaderCellDef> Max Value </th>
                     <td mat-cell *matCellDef="let element" data-label="Max Value"> 
-                      {{ element.fieldType === 'date' ? (element.validation?.maxDate | date: 'd/M/yyyy') : element.validation?.maxValue }} 
+                      {{ element.fieldType === 'date' ? (element?.maxDate | date: 'd/M/yyyy') : element?.maxValue }} 
                     </td>
                   </ng-container>
 

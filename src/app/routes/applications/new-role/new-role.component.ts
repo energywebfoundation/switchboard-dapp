@@ -318,6 +318,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
   
   addField() {
+    console.log('fields', this._extractValidationObject(this.fieldsForm.value));
     if (this.fieldsForm.valid) {
       this.dataSource.data = [...this.dataSource.data, this._extractValidationObject(this.fieldsForm.value)];
       this.fieldsForm.reset();
@@ -375,7 +376,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         default: 
           validation = value.validation;
       }
-      retVal.validation = validation;
+      retVal = JSON.parse(JSON.stringify(Object.assign(retVal, validation)));
+      delete retVal.validation;
     }
 
     return retVal;
