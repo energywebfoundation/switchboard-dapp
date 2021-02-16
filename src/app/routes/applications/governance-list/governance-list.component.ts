@@ -93,6 +93,11 @@ export class GovernanceListComponent implements OnInit {
       excludeSubOrgs: false
     });
 
+    if (this.listType === ListType.ORG) {
+      // Retrieve only main orgs
+      $getOrgList = this._getMainOrgs($getOrgList);
+    }
+
     this.origDatasource = $getOrgList;
 
     // Setup Filter
@@ -105,6 +110,48 @@ export class GovernanceListComponent implements OnInit {
     }
     this.filter();
     this.loadingService.hide();
+  }
+
+  private _getMainOrgs($getOrgList: any[]) {
+    let list = [];
+    let subList = [];
+
+    // Separate Parent & Child Orgs
+    $getOrgList.forEach((item: any) => {
+      let namespaceArr = item.namespace.split('.');
+      if (namespaceArr.length === 3) {
+        list.push(item);
+      }
+      else {
+        if (!subList[namespaceArr.length - 4]) {
+          subList[namespaceArr.length - 4] = [];
+        }
+        subList[namespaceArr.length - 4].push(item);
+      }
+    });
+
+    // Remove Unnecessary Sub-Orgs from Main List
+    if (list.length || subList.length) {
+      for (let i = 0; i < subList.length; i++) {
+        let arr = subList[i];
+        if (arr && arr.length) {
+          for (let subOrg of arr) {
+            let exists = false;
+            for (let mainOrg of list) {
+              if (subOrg.namespace && subOrg.namespace.includes(mainOrg.namespace)) {
+                exists = true;
+                break;
+              }
+            }
+            if (!exists) {
+              list.push(subOrg);
+            }
+          }
+        }
+      }
+    }
+
+    return list;
   }
 
   view(type: string, data: any) {
