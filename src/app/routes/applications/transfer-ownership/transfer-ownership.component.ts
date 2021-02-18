@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA, MatStepper } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { ConfigService } from 'src/app/shared/services/config.service';
 import { ExpiredRequestError } from 'src/app/shared/errors/errors';
 import { IamRequestService } from 'src/app/shared/services/iam-request.service';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -49,7 +50,8 @@ export class TransferOwnershipComponent implements OnInit {
     private changeDetector : ChangeDetectorRef,
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any) { 
+    @Inject(MAT_DIALOG_DATA) public data: any,
+      private configService: ConfigService) {
       this.namespace = this.data.namespace;
       this.type = this.data.type;
     }
@@ -88,26 +90,33 @@ export class TransferOwnershipComponent implements OnInit {
     if (this.newOwnerAddress.valid) {
       if (await this.confirm('You will no longer be the owner of this namespace. Do you wish to continue?')) {
         this.spinner.show();
+        const returnSteps = this.iamService.iam.address === this.data.owner ? true : false;
         let req = {
           namespace: this.namespace,
           newOwner: this.newOwnerAddress.value,
-          returnSteps: true
+          returnSteps
         };
-        let items = undefined;
+
+        let call;
         try {
           switch (this.type) {
             case ListType.ORG:
-              items = await this.iamService.iam.changeOrgOwnership(req);
+              call = this.iamService.iam.changeOrgOwnership(req);
               break;
             case ListType.APP:
-              items = await this.iamService.iam.changeAppOwnership(req);
+              call = this.iamService.iam.changeAppOwnership(req);
               break;
             case ListType.ROLE:
-              items = await this.iamService.iam.changeRoleOwnership(req);
+              call = this.iamService.iam.changeRoleOwnership(req);
               break;
           }
+          this.mySteps = returnSteps ?
+            await call :
+            [{
+              info: "Confirm transaction in your safe wallet",
+              next: async () => await call
+            }]
 
-          this.mySteps = items;
           this.newOwnerAddress.disable();
           this.isProcessing = true;
           this.changeDetector.detectChanges();
