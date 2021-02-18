@@ -1,5 +1,5 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -13,15 +13,16 @@ import 'hammerjs';
 import { ToastrModule } from 'ngx-toastr';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { ConfigService } from './shared/services/config.service';
 
 
 export function createTranslateLoader(http: HttpClient) {
-    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
     declarations: [
-        AppComponent
+      AppComponent
     ],
     imports: [
         HttpClientModule,
@@ -42,6 +43,14 @@ export function createTranslateLoader(http: HttpClient) {
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })        
     ],
     providers: [
+    ConfigService,
+    {
+      provide: APP_INITIALIZER,
+      deps: [ConfigService],
+      useFactory: (configService: ConfigService) =>
+        () => configService.loadConfigData(),
+      multi: true
+    }
     ],
     bootstrap: [AppComponent]
 })
