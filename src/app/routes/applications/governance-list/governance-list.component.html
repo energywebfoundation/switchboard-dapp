@@ -140,7 +140,7 @@
               <span>View Details</span>
             </button>
 
-            <ng-container *ngIf="element?.owner === currentUserEthAddress">
+            <ng-container *ngIf="element?.isOwned">
               <!-- Create Sub-Organization -->
               <button mat-menu-item class="btn-color-primary" (click)="newSubOrg(element, DRILL_DOWN_SUBORG)" *ngIf="listType === ListType.ORG">
                 <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-organization-icon"></mat-icon>

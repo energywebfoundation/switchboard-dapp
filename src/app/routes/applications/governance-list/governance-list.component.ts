@@ -99,8 +99,8 @@ export class GovernanceListComponent implements OnInit {
 
     this.origDatasource = await Promise.all(
       ($getOrgList as Domain[]).map(async (org) => {
-        const isOwner = await this.iamService.iam.isOwner({ domain: org.namespace });
-        return { ...org, isOwner };
+        const isOwned = await this.iamService.iam.isOwner({ domain: org.namespace });
+        return { ...org, isOwned };
       }));
 
     // Setup Filter
