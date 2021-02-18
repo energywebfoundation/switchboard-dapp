@@ -102,9 +102,5 @@
     "typescript": "3.4.3",
     "webdriver-manager": "10.2.5",
     "webpack-bundle-analyzer": "^3.9.0"
-  },
-  "browser": {
-    "child_process": false,
-    "fs": false
   }
 }
