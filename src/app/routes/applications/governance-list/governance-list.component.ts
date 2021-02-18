@@ -19,6 +19,7 @@ const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
 
 const ALLOW_NO_SUBORG = true;
+const MAX_TOOLTIP_SUBORG_ITEMS = 5;
 
 @Component({
   selector: 'app-governance-list',
@@ -513,5 +514,29 @@ export class GovernanceListComponent implements OnInit {
       this.orgHierarchy.length = idx
       await this.viewSubOrgs(element);
     }
+  }
+
+  getTooltip(element: any) {
+    let retVal = '';
+
+    if (element.subOrgs && element.subOrgs.length) {
+      let count = 0;
+      if (element.subOrgs.length > 1) {
+        retVal = 'Sub-Organizations \n';
+      }
+      else {
+        retVal = 'Sub-Organization \n';
+      }
+    
+      while (count < MAX_TOOLTIP_SUBORG_ITEMS && count < element.subOrgs.length) {
+        retVal += `\n${element.subOrgs[count++].namespace}`;
+      }
+
+      if (element.subOrgs.length > MAX_TOOLTIP_SUBORG_ITEMS) {
+        retVal += `\n\n ... +${ element.subOrgs.length - MAX_TOOLTIP_SUBORG_ITEMS } More`;
+      }
+    }
+
+    return retVal;
   }
 }
