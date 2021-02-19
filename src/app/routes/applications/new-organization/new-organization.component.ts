@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MatStepper, MAT_DIALOG_DATA } from '@angular/m
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from '../../../../environments/environment'
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -19,7 +20,12 @@ export const ViewType = {
   styleUrls: ['./new-organization.component.scss']
 })
 export class NewOrganizationComponent implements OnInit {
-  @ViewChild('stepper', { static: false }) private stepper: MatStepper;
+  private stepper: MatStepper;
+  @ViewChild('stepper', { static: false }) set content(content: MatStepper) {
+    if (content) {
+      this.stepper = content;
+    }
+  }
 
   public orgForm: FormGroup;
   public environment = environment;
@@ -34,10 +40,11 @@ export class NewOrganizationComponent implements OnInit {
 
   private TOASTR_HEADER = 'Create New Organization';
 
-  private _steps: any[];
+  public txs: any[];
   private _retryCount = 0;
   private _currentIdx = 0;
   private _requests = {};
+  private _returnSteps = true;
 
   public constructor(
     private fb: FormBuilder,
@@ -46,8 +53,9 @@ export class NewOrganizationComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<NewOrganizationComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) { 
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private configService: ConfigService
+  ) {
     this.orgForm = fb.group({
       orgName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
       namespace: environment.orgNamespace,
@@ -307,7 +315,7 @@ export class NewOrganizationComponent implements OnInit {
         // Make sure that the current step is not retried
         if (this._requests[`${requestIdx}`]) {
           this._currentIdx++;
-          this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this._steps.length})`);
+          this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.txs.length})`);
   
           // Remove 1st element
           steps.shift();
@@ -324,11 +332,18 @@ export class NewOrganizationComponent implements OnInit {
   }
 
   async proceedCreateSteps(req: any) {
+    req = { ...req, returnSteps: this._returnSteps };
     try {
+      const call = this.iamService.iam.createOrganization(req);
       // Retrieve the steps to create an organization
-      this._steps = await this.iamService.iam.createOrganization(req);
-      this._requests[`${this._retryCount}`] = [...this._steps];
-      
+      this.txs = this._returnSteps ?
+        await call :
+        [{
+          info: 'Confirm transaction in your safe wallet',
+          next: async () => await call
+        }];
+      this._requests[`${this._retryCount}`] = [...this.txs];
+
       // Process
       await this.next(0);
 
@@ -376,7 +391,7 @@ export class NewOrganizationComponent implements OnInit {
 
   private async proceedUpdateStep(req: any, skipNextStep?: boolean) {
     try {
-      let retryCount = this._retryCount;
+      const retryCount = this._retryCount;
       if (!skipNextStep) {
         // Update steps
         this.stepper.selected.completed = true;
@@ -385,10 +400,20 @@ export class NewOrganizationComponent implements OnInit {
 
       // Set Definition
       const newDomain = `${req.orgName}.${req.namespace}`;
-      await this.iamService.iam.setRoleDefinition({
-        data: req.data,
-        domain: newDomain
-      });
+      this.txs = [
+        {
+          info: 'Setting up definitions',
+          next: async () => await this.iamService.iam.setRoleDefinition({
+            data: req.data,
+            domain: newDomain
+          })
+        }
+      ];
+
+      this._requests[`${retryCount}`] = [...this.txs];
+
+      // Process
+      await this.next(0);
 
       // Make sure that all steps are not yet complete
       if (this.stepper.selectedIndex !== 3 && retryCount === this._retryCount) {
