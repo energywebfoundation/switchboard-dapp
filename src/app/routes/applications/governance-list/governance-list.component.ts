@@ -90,6 +90,7 @@ export class GovernanceListComponent implements OnInit {
       return;
     }
     this.loadingService.show();
+
     let $getOrgList = await this.iamService.iam.getENSTypesByOwner({
       type: this.ensType,
       owner: this.iamService.accountAddress,
@@ -98,11 +99,17 @@ export class GovernanceListComponent implements OnInit {
 
     type Domain = IRole & IOrganization & IApp;
 
-    this.origDatasource = await Promise.all(
+    let orgList = await Promise.all(
       ($getOrgList as Domain[]).map(async (org) => {
         const isOwned = await this.iamService.iam.isOwner({ domain: org.namespace });
         return { ...org, isOwned };
       }));
+
+    if (this.listType === ListType.ORG) {
+      // Retrieve only main orgs
+      orgList = this._getMainOrgs(orgList);
+    }
+    this.origDatasource = orgList;
 
     // Setup Filter
     if (filterOptions) {
