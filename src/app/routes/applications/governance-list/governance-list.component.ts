@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material';
 import { ENSNamespaceTypes, IApp, IOrganization, IRole } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { ListType } from 'src/app/shared/constants/shared-constants';
+import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -51,7 +52,8 @@ export class GovernanceListComponent implements OnInit {
       private iamService: IamService,
       private dialog: MatDialog,
       private fb: FormBuilder,
-      private toastr: ToastrService
+      private toastr: ToastrService,
+      private configService: ConfigService
     ) { 
       this.filterForm = fb.group({
         organization: '',
@@ -94,12 +96,13 @@ export class GovernanceListComponent implements OnInit {
       excludeSubOrgs: false
     });
 
-    if (this.listType === ListType.ORG) {
-      // Retrieve only main orgs
-      $getOrgList = this._getMainOrgs($getOrgList);
-    }
+    type Domain = IRole & IOrganization & IApp;
 
-    this.origDatasource = $getOrgList;
+    this.origDatasource = await Promise.all(
+      ($getOrgList as Domain[]).map(async (org) => {
+        const isOwned = await this.iamService.iam.isOwner({ domain: org.namespace });
+        return { ...org, isOwned };
+      }));
 
     // Setup Filter
     if (filterOptions) {
@@ -244,7 +247,8 @@ export class GovernanceListComponent implements OnInit {
     const dialogRef = this.dialog.open(TransferOwnershipComponent, {
       width: '600px',data:{
         namespace: data.namespace,
-        type: type
+        type: type,
+        owner: data.owner
       },
       maxWidth: '100%',
       disableClose: true
@@ -343,11 +347,12 @@ export class GovernanceListComponent implements OnInit {
     }
   }
 
-  async newApp(roleDefinition: any) {
+  async newApp(parentOrg: any) {
     const dialogRef = this.dialog.open(NewApplicationComponent, {
       width: '600px',data:{
         viewType: ViewType.NEW,
-        organizationNamespace: roleDefinition.namespace
+        organizationNamespace: parentOrg.namespace,
+        owner: parentOrg.owner
       },
       maxWidth: '100%',
       disableClose: true
@@ -356,7 +361,7 @@ export class GovernanceListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async (res: any) => {
       if (res) {
         // Redirect to Application List
-        this.viewApps(ListType.ORG, roleDefinition);
+        this.viewApps(ListType.ORG, parentOrg);
       }
     });
   }
@@ -366,7 +371,8 @@ export class GovernanceListComponent implements OnInit {
       width: '600px',data:{
         viewType: ViewType.NEW,
         namespace: roleDefinition.namespace,
-        listType: listType
+        listType: listType,
+        owner: roleDefinition.owner
       },
       maxWidth: '100%',
       disableClose: true
@@ -382,19 +388,23 @@ export class GovernanceListComponent implements OnInit {
 
   private async getRemovalSteps(listType: string, roleDefinition: any) {
     this.loadingService.show();
+    const returnSteps = this.iamService.iam.address === roleDefinition.owner;
+    const call = listType === ListType.ORG ?
+      this.iamService.iam.deleteOrganization({
+        namespace: roleDefinition.namespace,
+        returnSteps
+      }) :
+      this.iamService.iam.deleteApplication({
+        namespace: roleDefinition.namespace,
+        returnSteps
+      });
     try {
-      if (this.listType === ListType.ORG) {
-        return await this.iamService.iam.deleteOrganization({
-          namespace: roleDefinition.namespace,
-          returnSteps: true
-        });
-      }
-      else if (this.listType === ListType.APP) {
-        return await this.iamService.iam.deleteApplication({
-          namespace: roleDefinition.namespace,
-          returnSteps: true
-        });
-      }
+      return returnSteps ?
+        await call :
+        [{
+          info: 'Confirm removal in your safe wallet',
+          next: async () => await call
+        }];
     }
     catch (e) {
       console.error(e);
@@ -461,7 +471,8 @@ export class GovernanceListComponent implements OnInit {
       width: '600px',
       data: {
         viewType: ViewType.NEW,
-        parentOrg: JSON.parse(JSON.stringify(parentOrg))
+        parentOrg: JSON.parse(JSON.stringify(parentOrg)),
+        owner: parentOrg.owner
       },
       maxWidth: '100%',
       disableClose: true

@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MatStepper, MAT_DIALOG_DATA } from '@angular/m
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -15,7 +16,12 @@ import { ViewType } from '../new-organization/new-organization.component';
   styleUrls: ['./new-application.component.scss']
 })
 export class NewApplicationComponent implements OnInit, AfterViewInit {
-  @ViewChild('stepper', { static: false }) private stepper: MatStepper;
+  private stepper: MatStepper;
+  @ViewChild('stepper', { static: false }) set content(content: MatStepper) {
+    if (content) {
+      this.stepper = content;
+    }
+  }
 
   public appForm: FormGroup;
   public environment = environment;
@@ -29,18 +35,19 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
   private TOASTR_HEADER = 'Create New Application';
 
-  private _steps: any[];
+  public txs: any[];
   private _retryCount = 0;
   private _currentIdx = 0;
   private _requests = {};
-  
+
   constructor(private fb: FormBuilder,
     private iamService: IamService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any) { 
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private configService: ConfigService) {
       this.appForm = fb.group({
         orgNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
         appName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
@@ -388,7 +395,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         // Make sure that the current step is not retried
         if (this._requests[`${requestIdx}`]) {
           this._currentIdx++;
-          this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this._steps.length})`);
+          this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.stepper.steps.length})`);
   
           // Remove 1st element
           steps.shift();
@@ -405,10 +412,19 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   }
 
   private async proceedCreateSteps(req: any) {
+    const returnSteps = this.data.owner === this.iamService.iam.address;
+    req = { ...req, returnSteps };
     try {
+      const call = this.iamService.iam.createApplication(req);
+      // Retrieve the steps to create an organization
+      this.txs = returnSteps ?
+        await call :
+        [{
+          info: 'Confirm transaction in your safe wallet',
+          next: async () => await call
+        }];
       // Retrieve the steps to create an application
-      this._steps = await this.iamService.iam.createApplication(req);
-      this._requests[`${this._retryCount}`] = [...this._steps];
+      this._requests[`${this._retryCount}`] = [...this.txs];
       
       // Process
       await this.next(0);
@@ -465,10 +481,20 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
       // Set Definition
       const newDomain = `${req.appName}.${req.namespace}`;
-      await this.iamService.iam.setRoleDefinition({
-        data: req.data,
-        domain: newDomain
-      });
+      this.txs = [
+        {
+          info: 'Setting up definitions',
+          next: async () => await this.iamService.iam.setRoleDefinition({
+            data: req.data,
+            domain: newDomain
+          })
+        }
+      ];
+
+      this._requests[`${retryCount}`] = [...this.txs];
+
+      // Process
+      await this.next(0);
 
       // Make sure that all steps are not yet complete
       if (this.stepper.selectedIndex !== 3 && retryCount === this._retryCount) {

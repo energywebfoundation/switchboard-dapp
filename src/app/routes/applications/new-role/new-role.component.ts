@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { filter } from 'rxjs/operators';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { FieldValidationService } from 'src/app/shared/services/field-validation.service';
+import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -44,7 +45,12 @@ const FIELD_TYPES = [
   styleUrls: ['./new-role.component.scss']
 })
 export class NewRoleComponent implements OnInit, AfterViewInit {
-  @ViewChild('stepper', { static: false }) private stepper: MatStepper;
+  private stepper: MatStepper;
+  @ViewChild('stepper', { static: false }) set content(content: MatStepper) {
+    if (content) {
+      this.stepper = content;
+    }
+  }
 
   public roleForm     : FormGroup;
   public issuerGroup  : FormGroup;
@@ -75,7 +81,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   private TOASTR_HEADER = 'Create New Role';
 
-  private _steps: any[];
+  public txs: any[];
   private _retryCount = 0;
   private _currentIdx = 0;
   private _requests = {};
@@ -88,7 +94,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     private changeDetectorRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<NewRoleComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any) { 
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private configService: ConfigService) {
       this.roleForm = fb.group({
         roleType: [null, Validators.required],
         parentNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
@@ -614,7 +621,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       this.proceedCreateSteps(req);
     }
   }
-  
+
   private async next(requestIdx: number, skipNextStep?: boolean) {
     let steps = this._requests[`${requestIdx}`];
 
@@ -634,8 +641,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         // Make sure that the current step is not retried
         if (this._requests[`${requestIdx}`]) {
           this._currentIdx++;
-          this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this._steps.length})`);
-  
+          this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.txs.length})`);
+
           // Remove 1st element
           steps.shift();
   
@@ -651,11 +658,20 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   private async proceedCreateSteps(req: any) {
+    const returnSteps = this.data.owner === this.iamService.iam.address;
+    req = { ...req, returnSteps };
     try {
-      // Retrieve the steps to create role
-      this._steps = await this.iamService.iam.createRole(req);
-      this._requests[`${this._retryCount}`] = [...this._steps];
-      
+      const call = this.iamService.iam.createRole(req);
+      // Retrieve the steps to create an organization
+      this.txs = returnSteps ?
+        await call :
+        [{
+          info: 'Confirm transaction in your safe wallet',
+          next: async () => await call
+        }];
+      // Retrieve the steps to create an application
+      this._requests[`${this._retryCount}`] = [...this.txs];
+
       // Process
       await this.next(0);
 
@@ -711,10 +727,21 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
       // Set Definition
       const newDomain = `${req.roleName}.${req.namespace}`;
-      await this.iamService.iam.setRoleDefinition({
-        data: req.data,
-        domain: newDomain
-      });
+
+      this.txs = [
+        {
+          info: 'Setting up definitions',
+          next: async () => await this.iamService.iam.setRoleDefinition({
+            data: req.data,
+            domain: newDomain
+          })
+        }
+      ];
+
+      this._requests[`${retryCount}`] = [...this.txs];
+
+      // Process
+      await this.next(0);
 
       // Make sure that all steps are not yet complete
       if (this.stepper.selectedIndex !== 4 && retryCount === this._retryCount) {

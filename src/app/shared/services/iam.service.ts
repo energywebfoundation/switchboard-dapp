@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { IAM, DIDAttribute, CacheServerClient, MessagingMethod, WalletProvider } from 'iam-client-lib';
+import { IAM, DIDAttribute, CacheServerClient, MessagingMethod, WalletProvider, SafeIam } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
+import { safeAppSdk } from './gnosis.safe.service';
+import { ConfigService } from './config.service';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
@@ -44,7 +46,7 @@ export class IamService {
   private _timer = undefined;
   private _deepLink = '';
 
-  constructor(private loadingService: LoadingService) {
+  constructor(private loadingService: LoadingService, configService: ConfigService) {
     let options = {
       ...walletConnectOptions,
       cacheClient,
@@ -56,7 +58,11 @@ export class IamService {
 
     // Initialize Data
     this._user = new BehaviorSubject<User>(undefined);
-    this._iam = new IAM(options);
+    if (configService.safeInfo) {
+      this._iam = new SafeIam(safeAppSdk, options);
+    } else {
+      this._iam = new IAM(options);
+    }
   }
 
   /**
@@ -280,7 +286,7 @@ export class IamService {
 
   isAlphaNumericOnly(event: any, includeDot?: boolean) {
     let charCode = (event.which) ? event.which : event.keyCode;
-    
+
     // Check if key is alphanumeric key
     if ((charCode > 96 && charCode < 123) || (charCode > 47 && charCode < 58) || (includeDot && charCode === 46)) {
       return true;
@@ -289,7 +295,7 @@ export class IamService {
     return false;
   }
 
-  isValidEthAddress(ethAddressCtrl: AbstractControl) : { [key: string]: boolean } | null {
+  isValidEthAddress(ethAddressCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
     let ethAddress = ethAddressCtrl.value;
 
@@ -300,7 +306,7 @@ export class IamService {
     return retVal;
   }
 
-  isValidDid(didCtrl: AbstractControl) : { [key: string]: boolean } | null {
+  isValidDid(didCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
     let did = didCtrl.value;
 
@@ -311,7 +317,7 @@ export class IamService {
     return retVal;
   }
 
-  isValidJsonFormat(jsonFormatCtrl: AbstractControl) : { [key: string]: boolean } | null {
+  isValidJsonFormat(jsonFormatCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
     let jsonStr = jsonFormatCtrl.value;
 
@@ -319,7 +325,7 @@ export class IamService {
       try {
         JSON.parse(jsonStr);
       }
-      catch(e) {
+      catch (e) {
         retVal = { invalidJsonFormat: true };
       }
     }
