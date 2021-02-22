@@ -432,14 +432,6 @@ export class RequestClaimComponent implements OnInit {
       validations.push(Validators.max(field.maxValue));
     }
 
-    if (field.minDate) {
-
-    }
-
-    if (field.maxDate) {
-
-    }
-
     return validations;
   }
 
@@ -454,9 +446,6 @@ export class RequestClaimComponent implements OnInit {
   }
 
   async submit() {
-    console.log(this.enrolmentForm);
-
-    return;
     this.loadingService.show();
     if (this.enrolmentForm.valid) {
       let did = undefined;
