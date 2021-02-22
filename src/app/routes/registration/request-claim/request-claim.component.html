@@ -47,6 +47,10 @@
                 *ngIf="fieldList[i].fieldType === 'text'" [ngStyle]="txtColor">
                 <input matInput type="text" placeholder="{{ fieldList[i].label }}"
                   [formControl]="enrolmentForm?.get('fields')?.controls[i]" />
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.required">This field is required.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.minlength">Please input at least {{ fieldList[i].minLength }} characters.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.maxlength">Please input at most {{ fieldList[i].maxLength }} characters.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.pattern">Incorrect data format.</mat-error>
               </mat-form-field>
 
               <!-- TYPE: Number -->
@@ -54,12 +58,15 @@
               *ngIf="fieldList[i].fieldType === 'number'" [ngStyle]="txtColor">
                 <input matInput type="number" placeholder="{{ fieldList[i].label }}"
                   [formControl]="enrolmentForm?.get('fields')?.controls[i]"/>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.required">This field is required.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.minlength">Input exceeds value limit of {{ fieldList[i].max }}.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.maxlength">Input is less than minimum value of {{ fieldList[i].min }}.</mat-error>
               </mat-form-field>
 
               <!-- TYPE: Date -->
               <mat-form-field class="mt-2 md-enroll bg-transparent" appearance="outline" floatPlaceholder="never" 
               *ngIf="fieldList[i].fieldType === 'date'" [ngStyle]="txtColor">
-                <input [matDatepicker]="picker" matInput placeholder="{{ fieldList[i].label }}" autocomplete="off"
+                <input [matDatepicker]="picker" [max]="fieldList[i].maxDateValue" [min]="fieldList[i].minDateValue" matInput placeholder="{{ fieldList[i].label }}" autocomplete="off"
                   [formControl]="enrolmentForm?.get('fields')?.controls[i]" (keypress)="$event.preventDefault()">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
