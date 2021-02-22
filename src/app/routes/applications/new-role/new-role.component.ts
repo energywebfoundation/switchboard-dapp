@@ -198,6 +198,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
       // Construct Fields
       this.dataSource.data = def.fields ? [...def.fields] : [];
+      this._initDates();
 
       this.roleForm.patchValue({
         roleType: def.roleType,
@@ -216,6 +217,21 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
       if (def.issuer.did && def.issuer.did.length) {
         this.issuerList = [...def.issuer.did];
+      }
+    }
+  }
+
+  private _initDates() {
+    if (this.dataSource.data) {
+      for (let data of this.dataSource.data) {
+        if (data.fieldType === 'date') {
+          if (data.maxDate) {
+            data.maxDate = new Date(data.maxDate);
+          }
+          if (data.minDate) {
+            data.minDate = new Date(data.minDate);
+          }
+        }
       }
     }
   }
@@ -367,8 +383,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
           };
           break;
         case 'date':
-          minDate = this._getDate(minDate);
-          maxDate = this._getDate(maxDate);
+          minDate = minDate;// this._getDate(minDate);
+          maxDate = maxDate;// this._getDate(maxDate);
           validation = {
             required,
             minDate,
@@ -746,7 +762,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       // Make sure that all steps are not yet complete
       if (this.stepper.selectedIndex !== 4 && retryCount === this._retryCount) {
         // Move to Complete Step
-        this.toastr.info('Set definition for role', 'Transaction Success');
         this.stepper.selected.completed = true;
         this.stepper.next();
       }

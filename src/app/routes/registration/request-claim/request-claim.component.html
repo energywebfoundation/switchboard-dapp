@@ -59,8 +59,8 @@
                 <input matInput type="number" placeholder="{{ fieldList[i].label }}"
                   [formControl]="enrolmentForm?.get('fields')?.controls[i]"/>
                   <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.required">This field is required.</mat-error>
-                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.minlength">Input exceeds value limit of {{ fieldList[i].max }}.</mat-error>
-                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.maxlength">Input is less than minimum value of {{ fieldList[i].min }}.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.max">Max value is {{ fieldList[i].maxValue }}.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.min">Min value is {{ fieldList[i].minValue }}.</mat-error>
               </mat-form-field>
 
               <!-- TYPE: Date -->
@@ -70,6 +70,7 @@
                   [formControl]="enrolmentForm?.get('fields')?.controls[i]" (keypress)="$event.preventDefault()">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.required">This field is required.</mat-error>
               </mat-form-field>
 
               <!-- TYPE: Boolean -->
@@ -83,7 +84,7 @@
       </form>
       <div class="mt-3">
         <button mat-raised-button class="btn btn-primary md-enroll w-100" type="submit" (click)="submit()"
-          [disabled]="!roleTypeForm?.value?.roleType || submitting || roleTypeForm?.invalid" [ngStyle]="btnColor">Submit Request</button>
+          [disabled]="!roleTypeForm?.value?.roleType || submitting || !roleTypeForm?.valid" [ngStyle]="btnColor">Submit Request</button>
       </div>
     </mat-card>
     <app-loading></app-loading>

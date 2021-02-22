@@ -24,7 +24,7 @@ export class RequestClaimComponent implements OnInit {
   public enrolmentForm  : FormGroup;
   public roleTypeForm   : FormGroup;
   public fieldList      : {
-    type: string, 
+    fieldType: string, 
     label: string, 
     required: boolean,
     minLength: number,
@@ -33,7 +33,9 @@ export class RequestClaimComponent implements OnInit {
     minValue: number,
     maxValue: number,
     minDate: string,
-    maxDate: string
+    maxDate: string,
+    minDateValue: Date,
+    maxDateValue: Date
   }[];
   
   public orgAppDetails  : any;
@@ -372,18 +374,19 @@ export class RequestClaimComponent implements OnInit {
     let controls = [];
     for (let field of this.fieldList) {
       let control = new FormControl();
-      switch (field.type) {
+      switch (field.fieldType) {
         case 'text':
           break;
         case 'number':
           break;
         case 'date':
           if (field.maxDate) {
-            field['maxDateValue'] = new Date(field.maxDate);
+            field.maxDateValue = new Date(field.maxDate);
           }
           if (field.minDate) {
-            field['minDateValue'] = new Date(field.minDate);
+            field.minDateValue = new Date(field.minDate);
           }
+          console.log('field', field);
           break;
         case 'boolean':
           control.setValue(false);

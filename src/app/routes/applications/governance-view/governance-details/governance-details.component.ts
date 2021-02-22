@@ -44,17 +44,6 @@ export class GovernanceDetailsComponent implements OnInit {
 
   public async setData(data: any) {
     this.data = data;
-    switch (this.data.type) {
-      case ListType.ORG:
-        this.typeLabel = 'Organization';
-        break;
-      case ListType.APP:
-        this.typeLabel = 'Application';
-        break;
-      case ListType.ROLE:
-        this.typeLabel = 'Role';
-        break;
-    }
 
     this.formData = JSON.parse(JSON.stringify(this.data.definition));
     if (this.formData.definition.others) {
@@ -64,10 +53,37 @@ export class GovernanceDetailsComponent implements OnInit {
       }
       this.formData.definition.others = JSON.stringify(tmp);
     }
-    // console.log('formData', this.formData);
+
+    switch (this.data.type) {
+      case ListType.ORG:
+        this.typeLabel = 'Organization';
+        break;
+      case ListType.APP:
+        this.typeLabel = 'Application';
+        break;
+      case ListType.ROLE:
+        this.typeLabel = 'Role';
+        this._initFields();
+        break;
+    }
 
     if (this.isEmbedded) {
       await this._getAppsAndRoles();
+    }
+  }
+
+  private _initFields() {
+    if (this.formData.definition.fields) {
+      for (let data of this.formData.definition.fields) {
+        if (data.fieldType === 'date') {
+          if (data.maxDate) {
+            data.maxDate = new Date(data.maxDate);
+          }
+          if (data.minDate) {
+            data.minDate = new Date(data.minDate);
+          }
+        }
+      }
     }
   }
 

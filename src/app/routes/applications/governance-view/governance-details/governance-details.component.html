@@ -122,12 +122,12 @@
 
           <ng-container matColumnDef="minDate">
             <th mat-header-cell *matHeaderCellDef> Min Date </th>
-            <td mat-cell *matCellDef="let element" data-label="Label"> {{element.minDate}} </td>
+            <td mat-cell *matCellDef="let element" data-label="Label"> {{element.minDate | date: 'M/d/yyyy'}} </td>
           </ng-container>
 
           <ng-container matColumnDef="maxDate">
             <th mat-header-cell *matHeaderCellDef> Max Date </th>
-            <td mat-cell *matCellDef="let element" data-label="Label"> {{element.maxDate}} </td>
+            <td mat-cell *matCellDef="let element" data-label="Label"> {{element.maxDate | date: 'M/d/yyyy'}} </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumnsView"></tr>
