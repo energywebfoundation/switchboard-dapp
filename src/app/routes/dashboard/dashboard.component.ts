@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { IamService, LoginType } from 'src/app/shared/services/iam.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -13,10 +13,9 @@ import { ENSNamespaceTypes, WalletProvider } from 'iam-client-lib';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
   public accountDid = '';
   public userName = '';
-  private _loginStatus = undefined;
   private readonly walletProvider: WalletProvider = undefined;
 
   public filteredOptions: Observable<any[]>;
@@ -39,37 +38,16 @@ export class DashboardComponent implements OnInit {
       startWith(undefined),
       switchMap(async (value) => await this._filterOrgsAndApps(value))
     );
-
-    // Check Login Status
-    this._loginStatus = this.iamService.getLoginStatus();
-    let extras: any = this.route.getCurrentNavigation().extras.state;
-    if (this._loginStatus) {
-      if (
-        (extras && extras.data && extras.data.fresh) ||
-        this._loginStatus === LoginType.REMOTE
-      ) {
-        this.loadingService.show();
-      } else {
-        this.walletProvider = window.localStorage.getItem('METAMASK_EXT_CONNECTED') ?
-          WalletProvider.MetaMask :
-          WalletProvider.WalletConnect;
-        this.iamService.waitForSignature(this.walletProvider);
-      }
-    }
   }
 
-  ngOnInit() {
+  ngAfterViewInit(): void {
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
       let returnUrl = undefined;
+      this.loadingService.show();
 
       // Check Login
-      if (this._loginStatus) {
-        // console.log(this._loginStatus);
-        if (this._loginStatus === LoginType.LOCAL) {
-          // console.log('local > login');
-          await this.iamService.login(this.walletProvider);
-          this.iamService.clearWaitSignatureTimer();
-        }
+      if (this.iamService.iam.isSessionActive()) {
+        await this.iamService.login();
 
         // Check if returnUrl is available or just redirect to dashboard
         if (queryParams && queryParams.returnUrl) {
@@ -85,9 +63,8 @@ export class DashboardComponent implements OnInit {
 
       // Redirect to actual screen
       if (returnUrl) {
-        this.loadingService.hide();
-
         let timeout$ = setTimeout(() => {
+          this.loadingService.hide();
           this.route.navigateByUrl(returnUrl);
           clearTimeout(timeout$);
         }, 30);
@@ -103,6 +80,8 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+  ngOnInit() { }
 
   private async _setupUser() {
     // Format DID

@@ -135,7 +135,7 @@ export class RequestClaimComponent implements OnInit {
 
     // Hide button if callback url is not available
     if (!this.callbackUrl) {
-      if (this.iamService.getLoginStatus()) {
+      if (this.iamService.iam.isSessionActive()) {
         config.button = 'View My Enrolments';
       }
       else {
@@ -164,6 +164,7 @@ export class RequestClaimComponent implements OnInit {
 
   async ngOnInit() {
     this.activeRoute.queryParams.subscribe(async (params: any) => {
+      this.loadingService.show();
       this.stayLoggedIn = params.stayLoggedIn;
 
       // Check Login Status
@@ -172,6 +173,7 @@ export class RequestClaimComponent implements OnInit {
       if (params.app || params.org) {
         // Check if namespace is correct
         if (!this.isCorrectNamespace(params)) {
+          this.loadingService.hide();
           this.displayAlert('Namespace provided is incorrect.', 'error');
           return;
         }
@@ -218,6 +220,7 @@ export class RequestClaimComponent implements OnInit {
         console.error('Enrolment Param Error', params);
         this.displayAlert('URL is invalid.', 'error');
       }
+      this.loadingService.hide();
     });
   }
 
@@ -239,29 +242,20 @@ export class RequestClaimComponent implements OnInit {
   }
 
   private async initLoginUser() {
-    let loginStatus = this.iamService.getLoginStatus();
-
     // Check Login
-    if (loginStatus) {
-      if (loginStatus === LoginType.LOCAL) {
+    if (this.iamService.iam.isSessionActive()) {
+      this.loadingService.show();
+      await this.iamService.login();
+      this.iamService.clearWaitSignatureTimer();
 
-        const walletProvider = window.localStorage.getItem('METAMASK_EXT_CONNECTED') ?
-          WalletProvider.MetaMask :
-          WalletProvider.WalletConnect;
-
-        // Proceed Login
-        this.iamService.waitForSignature(walletProvider);
-        await this.iamService.login(walletProvider);
-        this.iamService.clearWaitSignatureTimer();
-
-        // Setup User Data
-        await this.iamService.setupUser();
-      }
+      // Setup User Data
+      await this.iamService.setupUser();
 
       // Set Loggedin Flag to true
       this.isLoggedIn = true;
     }
     else {
+      this.loadingService.hide();
       // Launch Login Dialog
       await this.dialog.open(ConnectToWalletDialogComponent, {
         width: '434px',
@@ -275,6 +269,7 @@ export class RequestClaimComponent implements OnInit {
 
       // Set Loggedin Flag to true
       this.isLoggedIn = true;
+      this.loadingService.show();
     }
   }
 
