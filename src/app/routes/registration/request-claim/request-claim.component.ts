@@ -479,7 +479,8 @@ export class RequestClaimComponent implements OnInit {
           // Submit
           let claim = {
             fields: JSON.parse(JSON.stringify(fields)),
-            claimType: this.selectedNamespace
+            claimType: this.selectedNamespace,
+            claimTypeVersion: this.selectedRole.version || '1.0.0'
           };
 
           await this.iamService.iam.createClaimRequest({
