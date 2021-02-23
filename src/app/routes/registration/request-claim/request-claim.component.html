@@ -47,6 +47,10 @@
                 *ngIf="fieldList[i].fieldType === 'text'" [ngStyle]="txtColor">
                 <input matInput type="text" placeholder="{{ fieldList[i].label }}"
                   [formControl]="enrolmentForm?.get('fields')?.controls[i]" />
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.required">This field is required.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.minlength">Please input at least {{ fieldList[i].minLength }} characters.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.maxlength">Please input at most {{ fieldList[i].maxLength }} characters.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.pattern">Incorrect data format.</mat-error>
               </mat-form-field>
 
               <!-- TYPE: Number -->
@@ -54,15 +58,19 @@
               *ngIf="fieldList[i].fieldType === 'number'" [ngStyle]="txtColor">
                 <input matInput type="number" placeholder="{{ fieldList[i].label }}"
                   [formControl]="enrolmentForm?.get('fields')?.controls[i]"/>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.required">This field is required.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.max">Max value is {{ fieldList[i].maxValue }}.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.min">Min value is {{ fieldList[i].minValue }}.</mat-error>
               </mat-form-field>
 
               <!-- TYPE: Date -->
               <mat-form-field class="mt-2 md-enroll bg-transparent" appearance="outline" floatPlaceholder="never" 
               *ngIf="fieldList[i].fieldType === 'date'" [ngStyle]="txtColor">
-                <input [matDatepicker]="picker" matInput placeholder="{{ fieldList[i].label }}" autocomplete="off"
+                <input [matDatepicker]="picker" [max]="fieldList[i].maxDateValue" [min]="fieldList[i].minDateValue" matInput placeholder="{{ fieldList[i].label }}" autocomplete="off"
                   [formControl]="enrolmentForm?.get('fields')?.controls[i]" (keypress)="$event.preventDefault()">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.required">This field is required.</mat-error>
               </mat-form-field>
 
               <!-- TYPE: Boolean -->
@@ -76,7 +84,7 @@
       </form>
       <div class="mt-3">
         <button mat-raised-button class="btn btn-primary md-enroll w-100" type="submit" (click)="submit()"
-          [disabled]="!roleTypeForm?.value?.roleType || submitting" [ngStyle]="btnColor">Submit Request</button>
+          [disabled]="!roleTypeForm?.value?.roleType || submitting || !roleTypeForm?.valid" [ngStyle]="btnColor">Submit Request</button>
       </div>
     </mat-card>
     <app-loading></app-loading>

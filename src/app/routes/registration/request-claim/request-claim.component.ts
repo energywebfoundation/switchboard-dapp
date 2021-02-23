@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ENSNamespaceTypes, WalletProvider } from 'iam-client-lib';
@@ -23,7 +23,20 @@ export class RequestClaimComponent implements OnInit {
   public RoleType       = RoleType;
   public enrolmentForm  : FormGroup;
   public roleTypeForm   : FormGroup;
-  public fieldList      : {type: string, label: string, validation: string}[];
+  public fieldList      : {
+    fieldType: string, 
+    label: string, 
+    required: boolean,
+    minLength: number,
+    maxLength: number,
+    pattern: string,
+    minValue: number,
+    maxValue: number,
+    minDate: string,
+    maxDate: string,
+    minDateValue: Date,
+    maxDateValue: Date
+  }[];
   
   public orgAppDetails  : any;
   public roleList       : any;
@@ -359,20 +372,32 @@ export class RequestClaimComponent implements OnInit {
 
   private updateForm() {
     let controls = [];
-    for (let { type, label, validation} of this.fieldList) {
+    for (let field of this.fieldList) {
       let control = new FormControl();
-      switch (type) {
+      switch (field.fieldType) {
         case 'text':
           break;
         case 'number':
           break;
         case 'date':
+          if (field.maxDate) {
+            field.maxDateValue = new Date(field.maxDate);
+          }
+          if (field.minDate) {
+            field.minDateValue = new Date(field.minDate);
+          }
+          console.log('field', field);
           break;
         case 'boolean':
+          control.setValue(false);
           break;
       }
 
-      // TODO: add validations
+      // Set Validations
+      let validations = this.buildValidationOptions(field);
+      if (validations.length) {
+        control.setValidators(validations);
+      }
 
       // add control to array
       controls.push(control);
@@ -381,6 +406,36 @@ export class RequestClaimComponent implements OnInit {
     this.enrolmentForm = this.fb.group({
       fields: this.fb.array(controls)
     });
+  }
+
+  private buildValidationOptions(field: any){
+    let validations = [];
+
+    if (field.required) {
+      validations.push(Validators.required);
+    }
+
+    if (field.minLength) {
+      validations.push(Validators.minLength(field.minLength));
+    }
+
+    if (field.maxLength) {
+      validations.push(Validators.maxLength(field.maxLength));
+    }
+
+    if (field.pattern) {
+      validations.push(Validators.pattern(field.pattern));
+    }
+
+    if (field.minValue) {
+      validations.push(Validators.min(field.minValue));
+    }
+
+    if (field.maxValue) {
+      validations.push(Validators.max(field.maxValue));
+    }
+
+    return validations;
   }
 
   roleTypeSelected(e: any) {
