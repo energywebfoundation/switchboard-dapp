@@ -58,12 +58,6 @@ export class ConnectToWalletDialogComponent implements OnInit {
   }
 
   async connectToMetamask() {
-    // Make sure that localStorage is supported
-    if (!window.localStorage) {
-      this.toastr.error('Local data storage is not supported in this browser.', 'Connect with Metamask');
-      return;
-    }
-
     // Proceed with Login Process
     const walletProvider = WalletProvider.MetaMask;
     this.iamService.waitForSignature(walletProvider, true);
@@ -71,9 +65,6 @@ export class ConnectToWalletDialogComponent implements OnInit {
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
-      // Set LocalStorage for Metamask
-      localStorage['METAMASK_EXT_CONNECTED'] = true;
-
       // Close Login Dialog
       this.dialogRef.close();
     }

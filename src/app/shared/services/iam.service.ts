@@ -68,7 +68,7 @@ export class IamService {
   /**
    * Login via IAM and retrieve basic user info
    */
-  async login(walletProvider: WalletProvider, reinitializeMetamask?: boolean): Promise<boolean> {
+  async login(walletProvider?: WalletProvider, reinitializeMetamask?: boolean): Promise<boolean> {
     let retVal = false;
 
     // Check if account address exists
@@ -144,11 +144,6 @@ export class IamService {
   logout(saveDeepLink?: boolean) {
     this._iam.closeConnection();
     this._user = undefined;
-
-    // Logout for Metamask Extension
-    if (localStorage['METAMASK_EXT_CONNECTED']) {
-      localStorage.removeItem('METAMASK_EXT_CONNECTED');
-    }
   }
 
   setDeepLink(deepLink: any) {
@@ -164,40 +159,6 @@ export class IamService {
       }
       location.reload();
   }, 100);
-  }
-
-  /**
-   * Checks if the there is a user currently logged-in into the dApp
-   */
-  getLoginStatus(): LoginType {
-    if (this._iam.isConnected()) {
-      // User is loggedin via remote connection
-      return LoginType.REMOTE;
-    }
-    else {
-      let isLocallyLoggedIn = false;
-
-      // Check if there is an existing walletconnect or metamask session locally
-      if (window.localStorage) {
-        if (window.localStorage.getItem(LS_WALLETCONNECT)) {
-          let walletconnectData = JSON.parse(window.localStorage.getItem(LS_WALLETCONNECT));
-          isLocallyLoggedIn = walletconnectData[LS_KEY_CONNECTED];
-        }
-        else if (window.localStorage.getItem('METAMASK_EXT_CONNECTED')) {
-          isLocallyLoggedIn = true;
-        }
-        
-      }
-      
-      if (isLocallyLoggedIn) {
-        // User has existing local session, need to call IAM.login()
-        return LoginType.LOCAL;
-      }
-      else {
-        // User is not logged-in
-        return;
-      }
-    }
   }
 
   /**
@@ -224,7 +185,7 @@ export class IamService {
     }
   }
 
-  public waitForSignature(walletProvider: WalletProvider, isConnectAndSign?: boolean) {
+  public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean) {
     this._throwTimeoutError = false;
     const timeoutInMinutes = walletProvider === WalletProvider.EwKeyManager ? 2 : 1;
     const connectionMessage = isConnectAndSign ? 'connection to a wallet and ' : '';

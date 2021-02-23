@@ -34,7 +34,7 @@ export class WelcomeComponent implements OnInit {
     });
 
     // Immediately navigate to dashboard if user is currently logged-in to walletconnect
-    if (this.iamService.getLoginStatus()) {
+    if (this.iamService.iam.isSessionActive()) {
       this.route.navigate(['dashboard']);
     }
 
@@ -80,12 +80,6 @@ export class WelcomeComponent implements OnInit {
   }
 
   async connectToMetamask() {
-    // Make sure that localStorage is supported
-    if (!window.localStorage) {
-      this.toastr.error('Local data storage is not supported in this browser.', 'Connect with Metamask');
-      return;
-    }
-
     // Proceed with Login Process
     const walletProvider = WalletProvider.MetaMask;
     this.iamService.waitForSignature(walletProvider, true);
@@ -93,9 +87,6 @@ export class WelcomeComponent implements OnInit {
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
-      // Set LocalStorage for Metamask
-      localStorage['METAMASK_EXT_CONNECTED'] = true;
-
       // Check deep link
       let queryParams = undefined;
       if (this._returnUrl) {
