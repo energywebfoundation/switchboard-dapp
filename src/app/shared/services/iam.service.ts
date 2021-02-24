@@ -13,6 +13,10 @@ const { walletConnectOptions, cacheServerUrl, natsServerUrl } = environment;
 
 const SWAL = require('sweetalert');
 
+const EVENT_ACCOUNT_CHANGED = 'EVENT_ACCOUNT_CHANGED';
+const EVENT_NETWORK_CHANGED = 'EVENT_NETWORK_CHANGED';
+const EVENT_DISCONNECTED = 'EVENT_DISCONNECTED';
+
 const cacheClient = new CacheServerClient({
   url: cacheServerUrl
 });
@@ -83,12 +87,20 @@ export class IamService {
           const signer = this._iam.getSigner();
           this.accountAddress = await signer.getAddress();
 
-          // console.log('signer', signer);
-
           // Listen to Account Change
-          if (walletProvider == WalletProvider.MetaMask) {
-            this._listenToMetamaskAccountChange();
-          }
+          this._iam.on('accountChanged', () => {
+            this._displayAccountAndNetworkChanges(EVENT_ACCOUNT_CHANGED);
+          });
+
+          // Listen to Network Change
+          this._iam.on('networkChanged', () => {
+            this._displayAccountAndNetworkChanges(EVENT_NETWORK_CHANGED);
+          });
+
+          // Listen to Disconnection
+          this._iam.on('disconnected', () => {
+            this._displayAccountAndNetworkChanges(EVENT_DISCONNECTED);
+          });
 
           retVal = true;
         }
@@ -176,15 +188,6 @@ export class IamService {
     this._user.next(data);
   }
 
-  private _listenToMetamaskAccountChange() {
-    // Listen to account changes in metamask
-    if (window['ethereum']) {
-      window['ethereum'].on('accountsChanged', () => {
-        location.reload();
-      });
-    }
-  }
-
   public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean) {
     this._throwTimeoutError = false;
     const timeoutInMinutes = walletProvider === WalletProvider.EwKeyManager ? 2 : 1;
@@ -242,6 +245,39 @@ export class IamService {
     let result = await SWAL(config);
     if (result) {
         this.logoutAndRefresh();
+    }
+  }
+
+  private async _displayAccountAndNetworkChanges(changeType: string) {
+    let message: string;
+    let title: string;
+
+    switch (changeType) {
+      case EVENT_ACCOUNT_CHANGED:
+        title = 'Account Changed';
+        message = 'Account is changed.';
+        break;
+      case EVENT_NETWORK_CHANGED:
+        title = 'Network Changed';
+        message = 'Network is changed.';
+        break;
+      case EVENT_DISCONNECTED:
+        title = 'Disconnected';
+        message = 'You are disconnected from your wallet.';
+        break;
+    }
+
+    let config = {
+        title: title,
+        text: `${message} Please login again.`,
+        icon: 'warning',
+        button: 'Proceed',
+        closeOnClickOutside: false
+      };
+
+    let result = await SWAL(config);
+    if (result) {
+      this.logoutAndRefresh();
     }
   }
 
