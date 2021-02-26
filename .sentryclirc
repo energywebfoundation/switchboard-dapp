@@ -1,0 +1,6 @@
+[defaults]
+project=switchboard
+org=energy-web
+
+[auth]
+token=2fed3836a81840a1811a7ae5a8293615e8419ce5688a47cc9607489e5a3c128b

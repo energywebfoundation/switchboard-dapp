@@ -39,6 +39,7 @@
     "@mat-datetimepicker/moment": "^2.0.1",
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
+    "@sentry/angular": "^6.2.0",
     "angular-user-idle": "^2.2.4",
     "async": "^3.2.0",
     "bootstrap": "4.3.1",
