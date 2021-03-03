@@ -12,6 +12,7 @@ import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/conn
 const SWAL = require('sweetalert');
 
 const TOASTR_HEADER = 'Enrolment';
+const DEFAULT_CLAIM_TYPE_VERSION = '1.0.0';
 
 @Component({
   selector: 'app-request-claim',
@@ -479,7 +480,8 @@ export class RequestClaimComponent implements OnInit {
           // Submit
           let claim = {
             fields: JSON.parse(JSON.stringify(fields)),
-            claimType: this.selectedNamespace
+            claimType: this.selectedNamespace,
+            claimTypeVersion: this.selectedRole.version || DEFAULT_CLAIM_TYPE_VERSION
           };
 
           await this.iamService.iam.createClaimRequest({
