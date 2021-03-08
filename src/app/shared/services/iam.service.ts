@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { IAM, DIDAttribute, CacheServerClient, MessagingMethod, WalletProvider, SafeIam } from 'iam-client-lib';
+import { IAM, DIDAttribute, MessagingMethod, WalletProvider, SafeIam, setCacheClientOptions, setChainConfig, setMessagingOptions } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
@@ -16,10 +16,6 @@ const SWAL = require('sweetalert');
 const EVENT_ACCOUNT_CHANGED = 'EVENT_ACCOUNT_CHANGED';
 const EVENT_NETWORK_CHANGED = 'EVENT_NETWORK_CHANGED';
 const EVENT_DISCONNECTED = 'EVENT_DISCONNECTED';
-
-const cacheClient = new CacheServerClient({
-  url: cacheServerUrl
-});
 
 const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
 const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
@@ -51,21 +47,28 @@ export class IamService {
   private _deepLink = '';
 
   constructor(private loadingService: LoadingService, configService: ConfigService) {
-    let options = {
-      ...walletConnectOptions,
-      cacheClient,
-      messagingMethod: MessagingMethod.CacheServer,
-      natsServerUrl
-    };
+    // Set Cache Server
+    setCacheClientOptions(VOLTA_CHAIN_ID, {
+      url: cacheServerUrl
+    });
 
-    // console.info('IAM Service Options', options);
+    // Set RPC
+    setChainConfig(VOLTA_CHAIN_ID, {
+      rpcUrl: walletConnectOptions.rpcUrl
+    });
+
+    // Set Messaging Options
+    setMessagingOptions(VOLTA_CHAIN_ID, {
+      messagingMethod: MessagingMethod.Nats,
+      natsServerUrl: natsServerUrl,
+    });
 
     // Initialize Data
     this._user = new BehaviorSubject<User>(undefined);
     if (configService.safeInfo) {
-      this._iam = new SafeIam(safeAppSdk, options);
+      this._iam = new SafeIam(safeAppSdk, undefined);
     } else {
-      this._iam = new IAM(options);
+      this._iam = new IAM();
     }
   }
 
