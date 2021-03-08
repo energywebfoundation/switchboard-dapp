@@ -169,17 +169,15 @@ export class EnrolmentListComponent implements OnInit {
         token: element.issuedToken
       });
 
-      // console.log('decoded', decoded);
-
       let retVal = await this.iamService.iam.publishPublicClaim({
         token: element.issuedToken
       });
 
       // console.log('Publish Public Claim Result: ', retVal);
       if (retVal) {
-        element.isSynced = true;
         this.notifService.decreasePendingDidDocSyncCount();
         this.toastr.success('Action is successful.', 'Sync to DID Document');
+        await this.getList(this.rejected, this.accepted);
       }
       else {
         this.toastr.warning('Unable to proceed with this action. Please contact system administrator.', 'Sync to DID Document');

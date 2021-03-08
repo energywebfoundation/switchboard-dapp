@@ -13,13 +13,14 @@ import { Router, NavigationEnd } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NotificationService } from 'src/app/shared/services/notification.service';
+import { OnDestroy } from '@angular/core';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
     navCollapsed = true; // for horizontal layout
     menuItems = []; // for horizontal layout
@@ -43,7 +44,9 @@ export class HeaderComponent implements OnInit {
     };
 
     isLoadingNotif = true;
-    isNotifInitialized = false;
+
+    private _pendingApprovalCountListener: any;
+    private _pendingSyncCountListener: any;
 
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
@@ -83,11 +86,20 @@ export class HeaderComponent implements OnInit {
                 this.userName = data.name;
             }
         
-            if (this.iamService.accountAddress && !this.isNotifInitialized) {
+            if (this.iamService.accountAddress && !this.notifService.initialized) {
                 // Initialize Notifications
                 this.initNotifications();
             }
         });
+    }
+
+    ngOnDestroy(): void {
+        if (this._pendingSyncCountListener) {
+            this._pendingSyncCountListener.unsubscribe();
+        }
+        if (this._pendingApprovalCountListener) {
+            this._pendingApprovalCountListener.unsubscribe();
+        }
     }
 
     openDialogUser(): void {
@@ -116,7 +128,7 @@ export class HeaderComponent implements OnInit {
     private initNotifications() {
         // Init Notif Count
         this.initNotificationCount();
-        this.isNotifInitialized = true;
+        this.notifService.initialized = true;
     }
 
     private async initNotificationListeners(pendingApprovalCount: number, pendingSyncCount: number) {
@@ -124,14 +136,14 @@ export class HeaderComponent implements OnInit {
         this.notifService.initNotifCounts(pendingApprovalCount, pendingSyncCount);
 
         // Listen to Count Changes
-        this.notifService.pendingApproval.subscribe(async (count: number) => {
+        this._pendingApprovalCountListener = this.notifService.pendingApproval.subscribe(async (count: number) => {
             await this.initPendingClaimsCount();
             this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
             if (this.notif.totalCount < 0) {
                 this.notif.totalCount = 0;
             }
         });
-        this.notifService.pendingDidDocSync.subscribe(async (count: number) => {
+        this._pendingSyncCountListener = this.notifService.pendingDidDocSync.subscribe(async (count: number) => {
             await this.initApprovedClaimsForSyncCount();
             this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
             if (this.notif.totalCount < 0) {
@@ -140,7 +152,7 @@ export class HeaderComponent implements OnInit {
         });
 
         // Listen to External Messages
-        await this.iamService.iam.subscribeToMessages({
+        this.iamService.iam.subscribeToMessages({
             messageHandler: this.handleMessage.bind(this)
         });
     }
@@ -246,7 +258,6 @@ export class HeaderComponent implements OnInit {
     }
 
     setNavSearchVisible(stat: boolean) {
-        // console.log(stat);
         this.isNavSearchVisible = stat;
     }
 

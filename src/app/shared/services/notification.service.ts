@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 export class NotificationService {
   private _pendingApproval    : BehaviorSubject<number>;
   private _pendingDidDocSync  : BehaviorSubject<number>;
+  public initialized          = false;
   
   constructor() {
     this._pendingApproval     = new BehaviorSubject<number>(0);
