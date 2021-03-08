@@ -101,8 +101,8 @@ export class GovernanceListComponent implements OnInit {
 
     let orgList = await Promise.all(
       ($getOrgList as Domain[]).map(async (org) => {
-        const isOwned = await this.iamService.iam.isOwner({ domain: org.namespace });
-        return { ...org, isOwned };
+        const isOwnedByCurrentUser = await this.iamService.iam.isOwner({ domain: org.namespace });
+        return { ...org, isOwnedByCurrentUser };
       }));
 
     if (this.listType === ListType.ORG) {
