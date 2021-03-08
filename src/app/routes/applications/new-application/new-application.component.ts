@@ -30,7 +30,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   public ENSPrefixes = ENSNamespaceTypes;
   public ViewType = ViewType;
 
-  viewType: string;
+  viewType: string = ViewType.NEW;
   origData: any;
 
   private TOASTR_HEADER = 'Create New Application';
@@ -388,26 +388,25 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         this.stepper.next();
       }
 
-      try {
-        // Process the next step
-        await step.next();
+      // Process the next step
+      await step.next();
 
-        // Make sure that the current step is not retried
-        if (this._requests[`${requestIdx}`]) {
-          this._currentIdx++;
-          this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.stepper.steps.length})`);
-  
-          // Remove 1st element
-          steps.shift();
-  
-          // Process
-          await this.next(requestIdx);
-        }
+      // Make sure that the current step is not retried
+      if (this._requests[`${requestIdx}`]) {
+        this._currentIdx++;
+        this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.stepper.steps.length})`);
+
+        // Remove 1st element
+        steps.shift();
+
+        // Process
+        await this.next(requestIdx);
       }
-      catch (e) {
-        console.error('New App Error', e);
-        this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
-      }
+    }
+    else if (this._requests['0']) {
+      // Move to Complete Step
+      this.stepper.selected.completed = true;
+      this.stepper.next();
     }
   }
 
@@ -428,12 +427,6 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       
       // Process
       await this.next(0);
-
-      if (this._requests['0']) {
-        // Move to Complete Step
-        this.stepper.selected.completed = true;
-        this.stepper.next();
-      }
     }
     catch (e) {
       console.error('New App Error', e);
@@ -442,7 +435,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   }
 
   async retry() {
-    if (this.viewType === ViewType.NEW) {
+    if (this.viewType !== ViewType.UPDATE) {
       // Copy pending steps
       this._requests[`${this._retryCount + 1}`] = [...this._requests[`${this._retryCount}`]];
 
@@ -461,11 +454,12 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         }
       }
       catch (e) {
-        console.error(e);
+        console.error('New App Error', e);
+        this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
       }
     }
     else {
-      this._retryCount++;
+      delete this._requests[`${this._retryCount++}`];
       await this.confirmApp(true);
     }
   }
@@ -494,7 +488,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       this._requests[`${retryCount}`] = [...this.txs];
 
       // Process
-      await this.next(0);
+      await this.next(retryCount, skipNextStep);
 
       // Make sure that all steps are not yet complete
       if (this.stepper.selectedIndex !== 3 && retryCount === this._retryCount) {
