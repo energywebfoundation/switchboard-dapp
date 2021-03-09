@@ -145,6 +145,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.route.navigate(['enrolment']);
   }
 
+  goToAssets() {
+    this.route.navigate(['assets']);
+  }
+
   copyToClipboard() {
     let listener = (e: ClipboardEvent) => {
       let clipboard = e.clipboardData || window['clipboardData'];
