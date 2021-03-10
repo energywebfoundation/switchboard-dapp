@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ENSNamespaceTypes, WalletProvider } from 'iam-client-lib';
+import { ENSNamespaceTypes, PreconditionTypes, WalletProvider } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { IamService, LoginType } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -13,6 +13,7 @@ const SWAL = require('sweetalert');
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = '1.0.0';
+const REDIRECT_TO_ENROLMENT = true;
 
 @Component({
   selector: 'app-request-claim',
@@ -41,6 +42,7 @@ export class RequestClaimComponent implements OnInit {
   
   public orgAppDetails  : any;
   public roleList       : any;
+  private userRoleList  : any;
 
   public submitting     = false;
   public appError       = false;
@@ -60,7 +62,16 @@ export class RequestClaimComponent implements OnInit {
   public txtboxColor    : Object = {};
 
   public isLoggedIn     = false;
+  public isPrecheckSuccess = false;
   private stayLoggedIn  = false;
+  isLoading = false;
+
+  rolePreconditionList = [];
+  RolePreconditionType = {
+    SYNCED: 'synced',
+    APPROVED: 'approved',
+    PENDING: 'pending'
+  };
 
   @HostListener('window:beforeunload', ['$event'])
   public onPageUnload($event: BeforeUnloadEvent) {
@@ -179,6 +190,7 @@ export class RequestClaimComponent implements OnInit {
   async ngOnInit() {
     this.activeRoute.queryParams.subscribe(async (params: any) => {
       this.loadingService.show();
+      this.isLoading = true;
       this.stayLoggedIn = params.stayLoggedIn;
 
       // Check Login Status
@@ -187,6 +199,7 @@ export class RequestClaimComponent implements OnInit {
       if (params.app || params.org) {
         // Check if namespace is correct
         if (!this.isCorrectNamespace(params)) {
+          this.isLoading = false;
           this.loadingService.hide();
           this.displayAlert('Namespace provided is incorrect.', 'error');
           return;
@@ -234,6 +247,7 @@ export class RequestClaimComponent implements OnInit {
         console.error('Enrolment Param Error', params);
         this.displayAlert('URL is invalid.', 'error');
       }
+      this.isLoading = false;
       this.loadingService.hide();
     });
   }
@@ -287,12 +301,41 @@ export class RequestClaimComponent implements OnInit {
     }
   }
 
+  private async _getDIDSyncedRoles() {
+    try {
+      let claims: any[] = await this.iamService.iam.getUserClaims();
+      claims = claims.filter((item: any) => {
+          if (item && item.claimType) {
+              let arr = item.claimType.split('.');
+              if (arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles) {
+                  return true;
+              }
+              return false;
+          }
+          return false;
+      });
+
+      if (claims && claims.length && this.userRoleList) {
+        claims.forEach((item: any) => {
+          for (let i = 0; i < this.userRoleList.length; i++) {
+            if (item.claimType === this.userRoleList[i].claimType) {
+              this.userRoleList[i].isSynced = true;
+            }
+          }
+        });
+      }
+    }
+    catch (e) {
+      console.error(e);
+    }
+  }
+
   private async getNotEnrolledRoles() {
     let roleList = await this.iamService.iam.getRolesByNamespace({
       parentType: this.roleType === RoleType.APP ? ENSNamespaceTypes.Application : ENSNamespaceTypes.Organization,
       namespace: this.namespace
     });
-    let enrolledRoles = await this.iamService.iam.getRequestedClaims({
+    this.userRoleList = await this.iamService.iam.getRequestedClaims({
       did: this.iamService.iam.getDid()
     });
 
@@ -300,8 +343,8 @@ export class RequestClaimComponent implements OnInit {
       roleList = roleList.filter((role: any) => {
         let retVal = true;
         let defaultRole = `${this.defaultRole}.${ENSNamespaceTypes.Roles}.${this.namespace}`;
-        for (let i = 0; i < enrolledRoles.length; i++) {
-          if (role.namespace === enrolledRoles[i].claimType) {
+        for (let i = 0; i < this.userRoleList.length; i++) {
+          if (role.namespace === this.userRoleList[i].claimType) {
             if (role.namespace === defaultRole) {
               // Display Error
               this.displayAlert('You have already enrolled to this role.', 'error');
@@ -323,6 +366,9 @@ export class RequestClaimComponent implements OnInit {
     try {
       this.loadingService.show();
       this.roleList = await this.getNotEnrolledRoles();
+      
+      // Initialize Claims Synced in DID
+      await this._getDIDSyncedRoles();
 
       if (this.roleList && this.roleList.length) {
 
@@ -334,8 +380,10 @@ export class RequestClaimComponent implements OnInit {
               this.selectedNamespace = this.roleList[i].namespace;
               this.fieldList = this.selectedRole.fields || [];
               this.updateForm();
-
               this.roleTypeForm.get('roleType').setValue(this.roleList[i]);
+
+              // Init Preconditions
+              this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
             }
           }
         }
@@ -440,9 +488,68 @@ export class RequestClaimComponent implements OnInit {
       this.selectedRole = e.value.definition;
       this.selectedNamespace = e.value.namespace;
 
+      // Init Preconditions
+      this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
+      
       this.updateForm();
+
     }
   }
+
+  private _getRoleConditionStatus(namespace: string) {
+    let status = this.RolePreconditionType.PENDING;
+
+    // Check if namespace exists in synced DID Doc Roles
+    for (let roleObj of this.userRoleList) {
+      if (roleObj.claimType === namespace) {
+        if (roleObj.isAccepted) {
+          if (roleObj.isSynced) {
+            status = this.RolePreconditionType.SYNCED;
+          }
+          else {
+            status = this.RolePreconditionType.APPROVED;
+          }
+        }
+        break;
+      }
+    }
+
+    return status;
+  }
+
+  private _preconditionCheck(preconditionList: any[]) {
+    let retVal = true;
+
+    if (preconditionList && preconditionList.length) {
+      for (let precondition of preconditionList) {
+        switch (precondition.type) {
+          case PreconditionTypes.Role:
+            // Check for Role Conditions
+            this.rolePreconditionList = [];
+
+            let conditions = precondition.conditions;
+            if (conditions) {
+              for (let roleCondition of conditions) {
+                let status = this._getRoleConditionStatus(roleCondition);
+                this.rolePreconditionList.push({
+                  namespace: roleCondition,
+                  status: status
+                });
+
+                if (status !== this.RolePreconditionType.SYNCED) {
+                  retVal = false;
+                }
+              }
+            }
+            break;
+        }
+      }
+    }
+
+    return retVal;
+  }
+
+  private _roleExists
 
   async submit() {
     this.loadingService.show();
@@ -514,6 +621,11 @@ export class RequestClaimComponent implements OnInit {
     }
 
     this.loadingService.hide();
+  }
+
+  goToEnrolment() {
+    // Navigate to My Enrolments Page
+    this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/enrolment?notif=myEnrolments' }});
   }
 
   logout() {
