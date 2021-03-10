@@ -15,6 +15,7 @@ import { GovernanceViewComponent } from './governance-view/governance-view.compo
 import { TransferOwnershipComponent } from './transfer-ownership/transfer-ownership.component';
 import { RemoveOrgAppComponent } from './remove-org-app/remove-org-app.component';
 import { GovernanceDetailsModule } from './governance-view/governance-details/governance-details.module';
+import { NgMatSearchBarModule } from 'ng-mat-search-bar';
 
 const routes: Routes = [
   { path: '', component: ApplicationsComponent }
@@ -38,7 +39,8 @@ const routes: Routes = [
     MatDialogModule,
     MatInputModule,
     GovernanceDetailsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    NgMatSearchBarModule
   ],
   entryComponents: [
     NewOrganizationComponent, 

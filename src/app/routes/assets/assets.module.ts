@@ -7,6 +7,7 @@ import { MatSelectModule, MatCardModule, MatFormFieldModule, MatButtonModule, Ma
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { GovernanceDetailsModule } from '../applications/governance-view/governance-details/governance-details.module';
+import { NgMatSearchBarModule } from 'ng-mat-search-bar';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent }
@@ -31,7 +32,8 @@ const routes: Routes = [
     MatDialogModule,
     MatInputModule,
     GovernanceDetailsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    NgMatSearchBarModule
 
   ]
 })
