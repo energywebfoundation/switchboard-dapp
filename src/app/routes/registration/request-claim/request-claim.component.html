@@ -33,7 +33,26 @@
           </div>
         </div>
       </form>
-      <form role="form" [formGroup]="enrolmentForm" *ngIf="roleTypeForm?.value?.roleType && fieldList.length">
+
+      <!-- PRE-CHECK Error Messages-->
+      <ng-container *ngIf="!isPrecheckSuccess && rolePreconditionList?.length">
+        <ng-container *ngFor="let precondition of rolePreconditionList">
+          <!-- Role is Approved but NOT SYNCED -->
+          <div *ngIf="precondition.status === RolePreconditionType.APPROVED" 
+            matTooltip="Please sync this role to your DID Document."
+            class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              <mat-icon >info</mat-icon><span class="pb-2">{{  precondition.namespace }}</span>
+          </div>
+          <!-- Request is Pending or No Request at all -->
+          <div *ngIf="precondition.status === RolePreconditionType.PENDING" 
+            matTooltip="You don't have this role yet."
+            class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              <mat-icon >close</mat-icon><span class="pb-2">{{  precondition.namespace }}</span>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <form role="form" [formGroup]="enrolmentForm" *ngIf="roleTypeForm?.value?.roleType && fieldList.length && isPrecheckSuccess">
         <div class="row">
           <!-- START: Dynamic Form Fields -->
           <ng-container *ngFor="let field of enrolmentForm?.get('fields')?.controls; let i = index;">
@@ -82,9 +101,11 @@
           <!-- END: Dynamic Form Fields -->
         </div>
       </form>
-      <div class="mt-3">
+      <div class="mt-3" *ngIf="!isLoading">
         <button mat-raised-button class="btn btn-primary md-enroll w-100" type="submit" (click)="submit()"
-          [disabled]="!roleTypeForm?.value?.roleType || submitting || !roleTypeForm?.valid" [ngStyle]="btnColor">Submit Request</button>
+          *ngIf="isPrecheckSuccess" [disabled]="!roleTypeForm?.value?.roleType || submitting || !roleTypeForm?.valid" [ngStyle]="btnColor">Submit Request</button>
+        <button mat-raised-button class="btn btn-primary md-enroll w-100" type="submit" (click)="goToEnrolment()"
+          *ngIf="!isPrecheckSuccess" [ngStyle]="btnColor">View My Enrolments</button>
       </div>
     </mat-card>
     <app-loading></app-loading>

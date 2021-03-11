@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -29,6 +29,9 @@ export class GovernanceDetailsComponent implements OnInit {
 
   appList: any[];
   roleList: any[];
+
+  preconditions = {};
+  PreconditionTypes = PreconditionTypes;
 
   constructor(
     private iamService: IamService,
@@ -74,6 +77,7 @@ export class GovernanceDetailsComponent implements OnInit {
 
   private _initFields() {
     if (this.formData.definition.fields) {
+      // Init Fields
       for (let data of this.formData.definition.fields) {
         if (data.fieldType === 'date') {
           if (data.maxDate) {
@@ -82,6 +86,15 @@ export class GovernanceDetailsComponent implements OnInit {
           if (data.minDate) {
             data.minDate = new Date(data.minDate);
           }
+        }
+      }
+    }
+
+    if (this.formData.definition.enrolmentPreconditions) {
+      // Init Preconditions
+      for (let precondition of this.formData.definition.enrolmentPreconditions) {
+        if (precondition.conditions) {
+          this.preconditions[precondition.type] = precondition.conditions;
         }
       }
     }
