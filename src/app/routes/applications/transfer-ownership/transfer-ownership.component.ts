@@ -3,6 +3,9 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA, MatStepper } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { ConfigService } from 'src/app/shared/services/config.service';
+import { ExpiredRequestError } from 'src/app/shared/errors/errors';
+import { IamRequestService } from 'src/app/shared/services/iam-request.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { NewApplicationComponent } from '../new-application/new-application.component';
@@ -38,13 +41,17 @@ export class TransferOwnershipComponent implements OnInit {
   public mySteps           = [];
   isProcessing             = false;
 
+  private _currentIdx = 0;
+
   constructor(private iamService: IamService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
+    private iamRequestService: IamRequestService,
     private changeDetector : ChangeDetectorRef,
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any) { 
+    @Inject(MAT_DIALOG_DATA) public data: any,
+      private configService: ConfigService) {
       this.namespace = this.data.namespace;
       this.type = this.data.type;
     }
@@ -83,33 +90,40 @@ export class TransferOwnershipComponent implements OnInit {
     if (this.newOwnerAddress.valid) {
       if (await this.confirm('You will no longer be the owner of this namespace. Do you wish to continue?')) {
         this.spinner.show();
+        const returnSteps = this.iamService.iam.address === this.data.owner ? true : false;
         let req = {
           namespace: this.namespace,
           newOwner: this.newOwnerAddress.value,
-          returnSteps: true
+          returnSteps
         };
-        let items = undefined;
+
+        let call;
         try {
           switch (this.type) {
             case ListType.ORG:
-              items = await this.iamService.iam.changeOrgOwnership(req);
+              call = this.iamService.iam.changeOrgOwnership(req);
               break;
             case ListType.APP:
-              items = await this.iamService.iam.changeAppOwnership(req);
+              call = this.iamService.iam.changeAppOwnership(req);
               break;
             case ListType.ROLE:
-              items = await this.iamService.iam.changeRoleOwnership(req);
+              call = this.iamService.iam.changeRoleOwnership(req);
               break;
           }
+          this.mySteps = returnSteps ?
+            await call :
+            [{
+              info: "Confirm transaction in your safe wallet",
+              next: async () => await call
+            }]
 
-          this.mySteps = items;
           this.newOwnerAddress.disable();
           this.isProcessing = true;
           this.changeDetector.detectChanges();
           this.spinner.hide();
 
           // Proceed
-          this.proceedSteps(this.mySteps);
+          this.proceedSteps(0);
         }
         catch (e) {
           console.error(e);
@@ -123,26 +137,34 @@ export class TransferOwnershipComponent implements OnInit {
     }
   }
 
-  private async proceedSteps(steps: any[]) {
-    try {
-      if (steps) {
-        for (let index = 0; index < steps.length; index++) {
-          let step = steps[index];
-          // console.log('Processing', step.info);
+  retry() {
+    this.proceedSteps(this._currentIdx);
+  }
 
-          // Process the next steap
-          await step.next();
+  private async proceedSteps(startIndex: number) {
+    let steps = this.mySteps;
+    if (steps) {
+      for (let index = startIndex; index < steps.length; index++) {
+        this._currentIdx = index;
+        let step = steps[index];
+
+        // Process the next step
+        try {
+          await this.iamRequestService.enqueue(step.next);
           this.toastr.info(step.info, `Transaction Success (${index + 1}/${steps.length})`);
-  
+
           // Move to Complete Step
           this.stepper.selected.completed = true;
           this.stepper.next();
-        };
-      }
-    }
-    catch (e) {
-      console.error('New Role Error', e);
-      this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+        }
+        catch (e) {
+          if (!(e instanceof ExpiredRequestError)) {
+            console.error('New Role Error', e);
+            this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+          }
+          break;
+        }
+      };
     }
   }
 }

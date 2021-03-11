@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MatStepper, MAT_DIALOG_DATA } from '@angular/m
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from '../../../../environments/environment'
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -19,7 +20,12 @@ export const ViewType = {
   styleUrls: ['./new-organization.component.scss']
 })
 export class NewOrganizationComponent implements OnInit {
-  @ViewChild('stepper', { static: false }) private stepper: MatStepper;
+  private stepper: MatStepper;
+  @ViewChild('stepper', { static: false }) set content(content: MatStepper) {
+    if (content) {
+      this.stepper = content;
+    }
+  }
 
   public orgForm: FormGroup;
   public environment = environment;
@@ -28,11 +34,17 @@ export class NewOrganizationComponent implements OnInit {
   public ENSPrefixes = ENSNamespaceTypes;
   public ViewType = ViewType;
 
-  viewType: string;
+  viewType: string = ViewType.NEW;
   origData: any;
   parentOrg: any;
 
   private TOASTR_HEADER = 'Create New Organization';
+
+  public txs: any[];
+  private _retryCount = 0;
+  private _currentIdx = 0;
+  private _requests = {};
+  private _returnSteps = true;
 
   public constructor(
     private fb: FormBuilder,
@@ -41,8 +53,9 @@ export class NewOrganizationComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<NewOrganizationComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) { 
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private configService: ConfigService
+  ) {
     this.orgForm = fb.group({
       orgName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
       namespace: environment.orgNamespace,
@@ -83,7 +96,7 @@ export class NewOrganizationComponent implements OnInit {
     if (origData && origData.namespace) {
       let arr = origData.namespace.split('.');
     
-      if (arr.length === 4) {
+      if (arr.length > 3) {
         retVal = true;
       }
     }
@@ -232,7 +245,7 @@ export class NewOrganizationComponent implements OnInit {
     else {
       try {
         // Check if others is in JSON Format
-        // console.info(JSON.parse(orgData.data.others));
+        JSON.parse(orgData.data.others);
 
         // Let the user confirm the info before proceeding to the next step
         this.stepper.selected.completed = true;
@@ -245,8 +258,8 @@ export class NewOrganizationComponent implements OnInit {
     }
   }
 
-  async confirmOrg() {
-    let req = { ...this.orgForm.value, returnSteps: true };
+  async confirmOrg(skipNextStep?: boolean) {
+    let req = JSON.parse(JSON.stringify({ ...this.orgForm.value, returnSteps: true }));
     req.data.orgName = req.data.organizationName;
     delete req.data.organizationName;
 
@@ -270,37 +283,68 @@ export class NewOrganizationComponent implements OnInit {
       delete req.data.others;
     }
 
-    // Set the first step to non-editable
-    this.stepper.steps.first.editable = false;
+    if (!skipNextStep) {
+      // Set the first step to non-editable
+      this.stepper.steps.first.editable = false;
+    }
 
     if (this.viewType === ViewType.UPDATE) {
-      this.proceedUpdateStep(req);
+      this.proceedUpdateStep(req, skipNextStep);
     }
     else {
       this.proceedCreateSteps(req);
     }
   }
 
-  private async proceedCreateSteps(req: any) {
-    try {
-      // Retrieve the steps to create an organization
-      let steps = await this.iamService.iam.createOrganization(req);
-      for (let index = 0; index < steps.length; index++) {
-        let step = steps[index];
-        // console.log('Processing', step.info);
-        
+  private async next(requestIdx: number, skipNextStep?: boolean) {
+    let steps = this._requests[`${requestIdx}`];
+
+    if (steps && steps.length) {
+      let step = steps[0];
+
+      if (!skipNextStep) {
         // Show the next step
         this.stepper.selected.completed = true;
         this.stepper.next();
-
-        // Process the next step
-        await step.next();
-        this.toastr.info(step.info, `Transaction Success (${index + 1}/${steps.length})`);
       }
 
+      // Process the next step
+      await step.next();
+
+      // Make sure that the current step is not retried
+      if (this._requests[`${requestIdx}`]) {
+        this._currentIdx++;
+        this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.txs.length})`);
+
+        // Remove 1st element
+        steps.shift();
+
+        // Process
+        await this.next(requestIdx);
+      }
+    }
+    else if (this._requests['0']) {
       // Move to Complete Step
       this.stepper.selected.completed = true;
       this.stepper.next();
+    }
+  }
+
+  async proceedCreateSteps(req: any) {
+    req = { ...req, returnSteps: this._returnSteps };
+    try {
+      const call = this.iamService.iam.createOrganization(req);
+      // Retrieve the steps to create an organization
+      this.txs = this._returnSteps ?
+        await call :
+        [{
+          info: 'Confirm transaction in your safe wallet',
+          next: async () => await call
+        }];
+      this._requests[`${this._retryCount}`] = [...this.txs];
+
+      // Process
+      await this.next(0);
     }
     catch (e) {
       console.error('New Org Error', e);
@@ -308,23 +352,70 @@ export class NewOrganizationComponent implements OnInit {
     }
   }
 
-  private async proceedUpdateStep(req: any) {
+  async retry() {
+    if (this.viewType !== ViewType.UPDATE) {
+      // Copy pending steps
+      this._requests[`${this._retryCount + 1}`] = [...this._requests[`${this._retryCount}`]];
+
+      //Remove previous request
+      delete this._requests[`${this._retryCount}`];
+      const retryCount = ++this._retryCount;
+
+      try {
+        // Process
+        await this.next(retryCount, true);
+
+        if (this._requests[retryCount]) {
+          // Move to Complete Step
+          this.stepper.selected.completed = true;
+          this.stepper.next();
+        }
+      }
+      catch (e) {
+        console.error('New Org Error', e);
+        this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+      }
+    }
+    else {
+      delete this._requests[`${this._retryCount++}`];
+      await this.confirmOrg(true);
+    }
+    
+  }
+
+  private async proceedUpdateStep(req: any, skipNextStep?: boolean) {
     try {
-      // Update steps
-      this.stepper.selected.completed = true;
-      this.stepper.next();
+      const retryCount = this._retryCount;
+      if (!skipNextStep) {
+        // Update steps
+        this.stepper.selected.completed = true;
+        this.stepper.next();
+      }
 
       // Set Definition
       const newDomain = `${req.orgName}.${req.namespace}`;
-      await this.iamService.iam.setRoleDefinition({
-        data: req.data,
-        domain: newDomain
-      });
+      this.txs = [
+        {
+          info: 'Setting up definitions',
+          next: async () => await this.iamService.iam.setRoleDefinition({
+            data: req.data,
+            domain: newDomain
+          })
+        }
+      ];
 
-      // Move to Complete Step
-      this.toastr.info('Set definition for organization', 'Transaction Success');
-      this.stepper.selected.completed = true;
-      this.stepper.next();
+      this._requests[`${retryCount}`] = [...this.txs];
+
+      // Process
+      await this.next(retryCount, skipNextStep);
+
+      // Make sure that all steps are not yet complete
+      if (this.stepper.selectedIndex !== 3 && retryCount === this._retryCount) {
+        // Move to Complete Step
+        this.toastr.info('Set definition for organization', 'Transaction Success');
+        this.stepper.selected.completed = true;
+        this.stepper.next();
+      }
     }
     catch (e) {
       console.error('Update Org Error', e);

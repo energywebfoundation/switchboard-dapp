@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IAM } from 'iam-client-lib';
+import { IAM, WalletProvider } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { IamService } from 'src/app/shared/services/iam.service';
+import { IamService, VOLTA_CHAIN_ID } from 'src/app/shared/services/iam.service';
 
 @Component({
   selector: 'app-connect-to-wallet-dialog',
@@ -12,6 +12,7 @@ import { IamService } from 'src/app/shared/services/iam.service';
 })
 export class ConnectToWalletDialogComponent implements OnInit {
   isMetamaskExtensionAvailable = false;
+  disableMetamaskButton = false;
   appName: string;
 
   constructor(private iamService: IamService, 
@@ -24,14 +25,27 @@ export class ConnectToWalletDialogComponent implements OnInit {
 
   async ngOnInit() {
     // Check metamask availability
-    if (await IAM.isMetamaskExtensionPresent()) {
+    let { isMetamaskPresent, chainId } = await IAM.isMetamaskExtensionPresent();
+    if (isMetamaskPresent) {
       this.isMetamaskExtensionAvailable = true;
+
+      if (chainId && parseInt(`${chainId}`, 16) !== VOLTA_CHAIN_ID) {
+        this.disableMetamaskButton = true;
+      }
     }
   }
 
-  async connectToWallet() {
-    this.iamService.waitForSignature(true);
-    let isLoggedIn = await this.iamService.login();
+  async connectToEwKeyManager() {
+    await this.connectToWallet(WalletProvider.EwKeyManager);
+  }
+
+  async connectToWalletConnect() {
+    await this.connectToWallet(WalletProvider.WalletConnect)
+  }
+
+  async connectToWallet(walletProvider: WalletProvider) {
+    this.iamService.waitForSignature(walletProvider, true);
+    let isLoggedIn = await this.iamService.login(walletProvider);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
@@ -44,21 +58,13 @@ export class ConnectToWalletDialogComponent implements OnInit {
   }
 
   async connectToMetamask() {
-    // Make sure that localStorage is supported
-    if (!window.localStorage) {
-      this.toastr.error('Local data storage is not supported in this browser.', 'Connect with Metamask');
-      return;
-    }
-
     // Proceed with Login Process
-    this.iamService.waitForSignature(true);
-    let isLoggedIn = await this.iamService.login(true, true);
+    const walletProvider = WalletProvider.MetaMask;
+    this.iamService.waitForSignature(walletProvider, true);
+    let isLoggedIn = await this.iamService.login(walletProvider, true);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
-      // Set LocalStorage for Metamask
-      localStorage['METAMASK_EXT_CONNECTED'] = true;
-
       // Close Login Dialog
       this.dialogRef.close();
     }

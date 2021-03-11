@@ -51,7 +51,7 @@
                   <mat-label class="ml-3 pl-1">Organization Namespace</mat-label>
                   <div
                     class="mt-2 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-                    <div class="pb-2">{{ orgForm.get('orgName').value + '.' + orgForm?.value?.namespace }}</div>
+                    <div class="pb-2">{{ origData?.namespace }}</div>
                   </div>
                 </div>
 
@@ -153,100 +153,23 @@
             </div>
           </div>
         </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
-          <ng-template matStepLabel>Creating Organization Namespace</ng-template>
-          <div
-            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in
-              your connected Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
-          <ng-template matStepLabel>Registering Reverse Name for Namespace</ng-template>
-          <div
-            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected
-              Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
-        <mat-step [editable]="false" [completed]="false">
-          <ng-template matStepLabel>Setting up definitions</ng-template>
-          <div
-            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected
-              Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
-          <ng-template matStepLabel>Creating Role Sub-domain</ng-template>
-          <div
-            class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>info</mat-icon><span class="pb-2">Creating below sub-domain:
-              <br>{{ ENSPrefixes.Roles }}.{{ orgForm?.value?.orgName }}.{{ orgForm?.value?.namespace }}</span>
-          </div>
-          <div
-            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected
-              Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
-          <ng-template matStepLabel>Registering Reverse Name for Role Sub-domain</ng-template>
-          <div
-            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected
-              Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
-          <ng-template matStepLabel>Creating Application Sub-domain</ng-template>
-          <div
-            class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>info</mat-icon><span class="pb-2">Creating below sub-domain:
-              <br>{{ ENSPrefixes.Application }}.{{ orgForm?.value?.orgName }}.{{ orgForm?.value?.namespace }}</span>
-          </div>
-          <div
-            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected
-              Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
-          <ng-template matStepLabel>Registering Reverse Name for Application Sub-domain</ng-template>
-          <div
-            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected
-              Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
+ 
+        <ng-container *ngFor="let step of txs; let i = index;">
+          <mat-step #customStep [editable]="false" [completed]="false">
+            <ng-template matStepLabel>{{ step.info }}</ng-template>
+            <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              <mat-icon>info</mat-icon><span class="pb-2">{{ step.info }}</span>
+            </div>
+            <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
+            </div>
+            <div class="d-flex justify-content-end mb-3">
+              <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
+              <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper?.selected === customStep" (appRetryBtn)="retry()">Retry</button>
+            </div>
+          </mat-step>
+        </ng-container>
+        
         <mat-step [completed]="false">
           <ng-template matStepLabel>Organization {{ viewType === ViewType.UPDATE ? 'Updated' : 'Created' }}
           </ng-template>

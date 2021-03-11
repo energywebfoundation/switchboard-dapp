@@ -1,4 +1,4 @@
-<div class="mb-3 pb-3">
+<div class="mb-3">
   <table mat-table [dataSource]="dataSource">
     <!-- Request Date -->
     <ng-container matColumnDef="requestDate">
@@ -36,7 +36,8 @@
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef> Status </th>
       <td mat-cell *matCellDef="let element" data-label="Status">
-        <ng-container *ngIf="element?.isAccepted"> <span class="color-success">Approved</span> </ng-container>
+        <ng-container *ngIf="element?.isAccepted && element?.isSynced"> <span class="color-success">Approved</span> </ng-container>
+        <ng-container *ngIf="element?.isAccepted && !element?.isSynced"> <span class="color-success">Approved</span> <div>Pending Sync to DID Document</div> </ng-container>
         <ng-container *ngIf="!element?.isAccepted && !element?.isRejected"> <span class="color-warned">Pending</span> </ng-container>
         <ng-container *ngIf="!element?.isAccepted && element?.isRejected"> <span class="color-error">Rejected</span> </ng-container>
       </td>
@@ -44,22 +45,9 @@
 
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element">
-        <div class="d-none d-md-block">
-          <!-- View Details -->
-          <button mat-icon-button matTooltip="View" (click)="view(element)">
-            <mat-icon class="btn-color-primary">preview</mat-icon>
-          </button>
-
-          <!-- Sync to DID -->
-          <button mat-icon-button matTooltip="Add to DID Document" (click)="addToDidDoc(element)"
-            *ngIf="listType === ListType.APPLICANT && element?.isAccepted && !element?.isSynced">
-            <mat-icon class="btn-color-primary">note_add</mat-icon>
-          </button>
-        </div>
-
-        <div class="d-block d-md-none">
+        <div class="d-flex justify-content-end">
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action button list">
             <mat-icon class="btn-color-primary">more_vert</mat-icon>
           </button>
@@ -76,6 +64,13 @@
             <mat-icon class="btn-color-primary">note_add</mat-icon>
             <span>Add to DID Document</span>
           </button>
+
+          <!-- Cancel Claim Request -->
+          <button mat-menu-item class="btn-color-error" (click)="cancelClaimRequest(element)"
+            *ngIf="listType === ListType.APPLICANT && !element?.isAccepted && !element?.isRejected">
+            <mat-icon class="btn-color-error">highlight_off</mat-icon>
+            <span>Cancel Claim Request</span> 
+          </button>
           </mat-menu>
         </div>
       </td>
@@ -85,7 +80,7 @@
     <tr class="cursor-pointer" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
   <!-- Shows when table is empty -->
-  <div class="d-flex justify-content-center align-items-center mt-4 mb-3" *ngIf="!dataSource?.length">
+  <div class="d-flex justify-content-center align-items-center mt-4 mb-3 pb-3" *ngIf="!dataSource?.length">
     <div class="d-flex align-items-center no-record color-white">
       <mat-icon class="mr-2">info</mat-icon>
       <i>No Record Found</i>

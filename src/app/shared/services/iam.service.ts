@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { IAM, DIDAttribute, CacheServerClient, MessagingMethod } from 'iam-client-lib';
+import { IAM, DIDAttribute, MessagingMethod, WalletProvider, SafeIam, setCacheClientOptions, setChainConfig, setMessagingOptions } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
+import { safeAppSdk } from './gnosis.safe.service';
+import { ConfigService } from './config.service';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
@@ -11,12 +13,14 @@ const { walletConnectOptions, cacheServerUrl, natsServerUrl } = environment;
 
 const SWAL = require('sweetalert');
 
-const cacheClient = new CacheServerClient({
-  url: cacheServerUrl
-});
+const EVENT_ACCOUNT_CHANGED = 'EVENT_ACCOUNT_CHANGED';
+const EVENT_NETWORK_CHANGED = 'EVENT_NETWORK_CHANGED';
+const EVENT_DISCONNECTED = 'EVENT_DISCONNECTED';
 
 const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
 const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
+
+export const VOLTA_CHAIN_ID = 73799;
 
 export enum LoginType {
   LOCAL = 'local',
@@ -42,52 +46,64 @@ export class IamService {
   private _timer = undefined;
   private _deepLink = '';
 
-  constructor(private loadingService: LoadingService) {
-    let options = {
-      ...walletConnectOptions,
-      cacheClient,
-      messagingMethod: MessagingMethod.CacheServer,
-      natsServerUrl
-    };
+  constructor(private loadingService: LoadingService, configService: ConfigService) {
+    // Set Cache Server
+    setCacheClientOptions(VOLTA_CHAIN_ID, {
+      url: cacheServerUrl
+    });
 
-    // console.info('IAM Service Options', options);
+    // Set RPC
+    setChainConfig(VOLTA_CHAIN_ID, {
+      rpcUrl: walletConnectOptions.rpcUrl
+    });
+
+    // Set Messaging Options
+    setMessagingOptions(VOLTA_CHAIN_ID, {
+      messagingMethod: MessagingMethod.Nats,
+      natsServerUrl: natsServerUrl,
+    });
 
     // Initialize Data
     this._user = new BehaviorSubject<User>(undefined);
-    this._iam = new IAM(options);
+    if (configService.safeInfo) {
+      this._iam = new SafeIam(safeAppSdk, undefined);
+    } else {
+      this._iam = new IAM();
+    }
   }
 
   /**
    * Login via IAM and retrieve basic user info
    */
-  async login(useMetamaskExtension?: boolean, reinitializeMetamask?: boolean): Promise<boolean> {
+  async login(walletProvider?: WalletProvider, reinitializeMetamask?: boolean): Promise<boolean> {
     let retVal = false;
 
     // Check if account address exists
     if (!this._user.getValue()) {
-      // console.log('Initializing connections...');
-      let metamaskOpts = undefined;
-      if (useMetamaskExtension) {
-        metamaskOpts = {
-          useMetamaskExtension: useMetamaskExtension,
-          reinitializeMetamask: !!reinitializeMetamask
-        };
-      }
-
+      console.log('Initializing connections...');
+      const connectionOpts = { walletProvider, reinitializeMetamask };
       try {
-        const { did, connected, userClosedModal } = await this._iam.initializeConnection(metamaskOpts);
-        // console.log(did, connected, userClosedModal);
+        const { did, connected, userClosedModal } = await this._iam.initializeConnection(connectionOpts);
+        console.log(did, connected, userClosedModal);
         if (did && connected && !userClosedModal) {
           // Setup Account Address
           const signer = this._iam.getSigner();
           this.accountAddress = await signer.getAddress();
 
-          // console.log('signer', signer);
-
           // Listen to Account Change
-          if (useMetamaskExtension) {
-            this._listenToMetamaskAccountChange();
-          }
+          this._iam.on('accountChanged', () => {
+            this._displayAccountAndNetworkChanges(EVENT_ACCOUNT_CHANGED);
+          });
+
+          // Listen to Network Change
+          this._iam.on('networkChanged', () => {
+            this._displayAccountAndNetworkChanges(EVENT_NETWORK_CHANGED);
+          });
+
+          // Listen to Disconnection
+          this._iam.on('disconnected', () => {
+            this._displayAccountAndNetworkChanges(EVENT_DISCONNECTED);
+          });
 
           retVal = true;
         }
@@ -143,11 +159,6 @@ export class IamService {
   logout(saveDeepLink?: boolean) {
     this._iam.closeConnection();
     this._user = undefined;
-
-    // Logout for Metamask Extension
-    if (localStorage['METAMASK_EXT_CONNECTED']) {
-      localStorage.removeItem('METAMASK_EXT_CONNECTED');
-    }
   }
 
   setDeepLink(deepLink: any) {
@@ -166,40 +177,6 @@ export class IamService {
   }
 
   /**
-   * Checks if the there is a user currently logged-in into the dApp
-   */
-  getLoginStatus(): LoginType {
-    if (this._iam.isConnected()) {
-      // User is loggedin via remote connection
-      return LoginType.REMOTE;
-    }
-    else {
-      let isLocallyLoggedIn = false;
-
-      // Check if there is an existing walletconnect or metamask session locally
-      if (window.localStorage) {
-        if (window.localStorage.getItem(LS_WALLETCONNECT)) {
-          let walletconnectData = JSON.parse(window.localStorage.getItem(LS_WALLETCONNECT));
-          isLocallyLoggedIn = walletconnectData[LS_KEY_CONNECTED];
-        }
-        else if (window.localStorage.getItem('METAMASK_EXT_CONNECTED')) {
-          isLocallyLoggedIn = true;
-        }
-        
-      }
-      
-      if (isLocallyLoggedIn) {
-        // User has existing local session, need to call IAM.login()
-        return LoginType.LOCAL;
-      }
-      else {
-        // User is not logged-in
-        return;
-      }
-    }
-  }
-
-  /**
    * Retrieve IAM Object Reference
    */
   get iam(): IAM {
@@ -214,29 +191,34 @@ export class IamService {
     this._user.next(data);
   }
 
-  private _listenToMetamaskAccountChange() {
-    // Listen to account changes in metamask
-    if (window['ethereum']) {
-      window['ethereum'].on('accountsChanged', () => {
-        location.reload();
-      });
-    }
-  }
-
-  public waitForSignature(isConnectAndSign?: boolean) {
+  public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean) {
     this._throwTimeoutError = false;
-    let timeout = 60000;
-    let messageType = 'sign';
-    if (isConnectAndSign) {
-      messageType = 'connect to your wallet and sign';
-    }
-
-    this.loadingService.show(['Your signature is being requested.', `Please ${messageType} within ${timeout / 1000} seconds or you will be automatically logged-out.`]);
+    const timeoutInMinutes = walletProvider === WalletProvider.EwKeyManager ? 2 : 1;
+    const connectionMessage = isConnectAndSign ? 'connection to a wallet and ' : '';
+    const messages = [
+      {
+        message: `Your ${connectionMessage}signature is being requested.`,
+        relevantProviders: 'all'
+      },
+      {
+        message: 'EW Key Manager should appear in a new browser tab or window. If you do not see it, please check your browser settings.',
+        relevantProviders: WalletProvider.EwKeyManager
+      },
+      {
+        message: `If you do not complete this within ${timeoutInMinutes} minute${timeoutInMinutes === 1 ? '' : 's'},
+          your browser will refresh automatically.`,
+        relevantProviders: 'all'
+      },
+    ];
+    const waitForSignatureMessage = messages
+      .filter(m => m.relevantProviders === walletProvider || m.relevantProviders === 'all')
+      .map(m => m.message);
+    this.loadingService.show(waitForSignatureMessage);
     this._timer = setTimeout(() => {
-      this._displayTimeout(timeout / 1000, isConnectAndSign);
+      this._displayTimeout(isConnectAndSign);
       this.clearWaitSignatureTimer();
       this._throwTimeoutError = true;
-    }, timeout);
+    }, timeoutInMinutes * 60000);
   }
 
   public clearWaitSignatureTimer(throwError?: boolean) {
@@ -250,7 +232,7 @@ export class IamService {
     }
   }
 
-  private async _displayTimeout(timeout: number, isConnectAndSign?: boolean) {
+  private async _displayTimeout(isConnectAndSign?: boolean) {
     let message = 'sign';
     if (isConnectAndSign) {
       message = 'connect with your wallet and sign'
@@ -269,9 +251,42 @@ export class IamService {
     }
   }
 
+  private async _displayAccountAndNetworkChanges(changeType: string) {
+    let message: string;
+    let title: string;
+
+    switch (changeType) {
+      case EVENT_ACCOUNT_CHANGED:
+        title = 'Account Changed';
+        message = 'Account is changed.';
+        break;
+      case EVENT_NETWORK_CHANGED:
+        title = 'Network Changed';
+        message = 'Network is changed.';
+        break;
+      case EVENT_DISCONNECTED:
+        title = 'Disconnected';
+        message = 'You are disconnected from your wallet.';
+        break;
+    }
+
+    let config = {
+        title: title,
+        text: `${message} Please login again.`,
+        icon: 'warning',
+        button: 'Proceed',
+        closeOnClickOutside: false
+      };
+
+    let result = await SWAL(config);
+    if (result) {
+      this.logoutAndRefresh();
+    }
+  }
+
   isAlphaNumericOnly(event: any, includeDot?: boolean) {
     let charCode = (event.which) ? event.which : event.keyCode;
-    
+
     // Check if key is alphanumeric key
     if ((charCode > 96 && charCode < 123) || (charCode > 47 && charCode < 58) || (includeDot && charCode === 46)) {
       return true;
@@ -280,7 +295,7 @@ export class IamService {
     return false;
   }
 
-  isValidEthAddress(ethAddressCtrl: AbstractControl) : { [key: string]: boolean } | null {
+  isValidEthAddress(ethAddressCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
     let ethAddress = ethAddressCtrl.value;
 
@@ -291,7 +306,7 @@ export class IamService {
     return retVal;
   }
 
-  isValidDid(didCtrl: AbstractControl) : { [key: string]: boolean } | null {
+  isValidDid(didCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
     let did = didCtrl.value;
 
@@ -302,7 +317,7 @@ export class IamService {
     return retVal;
   }
 
-  isValidJsonFormat(jsonFormatCtrl: AbstractControl) : { [key: string]: boolean } | null {
+  isValidJsonFormat(jsonFormatCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
     let jsonStr = jsonFormatCtrl.value;
 
@@ -310,7 +325,7 @@ export class IamService {
       try {
         JSON.parse(jsonStr);
       }
-      catch(e) {
+      catch (e) {
         retVal = { invalidJsonFormat: true };
       }
     }

@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { ToastrService } from 'ngx-toastr';
+import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -161,14 +162,12 @@ export class EnrolmentListComponent implements OnInit {
   }
 
   private async syncClaimToDidDoc(element: any) {
-    this.loadingService.show('Please confirm this transaction in your connected wallet.');
+    this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
 
     try {
       let decoded: any = await this.iamService.iam.decodeJWTToken({
         token: element.issuedToken
       });
-
-      // console.log('decoded', decoded);
 
       let retVal = await this.iamService.iam.publishPublicClaim({
         token: element.issuedToken
@@ -176,9 +175,9 @@ export class EnrolmentListComponent implements OnInit {
 
       // console.log('Publish Public Claim Result: ', retVal);
       if (retVal) {
-        element.isSynced = true;
         this.notifService.decreasePendingDidDocSyncCount();
         this.toastr.success('Action is successful.', 'Sync to DID Document');
+        await this.getList(this.rejected, this.accepted);
       }
       else {
         this.toastr.warning('Unable to proceed with this action. Please contact system administrator.', 'Sync to DID Document');
@@ -190,5 +189,36 @@ export class EnrolmentListComponent implements OnInit {
     }
 
     this.loadingService.hide();
+  }
+
+  async cancelClaimRequest(element: any) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      maxHeight: '195px',
+      data: {
+        header: TOASTR_HEADER,
+        message: 'Are you sure to cancel this enrolment request?'
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().toPromise();
+
+    if (await dialogRef) {
+      this.loadingService.show();
+
+      try {
+        await this.iamService.iam.deleteClaim({
+          id: element.id
+        });
+        this.toastr.success('Action is successful.', 'Cancel Enrolment Request');
+      }
+      catch (e) {
+        console.error(e);
+        this.toastr.error('Failed to cancel the enrolment request.', TOASTR_HEADER)
+      }
+      finally {
+        this.loadingService.hide();
+      }
+    }
   }
 }

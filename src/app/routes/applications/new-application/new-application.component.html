@@ -138,74 +138,34 @@
               </div>
             </div>
         </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
-          <ng-template matStepLabel>Creating Application Namespace</ng-template>
-          <div
-            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in
-              your connected Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
-          <ng-template matStepLabel>Registering Reverse Name for Namespace</ng-template>
-          <div
-            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
-        <mat-step [editable]="false" [completed]="false">
-          <ng-template matStepLabel>Setting up definitions</ng-template>
-          <div
-            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
-          <ng-template matStepLabel>Creating Role Sub-domain</ng-template>
-          <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>info</mat-icon><span class="pb-2">Creating below sub-domain: <br>{{ ENSPrefixes.Roles }}.{{ appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace }}</span>
-          </div>
-          <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
-        <mat-step [editable]="false" *ngIf="viewType !== ViewType.UPDATE" [completed]="false">
-          <ng-template matStepLabel>Registering Reverse Name for Role Sub-domain</ng-template>
-          <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
-          </div>
-          <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="true">Next</button>
-          </div>
-        </mat-step>
-        <mat-step [completed]="false">
-            <ng-template matStepLabel>Application {{ viewType === ViewType.UPDATE ? 'Updated' : 'Created' }} </ng-template>
+        
+        <ng-container *ngFor="let step of txs; let i = index;">
+          <mat-step #customStep [editable]="false" [completed]="false">
+            <ng-template matStepLabel>{{ step.info }}</ng-template>
+            <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              <mat-icon>info</mat-icon><span class="pb-2">{{ step.info }}</span>
+            </div>
             <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-              <mat-icon>notifications_none</mat-icon><span class="pb-2">All transactions are completely processed.</span>
+              <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
             </div>
-            <div>
-              <div class="d-flex justify-content-end mb-2">
-                <button mat-raised-button class="btn btn-small btn-primary" (click)="closeDialog(true)">Complete</button>
-              </div>
+            <div class="d-flex justify-content-end mb-3">
+              <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
+              <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper?.selected === customStep" (appRetryBtn)="retry()">Retry</button>
             </div>
-        </mat-step>
+          </mat-step>
+        </ng-container>
+        <mat-step [completed]="false">
+          <ng-template matStepLabel>Complete</ng-template>
+          <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            <mat-icon>notifications_none</mat-icon><span class="pb-2">All transactions are completely processed.</span>
+          </div>
+          <div>
+            <div class="d-flex justify-content-end mb-2">
+              <button mat-raised-button class="btn btn-small btn-primary" (click)="closeDialog(true)">Complete</button>
+            </div>
+          </div>
+        </mat-step>        
+        
       </mat-vertical-stepper>
     </div>
   </div>

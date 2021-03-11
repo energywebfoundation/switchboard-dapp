@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -25,10 +25,13 @@ export class GovernanceDetailsComponent implements OnInit {
 
   typeLabel: string;
   formData: any;
-  displayedColumnsView: string[] = ['type', 'label' /*, 'validation'*/];
+  displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue', 'minDate', 'maxDate'];
 
   appList: any[];
   roleList: any[];
+
+  preconditions = {};
+  PreconditionTypes = PreconditionTypes;
 
   constructor(
     private iamService: IamService,
@@ -44,17 +47,6 @@ export class GovernanceDetailsComponent implements OnInit {
 
   public async setData(data: any) {
     this.data = data;
-    switch (this.data.type) {
-      case ListType.ORG:
-        this.typeLabel = 'Organization';
-        break;
-      case ListType.APP:
-        this.typeLabel = 'Application';
-        break;
-      case ListType.ROLE:
-        this.typeLabel = 'Role';
-        break;
-    }
 
     this.formData = JSON.parse(JSON.stringify(this.data.definition));
     if (this.formData.definition.others) {
@@ -64,10 +56,47 @@ export class GovernanceDetailsComponent implements OnInit {
       }
       this.formData.definition.others = JSON.stringify(tmp);
     }
-    // console.log('formData', this.formData);
+
+    switch (this.data.type) {
+      case ListType.ORG:
+        this.typeLabel = 'Organization';
+        break;
+      case ListType.APP:
+        this.typeLabel = 'Application';
+        break;
+      case ListType.ROLE:
+        this.typeLabel = 'Role';
+        this._initFields();
+        break;
+    }
 
     if (this.isEmbedded) {
       await this._getAppsAndRoles();
+    }
+  }
+
+  private _initFields() {
+    if (this.formData.definition.fields) {
+      // Init Fields
+      for (let data of this.formData.definition.fields) {
+        if (data.fieldType === 'date') {
+          if (data.maxDate) {
+            data.maxDate = new Date(data.maxDate);
+          }
+          if (data.minDate) {
+            data.minDate = new Date(data.minDate);
+          }
+        }
+      }
+    }
+
+    if (this.formData.definition.enrolmentPreconditions) {
+      // Init Preconditions
+      for (let precondition of this.formData.definition.enrolmentPreconditions) {
+        if (precondition.conditions) {
+          this.preconditions[precondition.type] = precondition.conditions;
+        }
+      }
     }
   }
 
@@ -122,69 +151,7 @@ export class GovernanceDetailsComponent implements OnInit {
     });
   }
 
-  async enrol(type: string, role: any) {
-    // check if currently enrolled in this role
-    if (!(await this._isEnrolled(role))) {
-      try {
-        let url = this._constructEnrolmentUrl(type, role);
-        let newWindowRef = window.open();
-        newWindowRef.location = <any>url;
-        if (
-          !newWindowRef ||
-          newWindowRef.closed ||
-          typeof newWindowRef.closed == 'undefined'
-        ) {
-          this.toastr.error(
-            'A new window cannot be opened. Please allow popups for this application in your browser.',
-            'Enrolment'
-          );
-        }
-      } catch (e) {
-        console.error('Cannot open new window.', e);
-        this.toastr.error(
-          'A new window cannot be opened. Please allow popups for this application in your browser.',
-          'Enrolment'
-        );
-      }
-    } else {
-      this.toastr.warning(
-        'You either have an approved/pending enrolment request for this role.',
-        'Enrolment'
-      );
-    }
-  }
-
-  private async _isEnrolled(role: any): Promise<boolean> {
-    let isEnrolled = false;
-    let namespaceArr: string[] = role.namespace.split('.');
-    namespaceArr.splice(0, 2);
-
-    try {
-      this.loadingService.show();
-      let enrolledList = await this.iamService.iam.getRequestedClaims({
-        did: this.iamService.iam.getDid(),
-        parentNamespace: namespaceArr.join('')
-      });
-
-      if (enrolledList) {
-        for (let i = 0; i < enrolledList.length; i++) {
-          if (enrolledList[i].claimType === role.namespace) {
-            isEnrolled = true;
-            break;
-          }
-        }
-      }
-    } catch (e) {
-      console.error(e);
-      this.toastr.error(e);
-    } finally {
-      this.loadingService.hide();
-    }
-
-    return isEnrolled;
-  }
-
-  private _constructEnrolmentUrl(listType: string, roleDefinition: any) {
+  getQueryParams(listType: string, roleDefinition: any) {
     let name = roleDefinition.name;
     let arr = roleDefinition.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
     let namespace = '';
@@ -193,6 +160,12 @@ export class GovernanceDetailsComponent implements OnInit {
       namespace = arr[1];
     }
 
-    return `${location.origin}/#/enrol?${listType}=${namespace}&roleName=${name}&stayLoggedIn=true`;
+    let retVal = {
+      roleName: name,
+      stayLoggedIn: true
+    };
+    retVal[listType] = namespace;
+
+    return retVal;
   }
 }

@@ -129,6 +129,18 @@ mat-paginator {
     height: 32px;
 }
 
+.img-logo-list-sm {
+    width: auto !important;
+    height: 18px;
+}
+
+.filter-list-item {
+    display: flex;
+    align-items: center;
+    padding: 3px 0 3px 0;
+    
+}
+
 .btn-action-1 {
     position: relative;
     top: -1px;
@@ -181,7 +193,7 @@ mat-paginator {
     .mat-table tr.mat-row {
       display: block;
       height: auto;
-      padding-bottom: 10px;
+      padding-bottom: 5px;
     }
     /*
     .mat-table tr.mat-row:nth-child(even) {background: #CCC}

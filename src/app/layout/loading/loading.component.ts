@@ -1,20 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+
+export const CancelButton = {
+  ENABLED: true,
+  DISABLED: false
+};
 
 @Component({
   selector: 'app-loading',
   templateUrl: './loading.component.html',
   styleUrls: ['./loading.component.scss']
 })
-export class LoadingComponent implements OnInit {
+export class LoadingComponent implements OnInit, AfterViewInit {
 
   public showLoadingOverlay = false;
+  public isCancellable = false;
   public msg = '';
   public msgList: string[];
   constructor(private spinner: NgxSpinnerService, private loadingService: LoadingService) { }
 
-  ngOnInit() {
+  ngAfterViewInit(): void {
+    // Subscribe to cancellable event
+    this.loadingService.isCancellable.subscribe((isCancellable: boolean) => {
+      let $setTimeout = setTimeout(() => {
+        this.isCancellable = isCancellable;
+        clearTimeout($setTimeout);
+      }, 30);
+    });
+
     // Subscribe to msg event
     this.loadingService.message.subscribe((message: any) => {
       let $setTimeout = setTimeout(() => {
@@ -48,4 +62,9 @@ export class LoadingComponent implements OnInit {
     });
   }
 
+  ngOnInit() { }
+
+  cancel() {
+    this.loadingService.hide();
+  }
 }

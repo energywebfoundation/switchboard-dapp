@@ -120,6 +120,10 @@ export class AppComponent implements OnInit {
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/view-organization-icon.svg")
         );
         this.matIconRegistry.addSvgIcon(
+            "add-organization-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/add-organization-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
             "transfer-ownership-icon",
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/transfer-ownership-icon.svg")
         );

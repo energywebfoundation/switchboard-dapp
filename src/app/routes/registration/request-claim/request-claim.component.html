@@ -33,7 +33,26 @@
           </div>
         </div>
       </form>
-      <form role="form" [formGroup]="enrolmentForm" *ngIf="roleTypeForm?.value?.roleType && fieldList.length">
+
+      <!-- PRE-CHECK Error Messages-->
+      <ng-container *ngIf="!isPrecheckSuccess && rolePreconditionList?.length">
+        <ng-container *ngFor="let precondition of rolePreconditionList">
+          <!-- Role is Approved but NOT SYNCED -->
+          <div *ngIf="precondition.status === RolePreconditionType.APPROVED" 
+            matTooltip="Please sync this role to your DID Document."
+            class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              <mat-icon >info</mat-icon><span class="pb-2">{{  precondition.namespace }}</span>
+          </div>
+          <!-- Request is Pending or No Request at all -->
+          <div *ngIf="precondition.status === RolePreconditionType.PENDING" 
+            matTooltip="You don't have this role yet."
+            class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              <mat-icon >close</mat-icon><span class="pb-2">{{  precondition.namespace }}</span>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <form role="form" [formGroup]="enrolmentForm" *ngIf="roleTypeForm?.value?.roleType && fieldList.length && isPrecheckSuccess">
         <div class="row">
           <!-- START: Dynamic Form Fields -->
           <ng-container *ngFor="let field of enrolmentForm?.get('fields')?.controls; let i = index;">
@@ -47,6 +66,10 @@
                 *ngIf="fieldList[i].fieldType === 'text'" [ngStyle]="txtColor">
                 <input matInput type="text" placeholder="{{ fieldList[i].label }}"
                   [formControl]="enrolmentForm?.get('fields')?.controls[i]" />
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.required">This field is required.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.minlength">Please input at least {{ fieldList[i].minLength }} characters.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.maxlength">Please input at most {{ fieldList[i].maxLength }} characters.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.pattern">Incorrect data format.</mat-error>
               </mat-form-field>
 
               <!-- TYPE: Number -->
@@ -54,15 +77,19 @@
               *ngIf="fieldList[i].fieldType === 'number'" [ngStyle]="txtColor">
                 <input matInput type="number" placeholder="{{ fieldList[i].label }}"
                   [formControl]="enrolmentForm?.get('fields')?.controls[i]"/>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.required">This field is required.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.max">Max value is {{ fieldList[i].maxValue }}.</mat-error>
+                  <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.min">Min value is {{ fieldList[i].minValue }}.</mat-error>
               </mat-form-field>
 
               <!-- TYPE: Date -->
               <mat-form-field class="mt-2 md-enroll bg-transparent" appearance="outline" floatPlaceholder="never" 
               *ngIf="fieldList[i].fieldType === 'date'" [ngStyle]="txtColor">
-                <input [matDatepicker]="picker" matInput placeholder="{{ fieldList[i].label }}" autocomplete="off"
+                <input [matDatepicker]="picker" [max]="fieldList[i].maxDateValue" [min]="fieldList[i].minDateValue" matInput placeholder="{{ fieldList[i].label }}" autocomplete="off"
                   [formControl]="enrolmentForm?.get('fields')?.controls[i]" (keypress)="$event.preventDefault()">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="enrolmentForm?.get('fields')?.controls[i]?.errors?.required">This field is required.</mat-error>
               </mat-form-field>
 
               <!-- TYPE: Boolean -->
@@ -74,9 +101,11 @@
           <!-- END: Dynamic Form Fields -->
         </div>
       </form>
-      <div class="mt-3">
+      <div class="mt-3" *ngIf="!isLoading">
         <button mat-raised-button class="btn btn-primary md-enroll w-100" type="submit" (click)="submit()"
-          [disabled]="!roleTypeForm?.value?.roleType || submitting" [ngStyle]="btnColor">Submit Request</button>
+          *ngIf="isPrecheckSuccess" [disabled]="!roleTypeForm?.value?.roleType || submitting || !roleTypeForm?.valid" [ngStyle]="btnColor">Submit Request</button>
+        <button mat-raised-button class="btn btn-primary md-enroll w-100" type="submit" (click)="goToEnrolment()"
+          *ngIf="!isPrecheckSuccess" [ngStyle]="btnColor">View My Enrolments</button>
       </div>
     </mat-card>
     <app-loading></app-loading>
