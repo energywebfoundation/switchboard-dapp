@@ -3,3 +3,7 @@ export const ListType = {
     APP: 'app',
     ROLE: 'role'
 };
+
+export const enum LoadingCount {
+    UP, DOWN
+}
