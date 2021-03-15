@@ -12,4 +12,5 @@ export class NewAssetTypeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  closeDialog() {}
 }

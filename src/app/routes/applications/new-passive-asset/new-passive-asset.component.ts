@@ -12,4 +12,5 @@ export class NewPassiveAssetComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  closeDialog() {}
 }
