@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { LoadingCount } from '../constants/shared-constants';
 
 @Injectable({
   providedIn: 'root'
@@ -48,5 +49,18 @@ export class LoadingService {
     }
     this._msg.next('');
     this._isLoading.next(this._counter);
+  }
+
+  updateLocalLoadingFlag(loadingObj: { requests: any[], value: boolean}, method: LoadingCount) {
+    console.log('test');
+    if (loadingObj && loadingObj.requests) {
+      if (method === LoadingCount.UP) {
+        loadingObj.requests.push(true);
+      }
+      else if (method === LoadingCount.DOWN) {
+        loadingObj.requests.pop();
+      }
+      loadingObj.value = loadingObj.requests.length > 0;
+    }
   }
 }

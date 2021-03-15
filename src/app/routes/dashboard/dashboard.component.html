@@ -38,12 +38,15 @@
                   </mat-option>
                 </mat-autocomplete>                
                   <div matSuffix class="d-flex" *ngIf="searchTxtFieldValue?.trim()?.length > 2">
-                    <button mat-icon-button (click)="search()">
-                      <mat-icon>search</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="clearSearchTxt()">
-                      <mat-icon>close</mat-icon>
-                    </button>
+                    <ng-container *ngIf="!isAutolistLoading?.value" >
+                      <button mat-icon-button (click)="search()">
+                        <mat-icon>search</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="clearSearchTxt()">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </ng-container>
+                    <mat-spinner *ngIf="isAutolistLoading?.value" diameter="21" class="color-white"></mat-spinner>
                   </div>
               </mat-form-field>
             </form>
