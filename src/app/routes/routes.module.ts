@@ -11,6 +11,7 @@ import { EnrolmentModule } from './enrolment/enrolment.module';
 import { ApplicationsModule } from './applications/applications.module';
 import { WidgetsModule } from './widgets/widgets.module';
 import { SearchResultModule } from './search-result/search-result.module';
+import { AssetsModule } from './assets/assets.module';
 
 
 
@@ -22,6 +23,7 @@ import { SearchResultModule } from './search-result/search-result.module';
         RegistrationModule,
         WelcomeModule,
         ApplicationsModule,
+        AssetsModule,
         EnrolmentModule,
         SearchResultModule,
         WidgetsModule
