@@ -1,10 +1,10 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MatStepper, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { MatAutocompleteTrigger, MatDialog, MatDialogRef, MatStepper, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { filter } from 'rxjs/operators';
+import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { FieldValidationService } from 'src/app/shared/services/field-validation.service';
 import { ConfigService } from 'src/app/shared/services/config.service';
@@ -12,6 +12,7 @@ import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
+import { Observable } from 'rxjs';
 
 export const RoleType = {
   ORG: 'org',
@@ -51,9 +52,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       this.stepper = content;
     }
   }
+  @ViewChild(MatAutocompleteTrigger, { static: false}) autocompleteTrigger: MatAutocompleteTrigger;
 
   public roleForm     : FormGroup;
   public issuerGroup  : FormGroup;
+  public roleControl  : FormControl;
   public environment  = environment;
   public isChecking   = false;
   public RoleType     = RoleType;
@@ -71,9 +74,12 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   fieldsForm          : FormGroup;
   showFieldsForm      = false;
   isEditFieldForm     = false;
+  isAutolistLoading   = false;
+  hasSearchResult     = true;
   displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
   displayedColumns    : string[] = [...this.displayedColumnsView, 'actions'];
   dataSource          = new MatTableDataSource([]);
+  rolenamespaceList   : Observable<any[]>;
 
   public ViewType = ViewType;
   viewType: string = ViewType.NEW;
@@ -85,6 +91,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   private _retryCount = 0;
   private _currentIdx = 0;
   private _requests = {};
+  private _onSearchKeywordInput$ : any;
 
   constructor(private fb: FormBuilder,
     private iamService: IamService,
@@ -107,7 +114,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
             issuerType: this.IssuerType.DID,
             roleName: '',
             did: fb.array([])
-          })
+          }),
+          enrolmentPreconditions: [[{ type: PreconditionTypes.Role, conditions: []}]]
         })
       });
 
@@ -138,12 +146,23 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       this._induceInt();
       this._induceRanges();
 
+      // Init Issuer Fields
       this.issuerGroup = fb.group({
         newIssuer: ['', this.iamService.isValidDid]
       });
-
       this.issuerList = [];
       this.issuerList.push(this.iamService.iam.getDid());
+
+      // Init Restriction Fields
+      this.roleControl = fb.control('');
+      this.rolenamespaceList = this.roleControl.valueChanges.pipe(
+        debounceTime(1200),
+        startWith(''),
+        switchMap(async (value) => await this._searchRoleNamespace(value))
+      );
+      this._onSearchKeywordInput$ = this.roleControl.valueChanges.pipe(
+        switchMap(async (value) => await this._handleKeywordChanged(value))
+      ).subscribe();
 
       this._init(data);
     }
@@ -210,7 +229,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
             issuerType: def.issuer.issuerType,
             roleName: def.issuer.roleName,
             did: def.issuer.did ? [...def.issuer.did] : []
-          }
+          },
+          enrolmentPreconditions: this._initPreconditions(def.enrolmentPreconditions)
         }
       });
 
@@ -218,6 +238,20 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         this.issuerList = [...def.issuer.did];
       }
     }
+  }
+
+  private _initPreconditions(preconditionList: any[]) {
+    let retVal = [];
+
+    if (preconditionList) {
+      for (let precondition of preconditionList) {
+        if (precondition.conditions) {
+          retVal.push(precondition);
+        }
+      }
+    }
+    
+    return retVal;
   }
 
   private _initDates() {
@@ -340,7 +374,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
   
   addField() {
-    console.log('fields', this._extractValidationObject(this.fieldsForm.value));
     if (this.fieldsForm.valid) {
       this.dataSource.data = [...this.dataSource.data, this._extractValidationObject(this.fieldsForm.value)];
       this.fieldsForm.reset();
@@ -629,6 +662,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       list[1].editable = false;
     }
 
+    console.log('req', req);
+
     if (this.viewType === ViewType.UPDATE) {
       this.proceedUpdateStep(req, skipNextStep);
     }
@@ -795,6 +830,99 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         }
       }
       this.dialogRef.close(isSuccess);
+    }
+  }
+
+  private async _searchRoleNamespace(keyword: any): Promise<any[]> {
+    if (this.autocompleteTrigger) {
+      this.autocompleteTrigger.closePanel();
+    }
+    
+    this.isAutolistLoading = true;
+    let retVal = [];
+
+    if (keyword) {
+      let word = undefined;
+      if (!keyword.trim && keyword.name) {
+        word = keyword.name;
+      } else {
+        word = keyword.trim();
+      }
+
+      if (word.length > 2) {
+        word = word.toLowerCase();
+        try {
+          retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
+            search: word,
+            types: ['Role']
+          });
+
+          if (retVal && retVal.length) {
+            this.hasSearchResult = true;
+            if (this.autocompleteTrigger) {
+              this.autocompleteTrigger.openPanel();
+            }
+          }
+        }
+        catch (e) {
+          this.toastr.error('Could not load search result.', 'Server Error');
+        }
+      }
+    }
+    this.isAutolistLoading = false;
+    return retVal;
+  }
+
+  displayFn(selected: any) {
+    return selected && selected.namespace ? selected.namespace : '';
+  }
+
+  onSelectedItem(event: any) {
+    // Make sure that enrolmentPreconditions field exists
+    let enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions');
+    if (!enrolmentPreconditions || !enrolmentPreconditions.value || !enrolmentPreconditions.value.length) {
+      this.roleForm.get('data').get('enrolmentPreconditions').setValue([{ type: PreconditionTypes.Role, conditions: []}]);
+      enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions');
+    }
+
+    // Make sure that conditions field exists
+    let conditions = enrolmentPreconditions.value[0].conditions;
+    if (!enrolmentPreconditions) {
+      conditions = this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions = [];
+    }
+
+    // Check if item is already added
+    if (conditions.includes(event.option.value.namespace)) {
+      this.toastr.warning('Role already exists in the list.');
+    }
+    else {
+      conditions.push(event.option.value.namespace);
+      this.clearSearchTxt();
+    }
+  }
+
+  private _
+
+  clearSearchTxt() {
+    this.roleControl.setValue('');
+  }
+
+  removePreconditionRole(idx: number) {
+    this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions.splice(idx, 1);
+  }
+
+  private async _handleKeywordChanged(keyword: any) {
+    this.hasSearchResult = true;
+    if (keyword) {
+      let word = undefined;
+      if (!keyword.trim && keyword.name) {
+        word = keyword.name;
+      } else {
+        word = keyword.trim();
+      }
+      if (!this.isAutolistLoading && word.length > 2) {
+        this.hasSearchResult = false;
+      }
     }
   }
 }

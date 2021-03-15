@@ -76,6 +76,12 @@
       </ng-container>
       <mat-divider></mat-divider>
       <div class="text-left my-3">
+        <div class="label opacity-50 mb-2">Restrictions (Role Preconditions)</div>
+        <div class="color-white mb-0" *ngIf="!preconditions[PreconditionTypes.Role]?.length">None</div>
+        <div class="color-white mb-0" *ngFor="let precondition of preconditions[PreconditionTypes.Role]">{{ precondition }}</div>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Fields</div>
         <span class="color-white mb-0" *ngIf="!formData?.definition?.fields?.length">None</span>
         <table mat-table [dataSource]="formData?.definition?.fields" *ngIf="formData?.definition?.fields?.length">
