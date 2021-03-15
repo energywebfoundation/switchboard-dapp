@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { ToastrService } from 'ngx-toastr';
@@ -27,8 +27,10 @@ export class EnrolmentListComponent implements OnInit {
   @Input('accepted') accepted   : boolean;
   @Input('rejected') rejected   : boolean;
 
+  @ViewChild(MatSort, undefined) sort: MatSort;
+
   ListType        = EnrolmentListType;
-  dataSource      = [];
+  dataSource      = new MatTableDataSource([]);
   displayedColumns: string[];
   dynamicAccepted : boolean;
   dynamicRejected : boolean;
@@ -40,11 +42,37 @@ export class EnrolmentListComponent implements OnInit {
     private notifService: NotificationService) {}
 
   async ngOnInit() { 
+
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      if (property === 'status') {
+        if (item.isAccepted) {
+          if (item.isSynced) {
+            return 'approved';
+          }
+          else {
+            return 'approved pending sync';
+          }
+        }
+        else {
+          if (item.isRejected) {
+            return 'rejected';
+          }
+          else {
+            return 'pending';
+          }
+        }
+      }
+      else {
+        return item[property];
+      }
+    };
+
     if (this.listType === EnrolmentListType.APPLICANT) {
-      this.displayedColumns = ['requestDate', 'name', 'namespace', 'status', 'actions'];
+      this.displayedColumns = ['requestDate', 'roleName', 'parentNamespace', 'status', 'actions'];
     }
     else {
-      this.displayedColumns = ['requestDate', 'name', 'namespace', 'requestor', 'status', 'actions'];
+      this.displayedColumns = ['requestDate', 'roleName', 'parentNamespace', 'requester', 'status', 'actions'];
     }
 
     await this.getList(this.rejected, this.accepted);
@@ -97,7 +125,7 @@ export class EnrolmentListComponent implements OnInit {
       this.toastr.error(e, TOASTR_HEADER);
     }
 
-    this.dataSource = list;
+    this.dataSource.data = list;
     this.loadingService.hide();
   }
 

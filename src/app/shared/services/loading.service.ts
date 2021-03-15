@@ -52,7 +52,6 @@ export class LoadingService {
   }
 
   updateLocalLoadingFlag(loadingObj: { requests: any[], value: boolean}, method: LoadingCount) {
-    console.log('test');
     if (loadingObj && loadingObj.requests) {
       if (method === LoadingCount.UP) {
         loadingObj.requests.push(true);
