@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { ENSNamespaceTypes, IApp, IOrganization, IRole } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { ListType } from 'src/app/shared/constants/shared-constants';
@@ -33,9 +33,11 @@ export class GovernanceListComponent implements OnInit {
   @Input() defaultFilterOptions: any;
   @Output() updateFilter = new EventEmitter<any>();
 
+  @ViewChild(MatSort, undefined) sort: MatSort;
+
   ListType        = ListType;
   RoleType        = RoleType;
-  dataSource      = [];
+  dataSource      = new MatTableDataSource([]);;
   origDatasource  = [];
   displayedColumns: string[];
   listTypeLabel   : string;
@@ -81,6 +83,24 @@ export class GovernanceListComponent implements OnInit {
         this.ensType = ENSNamespaceTypes.Roles;
         break;
     }
+
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      if (property === 'name') {
+        
+        switch (this.listType) {
+          case ListType.ORG: return item.definition.orgName.toLowerCase();
+          case ListType.APP: return item.definition.appName.toLowerCase();
+          case ListType.ROLE: return item.definition.roleName.toLowerCase();
+        }
+      } 
+      else if (property === 'type') {
+        return item.definition.roleType;
+      }
+      else {
+        return item[property];
+      }
+    };
 
     await this.getList(this.defaultFilterOptions);
   }
@@ -266,7 +286,7 @@ export class GovernanceListComponent implements OnInit {
       if (result) {
         if (this.orgHierarchy.length) {
           let currentOrg = this.orgHierarchy.pop();
-          if (this.dataSource.length === 1) {
+          if (this.dataSource.data.length === 1) {
             await this.viewSubOrgs(this.orgHierarchy.pop());
           }
           else {
@@ -339,7 +359,7 @@ export class GovernanceListComponent implements OnInit {
         if (await isRemoved) {
           if (this.orgHierarchy.length) {
             let currentOrg = this.orgHierarchy.pop();
-            if (this.dataSource.length === 1) {
+            if (this.dataSource.data.length === 1) {
               await this.viewSubOrgs(this.orgHierarchy.pop());
             }
             else {
@@ -460,7 +480,7 @@ export class GovernanceListComponent implements OnInit {
       });
     }
 
-    this.dataSource = tmpData;
+    this.dataSource.data = tmpData;
   }
 
   resetFilter() {
@@ -470,7 +490,7 @@ export class GovernanceListComponent implements OnInit {
       role: ''
     });
 
-    this.dataSource = JSON.parse(JSON.stringify(this.origDatasource));
+    this.dataSource.data = JSON.parse(JSON.stringify(this.origDatasource));
   }
 
   newSubOrg(parentOrg: any, displayMode?: boolean) {
@@ -503,7 +523,7 @@ export class GovernanceListComponent implements OnInit {
         });
 
         if ($getSubOrgs.subOrgs && $getSubOrgs.subOrgs.length) {
-          this.dataSource = JSON.parse(JSON.stringify($getSubOrgs.subOrgs));
+          this.dataSource.data = JSON.parse(JSON.stringify($getSubOrgs.subOrgs));
           this.orgHierarchy.push(element);
         }
         else {
@@ -524,7 +544,7 @@ export class GovernanceListComponent implements OnInit {
     e.preventDefault();
 
     if (idx === undefined) {
-      this.dataSource = JSON.parse(JSON.stringify(this.origDatasource));
+      this.dataSource.data = JSON.parse(JSON.stringify(this.origDatasource));
       this.orgHierarchy.length = 0;
     }
     else {
