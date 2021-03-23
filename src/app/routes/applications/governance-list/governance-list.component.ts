@@ -49,6 +49,8 @@ export class GovernanceListComponent implements OnInit {
 
   DRILL_DOWN_SUBORG = true;
   currentUserEthAddress = undefined;
+
+  private _isSubOrgCreated = false;
   
   constructor(private loadingService: LoadingService,
       private iamService: IamService,
@@ -507,6 +509,8 @@ export class GovernanceListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(async (res: any) => {
       if (res) {
+        this._isSubOrgCreated = true;
+
         // Refresh Screen
         let currentOrg = displayMode === this.DRILL_DOWN_SUBORG ? parentOrg : this.orgHierarchy.pop();
         await this.viewSubOrgs(currentOrg, ALLOW_NO_SUBORG);
@@ -544,8 +548,15 @@ export class GovernanceListComponent implements OnInit {
     e.preventDefault();
 
     if (idx === undefined) {
-      this.dataSource.data = JSON.parse(JSON.stringify(this.origDatasource));
-      this.orgHierarchy.length = 0;
+      if (this._isSubOrgCreated) {
+        this._isSubOrgCreated = false;
+        this.orgHierarchy.length = 0;
+        await this.getList(this.defaultFilterOptions, true);
+      }
+      else {
+        this.dataSource.data = JSON.parse(JSON.stringify(this.origDatasource));
+        this.orgHierarchy.length = 0;
+      }
     }
     else {
       let element = this.orgHierarchy[idx];
