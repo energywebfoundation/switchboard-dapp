@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AssetsComponent implements OnInit {
 
-  displayedColumns: string[] = ['qrCode', 'name', 'activeEnrolments', 'type', 'status', 'actions'];
+  displayedColumns: string[] = ['logo', 'name', 'activeEnrolments', 'type', 'status', 'actions'];
   dataSource = ELEMENT_DATA;
 
   constructor() { }
@@ -18,7 +18,7 @@ export class AssetsComponent implements OnInit {
 }
 
 export interface PeriodicElement {
-  qrCode: string;
+  logo: string;
   name: string;
   activeEnrolments: string;
   type: string;
@@ -27,7 +27,7 @@ export interface PeriodicElement {
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-  {qrCode: '', name: 'macbook2019Q1.support.apple.iam.ewc', activeEnrolments: 'IoT Gateway', type: 'Passive', status: 'Online', actions: ''},
-  {qrCode: '', name: 'Living Room Gateway', activeEnrolments: 'IoT Gateway', type: 'Active', status: 'Online', actions: ''},
-  {qrCode: '', name: 'Apartment Smart Gateway', activeEnrolments: 'IoT Gateway', type: 'Active', status: 'Online', actions: ''},
+  {logo: '', name: 'macbook2019Q1.support.apple.iam.ewc', activeEnrolments: 'IoT Gateway', type: 'Passive', status: 'Online', actions: ''},
+  {logo: '', name: 'Living Room Gateway', activeEnrolments: 'IoT Gateway', type: 'Active', status: 'Online', actions: ''},
+  {logo: '', name: 'Apartment Smart Gateway', activeEnrolments: 'IoT Gateway', type: 'Active', status: 'Online', actions: ''},
 ];
