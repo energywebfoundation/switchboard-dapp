@@ -47,6 +47,15 @@
     }
 }
 
+.select-asset {
+    border: 2px solid #33CBCB;
+    border-radius: 50px;
+}
+
+.mat-sort-header-button {
+    text-transform: uppercase;
+}
+
 @include media-breakpoint-down(sm) {
     .mat-raised-button, .mat-stroked-button {
         padding: 0 16px !important;
