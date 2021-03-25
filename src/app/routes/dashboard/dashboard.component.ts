@@ -135,7 +135,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   search(namespace?: string) {
-    if (!this.isAutolistLoading) {
+    if (!this.isAutolistLoading.value) {
       this.route.navigate(['search-result'], {
         queryParams: { keyword: this.searchTxtFieldValue, namespace: namespace }
       });
@@ -143,7 +143,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   onSelectedItem(event: any) {
-    // console.log('onSelectedItem', event);
+    console.log('onSelectedItem', event);
     this.search(event.option.value.namespace);
   }
 
