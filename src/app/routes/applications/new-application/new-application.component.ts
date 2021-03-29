@@ -91,14 +91,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
       // Construct Others
       if (def.others) {
-        let tmp: any[] = def.others;
-        others = {};
-
-        for (let item of tmp) {
-          others[item.key] = item.value;
-        }
-
-        others = JSON.stringify(others);
+        others = JSON.stringify(def.others);
       }
 
       // Construct Organization
@@ -394,7 +387,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       // Make sure that the current step is not retried
       if (this._requests[`${requestIdx}`]) {
         this._currentIdx++;
-        this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.stepper.steps.length})`);
+        this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.txs.length})`);
 
         // Remove 1st element
         steps.shift();
