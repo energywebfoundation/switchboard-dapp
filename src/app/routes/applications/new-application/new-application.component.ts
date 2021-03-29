@@ -91,14 +91,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
       // Construct Others
       if (def.others) {
-        let tmp: any[] = def.others;
-        others = {};
-
-        for (let item of tmp) {
-          others[item.key] = item.value;
-        }
-
-        others = JSON.stringify(others);
+        others = JSON.stringify(def.others);
       }
 
       // Construct Organization

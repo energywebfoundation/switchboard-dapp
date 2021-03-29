@@ -105,10 +105,7 @@ export class RequestClaimComponent implements OnInit {
 
       // re-construct others
       if (this.orgAppDetails.others) {
-        others = {};
-        for (let item of this.orgAppDetails.others) {
-          others[item.key] = item.value;
-        }
+        others = this.orgAppDetails.others;
       }
 
       this.callbackUrl = params.returnUrl || (others ? others.returnUrl : undefined);
@@ -430,7 +427,6 @@ export class RequestClaimComponent implements OnInit {
           if (field.minDate) {
             field.minDateValue = new Date(field.minDate);
           }
-          console.log('field', field);
           break;
         case 'boolean':
           control.setValue(false);
