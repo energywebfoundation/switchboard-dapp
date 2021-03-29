@@ -394,7 +394,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       // Make sure that the current step is not retried
       if (this._requests[`${requestIdx}`]) {
         this._currentIdx++;
-        this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.stepper.steps.length})`);
+        this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.txs.length})`);
 
         // Remove 1st element
         steps.shift();
