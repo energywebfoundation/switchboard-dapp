@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
+// import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
 
 
 @Component({
@@ -13,29 +13,30 @@ export class AssetsComponent implements OnInit {
   displayedColumns: string[] = ['logo', 'name', 'activeEnrolments', 'type', 'status', 'actions'];
   dataSource = ELEMENT_DATA;
 
-  constructor(public dialog: MatDialog) { }
+  constructor() { }
+  // constructor(public dialog: MatDialog) { }
 
-  regPassiveAsset() {
-    const dialogRef = this.dialog.open(NewPassiveAssetComponent, {
-      width: '600px',data:{},
-      maxWidth: '100%',
-    });
+  // regPassiveAsset() {
+  //   const dialogRef = this.dialog.open(NewPassiveAssetComponent, {
+  //     width: '600px',data:{},
+  //     maxWidth: '100%',
+  //   });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.log(`Dialog result: ${result}`);
+  //   });
+  // }
 
   ngOnInit(): void {
   }
 
 }
-@Component({
-  selector: 'app-new-passive-asset',
-  templateUrl: './new-passive-asset/new-passive-asset.component.html'
-})
+// @Component({
+//   selector: 'app-new-passive-asset',
+//   templateUrl: './new-passive-asset/new-passive-asset.component.html'
+// })
 
-export class newPassiveAsset {}
+// export class newPassiveAsset {}
 
 export interface PeriodicElement {
   logo: string;

@@ -8,8 +8,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { GovernanceDetailsModule } from '../applications/governance-view/governance-details/governance-details.module';
 import { NgMatSearchBarModule } from 'ng-mat-search-bar';
-import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
-import { PredefinedIconsComponent } from './new-passive-asset/predefined-icons/predefined-icons.component';
+// import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
+// import { PredefinedIconsComponent } from './new-passive-asset/predefined-icons/predefined-icons.component';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent }
@@ -17,7 +17,8 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [AssetsComponent, NewPassiveAssetComponent, PredefinedIconsComponent],
+  declarations: [AssetsComponent],
+  // declarations: [AssetsComponent, NewPassiveAssetComponent, PredefinedIconsComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -37,10 +38,10 @@ const routes: Routes = [
     MatExpansionModule,
     NgMatSearchBarModule
 
-  ],
-  entryComponents: [
-    NewPassiveAssetComponent, PredefinedIconsComponent
+  ]
+  // entryComponents: [
+  //   NewPassiveAssetComponent, PredefinedIconsComponent
 
-  ],
+  // ],
 })
 export class AssetsModule { }
