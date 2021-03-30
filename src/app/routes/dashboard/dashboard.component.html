@@ -38,12 +38,15 @@
                   </mat-option>
                 </mat-autocomplete>                
                   <div matSuffix class="d-flex" *ngIf="searchTxtFieldValue?.trim()?.length > 2">
-                    <button mat-icon-button (click)="search()">
-                      <mat-icon>search</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="clearSearchTxt()">
-                      <mat-icon>close</mat-icon>
-                    </button>
+                    <ng-container *ngIf="!isAutolistLoading?.value" >
+                      <button mat-icon-button (click)="search()">
+                        <mat-icon>search</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="clearSearchTxt()">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </ng-container>
+                    <mat-spinner *ngIf="isAutolistLoading?.value" diameter="21" class="color-white"></mat-spinner>
                   </div>
               </mat-form-field>
             </form>
@@ -51,13 +54,10 @@
       </div>
     </div>
     <div class="col-6 col-md-3 col-lg-2 col-lg-offset-1">
-      <div class="card card-icon-disabled d-flex justify-content-center align-items-center py-3 mb-3">
-        <div class="position-fixed d-flex align-items-center text-center">
-          <h3 class="color-white opacity-50">Coming Soon</h3>
-        </div>
-        <img class="img-dashboard opacity-01 mt-4 m-3 m-lg-4" src="../assets/img/icons/assets-icon.png"
+      <div class="card card-icon d-flex justify-content-center align-items-center py-3 mb-3" (click)="goToAssets()">
+        <img class="img-dashboard mt-4 m-3 m-lg-4" src="../assets/img/icons/assets-icon.png"
                 alt="assets image">
-        <h4 class="color-white opacity-01 mt-3 mb-4 my-lg-4">Assets</h4>         
+        <h4 class="color-white mt-3 mb-4 my-lg-4">Assets</h4>         
       </div>
     </div>
     <div class="col-6 col-md-3 col-lg-2">

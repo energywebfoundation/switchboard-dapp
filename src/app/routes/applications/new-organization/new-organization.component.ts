@@ -116,14 +116,7 @@ export class NewOrganizationComponent implements OnInit {
       let others = undefined;
 
       if (def.others) {
-        let tmp: any[] = def.others;
-        others = {};
-
-        for (let item of tmp) {
-          others[item.key] = item.value;
-        }
-
-        others = JSON.stringify(others);
+        others = JSON.stringify(def.others);
       }
 
       this.orgForm.patchValue({

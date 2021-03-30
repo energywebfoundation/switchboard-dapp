@@ -5,8 +5,9 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { startWith, map, switchMap } from 'rxjs/operators';
+import { startWith, map, switchMap, debounceTime } from 'rxjs/operators';
 import { ENSNamespaceTypes, WalletProvider } from 'iam-client-lib';
+import { LoadingCount } from 'src/app/shared/constants/shared-constants';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   public filteredOptions: Observable<any[]>;
   public searchForm: FormGroup;
   searchTxtFieldValue: string;
+  isAutolistLoading = {
+    requests: [],
+    value: false
+  };
 
   constructor(
     private iamService: IamService,
@@ -35,6 +40,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       searchTxt: new FormControl('')
     });
     this.filteredOptions = this.searchForm.get('searchTxt').valueChanges.pipe(
+      debounceTime(1200),
       startWith(undefined),
       switchMap(async (value) => await this._filterOrgsAndApps(value))
     );
@@ -94,23 +100,33 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   private async _filterOrgsAndApps(keyword: any): Promise<any[]> {
     let retVal = [];
+    this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.UP);
 
-    if (keyword) {
-      let word = undefined;
-      if (!keyword.trim && keyword.name) {
-        word = keyword.name;
-      } else {
-        word = keyword.trim();
-      }
+    try {
+      if (keyword) {
+        let word = undefined;
+        if (!keyword.trim && keyword.name) {
+          word = keyword.name;
+        } else {
+          word = keyword.trim();
+        }
 
-      if (word.length > 2) {
-        word = word.toLowerCase();
-        retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
-          search: word,
-          types: ['App', 'Org']
-        });
+        if (word.length > 2) {
+          word = word.toLowerCase();
+          retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
+            search: word,
+            types: ['App', 'Org']
+          });
+        }
       }
     }
+    catch (e) {
+      console.error(e);
+    }
+    finally {
+      this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.DOWN);
+    }
+    
     return retVal;
   }
 
@@ -119,13 +135,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   search(namespace?: string) {
-    this.route.navigate(['search-result'], {
-      queryParams: { keyword: this.searchTxtFieldValue, namespace: namespace }
-    });
+    if (!this.isAutolistLoading.value) {
+      this.route.navigate(['search-result'], {
+        queryParams: { keyword: this.searchTxtFieldValue, namespace: namespace }
+      });
+    }
   }
 
   onSelectedItem(event: any) {
-    // console.log('onSelectedItem', event);
+    console.log('onSelectedItem', event);
     this.search(event.option.value.namespace);
   }
 
@@ -143,6 +161,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   goToEnrolment() {
     this.route.navigate(['enrolment']);
+  }
+
+  goToAssets() {
+    this.route.navigate(['assets']);
   }
 
   copyToClipboard() {

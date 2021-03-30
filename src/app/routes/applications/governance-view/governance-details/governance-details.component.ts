@@ -50,11 +50,7 @@ export class GovernanceDetailsComponent implements OnInit {
 
     this.formData = JSON.parse(JSON.stringify(this.data.definition));
     if (this.formData.definition.others) {
-      let tmp = {};
-      for (let item of this.formData.definition.others) {
-        tmp[item.key] = item.value;
-      }
-      this.formData.definition.others = JSON.stringify(tmp);
+      this.formData.definition.others = JSON.stringify(this.formData.definition.others);
     }
 
     switch (this.data.type) {

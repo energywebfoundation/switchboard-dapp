@@ -15,13 +15,27 @@ import { GovernanceViewComponent } from './governance-view/governance-view.compo
 import { TransferOwnershipComponent } from './transfer-ownership/transfer-ownership.component';
 import { RemoveOrgAppComponent } from './remove-org-app/remove-org-app.component';
 import { GovernanceDetailsModule } from './governance-view/governance-details/governance-details.module';
+import { NgMatSearchBarModule } from 'ng-mat-search-bar';
+import { NewAssetTypeComponent } from './new-asset-type/new-asset-type.component';
+import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
 
 const routes: Routes = [
   { path: '', component: ApplicationsComponent }
 ];
 
 @NgModule({
-  declarations: [ApplicationsComponent, NewOrganizationComponent, ViewOrganizationComponent, NewApplicationComponent, NewRoleComponent, GovernanceListComponent, GovernanceViewComponent, TransferOwnershipComponent, RemoveOrgAppComponent],
+  declarations: [
+    ApplicationsComponent,
+    NewOrganizationComponent,
+    ViewOrganizationComponent,
+    NewApplicationComponent,
+    NewRoleComponent,
+    GovernanceListComponent,
+    GovernanceViewComponent,
+    TransferOwnershipComponent,
+    RemoveOrgAppComponent,
+    NewPassiveAssetComponent,
+    NewAssetTypeComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -38,7 +52,8 @@ const routes: Routes = [
     MatDialogModule,
     MatInputModule,
     GovernanceDetailsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    NgMatSearchBarModule
   ],
   entryComponents: [
     NewOrganizationComponent, 

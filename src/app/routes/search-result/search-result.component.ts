@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ENSNamespaceTypes } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
-import { ListType } from 'src/app/shared/constants/shared-constants';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { ListType, LoadingCount } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { GovernanceDetailsComponent } from '../applications/governance-view/governance-details/governance-details.component';
@@ -32,6 +31,11 @@ export class SearchResultComponent implements OnInit {
   searchForm: FormGroup;
   searchTxtFieldValue: string;
 
+  isAutolistLoading = {
+    requests: [],
+    value: false
+  };
+
   requestedClaims: any[];
 
   constructor(
@@ -56,6 +60,7 @@ export class SearchResultComponent implements OnInit {
     this.filteredOptions = new BehaviorSubject([]);
     this.searchForm.valueChanges
       .pipe(
+        debounceTime(1200),
         distinctUntilChanged(
           (a: any, b: any) =>
             a.searchTxt === b.searchTxt && a.filterType === b.filterType
@@ -127,22 +132,31 @@ export class SearchResultComponent implements OnInit {
     listType: any
   ): Promise<any[]> {
     let retVal = [];
+    this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.UP);
 
-    if (keyword) {
-      let word = undefined;
-      if (!keyword.trim && keyword.name) {
-        word = keyword.name;
-      } else {
-        word = keyword.trim();
-      }
+    try {
+      if (keyword) {
+        let word = undefined;
+        if (!keyword.trim && keyword.name) {
+          word = keyword.name;
+        } else {
+          word = keyword.trim();
+        }
 
-      if (word.length > 2) {
-        word = word.toLowerCase();
-        retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
-          search: word,
-          types: listType
-        });
+        if (word.length > 2) {
+          word = word.toLowerCase();
+          retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
+            search: word,
+            types: listType
+          });
+        }
       }
+    }
+    catch (e) {
+      console.error(e);
+    }
+    finally {
+      this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.DOWN);
     }
 
     return retVal;
@@ -211,9 +225,5 @@ export class SearchResultComponent implements OnInit {
   clearSelectedItem() {
     this.opened = false;
     this._updateData(undefined);
-  }
-
-  onChangeFlag(e: any) {
-    // console.log(e);
   }
 }
