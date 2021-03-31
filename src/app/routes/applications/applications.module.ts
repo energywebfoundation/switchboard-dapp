@@ -16,8 +16,6 @@ import { TransferOwnershipComponent } from './transfer-ownership/transfer-owners
 import { RemoveOrgAppComponent } from './remove-org-app/remove-org-app.component';
 import { GovernanceDetailsModule } from './governance-view/governance-details/governance-details.module';
 import { NgMatSearchBarModule } from 'ng-mat-search-bar';
-import { NewAssetTypeComponent } from './new-asset-type/new-asset-type.component';
-import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
 
 const routes: Routes = [
   { path: '', component: ApplicationsComponent }
@@ -33,9 +31,7 @@ const routes: Routes = [
     GovernanceListComponent,
     GovernanceViewComponent,
     TransferOwnershipComponent,
-    RemoveOrgAppComponent,
-    NewPassiveAssetComponent,
-    NewAssetTypeComponent],
+    RemoveOrgAppComponent],
   imports: [
     CommonModule,
     SharedModule,
