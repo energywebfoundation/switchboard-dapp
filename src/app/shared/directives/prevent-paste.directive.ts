@@ -7,7 +7,6 @@ export class PreventPasteDirective {
   constructor() { }
 
   @HostListener('paste', ['$event']) blockPaste(e: KeyboardEvent) {
-      console.log('pasting...');
     e.preventDefault();
   }
 }

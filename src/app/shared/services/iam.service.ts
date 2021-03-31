@@ -9,7 +9,7 @@ import { ConfigService } from './config.service';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
-const { walletConnectOptions, cacheServerUrl, natsServerUrl } = environment;
+const { walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl } = environment;
 
 const SWAL = require('sweetalert');
 
@@ -63,12 +63,19 @@ export class IamService {
       natsServerUrl: natsServerUrl,
     });
 
+    let connectionOptions = undefined;
+    if (kmsServerUrl) {
+      connectionOptions = {
+        ewKeyManagerUrl: kmsServerUrl
+      };
+    }
+
     // Initialize Data
     this._user = new BehaviorSubject<User>(undefined);
     if (configService.safeInfo) {
-      this._iam = new SafeIam(safeAppSdk, undefined);
+      this._iam = new SafeIam(safeAppSdk, connectionOptions);
     } else {
-      this._iam = new IAM();
+      this._iam = new IAM(connectionOptions);
     }
   }
 

@@ -662,7 +662,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       list[1].editable = false;
     }
 
-    console.log('req', req);
+    // console.log('req', req);
 
     if (this.viewType === ViewType.UPDATE) {
       this.proceedUpdateStep(req, skipNextStep);

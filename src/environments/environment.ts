@@ -8,6 +8,7 @@ export const environment = {
   production: false,  
   cacheServerUrl: 'https://identitycache-dev.energyweb.org/',
   natsServerUrl: 'https://identityevents-dev.energyweb.org/',
+  kmsServerUrl: undefined,
   walletConnectOptions: {
     // rpcUrl: 'https://volta-rpc.energyweb.org/',
     // rpcUrl: 'https://volta-internal-archive.energyweb.org/',

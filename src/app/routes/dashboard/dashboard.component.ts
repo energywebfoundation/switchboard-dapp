@@ -143,7 +143,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   onSelectedItem(event: any) {
-    console.log('onSelectedItem', event);
+    // console.log('onSelectedItem', event);
     this.search(event.option.value.namespace);
   }
 
