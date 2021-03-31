@@ -131,14 +131,14 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   }
 
   updateEnrolmentList (e: any) {
-    console.log('enrolement list');
+    // console.log('enrolement list');
     let value = e.value;
     this.enrolmentList.getList(value === 'rejected',
       value === 'true' ? true : value === 'false' ? false : undefined);
   }
 
   updateIssuerList (e: any) {
-    console.log('issuer list');
+    // console.log('issuer list');
     let value = e.value;
     this.issuerList.getList(value === 'rejected',
       value === 'true' ? true : value === 'false' ? false : undefined);

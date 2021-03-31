@@ -90,7 +90,7 @@ export class SearchResultComponent implements OnInit {
         }
         this._manageScreenWidth();
       } catch (err) {
-        console.log(err);
+        console.error(err);
       } finally {
         this.loadingService.hide();
       }
