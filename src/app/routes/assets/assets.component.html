@@ -1,111 +1,41 @@
-<div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
-    <h4 class="color-white strong my-4">Assets Management</h4>
-    <div class="d-flex justify-content-end flex-column flex-md-row">
-        <div class="d-flex justify-content-end align-items-center mr-0 mr-md-2 mb-2 mb-md-0">
-            <mat-search-bar matTooltip="Search"></mat-search-bar>
-        </div>
-        <div class="d-flex align-item-center">
-            <button class="btn mat-raised-header-button btn-small mb-3 mb-lg-0 mr-2">Register Active Asset
-            </button>
-            <button class="btn mat-raised-header-button btn-small mb-3 mb-lg-0">Register Passive Asset
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- START TABLE -->
-<div class="card card-default mb-3 pb-3">
-    <table mat-table [dataSource]="dataSource">
-
-        <!-- Logo -->
-        <ng-container matColumnDef="logo">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element" data-label="">
-                <div class="d-flex justify-content-center justify-content-md-start">
-                    <img class="img-logo-list" src="../assets/img/no-organization-image.png" />
-                </div>
-            </td>
-        </ng-container>
-
-        <!-- Name -->
-        <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let element" data-label="Name">
-                <div class="d-flex flex-row align-items-center justify-content-between justify-content-lg-start">
-                    <div>
-                        {{element.name}}
-                    </div>
-                    <div>
-                        <button mat-icon-button class="btn-color-primary" aria-label="Scan QR Code"  matTooltip="Scan QR Code">
-                            <mat-icon class="btn-color-primary">qr_code</mat-icon>
-                        </button>
-                        <button mat-icon-button class="btn-color-primary" aria-label="Edit" matTooltip="Edit">
-                            <mat-icon class="btn-color-primary">create</mat-icon>
-                        </button>
+<mat-tab-group mat-align-tabs="start" #assetsTabGroup (selectedTabChange)="showMe($event)">
+    <!-- MY ASSETS -->
+    <mat-tab label="My Assets">
+        <div class="row mx-0 mt-1">
+            <div class="col-xl-12">
+                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
+                    <h4 class="color-white strong my-4">My Assets</h4>
+                    <div class="d-flex align-item-center">
+                        <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0" (click)="registerAsset()">
+                            Register Asset</button>
                     </div>
                 </div>
-            </td>
-        </ng-container>
+                <app-asset-list #listMyAssets [list-type]="AssetListType.MY_ASSETS"></app-asset-list>
+            </div>
+        </div>
+    </mat-tab>
 
-        <!-- Active Enrolments -->
-        <ng-container matColumnDef="activeEnrolments">
-            <th mat-header-cell *matHeaderCellDef>Active Enrolments
-            </th>
-            <td mat-cell *matCellDef="let element" data-label="Active Enrolments">
-                {{element.activeEnrolments}}
-            </td>
-        </ng-container>
-
-        <!-- Type -->
-        <ng-container matColumnDef="type">
-            <th mat-header-cell *matHeaderCellDef>Type</th>
-            <td mat-cell *matCellDef="let element" data-label="Type">{{element.type}}</td>
-        </ng-container>
-
-        <!-- Status -->
-        <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let element" data-label="Type"><span
-                    class="color-success">{{element.status}}</span></td>
-        </ng-container>
-
-        <!-- Action -->
-        <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef class="text-right"> </th>
-            <td mat-cell *matCellDef="let element">
-                <div class="d-flex justify-content-end">
-                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action button list">
-                        <mat-icon class="btn-color-primary">more_vert</mat-icon>
-                    </button>
-                    <mat-menu #menu="matMenu">
-                        <ng-container>
-                            <!-- Edit -->
-                            <button mat-menu-item class="btn-color-primary">
-                                <mat-icon class="btn-color-primary btn-action-3">create</mat-icon>
-                                <span>Edit</span>
-                            </button>
-
-                            <!-- Remove -->
-                            <button mat-menu-item class="btn-color-primary">
-                                <mat-icon class="btn-color-error btn-action-3">delete_outline</mat-icon>
-                                <span class="color-error">Remove</span>
-                            </button>
-                        </ng-container>
-                    </mat-menu>
+    <!-- ASSETS OFFERED TO ME -->
+    <mat-tab label="Assets Offered To Me">
+        <div class="row mx-0 mt-1">
+            <div class="col-xl-12">
+                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
+                    <h4 class="color-white strong my-4">Assets Offered To Me</h4>
                 </div>
-            </td>
-        </ng-container>
+                <app-asset-list #listOfferedAssets [list-type]="AssetListType.OFFERED_ASSETS"></app-asset-list>
+            </div>
+        </div>
+    </mat-tab>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr class="cursor-pointer" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-    <!-- Shows when table is empty -->
-    <!-- <div class="d-flex justify-content-center align-items-center mt-4 mb-3">
-      <div class="d-flex align-items-center no-record color-white">
-        <mat-icon class="mr-2">info</mat-icon>
-        <i>No Record Found</i>
-      </div>
-    </div> -->
-    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
-    </mat-paginator> -->
-</div>
+    <!-- PREVIOUSLY OWNED ASSETS -->
+    <mat-tab label="Previously Owned Assets">
+        <div class="row mx-0 mt-1">
+            <div class="col-xl-12">
+                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
+                    <h4 class="color-white strong my-4">Previously Owned Assets</h4>
+                </div>
+                <app-asset-list #listPreviousAssets [list-type]="AssetListType.PREV_OWNED_ASSETS"></app-asset-list>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>

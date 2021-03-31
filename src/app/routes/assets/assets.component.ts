@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatTabGroup } from '@angular/material';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AssetListType } from 'src/app/shared/constants/shared-constants';
+import { UrlParamService } from 'src/app/shared/services/url-param.service';
+import { AssetListComponent, RESET_LIST } from './asset-list/asset-list.component';
+import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
 
 @Component({
   selector: 'app-assets',
@@ -6,28 +12,60 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./assets.component.scss']
 })
 export class AssetsComponent implements OnInit {
+  @ViewChild("assetsTabGroup", { static: false }) assetsTabGroup: MatTabGroup;
+  @ViewChild('listMyAssets', undefined ) listMyAssets: AssetListComponent;
+  @ViewChild('listOfferedAssets', undefined ) listOfferedAssets: AssetListComponent;
+  @ViewChild('listPreviousAssets', undefined ) listPreviousAssets: AssetListComponent;
 
-  displayedColumns: string[] = ['logo', 'name', 'activeEnrolments', 'type', 'status', 'actions'];
-  dataSource = ELEMENT_DATA;
-
-  constructor() { }
+  AssetListType = AssetListType;
+  
+  constructor(private dialog: MatDialog,
+    private urlParamService: UrlParamService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
   }
 
-}
+  ngAfterViewInit(): void {
+    this.activatedRoute.queryParams.subscribe((params: any) => {
+       if (params && params.selectedTab) {
+         this.assetsTabGroup.selectedIndex = params.selectedTab;
+       }
+     }).unsubscribe();
+   }
 
-export interface PeriodicElement {
-  logo: string;
-  name: string;
-  activeEnrolments: string;
-  type: string;
-  status: string;
-  actions: string;
-}
+  registerAsset() {
+    const dialogRef = this.dialog.open(NewPassiveAssetComponent, {
+      width: '600px',data:{},
+      maxWidth: '100%',
+      disableClose: true
+    });
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {logo: '', name: 'macbook2019Q1.support.apple.iam.ewc', activeEnrolments: 'IoT Gateway', type: 'Passive', status: 'Online', actions: ''},
-  {logo: '', name: 'Living Room Gateway', activeEnrolments: 'IoT Gateway', type: 'Active', status: 'Online', actions: ''},
-  {logo: '', name: 'Apartment Smart Gateway', activeEnrolments: 'IoT Gateway', type: 'Active', status: 'Online', actions: ''},
-];
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.listMyAssets.getAssetList(RESET_LIST);
+      }
+    });
+  }
+
+  async showMe(i: any) {
+    // Preserve Selected Tab
+    this.urlParamService.updateQueryParams(this.router, this.activatedRoute, {
+      selectedTab: i.index
+    });
+
+    switch (i.index) {
+      case 0:
+        this.listMyAssets.getAssetList(RESET_LIST);
+        break;
+      case 1:
+        this.listOfferedAssets.getAssetList(RESET_LIST);
+        break;
+      case 2:
+        this.listPreviousAssets.getAssetList(RESET_LIST);
+        break;
+      default:
+    }
+  }
+}

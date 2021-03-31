@@ -37,7 +37,7 @@ export class GovernanceListComponent implements OnInit {
 
   ListType        = ListType;
   RoleType        = RoleType;
-  dataSource      = new MatTableDataSource([]);;
+  dataSource      = new MatTableDataSource([]);
   origDatasource  = [];
   displayedColumns: string[];
   listTypeLabel   : string;
