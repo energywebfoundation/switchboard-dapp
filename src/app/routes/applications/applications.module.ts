@@ -57,6 +57,9 @@ const routes: Routes = [
     NewRoleComponent, 
     GovernanceViewComponent, 
     TransferOwnershipComponent,
-    RemoveOrgAppComponent]
+    RemoveOrgAppComponent],
+  exports: [
+    TransferOwnershipComponent
+  ]
 })
 export class ApplicationsModule { }

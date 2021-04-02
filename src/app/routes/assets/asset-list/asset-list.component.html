@@ -55,7 +55,7 @@
                 <ng-container> Offered By </ng-container>
             </th>
             <td mat-cell *matCellDef="let element" data-label="Offered By">
-                {{ element.offeredTo || '-' }}
+                {{ element.owner || '-' }}
             </td>
         </ng-container>
 
@@ -91,17 +91,51 @@
                     </button>
                     <mat-menu #menu="matMenu">
                         <ng-container>
-                            <!-- Edit -->
+                            <!-- View Ownership History -->
                             <button mat-menu-item class="btn-color-primary">
-                                <mat-icon class="btn-color-primary btn-action-3">create</mat-icon>
-                                <span>Edit</span>
+                                <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-application-icon"></mat-icon>
+                                <span>View Ownership History</span>
                             </button>
 
+                            <ng-container *ngIf="listType === AssetListType.MY_ASSETS">
+                                <!-- Offer Ownership -->
+                                <button mat-menu-item class="btn-color-primary" *ngIf="!element?.offeredTo" (click)="transferOwnership(listType, element)">
+                                    <mat-icon class="btn-color-primary btn-action-1" svgIcon="transfer-ownership-icon"></mat-icon>
+                                    <span>Transfer Ownership</span>
+                                </button>
+
+                                <!-- Cancel Ownership Offer -->
+                                <button mat-menu-item class="btn-color-error" *ngIf="element?.offeredTo">
+                                    <mat-icon class="btn-color-error">delete_outline</mat-icon>
+                                    <span>Cancel Transfer of Ownership</span>
+                                </button>
+                            </ng-container>
+
+                            <ng-container *ngIf="listType === AssetListType.OFFERED_ASSETS">
+                                <!-- Approve Ownership Offer -->
+                                <button mat-menu-item class="btn-color-primary">
+                                    <mat-icon class="btn-color-primary btn-action-3">create</mat-icon>
+                                    <span>Approve</span>
+                                </button>
+
+                                <!-- Reject Ownership Offer -->
+                                <button mat-menu-item class="btn-color-error">
+                                    <mat-icon class="btn-color-error">delete_outline</mat-icon>
+                                    <span>Reject</span>
+                                </button>
+                            </ng-container>
+
+                            <!-- Edit -->
+                            <!-- <button mat-menu-item class="btn-color-primary">
+                                <mat-icon class="btn-color-primary btn-action-3">create</mat-icon>
+                                <span>Edit</span>
+                            </button> -->
+
                             <!-- Remove -->
-                            <button mat-menu-item class="btn-color-primary">
+                            <!-- <button mat-menu-item class="btn-color-primary">
                                 <mat-icon class="btn-color-error btn-action-3">delete_outline</mat-icon>
                                 <span class="color-error">Remove</span>
-                            </button>
+                            </button> -->
                         </ng-container>
                     </mat-menu>
                 </div>
