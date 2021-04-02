@@ -2,12 +2,17 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { Asset } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
+import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { AssetListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { TransferOwnershipComponent } from '../../applications/transfer-ownership/transfer-ownership.component';
+import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 
 export const RESET_LIST = true;
+
+const HEADER_TRANSFER_OWNERSHIP = 'Transfer Ownership';
+const HEADER_CANCEL_OWNERSHIP = 'Cancel Offered Ownership';
 
 @Component({
   selector: 'app-asset-list',
@@ -82,10 +87,42 @@ export class AssetListComponent implements OnInit {
       disableClose: true
     }).afterClosed().subscribe((res: any) => {
       if (res) {
-        this.toastr.success('Asset is offered successfully.', 'Transfer Ownership');
+        this.toastr.success('Asset is offered successfully.', HEADER_TRANSFER_OWNERSHIP);
         this.getAssetList(RESET_LIST);
       }
       dialogRef.unsubscribe();
     });
+  }
+
+  private async _confirm(confirmationMsg: string, header: string) {
+    return this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      maxHeight: '195px',
+      data: {
+        header: header,
+        message: confirmationMsg
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().toPromise();
+  }
+
+  async cancelAssetOffer(data: Asset) {
+    if (await this._confirm('The offered ownership of this asset will be cancelled. Do you wish to continue?', HEADER_TRANSFER_OWNERSHIP)) {
+      try {
+        this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
+        await this.iamService.iam.cancelAssetOffer({
+          assetDID: data.id
+        });
+        await this.getAssetList(RESET_LIST);
+      }
+      catch (e) {
+        console.error(e);
+        this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_TRANSFER_OWNERSHIP);
+      }
+      finally {
+        this.loadingService.hide();
+      }
+    }
   }
 }

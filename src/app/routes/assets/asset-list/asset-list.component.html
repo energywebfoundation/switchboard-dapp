@@ -105,7 +105,7 @@
                                 </button>
 
                                 <!-- Cancel Ownership Offer -->
-                                <button mat-menu-item class="btn-color-error" *ngIf="element?.offeredTo">
+                                <button mat-menu-item class="btn-color-error" *ngIf="element?.offeredTo" (click)="cancelAssetOffer(element)">
                                     <mat-icon class="btn-color-error">delete_outline</mat-icon>
                                     <span>Cancel Transfer of Ownership</span>
                                 </button>
