@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { Asset } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { AssetListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { TransferOwnershipComponent } from '../../applications/transfer-ownership/transfer-ownership.component';
 
 export const RESET_LIST = true;
 
@@ -23,6 +24,7 @@ export class AssetListComponent implements OnInit {
   displayedColumns: string[] = ['id'];
 
   constructor(private toastr: ToastrService,
+    private dialog: MatDialog,
     private iamService: IamService,
     private loadingService: LoadingService) { 
       
@@ -67,5 +69,23 @@ export class AssetListComponent implements OnInit {
     finally {
       this.loadingService.hide();
     }
+  }
+
+  transferOwnership(type: any, data: Asset) {
+    const dialogRef = this.dialog.open(TransferOwnershipComponent, {
+      width: '600px', data:{
+        assetDid: data.id,
+        type: type,
+        owner: data.owner
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().subscribe((res: any) => {
+      if (res) {
+        this.toastr.success('Asset is offered successfully.', 'Transfer Ownership');
+        this.getAssetList(RESET_LIST);
+      }
+      dialogRef.unsubscribe();
+    });
   }
 }
