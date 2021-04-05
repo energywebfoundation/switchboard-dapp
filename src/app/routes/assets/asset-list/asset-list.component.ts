@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { Asset } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,8 @@ export const RESET_LIST = true;
 
 const HEADER_TRANSFER_OWNERSHIP = 'Transfer Ownership';
 const HEADER_CANCEL_OWNERSHIP = 'Cancel Offered Ownership';
+const HEADER_ACCEPT_OWNERSHIP = 'Accept Offered Asset';
+const HEADER_REJECT_OWNERSHIP = 'Reject Offered Asset';
 
 @Component({
   selector: 'app-asset-list',
@@ -22,6 +24,7 @@ const HEADER_CANCEL_OWNERSHIP = 'Cancel Offered Ownership';
 export class AssetListComponent implements OnInit {
   @Input('list-type') listType: number;
   @ViewChild(MatSort, undefined) sort: MatSort;
+  @Output() selectTab = new EventEmitter<any>();
   
   AssetListType = AssetListType;
 
@@ -108,17 +111,58 @@ export class AssetListComponent implements OnInit {
   }
 
   async cancelAssetOffer(data: Asset) {
-    if (await this._confirm('The offered ownership of this asset will be cancelled. Do you wish to continue?', HEADER_TRANSFER_OWNERSHIP)) {
+    if (await this._confirm('The offered ownership of this asset will be cancelled.', HEADER_CANCEL_OWNERSHIP)) {
       try {
         this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
         await this.iamService.iam.cancelAssetOffer({
           assetDID: data.id
         });
+        this.toastr.success('Offered ownership is cancelled successfully.', HEADER_CANCEL_OWNERSHIP);
         await this.getAssetList(RESET_LIST);
       }
       catch (e) {
         console.error(e);
-        this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_TRANSFER_OWNERSHIP);
+        this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_CANCEL_OWNERSHIP);
+      }
+      finally {
+        this.loadingService.hide();
+      }
+    }
+  }
+
+  async approveAssetOffer(data: Asset) {
+    if (await this._confirm('You will become the owner of this asset.', HEADER_ACCEPT_OWNERSHIP)) {
+      try {
+        this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
+        await this.iamService.iam.acceptAssetOffer({
+          assetDID: data.id
+        });
+        this.toastr.success('A new asset is added successfully to your list.', HEADER_ACCEPT_OWNERSHIP);
+        this.selectTab.emit(0);
+      }
+      catch (e) {
+        console.error(e);
+        this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_ACCEPT_OWNERSHIP);
+      }
+      finally {
+        this.loadingService.hide();
+      }
+    }
+  }
+
+  async rejectAssetOffer(data: Asset) {
+    if (await this._confirm('You are rejecting this offered asset.', HEADER_REJECT_OWNERSHIP)) {
+      try {
+        this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
+        await this.iamService.iam.rejectAssetOffer({
+          assetDID: data.id
+        });
+        this.toastr.success('You have rejected an offered asset successfully.', HEADER_REJECT_OWNERSHIP);
+        await this.getAssetList(RESET_LIST);
+      }
+      catch (e) {
+        console.error(e);
+        this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_REJECT_OWNERSHIP);
       }
       finally {
         this.loadingService.hide();

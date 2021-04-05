@@ -112,15 +112,15 @@
                             </ng-container>
 
                             <ng-container *ngIf="listType === AssetListType.OFFERED_ASSETS">
-                                <!-- Approve Ownership Offer -->
-                                <button mat-menu-item class="btn-color-primary">
-                                    <mat-icon class="btn-color-primary btn-action-3">create</mat-icon>
-                                    <span>Approve</span>
+                                <!-- Accept Ownership Offer -->
+                                <button mat-menu-item class="btn-color-primary" (click)="approveAssetOffer(element)">
+                                    <mat-icon class="btn-color-primary btn-action-3">thumb_up_alt</mat-icon>
+                                    <span>Accept</span>
                                 </button>
 
                                 <!-- Reject Ownership Offer -->
-                                <button mat-menu-item class="btn-color-error">
-                                    <mat-icon class="btn-color-error">delete_outline</mat-icon>
+                                <button mat-menu-item class="btn-color-error" (click)="rejectAssetOffer(element)">
+                                    <mat-icon class="btn-color-error">thumb_down_alt</mat-icon>
                                     <span>Reject</span>
                                 </button>
                             </ng-container>

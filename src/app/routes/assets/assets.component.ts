@@ -68,4 +68,8 @@ export class AssetsComponent implements OnInit {
       default:
     }
   }
+
+  setSelectedTab(i: number) {
+    this.assetsTabGroup.selectedIndex = i;
+  }
 }
