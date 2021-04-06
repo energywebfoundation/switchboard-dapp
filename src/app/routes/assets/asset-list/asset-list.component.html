@@ -46,7 +46,8 @@
                 <ng-container> Offered To </ng-container>
             </th>
             <td mat-cell *matCellDef="let element" data-label="Offered To">
-                {{ element.offeredTo || '-' }}
+                <ng-container *ngIf="listType === AssetListType.MY_ASSETS">{{ element.offeredTo || '-' }}</ng-container>
+                <ng-container *ngIf="listType === AssetListType.PREV_OWNED_ASSETS">{{ element.owner || '-' }}</ng-container>
             </td>
         </ng-container>
 
@@ -92,7 +93,7 @@
                     <mat-menu #menu="matMenu">
                         <ng-container>
                             <!-- View Ownership History -->
-                            <button mat-menu-item class="btn-color-primary">
+                            <button mat-menu-item class="btn-color-primary" (click)="viewOwnershipHistory(element)">
                                 <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-application-icon"></mat-icon>
                                 <span>View Ownership History</span>
                             </button>
