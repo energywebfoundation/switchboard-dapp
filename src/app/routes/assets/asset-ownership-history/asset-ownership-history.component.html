@@ -1,0 +1,60 @@
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
+    Asset Ownership History
+    <button mat-icon-button (click)="closeDialog()">
+        <mat-icon>close</mat-icon>
+    </button>
+</h4>
+
+<div mat-dialog-content>
+    <table mat-table matSort [dataSource]="dataSource">
+
+        <!-- Date -->
+        <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <ng-container> Date </ng-container>
+            </th>
+            <td mat-cell *matCellDef="let element" data-label="Date">
+                {{ element?.emittedDate | date : 'MM/dd/yyyy HH:mm:ss' }}
+            </td>
+        </ng-container>
+
+        <!-- Owner -->
+        <ng-container matColumnDef="owner">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <ng-container> Owner </ng-container>
+            </th>
+            <td mat-cell *matCellDef="let element" data-label="Owner">
+                {{ element?.emittedBy }}
+            </td>
+        </ng-container>
+
+        <!-- Offered To -->
+        <ng-container matColumnDef="offeredTo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <ng-container> Offered To </ng-container>
+            </th>
+            <td mat-cell *matCellDef="let element" data-label="Offered To">
+                {{ element?.relatedTo }}
+            </td>
+        </ng-container>
+
+        <!-- Type -->
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let element" data-label="Type"> {{element?.type}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr class="cursor-pointer" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    
+    <!-- Shows when table is empty -->
+    <div class="d-flex justify-content-center align-items-center mt-4 mb-3" *ngIf="!dataSource?.data?.length">
+      <div class="d-flex align-items-center no-record color-white">
+        <mat-icon class="mr-2">info</mat-icon>
+        <i>No Record Found</i>
+      </div>
+    </div>
+    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
+    </mat-paginator> -->
+</div>

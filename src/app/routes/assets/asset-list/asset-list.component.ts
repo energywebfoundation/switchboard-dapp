@@ -8,6 +8,7 @@ import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { TransferOwnershipComponent } from '../../applications/transfer-ownership/transfer-ownership.component';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
+import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
 
 export const RESET_LIST = true;
 
@@ -168,5 +169,17 @@ export class AssetListComponent implements OnInit {
         this.loadingService.hide();
       }
     }
+  }
+
+  viewOwnershipHistory(data: any) {
+    const dialogRef = this.dialog.open(AssetOwnershipHistoryComponent, {
+      width: '600px', data:{
+        id: data.id
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().subscribe((res: any) => {
+      dialogRef.unsubscribe();
+    });
   }
 }
