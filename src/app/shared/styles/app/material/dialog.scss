@@ -72,6 +72,27 @@ mat-datetimepicker-content {
     }
 }
 
+.history-list-item {
+    background-color: #363446;
+}
+
+.bg-status {
+    background-color: #3e3d4c;
+    padding: 8px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.border-vertical {
+    border-left: 1px solid #c1fff9;
+    height: 18px;
+    position: relative;
+    left: 11px;
+    top: -1px;
+}
+
 .mat-dialog-content {
     padding: 0 24px !important;
     margin: 0 !important;
