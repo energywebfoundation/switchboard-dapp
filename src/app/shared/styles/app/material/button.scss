@@ -1,6 +1,11 @@
 .btn-color-primary {
     color: #33CBCB !important;
 }
+
+.btn-color-disabled {
+    color: rgb(207 207 207 / 25%) !important;
+}
+
 .btn-color-error {
     color: #C82E2E !important;
 }
@@ -85,6 +90,26 @@
         border-color: #33CBCB !important;
         color: #33CBCB !important; 
     }
+}
+
+.mat-stroked-table-button {
+    border-color: #8677ae !important;
+    color: #8677ae !important;
+    border-radius: 4px !important;
+    font-size: 12px !important;
+    font-weight: 600;
+    padding: 8px 10px !important;
+    letter-spacing: 0.33px;
+    min-width: 90px !important;
+    line-height: 9px !important;
+    height: 30px;
+    min-height: 30px !important;
+
+    &:hover {
+        border-color: #33CBCB !important;
+        color: #33CBCB !important; 
+    }
+
 }
 
 .btn-qr {

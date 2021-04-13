@@ -30,7 +30,7 @@ export class AssetListComponent implements OnInit {
   AssetListType = AssetListType;
 
   dataSource : MatTableDataSource<Asset> = new MatTableDataSource([]);
-  displayedColumns: string[] = ['id'];
+  displayedColumns: string[] = ['logo','name','id'];
 
   constructor(private toastr: ToastrService,
     private dialog: MatDialog,
