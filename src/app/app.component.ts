@@ -96,6 +96,10 @@ export class AppComponent implements OnInit {
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/scan-qr-icon.svg")
         );
         this.matIconRegistry.addSvgIcon(
+            "view-qr-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/qr-icon.svg")
+        );    
+        this.matIconRegistry.addSvgIcon(
             "new-claim-icon",
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/new-claim-icon.svg")
         );

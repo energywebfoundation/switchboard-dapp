@@ -3,34 +3,30 @@
     <table mat-table matSort [dataSource]="dataSource">
 
         <!-- Logo -->
-        <!-- <ng-container matColumnDef="logo">
+        <ng-container matColumnDef="logo">
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element" data-label="">
                 <div class="d-flex justify-content-center justify-content-md-start">
-                    <img class="img-logo-list" src="../assets/img/no-organization-image.png" />
+                    <img class="img-logo-list" src="../assets/img/assets-icons/solar-energy.svg" />
                 </div>
             </td>
-        </ng-container> -->
+        </ng-container>
 
         <!-- Name -->
-        <!-- <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
+        <ng-container matColumnDef="name">
+            <th mat-header-cell class="d-flex align-items-center" *matHeaderCellDef>Asset Name
+                <mat-icon class="btn-color-disabled ml-2">visibility_off</mat-icon></th>
             <td mat-cell *matCellDef="let element" data-label="Name">
                 <div class="d-flex flex-row align-items-center justify-content-between justify-content-lg-start">
-                    <div>
-                        {{element.name}}
+                    <div class="text-blur">
+                        Asset Name
                     </div>
                     <div>
-                        <button mat-icon-button class="btn-color-primary" aria-label="Scan QR Code"  matTooltip="Scan QR Code">
-                            <mat-icon class="btn-color-primary">qr_code</mat-icon>
-                        </button>
-                        <button mat-icon-button class="btn-color-primary" aria-label="Edit" matTooltip="Edit">
-                            <mat-icon class="btn-color-primary">create</mat-icon>
-                        </button>
+                        <button class="btn mat-stroked-table-button ml-0 mr-2 mr-md-0 ml-md-2">Enrolments</button>
                     </div>
                 </div>
             </td>
-        </ng-container> -->
+        </ng-container>
 
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -96,6 +92,10 @@
                             <button mat-menu-item class="btn-color-primary" (click)="viewOwnershipHistory(element)">
                                 <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-application-icon"></mat-icon>
                                 <span>View Ownership History</span>
+                            </button>
+                            <button mat-menu-item class="btn-color-primary">
+                                <mat-icon class="btn-color-primary btn-action-1" svgIcon="view-qr-icon"></mat-icon>
+                                <span>Scan QR Code</span>
                             </button>
 
                             <ng-container *ngIf="listType === AssetListType.MY_ASSETS">
