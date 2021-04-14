@@ -43,29 +43,26 @@ export class GovernanceListComponent implements OnInit {
   listTypeLabel   : string;
   ensType         : any;
 
-  filterForm      : FormGroup;
+  filterForm      = this.fb.group({
+    organization: '',
+    application: '',
+    role: ''
+  });
 
   orgHierarchy    = [];
 
   DRILL_DOWN_SUBORG = true;
-  currentUserEthAddress = undefined;
+  currentUserEthAddress = this.iamService.accountAddress;
 
   private _isSubOrgCreated = false;
-  
+
   constructor(private loadingService: LoadingService,
       private iamService: IamService,
       private dialog: MatDialog,
       private fb: FormBuilder,
       private toastr: ToastrService,
       private configService: ConfigService
-    ) { 
-      this.filterForm = fb.group({
-        organization: '',
-        application: '',
-        role: ''
-      });
-      this.currentUserEthAddress = this.iamService.accountAddress;
-    }
+    ) { }
 
   async ngOnInit() {
     switch (this.listType) {

@@ -37,8 +37,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit {
 
   ListType = ListType;
 
-  constructor(public dialog: MatDialog, 
-    private iamService: IamService, 
+  constructor(public dialog: MatDialog,
+    private iamService: IamService,
     private urlParamService: UrlParamService,
     private router: Router,
     private activatedRoute: ActivatedRoute) { }
