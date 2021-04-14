@@ -290,14 +290,15 @@ export class IamService {
   }
 
   isAlphaNumericOnly(event: any, includeDot?: boolean) {
-    let charCode = (event.which) ? event.which : event.keyCode;
+    const charCode = (event.which) ? event.which : event.keyCode;
 
     // Check if key is alphanumeric key
-    if ((charCode > 96 && charCode < 123) || (charCode > 47 && charCode < 58) || (includeDot && charCode === 46)) {
-      return true;
-    }
-
-    return false;
+    return (
+        (charCode > 96 && charCode < 123) || // a-z
+        (charCode > 64 && charCode < 91) || // A-Z
+        (charCode > 47 && charCode < 58) || // 0-9
+        (includeDot && charCode === 46) // .
+    );
   }
 
   isValidEthAddress(ethAddressCtrl: AbstractControl): { [key: string]: boolean } | null {
