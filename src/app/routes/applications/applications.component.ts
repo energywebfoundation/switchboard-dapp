@@ -1,21 +1,25 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { NewOrganizationComponent } from './new-organization/new-organization.component';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { MatDialog, MatTabGroup } from '@angular/material';
+import { Subject } from 'rxjs/Subject';
+
+import { NewOrganizationComponent } from './new-organization/new-organization.component';
 import { NewApplicationComponent } from './new-application/new-application.component';
 import { NewRoleComponent } from './new-role/new-role.component';
 import { GovernanceListComponent } from './governance-list/governance-list.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { UrlParamService } from 'src/app/shared/services/url-param.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-applications',
   templateUrl: './applications.component.html',
   styleUrls: ['./applications.component.scss']
 })
-export class ApplicationsComponent implements OnInit, AfterViewInit {
-  @ViewChild("governanceTabGroup", { static: false }) governanceTabGroup: MatTabGroup;
+export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('governanceTabGroup', { static: false }) governanceTabGroup: MatTabGroup;
   @ViewChild('listOrg', undefined ) listOrg: GovernanceListComponent;
   @ViewChild('listApp', undefined ) listApp: GovernanceListComponent;
   @ViewChild('listRole', undefined ) listRole: GovernanceListComponent;
@@ -37,6 +41,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit {
 
   ListType = ListType;
 
+  private subscription$ = new Subject();
+
   constructor(public dialog: MatDialog, 
     private iamService: IamService, 
     private urlParamService: UrlParamService,
@@ -51,50 +57,64 @@ export class ApplicationsComponent implements OnInit, AfterViewInit {
     }).unsubscribe();
   }
 
+  ngOnDestroy(): void {
+    this.subscription$.next();
+    this.subscription$.complete();
+  }
+
   openNewOrgComponent(): void {
     const dialogRef = this.dialog.open(NewOrganizationComponent, {
-      width: '600px',data:{},
+      width: '600px',
+      data: {},
       maxWidth: '100%',
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog was closed');
+    dialogRef.afterClosed()
+        .pipe(takeUntil(this.subscription$))
+        .subscribe(result => {
+          // console.log('The dialog was closed');
 
-      if (result) {
-        this.listOrg.getList(undefined, true);
-      }
-    });
+          if (result) {
+            this.listOrg.getList(undefined, true);
+          }
+        });
   }
 
   openNewAppComponent(): void {
     const dialogRef = this.dialog.open(NewApplicationComponent, {
-      width: '600px',data:{},
+      width: '600px',
+      data: {},
       maxWidth: '100%',
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog was closed');
-      if (result) {
-        this.listApp.getList();
-      }
-    });
+    dialogRef.afterClosed()
+        .pipe(takeUntil(this.subscription$))
+        .subscribe(result => {
+          // console.log('The dialog was closed');
+          if (result) {
+            this.listApp.getList();
+          }
+        });
   }
 
   openNewRoleComponent(): void {
     const dialogRef = this.dialog.open(NewRoleComponent, {
-      width: '600px',data:{},
+      width: '600px',
+      data: {},
       maxWidth: '100%',
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog was closed');
-      if (result) {
-        this.listRole.getList();
-      }
-    });
+    dialogRef.afterClosed()
+        .pipe(takeUntil(this.subscription$))
+        .subscribe(result => {
+          // console.log('The dialog was closed');
+          if (result) {
+            this.listRole.getList();
+          }
+        });
   }
 
   async ngOnInit() {
