@@ -27,7 +27,17 @@ export class NewOrganizationComponent implements OnInit {
     }
   }
 
-  public orgForm: FormGroup;
+  public orgForm = this.fb.group({
+    orgName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    namespace: environment.orgNamespace,
+    data: this.fb.group({
+      organizationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+      logoUrl: ['', Validators.pattern('https?://.*')],
+      websiteUrl: ['', Validators.pattern('https?://.*')],
+      description: '',
+      others: [undefined, this.iamService.isValidJsonFormat]
+    })
+  });
   public environment = environment;
   public isChecking = false;
   private _isLogoUrlValid = true;
@@ -54,20 +64,7 @@ export class NewOrganizationComponent implements OnInit {
     public dialogRef: MatDialogRef<NewOrganizationComponent>,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private configService: ConfigService
-  ) {
-    this.orgForm = fb.group({
-      orgName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-      namespace: environment.orgNamespace,
-      data: fb.group({
-        organizationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-        logoUrl: ['', Validators.pattern('https?://.*')],
-        websiteUrl: ['', Validators.pattern('https?://.*')],
-        description: '',
-        others: [undefined, this.iamService.isValidJsonFormat]
-      })
-    });
-
+    private configService: ConfigService) {
     if (data && data.viewType && (data.origData || data.parentOrg)) {
       this.viewType   = data.viewType;
       this.origData   = data.origData;
@@ -77,11 +74,10 @@ export class NewOrganizationComponent implements OnInit {
         this.TOASTR_HEADER = 'Update Organization';
         this.initFormData();
       }
-      
+
       if (this.parentOrg) {
         this.orgForm.get('namespace').setValue(this.parentOrg.namespace);
-      }
-      else if (this._isSubOrg(this.origData)) {
+      } else if (this._isSubOrg(this.origData)) {
         this.orgForm.get('namespace').setValue(this._constructParentOrg(this.origData.namespace));
       }
     }
