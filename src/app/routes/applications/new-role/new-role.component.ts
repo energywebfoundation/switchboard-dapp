@@ -54,24 +54,63 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
   @ViewChild(MatAutocompleteTrigger, { static: false}) autocompleteTrigger: MatAutocompleteTrigger;
 
-  public roleForm     : FormGroup;
-  public issuerGroup  : FormGroup;
-  public roleControl  : FormControl;
-  public environment  = environment;
-  public isChecking   = false;
-  public RoleType     = RoleType;
-  public RoleTypeList = RoleTypeList;
-  public ENSPrefixes  = ENSNamespaceTypes;
-  public issuerList   : string[];
-
   IssuerType    = {
     DID: 'DID',
     Role: 'Role'
   };
 
+  public roleForm     = this.fb.group({
+    roleType: [null, Validators.required],
+    parentNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    roleName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    namespace: '',
+    data: this.fb.group({
+      version: '1.0.0',
+      issuer: this.fb.group({
+        issuerType: this.IssuerType.DID,
+        roleName: '',
+        did: this.fb.array([])
+      }),
+      enrolmentPreconditions: [[{ type: PreconditionTypes.Role, conditions: []}]]
+    })
+  });
+  public issuerGroup  = this.fb.group({
+    newIssuer: ['', this.iamService.isValidDid]
+  });
+  public roleControl  =  this.fb.control('');
+  public environment  = environment;
+  public isChecking   = false;
+  public RoleType     = RoleType;
+  public RoleTypeList = RoleTypeList;
+  public ENSPrefixes  = ENSNamespaceTypes;
+  public issuerList   : string[] = [this.iamService.iam.getDid()];
+
   // Fields
   public FieldTypes   = FIELD_TYPES;
-  fieldsForm          : FormGroup;
+  fieldsForm          = this.fb.group({
+    fieldType: ['', Validators.required],
+    label: ['', Validators.required],
+    validation: this.fb.group({
+      required: undefined,
+      minLength: [undefined, {
+        validators: Validators.min(0),
+        updateOn: 'blur'
+      }],
+      maxLength: [undefined, {
+        validators: Validators.min(1),
+        updateOn: 'blur'
+      }],
+      pattern: undefined,
+      minValue: [undefined, {
+        updateOn: 'blur'
+      }],
+      maxValue: [undefined, {
+        updateOn: 'blur'
+      }],
+      minDate: undefined,
+      maxDate: undefined
+    })
+  });
   showFieldsForm      = false;
   isEditFieldForm     = false;
   isAutolistLoading   = false;
@@ -103,68 +142,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private configService: ConfigService) {
-      this.roleForm = fb.group({
-        roleType: [null, Validators.required],
-        parentNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-        roleName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-        namespace: '',
-        data: fb.group({
-          version: '1.0.0',
-          issuer: fb.group({
-            issuerType: this.IssuerType.DID,
-            roleName: '',
-            did: fb.array([])
-          }),
-          enrolmentPreconditions: [[{ type: PreconditionTypes.Role, conditions: []}]]
-        })
-      });
-
-      this.fieldsForm = fb.group({
-        fieldType: ['', Validators.required],
-        label: ['', Validators.required],
-        validation: fb.group({
-          required: undefined,
-          minLength: [undefined, {
-            validators: Validators.min(0),
-            updateOn: 'blur'
-          }],
-          maxLength: [undefined, {
-            validators: Validators.min(1),
-            updateOn: 'blur'
-          }],
-          pattern: undefined,
-          minValue: [undefined, {
-            updateOn: 'blur'
-          }],
-          maxValue: [undefined, {
-            updateOn: 'blur'
-          }],
-          minDate: undefined,
-          maxDate: undefined
-        })
-      });
-      this._induceInt();
-      this._induceRanges();
-
-      // Init Issuer Fields
-      this.issuerGroup = fb.group({
-        newIssuer: ['', this.iamService.isValidDid]
-      });
-      this.issuerList = [];
-      this.issuerList.push(this.iamService.iam.getDid());
-
-      // Init Restriction Fields
-      this.roleControl = fb.control('');
-      this.rolenamespaceList = this.roleControl.valueChanges.pipe(
-        debounceTime(1200),
-        startWith(''),
-        switchMap(async (value) => await this._searchRoleNamespace(value))
-      );
-      this._onSearchKeywordInput$ = this.roleControl.valueChanges.pipe(
-        switchMap(async (value) => await this._handleKeywordChanged(value))
-      ).subscribe();
-
-      this._init(data);
     }
 
   async ngAfterViewInit() {
@@ -172,6 +149,19 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this._induceInt();
+    this._induceRanges();
+
+    this.rolenamespaceList = this.roleControl.valueChanges.pipe(
+        debounceTime(1200),
+        startWith(''),
+        switchMap(async (value) => await this._searchRoleNamespace(value))
+    );
+    this._onSearchKeywordInput$ = this.roleControl.valueChanges.pipe(
+        switchMap(async (value) => await this._handleKeywordChanged(value))
+    ).subscribe();
+
+    this._init(this.data);
   }
 
   private _init(data: any) {
