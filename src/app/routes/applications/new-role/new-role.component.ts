@@ -1,10 +1,14 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+
 import { MatAutocompleteTrigger, MatDialog, MatDialogRef, MatStepper, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime, startWith, switchMap } from 'rxjs/operators';
+import { debounceTime, startWith, switchMap, takeUntil } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
+
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { FieldValidationService } from 'src/app/shared/services/field-validation.service';
 import { ConfigService } from 'src/app/shared/services/config.service';
@@ -12,7 +16,6 @@ import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
-import { Observable } from 'rxjs';
 
 export const RoleType = {
   ORG: 'org',
@@ -45,7 +48,7 @@ const FIELD_TYPES = [
   templateUrl: './new-role.component.html',
   styleUrls: ['./new-role.component.scss']
 })
-export class NewRoleComponent implements OnInit, AfterViewInit {
+export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   private stepper: MatStepper;
   @ViewChild('stepper', { static: false }) set content(content: MatStepper) {
     if (content) {
@@ -131,6 +134,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   private _currentIdx = 0;
   private _requests = {};
   private _onSearchKeywordInput$ : any;
+  private subscription$ = new Subject();
 
   constructor(private fb: FormBuilder,
     private iamService: IamService,
@@ -157,11 +161,20 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         startWith(''),
         switchMap(async (value) => await this._searchRoleNamespace(value))
     );
-    this._onSearchKeywordInput$ = this.roleControl.valueChanges.pipe(
-        switchMap(async (value) => await this._handleKeywordChanged(value))
-    ).subscribe();
+
+    this.roleControl.valueChanges
+        .pipe(
+            takeUntil(this.subscription$),
+            switchMap(async (value) => await this._handleKeywordChanged(value))
+        )
+        .subscribe();
 
     this._init(this.data);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription$.next();
+    this.subscription$.complete();
   }
 
   private _init(data: any) {
@@ -260,20 +273,24 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   private _induceInt() {
-    let minLength = this.fieldsForm.get('validation').get('minLength');
-    let maxLength = this.fieldsForm.get('validation').get('maxLength');
+    const minLength = this.fieldsForm.get('validation').get('minLength');
+    const maxLength = this.fieldsForm.get('validation').get('maxLength');
 
-    minLength.valueChanges.subscribe(data => {
-      if (data) {
-        minLength.setValue(parseInt(data), { emitEvent: false });
-      }
-    });
+    minLength.valueChanges
+        .pipe(takeUntil(this.subscription$))
+        .subscribe(data => {
+          if (data) {
+            minLength.setValue(parseInt(data), {emitEvent: false});
+          }
+        });
 
-    maxLength.valueChanges.subscribe(data => {
-      if (data) {
-        maxLength.setValue(parseInt(data), { emitEvent: false });
-      }
-    });
+    maxLength.valueChanges
+        .pipe(takeUntil(this.subscription$))
+        .subscribe(data => {
+          if (data) {
+            maxLength.setValue(parseInt(data), {emitEvent: false});
+          }
+        });
   }
 
   private _induceRanges() {
