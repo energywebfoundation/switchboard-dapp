@@ -47,7 +47,7 @@ export class ViewRequestsComponent implements OnInit {
 
     try {
       let req = {
-        requesterDID: this.claim.requester,
+        requester: this.claim.requester,
         id: this.claim.id,
         token: this.claim.token
       };
