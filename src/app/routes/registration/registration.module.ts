@@ -9,6 +9,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { RequestClaimComponent } from './request-claim/request-claim.component';
 import { ConnectToWalletDialogComponent } from './connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { LayoutModule } from 'src/app/layout/layout.module';
+import { SelectAssetDialogComponent } from './select-asset-dialog/select-asset-dialog.component';
 
 
 const routes: Routes = [];
@@ -28,9 +29,10 @@ const routes: Routes = [];
     ],
     declarations: [
         RequestClaimComponent,
-        ConnectToWalletDialogComponent
+        ConnectToWalletDialogComponent,
+        SelectAssetDialogComponent
     ],
-    entryComponents: [ConnectToWalletDialogComponent],
+    entryComponents: [ConnectToWalletDialogComponent, SelectAssetDialogComponent],
     exports: []
 })
 

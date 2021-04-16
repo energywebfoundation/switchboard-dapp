@@ -2,18 +2,23 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ENSNamespaceTypes, PreconditionTypes, WalletProvider } from 'iam-client-lib';
+import { Asset, ENSNamespaceTypes, PreconditionTypes, WalletProvider } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { IamService, LoginType } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
 import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/connect-to-wallet-dialog.component';
+import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-dialog.component';
 
 const SWAL = require('sweetalert');
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = '1.0.0';
 const REDIRECT_TO_ENROLMENT = true;
+const EnrolForType = {
+  ME: 'me',
+  ASSET: 'asset'
+};
 
 @Component({
   selector: 'app-request-claim',
@@ -23,8 +28,14 @@ const REDIRECT_TO_ENROLMENT = true;
 export class RequestClaimComponent implements OnInit {
 
   public RoleType       = RoleType;
+  public EnrolForType   = EnrolForType;
+
   public enrolmentForm  : FormGroup;
-  public roleTypeForm   : FormGroup;
+  public roleTypeForm   = this.fb.group({
+    roleType: '',
+    enrolFor: EnrolForType.ME,
+    assetDid: ''
+  });
   public fieldList      : {
     fieldType: string, 
     label: string, 
@@ -87,12 +98,7 @@ export class RequestClaimComponent implements OnInit {
       private iamService: IamService,
       private toastr: ToastrService,
       public dialog: MatDialog,
-      private loadingService: LoadingService) { 
-    
-    this.roleTypeForm = fb.group({
-      roleType: ''
-    });
-  }
+      private loadingService: LoadingService) { }
 
   private setUrlParams(params: any) {
     this.namespace = params.app || params.org;
@@ -300,7 +306,9 @@ export class RequestClaimComponent implements OnInit {
 
   private async _getDIDSyncedRoles() {
     try {
-      let claims: any[] = await this.iamService.iam.getUserClaims();
+      let claims: any[] = await this.iamService.iam.getUserClaims({
+        did: this.roleTypeForm.value.enrolFor === EnrolForType.ASSET ? this.roleTypeForm.value.assetDID : this.iamService.iam.getDid()
+      });
       claims = claims.filter((item: any) => {
           if (item && item.claimType) {
               let arr = item.claimType.split('.');
@@ -332,8 +340,9 @@ export class RequestClaimComponent implements OnInit {
       parentType: this.roleType === RoleType.APP ? ENSNamespaceTypes.Application : ENSNamespaceTypes.Organization,
       namespace: this.namespace
     });
+
     this.userRoleList = await this.iamService.iam.getRequestedClaims({
-      did: this.iamService.iam.getDid()
+      did: this.roleTypeForm.value.enrolFor === EnrolForType.ASSET ? this.roleTypeForm.value.assetDID : this.iamService.iam.getDid()
     });
 
     if (roleList && roleList.length) {
@@ -344,7 +353,12 @@ export class RequestClaimComponent implements OnInit {
           if (role.namespace === this.userRoleList[i].claimType) {
             if (role.namespace === defaultRole) {
               // Display Error
-              this.displayAlert('You have already enrolled to this role.', 'error');
+              if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
+                this.displayAlert('Your asset has already enrolled to this role.', 'error');
+              }
+              else {
+                this.displayAlert('You have already enrolled to this role.', 'error');
+              }
             }
             retVal = false;
             break;
@@ -401,6 +415,7 @@ export class RequestClaimComponent implements OnInit {
     this.selectedNamespace = undefined;
 
     this.roleTypeForm.reset();
+    this.roleTypeForm.get('enrolFor').setValue(EnrolForType.ME);
     
     if (this.fieldList) {
       this.fieldList = [];
@@ -479,6 +494,7 @@ export class RequestClaimComponent implements OnInit {
   }
 
   roleTypeSelected(e: any) {
+    console.log(this.roleTypeForm.value);
     if (e && e.value && e.value.definition) {
       this.fieldList = e.value.definition.fields || [];
       this.selectedRole = e.value.definition;
@@ -489,6 +505,17 @@ export class RequestClaimComponent implements OnInit {
       
       this.updateForm();
 
+    }
+  }
+
+  async enrolForSelected(e: any) {
+    if (e.value === EnrolForType.ME) {
+      this.roleTypeForm.patchValue({
+        assetDid: ''
+      });
+
+      // Initialize Roles
+      await this.initRoles();
     }
   }
 
@@ -545,8 +572,6 @@ export class RequestClaimComponent implements OnInit {
     return retVal;
   }
 
-  private _roleExists
-
   async submit() {
     this.loadingService.show();
     if (this.enrolmentForm.valid) {
@@ -589,7 +614,8 @@ export class RequestClaimComponent implements OnInit {
 
           await this.iamService.iam.createClaimRequest({
             issuer: did,
-            claim: claim
+            claim: claim,
+            subject: this.roleTypeForm.value.assetDid ? this.roleTypeForm.value.assetDid : undefined
           });
           
           success = true;
@@ -626,5 +652,23 @@ export class RequestClaimComponent implements OnInit {
 
   logout() {
     this.iamService.logoutAndRefresh();
+  }
+
+  selectAsset() {
+    const dialogRef = this.dialog.open(SelectAssetDialogComponent, {
+      width: '600px',
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().subscribe(async (res: Asset) => {
+      if (res) {
+        this.roleTypeForm.patchValue({
+          assetDid: res.id
+        });
+
+        // Initialize Roles
+        await this.initRoles();
+      }
+      dialogRef.unsubscribe();
+    });
   }
 }
