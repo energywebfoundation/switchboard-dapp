@@ -23,7 +23,18 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public appForm: FormGroup;
+  public appForm = this.fb.group({
+    orgNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    appName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    namespace: '',
+    data: this.fb.group({
+      applicationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+      logoUrl: ['', Validators.pattern('https?://.*')],
+      websiteUrl: ['', Validators.pattern('https?://.*')],
+      description: '',
+      others: ['', this.iamService.isValidJsonFormat]
+    })
+  });
   public environment = environment;
   public isChecking = false;
   private _isLogoUrlValid = true;
@@ -48,32 +59,15 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private configService: ConfigService) {
-      this.appForm = fb.group({
-        orgNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-        appName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-        namespace: '',
-        data: fb.group({
-          applicationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-          logoUrl: ['', Validators.pattern('https?://.*')],
-          websiteUrl: ['', Validators.pattern('https?://.*')],
-          description: '',
-          others: ['', this.iamService.isValidJsonFormat]
-        })
-      });
-
       if (data && data.viewType) {
         this.viewType = data.viewType;
-        
-  
+
         if (this.viewType === ViewType.UPDATE && data.origData) {
           this.origData = data.origData;
           this.TOASTR_HEADER = 'Update Application';
-        }
-        else if (this.viewType === ViewType.NEW && data.organizationNamespace) {
+        } else if (this.viewType === ViewType.NEW && data.organizationNamespace) {
           this.appForm.patchValue({ orgNamespace: data.organizationNamespace });
         }
-  
-        this.initFormData();
       }
     }
 
@@ -82,6 +76,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.initFormData();
   }
 
   private initFormData() {
