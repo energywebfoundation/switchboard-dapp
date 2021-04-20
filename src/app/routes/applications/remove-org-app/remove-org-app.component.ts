@@ -35,17 +35,14 @@ export class RemoveOrgAppComponent implements OnInit {
     private loadingService: LoadingService,
     private iamRequestService: IamRequestService,
     public dialogRef: MatDialogRef<RemoveOrgAppComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) { 
-    // console.log(data);
+    @Inject(MAT_DIALOG_DATA) public data: any) {
     this.listType = data.listType;
     this.namespace = data.namespace;
     this.steps = data.steps;
 
     if (this.listType === ListType.ORG) {
       this.TOASTR_HEADER = 'Remove Organization'
-    }
-    else if (this.listType === ListType.APP) {
+    } else if (this.listType === ListType.APP) {
       this.TOASTR_HEADER = 'Remove Application';
     }
   }
