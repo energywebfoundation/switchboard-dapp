@@ -1,19 +1,23 @@
+import { HttpClient } from '@angular/common/http';
+import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { OnDestroy } from '@angular/core';
+
 import { MatDialog } from '@angular/material/dialog';
-import {Md5} from 'ts-md5/dist/md5';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ToastrService } from 'ngx-toastr';
+import { Md5 } from 'ts-md5/dist/md5';
+import { ENSNamespaceTypes } from 'iam-client-lib';
+
 import { UserblockService } from '../sidebar/userblock/userblock.service';
 import { SettingsService } from '../../core/settings/settings.service';
 import { MenuService } from '../../core/menu/menu.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Identicon } from 'src/app/shared/directives/identicon/identicon';
-import { HttpClient } from '@angular/common/http';
 import { DialogUser } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
-import { Router, NavigationEnd } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-header',
@@ -47,50 +51,56 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     private _pendingApprovalCountListener: any;
     private _pendingSyncCountListener: any;
+    private subscription$ = new Subject();
 
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
-    constructor(public menu: MenuService, 
-        // private authenticationService: AuthService,
-        private iamService: IamService,
-        private router: Router,
-        private toastr: ToastrService,
-        private notifService: NotificationService,
-        public userblockService: UserblockService, private http: HttpClient,
-        public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer) {
-
+    constructor(public menu: MenuService,
+                // private authenticationService: AuthService,
+                private iamService: IamService,
+                private router: Router,
+                private toastr: ToastrService,
+                private notifService: NotificationService,
+                public userblockService: UserblockService, private http: HttpClient,
+                public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer) {
         // show only a few items on demo
         this.menuItems = menu.getMenu().slice(0, 4); // for horizontal layout
-        
+
         if (localStorage.getItem('currentUser')) {
             this.currentUserDid = JSON.parse(localStorage.getItem('currentUser')).did;
             this.currentUserRole = JSON.parse(localStorage.getItem('currentUser')).organizationType;
         }
 
-        this.router.events.subscribe((event: any) => {
-            if (event instanceof NavigationEnd) {
-                this.iamService.setDeepLink(event.url);
-                this.isNavMenuVisible = true;
-                if (event.url  === '/dashboard') {
-                    this.isNavMenuVisible = false;
-                }
+        this.router.events
+            .pipe(takeUntil(this.subscription$))
+            .subscribe((event: any) => {
+                if (event instanceof NavigationEnd) {
+                    this.iamService.setDeepLink(event.url);
+                    this.isNavMenuVisible = true;
+                    if (event.url === '/dashboard') {
+                        this.isNavMenuVisible = false;
+                    }
 
-                let pathArr = event.url.split('/');
-                this.currentNav = pathArr[1];
-            }
-        });
+                    const pathArr = event.url.split('/');
+                    this.currentNav = pathArr[1];
+                }
+            });
 
         // Stay in current screen and display user name if available
-        this.iamService.userProfile.subscribe((data: any) => {
-            if (data && data.name) {
-                this.userName = data.name;
-            }
-        
-            if (this.iamService.accountAddress && !this.notifService.initialized) {
-                // Initialize Notifications
-                this.initNotifications();
-            }
-        });
+        this.iamService.userProfile
+            .pipe(takeUntil(this.subscription$))
+            .subscribe((data: any) => {
+                if (data && data.name) {
+                    this.userName = data.name;
+                }
+
+                if (this.iamService.accountAddress && !this.notifService.initialized) {
+                    // Initialize Notifications
+                    this.initNotifications();
+                } else {
+                    this.isLoadingNotif = false;
+                }
+            });
     }
 
     ngOnDestroy(): void {
@@ -100,27 +110,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (this._pendingApprovalCountListener) {
             this._pendingApprovalCountListener.unsubscribe();
         }
+
+        this.subscription$.next();
+        this.subscription$.complete();
+        console.log('header ngOnDestroy')
     }
 
     openDialogUser(): void {
         const dialogRef = this.dialog.open(DialogUser, {
-          width: '440px',data:{},
-          maxWidth: '100%',
-          disableClose: true
+            width: '440px',
+            data: {},
+            maxWidth: '100%',
+            disableClose: true
         });
-    
-        dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            // Update User Name
-          }
-        });
-      }
+
+        dialogRef.afterClosed()
+            .pipe(takeUntil(this.subscription$))
+            .subscribe(result => {
+                if (result) {
+                    // Update User Name
+                }
+            });
+    }
 
     ngOnInit() {
         this.isNavSearchVisible = false;
 
-        var ua = window.navigator.userAgent;
-        if (ua.indexOf("MSIE ") > 0 || !!ua.match(/Trident.*rv\:11\./)) { // Not supported under IE
+        const ua = window.navigator.userAgent;
+        if (ua.indexOf('MSIE ') > 0 || !!ua.match(/Trident.*rv\:11\./)) { // Not supported under IE
             this.fsbutton.nativeElement.style.display = 'none';
         }
     }
@@ -136,20 +153,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.notifService.initNotifCounts(pendingApprovalCount, pendingSyncCount);
 
         // Listen to Count Changes
-        this._pendingApprovalCountListener = this.notifService.pendingApproval.subscribe(async (count: number) => {
-            await this.initPendingClaimsCount();
-            this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
-            if (this.notif.totalCount < 0) {
-                this.notif.totalCount = 0;
-            }
-        });
-        this._pendingSyncCountListener = this.notifService.pendingDidDocSync.subscribe(async (count: number) => {
-            await this.initApprovedClaimsForSyncCount();
-            this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
-            if (this.notif.totalCount < 0) {
-                this.notif.totalCount = 0;
-            }
-        });
+        this._pendingApprovalCountListener = this.notifService.pendingApproval
+            .pipe(takeUntil(this.subscription$))
+            .subscribe(async (count: number) => {
+                await this.initPendingClaimsCount();
+                this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
+                if (this.notif.totalCount < 0) {
+                    this.notif.totalCount = 0;
+                }
+            });
+        this._pendingSyncCountListener = this.notifService.pendingDidDocSync
+            .pipe(takeUntil(this.subscription$))
+            .subscribe(async (count: number) => {
+                await this.initApprovedClaimsForSyncCount();
+                this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
+                if (this.notif.totalCount < 0) {
+                    this.notif.totalCount = 0;
+                }
+            });
 
         // Listen to External Messages
         this.iamService.iam.subscribeToMessages({
@@ -227,12 +248,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         try {
             await this.initPendingClaimsCount();
             await this.initApprovedClaimsForSyncCount();
-        }
-        catch (e) {
+        } catch (e) {
             console.error(e);
             this.toastr.error(e);
-        }
-        finally {
+        } finally {
             this.isLoadingNotif = false;
             await this.initNotificationListeners(this.notif.pendingApprovalCount, this.notif.pendingSyncCount);
         }
