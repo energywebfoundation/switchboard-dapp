@@ -41,7 +41,7 @@ export class SelectAssetDialogComponent implements OnInit {
     this.dialogRef.close(asset);
   }
 
-  closeDialog(asset: Asset) {
+  closeDialog(asset?: Asset) {
     this.dialogRef.close();
   }
 }
