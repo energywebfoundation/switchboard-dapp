@@ -21,12 +21,12 @@
                         <span style="font-size:16px;"> {{ element?.emittedBy }}</span>
                     </div>
                 </div>
-                <div class="border-vertical"></div>
-                <div class="d-flex align-items-center">
+                <div class="border-vertical" *ngIf="element?.relatedTo"></div>
+                <div class="d-flex align-items-center" *ngIf="element?.relatedTo">
                     <mat-icon class="color-success pr-2">account_circle</mat-icon>
                     <div class="d-flex flex-column pl-2">
                         <h4 class="small font-weight-600 mb-1">OFFERED TO</h4>
-                        <span style="font-size:16px;"> {{ element?.assetId }}</span>
+                        <span style="font-size:16px;"> {{ element?.relatedTo }}</span>
                     </div>
                 </div>
             </div>
