@@ -341,9 +341,16 @@ export class RequestClaimComponent implements OnInit {
       namespace: this.namespace
     });
 
-    this.userRoleList = await this.iamService.iam.getRequestedClaims({
-      did: this.roleTypeForm.value.enrolFor === EnrolForType.ASSET ? this.roleTypeForm.value.assetDID : this.iamService.iam.getDid()
-    });
+    if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
+      this.userRoleList = await this.iamService.iam.getClaimsBySubject({
+        did: this.roleTypeForm.value.assetDID
+      });
+    }
+    else {
+      this.userRoleList = await this.iamService.iam.getClaimsByRequester({
+        did: this.iamService.iam.getDid()
+      });
+    }
 
     if (roleList && roleList.length) {
       roleList = roleList.filter((role: any) => {

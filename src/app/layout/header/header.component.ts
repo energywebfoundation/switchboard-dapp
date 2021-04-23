@@ -197,7 +197,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private async initPendingClaimsCount() {
         try {
             // Get Pending Claims to be Approved
-            let pendingClaimsList = (await this.iamService.iam.getIssuedClaims({
+            let pendingClaimsList = (await this.iamService.iam.getClaimsByIssuer({
                 did: this.iamService.iam.getDid(),
                 isAccepted: false
             })).filter(item => !item['isRejected']);
@@ -214,7 +214,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private async initApprovedClaimsForSyncCount() {
         try {
             // Get Approved Claims
-            let approvedClaimsList = await this.iamService.iam.getRequestedClaims({
+            let approvedClaimsList = await this.iamService.iam.getClaimsByRequester({
                 did: this.iamService.iam.getDid(),
                 isAccepted: true
             });

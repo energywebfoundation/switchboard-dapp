@@ -12,6 +12,8 @@ import { NewAssetTypeComponent } from './new-asset-type/new-asset-type.component
 import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
 import { AssetListComponent } from './asset-list/asset-list.component';
 import { AssetOwnershipHistoryComponent } from './asset-ownership-history/asset-ownership-history.component';
+import { AssetEnrolmentListComponent } from './asset-enrolment-list/asset-enrolment-list.component';
+import { EnrolmentModule } from '../enrolment/enrolment.module';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent }
@@ -19,7 +21,7 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [AssetsComponent, NewAssetTypeComponent, NewPassiveAssetComponent, AssetListComponent, AssetOwnershipHistoryComponent],
+  declarations: [AssetsComponent, NewAssetTypeComponent, NewPassiveAssetComponent, AssetListComponent, AssetOwnershipHistoryComponent, AssetEnrolmentListComponent],
   imports: [
     CommonModule,
     SharedModule,

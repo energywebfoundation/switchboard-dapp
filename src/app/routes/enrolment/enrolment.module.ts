@@ -8,14 +8,13 @@ import { EnrolToRoleComponent } from './enrol-to-role/enrol-to-role.component';
 import { FormsModule } from '@angular/forms';
 import { ViewRequestsComponent } from './view-requests/view-requests.component';
 import { ViewRoleComponent } from './view-role/view-role.component';
-import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 
 const routes: Routes = [
   { path: '', component: EnrolmentComponent }
 ];
 
 @NgModule({
-  declarations: [EnrolmentComponent, EnrolToRoleComponent, ViewRequestsComponent, ViewRoleComponent, EnrolmentListComponent],
+  declarations: [EnrolmentComponent, EnrolToRoleComponent, ViewRequestsComponent, ViewRoleComponent],
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
@@ -31,6 +30,6 @@ const routes: Routes = [
     MatDialogModule,
     MatInputModule
   ],
-  entryComponents: [ViewRequestsComponent,ViewRoleComponent],
+  entryComponents: [ViewRequestsComponent,ViewRoleComponent]
 })
 export class EnrolmentModule { }
