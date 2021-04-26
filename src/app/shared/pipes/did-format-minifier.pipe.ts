@@ -10,7 +10,7 @@ export class DidFormatMinifierPipe implements PipeTransform {
     
     if (value && value.length > 10) {
       let lastColonIndex = value.lastIndexOf(':');
-      retVal = `${value.substr(0, lastColonIndex + 5)}...${value.substr(value.length - 5)}`;
+      retVal = `${value.substr(0, lastColonIndex + 7)}...${value.substr(value.length - 5)}`;
     }
 
     return retVal;
