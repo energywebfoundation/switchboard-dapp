@@ -13,10 +13,10 @@ import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.
 import { AssetListComponent } from './asset-list/asset-list.component';
 import { AssetOwnershipHistoryComponent } from './asset-ownership-history/asset-ownership-history.component';
 import { AssetEnrolmentListComponent } from './asset-enrolment-list/asset-enrolment-list.component';
-import { EnrolmentModule } from '../enrolment/enrolment.module';
 
 const routes: Routes = [
-  { path: '', component: AssetsComponent }
+  { path: '', component: AssetsComponent},
+  { path: 'enrolment/:subject', component: AssetEnrolmentListComponent }
 ];
 
 

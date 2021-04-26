@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
 import { Asset } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
@@ -35,7 +36,8 @@ export class AssetListComponent implements OnInit {
   constructor(private toastr: ToastrService,
     private dialog: MatDialog,
     private iamService: IamService,
-    private loadingService: LoadingService) { 
+    private loadingService: LoadingService,
+    private route: Router) { 
       
     }
 
@@ -181,5 +183,9 @@ export class AssetListComponent implements OnInit {
     }).afterClosed().subscribe((res: any) => {
       dialogRef.unsubscribe();
     });
+  }
+
+  viewAssetEnrolments(data: Asset) {
+    this.route.navigate(['assets/enrolment/' + data.id]);
   }
 }
