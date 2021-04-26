@@ -711,7 +711,7 @@ export class RequestClaimComponent implements OnInit {
   goToEnrolment() {
     if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/asset/enrolment/' + this.roleTypeForm.value.assetDid }});
+      this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid }});
     }
     else {
       // Navigate to My Enrolments Page
