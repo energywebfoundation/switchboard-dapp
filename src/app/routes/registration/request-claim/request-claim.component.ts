@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Asset, ENSNamespaceTypes, PreconditionTypes, WalletProvider } from 'iam-client-lib';
+import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { ToastrService } from 'ngx-toastr';
 import { IamService, LoginType } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -393,14 +394,14 @@ export class RequestClaimComponent implements OnInit {
     });
 
     if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
-      this.userRoleList = await this.iamService.iam.getClaimsBySubject({
+      this.userRoleList = (await this.iamService.iam.getClaimsBySubject({
         did: this.roleTypeForm.value.assetDid
-      });
+      })).filter((claim: Claim) => !claim.isRejected);
     }
     else {
-      this.userRoleList = await this.iamService.iam.getClaimsByRequester({
+      this.userRoleList = (await this.iamService.iam.getClaimsByRequester({
         did: this.iamService.iam.getDid()
-      });
+      })).filter((claim: Claim) => !claim.isRejected);
     }
 
     if (roleList && roleList.length) {
