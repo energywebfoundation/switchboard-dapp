@@ -64,6 +64,8 @@ import { PreventPasteDirective } from './directives/prevent-paste.directive';
 import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
 import { DidFormatMinifierPipe } from './pipes/did-format-minifier.pipe';
 import { EnrolmentListComponent } from '../routes/enrolment/enrolment-list/enrolment-list.component';
+import { MinifiedDidViewerDirective } from './directives/minified-did-viewer/minified-did-viewer.directive';
+import { MinifiedDidViewerDialogComponent } from './directives/minified-did-viewer/minified-did-viewer-dialog.component';
 
 
 
@@ -134,7 +136,9 @@ import { EnrolmentListComponent } from '../routes/enrolment/enrolment-list/enrol
         PreventPasteDirective,
         RetryBtnDirective,
         DidFormatMinifierPipe,
-        EnrolmentListComponent
+        EnrolmentListComponent,
+        MinifiedDidViewerDirective,
+        MinifiedDidViewerDialogComponent
     ],
     exports: [
         CommonModule,
@@ -163,6 +167,7 @@ import { EnrolmentListComponent } from '../routes/enrolment/enrolment-list/enrol
         JAllowByDirective,
         PreventPasteDirective,
         RetryBtnDirective,
+        MinifiedDidViewerDirective,
         DidFormatMinifierPipe,
         EnrolmentListComponent,
         // Material Modules
@@ -198,7 +203,8 @@ import { EnrolmentListComponent } from '../routes/enrolment/enrolment-list/enrol
         MatTooltipModule,
         MatNativeDateModule,
         MatStepperModule
-    ]
+    ],
+    entryComponents: [MinifiedDidViewerDialogComponent]
 })
 
 // https://github.com/ocombe/ng2-translate/issues/209
