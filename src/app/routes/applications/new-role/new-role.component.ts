@@ -858,12 +858,41 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private async _searchRoleNamespace(keyword: any): Promise<any[]> {
+    if (this.autocompleteTrigger) {
+      this.autocompleteTrigger.closePanel();
+    }
+
+    this.isAutolistLoading = true;
     let retVal = [];
-      let word = undefined;
+
+    if (keyword) {
+      let word;
+      if (!keyword.trim && keyword.name) {
+        word = keyword.name;
+      } else {
+        word = keyword.trim();
+      }
+
+      if (word.length > 2) {
+        word = word.toLowerCase();
+        try {
           retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
             search: word,
             types: ['Role']
           });
+
+          if (retVal && retVal.length) {
+            this.hasSearchResult = true;
+            if (this.autocompleteTrigger) {
+              this.autocompleteTrigger.openPanel();
+            }
+          }
+        } catch (e) {
+          this.toastr.error('Could not load search result.', 'Server Error');
+        }
+      }
+    }
+    this.isAutolistLoading = false;
     return retVal;
   }
 

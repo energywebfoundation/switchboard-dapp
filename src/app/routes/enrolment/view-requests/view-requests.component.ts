@@ -54,6 +54,7 @@ export class ViewRequestsComponent implements OnInit {
       };
 
       // console.log('issue claim', req);
+      await this.iamService.iam.issueClaimRequest(req);
 
       this.notifService.decreasePendingApprovalCount();
       this.toastr.success('Request is approved.', TOASTR_HEADER);

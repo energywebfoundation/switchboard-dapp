@@ -677,7 +677,8 @@ export class RequestClaimComponent implements OnInit {
 
           await this.iamService.iam.createClaimRequest({
             issuer: did,
-            claim
+            claim,
+            subject: this.roleTypeForm.value.assetDid ? this.roleTypeForm.value.assetDid : undefined
           });
 
           success = true;
