@@ -20,19 +20,20 @@ export class ViewRequestsComponent implements OnInit {
   fields = [];
 
   constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialog: MatDialog,
-    private iamService: IamService,
-    private toastr: ToastrService,
-    private loadingService: LoadingService,
-    private notifService: NotificationService) { }
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              public dialog: MatDialog,
+              private iamService: IamService,
+              private toastr: ToastrService,
+              private loadingService: LoadingService,
+              private notifService: NotificationService) {
+  }
 
   async ngOnInit() {
     this.listType = this.data.listType;
     this.claim = this.data.claimData;
 
     if (this.claim && this.claim.token) {
-      let decoded = await this.iamService.iam.decodeJWTToken({
+      const decoded = await this.iamService.iam.decodeJWTToken({
         token: this.claim.token
       });
 
@@ -46,23 +47,20 @@ export class ViewRequestsComponent implements OnInit {
     this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
 
     try {
-      let req = {
+      const req = {
         requester: this.claim.requester,
         id: this.claim.id,
         token: this.claim.token
       };
 
       // console.log('issue claim', req);
-      await this.iamService.iam.issueClaimRequest(req);
 
       this.notifService.decreasePendingApprovalCount();
       this.toastr.success('Request is approved.', TOASTR_HEADER);
       this.dialogRef.close(true);
-    }
-    catch (e) {
+    }    catch (e) {
       this.toastr.error(e, TOASTR_HEADER);
-    }
-    finally {
+    }    finally {
       this.loadingService.hide();
     }
   }
@@ -89,11 +87,9 @@ export class ViewRequestsComponent implements OnInit {
           this.notifService.decreasePendingApprovalCount();
           this.toastr.success('Request is rejected successfully.', TOASTR_HEADER);
           this.dialogRef.close(true);
-        }
-        catch (e) {
+        } catch (e) {
           console.error(e);
-        }
-        finally {
+        } finally {
           this.loadingService.hide();
         }
       }

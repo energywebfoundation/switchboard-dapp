@@ -62,6 +62,7 @@ import { ScrollableDirective } from './directives/scrollable/scrollable.directiv
 import { JAllowByDirective } from './directives/j-allow-by.directive';
 import { PreventPasteDirective } from './directives/prevent-paste.directive';
 import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
+import { SmartSearchComponent } from './components/smart-search/smart-search.component';
 
 
 
@@ -130,7 +131,8 @@ import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
         ScrollableDirective,
         JAllowByDirective,
         PreventPasteDirective,
-        RetryBtnDirective
+        RetryBtnDirective,
+        SmartSearchComponent
     ],
     exports: [
         CommonModule,
@@ -191,7 +193,8 @@ import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
         MatToolbarModule,
         MatTooltipModule,
         MatNativeDateModule,
-        MatStepperModule
+        MatStepperModule,
+        SmartSearchComponent
     ]
 })
 

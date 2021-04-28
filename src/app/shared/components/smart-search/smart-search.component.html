@@ -1,0 +1,34 @@
+<mat-form-field class="md-search" appearance="outline">
+    <input type="text"
+           [placeholder]="placeholderSearch"
+
+           matInput
+           [formControl]="searchText"
+           [matAutocomplete]="auto"
+           (input)="updateSearchTxtFieldValue($event)">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelectedItem($event)">
+      <mat-option *ngFor="let item of filteredOptions | async" [value]="item" class="d-flex align-items-start" style="height: 90px;">
+        <ng-container *ngIf="item?.definition?.orgName">
+          <mat-icon svgIcon="organization-list-icon"></mat-icon> <span class="search-title">{{ item?.definition?.orgName }}</span>
+        </ng-container>
+        <ng-container *ngIf="item?.definition?.appName">
+          <mat-icon svgIcon="application-list-icon"></mat-icon> <span class="search-title">{{ item?.definition?.appName }}</span>
+        </ng-container>
+        <div class="search-preview d-flex flex-column">
+          <span>{{ item?.namespace }}</span>
+          <span class="opacity-50">{{ item?.definition?.description }}</span>
+        </div>
+      </mat-option>
+    </mat-autocomplete>                
+      <div matSuffix class="d-flex" *ngIf="searchTxtFieldValue?.trim()?.length > 2">
+        <ng-container *ngIf="!isAutolistLoading?.value" >
+          <button mat-icon-button (click)="search()">
+            <mat-icon>search</mat-icon>
+          </button>
+          <button mat-icon-button (click)="clearSearchTxt()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </ng-container>
+        <mat-spinner *ngIf="isAutolistLoading?.value" diameter="21" class="color-white"></mat-spinner>
+      </div>
+  </mat-form-field>
