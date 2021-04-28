@@ -77,7 +77,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr class="cursor-pointer" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
   <!-- Shows when table is empty -->
   <div class="d-flex justify-content-center align-items-center mt-4 mb-3 pb-3" *ngIf="!dataSource?.data?.length">
