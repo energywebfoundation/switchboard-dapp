@@ -19,6 +19,11 @@ const EnrolForType = {
   ME: 'me',
   ASSET: 'asset'
 };
+const SwalButtons = {
+  VIEW_MY_ENROMENTS: 'viewMyEnrolments',
+  ENROL_FOR_ASSET: 'enrolForAsset',
+  ENROL_FOR_MYSELF: 'enrolForSelf'
+}
 
 @Component({
   selector: 'app-request-claim',
@@ -163,12 +168,28 @@ export class RequestClaimComponent implements OnInit {
 
     // Hide button if callback url is not available
     if (!this.callbackUrl) {
+      delete config.button;
       if (this.iamService.iam.isSessionActive()) {
-        config.button = 'View My Enrolments';
+        if (icon !== 'success') {
+          config['buttons'] = {
+            viewMyEnrolments: 'View My Enrolments',
+            enrolForAsset: 'Enrol For My Asset'
+          };
+          if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
+            config['buttons'].enrolForSelf = 'Enrol For Myself';
+            config['buttons'].enrolForAsset = 'Choose Another Asset';
+            config['buttons'].viewMyEnrolments = 'View Asset Enrolments';
+          }
+        }
+        else if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
+          config.button = 'View Asset Enrolments';
+        }
+        else {
+          config.button = 'View My Enrolments';
+        }
       }
       else {
         // No Buttons
-        delete config.button;
         config['buttons'] = false;
       }
     }
@@ -176,17 +197,47 @@ export class RequestClaimComponent implements OnInit {
     // Navigate to callback URL
     let result = await SWAL(config);
     if (result) {
-      if (this.callbackUrl && !this.stayLoggedIn) {
-        // Logout
-        this.iamService.logout();
-
-        // Redirect to Callback URL
-        location.href = this.callbackUrl;
+      switch (result) {
+        case SwalButtons.ENROL_FOR_MYSELF:
+          this.roleTypeForm.patchValue({
+            enrolFor: EnrolForType.ME,
+            enrolType: ''
+          });
+          await this.initRoles();
+          break;
+        case SwalButtons.ENROL_FOR_ASSET:
+          this.roleTypeForm.patchValue({
+            enrolFor: EnrolForType.ASSET,
+            enrolType: '',
+            assetDid: ''
+          });
+          this.resetForm();
+          if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
+            this.selectAsset();
+          }
+          break;
+        default:
+          if (this.callbackUrl && !this.stayLoggedIn) {
+            // Logout
+            this.iamService.logout();
+    
+            // Redirect to Callback URL
+            location.href = this.callbackUrl;
+          }
+          else if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
+            // Navigate to My Enrolments Page
+            this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid }});
+          }
+          else {
+            // Navigate to My Enrolments Page
+            this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/enrolment?notif=myEnrolments' }});
+          }
       }
-      else {
-        // Navigate to My Enrolments Page
-        this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/enrolment?notif=myEnrolments' }});
-      }
+    }
+    else {
+      this.roleTypeForm.patchValue({
+        enrolType: ''
+      });
     }
   }
 
@@ -307,7 +358,7 @@ export class RequestClaimComponent implements OnInit {
   private async _getDIDSyncedRoles() {
     try {
       let claims: any[] = await this.iamService.iam.getUserClaims({
-        did: this.roleTypeForm.value.enrolFor === EnrolForType.ASSET ? this.roleTypeForm.value.assetDID : this.iamService.iam.getDid()
+        did: this.roleTypeForm.value.enrolFor === EnrolForType.ASSET ? this.roleTypeForm.value.assetDid : this.iamService.iam.getDid()
       });
       claims = claims.filter((item: any) => {
           if (item && item.claimType) {
@@ -341,9 +392,16 @@ export class RequestClaimComponent implements OnInit {
       namespace: this.namespace
     });
 
-    this.userRoleList = await this.iamService.iam.getRequestedClaims({
-      did: this.roleTypeForm.value.enrolFor === EnrolForType.ASSET ? this.roleTypeForm.value.assetDID : this.iamService.iam.getDid()
-    });
+    if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
+      this.userRoleList = await this.iamService.iam.getClaimsBySubject({
+        did: this.roleTypeForm.value.assetDid
+      });
+    }
+    else {
+      this.userRoleList = await this.iamService.iam.getClaimsByRequester({
+        did: this.iamService.iam.getDid()
+      });
+    }
 
     if (roleList && roleList.length) {
       roleList = roleList.filter((role: any) => {
@@ -409,14 +467,18 @@ export class RequestClaimComponent implements OnInit {
   }
 
   private resetData() {
+    this.resetForm();
+
+    this.roleTypeForm.reset();
+    this.roleTypeForm.get('enrolFor').setValue(EnrolForType.ME);
+  }
+
+  private resetForm() {
     this.submitting = false;
     this.appError = false;
     this.selectedRole = undefined;
     this.selectedNamespace = undefined;
 
-    this.roleTypeForm.reset();
-    this.roleTypeForm.get('enrolFor').setValue(EnrolForType.ME);
-    
     if (this.fieldList) {
       this.fieldList = [];
     }
@@ -494,7 +556,6 @@ export class RequestClaimComponent implements OnInit {
   }
 
   roleTypeSelected(e: any) {
-    console.log(this.roleTypeForm.value);
     if (e && e.value && e.value.definition) {
       this.fieldList = e.value.definition.fields || [];
       this.selectedRole = e.value.definition;
@@ -509,11 +570,13 @@ export class RequestClaimComponent implements OnInit {
   }
 
   async enrolForSelected(e: any) {
-    if (e.value === EnrolForType.ME) {
-      this.roleTypeForm.patchValue({
-        assetDid: ''
-      });
+    this.roleTypeForm.patchValue({
+      enrolType: '',
+      assetDid: ''
+    });
+    this.resetForm();
 
+    if (e.value === EnrolForType.ME) {
       // Initialize Roles
       await this.initRoles();
     }
@@ -643,8 +706,14 @@ export class RequestClaimComponent implements OnInit {
   }
 
   goToEnrolment() {
-    // Navigate to My Enrolments Page
-    this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/enrolment?notif=myEnrolments' }});
+    if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
+      // Navigate to My Enrolments Page
+      this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid }});
+    }
+    else {
+      // Navigate to My Enrolments Page
+      this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/enrolment?notif=myEnrolments' }});
+    }
   }
 
   logout() {

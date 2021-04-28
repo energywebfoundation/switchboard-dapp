@@ -62,6 +62,10 @@ import { ScrollableDirective } from './directives/scrollable/scrollable.directiv
 import { JAllowByDirective } from './directives/j-allow-by.directive';
 import { PreventPasteDirective } from './directives/prevent-paste.directive';
 import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
+import { DidFormatMinifierPipe } from './pipes/did-format-minifier.pipe';
+import { EnrolmentListComponent } from '../routes/enrolment/enrolment-list/enrolment-list.component';
+import { MinifiedDidViewerDirective } from './directives/minified-did-viewer/minified-did-viewer.directive';
+import { MinifiedDidViewerDialogComponent } from './directives/minified-did-viewer/minified-did-viewer-dialog.component';
 import { SmartSearchComponent } from './components/smart-search/smart-search.component';
 
 
@@ -132,6 +136,10 @@ import { SmartSearchComponent } from './components/smart-search/smart-search.com
         JAllowByDirective,
         PreventPasteDirective,
         RetryBtnDirective,
+        DidFormatMinifierPipe,
+        EnrolmentListComponent,
+        MinifiedDidViewerDirective,
+        MinifiedDidViewerDialogComponent,
         SmartSearchComponent
     ],
     exports: [
@@ -161,6 +169,9 @@ import { SmartSearchComponent } from './components/smart-search/smart-search.com
         JAllowByDirective,
         PreventPasteDirective,
         RetryBtnDirective,
+        MinifiedDidViewerDirective,
+        DidFormatMinifierPipe,
+        EnrolmentListComponent,
         // Material Modules
         MatAutocompleteModule,
         MatButtonModule,
@@ -195,7 +206,8 @@ import { SmartSearchComponent } from './components/smart-search/smart-search.com
         MatNativeDateModule,
         MatStepperModule,
         SmartSearchComponent
-    ]
+    ],
+    entryComponents: [MinifiedDidViewerDialogComponent]
 })
 
 // https://github.com/ocombe/ng2-translate/issues/209

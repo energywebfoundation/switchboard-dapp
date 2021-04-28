@@ -18,7 +18,7 @@
                     <mat-icon class="color-info pr-2">account_circle</mat-icon>
                     <div class="d-flex flex-column pl-2">
                         <h4 class="small font-weight-600 mb-1">OWNER</h4>
-                        <span style="font-size:16px;"> {{ element?.emittedBy }}</span>
+                        <span style="font-size:16px;" [appMinifiedDidViewer]="element?.emittedBy"> {{ element?.emittedBy | didFormatMinifier }}</span>
                     </div>
                 </div>
                 <div class="border-vertical" *ngIf="element?.relatedTo"></div>
@@ -26,7 +26,7 @@
                     <mat-icon class="color-success pr-2">account_circle</mat-icon>
                     <div class="d-flex flex-column pl-2">
                         <h4 class="small font-weight-600 mb-1">OFFERED TO</h4>
-                        <span style="font-size:16px;"> {{ element?.relatedTo }}</span>
+                        <span style="font-size:16px;" [appMinifiedDidViewer]="element?.relatedTo"> {{ element?.relatedTo | didFormatMinifier }}</span>
                     </div>
                 </div>
             </div>

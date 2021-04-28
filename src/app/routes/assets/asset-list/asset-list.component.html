@@ -22,7 +22,7 @@
                         Asset Name
                     </div>
                     <div>
-                        <button class="btn mat-stroked-table-button ml-0 mr-2 mr-md-0 ml-md-2">Enrolments</button>
+                        <button class="btn mat-stroked-table-button ml-0 mr-2 mr-md-0 ml-md-2" (click)="viewAssetEnrolments(element)">Enrolments</button>
                     </div>
                 </div>
             </td>
@@ -33,7 +33,7 @@
                 <ng-container> Asset DID </ng-container>
             </th>
             <td mat-cell *matCellDef="let element" data-label="Asset DID">
-                {{ element.id }}
+                <div matTooltip="{{element.id}}" [appMinifiedDidViewer]="element.id">{{ element.id | didFormatMinifier }}</div>
             </td>
         </ng-container>
 
@@ -42,8 +42,12 @@
                 <ng-container> Offered To </ng-container>
             </th>
             <td mat-cell *matCellDef="let element" data-label="Offered To">
-                <ng-container *ngIf="listType === AssetListType.MY_ASSETS">{{ element.offeredTo || '-' }}</ng-container>
-                <ng-container *ngIf="listType === AssetListType.PREV_OWNED_ASSETS">{{ element.owner || '-' }}</ng-container>
+                <ng-container *ngIf="listType === AssetListType.MY_ASSETS">
+                    <div matTooltip="{{element.offeredTo}}" [appMinifiedDidViewer]="element.offeredTo">{{ (element.offeredTo | didFormatMinifier) || '-' }}</div>
+                </ng-container>
+                <ng-container *ngIf="listType === AssetListType.PREV_OWNED_ASSETS">
+                    <div matTooltip="{{element.owner}}" [appMinifiedDidViewer]="element.owner">{{ (element.owner | didFormatMinifier) || '-' }}</div>
+                </ng-container>
             </td>
         </ng-container>
 
@@ -52,7 +56,7 @@
                 <ng-container> Offered By </ng-container>
             </th>
             <td mat-cell *matCellDef="let element" data-label="Offered By">
-                {{ element.owner || '-' }}
+                <div matTooltip="{{element.owner}}" [appMinifiedDidViewer]="element.owner">{{ (element.owner | didFormatMinifier) || '-' }}</div>
             </td>
         </ng-container>
 
@@ -144,7 +148,7 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr class="cursor-pointer" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
     <!-- Shows when table is empty -->
     <div class="d-flex justify-content-center align-items-center mt-4 mb-3" *ngIf="!dataSource?.data?.length">
