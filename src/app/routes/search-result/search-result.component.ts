@@ -77,10 +77,6 @@ export class SearchResultComponent implements OnInit {
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
       // Get requested claims
       try {
-        this.requestedClaims = await this.iamService.iam.getRequestedClaims({
-          did: this.iamService.iam.getDid()
-        });
-
         if (queryParams.keyword) {
           this.searchForm.get('searchTxt').setValue(queryParams.keyword);
         }

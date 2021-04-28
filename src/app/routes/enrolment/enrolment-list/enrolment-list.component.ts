@@ -12,7 +12,8 @@ import { ViewRequestsComponent } from '../view-requests/view-requests.component'
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
-  APPLICANT: 'applicant'
+  APPLICANT: 'applicant',
+  ASSET: 'asset'
 };
 
 const TOASTR_HEADER = 'Enrolment';
@@ -26,6 +27,7 @@ export class EnrolmentListComponent implements OnInit {
   @Input('list-type') listType  : string;
   @Input('accepted') accepted   : boolean;
   @Input('rejected') rejected   : boolean;
+  @Input('subject') subject     : string;
 
   @ViewChild(MatSort, undefined) sort: MatSort;
 
@@ -68,11 +70,11 @@ export class EnrolmentListComponent implements OnInit {
       }
     };
 
-    if (this.listType === EnrolmentListType.APPLICANT) {
+    if (this.listType === EnrolmentListType.APPLICANT || this.listType === EnrolmentListType.ASSET) {
       this.displayedColumns = ['requestDate', 'roleName', 'parentNamespace', 'status', 'actions'];
     }
     else {
-      this.displayedColumns = ['requestDate', 'roleName', 'parentNamespace', 'requester', 'status', 'actions'];
+      this.displayedColumns = ['requestDate', 'roleName', 'parentNamespace', 'requester', 'asset', 'status', 'actions'];
     }
 
     await this.getList(this.rejected, this.accepted);
@@ -95,14 +97,20 @@ export class EnrolmentListComponent implements OnInit {
     let list = [];
     
     try {
-      if (this.listType === EnrolmentListType.ISSUER) {
-        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getIssuedClaims({
+      if (this.listType === EnrolmentListType.ASSET) {
+        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getClaimsBySubject({
+          did: this.subject,
+          isAccepted: isAccepted
+        }));
+      }
+      else if (this.listType === EnrolmentListType.ISSUER) {
+        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getClaimsByIssuer({
           did: this.iamService.iam.getDid(),
           isAccepted: isAccepted
         }));
       }
       else {
-        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getRequestedClaims({
+        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getClaimsByRequester({
           did: this.iamService.iam.getDid(),
           isAccepted: isAccepted
         }));
@@ -112,10 +120,10 @@ export class EnrolmentListComponent implements OnInit {
         for (let item of list) {
           let arr = item.claimType.split(`.${ENSNamespaceTypes.Roles}.`);
           item.roleName = arr[0];
-          item.requestDate = new Date(parseInt(item.createdAt));
+          item.requestDate = new Date(item.createdAt);
         }
 
-        if (this.listType === EnrolmentListType.APPLICANT) {
+        if (this.listType !== EnrolmentListType.ISSUER) {
           await this.appendDidDocSyncStatus(list);
         }
       }

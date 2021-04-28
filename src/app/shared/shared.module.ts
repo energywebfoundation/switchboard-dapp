@@ -62,6 +62,8 @@ import { ScrollableDirective } from './directives/scrollable/scrollable.directiv
 import { JAllowByDirective } from './directives/j-allow-by.directive';
 import { PreventPasteDirective } from './directives/prevent-paste.directive';
 import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
+import { DidFormatMinifierPipe } from './pipes/did-format-minifier.pipe';
+import { EnrolmentListComponent } from '../routes/enrolment/enrolment-list/enrolment-list.component';
 
 
 
@@ -130,7 +132,9 @@ import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
         ScrollableDirective,
         JAllowByDirective,
         PreventPasteDirective,
-        RetryBtnDirective
+        RetryBtnDirective,
+        DidFormatMinifierPipe,
+        EnrolmentListComponent
     ],
     exports: [
         CommonModule,
@@ -159,6 +163,8 @@ import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
         JAllowByDirective,
         PreventPasteDirective,
         RetryBtnDirective,
+        DidFormatMinifierPipe,
+        EnrolmentListComponent,
         // Material Modules
         MatAutocompleteModule,
         MatButtonModule,
