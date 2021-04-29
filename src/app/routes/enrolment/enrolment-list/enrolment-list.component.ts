@@ -139,8 +139,9 @@ export class EnrolmentListComponent implements OnInit {
 
   private async appendDidDocSyncStatus(list: any[]) {
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    let claims: any[] = await this.iamService.iam.getUserClaims();
-    claims = claims.filter((item: any) => {
+    const did = this.listType === EnrolmentListType.ASSET ? { did: this.subject } : undefined;
+    const claims: any[] = (await this.iamService.iam.getUserClaims(did))
+      .filter((item: any) => {
         if (item && item.claimType) {
             let arr = item.claimType.split('.');
             if (arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles) {
@@ -149,7 +150,7 @@ export class EnrolmentListComponent implements OnInit {
             return false;
         }
         return false;
-    });
+      });
 
     if (claims && claims.length) {
       claims.forEach((item: any) => {
@@ -201,15 +202,10 @@ export class EnrolmentListComponent implements OnInit {
     this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
 
     try {
-      let decoded: any = await this.iamService.iam.decodeJWTToken({
+      const retVal = await this.iamService.iam.publishPublicClaim({
         token: element.issuedToken
       });
 
-      let retVal = await this.iamService.iam.publishPublicClaim({
-        token: element.issuedToken
-      });
-
-      // console.log('Publish Public Claim Result: ', retVal);
       if (retVal) {
         this.notifService.decreasePendingDidDocSyncCount();
         this.toastr.success('Action is successful.', 'Sync to DID Document');
