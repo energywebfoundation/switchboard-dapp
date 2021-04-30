@@ -74,19 +74,19 @@
               <span>Preview</span>
             </button>
 
-            <!-- Sync to DID -->
-            <button mat-menu-item class="btn-color-primary" (click)="addToDidDoc(element)"
-              *ngIf="listType === ListType.APPLICANT && element?.isAccepted && !element?.isSynced">
-              <mat-icon class="btn-color-primary">note_add</mat-icon>
-              <span>Add to DID Document</span>
-            </button>
+          <!-- Sync to DID -->
+          <button mat-menu-item class="btn-color-primary" (click)="addToDidDoc(element)"
+            *ngIf="listType !== ListType.ISSUER && element?.isAccepted && !element?.isSynced">
+            <mat-icon class="btn-color-primary">note_add</mat-icon>
+            <span>Add to DID Document</span>
+          </button>
 
-            <!-- Cancel Claim Request -->
-            <button mat-menu-item class="btn-color-error" (click)="cancelClaimRequest(element)"
-              *ngIf="listType === ListType.APPLICANT && !element?.isAccepted && !element?.isRejected">
-              <mat-icon class="btn-color-error">highlight_off</mat-icon>
-              <span>Cancel Claim Request</span>
-            </button>
+          <!-- Cancel Claim Request -->
+          <button mat-menu-item class="btn-color-error" (click)="cancelClaimRequest(element)"
+            *ngIf="listType !== ListType.ISSUER && !element?.isAccepted && !element?.isRejected">
+            <mat-icon class="btn-color-error">highlight_off</mat-icon>
+            <span>Cancel Claim Request</span> 
+          </button>
           </mat-menu>
         </div>
       </td>
