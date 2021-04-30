@@ -51,7 +51,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     private _pendingApprovalCountListener: any;
     private _pendingSyncCountListener: any;
-    private subscription$ = new Subject();
+    private _subscription$ = new Subject();
+    private _iamSubscriptionId: number;
 
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
@@ -72,7 +73,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
 
         this.router.events
-            .pipe(takeUntil(this.subscription$))
+            .pipe(takeUntil(this._subscription$))
             .subscribe((event: any) => {
                 if (event instanceof NavigationEnd) {
                     this.iamService.setDeepLink(event.url);
@@ -88,7 +89,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         // Stay in current screen and display user name if available
         this.iamService.userProfile
-            .pipe(takeUntil(this.subscription$))
+            .pipe(takeUntil(this._subscription$))
             .subscribe((data: any) => {
                 if (data && data.name) {
                     this.userName = data.name;
@@ -103,7 +104,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             });
     }
 
-    ngOnDestroy(): void {
+    async ngOnDestroy(): Promise<void> {
         if (this._pendingSyncCountListener) {
             this._pendingSyncCountListener.unsubscribe();
         }
@@ -111,9 +112,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this._pendingApprovalCountListener.unsubscribe();
         }
 
-        this.subscription$.next();
-        this.subscription$.complete();
-        console.log('header ngOnDestroy')
+        this._subscription$.next();
+        this._subscription$.complete();
+        
+        // Unsubscribe to IAM Events
+        await this.iamService.iam.unsubscribeFrom(this._iamSubscriptionId);
     }
 
     openDialogUser(): void {
@@ -125,7 +128,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed()
-            .pipe(takeUntil(this.subscription$))
+            .pipe(takeUntil(this._subscription$))
             .subscribe(result => {
                 if (result) {
                     // Update User Name
@@ -154,7 +157,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         // Listen to Count Changes
         this._pendingApprovalCountListener = this.notifService.pendingApproval
-            .pipe(takeUntil(this.subscription$))
+            .pipe(takeUntil(this._subscription$))
             .subscribe(async (count: number) => {
                 await this.initPendingClaimsCount();
                 this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
@@ -163,7 +166,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 }
             });
         this._pendingSyncCountListener = this.notifService.pendingDidDocSync
-            .pipe(takeUntil(this.subscription$))
+            .pipe(takeUntil(this._subscription$))
             .subscribe(async (count: number) => {
                 await this.initApprovedClaimsForSyncCount();
                 this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
@@ -173,12 +176,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
             });
 
         // Listen to External Messages
-        this.iamService.iam.subscribeToMessages({
+        this._iamSubscriptionId = await this.iamService.iam.subscribeTo({
             messageHandler: this.handleMessage.bind(this)
         });
     }
 
     private handleMessage(message: any) {
+        console.log('message', message);
         if (message.issuedToken) {
             // Message has issued token ===> Newly Approved Claim
             this.notifService.increasePendingDidDocSyncCount();
