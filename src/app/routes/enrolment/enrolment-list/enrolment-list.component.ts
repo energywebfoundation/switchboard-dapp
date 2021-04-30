@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
+import { ClaimData } from 'iam-client-lib/dist/src/iam/iam-base';
 import { ToastrService } from 'ngx-toastr';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -140,8 +141,8 @@ export class EnrolmentListComponent implements OnInit {
   private async appendDidDocSyncStatus(list: any[]) {
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
     const did = this.listType === EnrolmentListType.ASSET ? { did: this.subject } : undefined;
-    const claims: any[] = (await this.iamService.iam.getUserClaims(did))
-      .filter((item: any) => {
+    const claims: ClaimData[] = (await this.iamService.iam.getUserClaims(did))
+      .filter((item: ClaimData) => {
         if (item && item.claimType) {
             let arr = item.claimType.split('.');
             if (arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles) {
@@ -153,7 +154,7 @@ export class EnrolmentListComponent implements OnInit {
       });
 
     if (claims && claims.length) {
-      claims.forEach((item: any) => {
+      claims.forEach((item: ClaimData) => {
         for (let i = 0; i < list.length; i++) {
           if (item.claimType === list[i].claimType) {
             list[i].isSynced = true;
