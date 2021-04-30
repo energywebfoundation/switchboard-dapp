@@ -1,9 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
-import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { ClaimData } from 'iam-client-lib/dist/src/iam/iam-base';
 import { ToastrService } from 'ngx-toastr';
+import { fromPromise } from 'rxjs/internal/observable/fromPromise';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -24,7 +26,7 @@ const TOASTR_HEADER = 'Enrolment';
   templateUrl: './enrolment-list.component.html',
   styleUrls: ['./enrolment-list.component.scss']
 })
-export class EnrolmentListComponent implements OnInit {
+export class EnrolmentListComponent implements OnInit, OnDestroy {
   @Input('list-type') listType  : string;
   @Input('accepted') accepted   : boolean;
   @Input('rejected') rejected   : boolean;
@@ -38,6 +40,9 @@ export class EnrolmentListComponent implements OnInit {
   dynamicAccepted : boolean;
   dynamicRejected : boolean;
 
+  private _subscription$ = new Subject();
+  private _iamSubscriptionId: number;
+
   constructor(private loadingService: LoadingService,
     private iamService: IamService,
     private dialog: MatDialog,
@@ -45,7 +50,12 @@ export class EnrolmentListComponent implements OnInit {
     private notifService: NotificationService) {}
 
   async ngOnInit() { 
+    // Subscribe to IAM events
+    this._iamSubscriptionId = await this.iamService.iam.subscribeTo({
+      messageHandler: this._handleMessage.bind(this)
+    });
 
+    // Initialize table
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = (item, property) => {
       if (property === 'status') {
@@ -81,6 +91,14 @@ export class EnrolmentListComponent implements OnInit {
     await this.getList(this.rejected, this.accepted);
   }
 
+  async ngOnDestroy(): Promise<void> {
+    this._subscription$.next();
+    this._subscription$.complete();
+
+    // Unsubscribe from IAM Events
+    await this.iamService.iam.unsubscribeFrom(this._iamSubscriptionId);
+  }
+
   private _getRejectedOnly(isRejected: boolean, isAccepted: boolean | undefined, list: any[]) {
     if (list.length && isRejected) {
       list = list.filter(item => item.isRejected === true);
@@ -89,6 +107,13 @@ export class EnrolmentListComponent implements OnInit {
       list = list.filter(item => (item.isAccepted === false && !item.isRejected));
     }
     return list;
+  }
+
+  private async _handleMessage(message: any) {
+    if ((this.listType === EnrolmentListType.APPLICANT && (message.issuedToken || message.isRejected)) ||
+      (this.listType === EnrolmentListType.ISSUER && !message.issuedToken)) {
+        await this.getList(this.rejected, this.accepted);
+    }
   }
 
   public async getList(isRejected: boolean, isAccepted?: boolean) {
@@ -165,16 +190,16 @@ export class EnrolmentListComponent implements OnInit {
   }
 
   view (element: any) {
-    // console.log('view element', element);
-
-    const dialogRef = this.dialog.open(ViewRequestsComponent, {
+    this.dialog.open(ViewRequestsComponent, {
       width: '600px',data:{
         listType: this.listType,
         claimData: element
       },
       maxWidth: '100%',
       disableClose: true
-    }).afterClosed().subscribe((reloadList: any) => {
+    }).afterClosed()
+    .pipe(takeUntil(this._subscription$))
+    .subscribe((reloadList: any) => {
       if (reloadList) {
         this.getList(this.dynamicRejected, this.dynamicAccepted);
       }
