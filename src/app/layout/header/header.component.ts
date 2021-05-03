@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 import { Md5 } from 'ts-md5/dist/md5';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { AssetHistoryEventType, ENSNamespaceTypes } from 'iam-client-lib';
 
 import { UserblockService } from '../sidebar/userblock/userblock.service';
 import { SettingsService } from '../../core/settings/settings.service';
@@ -44,13 +44,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     notif = {
         totalCount: 0,
         pendingApprovalCount: 0,
-        pendingSyncCount: 0
+        pendingSyncCount: 0,
+        assetsOfferedToMeCount: 0,
+        pendingAssetSyncCount: 0
     };
 
     isLoadingNotif = true;
 
     private _pendingApprovalCountListener: any;
     private _pendingSyncCountListener: any;
+    private _assetsOfferedToMeCountListener: any;
+    private _pendingAssetSyncCountListener: any;
     private _subscription$ = new Subject();
     private _iamSubscriptionId: number;
 
@@ -97,7 +101,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
                 if (this.iamService.accountAddress && !this.notifService.initialized) {
                     // Initialize Notifications
-                    this.initNotifications();
+                    this._initNotifications();
                 } else {
                     this.isLoadingNotif = false;
                 }
@@ -145,45 +149,69 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
-    private initNotifications() {
+    private _initNotifications() {
         // Init Notif Count
-        this.initNotificationCount();
+        this._initNotificationCount();
         this.notifService.initialized = true;
     }
 
-    private async initNotificationListeners(pendingApprovalCount: number, pendingSyncCount: number) {
+    private _calcTotalCount() {
+        this.notif.totalCount =  this.notif.pendingSyncCount +
+            this.notif.pendingApprovalCount + 
+            this.notif.assetsOfferedToMeCount + 
+            this.notif.pendingAssetSyncCount;
+        if (this.notif.totalCount < 0) {
+            this.notif.totalCount = 0;
+        }
+    }
+
+    private async _initNotificationListeners() {
+
         // Initialize Notif Counts
-        this.notifService.initNotifCounts(pendingApprovalCount, pendingSyncCount);
+        this.notifService.initNotifCounts(this.notif.pendingApprovalCount, 
+            this.notif.pendingSyncCount, 
+            this.notif.assetsOfferedToMeCount, 
+            this.notif.pendingAssetSyncCount);
 
         // Listen to Count Changes
         this._pendingApprovalCountListener = this.notifService.pendingApproval
             .pipe(takeUntil(this._subscription$))
             .subscribe(async (count: number) => {
-                await this.initPendingClaimsCount();
-                this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
-                if (this.notif.totalCount < 0) {
-                    this.notif.totalCount = 0;
-                }
+                await this._initPendingClaimsCount();
+                this._calcTotalCount();
             });
         this._pendingSyncCountListener = this.notifService.pendingDidDocSync
             .pipe(takeUntil(this._subscription$))
             .subscribe(async (count: number) => {
-                await this.initApprovedClaimsForSyncCount();
-                this.notif.totalCount = this.notif.pendingSyncCount + this.notif.pendingApprovalCount;
-                if (this.notif.totalCount < 0) {
-                    this.notif.totalCount = 0;
-                }
+                await this._initApprovedClaimsForSyncCount();
+                this._calcTotalCount();
+            });
+        this._assetsOfferedToMeCountListener = this.notifService.assetsOfferedToMe
+            .pipe(takeUntil(this._subscription$))
+            .subscribe(async (count: number) => {
+                await this._initAssetsOfferedToMeSyncCount();
+                this._calcTotalCount();
+            });
+        this._pendingAssetSyncCountListener = this.notifService.pendingAssetDidDocSync
+            .pipe(takeUntil(this._subscription$))
+            .subscribe(async (count: number) => {
+                await this._initApprovedClaimsForAssetSyncCount();
+                this._calcTotalCount();
             });
 
         // Listen to External Messages
         this._iamSubscriptionId = await this.iamService.iam.subscribeTo({
-            messageHandler: this.handleMessage.bind(this)
+            messageHandler: this._handleMessage.bind(this)
         });
     }
 
-    private handleMessage(message: any) {
+    private _handleMessage(message: any) {
         console.log('message', message);
-        if (message.issuedToken) {
+        if (message.type) {
+            // Handle Asset-related Events
+            this._handleAssetEvents(message.type);
+        }
+        else if (message.issuedToken) {
             // Message has issued token ===> Newly Approved Claim
             this.notifService.increasePendingDidDocSyncCount();
             this.toastr.info('Your enrolment request is approved. Please sync your approved claims in your DID Document.', 'Enrolment Approved');
@@ -198,7 +226,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
-    private async initPendingClaimsCount() {
+    private _handleAssetEvents(type: string) {
+        switch(type) {
+            case AssetHistoryEventType.ASSET_OFFERED:
+                this.toastr.info('An asset is offered to you.', 'Asset Offered');
+                this.notifService.increaseAssetsOfferedToMeCount();
+                break;
+            case AssetHistoryEventType.ASSET_TRANSFERRED:
+                this.toastr.success('Your asset is successfully tranferred to a new owner.', 'Asset Transferred');
+                break;
+            case AssetHistoryEventType.ASSET_OFFER_CANCELED:
+                this.toastr.warning('An asset offered to you is cancelled by the owner.', 'Asset Offer Cancelled');
+                this.notifService.decreaseAssetsOfferedToMeCount();
+                break;
+            case AssetHistoryEventType.ASSET_OFFER_REJECTED:
+                this.toastr.warning('An asset you offered is rejected.', 'Asset Offer Rejected');
+                break;
+        }
+    }
+
+    private async _initPendingClaimsCount() {
         try {
             // Get Pending Claims to be Approved
             let pendingClaimsList = (await this.iamService.iam.getClaimsByIssuer({
@@ -215,7 +262,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
-    private async initApprovedClaimsForSyncCount() {
+    private async _initApprovedClaimsForSyncCount() {
         try {
             // Get Approved Claims
             let approvedClaimsList = await this.iamService.iam.getClaimsByRequester({
@@ -248,16 +295,38 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
     }
 
-    private async initNotificationCount() {
+    private async _initAssetsOfferedToMeSyncCount(){
         try {
-            await this.initPendingClaimsCount();
-            await this.initApprovedClaimsForSyncCount();
+            this.notif.assetsOfferedToMeCount = (await this.iamService.iam.getOfferedAssets()).length;
+            if (this.notif.assetsOfferedToMeCount < 0) {
+                this.notif.assetsOfferedToMeCount = 0;
+            }
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+
+    private async _initApprovedClaimsForAssetSyncCount() {
+        // TODO: 
+        this.notif.pendingAssetSyncCount = 0;
+        if (this.notif.pendingAssetSyncCount < 0) {
+            this.notif.pendingAssetSyncCount = 0;
+        }
+    }
+
+    private async _initNotificationCount() {
+        try {
+            await this._initPendingClaimsCount();
+            await this._initApprovedClaimsForSyncCount();
+            await this._initAssetsOfferedToMeSyncCount();
+            await this._initApprovedClaimsForAssetSyncCount();
         } catch (e) {
             console.error(e);
             this.toastr.error(e);
         } finally {
             this.isLoadingNotif = false;
-            await this.initNotificationListeners(this.notif.pendingApprovalCount, this.notif.pendingSyncCount);
+            await this._initNotificationListeners();
         }
     }
 
