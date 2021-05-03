@@ -8,44 +8,49 @@
     </div>
     <ul class="menu-top navbar-nav mx-auto flex-row align-items-center" *ngIf="isNavMenuVisible">
         <li class="nav-item" [ngClass]="{ 'active': currentNav === 'assets' }">
-            <img src="../assets/img/icons/assets-icon.png" width="auto" height="21"
-            alt="assets image">
-            <a class="nav-link d-lg-block d-xl-block cursor-pointer" routerLink="/assets">
+            <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/assets">
+                <div class="icon-footer-center">
+                    <img src="../assets/img/icons/assets-icon.png" width="auto" height="21" alt="assets image">
+                </div>
                 <h6 class="mb-0">Assets</h6>
             </a>
         </li>
         <li class="nav-item" [ngClass]="{ 'active': currentNav === 'governance' }">
-            <img src="../assets/img/icons/governance-icon.png" width="auto" height="21"
-            alt="Governance image">
-            <a class="nav-link d-lg-block d-xl-block cursor-pointer" routerLink="/governance">
+            <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/governance">
+                <div class="icon-footer-center">
+                    <img src="../assets/img/icons/governance-icon.png" width="auto" height="21" alt="Governance image">
+                </div>
                 <h6 class="mb-0">Governance</h6>
             </a>
         </li>
         <li class="nav-item" [ngClass]="{ 'active': currentNav === 'services' }">
-            <img src="../assets/img/icons/services-icon.png" width="auto" height="21"
-            alt="Services image">
-            <a class="nav-link d-lg-block d-xl-block coming-soon">
+            <a class="nav-link d-lg-block d-xl-block coming-soon link-footer">
+                <div class="icon-footer-center">
+                    <img src="../assets/img/icons/services-icon.png" width="auto" height="21" alt="Services image">
+                </div>
                 <h6 class="mb-0">Services</h6>
             </a>
         </li>
         <li class="nav-item" [ngClass]="{ 'active': currentNav === 'enrolment' }">
-            <img src="../assets/img/icons/enrollment-icon.png" width="auto" height="21"
-            alt="Enrolments image">
-            <a class="nav-link d-lg-block d-xl-block cursor-pointer" routerLink="/enrolment">
+            <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/enrolment">
+                <div class="icon-footer-center">
+                    <img src="../assets/img/icons/enrollment-icon.png" width="auto" height="21" alt="Enrolments image">
+                </div>
                 <h6 class="mb-0">Enrolments</h6>
             </a>
         </li>
         <li class="nav-item coming-soon" [ngClass]="{ 'active': currentNav === 'applications' }">
-            <img src="../assets/img/icons/applications-icon.png" width="auto" height="21"
-                alt="Dashboard image">
-            <a class="nav-link d-lg-block d-xl-block coming-soon">
+            <a class="nav-link d-lg-block d-xl-block coming-soon link-footer">
+                <div class="icon-footer-center">
+                    <img src="../assets/img/icons/applications-icon.png" width="auto" height="21" alt="Dashboard image">
+                </div>
                 <h6 class="mb-0">Applications</h6>
             </a>
         </li>
     </ul>
-    <ul class="navbar-nav flex-row align-items-center profile-wrapper cursor-pointer">
+    <ul class="navbar-nav flex-row align-items-center profile-wrapper">
         <li class="nav-item dropdown dropdown-list" dropdown>
-            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" dropdownToggle>
+            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret cursor-pointer" dropdownToggle>
                 <!-- loading here -->
                 <ng-container *ngIf="isLoadingNotif">
                     <div>
@@ -61,42 +66,87 @@
             </a>
             <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-item">
-                    
-                    <div class="list-group">
-                        <a routerLink="/enrolment" routerLinkActive="active">
-                            <div class="list-group-item list-group-item-action">
-                                <div class="media d-flex align-items-center cursor-pointer">
-                                    <div class="align-self-start mr-2">
-                                        <mat-icon svgIcon="new-claim-icon"></mat-icon>
+                    <div class="d-flex flex-column flex-md-row">
+                        <div class="d-flex flex-grow-1 list-group header-notification-container">
+                            <div class="d-flex justify-content-center flex-column align-items-center flex-grow-1 pt-3 pb-2 header-notification">
+                                <img src="../assets/img/icons/claim.png" width="auto" height="38" alt="claim image">
+                                <h4 class="pt-2 my-2 color-white">My Claims request</h4>
+                            </div>
+                            <a routerLink="/enrolment" routerLinkActive="active">
+                                <div class="list-group-item list-group-item-action">
+                                    <div class="media d-flex align-items-center cursor-pointer">
+                                        <div class="align-self-start mr-2">
+                                            <mat-icon svgIcon="new-claim-icon"></mat-icon>
+                                        </div>
+                                        <div
+                                            class="media-body d-flex flex-row justify-content-between align-items-center">
+                                            <p class="m-0">For my approval</p>
+                                            <span class="badge badge-danger ml-2">{{ notif?.pendingApprovalCount
+                                                }}</span>
+                                        </div>
                                     </div>
-                                    <div class="media-body d-flex flex-row justify-content-between align-items-center">
-                                        <p class="m-0">Claim Requests Pending for Approval</p>
-                                        <span class="badge badge-danger ml-2">{{ notif?.pendingApprovalCount }}</span>
+                                </div>
+                            </a>
+                            <a [routerLink]="['/enrolment']" routerLinkActive="active"
+                                [queryParams]="{notif: 'pendingSyncToDidDoc'}">
+                                <div class="list-group-item list-group-item-action">
+                                    <div class="media d-flex align-items-center cursor-pointer">
+                                        <div class="align-self-start mr-2">
+                                            <mat-icon>timelapse</mat-icon>
+                                        </div>
+                                        <div
+                                            class="media-body d-flex flex-row justify-content-between align-items-center">
+                                            <p class="m-0">Pending Sync to DID Document</p>
+                                            <span class="badge badge-danger ml-2">{{ notif?.pendingSyncCount }}</span>
+                                        </div>
                                     </div>
                                 </div>
+                            </a>
+                        </div>
+                        <div class="d-flex flex-grow-1 list-group header-notification-container">
+                            <div class="d-flex justify-content-center flex-column align-items-center flex-grow-1 pt-3 pb-2 header-notification">
+                                <img src="../assets/img/icons/assets-icon.png" width="auto" height="38" alt="assets image">
+                                <h4 class="pt-2 my-2 color-white">My Assets</h4>
                             </div>
-                        </a>
-                        <a [routerLink]="['/enrolment']" routerLinkActive="active" [queryParams]="{notif: 'pendingSyncToDidDoc'}">
-                            <div class="list-group-item list-group-item-action">
-                            <div class="media d-flex align-items-center cursor-pointer">
-                                <div class="align-self-start mr-2">
-                                    <mat-icon svgIcon="approved-claim-icon"></mat-icon>
+                            <a [routerLink]="['/assets']" routerLinkActive="active" [queryParams]="{notif: 'assetsOfferedToMe'}">
+                                <div class="list-group-item list-group-item-action">
+                                    <div class="media d-flex align-items-center cursor-pointer">
+                                        <div class="align-self-start mr-2">
+                                            <mat-icon svgIcon="new-claim-icon"></mat-icon>
+                                        </div>
+                                        <div
+                                            class="media-body d-flex flex-row justify-content-between align-items-center">
+                                            <p class="m-0">For my approval</p>
+                                            <span class="badge badge-danger ml-2">{{ notif?.assetsOfferedToMeCount }}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="media-body d-flex flex-row justify-content-between align-items-center">
-                                    <p class="m-0">Claims Pending Sync to DID Document</p>
-                                    <span class="badge badge-danger ml-2">{{ notif?.pendingSyncCount }}</span>
+                            </a>
+                            <a href="#">
+                                <div class="list-group-item list-group-item-action">
+                                    <div class="media d-flex align-items-center cursor-pointer">
+                                        <div class="align-self-start mr-2">
+                                            <mat-icon>timelapse</mat-icon>
+                                        </div>
+                                        <div
+                                            class="media-body d-flex flex-row justify-content-between align-items-center">
+                                            <p class="m-0">Pending Sync to DID Document</p>
+                                            <span class="badge badge-danger ml-2">0</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                   
+
                 </div>
             </div>
-            
+
         </li>
         <li class="nav-item d-block">
-            <a matTooltip="Help" class="nav-link" #fsbutton href="https://energyweb.atlassian.net/wiki/spaces/SWITCH/pages/1712554033/Using+Switchboard" target="_blank">
+            <a matTooltip="Help" class="nav-link" #fsbutton
+                href="https://energyweb.atlassian.net/wiki/spaces/SWITCH/pages/1712554033/Using+Switchboard"
+                target="_blank">
                 <em class="far fa-lg fa-question-circle"></em>
             </a>
         </li>
