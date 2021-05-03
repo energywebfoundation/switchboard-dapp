@@ -1,6 +1,6 @@
 <!-- START TABLE -->
 <div class="card card-default mb-3 pb-3">
-    <table mat-table matSort [dataSource]="dataSource">
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="createdDate" matSortDirection="desc">
 
         <!-- Logo -->
         <ng-container matColumnDef="logo">
@@ -8,6 +8,21 @@
             <td mat-cell *matCellDef="let element" data-label="">
                 <div class="d-flex justify-content-center justify-content-md-start">
                     <img class="img-logo-list" src="../assets/img/assets-icons/solar-energy.svg" />
+                </div>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <ng-container *ngIf="listType !== AssetListType.OFFERED_ASSETS"> Created Date </ng-container>
+                <ng-container *ngIf="listType === AssetListType.OFFERED_ASSETS"> Offered Date </ng-container>
+            </th>
+            <td mat-cell *matCellDef="let element" data-label="Created Date">
+                <div *ngIf="listType !== AssetListType.OFFERED_ASSETS">
+                    {{ element.createdDate | date: 'MM/dd/yyyy HH:mm:ss' }}
+                </div>
+                <div *ngIf="listType === AssetListType.OFFERED_ASSETS">
+                    {{ element.modifiedDate | date: 'MM/dd/yyyy HH:mm:ss' }}
                 </div>
             </td>
         </ng-container>
@@ -80,6 +95,15 @@
             <th mat-header-cell *matHeaderCellDef>Status</th>
             <td mat-cell *matCellDef="let element" data-label="Type"><span
                     class="color-success">{{element.status}}</span></td>
+        </ng-container>
+
+        <ng-container matColumnDef="modifiedDate" *ngIf="listType === AssetListType.MY_ASSETS">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <ng-container> Last Updated Date </ng-container>
+            </th>
+            <td mat-cell *matCellDef="let element" data-label="Last Updated Date">
+                {{ element.modifiedDate | date: 'MM/dd/yyyy HH:mm:ss' }}
+            </td>
         </ng-container>
 
         <!-- Action -->

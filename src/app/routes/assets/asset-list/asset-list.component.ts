@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
-import { Asset } from 'iam-client-lib';
+import { Asset, AssetHistoryEventType } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { AssetListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TransferOwnershipComponent } from '../../applications/transfer-ownership/transfer-ownership.component';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
@@ -23,7 +24,7 @@ const HEADER_REJECT_OWNERSHIP = 'Reject Offered Asset';
   templateUrl: './asset-list.component.html',
   styleUrls: ['./asset-list.component.scss']
 })
-export class AssetListComponent implements OnInit {
+export class AssetListComponent implements OnInit, OnDestroy {
   @Input('list-type') listType: number;
   @ViewChild(MatSort, undefined) sort: MatSort;
   @Output() selectTab = new EventEmitter<any>();
@@ -31,29 +32,75 @@ export class AssetListComponent implements OnInit {
   AssetListType = AssetListType;
 
   dataSource : MatTableDataSource<Asset> = new MatTableDataSource([]);
-  displayedColumns: string[] = ['logo','name','id'];
+  displayedColumns: string[] = ['logo','createdDate','name','id'];
+
+  private _iamSubscriptionId: number;
 
   constructor(private toastr: ToastrService,
     private dialog: MatDialog,
     private iamService: IamService,
+    private notifService: NotificationService,
     private loadingService: LoadingService,
     private route: Router) { 
       
     }
 
+  async ngOnDestroy(): Promise<void> {
+    // Unsubscribe from IAM Events
+    await this.iamService.iam.unsubscribeFrom(this._iamSubscriptionId);
+  }
+
   async ngOnInit(): Promise<void> {
+    // Subscribe to IAM events
+    this._iamSubscriptionId = await this.iamService.iam.subscribeTo({
+      messageHandler: this._handleMessage.bind(this)
+    });
+
     // Set Table Columns
     if (this.listType === AssetListType.OFFERED_ASSETS) {
       this.displayedColumns.push('owner');
     }
     else {
       this.displayedColumns.push('offeredTo');
+      if (this.listType === AssetListType.MY_ASSETS) {
+        this.displayedColumns.push('modifiedDate');
+      }
     }
     this.displayedColumns.push('actions');
 
     // Initialize List
     if (this.listType === AssetListType.MY_ASSETS) {
       await this.getAssetList(RESET_LIST);
+    }
+
+    // Initialize Sorting
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      if (property === 'createdDate') {
+        if (this.listType === AssetListType.OFFERED_ASSETS) {
+          return item['modifiedDate'];
+        }
+        else {
+          return item['createdDate'];
+        }
+      }
+      else {
+        return item[property];
+      }
+    };
+  }
+
+  private _handleMessage(message: any) {
+    if (message.type && (
+      (this.listType === AssetListType.OFFERED_ASSETS && 
+        (message.type === AssetHistoryEventType.ASSET_OFFERED || 
+          message.type === AssetHistoryEventType.ASSET_OFFER_CANCELED)) ||
+      (this.listType === AssetListType.MY_ASSETS && 
+        (message.type === AssetHistoryEventType.ASSET_TRANSFERRED || 
+          message.type === AssetHistoryEventType.ASSET_OFFER_REJECTED)) ||
+      (this.listType === AssetListType.PREV_OWNED_ASSETS && message.type === AssetHistoryEventType.ASSET_TRANSFERRED)
+    )) {
+      this.getAssetList(RESET_LIST);
     }
   }
 
@@ -63,15 +110,22 @@ export class AssetListComponent implements OnInit {
     }
     try {
       this.loadingService.show();
+      let listData: Asset[];
       if (this.listType === AssetListType.PREV_OWNED_ASSETS) {
-        this.dataSource.data = await this.iamService.iam.getPreviouslyOwnedAssets({ owner: this.iamService.iam.getDid() });
+        listData = await this.iamService.iam.getPreviouslyOwnedAssets({ owner: this.iamService.iam.getDid() });
       }
       else if (this.listType === AssetListType.OFFERED_ASSETS) {
-        this.dataSource.data = await this.iamService.iam.getOfferedAssets();
+        listData = await this.iamService.iam.getOfferedAssets();
       }
       else {
-        this.dataSource.data = await this.iamService.iam.getOwnedAssets();
+        listData = await this.iamService.iam.getOwnedAssets();
       }
+
+      this.dataSource.data = listData.map((item: any) => {
+        item.createdDate = new Date(item.createdAt);
+        item.modifiedDate = new Date(item.updatedAt);
+        return item;
+      });
     }
     catch (e) {
       console.error(e);
@@ -141,6 +195,7 @@ export class AssetListComponent implements OnInit {
           assetDID: data.id
         });
         this.toastr.success('A new asset is added successfully to your list.', HEADER_ACCEPT_OWNERSHIP);
+        this.notifService.decreaseAssetsOfferedToMeCount();
         this.selectTab.emit(0);
       }
       catch (e) {
@@ -162,6 +217,7 @@ export class AssetListComponent implements OnInit {
         });
         this.toastr.success('You have rejected an offered asset successfully.', HEADER_REJECT_OWNERSHIP);
         await this.getAssetList(RESET_LIST);
+        this.notifService.decreaseAssetsOfferedToMeCount();
       }
       catch (e) {
         console.error(e);

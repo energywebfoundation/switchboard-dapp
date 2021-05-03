@@ -101,7 +101,9 @@ export class TransferOwnershipComponent implements OnInit {
   }
 
   async submit() {
-    if (this.newOwnerAddress.valid) {
+    if (this.newOwnerAddress.value === this.iamService.iam.getDid()) {
+      this.toastr.error('You cannot transfer to your own DID.', TOASTR_HEADER);
+    } else if (this.newOwnerAddress.valid) {
       if (this.namespace) {
         await this._transferOrgAppRole();
       }
