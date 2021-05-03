@@ -90,22 +90,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
                     this.currentNav = pathArr[1];
                 }
             });
-
-        // Stay in current screen and display user name if available
-        this.iamService.userProfile
-            .pipe(takeUntil(this._subscription$))
-            .subscribe((data: any) => {
-                if (data && data.name) {
-                    this.userName = data.name;
-                }
-
-                if (this.iamService.accountAddress && !this.notifService.initialized) {
-                    // Initialize Notifications
-                    this._initNotifications();
-                } else {
-                    this.isLoadingNotif = false;
-                }
-            });
     }
 
     async ngOnDestroy(): Promise<void> {
@@ -114,6 +98,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
         if (this._pendingApprovalCountListener) {
             this._pendingApprovalCountListener.unsubscribe();
+        }
+        if (this._assetsOfferedToMeCountListener) {
+            this._assetsOfferedToMeCountListener.unsubscribe();
+        }
+        if (this._pendingAssetSyncCountListener) {
+            this._pendingAssetSyncCountListener.unsubscribe();
         }
 
         this._subscription$.next();
@@ -147,12 +137,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (ua.indexOf('MSIE ') > 0 || !!ua.match(/Trident.*rv\:11\./)) { // Not supported under IE
             this.fsbutton.nativeElement.style.display = 'none';
         }
+
+        // Stay in current screen and display user name if available
+        this.iamService.userProfile
+            .pipe(takeUntil(this._subscription$))
+            .subscribe((data: any) => {
+                if (data && data.name) {
+                    this.userName = data.name;
+                }
+
+                if (this.iamService.accountAddress) {
+                    // Initialize Notifications
+                    this._initNotifications();
+                } else {
+                    this.isLoadingNotif = false;
+                }
+            });
     }
 
     private _initNotifications() {
         // Init Notif Count
         this._initNotificationCount();
-        this.notifService.initialized = true;
     }
 
     private _calcTotalCount() {
@@ -206,7 +211,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     private _handleMessage(message: any) {
-        console.log('message', message);
         if (message.type) {
             // Handle Asset-related Events
             this._handleAssetEvents(message.type);
