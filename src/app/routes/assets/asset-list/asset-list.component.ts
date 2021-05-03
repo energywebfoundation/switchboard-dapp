@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
-import { Asset } from 'iam-client-lib';
+import { Asset, AssetHistoryEventType } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { AssetListType } from 'src/app/shared/constants/shared-constants';
@@ -24,7 +24,7 @@ const HEADER_REJECT_OWNERSHIP = 'Reject Offered Asset';
   templateUrl: './asset-list.component.html',
   styleUrls: ['./asset-list.component.scss']
 })
-export class AssetListComponent implements OnInit {
+export class AssetListComponent implements OnInit, OnDestroy {
   @Input('list-type') listType: number;
   @ViewChild(MatSort, undefined) sort: MatSort;
   @Output() selectTab = new EventEmitter<any>();
@@ -33,6 +33,8 @@ export class AssetListComponent implements OnInit {
 
   dataSource : MatTableDataSource<Asset> = new MatTableDataSource([]);
   displayedColumns: string[] = ['logo','createdDate','name','id'];
+
+  private _iamSubscriptionId: number;
 
   constructor(private toastr: ToastrService,
     private dialog: MatDialog,
@@ -43,7 +45,17 @@ export class AssetListComponent implements OnInit {
       
     }
 
+  async ngOnDestroy(): Promise<void> {
+    // Unsubscribe from IAM Events
+    await this.iamService.iam.unsubscribeFrom(this._iamSubscriptionId);
+  }
+
   async ngOnInit(): Promise<void> {
+    // Subscribe to IAM events
+    this._iamSubscriptionId = await this.iamService.iam.subscribeTo({
+      messageHandler: this._handleMessage.bind(this)
+    });
+
     // Set Table Columns
     if (this.listType === AssetListType.OFFERED_ASSETS) {
       this.displayedColumns.push('owner');
@@ -76,6 +88,20 @@ export class AssetListComponent implements OnInit {
         return item[property];
       }
     };
+  }
+
+  private _handleMessage(message: any) {
+    if (message.type && (
+      (this.listType === AssetListType.OFFERED_ASSETS && 
+        (message.type === AssetHistoryEventType.ASSET_OFFERED || 
+          message.type === AssetHistoryEventType.ASSET_OFFER_CANCELED)) ||
+      (this.listType === AssetListType.MY_ASSETS && 
+        (message.type === AssetHistoryEventType.ASSET_TRANSFERRED || 
+          message.type === AssetHistoryEventType.ASSET_OFFER_REJECTED)) ||
+      (this.listType === AssetListType.PREV_OWNED_ASSETS && message.type === AssetHistoryEventType.ASSET_TRANSFERRED)
+    )) {
+      this.getAssetList(RESET_LIST);
+    }
   }
 
   async getAssetList(resetList?: boolean) {
