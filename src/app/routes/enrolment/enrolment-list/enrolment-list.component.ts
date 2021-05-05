@@ -269,6 +269,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
           id: element.id
         });
         this.toastr.success('Action is successful.', 'Cancel Enrolment Request');
+        await this.getList(this.rejected, this.accepted);
       }
       catch (e) {
         console.error(e);
