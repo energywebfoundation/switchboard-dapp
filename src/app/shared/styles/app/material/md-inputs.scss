@@ -136,6 +136,14 @@ mat-label {
 
 }
 
+.break-word {
+  word-break: break-all;
+}
+
+.md-create.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background: #A567FF !important;
+}
+
 .search-title {
   font-size: 16px;
   font-weight: 600 !important;
