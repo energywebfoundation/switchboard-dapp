@@ -244,4 +244,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
   viewAssetEnrolments(data: Asset) {
     this.route.navigate(['assets/enrolment/' + data.id]);
   }
+
+  edit() {
+
+  }
 }
