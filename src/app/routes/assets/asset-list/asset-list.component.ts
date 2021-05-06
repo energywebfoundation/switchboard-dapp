@@ -11,6 +11,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { TransferOwnershipComponent } from '../../applications/transfer-ownership/transfer-ownership.component';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
+import { EditAssetDialogComponent } from '../edit-asset-dialog/edit-asset-dialog.component';
 
 export const RESET_LIST = true;
 
@@ -247,6 +248,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   edit() {
-
+    const dialogRef = this.dialog.open(EditAssetDialogComponent, {
+      width: '600px',
+      data: {},
+      maxWidth: '100%',
+    });
   }
 }
