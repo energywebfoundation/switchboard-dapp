@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
-import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { ENSNamespaceTypes, IApp, IOrganization, IRole } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
@@ -18,6 +17,9 @@ import { NewRoleComponent, RoleType } from '../new-role/new-role.component';
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { TransferOwnershipComponent } from '../transfer-ownership/transfer-ownership.component';
 import { takeUntil } from 'rxjs/operators';
+import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -37,7 +39,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
   @Input() defaultFilterOptions: any;
   @Output() updateFilter = new EventEmitter<any>();
 
-  @ViewChild(MatSort, undefined) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   ListType        = ListType;
   RoleType        = RoleType;

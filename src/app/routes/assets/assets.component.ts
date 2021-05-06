@@ -1,31 +1,32 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatTabGroup } from '@angular/material';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AssetListType } from 'src/app/shared/constants/shared-constants';
 import { UrlParamService } from 'src/app/shared/services/url-param.service';
 import { AssetListComponent, RESET_LIST } from './asset-list/asset-list.component';
 import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-assets',
   templateUrl: './assets.component.html',
   styleUrls: ['./assets.component.scss']
 })
-export class AssetsComponent implements OnInit {
-  @ViewChild("assetsTabGroup", { static: false }) assetsTabGroup: MatTabGroup;
-  @ViewChild('listMyAssets', undefined ) listMyAssets: AssetListComponent;
-  @ViewChild('listOfferedAssets', undefined ) listOfferedAssets: AssetListComponent;
-  @ViewChild('listPreviousAssets', undefined ) listPreviousAssets: AssetListComponent;
+export class AssetsComponent implements OnInit, AfterViewInit {
+  @ViewChild('assetsTabGroup') assetsTabGroup: MatTabGroup;
+  @ViewChild('listMyAssets' ) listMyAssets: AssetListComponent;
+  @ViewChild('listOfferedAssets') listOfferedAssets: AssetListComponent;
+  @ViewChild('listPreviousAssets') listPreviousAssets: AssetListComponent;
 
   AssetListType = AssetListType;
-  
+
   constructor(private dialog: MatDialog,
     private urlParamService: UrlParamService,
     private router: Router,
     private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    
+
   }
 
   ngAfterViewInit(): void {
@@ -101,5 +102,5 @@ export class AssetsComponent implements OnInit {
     }
   }
 
-  
+
 }

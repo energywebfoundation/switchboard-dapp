@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatTabGroup } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlParamService } from 'src/app/shared/services/url-param.service';
 import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-enrolment',
@@ -11,9 +11,9 @@ import { EnrolmentListComponent } from './enrolment-list/enrolment-list.componen
   styleUrls: ['./enrolment.component.scss']
 })
 export class EnrolmentComponent implements OnInit, AfterViewInit {
-  @ViewChild("enrolmentTabGroup", { static: false }) enrolmentTabGroup: MatTabGroup;
-  @ViewChild('issuerList', undefined ) issuerList       : EnrolmentListComponent;
-  @ViewChild('enrolmentList', undefined ) enrolmentList : EnrolmentListComponent;
+  @ViewChild("enrolmentTabGroup") enrolmentTabGroup: MatTabGroup;
+  @ViewChild('issuerList') issuerList: EnrolmentListComponent;
+  @ViewChild('enrolmentList') enrolmentList: EnrolmentListComponent;
 
   issuerListAccepted = false;
   enrolmentListAccepted = undefined;
@@ -31,9 +31,84 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   public isMyEnrolmentShown = false;
   private _queryParamSelectedTabInit = false;
 
-  constructor(private activeRoute: ActivatedRoute, 
-    private urlParamService: UrlParamService,
-    private router: Router) { }
+  constructor(private activeRoute: ActivatedRoute,
+              private urlParamService: UrlParamService,
+              private router: Router) {
+  }
+
+  ngAfterViewInit(): void {
+    this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
+      if (queryParams) {
+        if (queryParams.notif) {
+          if (queryParams.notif === 'pendingSyncToDidDoc') {
+            // Display Approved Claims
+            this.enrolmentListAccepted = true;
+            this.asyncSetDropdownValue(this.dropdownValue.approved);
+
+            if (this.enrolmentTabGroup) {
+              this.enrolmentTabGroup.selectedIndex = 1;
+            }
+          } else if (queryParams.notif === 'myEnrolments') {
+            // Display All Claims
+            this.asyncSetDropdownValue(this.dropdownValue.all);
+
+            if (this.enrolmentTabGroup) {
+              this.enrolmentTabGroup.selectedIndex = 1;
+            }
+          } else {
+            this.initDefault();
+          }
+        } else if (queryParams.selectedTab) {
+          if (queryParams.selectedTab == 1) {
+            this.initDefaultMyEnrolments();
+          } else {
+            this.initDefault();
+          }
+          this._queryParamSelectedTabInit = true;
+        } else {
+          this.initDefault();
+        }
+      } else {
+        this.initDefault();
+      }
+    });
+  }
+
+  ngOnInit() {
+  }
+
+  showMe(i: any) {
+    // Preserve Selected Tab
+    this.urlParamService.updateQueryParams(this.router, this.activeRoute, {
+      selectedTab: i.index
+    }, ['notif']);
+
+    if (i.index === 1) {
+      if (this.isMyEnrolmentShown) {
+        this.enrolmentList.getList(this.enrolmentDropdown.value === 'rejected',
+          this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
+      } else {
+        this.isMyEnrolmentShown = true;
+      }
+    } else {
+      this.issuerList.getList(this.enrolmentDropdown.value === 'rejected',
+        this.issuerDropdown.value === 'true' ? true : this.issuerDropdown.value === 'false' ? false : undefined);
+    }
+  }
+
+  updateEnrolmentList(e: any) {
+    // console.log('enrolement list');
+    let value = e.value;
+    this.enrolmentList.getList(value === 'rejected',
+      value === 'true' ? true : value === 'false' ? false : undefined);
+  }
+
+  updateIssuerList(e: any) {
+    // console.log('issuer list');
+    let value = e.value;
+    this.issuerList.getList(value === 'rejected',
+      value === 'true' ? true : value === 'false' ? false : undefined);
+  }
 
   private initDefault() {
     if (!this._queryParamSelectedTabInit) {
@@ -61,86 +136,5 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
         clearTimeout(timeout$);
       }, 30);
     }
-  }
-
-  ngAfterViewInit(): void {
-    this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
-      if (queryParams) {
-        if (queryParams.notif) {
-          if (queryParams.notif === 'pendingSyncToDidDoc') {
-            // Display Approved Claims
-            this.enrolmentListAccepted = true;
-            this.asyncSetDropdownValue(this.dropdownValue.approved);
-  
-            if (this.enrolmentTabGroup) {
-              this.enrolmentTabGroup.selectedIndex = 1;
-            }
-          }
-          else if (queryParams.notif === 'myEnrolments') {
-            // Display All Claims
-            this.asyncSetDropdownValue(this.dropdownValue.all);
-  
-            if (this.enrolmentTabGroup) {
-              this.enrolmentTabGroup.selectedIndex = 1;
-            }
-          }
-          else {
-            this.initDefault();
-          }
-        }
-        else if (queryParams.selectedTab) {
-          if (queryParams.selectedTab == 1) {
-            this.initDefaultMyEnrolments();
-          }
-          else {
-            this.initDefault();
-          }
-          this._queryParamSelectedTabInit = true;
-        }
-        else {
-          this.initDefault();
-        }
-      }
-      else {
-        this.initDefault();
-      }
-    });
-  }
-
-  ngOnInit() {}
-
-  showMe(i: any) {
-    // Preserve Selected Tab
-    this.urlParamService.updateQueryParams(this.router, this.activeRoute, {
-      selectedTab: i.index
-    }, ['notif']);
-    
-    if (i.index === 1) {
-      if (this.isMyEnrolmentShown) {
-        this.enrolmentList.getList(this.enrolmentDropdown.value === 'rejected',
-          this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
-      }
-      else {
-        this.isMyEnrolmentShown = true;
-      }
-    }
-    else {
-      this.issuerList.getList(this.enrolmentDropdown.value === 'rejected',
-        this.issuerDropdown.value === 'true' ? true : this.issuerDropdown.value === 'false' ? false : undefined);
-    }
-  }
-
-  updateEnrolmentList (e: any) {
-    // console.log('enrolement list');
-    let value = e.value;
-    this.enrolmentList.getList(value === 'rejected',
-      value === 'true' ? true : value === 'false' ? false : undefined);
-  }
-
-  updateIssuerList (e: any) {
-    // console.log('issuer list');
-    let value = e.value;
-    this.issuerList.getList(value === 'rejected',
-      value === 'true' ? true : value === 'false' ? false : undefined);
   }
 }
