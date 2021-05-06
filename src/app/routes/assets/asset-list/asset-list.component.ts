@@ -28,7 +28,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
   @Input('list-type') listType: number;
   @ViewChild(MatSort, undefined) sort: MatSort;
   @Output() selectTab = new EventEmitter<any>();
-  
+
   AssetListType = AssetListType;
 
   dataSource : MatTableDataSource<Asset> = new MatTableDataSource([]);
@@ -41,8 +41,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
     private iamService: IamService,
     private notifService: NotificationService,
     private loadingService: LoadingService,
-    private route: Router) { 
-      
+    private route: Router) {
+
     }
 
   async ngOnDestroy(): Promise<void> {
@@ -92,11 +92,11 @@ export class AssetListComponent implements OnInit, OnDestroy {
 
   private _handleMessage(message: any) {
     if (message.type && (
-      (this.listType === AssetListType.OFFERED_ASSETS && 
-        (message.type === AssetHistoryEventType.ASSET_OFFERED || 
+      (this.listType === AssetListType.OFFERED_ASSETS &&
+        (message.type === AssetHistoryEventType.ASSET_OFFERED ||
           message.type === AssetHistoryEventType.ASSET_OFFER_CANCELED)) ||
-      (this.listType === AssetListType.MY_ASSETS && 
-        (message.type === AssetHistoryEventType.ASSET_TRANSFERRED || 
+      (this.listType === AssetListType.MY_ASSETS &&
+        (message.type === AssetHistoryEventType.ASSET_TRANSFERRED ||
           message.type === AssetHistoryEventType.ASSET_OFFER_REJECTED)) ||
       (this.listType === AssetListType.PREV_OWNED_ASSETS && message.type === AssetHistoryEventType.ASSET_TRANSFERRED)
     )) {
@@ -231,7 +231,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
 
   viewOwnershipHistory(data: any) {
     const dialogRef = this.dialog.open(AssetOwnershipHistoryComponent, {
-      width: '600px', data:{
+      width: '600px',
+      data: {
         id: data.id
       },
       maxWidth: '100%',
