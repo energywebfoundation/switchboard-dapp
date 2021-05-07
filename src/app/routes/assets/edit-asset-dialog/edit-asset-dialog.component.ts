@@ -83,10 +83,14 @@ export class EditAssetDialogComponent implements OnInit {
 
   private updateForm(profile) {
     const assetProfile: IAssetProfile = profile[assetProfilesKey] && profile[assetProfilesKey][this.data.id];
+
+    if (!assetProfile) {
+      return;
+    }
+
     this.form.patchValue({
       name: assetProfile.name,
       icon: assetProfile.icon
     });
   }
-
 }
