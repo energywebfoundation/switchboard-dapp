@@ -247,10 +247,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
     this.route.navigate(['assets/enrolment/' + data.id]);
   }
 
-  edit() {
-    const dialogRef = this.dialog.open(EditAssetDialogComponent, {
+  edit(data: Asset) {
+    this.dialog.open(EditAssetDialogComponent, {
       width: '600px',
-      data: {},
+      data,
       maxWidth: '100%',
     });
   }
