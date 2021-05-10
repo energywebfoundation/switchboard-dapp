@@ -23,7 +23,7 @@ const assetProfilesKey = 'assetProfiles';
 export class EditAssetDialogComponent implements OnInit {
 
   form = this.fb.group({
-    name: ['', Validators.minLength(3)],
+    name: ['', Validators.compose([Validators.minLength(3), Validators.maxLength(256)])],
     icon: ['', Validators.pattern('https?://.*')],
   });
 
@@ -61,7 +61,7 @@ export class EditAssetDialogComponent implements OnInit {
       data: this.createClaimObjectUpdate()
     })).pipe(
       takeUntil(this.dialogRef.afterClosed())
-    ).subscribe((next) => {
+    ).subscribe(() => {
       this.loadingService.hide();
       this.close();
     });
