@@ -34,7 +34,7 @@
             <td mat-cell *matCellDef="let element" data-label="Name">
                 <div class="d-flex flex-row align-items-center justify-content-between justify-content-lg-start">
                     <div class="text-blur">
-                        Asset Name
+                        {{element.name ? element.name : 'Asset Name'}}
                     </div>
                     <div>
                         <button class="btn mat-stroked-table-button ml-0 mr-2 mr-md-0 ml-md-2" (click)="viewAssetEnrolments(element)">Enrolments</button>

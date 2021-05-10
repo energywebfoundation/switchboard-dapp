@@ -12,6 +12,8 @@ import { TransferOwnershipComponent } from '../../applications/transfer-ownershi
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
 import { EditAssetDialogComponent } from '../edit-asset-dialog/edit-asset-dialog.component';
+import { finalize, first, flatMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { concat, forkJoin, from, merge, pipe } from 'rxjs';
 
 export const RESET_LIST = true;
 
@@ -32,19 +34,19 @@ export class AssetListComponent implements OnInit, OnDestroy {
 
   AssetListType = AssetListType;
 
-  dataSource : MatTableDataSource<Asset> = new MatTableDataSource([]);
-  displayedColumns: string[] = ['logo','createdDate','name','id'];
+  dataSource: MatTableDataSource<Asset> = new MatTableDataSource([]);
+  displayedColumns: string[] = ['logo', 'createdDate', 'name', 'id'];
 
   private _iamSubscriptionId: number;
 
   constructor(private toastr: ToastrService,
-    private dialog: MatDialog,
-    private iamService: IamService,
-    private notifService: NotificationService,
-    private loadingService: LoadingService,
-    private route: Router) {
+              private dialog: MatDialog,
+              private iamService: IamService,
+              private notifService: NotificationService,
+              private loadingService: LoadingService,
+              private route: Router) {
 
-    }
+  }
 
   async ngOnDestroy(): Promise<void> {
     // Unsubscribe from IAM Events
@@ -60,8 +62,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     // Set Table Columns
     if (this.listType === AssetListType.OFFERED_ASSETS) {
       this.displayedColumns.push('owner');
-    }
-    else {
+    } else {
       this.displayedColumns.push('offeredTo');
       if (this.listType === AssetListType.MY_ASSETS) {
         this.displayedColumns.push('modifiedDate');
@@ -80,29 +81,13 @@ export class AssetListComponent implements OnInit, OnDestroy {
       if (property === 'createdDate') {
         if (this.listType === AssetListType.OFFERED_ASSETS) {
           return item['modifiedDate'];
-        }
-        else {
+        } else {
           return item['createdDate'];
         }
-      }
-      else {
+      } else {
         return item[property];
       }
     };
-  }
-
-  private _handleMessage(message: any) {
-    if (message.type && (
-      (this.listType === AssetListType.OFFERED_ASSETS &&
-        (message.type === AssetHistoryEventType.ASSET_OFFERED ||
-          message.type === AssetHistoryEventType.ASSET_OFFER_CANCELED)) ||
-      (this.listType === AssetListType.MY_ASSETS &&
-        (message.type === AssetHistoryEventType.ASSET_TRANSFERRED ||
-          message.type === AssetHistoryEventType.ASSET_OFFER_REJECTED)) ||
-      (this.listType === AssetListType.PREV_OWNED_ASSETS && message.type === AssetHistoryEventType.ASSET_TRANSFERRED)
-    )) {
-      this.getAssetList(RESET_LIST);
-    }
   }
 
   async getAssetList(resetList?: boolean) {
@@ -114,11 +99,9 @@ export class AssetListComponent implements OnInit, OnDestroy {
       let listData: Asset[];
       if (this.listType === AssetListType.PREV_OWNED_ASSETS) {
         listData = await this.iamService.iam.getPreviouslyOwnedAssets({ owner: this.iamService.iam.getDid() });
-      }
-      else if (this.listType === AssetListType.OFFERED_ASSETS) {
+      } else if (this.listType === AssetListType.OFFERED_ASSETS) {
         listData = await this.iamService.iam.getOfferedAssets();
-      }
-      else {
+      } else {
         listData = await this.iamService.iam.getOwnedAssets();
       }
 
@@ -127,19 +110,17 @@ export class AssetListComponent implements OnInit, OnDestroy {
         item.modifiedDate = new Date(item.updatedAt);
         return item;
       });
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
       this.toastr.error(e.message || 'Could not retrieve list. Please contact system administrator.');
-    }
-    finally {
+    } finally {
       this.loadingService.hide();
     }
   }
 
   transferOwnership(type: any, data: Asset) {
     const dialogRef = this.dialog.open(TransferOwnershipComponent, {
-      width: '600px', data:{
+      width: '600px', data: {
         assetDid: data.id,
         type: type,
         owner: data.owner
@@ -155,19 +136,6 @@ export class AssetListComponent implements OnInit, OnDestroy {
     });
   }
 
-  private async _confirm(confirmationMsg: string, header: string) {
-    return this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      maxHeight: '195px',
-      data: {
-        header: header,
-        message: confirmationMsg
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().toPromise();
-  }
-
   async cancelAssetOffer(data: Asset) {
     if (await this._confirm('The offered ownership of this asset will be cancelled.', HEADER_CANCEL_OWNERSHIP)) {
       try {
@@ -177,12 +145,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
         });
         this.toastr.success('Offered ownership is cancelled successfully.', HEADER_CANCEL_OWNERSHIP);
         await this.getAssetList(RESET_LIST);
-      }
-      catch (e) {
+      } catch (e) {
         console.error(e);
         this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_CANCEL_OWNERSHIP);
-      }
-      finally {
+      } finally {
         this.loadingService.hide();
       }
     }
@@ -198,12 +164,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
         this.toastr.success('A new asset is added successfully to your list.', HEADER_ACCEPT_OWNERSHIP);
         this.notifService.decreaseAssetsOfferedToMeCount();
         this.selectTab.emit(0);
-      }
-      catch (e) {
+      } catch (e) {
         console.error(e);
         this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_ACCEPT_OWNERSHIP);
-      }
-      finally {
+      } finally {
         this.loadingService.hide();
       }
     }
@@ -219,12 +183,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
         this.toastr.success('You have rejected an offered asset successfully.', HEADER_REJECT_OWNERSHIP);
         await this.getAssetList(RESET_LIST);
         this.notifService.decreaseAssetsOfferedToMeCount();
-      }
-      catch (e) {
+      } catch (e) {
         console.error(e);
         this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_REJECT_OWNERSHIP);
-      }
-      finally {
+      } finally {
         this.loadingService.hide();
       }
     }
@@ -248,10 +210,72 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   edit(data: Asset) {
-    this.dialog.open(EditAssetDialogComponent, {
+    const dialogRef = this.dialog.open(EditAssetDialogComponent, {
       width: '600px',
       data,
       maxWidth: '100%',
     });
+
+    const userClaims = from(
+      this.iamService.iam.getUserClaims()).pipe(
+      flatMap((claimsData) => claimsData.filter(claim => !!claim.profile)),
+      map(claim => claim.profile && claim.profile),
+    );
+
+    const assetList = from(
+      this.iamService.iam.getOwnedAssets()).pipe(
+      map((assets) => assets.map((item: any) => {
+          return ({
+            ...item,
+            createdDate: new Date(item.createdAt),
+            modifiedDate: new Date(item.updatedAt)
+          });
+        })
+      )
+    );
+    dialogRef.afterClosed().pipe(
+      first(),
+      tap(() => this.loadingService.show()),
+      switchMap(() => forkJoin([userClaims, assetList])
+        .pipe(
+          map(([profile, assets]) => this.addClaimData(profile, assets))
+        )
+      )
+    ).subscribe((value) => {
+      console.log(value);
+      this.dataSource.data = value;
+      this.loadingService.hide();
+    });
+  }
+
+  private addClaimData(profile, assets) {
+    return assets.map((asset) => ({ ...asset, ...profile['asset-profiles'][asset.id] }));
+  }
+
+  private _handleMessage(message: any) {
+    if (message.type && (
+      (this.listType === AssetListType.OFFERED_ASSETS &&
+        (message.type === AssetHistoryEventType.ASSET_OFFERED ||
+          message.type === AssetHistoryEventType.ASSET_OFFER_CANCELED)) ||
+      (this.listType === AssetListType.MY_ASSETS &&
+        (message.type === AssetHistoryEventType.ASSET_TRANSFERRED ||
+          message.type === AssetHistoryEventType.ASSET_OFFER_REJECTED)) ||
+      (this.listType === AssetListType.PREV_OWNED_ASSETS && message.type === AssetHistoryEventType.ASSET_TRANSFERRED)
+    )) {
+      this.getAssetList(RESET_LIST);
+    }
+  }
+
+  private async _confirm(confirmationMsg: string, header: string) {
+    return this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      maxHeight: '195px',
+      data: {
+        header: header,
+        message: confirmationMsg
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().toPromise();
   }
 }
