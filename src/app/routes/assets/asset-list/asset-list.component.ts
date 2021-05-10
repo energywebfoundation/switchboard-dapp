@@ -238,7 +238,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   private addClaimData(profile, assets) {
-    return assets.map((asset) => ({ ...asset, ...profile['asset-profiles'][asset.id] }));
+    return assets.map((asset) => ({ ...asset, ...(profile && profile.assetProfiles && profile.assetProfiles[asset.id]) }));
   }
 
   private _handleMessage(message: any) {

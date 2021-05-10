@@ -13,7 +13,7 @@ interface IAssetProfile {
   icon?: string;
 }
 
-const assetProfilesKey = 'asset-profiles';
+const assetProfilesKey = 'assetProfiles';
 
 @Component({
   selector: 'app-edit-asset-dialog',
@@ -71,8 +71,8 @@ export class EditAssetDialogComponent implements OnInit {
     return ({
       profile: {
         ...this.assetProfiles,
-        [assetProfilesKey]: {
-          ...this.assetProfiles[assetProfilesKey],
+        assetProfiles: {
+          ...this.assetProfiles.assetProfiles,
           [this.data.id]: {
             ...this.form.getRawValue()
           }
