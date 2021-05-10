@@ -208,8 +208,6 @@ export class RequestClaimComponent implements OnInit {
         this.submitting = true;
         this.loadingService.show('Please confirm this transaction in your connected wallet.');
 
-        let success = true;
-
         try {
           // Construct Fields
           let fields = [];
@@ -234,7 +232,6 @@ export class RequestClaimComponent implements OnInit {
             subject: this.roleTypeForm.value.assetDid ? this.roleTypeForm.value.assetDid : undefined
           });
 
-          success = true;
         } catch (e) {
           console.error('Enrolment Failed', e);
           this.toastr.error(e, TOASTR_HEADER);
@@ -243,10 +240,8 @@ export class RequestClaimComponent implements OnInit {
           this.loadingService.hide();
         }
 
-        if (success) {
           this.displayAlert('Request to enrol as ' + this.roleTypeForm.value.roleType.name.toUpperCase() + ' is submitted for review and approval.',
             'success');
-        }
       } else {
         this.toastr.error('Cannot identify issuer for this role.', TOASTR_HEADER);
       }
