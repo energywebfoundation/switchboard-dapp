@@ -19,7 +19,7 @@
                     <mat-form-field class="mt-2" appearance="outline">
                         <input matInput formControlName="name" placeholder="Name" maxlength="256"
                                autocomplete="off">
-                        <mat-error></mat-error>
+                        <mat-error>Name should have at least 3 letters and no more than 256</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-lg-12">
@@ -27,7 +27,7 @@
                     <mat-form-field class="mt-2" appearance="outline">
                         <input matInput formControlName="icon" placeholder="Icon url" maxlength="256"
                                autocomplete="off">
-                        <mat-error></mat-error>
+                        <mat-error>This is not an url</mat-error>
                     </mat-form-field>
                 </div>
             </div>
