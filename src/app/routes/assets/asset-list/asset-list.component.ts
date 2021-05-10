@@ -12,8 +12,8 @@ import { TransferOwnershipComponent } from '../../applications/transfer-ownershi
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
 import { EditAssetDialogComponent } from '../edit-asset-dialog/edit-asset-dialog.component';
-import { finalize, first, flatMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { concat, forkJoin, from, merge, pipe } from 'rxjs';
+import { finalize, first, flatMap, map, switchMap, tap } from 'rxjs/operators';
+import { forkJoin, from, Observable } from 'rxjs';
 
 export const RESET_LIST = true;
 
@@ -94,28 +94,19 @@ export class AssetListComponent implements OnInit, OnDestroy {
     if (!resetList) {
       return;
     }
-    try {
-      this.loadingService.show();
-      let listData: Asset[];
-      if (this.listType === AssetListType.PREV_OWNED_ASSETS) {
-        listData = await this.iamService.iam.getPreviouslyOwnedAssets({ owner: this.iamService.iam.getDid() });
-      } else if (this.listType === AssetListType.OFFERED_ASSETS) {
-        listData = await this.iamService.iam.getOfferedAssets();
-      } else {
-        listData = await this.iamService.iam.getOwnedAssets();
-      }
+    this.loadingService.show();
+    this.subscribeTo(this.assetListFactory());
+  }
 
-      this.dataSource.data = listData.map((item: any) => {
-        item.createdDate = new Date(item.createdAt);
-        item.modifiedDate = new Date(item.updatedAt);
-        return item;
-      });
-    } catch (e) {
-      console.error(e);
-      this.toastr.error(e.message || 'Could not retrieve list. Please contact system administrator.');
-    } finally {
-      this.loadingService.hide();
-    }
+  subscribeTo(source: Observable<Asset[]>) {
+    return source.pipe(
+      finalize(() => this.loadingService.hide())
+    ).subscribe((data: Asset[]) => {
+      this.dataSource.data = data;
+    }, error => {
+      console.error(error);
+      this.toastr.error(error.message || 'Could not retrieve list. Please contact system administrator.');
+    });
   }
 
   transferOwnership(type: any, data: Asset) {
@@ -216,36 +207,34 @@ export class AssetListComponent implements OnInit, OnDestroy {
       maxWidth: '100%',
     });
 
-    const userClaims = from(
-      this.iamService.iam.getUserClaims()).pipe(
-      flatMap((claimsData) => claimsData.filter(claim => !!claim.profile)),
-      map(claim => claim.profile && claim.profile),
-    );
-
-    const assetList = from(
-      this.iamService.iam.getOwnedAssets()).pipe(
-      map((assets) => assets.map((item: any) => {
-          return ({
-            ...item,
-            createdDate: new Date(item.createdAt),
-            modifiedDate: new Date(item.updatedAt)
-          });
-        })
-      )
-    );
-    dialogRef.afterClosed().pipe(
+    this.subscribeTo(dialogRef.afterClosed().pipe(
       first(),
       tap(() => this.loadingService.show()),
-      switchMap(() => forkJoin([userClaims, assetList])
-        .pipe(
-          map(([profile, assets]) => this.addClaimData(profile, assets))
-        )
-      )
-    ).subscribe((value) => {
-      console.log(value);
-      this.dataSource.data = value;
-      this.loadingService.hide();
-    });
+      switchMap(() => this.assetListFactory())
+    ));
+  }
+
+  private getAssetsWithClaims() {
+    return forkJoin(
+      from(
+        this.iamService.iam.getUserClaims()).pipe(
+        flatMap((claimsData) => claimsData.filter(claim => !!claim.profile)),
+        map(claim => claim.profile && claim.profile),
+      ),
+      this.loadAssetList(this.iamService.iam.getOwnedAssets())
+    ).pipe(
+      map(([profile, assets]) => this.addClaimData(profile, assets))
+    );
+  }
+
+  private assetListFactory(): Observable<Asset[]> {
+    if (this.listType === AssetListType.PREV_OWNED_ASSETS) {
+      return this.loadAssetList(this.iamService.iam.getPreviouslyOwnedAssets({ owner: this.iamService.iam.getDid() }));
+    } else if (this.listType === AssetListType.OFFERED_ASSETS) {
+      return this.loadAssetList(this.iamService.iam.getOfferedAssets());
+    } else {
+      return this.getAssetsWithClaims();
+    }
   }
 
   private addClaimData(profile, assets) {
@@ -277,5 +266,19 @@ export class AssetListComponent implements OnInit, OnDestroy {
       maxWidth: '100%',
       disableClose: true
     }).afterClosed().toPromise();
+  }
+
+  private loadAssetList(source: Promise<Asset[]> | Observable<Asset[]>) {
+    return from(source)
+      .pipe(
+        map((assets) => assets.map((item: any) => {
+            return ({
+              ...item,
+              createdDate: new Date(item.createdAt),
+              modifiedDate: new Date(item.updatedAt)
+            });
+          })
+        )
+      );
   }
 }
