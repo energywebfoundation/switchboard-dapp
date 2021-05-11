@@ -240,8 +240,8 @@ export class RequestClaimComponent implements OnInit {
           this.loadingService.hide();
         }
 
-          this.displayAlert('Request to enrol as ' + this.roleTypeForm.value.roleType.name.toUpperCase() + ' is submitted for review and approval.',
-            'success');
+        this.displayAlert('Request to enrol as ' + this.roleTypeForm.value.roleType.name.toUpperCase() + ' is submitted for review and approval.',
+          'success');
       } else {
         this.toastr.error('Cannot identify issuer for this role.', TOASTR_HEADER);
       }
