@@ -10,7 +10,7 @@ export interface SubjectElements {
   txtboxColor: Element;
 }
 
-export class ColorsSetter {
+export class ViewColorsSetter {
   constructor(private params: any) {
   }
 

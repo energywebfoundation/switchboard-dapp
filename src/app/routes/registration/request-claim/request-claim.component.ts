@@ -10,7 +10,7 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
 import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-dialog.component';
-import { ColorsSetter, SubjectElements } from '../models/colors-setter';
+import { ViewColorsSetter, SubjectElements } from '../models/view-colors-setter';
 
 const SWAL = require('sweetalert');
 
@@ -300,8 +300,8 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
     this.callbackUrl = params.returnUrl || (others ? others.returnUrl : undefined);
 
-    const colorSetter = new ColorsSetter({...others, ...params});
-    colorSetter.applyTo(this);
+    const viewColorsSetter = new ViewColorsSetter({...others, ...params});
+    viewColorsSetter.applyTo(this);
   }
 
   private async displayAlert(text: string, icon: string) {
