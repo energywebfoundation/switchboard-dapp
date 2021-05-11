@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { AssetsComponent } from './assets.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { MatSelectModule, MatCardModule, MatFormFieldModule, MatButtonModule, MatDividerModule, MatProgressSpinnerModule, MatDialogModule, MatInputModule, MatExpansionModule } from '@angular/material';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { GovernanceDetailsModule } from '../applications/governance-view/governance-details/governance-details.module';
@@ -13,6 +12,16 @@ import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.
 import { AssetListComponent } from './asset-list/asset-list.component';
 import { AssetOwnershipHistoryComponent } from './asset-ownership-history/asset-ownership-history.component';
 import { AssetEnrolmentListComponent } from './asset-enrolment-list/asset-enrolment-list.component';
+import { EditAssetDialogComponent } from './edit-asset-dialog/edit-asset-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatInputModule } from '@angular/material/input';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent},
@@ -21,7 +30,7 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [AssetsComponent, NewAssetTypeComponent, NewPassiveAssetComponent, AssetListComponent, AssetOwnershipHistoryComponent, AssetEnrolmentListComponent],
+  declarations: [AssetsComponent, NewAssetTypeComponent, NewPassiveAssetComponent, AssetListComponent, AssetOwnershipHistoryComponent, AssetEnrolmentListComponent, EditAssetDialogComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -41,6 +50,6 @@ const routes: Routes = [
     MatExpansionModule,
     NgMatSearchBarModule
   ],
-  entryComponents: [NewAssetTypeComponent, NewPassiveAssetComponent, AssetOwnershipHistoryComponent]
+  entryComponents: [NewAssetTypeComponent, NewPassiveAssetComponent, AssetOwnershipHistoryComponent, EditAssetDialogComponent]
 })
 export class AssetsModule { }

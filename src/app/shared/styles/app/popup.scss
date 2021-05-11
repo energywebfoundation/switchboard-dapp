@@ -29,7 +29,7 @@
             border: 1px solid #289b9b;
             color: #289b9b;
         }
-    }
+    }    
 
     .swal-button--confirm {
         &:not([disabled]):hover {
@@ -37,6 +37,23 @@
         }
     }
 }
+
+.swal-button.swal-button--viewMyEnrolments, .swal-button--enrolForAsset {
+    color: #FFF !important;
+    background-color: #33CBCB;
+    font-size: 16px !important;
+    font-family: "Rajdhani", sans-serif !important;
+    text-transform: uppercase !important;
+    font-weight: 700 !important;
+    border: 1px solid #33CBCB;
+    margin: 0 3px;
+
+    &:hover {
+        background-color: #289b9b;
+        border: 1px solid #289b9b;
+    }
+}
+
 
 // Colors
 
@@ -107,6 +124,7 @@
     margin: 20px 20px 5px 20px;
     padding: 13px 16px;
     border-top: 1px solid #363546 !important;
+    flex-wrap: wrap;
 }
 
 .swal-overlay {

@@ -2,8 +2,18 @@
     padding: 0!important;
 }
 
+a:hover {
+    background-color: initial;
+}
+
 .border-bottom-1 {
     border-bottom: 1px solid #3c3b4c;  
+}
+
+.header-notification-container {
+    border: 1px solid #181523;
+    padding: 5px;
+    background-color: #2a2a37;
 }
 
 ::ng-deep .mat-menu-content:not(:empty) {
@@ -16,4 +26,35 @@
 
 .topnavbar .navbar-nav > .nav-item > .nav-link.coming-soon {
     color: #8B8A91;
+    cursor: auto;
+}
+
+.icon-footer-center {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    bottom: 15px;
+}
+
+.header-notification {
+    background-color: #2a2937;
+}
+
+.link-footer img{
+    filter: saturate(1);
+
+    &:hover {
+        filter: hue-rotate(285deg);
+    }
+}
+
+.link-footer.coming-soon img {
+    filter: saturate(0);
+    opacity: 0.2;
+
+    &:hover {
+        filter: saturate(0);
+    }
 }

@@ -25,14 +25,36 @@ export class AssetsComponent implements OnInit {
     private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    
   }
 
   ngAfterViewInit(): void {
-    this.activatedRoute.queryParams.subscribe((params: any) => {
-       if (params && params.selectedTab) {
-         this.assetsTabGroup.selectedIndex = params.selectedTab;
-       }
-     }).unsubscribe();
+    this.activatedRoute.queryParams.subscribe(async (queryParams: any) => {
+      if (queryParams) {
+        if (queryParams.notif) {
+          if (queryParams.notif === 'assetsOfferedToMe') {
+            this.initDefault(1);
+          }
+          else {
+            this.initDefault();
+          }
+        }
+        else if (queryParams.selectedTab) {
+          if (queryParams.selectedTab) {
+            this.initDefault(queryParams.selectedTab);
+          }
+          else {
+            this.initDefault();
+          }
+        }
+        else {
+          this.initDefault();
+        }
+      }
+      else {
+        this.initDefault();
+      }
+    });
    }
 
   registerAsset() {
@@ -53,7 +75,7 @@ export class AssetsComponent implements OnInit {
     // Preserve Selected Tab
     this.urlParamService.updateQueryParams(this.router, this.activatedRoute, {
       selectedTab: i.index
-    });
+    }, ['notif']);
 
     switch (i.index) {
       case 0:
@@ -72,4 +94,12 @@ export class AssetsComponent implements OnInit {
   setSelectedTab(i: number) {
     this.assetsTabGroup.selectedIndex = i;
   }
+
+  private initDefault(index?: number) {
+    if (this.assetsTabGroup) {
+      this.assetsTabGroup.selectedIndex = index || 0;
+    }
+  }
+
+  
 }

@@ -28,7 +28,8 @@
     <ng-container matColumnDef="requester" *ngIf="listType === ListType.ISSUER">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Requestor DID </th>
       <td mat-cell *matCellDef="let element" data-label="Requestor DID">
-        <div matTooltip="{{ element?.requester }}" [appMinifiedDidViewer]="element?.requester" class="position-relative"> {{ element?.requester | didFormatMinifier}} </div>
+        <div matTooltip="{{ element?.requester }}" [appMinifiedDidViewer]="element?.requester"
+          matTooltipClass="tooltip-full-width"> {{ element?.requester | didFormatMinifier}} </div>
       </td>
     </ng-container>
 
@@ -36,7 +37,9 @@
     <ng-container matColumnDef="asset" *ngIf="listType === ListType.ISSUER">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Asset DID </th>
       <td mat-cell *matCellDef="let element" data-label="Asset DID">
-        <div matTooltip="{{ element?.subject }}" [appMinifiedDidViewer]="element?.subject" class="position-relative" *ngIf="element?.subject !== element?.claimType"> {{ element?.subject | didFormatMinifier}} </div>
+        <div matTooltip="{{ element?.subject }}" [appMinifiedDidViewer]="element?.subject"
+          matTooltipClass="tooltip-full-width" *ngIf="element?.subject !== element?.claimType"> {{ element?.subject |
+          didFormatMinifier}} </div>
       </td>
     </ng-container>
 
@@ -44,10 +47,15 @@
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
       <td mat-cell *matCellDef="let element" data-label="Status">
-        <ng-container *ngIf="element?.isAccepted && element?.isSynced"> <span class="color-success">Approved</span> </ng-container>
-        <ng-container *ngIf="element?.isAccepted && !element?.isSynced"> <span class="color-success">Approved</span> <div *ngIf="listType !== ListType.ISSUER">Pending Sync to DID Document</div> </ng-container>
-        <ng-container *ngIf="!element?.isAccepted && !element?.isRejected"> <span class="color-warned">Pending</span> </ng-container>
-        <ng-container *ngIf="!element?.isAccepted && element?.isRejected"> <span class="color-error">Rejected</span> </ng-container>
+        <ng-container *ngIf="element?.isAccepted && element?.isSynced"> <span class="color-success">Approved</span>
+        </ng-container>
+        <ng-container *ngIf="element?.isAccepted && !element?.isSynced"> <span class="color-success">Approved</span>
+          <div *ngIf="listType !== ListType.ISSUER">Pending Sync to DID Document</div>
+        </ng-container>
+        <ng-container *ngIf="!element?.isAccepted && !element?.isRejected"> <span class="color-warned">Pending</span>
+        </ng-container>
+        <ng-container *ngIf="!element?.isAccepted && element?.isRejected"> <span class="color-error">Rejected</span>
+        </ng-container>
       </td>
     </ng-container>
 
@@ -60,22 +68,22 @@
             <mat-icon class="btn-color-primary">more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-             <!-- View Details -->
-          <button mat-menu-item class="btn-color-primary" (click)="view(element)">
-            <mat-icon class="btn-color-primary">preview</mat-icon>
-            <span>Preview</span>
-          </button>
+            <!-- View Details -->
+            <button mat-menu-item class="btn-color-primary" (click)="view(element)">
+              <mat-icon class="btn-color-primary">preview</mat-icon>
+              <span>Preview</span>
+            </button>
 
           <!-- Sync to DID -->
           <button mat-menu-item class="btn-color-primary" (click)="addToDidDoc(element)"
-            *ngIf="listType === ListType.APPLICANT && element?.isAccepted && !element?.isSynced">
+            *ngIf="listType !== ListType.ISSUER && element?.isAccepted && !element?.isSynced">
             <mat-icon class="btn-color-primary">note_add</mat-icon>
             <span>Add to DID Document</span>
           </button>
 
           <!-- Cancel Claim Request -->
           <button mat-menu-item class="btn-color-error" (click)="cancelClaimRequest(element)"
-            *ngIf="listType === ListType.APPLICANT && !element?.isAccepted && !element?.isRejected">
+            *ngIf="listType !== ListType.ISSUER && !element?.isAccepted && !element?.isRejected">
             <mat-icon class="btn-color-error">highlight_off</mat-icon>
             <span>Cancel Claim Request</span> 
           </button>
