@@ -581,45 +581,43 @@ export class RequestClaimComponent implements OnInit {
     }
   }
 
-  private updateForm() {
-    let controls = [];
-    for (let field of this.fieldList) {
-      let control = new FormControl();
-      switch (field.fieldType) {
-        case 'text':
-          break;
-        case 'number':
-          break;
-        case 'date':
-          if (field.maxDate) {
-            field.maxDateValue = new Date(field.maxDate);
-          }
-          if (field.minDate) {
-            field.minDateValue = new Date(field.minDate);
-          }
-          break;
-        case 'boolean':
-          control.setValue(false);
-          break;
-      }
+  private createControls() {
+    return this.fieldList.map((field) => {
+      this.setFieldDefaults(field);
 
-      // Set Validations
-      let validations = this.buildValidationOptions(field);
-      if (validations.length) {
-        control.setValidators(validations);
-      }
+      const control = new FormControl();
+      control.setValidators(this.buildValidationOptions(field));
+      return control;
+    });
+  }
 
-      // add control to array
-      controls.push(control);
+  private setFieldDefaults(field) {
+    switch (field.fieldType) {
+      case 'text':
+        break;
+      case 'number':
+        break;
+      case 'date':
+        if (field.maxDate) {
+          field.maxDateValue = new Date(field.maxDate);
+        }
+        if (field.minDate) {
+          field.minDateValue = new Date(field.minDate);
+        }
+        break;
+      case 'boolean':
+        break;
     }
+  }
 
+  private updateForm() {
     this.enrolmentForm = this.fb.group({
-      fields: this.fb.array(controls)
+      fields: this.fb.array(this.createControls())
     });
   }
 
   private buildValidationOptions(field: any) {
-    let validations = [];
+    const validations = [];
 
     if (field.required) {
       validations.push(Validators.required);
