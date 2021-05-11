@@ -34,7 +34,7 @@
             <td mat-cell *matCellDef="let element" data-label="Name">
                 <div class="d-flex flex-row align-items-center justify-content-between justify-content-lg-start">
                     <div class="text-blur">
-                        Asset Name
+                        {{element.name ? element.name : 'Asset Name'}}
                     </div>
                     <div>
                         <button class="btn mat-stroked-table-button ml-0 mr-2 mr-md-0 ml-md-2" (click)="viewAssetEnrolments(element)">Enrolments</button>
@@ -155,10 +155,10 @@
                             </ng-container>
 
                             <!-- Edit -->
-                            <!-- <button mat-menu-item class="btn-color-primary">
+                            <button mat-menu-item class="btn-color-primary" (click)="edit(element)">
                                 <mat-icon class="btn-color-primary btn-action-3">create</mat-icon>
                                 <span>Edit</span>
-                            </button> -->
+                            </button>
 
                             <!-- Remove -->
                             <!-- <button mat-menu-item class="btn-color-primary">

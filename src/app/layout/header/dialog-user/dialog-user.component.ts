@@ -15,6 +15,7 @@ export class DialogUser implements OnInit {
 
     public profileForm      : FormGroup;
     public maxDate          : Date;
+    private profileCache: any;
 
     constructor(
         public dialogRef: MatDialogRef<DialogUser>,
@@ -52,6 +53,7 @@ export class DialogUser implements OnInit {
 
         // Get the most recent claim
         if (data.length) {
+            this.profileCache = data[0].profile;
             let tmp: any = data[0].profile;
             this.profileForm.patchValue({
                 name: tmp.name,
@@ -79,7 +81,10 @@ export class DialogUser implements OnInit {
             try {
                 await this.iamService.iam.createSelfSignedClaim({
                     data: {
-                        profile: data
+                        profile: {
+                            ...this.profileCache,
+                            ...data
+                        }
                     }
                 });
                 this.toastr.success('Identity is updated.', 'Success');
