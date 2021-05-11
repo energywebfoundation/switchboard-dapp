@@ -462,24 +462,20 @@ export class RequestClaimComponent implements OnInit {
       let claims: any[] = await this.iamService.iam.getUserClaims({
         did: this.roleTypeForm.value.enrolFor === EnrolForType.ASSET ? this.roleTypeForm.value.assetDid : this.iamService.iam.getDid()
       });
-      claims = claims.filter((item: any) => {
-        if (item && item.claimType) {
-          let arr = item.claimType.split('.');
-          if (arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles) {
-            return true;
-          }
-          return false;
-        }
-        return false;
-      });
+      claims = claims
+        .filter((item: any) => item && item.claimType)
+        .filter((item) => {
+          const arr = item.claimType.split('.');
+          return arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles;
+        });
 
       if (claims && claims.length && this.userRoleList) {
-        claims.forEach((item: any) => {
-          for (let i = 0; i < this.userRoleList.length; i++) {
-            if (item.claimType === this.userRoleList[i].claimType) {
-              this.userRoleList[i].isSynced = true;
-            }
-          }
+        claims.map((item: any) => {
+          this.userRoleList
+            .filter(userRole => item.claimType === userRole.claimType)
+            .map(userRole => {
+              userRole.isSynced = true;
+            });
         });
       }
     } catch (e) {
