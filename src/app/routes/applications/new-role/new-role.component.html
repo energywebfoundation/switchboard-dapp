@@ -120,13 +120,12 @@
                       <span class="pb-2">Issuer Role Namespace can be organization or application role.</span>
                     </div>
                     <mat-label class="ml-3 pl-1">Issuer Role Namespace</mat-label>
-                    <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                      <input matInput autocomplete="off" formControlName="roleName" type="text"
-                        placeholder="Example: {{ 'issuerrole.' + ENSPrefixes.Roles + '.myorg.iam.ewc' }}" required
-                        oninput="this.value = this.value.toLowerCase()" (keypress)="alphaNumericOnly($event, true)"
-                        minlength="3" maxlength="256" />
-                      <mat-error>Issuer Role Namespace is <strong>required</strong></mat-error>
-                    </mat-form-field>
+                    <app-smart-search
+                            [placeholderSearch]="'Example:' + 'issuerrole.' + ENSPrefixes.Roles + '.myorg.iam.ewc'"
+                            [searchText]="roleForm.get('roleName')"
+                            [fieldName]="'rolePage'">
+                    </app-smart-search>
+                    <mat-error>Issuer Role Namespace is <strong>required</strong></mat-error>
                   </div>
                 </div>
               </div>
