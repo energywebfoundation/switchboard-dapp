@@ -10,6 +10,7 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
 import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-dialog.component';
+import { ColorsSetter, SubjectElements } from '../models/colors-setter';
 
 const SWAL = require('sweetalert');
 
@@ -31,7 +32,7 @@ const SwalButtons = {
   templateUrl: './request-claim.component.html',
   styleUrls: ['./request-claim.component.scss']
 })
-export class RequestClaimComponent implements OnInit {
+export class RequestClaimComponent implements OnInit, SubjectElements {
 
   public RoleType = RoleType;
   public EnrolForType = EnrolForType;
@@ -61,11 +62,11 @@ export class RequestClaimComponent implements OnInit {
   public roleList: any;
   public submitting = false;
   public appError = false;
-  public bgColor: Object = undefined;
-  public txtColor: Object = undefined;
-  public btnColor: Object = {};
-  public listColor: Object = {};
-  public txtboxColor: Object = {};
+  public bgColor = {};
+  public txtColor = {};
+  public btnColor = {};
+  public listColor = {};
+  public txtboxColor = {};
   public isLoggedIn = false;
   public isPrecheckSuccess = false;
   isLoading = false;
@@ -290,46 +291,17 @@ export class RequestClaimComponent implements OnInit {
   }
 
   private updateColors(params: any) {
-    if (this.orgAppDetails) {
-      let others = undefined;
+    let others = undefined;
 
-      // re-construct others
-      if (this.orgAppDetails.others) {
-        others = this.orgAppDetails.others;
-      }
-
-      this.callbackUrl = params.returnUrl || (others ? others.returnUrl : undefined);
-
-      if (params.bgcolor) {
-        this.bgColor = { 'background-color': `#${params.bgcolor}` };
-        this.listColor['background-color'] = `#${params.bgcolor}`;
-      } else if (others && others.bgcolor) {
-        this.bgColor = { 'background-color': `#${others.bgcolor}` };
-        this.listColor['background-color'] = `#${others.bgcolor}`;
-      }
-
-      if (params.btncolor) {
-        this.btnColor['background-color'] = `#${params.btncolor}`;
-        this.txtboxColor['color'] = `#${params.btncolor}`;
-      } else if (others && others.btncolor) {
-        this.btnColor['background-color'] = `#${others.btncolor}`;
-        this.txtboxColor['color'] = `#${others.btncolor}`;
-      }
-
-      if (params.txtcolor) {
-        this.txtColor = { 'color': `#${params.txtcolor}` };
-        this.listColor['color'] = `#${params.txtcolor}`;
-        this.btnColor['color'] = `#${params.txtcolor}`;
-      } else if (others && others.txtcolor) {
-        this.txtColor = { 'color': `#${others.txtcolor}` };
-        this.listColor['color'] = `#${others.txtcolor}`;
-        this.btnColor['color'] = `#${others.txtcolor}`;
-      } else {
-        this.txtColor = { 'color': 'white' };
-        this.listColor['color'] = 'white';
-        this.btnColor['color'] = 'white';
-      }
+    // re-construct others
+    if (this.orgAppDetails.others) {
+      others = this.orgAppDetails.others;
     }
+
+    this.callbackUrl = params.returnUrl || (others ? others.returnUrl : undefined);
+
+    const colorSetter = new ColorsSetter(params, others);
+    colorSetter.applyTo(this);
   }
 
   private async displayAlert(text: string, icon: string) {
