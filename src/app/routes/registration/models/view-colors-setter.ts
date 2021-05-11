@@ -14,7 +14,7 @@ export class ViewColorsSetter {
   constructor(private params: any) {
   }
 
-  applyTo(subject: SubjectElements) {
+  applyTo(subject): void {
     if (this.params.bgcolor) {
       this.setBgColor(subject, this.params.bgcolor);
     }
@@ -30,18 +30,18 @@ export class ViewColorsSetter {
     }
   }
 
-  private setTextColor(subject, color) {
+  private setTextColor(subject, color): void {
     subject.txtColor.color = `#${color}`;
     subject.listColor.color = `#${color}`;
     subject.btnColor.color = `#${color}`;
   }
 
-  private setBtnColor(subject, color) {
+  private setBtnColor(subject, color): void {
     subject.btnColor['background-color'] = `#${color}`;
     subject.txtboxColor.color = `#${color}`;
   }
 
-  private setBgColor(subject, color) {
+  private setBgColor(subject, color): void {
     subject.bgColor = { 'background-color': `#${color}` };
     subject.listColor['background-color'] = `#${color}`;
   }
