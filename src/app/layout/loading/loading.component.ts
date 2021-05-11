@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { of } from 'rxjs';
+import { delay, take } from 'rxjs/operators';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 
 export const CancelButton = {
@@ -14,7 +16,7 @@ export const CancelButton = {
 })
 export class LoadingComponent implements OnInit, AfterViewInit {
 
-  public showLoadingOverlay = false;
+  public showLoadingOverlay = true;
   public isCancellable = false;
   public msg = '';
   public msgList: string[];
@@ -46,16 +48,21 @@ export class LoadingComponent implements OnInit, AfterViewInit {
 
     // Subscribe to isLoading event
     this.loadingService.isLoading.subscribe((isLoading: number) => {
-      let $setTimeout = setTimeout(() => {
+      const $setTimeout = setTimeout(() => {
         if (isLoading > 0) {
           // Show if isLoading has requests
           this.showLoadingOverlay = true;
           this.spinner.show();
-        }
-        else {
+        } else {
           // Hide if isLoading has lesser requests
           this.showLoadingOverlay = false;
-          this.spinner.hide();
+          of(null)
+              .pipe(
+                  take(1),
+                  delay(40))
+              .subscribe(() => {
+                this.spinner.hide();
+              });
         }
         clearTimeout($setTimeout);
       }, 30);

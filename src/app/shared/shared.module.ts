@@ -66,6 +66,7 @@ import { DidFormatMinifierPipe } from './pipes/did-format-minifier.pipe';
 import { EnrolmentListComponent } from '../routes/enrolment/enrolment-list/enrolment-list.component';
 import { MinifiedDidViewerDirective } from './directives/minified-did-viewer/minified-did-viewer.directive';
 import { MinifiedDidViewerDialogComponent } from './directives/minified-did-viewer/minified-did-viewer-dialog.component';
+import { SmartSearchComponent } from './components/smart-search/smart-search.component';
 
 
 
@@ -138,7 +139,8 @@ import { MinifiedDidViewerDialogComponent } from './directives/minified-did-view
         DidFormatMinifierPipe,
         EnrolmentListComponent,
         MinifiedDidViewerDirective,
-        MinifiedDidViewerDialogComponent
+        MinifiedDidViewerDialogComponent,
+        SmartSearchComponent
     ],
     exports: [
         CommonModule,
@@ -202,7 +204,8 @@ import { MinifiedDidViewerDialogComponent } from './directives/minified-did-view
         MatToolbarModule,
         MatTooltipModule,
         MatNativeDateModule,
-        MatStepperModule
+        MatStepperModule,
+        SmartSearchComponent
     ],
     entryComponents: [MinifiedDidViewerDialogComponent]
 })

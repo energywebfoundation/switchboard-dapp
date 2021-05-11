@@ -678,18 +678,16 @@ export class RequestClaimComponent implements OnInit {
 
           await this.iamService.iam.createClaimRequest({
             issuer: did,
-            claim: claim,
+            claim,
             subject: this.roleTypeForm.value.assetDid ? this.roleTypeForm.value.assetDid : undefined
           });
-          
+
           success = true;
-        }
-        catch (e) {
+        } catch (e) {
           console.error('Enrolment Failed', e);
           this.toastr.error(e, TOASTR_HEADER);
           this.submitting = false;
-        }
-        finally {
+        } finally {
           this.loadingService.hide();
         }
 

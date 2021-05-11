@@ -5,8 +5,7 @@ import { MatAutocompleteTrigger, MatDialog, MatDialogRef, MatStepper, MatTableDa
 import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime, startWith, switchMap, takeUntil } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { debounceTime, delay, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 
 import { ListType } from 'src/app/shared/constants/shared-constants';
@@ -16,6 +15,7 @@ import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
+import { Observable, of } from 'rxjs';
 
 export const RoleType = {
   ORG: 'org',
@@ -161,13 +161,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         startWith(''),
         switchMap(async (value) => await this._searchRoleNamespace(value))
     );
-
-    this.roleControl.valueChanges
-        .pipe(
-            takeUntil(this.subscription$),
-            switchMap(async (value) => await this._handleKeywordChanged(value))
-        )
-        .subscribe();
 
     this._init(this.data);
   }
@@ -490,8 +483,15 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async proceedSettingIssuer() {
-    this.spinner.show();
-    this.isChecking = true;
+    of(null)
+    .pipe(
+        take(1),
+        delay(1)
+    )
+    .subscribe(() => {
+      this.isChecking = true;
+      this.spinner.show();
+    });
 
     if (this.roleForm.value.roleName) {
       let allowToProceed = true;
@@ -513,16 +513,21 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
           // Do not allow to proceed if namespace already exists
           this.toastr.error('Role namespace already exists. You have no access rights to it.', this.TOASTR_HEADER);
-        }
-        else {
+        } else {
           this.spinner.hide();
-          
+
           // Prompt if user wants to overwrite this namespace
           if (!await this.confirm('Role namespace already exists. Do you wish to continue?')) {
             allowToProceed = false;
-          }
-          else {
-            this.spinner.show();
+          } else {
+            of(null)
+                .pipe(
+                    take(1),
+                    delay(1)
+                )
+                .subscribe(() => {
+                  this.spinner.show();
+                });
           }
         }
       }
@@ -544,20 +549,25 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async proceedAddingFields() {
-    let issuerType = this.roleForm.value.data.issuer.issuerType;
+    const issuerType = this.roleForm.value.data.issuer.issuerType;
     if (this.IssuerType.DID === issuerType && !this.issuerList.length) {
       this.toastr.error('Issuer list is empty.', this.TOASTR_HEADER);
-    }
-    else if (this.IssuerType.Role === issuerType && !this.roleForm.value.data.issuer.roleName) {
+    } else if (this.IssuerType.Role === issuerType && !this.roleForm.value.data.issuer.roleName) {
       this.toastr.error('Issuer Role is empty.', this.TOASTR_HEADER);
-    }
-    else {
+    } else {
       let allowToProceed = true;
       if (this.IssuerType.Role === issuerType) {
-        this.spinner.show();
+        of(null)
+            .pipe(
+                take(1),
+                delay(1)
+            )
+            .subscribe(() => {
+              this.spinner.show();
+            });
 
         // Check if rolename exists or valid
-        let exists = await this.iamService.iam.checkExistenceOfDomain({
+        const exists = await this.iamService.iam.checkExistenceOfDomain({
           domain: this.roleForm.value.data.issuer.roleName
         });
 
@@ -598,9 +608,16 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   async confirmParentNamespace() {
     if (this.roleForm.value.parentNamespace) {
       try {
-        this.spinner.show();
-        this.isChecking = true;
-        
+        of(null)
+            .pipe(
+                take(1),
+                delay(1)
+            )
+            .subscribe(() => {
+              this.isChecking = true;
+              this.spinner.show();
+            });
+
         // Check if namespace exists
         let exists = await this.iamService.iam.checkExistenceOfDomain({
           domain: this.roleForm.value.parentNamespace
@@ -844,12 +861,12 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.autocompleteTrigger) {
       this.autocompleteTrigger.closePanel();
     }
-    
+
     this.isAutolistLoading = true;
     let retVal = [];
 
     if (keyword) {
-      let word = undefined;
+      let word;
       if (!keyword.trim && keyword.name) {
         word = keyword.name;
       } else {
@@ -870,8 +887,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
               this.autocompleteTrigger.openPanel();
             }
           }
-        }
-        catch (e) {
+        } catch (e) {
           this.toastr.error('Could not load search result.', 'Server Error');
         }
       }
@@ -908,28 +924,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private _
-
   clearSearchTxt() {
     this.roleControl.setValue('');
   }
 
   removePreconditionRole(idx: number) {
     this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions.splice(idx, 1);
-  }
-
-  private async _handleKeywordChanged(keyword: any) {
-    this.hasSearchResult = true;
-    if (keyword) {
-      let word = undefined;
-      if (!keyword.trim && keyword.name) {
-        word = keyword.name;
-      } else {
-        word = keyword.trim();
-      }
-      if (!this.isAutolistLoading && word.length > 2) {
-        this.hasSearchResult = false;
-      }
-    }
   }
 }
