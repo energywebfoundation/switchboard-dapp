@@ -538,18 +538,18 @@ export class RequestClaimComponent implements OnInit {
 
         // Set Default Selected
         if (this.defaultRole) {
-          for (let i = 0; i < this.roleList.length; i++) {
-            if (this.roleList[i].name.toUpperCase() === this.defaultRole.toUpperCase()) {
-              this.selectedRole = this.roleList[i].definition;
-              this.selectedNamespace = this.roleList[i].namespace;
+          this.roleList
+            .filter((role) => role.name.toUpperCase() === this.defaultRole.toUpperCase())
+            .map((role) => {
+              this.selectedRole = role.definition;
+              this.selectedNamespace = role.namespace;
               this.fieldList = this.selectedRole.fields || [];
               this.updateForm();
-              this.roleTypeForm.get('roleType').setValue(this.roleList[i]);
+              this.roleTypeForm.get('roleType').setValue(role);
 
               // Init Preconditions
               this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
-            }
-          }
+            });
         }
       }
     } catch (e) {
