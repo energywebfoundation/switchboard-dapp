@@ -89,6 +89,19 @@
         }
 }
 
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+    display: block;
+    font-size: inherit;
+    width: 2em !important;
+    height: 2em !important;
+    position: relative;
+    top: -3px;
+    background-color: #33cbcb;
+    color: #FFF;
+    padding: 3px;
+
+}
+
 .btn-primary {
     background-color: $inverse;
     box-shadow: 0 8px 20px 0 rgba(0,14,38,0.26);
