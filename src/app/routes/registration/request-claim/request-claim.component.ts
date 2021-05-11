@@ -508,7 +508,7 @@ export class RequestClaimComponent implements OnInit {
         let retVal = true;
         let defaultRole = `${this.defaultRole}.${ENSNamespaceTypes.Roles}.${this.namespace}`;
         for (let i = 0; i < this.userRoleList.length; i++) {
-          if (role.namespace === this.userRoleList[i].claimType) {
+          if (role.namespace === this.userRoleList[i].claimType && role.definition.version === this.userRoleList[i].claimTypeVersion) {
             if (role.namespace === defaultRole) {
               // Display Error
               if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
