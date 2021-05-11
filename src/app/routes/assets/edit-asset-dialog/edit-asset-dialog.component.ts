@@ -7,11 +7,7 @@ import { flatMap, map, takeUntil } from 'rxjs/operators';
 import { Asset } from 'iam-client-lib';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { CancelButton } from '../../../layout/loading/loading.component';
-
-interface IAssetProfile {
-  name?: string;
-  icon?: string;
-}
+import { AssetProfile, AssetProfiles, ClaimData, Profile } from 'iam-client-lib/dist/src/iam/iam-base';
 
 const assetProfilesKey = 'assetProfiles';
 
@@ -27,7 +23,7 @@ export class EditAssetDialogComponent implements OnInit {
     icon: ['', Validators.pattern('https?://.*')],
   });
 
-  private assetProfiles: { [key: string]: IAssetProfile };
+  private profile: Profile;
 
   constructor(public dialogRef: MatDialogRef<EditAssetDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: Asset,
@@ -43,7 +39,7 @@ export class EditAssetDialogComponent implements OnInit {
       map(claim => claim.profile && claim.profile)
     ).subscribe((profiles: any) => {
       this.loadingService.hide();
-      this.assetProfiles = profiles;
+      this.profile = profiles;
       this.updateForm(profiles);
     });
   }
@@ -67,12 +63,12 @@ export class EditAssetDialogComponent implements OnInit {
     });
   }
 
-  private createClaimObjectUpdate() {
+  private createClaimObjectUpdate(): ClaimData {
     return ({
       profile: {
-        ...this.assetProfiles,
+        ...this.profile,
         assetProfiles: {
-          ...this.assetProfiles.assetProfiles,
+          ...this.profile.assetProfiles,
           [this.data.id]: {
             ...this.form.getRawValue()
           }
@@ -82,7 +78,7 @@ export class EditAssetDialogComponent implements OnInit {
   }
 
   private updateForm(profile) {
-    const assetProfile: IAssetProfile = profile[assetProfilesKey] && profile[assetProfilesKey][this.data.id];
+    const assetProfile: AssetProfile = profile[assetProfilesKey] && profile[assetProfilesKey][this.data.id];
 
     if (!assetProfile) {
       return;
