@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnrolmentListComponent } from '../../enrolment/enrolment-list/enrolment-list.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-asset-enrolment-list',
@@ -11,7 +12,7 @@ import { EnrolmentListComponent } from '../../enrolment/enrolment-list/enrolment
   styleUrls: ['./asset-enrolment-list.component.scss']
 })
 export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
-  @ViewChild('enrolmentList', undefined ) enrolmentList : EnrolmentListComponent;
+  @ViewChild('enrolmentList', undefined) enrolmentList: EnrolmentListComponent;
 
   enrolmentDropdown = new FormControl('none');
   subject: string;
@@ -24,8 +25,10 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   };
 
   private subscription$ = new Subject();
-  
-  constructor(private activatedRoute: ActivatedRoute) { }
+
+  constructor(private activatedRoute: ActivatedRoute,
+              private location: Location) {
+  }
 
   ngOnDestroy(): void {
     this.subscription$.next();
@@ -41,9 +44,13 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
       });
   }
 
-  updateEnrolmentList (e: any) {
+  updateEnrolmentList(e: any) {
     let value = e.value;
     this.enrolmentList.getList(value === 'rejected',
       value === 'true' ? true : value === 'false' ? false : undefined);
+  }
+
+  back() {
+    this.location.back();
   }
 }
