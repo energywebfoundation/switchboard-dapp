@@ -291,7 +291,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   private updateColors(params: any) {
-    let others = undefined;
+    let others;
 
     // re-construct others
     if (this.orgAppDetails.others) {
@@ -300,7 +300,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
     this.callbackUrl = params.returnUrl || (others ? others.returnUrl : undefined);
 
-    const colorSetter = new ColorsSetter(params, others);
+    const colorSetter = new ColorsSetter({...others, ...params});
     colorSetter.applyTo(this);
   }
 
