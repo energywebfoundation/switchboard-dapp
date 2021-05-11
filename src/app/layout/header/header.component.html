@@ -60,19 +60,18 @@
 
                 <!-- notif count here -->
                 <ng-container *ngIf="!isLoadingNotif">
-                    <em class="icon-bell"></em>
-                    <span class="badge badge-danger" *ngIf="notif?.totalCount">{{ notif?.totalCount }}</span>
+                    <em class="fas fa-tasks"></em>
+                    <!-- <span class="badge badge-danger">2</span> -->
                 </ng-container>
             </a>
             <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-item">
-                    <div class="d-flex flex-column flex-md-row">
                         <div class="d-flex flex-grow-1 list-group header-notification-container">
-                            <div class="d-flex justify-content-center flex-column align-items-center flex-grow-1 pt-3 pb-2 header-notification">
-                                <img src="../assets/img/icons/claim.png" width="auto" height="38" alt="claim image">
-                                <h4 class="pt-2 my-2 color-white">Claim Requests</h4>
+                            <div class="d-flex justify-content-between pt-1 pb-3 px-3 mt-2 mb-2 align-items-center border-bottom-1">
+                                <h4 class="mb-0 f-16 color-white">Tasks</h4>
+                                <a href="#" class="color-primary">Clear all</a>
                             </div>
-                            <a routerLink="/enrolment" routerLinkActive="active">
+                            <!-- <a [routerLink]="['/assets']" routerLinkActive="active" [queryParams]="{notif: 'assetsOfferedToMe'}">
                                 <div class="list-group-item list-group-item-action">
                                     <div class="media d-flex align-items-center cursor-pointer">
                                         <div class="align-self-start mr-2">
@@ -80,44 +79,7 @@
                                         </div>
                                         <div
                                             class="media-body d-flex flex-row justify-content-between align-items-center">
-                                            <p class="m-0">For Approval</p>
-                                            <span class="badge badge-danger ml-2">{{ notif?.pendingApprovalCount
-                                                }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                            <a [routerLink]="['/enrolment']" routerLinkActive="active"
-                                [queryParams]="{notif: 'pendingSyncToDidDoc'}">
-                                <div class="list-group-item list-group-item-action">
-                                    <div class="media d-flex align-items-center cursor-pointer">
-                                        <div class="align-self-start mr-2">
-                                            <mat-icon>timelapse</mat-icon>
-                                        </div>
-                                        <div
-                                            class="media-body d-flex flex-row justify-content-between align-items-center">
-                                            <p class="m-0">Pending Sync to DID Document</p>
-                                            <span class="badge badge-danger ml-2">{{ notif?.pendingSyncCount }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="d-flex flex-grow-1 list-group header-notification-container">
-                            <div class="d-flex justify-content-center flex-column align-items-center flex-grow-1 pt-3 pb-2 header-notification">
-                                <img src="../assets/img/icons/assets-icon.png" width="auto" height="38" alt="assets image">
-                                <h4 class="pt-2 my-2 color-white">My Assets</h4>
-                            </div>
-                            <a [routerLink]="['/assets']" routerLinkActive="active" [queryParams]="{notif: 'assetsOfferedToMe'}">
-                                <div class="list-group-item list-group-item-action">
-                                    <div class="media d-flex align-items-center cursor-pointer">
-                                        <div class="align-self-start mr-2">
-                                            <mat-icon svgIcon="new-claim-icon"></mat-icon>
-                                        </div>
-                                        <div
-                                            class="media-body d-flex flex-row justify-content-between align-items-center">
-                                            <p class="m-0">For Ownership Acceptance</p>
-                                            <span class="badge badge-danger ml-2">{{ notif?.assetsOfferedToMeCount }}</span>
+                                            <p class="m-0 pr-2 color-white">Accept the transfer of the Asset</p>
                                         </div>
                                     </div>
                                 </div>
@@ -130,20 +92,110 @@
                                         </div>
                                         <div
                                             class="media-body d-flex flex-row justify-content-between align-items-center">
-                                            <p class="m-0">Pending Sync to DID Document</p>
-                                            <span class="badge badge-danger ml-2">0</span>
+                                            <p class="m-0 pr-2 color-white">Pending Sync to DID Document</p>
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </a> -->
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="color-white no-record mt-3 mb-4"><i>No task</i></div>
+                            </div>
                         </div>
-                    </div>
 
                 </div>
             </div>
 
         </li>
-        <li class="nav-item d-block">
+        <li class="nav-item dropdown dropdown-list" dropdown>
+            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret cursor-pointer" dropdownToggle>
+                <!-- loading here -->
+                <ng-container *ngIf="isLoadingNotif">
+                    <div>
+                        <mat-spinner diameter="21" class="color-white"></mat-spinner>
+                    </div>
+                </ng-container>
+
+                <!-- notif count here -->
+                <ng-container *ngIf="!isLoadingNotif">
+                    <em class="icon-bell"></em>
+                    <span class="badge badge-danger" *ngIf="notif?.totalCount">{{ notif?.totalCount }}</span>
+                </ng-container>
+            </a>
+            <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-item">
+                    
+                        <div class="d-flex flex-grow-1 list-group header-notification-container">
+                            <div class="d-flex justify-content-start pt-1 pb-3 px-3 mt-2 mb-2 align-items-center border-bottom-1">
+                                <h4 class="mb-0 f-16 color-white">Notification</h4>
+                            </div>
+                            <a routerLink="/enrolment" routerLinkActive="active">
+                                <div class="list-group-item list-group-item-action">
+                                    <div class="media d-flex align-items-center cursor-pointer">
+                                        <div class="align-self-start mr-2">
+                                            <mat-icon svgIcon="new-claim-icon"></mat-icon>
+                                        </div>
+                                        <div
+                                            class="media-body d-flex flex-row justify-content-between align-items-center">
+                                            <p class="m-0 pr-2 color-white">For approval</p>
+                                            <!-- <span class="badge badge-danger ml-2">{{ notif?.pendingApprovalCount
+                                                }}</span> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a [routerLink]="['/enrolment']" routerLinkActive="active"
+                                [queryParams]="{notif: 'pendingSyncToDidDoc'}">
+                                <div class="list-group-item list-group-item-action">
+                                    <div class="media d-flex align-items-center cursor-pointer">
+                                        <div class="align-self-start mr-2">
+                                            <mat-icon svgIcon="new-claim-icon"></mat-icon>
+                                        </div>
+                                        <div
+                                            class="media-body d-flex flex-row justify-content-between align-items-center">
+                                            <p class="m-0 pr-2 color-white">Claim has been issued by an authority</p>
+                                            <!-- <p class="m-0 pr-2 color-white">Pending Sync to Asset DID Document</p> -->
+                                            <!-- <span class="badge badge-danger ml-2">{{ notif?.pendingSyncCount }}</span> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a [routerLink]="['/assets']" routerLinkActive="active" [queryParams]="{notif: 'assetsOfferedToMe'}">
+                                <div class="list-group-item list-group-item-action">
+                                    <div class="media d-flex align-items-center cursor-pointer">
+                                        <div class="align-self-start mr-2">
+                                            <mat-icon svgIcon="new-claim-icon"></mat-icon>
+                                        </div>
+                                        <div
+                                            class="media-body d-flex flex-row justify-content-between align-items-center">
+                                            <p class="m-0 pr-2 color-white">For ownership acceptance</p>
+                                            <!-- <span class="badge badge-danger ml-2">{{ notif?.assetsOfferedToMeCount }}</span> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#">
+                                <div class="list-group-item list-group-item-action">
+                                    <div class="media d-flex align-items-center cursor-pointer">
+                                        <div class="align-self-start mr-2">
+                                            <mat-icon>timelapse</mat-icon>
+                                        </div>
+                                        <div
+                                            class="media-body d-flex flex-row justify-content-between align-items-center">
+                                            <p class="m-0 pr-2 color-white">Pending sync to Asset DID document</p>
+                                            <!-- <span class="badge badge-danger ml-2">0</span> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- <div class="d-flex align-items-center justify-content-center">
+                                <div class="color-white no-record mt-3 mb-4"><i>No notification</i></div>
+                            </div> -->
+                        </div>
+                </div>
+            </div>
+
+        </li>
+        <li class="nav-item d-none d-md-block">
             <a matTooltip="Help" class="nav-link" #fsbutton
                 href="https://energyweb.atlassian.net/wiki/spaces/SWITCH/pages/1712554033/Using+Switchboard"
                 target="_blank">
@@ -168,6 +220,9 @@
 </nav>
 <!-- END Top Navbar-->
 <mat-menu #menu="matMenu" xPosition="before">
+    <button class="d-block d-md-none color-link border-bottom-1 px-4" mat-menu-item (click)="openDialogUser()"><a  class="color-link" href="https://energyweb.atlassian.net/wiki/spaces/SWITCH/pages/1712554033/Using+Switchboard" target="_blank">
+        Help
+    </a></button>
     <button class="color-link border-bottom-1 px-4" mat-menu-item (click)="openDialogUser()">Update Identity</button>
     <button class="color-link px-4" mat-menu-item (click)="logout()">Logout</button>
 </mat-menu>
