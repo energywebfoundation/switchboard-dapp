@@ -7,7 +7,7 @@ import { flatMap, map, takeUntil } from 'rxjs/operators';
 import { Asset } from 'iam-client-lib';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { CancelButton } from '../../../layout/loading/loading.component';
-import { AssetProfile, AssetProfiles, ClaimData, Profile } from 'iam-client-lib/dist/src/iam/iam-base';
+import { AssetProfile, ClaimData, Profile } from 'iam-client-lib';
 
 const assetProfilesKey = 'assetProfiles';
 
