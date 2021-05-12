@@ -10,37 +10,39 @@ import { UserblockService } from '../sidebar/userblock/userblock.service';
 import { SettingsService } from '../../core/settings/settings.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('HeaderComponent', () => {
-    let component: HeaderComponent;
-    let fixture: ComponentFixture<HeaderComponent>;
+  let component: HeaderComponent;
+  let fixture: ComponentFixture<HeaderComponent>;
 
-    beforeEach(async () => {
-        await TestBed.configureTestingModule({
-            declarations: [HeaderComponent],
-            providers: [
-                {provide: UserIdleService, useClass: {}},
-                {provide: MenuService, useClass: {}},
-                {provide: IamService, useClass: {}},
-                {provide: Router, useClass: {}},
-                {provide: ToastrService, useClass: {}},
-                {provide: NotificationService, useClass: {}},
-                {provide: UserblockService, useClass: {}},
-                {provide: SettingsService, useClass: {}},
-                {provide: MatDialog, useClass: {}},
-                {provide: DomSanitizer, useClass: {}},
-            ]
-        })
-          .compileComponents();
-    });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [HeaderComponent],
+      providers: [
+        { provide: UserIdleService, useClass: {} },
+        { provide: MenuService, useClass: {} },
+        { provide: IamService, useClass: {} },
+        { provide: Router, useClass: {} },
+        { provide: ToastrService, useClass: {} },
+        { provide: NotificationService, useClass: {} },
+        { provide: UserblockService, useClass: {} },
+        { provide: SettingsService, useClass: {} },
+        { provide: MatDialog, useClass: {} },
+        { provide: DomSanitizer, useClass: {} },
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+      .compileComponents();
+  });
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(HeaderComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(HeaderComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

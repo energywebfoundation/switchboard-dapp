@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SidebarComponent } from './sidebar.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 xdescribe('SidebarComponent', () => {
@@ -8,7 +9,8 @@ xdescribe('SidebarComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [ SidebarComponent ]
+            declarations: [ SidebarComponent ],
+            schemas: [NO_ERRORS_SCHEMA]
         })
           .compileComponents();
     });
