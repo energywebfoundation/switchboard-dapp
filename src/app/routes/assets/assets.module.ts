@@ -22,15 +22,37 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { OwnedComponent } from './owned/owned.component';
+import { OfferedToComponent } from './offered-to/offered-to.component';
+import { PreviouslyOwnedComponent } from './previously-owned/previously-owned.component';
 
 const routes: Routes = [
-  { path: '', component: AssetsComponent},
+  {
+    path: '', component: AssetsComponent,
+    children: [
+      { path: '', redirectTo: 'owned', pathMatch: 'full'},
+      { path: 'owned', component: OwnedComponent, data: {animationId: 0} },
+      { path: 'offered', component: OfferedToComponent, data: {animationId: 1} },
+      { path: 'previously', component: PreviouslyOwnedComponent, data: {animationId: 2} },
+    ]
+  },
   { path: 'enrolment/:subject', component: AssetEnrolmentListComponent }
 ];
 
 
 @NgModule({
-  declarations: [AssetsComponent, NewAssetTypeComponent, NewPassiveAssetComponent, AssetListComponent, AssetOwnershipHistoryComponent, AssetEnrolmentListComponent, EditAssetDialogComponent],
+  declarations: [
+    AssetsComponent,
+    NewAssetTypeComponent,
+    NewPassiveAssetComponent,
+    AssetListComponent,
+    AssetOwnershipHistoryComponent,
+    AssetEnrolmentListComponent,
+    EditAssetDialogComponent,
+    OwnedComponent,
+    OfferedToComponent,
+    PreviouslyOwnedComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -52,4 +74,5 @@ const routes: Routes = [
   ],
   entryComponents: [NewAssetTypeComponent, NewPassiveAssetComponent, AssetOwnershipHistoryComponent, EditAssetDialogComponent]
 })
-export class AssetsModule { }
+export class AssetsModule {
+}

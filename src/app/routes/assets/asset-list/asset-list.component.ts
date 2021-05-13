@@ -29,6 +29,7 @@ const HEADER_REJECT_OWNERSHIP = 'Reject Offered Asset';
 })
 export class AssetListComponent implements OnInit, OnDestroy {
   @Input('list-type') listType: number;
+  @Input() additionalColumns: string[] = [];
   @ViewChild(MatSort, undefined) sort: MatSort;
   @Output() selectTab = new EventEmitter<any>();
 
@@ -60,20 +61,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
     });
 
     // Set Table Columns
-    if (this.listType === AssetListType.OFFERED_ASSETS) {
-      this.displayedColumns.push('owner');
-    } else {
-      this.displayedColumns.push('offeredTo');
-      if (this.listType === AssetListType.MY_ASSETS) {
-        this.displayedColumns.push('modifiedDate');
-      }
-    }
-    this.displayedColumns.push('actions');
+    this.displayedColumns = [...this.displayedColumns, ...this.additionalColumns, 'actions'];
 
     // Initialize List
-    if (this.listType === AssetListType.MY_ASSETS) {
-      await this.getAssetList(RESET_LIST);
-    }
+    this.getAssetList(RESET_LIST);
 
     // Initialize Sorting
     this.dataSource.sort = this.sort;
@@ -90,10 +81,12 @@ export class AssetListComponent implements OnInit, OnDestroy {
     };
   }
 
-  async getAssetList(resetList?: boolean) {
+  getAssetList(resetList?: boolean) {
     if (!resetList) {
       return;
     }
+    console.log('get asset list');
+    debugger;
     this.loadingService.show();
     this.subscribeTo(this.assetListFactory());
   }

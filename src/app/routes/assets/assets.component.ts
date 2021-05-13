@@ -1,105 +1,54 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatTabGroup } from '@angular/material';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AssetListType } from 'src/app/shared/constants/shared-constants';
-import { UrlParamService } from 'src/app/shared/services/url-param.service';
-import { AssetListComponent, RESET_LIST } from './asset-list/asset-list.component';
-import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
+import { MatTabGroup } from '@angular/material';
+import { Router, RouterOutlet } from '@angular/router';
+import { MatTabChangeEvent } from '@angular/material/tabs/typings/tab-group';
+import { tabAnimation } from './tabs-animation';
+
+const urlMap = new Map<number, string>().set(0, 'owned').set(1, 'offered').set(2, 'previously');
 
 @Component({
   selector: 'app-assets',
   templateUrl: './assets.component.html',
-  styleUrls: ['./assets.component.scss']
+  styleUrls: ['./assets.component.scss'],
+  animations: [
+    tabAnimation
+  ]
 })
 export class AssetsComponent implements OnInit {
-  @ViewChild("assetsTabGroup", { static: false }) assetsTabGroup: MatTabGroup;
-  @ViewChild('listMyAssets', undefined ) listMyAssets: AssetListComponent;
-  @ViewChild('listOfferedAssets', undefined ) listOfferedAssets: AssetListComponent;
-  @ViewChild('listPreviousAssets', undefined ) listPreviousAssets: AssetListComponent;
+  @ViewChild('assetsTabGroup', { static: false }) assetsTabGroup: MatTabGroup;
+  selectedIndex;
 
-  AssetListType = AssetListType;
-  
-  constructor(private dialog: MatDialog,
-    private urlParamService: UrlParamService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+  constructor(private router: Router) {
+  }
 
   ngOnInit(): void {
-    
+    this.mapUrlToSelectedTab(this.router.url);
   }
 
-  ngAfterViewInit(): void {
-    this.activatedRoute.queryParams.subscribe(async (queryParams: any) => {
-      if (queryParams) {
-        if (queryParams.notif) {
-          if (queryParams.notif === 'assetsOfferedToMe') {
-            this.initDefault(1);
-          }
-          else {
-            this.initDefault();
-          }
-        }
-        else if (queryParams.selectedTab) {
-          if (queryParams.selectedTab) {
-            this.initDefault(queryParams.selectedTab);
-          }
-          else {
-            this.initDefault();
-          }
-        }
-        else {
-          this.initDefault();
-        }
-      }
-      else {
-        this.initDefault();
-      }
-    });
-   }
-
-  registerAsset() {
-    const dialogRef = this.dialog.open(NewPassiveAssetComponent, {
-      width: '600px',data:{},
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.listMyAssets.getAssetList(RESET_LIST);
-      }
-    });
-  }
-
-  async showMe(i: any) {
-    // Preserve Selected Tab
-    this.urlParamService.updateQueryParams(this.router, this.activatedRoute, {
-      selectedTab: i.index
-    }, ['notif']);
-
-    switch (i.index) {
-      case 0:
-        this.listMyAssets.getAssetList(RESET_LIST);
-        break;
-      case 1:
-        this.listOfferedAssets.getAssetList(RESET_LIST);
-        break;
-      case 2:
-        this.listPreviousAssets.getAssetList(RESET_LIST);
-        break;
-      default:
-    }
+  tabClickHandler(i: MatTabChangeEvent) {
+    this.router.navigate(['assets', urlMap.get(i.index)]);
   }
 
   setSelectedTab(i: number) {
-    this.assetsTabGroup.selectedIndex = i;
+    this.selectedIndex = i;
   }
 
-  private initDefault(index?: number) {
-    if (this.assetsTabGroup) {
-      this.assetsTabGroup.selectedIndex = index || 0;
+  prepareRoute(outlet: RouterOutlet) {
+    return outlet.activatedRouteData === undefined ? -1 : outlet.activatedRouteData.animationId;
+  }
+
+  mapUrlToSelectedTab(url: string) {
+    const urlCandidate: string[] = url.split('/').filter(fragment => fragment && fragment !== 'assets');
+    if (urlCandidate.length === 0) {
+      this.setSelectedTab(0);
+      return;
     }
+
+    this.setSelectedTab(0);
+    this.selectedIndex = this.findSelectedTabId(urlCandidate[0]);
   }
 
-  
+  findSelectedTabId(url: string) {
+    return Array.from(urlMap.values()).findIndex((value) => value === url);
+  }
 }
