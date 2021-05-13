@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA, MatStepper } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -11,6 +11,8 @@ import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/c
 import { NewApplicationComponent } from '../new-application/new-application.component';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 const TOASTR_HEADER = 'Transfer Ownership';
 
@@ -25,7 +27,11 @@ const ListType = {
   templateUrl: './transfer-ownership.component.html',
   styleUrls: ['./transfer-ownership.component.scss']
 })
-export class TransferOwnershipComponent implements OnInit {
+export class TransferOwnershipComponent implements OnInit, OnDestroy {
+  destroy$ = new Subject();
+  isShowingDIDDropDown = false;
+
+
   private stepper: MatStepper;
   @ViewChild('stepper', { static: false }) set content(content: MatStepper) {
     if(content) { // initially setter gets called with undefined
@@ -37,12 +43,17 @@ export class TransferOwnershipComponent implements OnInit {
   assetDid        = '';
   type            : string;
 
+  newOwnerModifiedAddress = new FormControl('');
   newOwnerAddress = new FormControl('');
+  prefixDropDown = new FormControl('did:ethr:');
 
   public mySteps           = [];
   isProcessing             = false;
 
   private _currentIdx = 0;
+
+  ethAddrPattern = '^0x[A-Fa-f0-9]{40}';
+  DIDPattern = `^did:ethr:[a-z0-9]+:(${this.ethAddrPattern})$`;
 
   constructor(private iamService: IamService,
     private toastr: ToastrService,
@@ -59,7 +70,7 @@ export class TransferOwnershipComponent implements OnInit {
       this.assetDid = this.data.assetDid;
     }
 
-  ngOnInit() { 
+  ngOnInit() {
     if (this.namespace) {
       this.newOwnerAddress.setValidators(Validators.compose([Validators.required, 
         Validators.maxLength(256),
@@ -69,6 +80,38 @@ export class TransferOwnershipComponent implements OnInit {
       this.newOwnerAddress.setValidators(Validators.compose([Validators.required, 
         Validators.maxLength(256),
         this.iamService.isValidDid]));
+    }
+    this.setValidatorsToModAddress();
+    this.checkModAddressChanges();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private setValidatorsToModAddress(): void {
+    this.newOwnerModifiedAddress.setValidators(Validators.compose([Validators.required,
+      Validators.maxLength(256),
+      this.iamService.isValidEthAddress]));
+  }
+
+  private checkModAddressChanges(): void {
+    this.newOwnerModifiedAddress.valueChanges
+        .pipe(takeUntil(this.destroy$),
+            distinctUntilChanged((prev, curr) => prev === curr))
+        .subscribe((result) => {
+          this.changeNewOwnerAddressValue(result);
+        });
+  }
+
+  changeNewOwnerAddressValue(result: string): void {
+    if (result.match(this.ethAddrPattern) && !result.match(this.DIDPattern)) {
+      this.isShowingDIDDropDown = true;
+      this.newOwnerAddress.patchValue(this.prefixDropDown.value + result);
+    } else {
+      this.isShowingDIDDropDown = false;
+      this.newOwnerAddress.patchValue(result);
     }
   }
 
