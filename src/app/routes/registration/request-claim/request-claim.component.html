@@ -78,7 +78,7 @@
           <ng-container *ngFor="let field of enrolmentForm?.get('fields')?.controls; let i = index;">
             <div
               [ngClass]="{ 'col-lg-12': (fieldList[i].fieldType === 'text' || fieldList[i].fieldType === 'boolean'), 'col-lg-6': (fieldList[i].fieldType === 'number' || fieldList[i].fieldType === 'date') }">
-              <mat-label [ngStyle]="txtColor" class="ml-3 pl-1" *ngIf="fieldList[i].fieldType !== 'boolean'">{{ fieldList[i].label }}
+              <mat-label [ngStyle]="txtColor" class="ml-3 pl-1" *ngIf="fieldList[i].fieldType !== 'boolean'">{{ fieldList[i].label }} {{ fieldList[i].required ? '' : '(Optional)'}}
               </mat-label>
 
               <!-- TYPE: Text -->
