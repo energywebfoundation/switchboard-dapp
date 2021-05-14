@@ -1,0 +1,14 @@
+.border-vertical {
+    border-left: 1px solid #c1fff9;
+    height: 18px;
+    position: relative;
+    left: 11px;
+    top: -1px;
+
+    mat-icon {
+        color: #c1fff9;
+        position: absolute;
+        left: -12.5px;
+        top: 8px;
+    }
+}
