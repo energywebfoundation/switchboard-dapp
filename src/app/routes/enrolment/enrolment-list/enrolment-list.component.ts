@@ -1,9 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
-import { ENSNamespaceTypes } from 'iam-client-lib';
-import { ClaimData } from 'iam-client-lib/dist/src/iam/iam-base';
+import { ClaimData, ENSNamespaceTypes } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
-import { fromPromise } from 'rxjs/internal/observable/fromPromise';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
@@ -49,7 +47,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private notifService: NotificationService) {}
 
-  async ngOnInit() { 
+  async ngOnInit() {
     // Subscribe to IAM events
     this._iamSubscriptionId = await this.iamService.iam.subscribeTo({
       messageHandler: this._handleMessage.bind(this)
@@ -121,7 +119,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this.dynamicRejected = isRejected;
     this.dynamicAccepted = isAccepted;
     let list = [];
-    
+
     try {
       if (this.listType === EnrolmentListType.ASSET) {
         list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getClaimsBySubject({
@@ -141,7 +139,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
           isAccepted: isAccepted
         }));
       }
-      
+
       if (list && list.length) {
         for (let item of list) {
           let arr = item.claimType.split(`.${ENSNamespaceTypes.Roles}.`);
