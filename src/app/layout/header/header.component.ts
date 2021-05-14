@@ -17,7 +17,7 @@ import { DialogUser } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil } from 'rxjs/operators';
+import { skip, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-header',
@@ -31,7 +31,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     currentUserDid = 'did:ewc:';
     currentUserRole = '';
-
     currentTheme: any;
 
     isNavSearchVisible: boolean;
@@ -140,7 +139,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         // Stay in current screen and display user name if available
         this.iamService.userProfile
-            .pipe(takeUntil(this._subscription$))
+            .pipe(
+                skip(1),
+                takeUntil(this._subscription$))
             .subscribe((data: any) => {
                 if (data && data.name) {
                     this.userName = data.name;
