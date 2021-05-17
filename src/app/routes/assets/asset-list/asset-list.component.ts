@@ -221,6 +221,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
       width: '600px',
       data,
       maxWidth: '100%',
+      disableClose: true
     });
 
     this.subscribeTo(dialogRef.afterClosed().pipe(
