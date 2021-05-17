@@ -27,7 +27,7 @@ install:
       npm run build
     fi
 script:
-  - npm run test
+  - npm run test:headless
 deploy:
   - provider: script
     skip_cleanup: true

@@ -14,6 +14,7 @@
     "postinstall": "node patch.js && npm run downlevel_gnosis",
     "downlevel_gnosis": "node ./scripts/downlevel_gnosis",
     "test": "ng test",
+    "test:headless": "ng test --karma-config=karma-headless.conf.js",
     "lint": "ng lint",
     "modernizr": "modernizr -c modernizr-config.json -d src/modernizr.js",
     "webdriver-manager-update": "node ./node_modules/protractor/bin/webdriver-manager update",
