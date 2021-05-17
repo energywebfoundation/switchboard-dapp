@@ -4,7 +4,7 @@ import { EditAssetDialogComponent } from './edit-asset-dialog.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-describe('EditAssetDialogComponent', () => {
+xdescribe('EditAssetDialogComponent', () => {
   let component: EditAssetDialogComponent;
   let fixture: ComponentFixture<EditAssetDialogComponent>;
 

@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ViewRequestsComponent } from './view-requests.component';
 
-describe('ViewRequestsComponent', () => {
+xdescribe('ViewRequestsComponent', () => {
   let component: ViewRequestsComponent;
   let fixture: ComponentFixture<ViewRequestsComponent>;
 

@@ -9,7 +9,7 @@ class TestComponent {
   @Input() appMinifiedDidViewer = false;
 }
 
-describe('MinifiedDidViewerDirective', () => {
+xdescribe('MinifiedDidViewerDirective', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
 

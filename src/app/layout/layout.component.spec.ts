@@ -3,7 +3,7 @@ import { LayoutComponent } from './layout.component';
 import { UserIdleService } from 'angular-user-idle';
 import { IamService } from '../shared/services/iam.service';
 
-describe('LayoutComponent', () => {
+xdescribe('LayoutComponent', () => {
   let component: LayoutComponent;
   let fixture: ComponentFixture<LayoutComponent>;
 

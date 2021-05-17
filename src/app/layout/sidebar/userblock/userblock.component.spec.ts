@@ -5,7 +5,7 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { UserblockComponent } from './userblock.component';
 import { UserblockService } from './userblock.service';
 
-describe('Component: Userblock', () => {
+xdescribe('Component: Userblock', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({

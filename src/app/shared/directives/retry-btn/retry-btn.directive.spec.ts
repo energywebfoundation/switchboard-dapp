@@ -13,7 +13,7 @@ class TestComponent {
   }
 }
 
-describe('MinifiedDidViewerDirective', () => {
+xdescribe('RetryBtnDirective', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
 
