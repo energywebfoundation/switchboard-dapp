@@ -27,7 +27,7 @@ install:
       npm run build
     fi
 script:
-  - echo "skipping tests"
+  - npm run test
 deploy:
   - provider: script
     skip_cleanup: true
