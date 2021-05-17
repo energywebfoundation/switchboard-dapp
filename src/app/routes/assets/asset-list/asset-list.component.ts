@@ -12,7 +12,7 @@ import { TransferOwnershipComponent } from '../../applications/transfer-ownershi
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
 import { EditAssetDialogComponent } from '../edit-asset-dialog/edit-asset-dialog.component';
-import { finalize, first, map, switchMap, tap } from 'rxjs/operators';
+import { filter, finalize, first, map, switchMap, tap } from 'rxjs/operators';
 import { forkJoin, from, Observable } from 'rxjs';
 import { VerificationMethodComponent } from '../verification-method/verification-method.component';
 import { mapClaimsProfile } from '../operators/map-claims-profile';
@@ -225,6 +225,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
 
     this.subscribeTo(dialogRef.afterClosed().pipe(
       first(),
+      filter(Boolean),
       tap(() => this.loadingService.show()),
       switchMap(() => this.assetListFactory())
     ));

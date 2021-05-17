@@ -45,7 +45,7 @@ export class EditAssetDialogComponent implements OnInit {
   }
 
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   update() {
@@ -59,7 +59,7 @@ export class EditAssetDialogComponent implements OnInit {
       takeUntil(this.dialogRef.afterClosed())
     ).subscribe(() => {
       this.loadingService.hide();
-      this.close();
+      this.dialogRef.close(true);
     });
   }
 
