@@ -3,11 +3,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { IamService } from '../../../shared/services/iam.service';
 import { from } from 'rxjs';
-import { flatMap, map, takeUntil } from 'rxjs/operators';
-import { Asset } from 'iam-client-lib';
+import { map, takeUntil } from 'rxjs/operators';
+import { Asset, AssetProfile, ClaimData, Profile } from 'iam-client-lib';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { CancelButton } from '../../../layout/loading/loading.component';
-import { AssetProfile, ClaimData, Profile } from 'iam-client-lib';
+import { mapClaimsProfile } from '../operators/map-claims-profile';
 
 const assetProfilesKey = 'assetProfiles';
 
@@ -35,7 +35,7 @@ export class EditAssetDialogComponent implements OnInit {
   ngOnInit(): void {
     this.loadingService.show();
     from(this.iamService.iam.getUserClaims()).pipe(
-      flatMap((data) => data.filter(claim => !!claim.profile)),
+      mapClaimsProfile(),
       map(claim => claim.profile && claim.profile)
     ).subscribe((profiles: any) => {
       this.loadingService.hide();
@@ -68,7 +68,7 @@ export class EditAssetDialogComponent implements OnInit {
       profile: {
         ...this.profile,
         assetProfiles: {
-          ...this.profile.assetProfiles,
+          ...(this.profile && this.profile.assetProfiles),
           [this.data.id]: {
             ...this.form.getRawValue()
           }
@@ -78,7 +78,7 @@ export class EditAssetDialogComponent implements OnInit {
   }
 
   private updateForm(profile) {
-    const assetProfile: AssetProfile = profile[assetProfilesKey] && profile[assetProfilesKey][this.data.id];
+    const assetProfile: AssetProfile = profile && profile[assetProfilesKey] && profile[assetProfilesKey][this.data.id];
 
     if (!assetProfile) {
       return;

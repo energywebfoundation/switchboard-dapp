@@ -12,9 +12,10 @@ import { TransferOwnershipComponent } from '../../applications/transfer-ownershi
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
 import { EditAssetDialogComponent } from '../edit-asset-dialog/edit-asset-dialog.component';
-import { finalize, first, flatMap, map, switchMap, tap } from 'rxjs/operators';
+import { finalize, first, map, switchMap, tap } from 'rxjs/operators';
 import { forkJoin, from, Observable } from 'rxjs';
 import { VerificationMethodComponent } from '../verification-method/verification-method.component';
+import { mapClaimsProfile } from '../operators/map-claims-profile';
 
 export const RESET_LIST = true;
 
@@ -233,7 +234,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     return forkJoin(
       from(
         this.iamService.iam.getUserClaims()).pipe(
-        flatMap((claimsData) => claimsData.filter(claim => !!claim.profile)),
+        mapClaimsProfile(),
         map(claim => claim.profile && claim.profile),
       ),
       this.loadAssetList(this.iamService.iam.getOwnedAssets())
