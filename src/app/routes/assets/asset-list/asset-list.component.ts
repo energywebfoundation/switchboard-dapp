@@ -14,6 +14,7 @@ import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset
 import { EditAssetDialogComponent } from '../edit-asset-dialog/edit-asset-dialog.component';
 import { finalize, first, flatMap, map, switchMap, tap } from 'rxjs/operators';
 import { forkJoin, from, Observable } from 'rxjs';
+import { VerificationMethodComponent } from '../verification-method/verification-method.component';
 
 export const RESET_LIST = true;
 
@@ -195,6 +196,20 @@ export class AssetListComponent implements OnInit, OnDestroy {
       dialogRef.unsubscribe();
     });
   }
+
+  viewVerificationMethod(data: any) {
+    const dialogRef = this.dialog.open(VerificationMethodComponent, {
+      width: '600px',
+      data: {
+        id: data.id
+      },
+      maxWidth: '100%',
+      disableClose: true
+    }).afterClosed().subscribe((res: any) => {
+      dialogRef.unsubscribe();
+    });
+  }
+
 
   viewAssetEnrolments(data: Asset) {
     this.route.navigate(['assets/enrolment/' + data.id]);

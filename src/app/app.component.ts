@@ -152,6 +152,10 @@ export class AppComponent implements OnInit {
             "organization-list-icon",
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/organization-list-icon.svg")
         );
+        this.matIconRegistry.addSvgIcon(
+            "ethereum-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/assets-icons/ethereum-icon.svg")
+        );
     }
 
     ngOnInit() {

@@ -22,6 +22,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { VerificationMethodComponent } from './verification-method/verification-method.component';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent},
@@ -30,7 +31,7 @@ const routes: Routes = [
 
 
 @NgModule({
-  declarations: [AssetsComponent, NewAssetTypeComponent, NewPassiveAssetComponent, AssetListComponent, AssetOwnershipHistoryComponent, AssetEnrolmentListComponent, EditAssetDialogComponent],
+  declarations: [AssetsComponent, NewAssetTypeComponent, NewPassiveAssetComponent, AssetListComponent, AssetOwnershipHistoryComponent, AssetEnrolmentListComponent, EditAssetDialogComponent, VerificationMethodComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -50,6 +51,6 @@ const routes: Routes = [
     MatExpansionModule,
     NgMatSearchBarModule
   ],
-  entryComponents: [NewAssetTypeComponent, NewPassiveAssetComponent, AssetOwnershipHistoryComponent, EditAssetDialogComponent]
+  entryComponents: [NewAssetTypeComponent, NewPassiveAssetComponent, AssetOwnershipHistoryComponent, EditAssetDialogComponent, VerificationMethodComponent]
 })
 export class AssetsModule { }
