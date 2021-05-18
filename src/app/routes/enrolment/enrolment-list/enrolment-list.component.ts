@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ClaimData, ENSNamespaceTypes } from 'iam-client-lib';
-import { ENSNamespaceTypes } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
