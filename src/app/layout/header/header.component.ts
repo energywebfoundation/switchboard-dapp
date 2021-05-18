@@ -17,7 +17,7 @@ import { DialogUser } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Subject } from 'rxjs/Subject';
-import { takeUntil } from 'rxjs/operators';
+import {distinctUntilChanged, filter, pairwise, skip, takeUntil} from 'rxjs/operators';
 
 @Component({
     selector: 'app-header',
@@ -31,7 +31,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     currentUserDid = 'did:ewc:';
     currentUserRole = '';
-
     currentTheme: any;
 
     isNavSearchVisible: boolean;
@@ -62,6 +61,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private _pendingAssetSyncCountListener: any;
     private _subscription$ = new Subject();
     private _iamSubscriptionId: number;
+    private isInitNotificationCount = false;
 
     @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
@@ -162,7 +162,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     private _initNotificationsAndTasks() {
         // Init Notif Count
-        this._initNotificationsAndTasksCount();
+        if (!this.isInitNotificationCount) {
+            this._initNotificationsAndTasksCount();
+            this.isInitNotificationCount = true;
+        }
     }
 
     private _calcTotalCount() {
