@@ -35,12 +35,11 @@ export class EditAssetDialogComponent implements OnInit {
   ngOnInit(): void {
     this.loadingService.show();
     from(this.iamService.iam.getUserClaims()).pipe(
-      mapClaimsProfile(),
-      map(claim => claim.profile && claim.profile)
-    ).subscribe((profiles: any) => {
+      mapClaimsProfile()
+    ).subscribe((profile: any) => {
       this.loadingService.hide();
-      this.profile = profiles;
-      this.updateForm(profiles);
+      this.profile = profile;
+      this.updateForm(profile);
     });
   }
 

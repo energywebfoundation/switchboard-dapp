@@ -236,8 +236,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     return forkJoin(
       from(
         this.iamService.iam.getUserClaims()).pipe(
-        mapClaimsProfile(),
-        map(claim => claim.profile && claim.profile),
+        mapClaimsProfile()
       ),
       this.loadAssetList(this.iamService.iam.getOwnedAssets())
     ).pipe(
