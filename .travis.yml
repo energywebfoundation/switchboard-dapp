@@ -26,6 +26,7 @@ install:
       echo "Prod Env Disabled"
       npm run build
     fi
+  - npm run test:headless
 script:
   - echo "skipping tests"
 deploy:

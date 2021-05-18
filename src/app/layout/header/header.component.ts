@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Router, NavigationEnd } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { OnDestroy } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -66,7 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 private router: Router,
                 private toastr: ToastrService,
                 private notifService: NotificationService,
-                public userblockService: UserblockService, private http: HttpClient,
+                public userblockService: UserblockService,
                 public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer) {
         // show only a few items on demo
         this.menuItems = menu.getMenu().slice(0, 4); // for horizontal layout
@@ -108,7 +106,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         this._subscription$.next();
         this._subscription$.complete();
-        
+
         // Unsubscribe to IAM Events
         await this.iamService.iam.unsubscribeFrom(this._iamSubscriptionId);
     }
@@ -165,8 +163,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     private _calcTotalCount() {
         this.notif.totalCount =  this.notif.pendingSyncCount +
-            this.notif.pendingApprovalCount + 
-            this.notif.assetsOfferedToMeCount + 
+            this.notif.pendingApprovalCount +
+            this.notif.assetsOfferedToMeCount +
             this.notif.pendingAssetSyncCount;
         if (this.notif.totalCount < 0) {
             this.notif.totalCount = 0;
@@ -176,9 +174,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private async _initNotificationListeners() {
 
         // Initialize Notif Counts
-        this.notifService.initNotifCounts(this.notif.pendingApprovalCount, 
-            this.notif.pendingSyncCount, 
-            this.notif.assetsOfferedToMeCount, 
+        this.notifService.initNotifCounts(this.notif.pendingApprovalCount,
+            this.notif.pendingSyncCount,
+            this.notif.assetsOfferedToMeCount,
             this.notif.pendingAssetSyncCount);
 
         // Listen to Count Changes
@@ -315,7 +313,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     private async _initApprovedClaimsForAssetSyncCount() {
-        // TODO: 
+        // TODO:
         this.notif.pendingAssetSyncCount = 0;
         if (this.notif.pendingAssetSyncCount < 0) {
             this.notif.pendingAssetSyncCount = 0;
@@ -338,9 +336,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     getUserIdenticon() {
-        let userDid = this.currentUserDid ? this.currentUserDid : 'ewc:did:governingbody';        
+        let userDid = this.currentUserDid ? this.currentUserDid : 'ewc:did:governingbody';
         return this.sanitizer.bypassSecurityTrustResourceUrl( (
-            'data:image/svg+xml; utf8,' 
+            'data:image/svg+xml; utf8,'
             + encodeURI(new Identicon( Md5.hashStr(userDid), {size: 128, format: 'svg'} ).toString(true))
         ));
     }

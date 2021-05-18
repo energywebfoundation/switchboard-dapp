@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectAssetDialogComponent } from './select-asset-dialog.component';
 
-describe('SelectAssetDialogComponent', () => {
+xdescribe('SelectAssetDialogComponent', () => {
   let component: SelectAssetDialogComponent;
   let fixture: ComponentFixture<SelectAssetDialogComponent>;
 
