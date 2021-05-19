@@ -367,6 +367,50 @@ mat-label {
   }
 }
 
+.mat-filter-sort {
+  .mat-form-field {
+    font-size: 13px !important;
+  }
+  .mat-label {
+    color: #FFF;
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+    margin: 0 !important;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0 0 !important;
+  }
+
+  .mat-form-field-infix {
+    padding: 0.2em 0.2em !important;
+    top: 1px !important;
+}
+
+.mat-input-element {
+  color: #FFF;
+  font-size: 14px;
+}
+
+.mat-form-field-outline {
+  background: #181522 !important;
+  color: #554675;
+}
+
+.mat-form-field-flex {
+  padding: 0 .75em 0.2em .5em !important  ;
+}
+
+.mat-select-placeholder {
+  color: #9080bb !important;
+}
+
+.mat-select-value {
+  font-size: 14px !important;
+}
+}
+
 .dropdown-menu {
   border-color: transparent !important;
 }
