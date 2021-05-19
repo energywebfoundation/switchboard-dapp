@@ -25,7 +25,8 @@
             "tsConfig": "tsconfig.app.json",
             "allowedCommonJsDependencies": [
               "lodash",
-              "@gnosis.pm/safe-apps-sdk"
+              "@gnosis.pm/safe-apps-sdk",
+              "iam-client-lib"
             ],
             "assets": [
               "src/favicon.ico",
