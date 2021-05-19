@@ -23,6 +23,10 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "@gnosis.pm/safe-apps-sdk"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets",

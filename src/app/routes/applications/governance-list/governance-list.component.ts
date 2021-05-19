@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 
 import { ENSNamespaceTypes, IApp, IOrganization, IRole } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { ConfigService } from 'src/app/shared/services/config.service';
@@ -98,7 +98,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
           case ListType.APP: return item.definition.appName.toLowerCase();
           case ListType.ROLE: return item.definition.roleName.toLowerCase();
         }
-      } 
+      }
       else if (property === 'type') {
         return item.definition.roleType;
       }
@@ -143,7 +143,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
     // Setup Filter
     if (filterOptions) {
-      this.filterForm.patchValue({ 
+      this.filterForm.patchValue({
         organization: filterOptions.organization || '',
         application: filterOptions.application || '',
         role: ''
@@ -463,7 +463,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
   filter() {
     let tmpData = JSON.parse(JSON.stringify(this.origDatasource));
-    
+
     // Trim Filters
     this.filterForm.get('organization').setValue(this.filterForm.value.organization.trim());
     this.filterForm.get('application').setValue(this.filterForm.value.application.trim());
@@ -595,7 +595,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
       else {
         retVal = 'Sub-Organization \n';
       }
-    
+
       while (count < MAX_TOOLTIP_SUBORG_ITEMS && count < element.subOrgs.length) {
         retVal += `\n${element.subOrgs[count++].namespace}`;
       }
