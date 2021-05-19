@@ -64,7 +64,6 @@
     "popper.js": "1.14.3",
     "roboto-fontface": "0.10.0",
     "rxjs": "6.6.7",
-    "rxjs-compat": "6.1.0",
     "simple-line-icons": "2.4.1",
     "sweetalert": "2.1.2",
     "ts-helpers": "1.1.1",
