@@ -58,7 +58,7 @@
     "moment": "2.22.2",
     "ng-mat-search-bar": "^10.0.0-beta.3",
     "ngx-bootstrap": "4.2.0",
-    "ngx-spinner": "^8.1.0",
+    "ngx-spinner": "^10.0.1",
     "ngx-toastr": "13.2.1",
     "nodemon": "^2.0.2",
     "popper.js": "1.14.3",
