@@ -35,7 +35,7 @@
     "@angular/service-worker": "10.2.5",
     "@fortawesome/fontawesome-free": "5.5.0",
     "@mat-datetimepicker/core": "^5.1.2",
-    "@mat-datetimepicker/moment": "^4.1.0",
+    "@mat-datetimepicker/moment": "^5.1.2",
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
     "@sentry/angular": "^6.2.0",
