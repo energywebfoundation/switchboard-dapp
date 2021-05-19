@@ -61,6 +61,7 @@
                 <!-- notif count here -->
                 <ng-container *ngIf="!isLoadingNotif">
                     <em class="fas fa-tasks"></em>
+                    <span class="badge badge-danger" *ngIf="tasks?.totalCount">{{ tasks?.totalCount }}</span>
                     <!-- <span class="badge badge-danger">2</span> -->
                 </ng-container>
             </a>
@@ -71,7 +72,7 @@
                                 <h4 class="mb-0 f-16 color-white">Tasks</h4>
                                 <a href="#" class="color-primary">Clear all</a>
                             </div>
-                            <!-- <a [routerLink]="['/assets']" routerLinkActive="active" [queryParams]="{notif: 'assetsOfferedToMe'}">
+                            <a [routerLink]="['/assets']" routerLinkActive="active" [queryParams]="{notif: 'assetsOfferedToMe'}">
                                 <div class="list-group-item list-group-item-action">
                                     <div class="media d-flex align-items-center cursor-pointer">
                                         <div class="align-self-start mr-2">
@@ -96,7 +97,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a> -->
+                            </a>
                             <div class="d-flex align-items-center justify-content-center">
                                 <div class="color-white no-record mt-3 mb-4"><i>No task</i></div>
                             </div>

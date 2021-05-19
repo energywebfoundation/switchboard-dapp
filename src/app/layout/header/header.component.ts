@@ -37,13 +37,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     currentNav = '';
     userName = '';
 
+    //Tasks
+    tasks = {
+        totalCount: 0,
+        assetsOfferedToMeCount: 0,
+        pendingAssetSyncCount: 0
+    };
+
     // Notifications
     notif = {
         totalCount: 0,
         pendingApprovalCount: 0,
-        pendingSyncCount: 0,
-        assetsOfferedToMeCount: 0,
-        pendingAssetSyncCount: 0
+        pendingSyncCount: 0
     };
 
     isLoadingNotif = true;
@@ -146,38 +151,40 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
                 if (this.iamService.accountAddress) {
                     // Initialize Notifications
-                    this._initNotifications();
+                    this._initNotificationsAndTasks();
                 } else {
                     this.isLoadingNotif = false;
                 }
             });
     }
 
-    private _initNotifications() {
+    private _initNotificationsAndTasks() {
         // Init Notif Count
         if (!this.isInitNotificationCount) {
-            this._initNotificationCount();
+            this._initNotificationsAndTasksCount();
             this.isInitNotificationCount = true;
         }
     }
 
     private _calcTotalCount() {
         this.notif.totalCount =  this.notif.pendingSyncCount +
-            this.notif.pendingApprovalCount +
-            this.notif.assetsOfferedToMeCount +
-            this.notif.pendingAssetSyncCount;
+            this.notif.pendingApprovalCount;
+        this.tasks.totalCount = this.tasks.assetsOfferedToMeCount + this.tasks.pendingAssetSyncCount
         if (this.notif.totalCount < 0) {
             this.notif.totalCount = 0;
         }
+        if (this.tasks.totalCount < 0) {
+            this.tasks.totalCount = 0;
+        }
     }
 
-    private async _initNotificationListeners() {
+    private async _initNotificationAndTasksListeners() {
 
         // Initialize Notif Counts
         this.notifService.initNotifCounts(this.notif.pendingApprovalCount,
             this.notif.pendingSyncCount,
-            this.notif.assetsOfferedToMeCount,
-            this.notif.pendingAssetSyncCount);
+            this.tasks.assetsOfferedToMeCount,
+            this.tasks.pendingAssetSyncCount);
 
         // Listen to Count Changes
         this._pendingApprovalCountListener = this.notifService.pendingApproval
@@ -302,9 +309,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     private async _initAssetsOfferedToMeSyncCount(){
         try {
-            this.notif.assetsOfferedToMeCount = (await this.iamService.iam.getOfferedAssets()).length;
-            if (this.notif.assetsOfferedToMeCount < 0) {
-                this.notif.assetsOfferedToMeCount = 0;
+            this.tasks.assetsOfferedToMeCount = (await this.iamService.iam.getOfferedAssets()).length;
+            if (this.tasks.assetsOfferedToMeCount < 0) {
+                this.tasks.assetsOfferedToMeCount = 0;
             }
         }
         catch (e) {
@@ -313,14 +320,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     private async _initApprovedClaimsForAssetSyncCount() {
-        // TODO:
-        this.notif.pendingAssetSyncCount = 0;
-        if (this.notif.pendingAssetSyncCount < 0) {
-            this.notif.pendingAssetSyncCount = 0;
+        // TODO: 
+        this.tasks.pendingAssetSyncCount = 0;
+        if (this.tasks.pendingAssetSyncCount < 0) {
+            this.tasks.pendingAssetSyncCount = 0;
         }
     }
 
-    private async _initNotificationCount() {
+    private async _initNotificationsAndTasksCount() {
         try {
             await this._initPendingClaimsCount();
             await this._initApprovedClaimsForSyncCount();
@@ -331,7 +338,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.toastr.error(e);
         } finally {
             this.isLoadingNotif = false;
-            await this._initNotificationListeners();
+            await this._initNotificationAndTasksListeners();
         }
     }
 
