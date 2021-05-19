@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ViewRoleComponent } from './view-role.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatTableModule } from '@angular/material';
+import { MatTableModule } from '@angular/material/table';
 
 describe('ViewRoleComponent', () => {
   let component: ViewRoleComponent;
