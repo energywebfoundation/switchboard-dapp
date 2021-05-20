@@ -11,22 +11,28 @@
         <div class="history-list-item my-3 px-2 pb-3" *ngFor="let element of dataSource.data">
             <div class="d-flex justify-content-between align-items-center pt-3 px-2">
                 <h6 class="font-weight-600"> {{ element?.emittedDate | date : 'MM/dd/yyyy HH:mm:ss' }}</h6>
-                <div class="bg-status">{{element?.type | replaceUnderscore}}</div>
+                <div class="bg-status">{{element?.type}}</div>
             </div>
             <div class="d-flex flex-column justify-content-start px-2">
                 <div class="d-flex align-items-center pt-1">
                     <mat-icon class="color-info pr-2">account_circle</mat-icon>
                     <div class="d-flex flex-column pl-2">
-                        <h4 class="small font-weight-600 mb-1">OWNER</h4>
-                        <span style="font-size:16px;" [appMinifiedDidViewer]="element?.emittedBy" matTooltip="{{element?.emittedBy}}" matTooltipClass="tooltip-full-width"> {{ element?.emittedBy | didFormatMinifier }}</span>
+                        <h4 class="small font-weight-600 mb-1">{{ element?.type === 'ASSET_TRANSFERRED' ? 'OFFERED FROM' : 'OWNER'}}</h4>
+                        <span style="font-size:16px;" [appMinifiedDidViewer]="element?.emittedBy"
+                              matTooltip="{{element?.emittedBy}}"
+                              matTooltipClass="tooltip-full-width"> {{ element?.emittedBy | didFormatMinifier }}</span>
                     </div>
                 </div>
-                <div class="border-vertical" *ngIf="element?.relatedTo"><mat-icon>arrow_drop_down</mat-icon></div>
+                <div class="border-vertical" *ngIf="element?.relatedTo">
+                    <mat-icon>arrow_drop_down</mat-icon>
+                </div>
                 <div class="d-flex align-items-center" *ngIf="element?.relatedTo">
                     <mat-icon class="color-success pr-2">account_circle</mat-icon>
                     <div class="d-flex flex-column pl-2">
-                        <h4 class="small font-weight-600 mb-1">OFFERED TO</h4>
-                        <span style="font-size:16px;" [appMinifiedDidViewer]="element?.relatedTo" matTooltip="{{element?.relatedTo}}" matTooltipClass="tooltip-full-width"> {{ element?.relatedTo | didFormatMinifier }}</span>
+                        <h4 class="small font-weight-600 mb-1">{{ element?.type === 'ASSET_TRANSFERRED' ? 'OWNER' : 'OFFERED TO'}}</h4>
+                        <span style="font-size:16px;" [appMinifiedDidViewer]="element?.relatedTo"
+                              matTooltip="{{element?.relatedTo}}"
+                              matTooltipClass="tooltip-full-width"> {{ element?.relatedTo | didFormatMinifier }}</span>
                     </div>
                 </div>
             </div>
@@ -36,10 +42,10 @@
 
     <!-- Shows when table is empty -->
     <div class="d-flex justify-content-center align-items-center mt-4 mb-3" *ngIf="!dataSource?.data?.length">
-      <div class="d-flex align-items-center no-record color-white">
-        <mat-icon class="mr-2">info</mat-icon>
-        <i>No Record Found</i>
-      </div>
+        <div class="d-flex align-items-center no-record color-white">
+            <mat-icon class="mr-2">info</mat-icon>
+            <i>No Record Found</i>
+        </div>
     </div>
     <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
     </mat-paginator> -->
