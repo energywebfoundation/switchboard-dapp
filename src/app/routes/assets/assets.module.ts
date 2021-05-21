@@ -23,15 +23,28 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { VerificationMethodComponent } from './verification-method/verification-method.component';
+import { HistoryElementComponent } from './asset-ownership-history/history-element/history-element.component';
+import { HistoryPeriodComponent } from './asset-ownership-history/history-period/history-period.component';
 
 const routes: Routes = [
-  { path: '', component: AssetsComponent},
+  { path: '', component: AssetsComponent },
   { path: 'enrolment/:subject', component: AssetEnrolmentListComponent }
 ];
 
 
 @NgModule({
-  declarations: [AssetsComponent, NewAssetTypeComponent, NewPassiveAssetComponent, AssetListComponent, AssetOwnershipHistoryComponent, AssetEnrolmentListComponent, EditAssetDialogComponent, VerificationMethodComponent],
+  declarations: [
+    AssetsComponent,
+    NewAssetTypeComponent,
+    NewPassiveAssetComponent,
+    AssetListComponent,
+    AssetOwnershipHistoryComponent,
+    AssetEnrolmentListComponent,
+    EditAssetDialogComponent,
+    VerificationMethodComponent,
+    HistoryElementComponent,
+    HistoryPeriodComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -53,4 +66,5 @@ const routes: Routes = [
   ],
   entryComponents: [NewAssetTypeComponent, NewPassiveAssetComponent, AssetOwnershipHistoryComponent, EditAssetDialogComponent, VerificationMethodComponent]
 })
-export class AssetsModule { }
+export class AssetsModule {
+}

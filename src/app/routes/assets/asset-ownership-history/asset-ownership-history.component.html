@@ -13,29 +13,9 @@
                 <h6 class="font-weight-600"> {{ element?.emittedDate | date : 'MM/dd/yyyy HH:mm:ss' }}</h6>
                 <div class="bg-status">{{element?.type}}</div>
             </div>
-            <div class="d-flex flex-column justify-content-start px-2">
-                <div class="d-flex align-items-center pt-1">
-                    <mat-icon class="color-info pr-2">account_circle</mat-icon>
-                    <div class="d-flex flex-column pl-2">
-                        <h4 class="small font-weight-600 mb-1">{{ element?.type === 'ASSET_TRANSFERRED' ? 'OFFERED FROM' : 'OWNER'}}</h4>
-                        <span style="font-size:16px;" [appMinifiedDidViewer]="element?.emittedBy"
-                              matTooltip="{{element?.emittedBy}}"
-                              matTooltipClass="tooltip-full-width"> {{ element?.emittedBy | didFormatMinifier }}</span>
-                    </div>
-                </div>
-                <div class="border-vertical" *ngIf="element?.relatedTo">
-                    <mat-icon>arrow_drop_down</mat-icon>
-                </div>
-                <div class="d-flex align-items-center" *ngIf="element?.relatedTo">
-                    <mat-icon class="color-success pr-2">account_circle</mat-icon>
-                    <div class="d-flex flex-column pl-2">
-                        <h4 class="small font-weight-600 mb-1">{{ element?.type === 'ASSET_TRANSFERRED' ? 'OWNER' : 'OFFERED TO'}}</h4>
-                        <span style="font-size:16px;" [appMinifiedDidViewer]="element?.relatedTo"
-                              matTooltip="{{element?.relatedTo}}"
-                              matTooltipClass="tooltip-full-width"> {{ element?.relatedTo | didFormatMinifier }}</span>
-                    </div>
-                </div>
-            </div>
+            <app-history-period class="d-flex flex-column justify-content-start px-2"
+                                [period]="element">
+            </app-history-period>
         </div>
     </div>
     <!-- End Asset Ownership list Layout -->
