@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MinifiedDidViewerDialogComponent } from './minified-did-viewer-dialog.component';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('MinifiedDidViewerDialogComponent', () => {

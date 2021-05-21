@@ -19,7 +19,7 @@ const FilterTypes = {
   styleUrls: ['./search-result.component.scss']
 })
 export class SearchResultComponent implements OnInit {
-  @ViewChild('detailView', undefined) detailView: GovernanceDetailsComponent;
+  @ViewChild('detailView') detailView: GovernanceDetailsComponent;
 
   FilterTypes = FilterTypes;
   screenWidth: number;

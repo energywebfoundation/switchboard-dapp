@@ -1,12 +1,11 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { MatAutocompleteTrigger, MatDialog, MatDialogRef, MatStepper, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime, delay, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { FieldValidationService } from 'src/app/shared/services/field-validation.service';
@@ -15,6 +14,10 @@ import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatTableDataSource } from '@angular/material/table';
 import { Observable, of } from 'rxjs';
 
 export const RoleType = {
@@ -50,12 +53,12 @@ const FIELD_TYPES = [
 })
 export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   private stepper: MatStepper;
-  @ViewChild('stepper', { static: false }) set content(content: MatStepper) {
+  @ViewChild('stepper') set content(content: MatStepper) {
     if (content) {
       this.stepper = content;
     }
   }
-  @ViewChild(MatAutocompleteTrigger, { static: false}) autocompleteTrigger: MatAutocompleteTrigger;
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger;
 
   IssuerType    = {
     DID: 'DID',
@@ -246,7 +249,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     }
-    
+
     return retVal;
   }
 
@@ -372,7 +375,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isEditFieldForm = false;
     this.showFieldsForm = true;
   }
-  
+
   addField() {
     if (this.fieldsForm.valid) {
       this.dataSource.data = [...this.dataSource.data, this._extractValidationObject(this.fieldsForm.value)];
@@ -387,7 +390,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (value && value.fieldType) {
       let validation = undefined;
-      let { 
+      let {
         required,
         minLength,
         maxLength,
@@ -428,7 +431,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
             required
           };
           break;
-        default: 
+        default:
           validation = value.validation;
       }
       retVal = JSON.parse(JSON.stringify(Object.assign(retVal, validation)));
@@ -457,7 +460,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   moveUp(i: number) {
     let list = this.dataSource.data;
     let tmp = list[i - 1];
-    
+
     // Switch
     list[i - 1] = list[i];
     list[i] = tmp;
@@ -468,7 +471,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   moveDown(i: number) {
     let list = this.dataSource.data;
     let tmp = list[i + 1];
-    
+
     // Switch
     list[i + 1] = list[i];
     list[i] = tmp;
@@ -495,7 +498,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.roleForm.value.roleName) {
       let allowToProceed = true;
-      
+
       // Check if namespace is taken
       let orgData = this.roleForm.value;
       let exists = await this.iamService.iam.checkExistenceOfDomain({
@@ -589,7 +592,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.spinner.hide();
       }
-      
+
       if (allowToProceed) {
         // Proceed to Adding Fields Step
         this.stepper.selected.editable = false;
@@ -622,7 +625,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         let exists = await this.iamService.iam.checkExistenceOfDomain({
           domain: this.roleForm.value.parentNamespace
         });
-        
+
         if (exists) {
           // Check if role sub-domain exists in this namespace
           exists = await this.iamService.iam.checkExistenceOfDomain({
@@ -653,7 +656,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       catch (e) {
         this.toastr.error(e.message, 'System Error');
         this.dialog.closeAll();
-      } 
+      }
       finally {
         this.isChecking = false;
         this.spinner.hide();
@@ -762,7 +765,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       //Remove previous request
       delete this._requests[`${this._retryCount}`];
       const retryCount = ++this._retryCount;
-      
+
       try {
         // Process
         await this.next(retryCount, true);

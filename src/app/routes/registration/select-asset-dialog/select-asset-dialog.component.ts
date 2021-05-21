@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef, MatTableDataSource } from '@angular/material';
 import { Asset } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-select-asset-dialog',

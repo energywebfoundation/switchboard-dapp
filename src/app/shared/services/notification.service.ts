@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +12,12 @@ export class NotificationService {
   private _pendingAssetDidDocSync : BehaviorSubject<number>;
 
   public initialized          = false;
-  
+
   constructor() {
     this._pendingApproval     = new BehaviorSubject<number>(0);
-    this._pendingDidDocSync   = new BehaviorSubject<number>(0); 
-    this._assetsOfferedToMe   = new BehaviorSubject<number>(0); 
-    this._pendingAssetDidDocSync   = new BehaviorSubject<number>(0); 
+    this._pendingDidDocSync   = new BehaviorSubject<number>(0);
+    this._assetsOfferedToMe   = new BehaviorSubject<number>(0);
+    this._pendingAssetDidDocSync   = new BehaviorSubject<number>(0);
   }
 
   get pendingApproval() {
