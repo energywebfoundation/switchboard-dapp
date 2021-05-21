@@ -23,12 +23,12 @@ export class HistoryPeriodComponent {
     if (this.period.type === ASSET_TRANSFERRED) {
       return {
         header: 'Offered from',
-        element: this.period.relatedTo
+        did: this.period.relatedTo
       };
     }
     return {
       header: 'Owner',
-      element: this.period.emittedBy
+      did: this.period.emittedBy
     };
   }
 
@@ -39,12 +39,12 @@ export class HistoryPeriodComponent {
     if (this.period.type === ASSET_TRANSFERRED) {
       return {
         header: 'Owner',
-        element: this.period.emittedBy
+        did: this.period.emittedBy
       };
     }
     return {
       header: 'Offered to',
-      element: this.period.relatedTo
+      did: this.period.relatedTo
     };
   }
 }
