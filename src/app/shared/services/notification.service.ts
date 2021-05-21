@@ -7,17 +7,18 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 export class NotificationService {
   private _pendingApproval    : BehaviorSubject<number>;
   private _pendingDidDocSync  : BehaviorSubject<number>;
-
   private _assetsOfferedToMe      : BehaviorSubject<number>;
   private _pendingAssetDidDocSync : BehaviorSubject<number>;
+  private _pendingSyncCount$ = new BehaviorSubject<number | undefined>(undefined);
+  pendingSyncCount$ = this._pendingSyncCount$.asObservable();
 
-  public initialized          = false;
-  
+  public initialized = false;
+
   constructor() {
     this._pendingApproval     = new BehaviorSubject<number>(0);
-    this._pendingDidDocSync   = new BehaviorSubject<number>(0); 
-    this._assetsOfferedToMe   = new BehaviorSubject<number>(0); 
-    this._pendingAssetDidDocSync   = new BehaviorSubject<number>(0); 
+    this._pendingDidDocSync   = new BehaviorSubject<number>(0);
+    this._assetsOfferedToMe   = new BehaviorSubject<number>(0);
+    this._pendingAssetDidDocSync   = new BehaviorSubject<number>(0);
   }
 
   get pendingApproval() {
@@ -73,5 +74,9 @@ export class NotificationService {
 
   decreasePendingAssetDidDocSyncCount() {
     this._pendingAssetDidDocSync.next(this._pendingAssetDidDocSync.getValue() - 1);
+  }
+
+  setZeroToPendingDidDocSyncCount() {
+    this._pendingSyncCount$.next(0);
   }
 }

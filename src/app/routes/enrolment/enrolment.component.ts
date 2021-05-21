@@ -4,6 +4,7 @@ import { MatTabGroup } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlParamService } from 'src/app/shared/services/url-param.service';
 import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
+import {NotificationService} from '../../shared/services/notification.service';
 
 @Component({
   selector: 'app-enrolment',
@@ -31,7 +32,8 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   public isMyEnrolmentShown = false;
   private _queryParamSelectedTabInit = false;
 
-  constructor(private activeRoute: ActivatedRoute, 
+  constructor(private activeRoute: ActivatedRoute,
+    private notificationService: NotificationService,
     private urlParamService: UrlParamService,
     private router: Router) { }
 
@@ -49,6 +51,7 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   private initDefaultMyEnrolments() {
     if (this.enrolmentTabGroup) {
       this.enrolmentTabGroup.selectedIndex = 1;
+      this.notificationService.setZeroToPendingDidDocSyncCount();
     }
   }
 
@@ -71,7 +74,7 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
             // Display Approved Claims
             this.enrolmentListAccepted = true;
             this.asyncSetDropdownValue(this.dropdownValue.approved);
-  
+
             if (this.enrolmentTabGroup) {
               this.enrolmentTabGroup.selectedIndex = 1;
             }
@@ -79,7 +82,7 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
           else if (queryParams.notif === 'myEnrolments') {
             // Display All Claims
             this.asyncSetDropdownValue(this.dropdownValue.all);
-  
+
             if (this.enrolmentTabGroup) {
               this.enrolmentTabGroup.selectedIndex = 1;
             }
@@ -114,7 +117,7 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
     this.urlParamService.updateQueryParams(this.router, this.activeRoute, {
       selectedTab: i.index
     }, ['notif']);
-    
+
     if (i.index === 1) {
       if (this.isMyEnrolmentShown) {
         this.enrolmentList.getList(this.enrolmentDropdown.value === 'rejected',
