@@ -211,5 +211,8 @@
       }
     }
   },
-  "defaultProject": "ew-boilerplate-ui"
+  "defaultProject": "ew-boilerplate-ui",
+  "cli": {
+    "analytics": false
+  }
 }

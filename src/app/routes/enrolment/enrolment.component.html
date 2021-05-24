@@ -24,11 +24,16 @@
             <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
               <mat-form-field appearance="outline" floatPlaceholder="never"
                 class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0" matTooltip="Filter by namespace - Wildcard filtering, a short description?">
-                <input matInput placeholder="Namespace">
+                <input matInput placeholder="Namespace" [formControl]="namespaceControlIssuer">
               </mat-form-field>
             </div>
           </div>
-          <app-enrolment-list [list-type]="'issuer'" [accepted]="issuerListAccepted" #issuerList></app-enrolment-list>
+          <app-enrolment-list
+                  [list-type]="'issuer'"
+                  [accepted]="issuerListAccepted"
+                  #issuerList
+                  [namespaceFilterControl]="namespaceControlIssuer"
+          ></app-enrolment-list>
         </div>
       </div>
     </div>
@@ -57,11 +62,16 @@
             <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
               <mat-form-field appearance="outline" floatPlaceholder="never"
                 class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0" matTooltip="Filter by namespace - Filter by namespace - Wildcard filtering, a short description?">
-                <input matInput placeholder="Namespace">
+                <input matInput placeholder="Namespace" [formControl]="namespaceControlMyEnrolments">
               </mat-form-field>
             </div>
           </div>
-          <app-enrolment-list [list-type]="'applicant'" [accepted]="enrolmentListAccepted" #enrolmentList *ngIf="isMyEnrolmentShown"></app-enrolment-list>
+          <app-enrolment-list
+                  [list-type]="'applicant'"
+                  [accepted]="enrolmentListAccepted"
+                  #enrolmentList *ngIf="isMyEnrolmentShown"
+                  [namespaceFilterControl]="namespaceControlMyEnrolments"
+          ></app-enrolment-list>
         </div>
       </div>
     </div>
