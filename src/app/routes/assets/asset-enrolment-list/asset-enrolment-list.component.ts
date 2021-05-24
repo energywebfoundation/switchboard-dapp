@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./asset-enrolment-list.component.scss']
 })
 export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
-  @ViewChild('enrolmentList', undefined) enrolmentList: EnrolmentListComponent;
+  @ViewChild('enrolmentList') enrolmentList : EnrolmentListComponent;
 
   enrolmentDropdown = new FormControl('none');
   subject: string;

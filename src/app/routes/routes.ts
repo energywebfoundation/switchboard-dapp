@@ -10,12 +10,12 @@ export const routes = [
         canActivate: [AuthGuard],
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-            { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
-            { path: 'profile', loadChildren: './profile/profile.module#ProfileModule' },
-            { path: 'governance', loadChildren: './applications/applications.module#ApplicationsModule' },
-            { path: 'assets', loadChildren: './assets/assets.module#AssetsModule' },
-            { path: 'enrolment', loadChildren: './enrolment/enrolment.module#EnrolmentModule' },
-            { path: 'search-result', loadChildren: './search-result/search-result.module#SearchResultModule' }
+            { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
+            { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
+            { path: 'governance', loadChildren: () => import('./applications/applications.module').then(m => m.ApplicationsModule) },
+            { path: 'assets', loadChildren: () => import('./assets/assets.module').then(m => m.AssetsModule) },
+            { path: 'enrolment', loadChildren: () => import('./enrolment/enrolment.module').then(m => m.EnrolmentModule) },
+            { path: 'search-result', loadChildren: () => import('./search-result/search-result.module').then(m => m.SearchResultModule) }
         ]
     },
     {
@@ -25,7 +25,7 @@ export const routes = [
     {
         path: 'welcome',
         children: [
-            { path: '', loadChildren: './welcome/welcome.module#WelcomeModule' }
+            { path: '', loadChildren: () => import('./welcome/welcome.module').then(m => m.WelcomeModule) }
         ]
     },
 

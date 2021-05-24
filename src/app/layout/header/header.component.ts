@@ -14,7 +14,7 @@ import { Identicon } from 'src/app/shared/directives/identicon/identicon';
 import { DialogUser } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import {distinctUntilChanged, filter, pairwise, skip, takeUntil} from 'rxjs/operators';
 
 @Component({

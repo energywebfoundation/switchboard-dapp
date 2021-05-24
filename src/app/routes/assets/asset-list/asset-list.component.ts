@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
 import { Asset, AssetHistoryEventType } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
@@ -15,6 +14,9 @@ import { EditAssetDialogComponent } from '../edit-asset-dialog/edit-asset-dialog
 import { filter, finalize, first, map, switchMap, tap } from 'rxjs/operators';
 import { forkJoin, from, Observable } from 'rxjs';
 import { VerificationMethodComponent } from '../verification-method/verification-method.component';
+import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { mapClaimsProfile } from '../operators/map-claims-profile';
 
 export const RESET_LIST = true;
@@ -31,7 +33,7 @@ const HEADER_REJECT_OWNERSHIP = 'Reject Offered Asset';
 })
 export class AssetListComponent implements OnInit, OnDestroy {
   @Input('list-type') listType: number;
-  @ViewChild(MatSort, undefined) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
   @Output() selectTab = new EventEmitter<any>();
 
   AssetListType = AssetListType;

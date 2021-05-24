@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MatStepper, MAT_DIALOG_DATA } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -8,6 +7,8 @@ import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from '../../../../environments/environment'
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 
 export const ViewType = {
   UPDATE: 'update',
@@ -21,7 +22,7 @@ export const ViewType = {
 })
 export class NewOrganizationComponent implements OnInit {
   private stepper: MatStepper;
-  @ViewChild('stepper', { static: false }) set content(content: MatStepper) {
+  @ViewChild('stepper') set content(content: MatStepper) {
     if (content) {
       this.stepper = content;
     }

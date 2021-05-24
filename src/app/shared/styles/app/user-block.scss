@@ -16,7 +16,7 @@
     cursor: pointer;
     @include clearfix();
 
-    background: url('assets/img/user-bg.jpg') no-repeat left top;
+    background: url('/assets/img/user-bg.jpg') no-repeat left top;
     background-size: cover;
 
     > .user-block-picture {
@@ -103,7 +103,7 @@
 @media (max-width: 910px){
     .label-did {
         display: none;
-    } 
+    }
 }
 
 // Adapt to collapsed mode

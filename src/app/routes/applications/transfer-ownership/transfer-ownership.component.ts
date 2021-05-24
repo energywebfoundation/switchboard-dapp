@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MatDialog, MAT_DIALOG_DATA, MatStepper } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { ConfigService } from 'src/app/shared/services/config.service';
@@ -11,6 +10,8 @@ import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/c
 import { NewApplicationComponent } from '../new-application/new-application.component';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
@@ -33,7 +34,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
 
 
   private stepper: MatStepper;
-  @ViewChild('stepper', { static: false }) set content(content: MatStepper) {
+  @ViewChild('stepper') set content(content: MatStepper) {
     if(content) { // initially setter gets called with undefined
         this.stepper = content;
     }
@@ -72,12 +73,12 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.namespace) {
-      this.newOwnerAddress.setValidators(Validators.compose([Validators.required, 
+      this.newOwnerAddress.setValidators(Validators.compose([Validators.required,
         Validators.maxLength(256),
         this.iamService.isValidEthAddress]));
     }
     else {
-      this.newOwnerAddress.setValidators(Validators.compose([Validators.required, 
+      this.newOwnerAddress.setValidators(Validators.compose([Validators.required,
         Validators.maxLength(256),
         this.iamService.isValidDid]));
     }
