@@ -306,12 +306,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     private _initZeroCheckerForPendingSyncCount(): void {
         this.notifService.pendingSyncCount$
-            .pipe(takeUntil(this._subscription$))
+            .pipe(
+                takeUntil(this._subscription$),
+                filter(count => count === 0)
+            )
             .subscribe((count) => {
-                if (count === 0) {
-                    this.notif.pendingSyncCount = count;
-                    this._calcTotalCount();
-                }
+                this.notif.pendingSyncCount = count;
+                this._calcTotalCount();
             });
     }
 
