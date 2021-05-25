@@ -38,35 +38,6 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
               private router: Router) {
   }
 
-  private initDefault() {
-    if (!this._queryParamSelectedTabInit) {
-      this.issuerListAccepted = false;
-      this.asyncSetDropdownValue(this.dropdownValue.pending);
-    }
-
-    if (this.enrolmentTabGroup) {
-      this.enrolmentTabGroup.selectedIndex = 0;
-    }
-  }
-
-  private initDefaultMyEnrolments() {
-    if (this.enrolmentTabGroup) {
-      this.enrolmentTabGroup.selectedIndex = 1;
-      this.notificationService.setZeroToPendingDidDocSyncCount();
-    }
-  }
-
-  private asyncSetDropdownValue(value: any) {
-    if (this.enrolmentList) {
-      let timeout$ = setTimeout(() => {
-        this.enrolmentDropdown.setValue(value);
-        this.enrolmentList.getList(this.enrolmentDropdown.value === 'rejected',
-          this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
-        clearTimeout(timeout$);
-      }, 30);
-    }
-  }
-
   ngAfterViewInit(): void {
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
       if (queryParams) {
@@ -155,15 +126,16 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   private initDefaultMyEnrolments() {
     if (this.enrolmentTabGroup) {
       this.enrolmentTabGroup.selectedIndex = 1;
+      this.notificationService.setZeroToPendingDidDocSyncCount();
     }
   }
 
   private asyncSetDropdownValue(value: any) {
     if (this.enrolmentList) {
-      let timeout$ = setTimeout(() => {
+      const timeout$ = setTimeout(() => {
         this.enrolmentDropdown.setValue(value);
         this.enrolmentList.getList(this.enrolmentDropdown.value === 'rejected',
-          this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
+            this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
         clearTimeout(timeout$);
       }, 30);
     }
