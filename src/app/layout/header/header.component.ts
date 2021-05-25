@@ -41,13 +41,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     tasks = {
         totalCount: 0,
         assetsOfferedToMeCount: 0,
-        pendingAssetSyncCount: 0
+        pendingAssetSyncCount: 0,
+        pendingApprovalCount: 0,
     };
 
     // Notifications
     notif = {
         totalCount: 0,
-        pendingApprovalCount: 0,
         pendingSyncCount: 0
     };
 
@@ -167,9 +167,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     private _calcTotalCount() {
-        this.notif.totalCount =  this.notif.pendingSyncCount +
-            this.notif.pendingApprovalCount;
-        this.tasks.totalCount = this.tasks.assetsOfferedToMeCount + this.tasks.pendingAssetSyncCount
+        this.notif.totalCount =  this.notif.pendingSyncCount;
+        this.tasks.totalCount = this.tasks.assetsOfferedToMeCount + this.tasks.pendingAssetSyncCount +
+        this.tasks.pendingApprovalCount;
         if (this.notif.totalCount < 0) {
             this.notif.totalCount = 0;
         }
@@ -181,7 +181,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private async _initNotificationAndTasksListeners() {
 
         // Initialize Notif Counts
-        this.notifService.initNotifCounts(this.notif.pendingApprovalCount,
+        this.notifService.initNotifCounts(this.tasks.pendingApprovalCount,
             this.notif.pendingSyncCount,
             this.tasks.assetsOfferedToMeCount,
             this.tasks.pendingAssetSyncCount);
@@ -222,16 +222,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (message.type) {
             // Handle Asset-related Events
             this._handleAssetEvents(message.type);
-        }
-        else if (message.issuedToken) {
+        } else if (message.issuedToken) {
             // Message has issued token ===> Newly Approved Claim
             this.notifService.increasePendingDidDocSyncCount();
-            this.toastr.info('Your enrolment request is approved. Please sync your approved claims in your DID Document.', 'Enrolment Approved');
-        }
-        else if (message.isRejected) {
+            this.toastr.info('Your enrolment request is approved. ' +
+                'Please sync your approved claims in your DID Document.', 'Enrolment Approved');
+        } else if (message.isRejected) {
             this.toastr.warning('Your enrolment request is rejected.', 'New Enrolment Request');
-        }
-        else {
+        } else {
             // Message has no issued token ===> Newly Requested Claim
             this.notifService.increasePendingApprovalCount();
             this.toastr.info('A new enrolment request is waiting for your approval.', 'New Enrolment Request');
@@ -239,7 +237,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     private _handleAssetEvents(type: string) {
-        switch(type) {
+        switch (type) {
             case AssetHistoryEventType.ASSET_OFFERED:
                 this.toastr.info('An asset is offered to you.', 'Asset Offered');
                 this.notifService.increaseAssetsOfferedToMeCount();
@@ -264,9 +262,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 did: this.iamService.iam.getDid(),
                 isAccepted: false
             })).filter(item => !item['isRejected']);
-            this.notif.pendingApprovalCount = pendingClaimsList.length;
-            if (this.notif.pendingApprovalCount < 0) {
-                this.notif.pendingApprovalCount = 0;
+            this.tasks.pendingApprovalCount = pendingClaimsList.length;
+            if (this.tasks.pendingApprovalCount < 0) {
+                this.tasks.pendingApprovalCount = 0;
             }
         }
         catch (e) {
@@ -291,8 +289,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                         return true;
                     }
                     return false;
-                }
-                else {
+                } else {
                     return false;
                 }
             });
@@ -301,13 +298,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
             if (this.notif.pendingSyncCount < 0) {
                 this.notif.pendingSyncCount = 0;
             }
-        }
-        catch (e) {
+            this._initZeroCheckerForPendingSyncCount();
+        } catch (e) {
             throw e;
         }
     }
 
-    private async _initAssetsOfferedToMeSyncCount(){
+    private _initZeroCheckerForPendingSyncCount(): void {
+        this.notifService.pendingSyncCount$
+            .pipe(
+                takeUntil(this._subscription$),
+                filter(count => count === 0)
+            )
+            .subscribe((count) => {
+                this.notif.pendingSyncCount = count;
+                this._calcTotalCount();
+            });
+    }
+
+    private async _initAssetsOfferedToMeSyncCount() {
         try {
             this.tasks.assetsOfferedToMeCount = (await this.iamService.iam.getOfferedAssets()).length;
             if (this.tasks.assetsOfferedToMeCount < 0) {
@@ -320,7 +329,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     private async _initApprovedClaimsForAssetSyncCount() {
-        // TODO: 
+        // TODO:
         this.tasks.pendingAssetSyncCount = 0;
         if (this.tasks.pendingAssetSyncCount < 0) {
             this.tasks.pendingAssetSyncCount = 0;

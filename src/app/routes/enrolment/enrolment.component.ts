@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UrlParamService } from 'src/app/shared/services/url-param.service';
 import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 import { MatTabGroup } from '@angular/material/tabs';
+import {NotificationService} from '../../shared/services/notification.service';
 
 @Component({
   selector: 'app-enrolment',
@@ -32,6 +33,7 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   private _queryParamSelectedTabInit = false;
 
   constructor(private activeRoute: ActivatedRoute,
+              private notificationService: NotificationService,
               private urlParamService: UrlParamService,
               private router: Router) {
   }
@@ -124,15 +126,16 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
   private initDefaultMyEnrolments() {
     if (this.enrolmentTabGroup) {
       this.enrolmentTabGroup.selectedIndex = 1;
+      this.notificationService.setZeroToPendingDidDocSyncCount();
     }
   }
 
   private asyncSetDropdownValue(value: any) {
     if (this.enrolmentList) {
-      let timeout$ = setTimeout(() => {
+      const timeout$ = setTimeout(() => {
         this.enrolmentDropdown.setValue(value);
         this.enrolmentList.getList(this.enrolmentDropdown.value === 'rejected',
-          this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
+            this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
         clearTimeout(timeout$);
       }, 30);
     }
