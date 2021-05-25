@@ -528,6 +528,22 @@ mat-drawer {
     }
   }
 
+  .card-warning {
+    border: 1px solid rgb(255 165 0 / 50%);
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    background-color: rgb(255 165 0 / 8%);
+    border-radius: 5px;
+    font-size: 12px;
+    color: #FFA500;
+
+    .mat-icon {
+      font-size: 21px;
+      margin: -5px 10px 0 8px;
+    }
+  }
+
   .card-result {
     padding: 14px 18px 13px 18px;
     display: flex;
