@@ -140,7 +140,9 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
 
     this._shadowList = list;
-    this._updateList(this.namespaceFilterControl.value);
+    if (this.namespaceFilterControl) {
+      this._updateList(this.namespaceFilterControl.value);
+    }
     this.loadingService.hide();
   }
 
