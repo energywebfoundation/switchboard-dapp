@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { sortByEmittedDate } from '../utils/sort/sort-by-emitted-date';
 
 const TOASTR_HEADER = 'Asset Ownership History';
 
@@ -16,7 +17,7 @@ const TOASTR_HEADER = 'Asset Ownership History';
 })
 export class AssetOwnershipHistoryComponent implements OnInit {
 
-  dataSource      = new MatTableDataSource([]);
+  dataSource = new MatTableDataSource([]);
   displayedColumns: string[] = ['date', 'owner', 'offeredTo', 'type'];
 
   constructor(public dialogRef: MatDialogRef<AssetOwnershipHistoryComponent>,
@@ -32,10 +33,10 @@ export class AssetOwnershipHistoryComponent implements OnInit {
       const list = await this.iamService.iam.getAssetHistory({
         id: this.data.id
       });
-      this.dataSource.data = list.map((item: any) => {
+      this.dataSource.data = sortByEmittedDate(list.map((item: any) => {
         item.emittedDate = new Date(item.timestamp);
         return item;
-      });
+      }));
     } catch (e) {
       console.error(e);
       this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', TOASTR_HEADER);
