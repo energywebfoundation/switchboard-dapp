@@ -274,6 +274,10 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   private _checkNamespaceControlChanges(): void {
+    if (!this.namespaceFilterControl) {
+      return;
+    }
+
     this.namespaceFilterControl.valueChanges
         .pipe(
             distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
