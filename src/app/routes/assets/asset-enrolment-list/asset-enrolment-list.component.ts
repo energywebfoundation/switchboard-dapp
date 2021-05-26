@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./asset-enrolment-list.component.scss']
 })
 export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
-  @ViewChild('enrolmentList') enrolmentList : EnrolmentListComponent;
+  @ViewChild('enrolmentList') enrolmentList: EnrolmentListComponent;
 
   enrolmentDropdown = new FormControl('none');
   subject: string;
@@ -39,13 +39,12 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
     this.activatedRoute.params
       .pipe(takeUntil(this.subscription$))
       .subscribe(params => {
-        console.log('subject', params);
         this.subject = params.subject;
       });
   }
 
   updateEnrolmentList(e: any) {
-    let value = e.value;
+    const value = e.value;
     this.enrolmentList.getList(value === 'rejected',
       value === 'true' ? true : value === 'false' ? false : undefined);
   }
