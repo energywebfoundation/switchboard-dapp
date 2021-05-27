@@ -16,6 +16,7 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
 
   enrolmentDropdown = new FormControl('none');
   subject: string;
+  namespaceControlIssuer = new FormControl(undefined);
 
   public dropdownValue = {
     all: 'none',

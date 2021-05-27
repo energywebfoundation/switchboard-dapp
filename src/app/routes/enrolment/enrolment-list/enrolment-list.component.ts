@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ClaimData, ENSNamespaceTypes } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
-import { takeUntil } from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -12,6 +12,7 @@ import { ViewRequestsComponent } from '../view-requests/view-requests.component'
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import {FormControl} from "@angular/forms";
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
@@ -31,6 +32,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   @Input('accepted') accepted: boolean;
   @Input('rejected') rejected: boolean;
   @Input('subject') subject: string;
+  @Input() namespaceFilterControl!: FormControl;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -42,6 +44,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   private _subscription$ = new Subject();
   private _iamSubscriptionId: number;
+  private _shadowList = [];
 
   constructor(private loadingService: LoadingService,
               private iamService: IamService,
@@ -85,6 +88,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
 
     await this.getList(this.rejected, this.accepted);
+    this._checkNamespaceControlChanges();
   }
 
   async ngOnDestroy(): Promise<void> {
@@ -120,8 +124,8 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       }
 
       if (list && list.length) {
-        for (let item of list) {
-          let arr = item.claimType.split(`.${ENSNamespaceTypes.Roles}.`);
+        for (const item of list) {
+          const arr = item.claimType.split(`.${ENSNamespaceTypes.Roles}.`);
           item.roleName = arr[0];
           item.requestDate = new Date(item.createdAt);
         }
@@ -135,7 +139,10 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       this.toastr.error(e, TOASTR_HEADER);
     }
 
-    this.dataSource.data = list;
+    this._shadowList = list;
+    if (this.namespaceFilterControl) {
+      this._updateList(this.namespaceFilterControl.value);
+    }
     this.loadingService.hide();
   }
 
@@ -157,7 +164,6 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   async addToDidDoc(element: any) {
-    // console.log('claimToSync', element);
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
       maxHeight: '195px',
@@ -226,7 +232,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     const claims: ClaimData[] = (await this.iamService.iam.getUserClaims(did))
       .filter((item: ClaimData) => {
         if (item && item.claimType) {
-          let arr = item.claimType.split('.');
+          const arr = item.claimType.split('.');
           if (arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles) {
             return true;
           }
@@ -267,5 +273,26 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
 
     this.loadingService.hide();
+  }
+
+  private _checkNamespaceControlChanges(): void {
+    if (!this.namespaceFilterControl) {
+      return;
+    }
+
+    this.namespaceFilterControl.valueChanges
+        .pipe(
+            distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
+            takeUntil(this._subscription$)
+        )
+        .subscribe(filterValue => this._updateList(filterValue));
+  }
+
+  private _updateList(value): void{
+    if (value) {
+      this.dataSource.data = this._shadowList.filter((item) => item.parentNamespace.includes(value));
+    } else {
+      this.dataSource.data = this._shadowList;
+    }
   }
 }
