@@ -1,11 +1,11 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Asset } from 'iam-client-lib';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import {IDialogData} from './select-asset-dialog.interface';
+import { IDialogData } from './select-asset-dialog.interface';
 
 @Component({
   selector: 'app-select-asset-dialog',
@@ -29,12 +29,7 @@ export class SelectAssetDialogComponent implements OnInit {
       this.loadingService.show();
       this.dataSource.data = (await this.iamService.iam.getOwnedAssets()).map((data: Asset) => {
         data['minifiedId'] = `${data.id.substr(0, 15)}...${data.id.substr(data.id.length - 5)}`;
-        if (this.data.assetDiD) {
-          this.data.assetDiD === data.id ? data['isSelected'] = true : data['isSelected'] = false;
-          return data;
-        }
-        data['isSelected'] = false;
-        return data;
+        return { ...data, isSelected: this.data.assetDiD === data.id };
       });
     }
     catch (e) {
