@@ -37,7 +37,9 @@
                         {{element.name ? element.name : 'Asset Name'}}
                     </div>
                     <div>
-                        <button class="btn mat-stroked-table-button ml-0 mr-2 mr-md-0 ml-md-2" (click)="viewAssetEnrolments(element)">Enrolments</button>
+                        <button class="btn mat-stroked-table-button ml-0 mr-2 mr-md-0 ml-md-2"
+                                *ngIf="element.hasEnrolments"
+                                (click)="viewAssetEnrolments(element)">Enrolments</button>
                     </div>
                 </div>
             </td>

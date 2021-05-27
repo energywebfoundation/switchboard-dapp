@@ -26,6 +26,10 @@ const HEADER_CANCEL_OWNERSHIP = 'Cancel Offered Ownership';
 const HEADER_ACCEPT_OWNERSHIP = 'Accept Offered Asset';
 const HEADER_REJECT_OWNERSHIP = 'Reject Offered Asset';
 
+export interface AssetList extends Asset {
+  hasEnrolments: boolean;
+}
+
 @Component({
   selector: 'app-asset-list',
   templateUrl: './asset-list.component.html',
@@ -38,7 +42,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
 
   AssetListType = AssetListType;
 
-  dataSource: MatTableDataSource<Asset> = new MatTableDataSource([]);
+  dataSource: MatTableDataSource<AssetList> = new MatTableDataSource([]);
   displayedColumns: string[] = ['logo', 'createdDate', 'name', 'id'];
 
   private _iamSubscriptionId: number;
@@ -102,10 +106,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
     this.subscribeTo(this.assetListFactory());
   }
 
-  subscribeTo(source: Observable<Asset[]>) {
+  subscribeTo(source: Observable<AssetList[]>) {
     return source.pipe(
       finalize(() => this.loadingService.hide())
-    ).subscribe((data: Asset[]) => {
+    ).subscribe((data: AssetList[]) => {
       this.dataSource.data = data;
     }, error => {
       console.error(error);
@@ -117,7 +121,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(TransferOwnershipComponent, {
       width: '600px', data: {
         assetDid: data.id,
-        type: type,
+        type,
         owner: data.owner
       },
       maxWidth: '100%',
@@ -235,29 +239,58 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   private getAssetsWithClaims() {
-    return forkJoin(
-      from(
-        this.iamService.iam.getUserClaims()).pipe(
-        mapClaimsProfile()
-      ),
-      this.loadAssetList(this.iamService.iam.getOwnedAssets())
+    return forkJoin([
+        from(
+          this.iamService.iam.getUserClaims()).pipe(
+          mapClaimsProfile()
+        ),
+        this.loadAssetList(this.iamService.iam.getOwnedAssets())
+      ]
     ).pipe(
       map(([profile, assets]) => this.addClaimData(profile, assets))
     );
   }
 
-  private assetListFactory(): Observable<Asset[]> {
+  private getAssetsIds(assets: Asset[]): string[] {
+    return assets.map(asset => asset.id);
+  }
+
+  private assetListFactory(): Observable<AssetList[]> {
     if (this.listType === AssetListType.PREV_OWNED_ASSETS) {
-      return this.loadAssetList(this.iamService.iam.getPreviouslyOwnedAssets({ owner: this.iamService.iam.getDid() }));
+      return this.loadAssetList(
+        this.iamService.iam.getPreviouslyOwnedAssets({ owner: this.iamService.iam.getDid() })
+      ).pipe(
+        this.mapEnrolments()
+      );
     } else if (this.listType === AssetListType.OFFERED_ASSETS) {
-      return this.loadAssetList(this.iamService.iam.getOfferedAssets());
+      return this.loadAssetList(this.iamService.iam.getOfferedAssets())
+        .pipe(
+          this.mapEnrolments()
+        );
     } else {
       return this.getAssetsWithClaims();
     }
   }
 
+  private mapEnrolments() {
+    return (source: Observable<Asset[]>) => {
+      return source.pipe(
+        switchMap((assets: Asset[]) => from(this.iamService.iam.getClaimsBySubjects(this.getAssetsIds(assets)))
+          .pipe(
+            map((claims) => claims.map(claim => claim.subject)),
+            map(claims => assets.map((asset) => ({ ...asset, hasEnrolments: claims.includes(asset.id) })))
+          )
+        )
+      );
+    };
+  }
+
   private addClaimData(profile, assets) {
-    return assets.map((asset) => ({ ...asset, ...(profile && profile.assetProfiles && profile.assetProfiles[asset.id]) }));
+    return assets.map((asset) => ({
+      ...asset,
+      ...(profile && profile.assetProfiles && profile.assetProfiles[asset.id]),
+      hasEnrolments: true
+    }));
   }
 
   private _handleMessage(message: any) {
@@ -279,7 +312,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
       width: '400px',
       maxHeight: '195px',
       data: {
-        header: header,
+        header,
         message: confirmationMsg
       },
       maxWidth: '100%',
