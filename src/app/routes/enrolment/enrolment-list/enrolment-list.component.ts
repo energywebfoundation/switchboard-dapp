@@ -285,9 +285,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
             distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
             takeUntil(this._subscription$)
         )
-        .subscribe((filterValue) => {
-            this._updateList(filterValue);
-        });
+        .subscribe(filterValue => this._updateList(filterValue));
   }
 
   private _updateList(value): void{
