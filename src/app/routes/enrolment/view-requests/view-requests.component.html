@@ -26,7 +26,7 @@
               <div class="label opacity-50 mb-2">Requestor</div>
               <span class="color-white mb-0"> {{ claim?.requester }} </span>
             </div>
-            <ng-container *ngIf="claim?.subject !== claim?.claimType">
+            <ng-container *ngIf="claim?.subject !== claim?.claimType && claim?.subject === claim?.requester">
               <mat-divider></mat-divider>
               <div class="text-left my-3">
                 <div class="label opacity-50 mb-2">Asset</div>
