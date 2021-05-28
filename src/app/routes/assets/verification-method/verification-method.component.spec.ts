@@ -6,6 +6,8 @@ import { VerificationService } from './verification.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { TypeAlgorithmPipe } from '../pipes/type-algorithm.pipe';
+import { ToastrService } from 'ngx-toastr';
+import { DidFormatMinifierPipe } from '../../../shared/pipes/did-format-minifier.pipe';
 
 describe('VerificationMethodComponent', () => {
   let component: VerificationMethodComponent;
@@ -14,6 +16,7 @@ describe('VerificationMethodComponent', () => {
     ['getPublicKeys', 'updateDocumentAndReload']
   );
   const matDialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['success']);
 
   const setUp = (documentData: any[]) => {
     verificationServiceSpy.getPublicKeys.and.returnValue(of(documentData));
@@ -22,13 +25,14 @@ describe('VerificationMethodComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [VerificationMethodComponent, TypeAlgorithmPipe],
+      declarations: [VerificationMethodComponent, TypeAlgorithmPipe, DidFormatMinifierPipe],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { id: 1 } },
         {
           provide: MatDialogRef, useValue: matDialogRefSpy
         },
-        { provide: VerificationService, useValue: verificationServiceSpy }
+        { provide: VerificationService, useValue: verificationServiceSpy },
+        { provide: ToastrService, useValue: toastrSpy }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

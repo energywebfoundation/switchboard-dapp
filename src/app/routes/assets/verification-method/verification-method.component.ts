@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VerificationService } from './verification.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { AlgorithmsEnum } from '../models/algorithms.enum';
 import { ToastrService } from 'ngx-toastr';
+import { textDefaultsValidators } from '../../../utils/validators/text-defaults-validators';
 
 export interface PublicKey {
   publicKeyHex: string;
@@ -22,7 +22,10 @@ export class VerificationMethodComponent implements OnInit {
   pageSize = 5;
   verificationsAmount;
   dataSource: PublicKey[] = [];
-  selectControl = new FormControl('');
+  selectControl = new FormControl('', [Validators.required]);
+  publicKey = new FormControl('',
+    textDefaultsValidators
+  );
   selectOptions = Object.entries(AlgorithmsEnum);
   private publicKeys;
 
@@ -30,6 +33,10 @@ export class VerificationMethodComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) private dialogData: any,
               private verificationService: VerificationService,
               private toastr: ToastrService) {
+  }
+
+  get isFormDisabled() {
+    return !this.selectControl.value || !this.publicKey.valid;
   }
 
   ngOnInit(): void {
@@ -45,13 +52,11 @@ export class VerificationMethodComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  add(event: Event): void {
-    if (!this.selectControl.value) {
+  add(): void {
+    if (this.isFormDisabled) {
       return;
     }
-    event.preventDefault();
-    event.stopPropagation();
-    this.verificationService.updateDocumentAndReload(this.dialogData.id).subscribe((publicKeys) => {
+    this.verificationService.updateDocumentAndReload(this.dialogData.id, this.publicKey.value).subscribe((publicKeys) => {
       this.handleLoadedPublicKeys(publicKeys);
     });
   }

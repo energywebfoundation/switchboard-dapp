@@ -43,9 +43,9 @@
     </ng-container>
     <div class="history-list-item mb-3 p-2">
         <mat-form-field class="mt-2" appearance="outline">
-            <input matInput placeholder="Public Key" maxlength="256"
+            <input matInput [formControl]="publicKey" placeholder="Public Key" maxlength="256"
                    autocomplete="off">
-            <mat-error>This is not an url</mat-error>
+            <mat-error>Public key is required. It should have at least 3 letters and no more than 256</mat-error>
         </mat-form-field>
         <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
             <mat-select [formControl]="selectControl" placeholder="Select type">
@@ -54,11 +54,12 @@
                     {{option[0]}}
                 </mat-option>
             </mat-select>
+            <mat-error>Type is required.</mat-error>
         </mat-form-field>
         <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="close()">Close</button>
-            <button mat-raised-button class="btn btn-small btn-primary"
-                    (click)="add($event)">Add
+            <button mat-raised-button [disabled]="isFormDisabled" class="btn btn-small btn-primary"
+                    (click)="add()">Add
             </button>
         </div>
     </div>

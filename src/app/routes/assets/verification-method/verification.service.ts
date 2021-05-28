@@ -25,10 +25,10 @@ export class VerificationService {
     );
   }
 
-  updateDocumentAndReload(did: string) {
+  updateDocumentAndReload(did: string, publicKey: string) {
     this.loadingService.show();
     return from(
-      this.iamService.iam.updateDidDocument(this.getUpdateOptions(did))
+      this.iamService.iam.updateDidDocument(this.getUpdateOptions(did, publicKey))
     ).pipe(
       tap(() => this.toastr.success(
         'New Verification Type has been successfully added.',
@@ -54,17 +54,13 @@ export class VerificationService {
     );
   }
 
-  private createValueObject() {
-    return { publicKey: `0x${new Keys().publicKey}`, tag: uuidv4() };
-  }
-
-  private getUpdateOptions(did: string) {
+  private getUpdateOptions(did: string, publicKey: string) {
     return {
       didAttribute: DIDAttribute.PublicKey,
       did,
       data: {
         type: PubKeyType.SignatureAuthentication2018,
-        value: this.createValueObject()
+        value: { publicKey, tag: uuidv4() }
       }
     };
   }
