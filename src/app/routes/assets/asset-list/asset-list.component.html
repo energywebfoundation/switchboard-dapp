@@ -122,11 +122,11 @@
                                 <span>View Ownership History</span>
                             </button>
 
-                            <!-- Verification Method-->
-<!--                            <button mat-menu-item class="btn-color-primary" (click)="viewVerificationMethod(element)">-->
-<!--                                <mat-icon class="btn-color-primary btn-action-3">verified</mat-icon>-->
-<!--                                <span>Verification</span>-->
-<!--                            </button>-->
+<!--                             Verification Method-->
+                            <button mat-menu-item class="btn-color-primary" *ngIf="AssetListType.MY_ASSETS === listType" (click)="viewVerificationMethod(element)">
+                                <mat-icon class="btn-color-primary btn-action-3">verified</mat-icon>
+                                <span>Verification</span>
+                            </button>
 
                             <ng-container *ngIf="listType === AssetListType.MY_ASSETS">
                                 <!-- Offer Ownership -->
