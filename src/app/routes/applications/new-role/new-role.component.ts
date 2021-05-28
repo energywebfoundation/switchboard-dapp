@@ -71,7 +71,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     roleName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
     namespace: '',
     data: this.fb.group({
-      version: '1.0.0',
+      version: 1,
       issuer: this.fb.group({
         issuerType: this.IssuerType.DID,
         roleName: '',
@@ -210,8 +210,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       let parentNamespace = arrParentNamespace[1].substring(1);
 
       // Construct Version
-      let arrVersion = def.version.split('.');
-      let version = `${parseInt(arrVersion[0]) + 1}.0.0`;
+      const arrVersion = typeof(def.version) === 'string' ? parseInt(def.version.split('.')[0], 10) : def.version;
+      const version = arrVersion + 1;
 
       // Construct Fields
       this.dataSource.data = def.fields ? [...def.fields] : [];
@@ -223,7 +223,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         roleName: def.roleName,
         namespace: `${this.ENSPrefixes.Roles}.${parentNamespace}`,
         data: {
-          version: version,
+          version,
           issuer: {
             issuerType: def.issuer.issuerType,
             roleName: def.issuer.roleName,
