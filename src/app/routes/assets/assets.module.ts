@@ -26,6 +26,7 @@ import { VerificationMethodComponent } from './verification-method/verification-
 import { HistoryElementComponent } from './asset-ownership-history/history-element/history-element.component';
 import { HistoryPeriodComponent } from './asset-ownership-history/history-period/history-period.component';
 import { TypeAlgorithmPipe } from './pipes/type-algorithm.pipe';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent },
@@ -64,7 +65,8 @@ const routes: Routes = [
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    NgMatSearchBarModule
+    NgMatSearchBarModule,
+    ClipboardModule
   ],
   entryComponents: [NewAssetTypeComponent, NewPassiveAssetComponent, AssetOwnershipHistoryComponent, EditAssetDialogComponent, VerificationMethodComponent]
 })

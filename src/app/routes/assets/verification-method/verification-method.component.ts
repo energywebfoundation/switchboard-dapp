@@ -5,6 +5,12 @@ import { VerificationService } from './verification.service';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { AlgorithmsEnum } from '../models/algorithms.enum';
+import { ToastrService } from 'ngx-toastr';
+
+export interface PublicKey {
+  publicKeyHex: string;
+  type: string;
+}
 
 @Component({
   selector: 'app-verification-method',
@@ -15,14 +21,15 @@ export class VerificationMethodComponent implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   verificationsAmount;
-  dataSource = [];
+  dataSource: PublicKey[] = [];
   selectControl = new FormControl('');
   selectOptions = Object.entries(AlgorithmsEnum);
   private publicKeys;
 
   constructor(private dialogRef: MatDialogRef<VerificationMethodComponent>,
               @Inject(MAT_DIALOG_DATA) private dialogData: any,
-              private verificationService: VerificationService) {
+              private verificationService: VerificationService,
+              private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -62,6 +69,10 @@ export class VerificationMethodComponent implements OnInit {
   private loadPublicKeys(): void {
     this.verificationService.getPublicKeys(this.dialogData.id, true)
       .subscribe(publicKeys => this.handleLoadedPublicKeys(publicKeys));
+  }
+
+  private copied(): void {
+    this.toastr.success('Did successfully copied to clipboard.');
   }
 
 }

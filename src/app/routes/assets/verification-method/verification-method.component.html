@@ -15,23 +15,38 @@
                 <div class="d-flex flex-row justify-content-between align-items-center px-2">
                     <div class="d-flex align-items-center">
                         <mat-icon class="color-info pr-2" svgIcon="ethereum-icon"></mat-icon>
-                        <div class="d-flex flex-column pl-2">
-                            <div>
+                        <div class="flex-md-row">
+                            <div class="d-flex flex-row pl-2 align-items-baseline">
                                 <h4 class="small font-weight-600 mb-1">TYPE</h4>
-                                <span class="f-16">{{publicKey?.type | typeAlgorithm }}</span>
+                                <span class="pl-2 f-14">{{ publicKey?.type | typeAlgorithm }}</span>
+                            </div>
+                            <div class="d-flex flex-row pl-2 align-items-baseline">
+                                <h4 class="small font-weight-600 mb-1">Public Key</h4>
+                                <span [tooltip]="publicKey?.publicKeyHex"
+                                      [cdkCopyToClipboard]="publicKey?.publicKeyHex"
+                                      (cdkCopyToClipboardCopied)="copied()"
+                                      class="pl-2 f-14 cursor-pointer">
+                                    {{ publicKey?.publicKeyHex | didFormatMinifier }}
+                                </span>
                             </div>
                         </div>
+
                     </div>
-<!--                    <div class="d-flex align-items-center">-->
-<!--                        <button mat-icon-button aria-label="Delete" (click)="delete(verification)">-->
-<!--                            <mat-icon class="btn-color-error">delete</mat-icon>-->
-<!--                        </button>-->
-<!--                    </div>-->
+                    <!--                    <div class="d-flex align-items-center">-->
+                    <!--                        <button mat-icon-button aria-label="Delete" (click)="delete(verification)">-->
+                    <!--                            <mat-icon class="btn-color-error">delete</mat-icon>-->
+                    <!--                        </button>-->
+                    <!--                    </div>-->
                 </div>
             </div>
         </div>
     </ng-container>
     <div class="history-list-item mb-3 p-2">
+        <mat-form-field class="mt-2" appearance="outline">
+            <input matInput placeholder="Public Key" maxlength="256"
+                   autocomplete="off">
+            <mat-error>This is not an url</mat-error>
+        </mat-form-field>
         <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
             <mat-select [formControl]="selectControl" placeholder="Select type">
                 <mat-option [value]="option[1]" *ngFor="let option of selectOptions">
@@ -39,10 +54,13 @@
                     {{option[0]}}
                 </mat-option>
             </mat-select>
-            <button matTooltip="Add Type" matSuffix mat-icon-button aria-label="Add" (click)="add($event)">
-                <mat-icon>add</mat-icon>
-            </button>
         </mat-form-field>
+        <div class="d-flex justify-content-end mb-2">
+            <button mat-stroked-button class="btn btn-small mr-2" (click)="close()">Close</button>
+            <button mat-raised-button class="btn btn-small btn-primary"
+                    (click)="add($event)">Add
+            </button>
+        </div>
     </div>
     <!-- Shows when list is empty -->
     <ng-template #emptyList>
