@@ -179,7 +179,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <div class="cursor-pointer" [matMenuTriggerFor]="menu">
+            <div class="cursor-pointer" (menuOpened)="setUserDid()" [matMenuTriggerFor]="menu">
                 <div class="d-flex align-items-center ml-3 ml-md-0 flex-row">
                     <div class="d-none d-md-flex flex-column align-items-end ml-2 mr-2">
                         <div class="label-role" *ngIf="!userName">Manage Profile</div>
@@ -204,8 +204,8 @@
             <div class="label-role" *ngIf="userName"> {{ userName }} </div>
         </div>
         <div class="d-flex align-items-center opacity-50 text-truncate-middle did-wrapper mx-3 mb-3"
-            matTooltip="Copy to clipboard">
-            <div class="f-14">did:ethr:sample....AccountDID</div>
+            matTooltip="Copy to clipboard" [cdkCopyToClipboard]="userDid" (cdkCopyToClipboardCopied)="didCopied()">
+            <div class="f-14">{{userDid | didFormatMinifier}}</div>
             <mat-icon class="ml-2">content_copy</mat-icon>
         </div>
     </div>

@@ -15,7 +15,7 @@ import { DialogUser } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Subject } from 'rxjs';
-import {distinctUntilChanged, filter, pairwise, skip, takeUntil} from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-header',
@@ -50,6 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         totalCount: 0,
         pendingSyncCount: 0
     };
+    userDid: string;
 
     isLoadingNotif = true;
 
@@ -116,6 +117,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         await this.iamService.iam.unsubscribeFrom(this._iamSubscriptionId);
     }
 
+    didCopied() {
+        this.toastr.success('User DID is copied to clipboard.');
+    }
+
     openDialogUser(): void {
         const dialogRef = this.dialog.open(DialogUser, {
             width: '440px',
@@ -156,6 +161,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
                     this.isLoadingNotif = false;
                 }
             });
+    }
+
+    setUserDid() {
+        this.userDid = this.iamService.iam.getDid();
     }
 
     private _initNotificationsAndTasks() {
