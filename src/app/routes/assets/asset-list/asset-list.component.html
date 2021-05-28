@@ -123,7 +123,7 @@
                             </button>
 
 <!--                             Verification Method-->
-                            <button mat-menu-item class="btn-color-primary" (click)="viewVerificationMethod(element)">
+                            <button mat-menu-item class="btn-color-primary" *ngIf="AssetListType.MY_ASSETS === listType" (click)="viewVerificationMethod(element)">
                                 <mat-icon class="btn-color-primary btn-action-3">verified</mat-icon>
                                 <span>Verification</span>
                             </button>
