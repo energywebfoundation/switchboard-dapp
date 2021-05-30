@@ -38,8 +38,8 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Asset DID </th>
       <td mat-cell *matCellDef="let element" data-label="Asset DID">
         <div matTooltip="{{ element?.subject }}" [appMinifiedDidViewer]="element?.subject"
-          matTooltipClass="tooltip-full-width" *ngIf="element?.subject !== element?.claimType && element?.subject === element?.requester"> {{ element?.subject |
-          didFormatMinifier}} </div>
+          matTooltipClass="tooltip-full-width" *ngIf="element?.subject !== element?.claimType && element?.subject !== element?.requester"> {{ element?.subject |
+          didFormatMinifier}}</div>
       </td>
     </ng-container>
 
