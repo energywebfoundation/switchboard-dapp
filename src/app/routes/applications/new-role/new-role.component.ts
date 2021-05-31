@@ -209,10 +209,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       let arrParentNamespace = this.origData.namespace.split(ENSNamespaceTypes.Roles);
       let parentNamespace = arrParentNamespace[1].substring(1);
 
-      // Construct Version
-      const arrVersion = typeof(def.version) === 'string' ? parseInt(def.version.split('.')[0], 10) : def.version;
-      const version = arrVersion + 1;
-
       // Construct Fields
       this.dataSource.data = def.fields ? [...def.fields] : [];
       this._initDates();
@@ -223,7 +219,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         roleName: def.roleName,
         namespace: `${this.ENSPrefixes.Roles}.${parentNamespace}`,
         data: {
-          version,
+          version: this._incrementVersion(def.version),
           issuer: {
             issuerType: def.issuer.issuerType,
             roleName: def.issuer.roleName,
@@ -237,6 +233,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.issuerList = [...def.issuer.did];
       }
     }
+  }
+
+  private _incrementVersion(version: string | number) {
+    if (typeof(version) === 'string') {
+      return parseInt(version.split('.')[0], 10) + 1;
+    }
+    return version + 1;
   }
 
   private _initPreconditions(preconditionList: any[]) {
