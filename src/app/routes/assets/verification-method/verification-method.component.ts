@@ -4,7 +4,6 @@ import { VerificationService } from './verification.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { AlgorithmsEnum } from '../models/algorithms.enum';
-import { ToastrService } from 'ngx-toastr';
 
 export interface PublicKey {
   publicKeyHex: string;
@@ -30,8 +29,7 @@ export class VerificationMethodComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<VerificationMethodComponent>,
               @Inject(MAT_DIALOG_DATA) private dialogData: any,
-              private verificationService: VerificationService,
-              private toastr: ToastrService) {
+              private verificationService: VerificationService) {
   }
 
   get isFormDisabled() {
@@ -85,10 +83,6 @@ export class VerificationMethodComponent implements OnInit {
   private loadPublicKeys(): void {
     this.verificationService.getPublicKeys(this.dialogData.id, true)
       .subscribe(publicKeys => this.handleLoadedPublicKeys(publicKeys));
-  }
-
-  private copied(): void {
-    this.toastr.success('Public key successfully copied to clipboard.');
   }
 
 }
