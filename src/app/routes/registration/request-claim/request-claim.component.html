@@ -35,16 +35,28 @@
           </div>
 
           <!-- On-chain and Off-chain -->
-
-          <!-- <ng-container>
-            <mat-checkbox class="pl-3 md-enroll" [disabled]="true" [ngStyle]="txtboxColor"><span
-                class="mb-3 d-inline-flex" [ngStyle]="txtColor"
-                matTooltip="Short description of what is On-chain.">On-chain</span>
-            </mat-checkbox>
-            <mat-checkbox class="pl-3 md-enroll" [ngStyle]="txtboxColor"><span class="mb-3 d-inline-flex"
-                [ngStyle]="txtColor" matTooltip="Short description of what is Off-chain.">Off-chain</span>
-            </mat-checkbox>
-          </ng-container> -->
+          <ng-container *ngIf="isEnrolForMyself()">
+            <form [formGroup]="registrationTypesForm">
+              <mat-checkbox class="pl-3 md-enroll"
+                            formControlName="onChain"
+                            [ngStyle]="txtboxColor">
+                  <span class="mb-3 d-inline-flex"
+                        [ngStyle]="txtColor"
+                        matTooltip="Short description of what is On-chain.">
+                      On-chain
+                  </span>
+              </mat-checkbox>
+              <mat-checkbox class="pl-3 md-enroll"
+                            formControlName="offChain"
+                            [ngStyle]="txtboxColor">
+                    <span class="mb-3 d-inline-flex"
+                          [ngStyle]="txtColor"
+                          matTooltip="Short description of what is Off-chain.">
+                        Off-chain
+                    </span>
+              </mat-checkbox>
+            </form>
+          </ng-container>
 
           <ng-container *ngIf="roleTypeForm?.value?.enrolFor === EnrolForType.ASSET">
             <div class="col-lg-12 mt-2 mb-4">
