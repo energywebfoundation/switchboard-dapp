@@ -4,6 +4,7 @@ import { VerificationService } from './verification.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { AlgorithmsEnum } from '../models/algorithms.enum';
+import { isHexValidator } from '../../../utils/validators/is-hex.validator';
 
 export interface PublicKey {
   publicKeyHex: string;
@@ -22,7 +23,7 @@ export class VerificationMethodComponent implements OnInit {
   dataSource: PublicKey[] = [];
   selectControl = new FormControl('', [Validators.required]);
   publicKey = new FormControl('',
-    [Validators.required, Validators.pattern(new RegExp('0x[A-Fa-f0-9]{66}'))]
+    [Validators.required, isHexValidator]
   );
   selectOptions = Object.entries(AlgorithmsEnum);
   private publicKeys;
@@ -59,12 +60,13 @@ export class VerificationMethodComponent implements OnInit {
   }
 
   getPublicKeyErrorMsg() {
+    debugger;
     if (this.publicKey.hasError('required')) {
       return 'This field is required';
     }
 
-    if (this.publicKey.hasError('pattern')) {
-      return 'Invalid input. Public key must start with "0x" to be followed by 66 Hexadecimal characters.';
+    if (this.publicKey.hasError('isHexInvalid')) {
+      return 'Invalid input. Public key must start with "0x" to be followed by 66 or 130 Hexadecimal characters.';
     }
 
     return '';
