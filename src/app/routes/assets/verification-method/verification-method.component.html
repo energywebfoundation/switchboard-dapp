@@ -43,9 +43,9 @@
     </ng-container>
     <div class="history-list-item mb-3 p-2">
         <mat-form-field class="mt-2" appearance="outline">
-            <input matInput [formControl]="publicKey" placeholder="Public Key" maxlength="256"
+            <input matInput [formControl]="publicKey" placeholder="Public Key"
                    autocomplete="off">
-            <mat-error>Public key is required. It should have at least 3 letters and no more than 256</mat-error>
+            <mat-error *ngIf="publicKey.invalid">{{getPublicKeyErrorMsg()}} </mat-error>
         </mat-form-field>
         <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
             <mat-select [formControl]="selectControl" placeholder="Select type">

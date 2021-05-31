@@ -5,7 +5,6 @@ import { FormControl, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { AlgorithmsEnum } from '../models/algorithms.enum';
 import { ToastrService } from 'ngx-toastr';
-import { textDefaultsValidators } from '../../../utils/validators/text-defaults-validators';
 
 export interface PublicKey {
   publicKeyHex: string;
@@ -24,7 +23,7 @@ export class VerificationMethodComponent implements OnInit {
   dataSource: PublicKey[] = [];
   selectControl = new FormControl('', [Validators.required]);
   publicKey = new FormControl('',
-    textDefaultsValidators
+    [Validators.required, Validators.pattern(new RegExp('0x[A-Fa-f0-9]{66}'))]
   );
   selectOptions = Object.entries(AlgorithmsEnum);
   private publicKeys;
@@ -59,6 +58,18 @@ export class VerificationMethodComponent implements OnInit {
     this.verificationService.updateDocumentAndReload(this.dialogData.id, this.publicKey.value).subscribe((publicKeys) => {
       this.handleLoadedPublicKeys(publicKeys);
     });
+  }
+
+  getPublicKeyErrorMsg() {
+    if (this.publicKey.hasError('required')) {
+      return 'This field is required';
+    }
+
+    if (this.publicKey.hasError('pattern')) {
+      return 'Invalid input. Public key must start with "0x" to be followed by 66 Hexadecimal characters.';
+    }
+
+    return '';
   }
 
   private handleLoadedPublicKeys(publicKeys): void {
