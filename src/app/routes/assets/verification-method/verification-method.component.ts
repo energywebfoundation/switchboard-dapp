@@ -77,7 +77,7 @@ export class VerificationMethodComponent implements OnInit {
   }
 
   private copied(): void {
-    this.toastr.success('Did successfully copied to clipboard.');
+    this.toastr.success('Public key successfully copied to clipboard.');
   }
 
 }
