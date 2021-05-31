@@ -43,12 +43,12 @@
         </div>
     </ng-container>
     <div class="history-list-item mb-3 p-2">
-        <mat-form-field class="mt-2" appearance="outline">
+        <mat-form-field appearance="outline">
             <input matInput [formControl]="publicKey" placeholder="Public Key"
                    autocomplete="off">
             <mat-error *ngIf="publicKey.invalid">{{getPublicKeyErrorMsg()}} </mat-error>
         </mat-form-field>
-        <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+        <mat-form-field appearance="outline" floatPlaceholder="never">
             <mat-select [formControl]="selectControl" placeholder="Select type">
                 <mat-option [value]="option[1]" *ngFor="let option of selectOptions">
                     <mat-icon class="color-info pr-2" svgIcon="ethereum-icon"></mat-icon>
