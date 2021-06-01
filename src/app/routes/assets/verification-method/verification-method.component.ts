@@ -4,8 +4,7 @@ import { VerificationService } from './verification.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { AlgorithmsEnum } from '../models/algorithms.enum';
-import { ToastrService } from 'ngx-toastr';
-import { textDefaultsValidators } from '../../../utils/validators/text-defaults-validators';
+import { isHexValidator } from '../../../utils/validators/is-hex.validator';
 
 export interface PublicKey {
   publicKeyHex: string;
@@ -24,15 +23,14 @@ export class VerificationMethodComponent implements OnInit {
   dataSource: PublicKey[] = [];
   selectControl = new FormControl('', [Validators.required]);
   publicKey = new FormControl('',
-    textDefaultsValidators
+    [Validators.required, isHexValidator]
   );
   selectOptions = Object.entries(AlgorithmsEnum);
   private publicKeys;
 
   constructor(private dialogRef: MatDialogRef<VerificationMethodComponent>,
               @Inject(MAT_DIALOG_DATA) private dialogData: any,
-              private verificationService: VerificationService,
-              private toastr: ToastrService) {
+              private verificationService: VerificationService) {
   }
 
   get isFormDisabled() {
@@ -61,6 +59,18 @@ export class VerificationMethodComponent implements OnInit {
     });
   }
 
+  getPublicKeyErrorMsg() {
+    if (this.publicKey.hasError('required')) {
+      return 'This field is required';
+    }
+
+    if (this.publicKey.hasError('isHexInvalid')) {
+      return 'Invalid input. Public key must start with "0x" to be followed by 66 or 130 Hexadecimal characters.';
+    }
+
+    return '';
+  }
+
   private handleLoadedPublicKeys(publicKeys): void {
     this.publicKeys = publicKeys;
     this.verificationsAmount = publicKeys.length;
@@ -74,10 +84,6 @@ export class VerificationMethodComponent implements OnInit {
   private loadPublicKeys(): void {
     this.verificationService.getPublicKeys(this.dialogData.id, true)
       .subscribe(publicKeys => this.handleLoadedPublicKeys(publicKeys));
-  }
-
-  private copied(): void {
-    this.toastr.success('Did successfully copied to clipboard.');
   }
 
 }
