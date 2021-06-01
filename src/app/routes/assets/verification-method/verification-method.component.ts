@@ -60,7 +60,6 @@ export class VerificationMethodComponent implements OnInit {
   }
 
   getPublicKeyErrorMsg() {
-    debugger;
     if (this.publicKey.hasError('required')) {
       return 'This field is required';
     }
