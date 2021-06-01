@@ -24,4 +24,14 @@
         }
       
   }
+
+  ::ng-deep .mat-checkbox-disabled:not(.mat-checkbox-checked) .mat-checkbox-frame {
+      opacity: 0.5;
+      border-color: currentColor;
+  }
+
+  ::ng-deep .mat-checkbox-disabled .mat-checkbox-label {
+    color: currentColor;
+    opacity: 0.3;
+}
   

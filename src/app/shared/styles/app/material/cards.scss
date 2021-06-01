@@ -188,14 +188,6 @@ mat-drawer {
   }
 }
 
-.did-wrapper {
-  margin-top: 7px;
-  background-color: #1f1b2d;
-  padding: 8px 12px;
-  border-radius: 50px;
-  color: #FFF;
-}
-
 .card-register {
       width: 434px;
       padding: 35px 35px 25px 35px !important;
@@ -533,6 +525,22 @@ mat-drawer {
     .mat-icon {
       font-size: 21px;
       margin: 0 10px 0 8px;
+    }
+  }
+
+  .card-warning {
+    border: 1px solid rgb(255 165 0 / 50%);
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    background-color: rgb(255 165 0 / 8%);
+    border-radius: 5px;
+    font-size: 12px;
+    color: #FFA500;
+
+    .mat-icon {
+      font-size: 21px;
+      margin: -5px 10px 0 8px;
     }
   }
 

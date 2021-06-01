@@ -271,7 +271,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     const dialogRef = this.dialog.open(SelectAssetDialogComponent, {
       width: '600px',
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
+      data: {
+        assetDiD: this.roleTypeForm?.value?.assetDid
+      }
     }).afterClosed().subscribe(async (res: Asset) => {
       if (res) {
         this.roleTypeForm.patchValue({

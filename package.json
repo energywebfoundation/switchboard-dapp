@@ -69,6 +69,7 @@
     "ts-helpers": "1.1.1",
     "ts-md5": "^1.2.7",
     "tslib": "^2.0.0",
+    "uuid": "^8.3.2",
     "web-animations-js": "^2.3.2",
     "zone.js": "~0.10.2"
   },
