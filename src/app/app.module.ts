@@ -23,6 +23,9 @@ import { ConfigService } from './shared/services/config.service';
 import * as Sentry from '@sentry/angular';
 import { MenuService } from './core/menu/menu.service';
 import { menu } from './routes/menu';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -69,6 +72,9 @@ if (environment.SENTRY_DNS) {
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
+    StoreModule.forRoot({}, {}),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    EffectsModule.forRoot([]),
   ],
   providers,
   bootstrap: [AppComponent],
