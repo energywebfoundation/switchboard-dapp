@@ -6,6 +6,8 @@ import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
+import { Store } from '@ngrx/store';
+import * as userClaims from '../../state/user-claim/user.actions';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
@@ -46,7 +48,8 @@ export class IamService {
   private _timer = undefined;
   private _deepLink = '';
 
-  constructor(private loadingService: LoadingService, configService: ConfigService) {
+  constructor(private loadingService: LoadingService, configService: ConfigService,
+              private store: Store) {
     // Set Cache Server
     setCacheClientOptions(VOLTA_CHAIN_ID, {
       url: cacheServerUrl
@@ -135,7 +138,7 @@ export class IamService {
 
     // Setup DID Document
     this._didDocument = await this._iam.getDidDocument();
-
+    this.store.dispatch(userClaims.setDidDocument({didDocument: this._didDocument}));
     // Get User Claims
     let data: any[] = await this.iam.getUserClaims();
     // console.log('getUserClaims()', JSON.parse(JSON.stringify(data)));

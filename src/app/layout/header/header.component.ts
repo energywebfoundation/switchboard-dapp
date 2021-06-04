@@ -15,7 +15,9 @@ import { DialogUser } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
+import * as userSelectors from '../../state/user-claim/user.selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
     selector: 'app-header',
@@ -50,9 +52,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         totalCount: 0,
         pendingSyncCount: 0
     };
-    userDid: string;
 
     isLoadingNotif = true;
+    userName$ = this.store.select(userSelectors.getUserName).pipe(map(value => value ? value : 'Manage Profile'));
+    userDid$ = this.store.select(userSelectors.getDid);
 
     private _pendingApprovalCountListener: any;
     private _pendingSyncCountListener: any;
@@ -71,7 +74,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 private toastr: ToastrService,
                 private notifService: NotificationService,
                 public userblockService: UserblockService,
-                public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer) {
+                public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer,
+                private store: Store) {
         // show only a few items on demo
         this.menuItems = menu.getMenu().slice(0, 4); // for horizontal layout
 
@@ -161,10 +165,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
                     this.isLoadingNotif = false;
                 }
             });
-    }
-
-    setUserDid() {
-        this.userDid = this.iamService.iam.getDid();
     }
 
     private _initNotificationsAndTasks() {

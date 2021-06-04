@@ -180,12 +180,10 @@
             </a>
         </li>
         <li class="nav-item">
-            <div class="cursor-pointer" (menuOpened)="setUserDid()" [matMenuTriggerFor]="menu">
+            <div class="cursor-pointer" [matMenuTriggerFor]="menu">
                 <div class="d-flex align-items-center ml-3 ml-md-0 flex-row">
                     <div class="d-none d-md-flex flex-column align-items-end ml-2 mr-2">
-                        <div class="label-role" *ngIf="!userName">Manage Profile</div>
-                        <div class="label-role" *ngIf="userName"> {{ userName }} </div>
-                        <!-- <div class="label-did">0x5B1B89A48C1fB….6d45</div> -->
+                        <div class="label-role"> {{ userName$ | async }} </div>
                     </div>
                     <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="34"
                         height="34" alt="avatar">
@@ -200,15 +198,17 @@
     <div class="border-bottom-1">
         <div class="d-flex flex-column align-items-center m-3">
             <img class="img-thumbnail rounded-circle mt-2 mb-3" src="../assets/img/identity-image.png" width="44"
-                height="44" alt="avatar">
-            <div class="label-role" *ngIf="!userName">Manage Profile</div>
-            <div class="label-role" *ngIf="userName"> {{ userName }} </div>
+                 height="44" alt="avatar">
+            <div class="label-role">{{ userName$ | async}}</div>
         </div>
-        <div class="d-flex align-items-center opacity-50 text-truncate-middle did-wrapper mx-3 mb-3"
-            matTooltip="Copy to clipboard" [cdkCopyToClipboard]="userDid" (cdkCopyToClipboardCopied)="didCopied()">
-            <div class="f-14">{{userDid | didFormatMinifier}}</div>
-            <mat-icon class="ml-2">content_copy</mat-icon>
-        </div>
+        <ng-container *ngIf="(userDid$ | async) as did">
+            <div class="d-flex align-items-center opacity-50 text-truncate-middle did-wrapper mx-3 mb-3"
+                 matTooltip="Copy to clipboard"
+                 appCopyToClipboard [copyClipboard]="did" message="User Did">
+                <div class="f-14">{{did | didFormatMinifier}}</div>
+                <mat-icon class="ml-2">content_copy</mat-icon>
+            </div>
+        </ng-container>
     </div>
     <button class="color-link px-4 pb-2 border-bottom-1" mat-menu-item (click)="openDialogUser()">Update
         Identity</button>

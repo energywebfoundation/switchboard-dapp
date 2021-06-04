@@ -1,13 +1,16 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { IamService, LoginType } from 'src/app/shared/services/iam.service';
+import { IamService } from 'src/app/shared/services/iam.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { ToastrService } from 'ngx-toastr';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { startWith, map, switchMap, debounceTime } from 'rxjs/operators';
-import { ENSNamespaceTypes, WalletProvider } from 'iam-client-lib';
+import { debounceTime, startWith, switchMap } from 'rxjs/operators';
+import { WalletProvider } from 'iam-client-lib';
 import { LoadingCount } from 'src/app/shared/constants/shared-constants';
+import { Store } from '@ngrx/store';
+import { loadUserClaims } from '../../state/user-claim/user.actions';
+import * as userSelectors from '../../state/user-claim/user.selectors';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,13 +30,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     value: false
   };
 
+  userName$ = this.store.select(userSelectors.getUserName);
+  userDid$ = this.store.select(userSelectors.getDid);
+
   constructor(
     private iamService: IamService,
     private route: Router,
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService,
     private toastr: ToastrService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private store: Store
   ) {
     // Init Search
     this.searchForm = fb.group({
@@ -52,7 +59,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.loadingService.show();
 
       // Check Login
+      console.log('this.iamService.iam.isSessionActive()', this.iamService.iam.isSessionActive());
       if (this.iamService.iam.isSessionActive()) {
+        console.log('login');
         await this.iamService.login();
 
         // Check if returnUrl is available or just redirect to dashboard
@@ -66,7 +75,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
       // Setup User Data
       await this._setupUser();
-
+      this.store.dispatch(loadUserClaims());
       // Redirect to actual screen
       if (returnUrl) {
         let timeout$ = setTimeout(() => {
@@ -87,7 +96,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
   private async _setupUser() {
     // Format DID
@@ -126,7 +136,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     finally {
       this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.DOWN);
     }
-    
+
     return retVal;
   }
 
