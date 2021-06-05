@@ -11,11 +11,11 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'dialog-user',
+  selector: 'app-dialog-user',
   templateUrl: 'dialog-user.component.html',
   styleUrls: ['../header.component.scss']
 })
-export class DialogUser implements OnInit, OnDestroy {
+export class DialogUserComponent implements OnInit, OnDestroy {
 
   public profileForm: FormGroup;
   public maxDate: Date;
@@ -23,7 +23,7 @@ export class DialogUser implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
-    public dialogRef: MatDialogRef<DialogUser>,
+    public dialogRef: MatDialogRef<DialogUserComponent>,
     private fb: FormBuilder,
     private iamService: IamService,
     private toastr: ToastrService,

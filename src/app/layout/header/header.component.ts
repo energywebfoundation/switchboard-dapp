@@ -11,7 +11,7 @@ import { UserblockService } from '../sidebar/userblock/userblock.service';
 import { SettingsService } from '../../core/settings/settings.service';
 import { MenuService } from '../../core/menu/menu.service';
 import { Identicon } from 'src/app/shared/directives/identicon/identicon';
-import { DialogUser } from './dialog-user/dialog-user.component';
+import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Subject } from 'rxjs';
@@ -126,7 +126,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     openDialogUser(): void {
-        const dialogRef = this.dialog.open(DialogUser, {
+        const dialogRef = this.dialog.open(DialogUserComponent, {
             width: '440px',
             data: {},
             maxWidth: '100%',
