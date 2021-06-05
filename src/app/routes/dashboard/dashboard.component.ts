@@ -2,7 +2,6 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from 'src/app/shared/services/loading.service';
-import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
@@ -38,7 +37,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private route: Router,
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService,
-    private toastr: ToastrService,
     private fb: FormBuilder,
     private store: Store
   ) {
@@ -59,9 +57,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.loadingService.show();
 
       // Check Login
-      console.log('this.iamService.iam.isSessionActive()', this.iamService.iam.isSessionActive());
       if (this.iamService.iam.isSessionActive()) {
-        console.log('login');
         await this.iamService.login();
 
         // Check if returnUrl is available or just redirect to dashboard
@@ -175,20 +171,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   goToAssets() {
     this.route.navigate(['assets']);
-  }
-
-  copyToClipboard() {
-    let listener = (e: ClipboardEvent) => {
-      let clipboard = e.clipboardData || window['clipboardData'];
-      clipboard.setData('text', this.iamService.iam.getDid());
-      e.preventDefault();
-    };
-
-    document.addEventListener('copy', listener, false);
-    document.execCommand('copy');
-    document.removeEventListener('copy', listener, false);
-
-    this.toastr.success('User DID is copied to clipboard.');
   }
 
   clearSearchTxt() {
