@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import * as userActions from '../../../state/user-claim/user.actions';
 
 @Component({
   selector: 'app-dialog-user',
@@ -19,7 +20,6 @@ export class DialogUserComponent implements OnInit, OnDestroy {
 
   public profileForm: FormGroup;
   public maxDate: Date;
-  private profileCache: any;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -64,8 +64,6 @@ export class DialogUserComponent implements OnInit, OnDestroy {
 
   async save() {
     if (this.profileForm.valid) {
-      this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
-
       let data = this.profileForm.getRawValue();
 
       if (data.birthdate) {
@@ -74,24 +72,7 @@ export class DialogUserComponent implements OnInit, OnDestroy {
         data.birthdate = date;
       }
 
-      // console.log('data', data);
-      try {
-        await this.iamService.iam.createSelfSignedClaim({
-          data: {
-            profile: {
-              ...this.profileCache,
-              ...data
-            }
-          }
-        });
-        this.toastr.success('Identity is updated.', 'Success');
-        this.dialogRef.close(true);
-      } catch (e) {
-        console.error('Saving Identity Error', e);
-        this.toastr.error(e.message, 'System Error');
-      } finally {
-        this.loadingService.hide();
-      }
+      this.store.dispatch(userActions.updateUserClaims({ profile: data }));
     }
   }
 }

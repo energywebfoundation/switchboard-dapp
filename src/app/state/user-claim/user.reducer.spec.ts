@@ -1,6 +1,4 @@
-import { UserEntity } from './user-claim.models';
-import * as UserActions from './user.actions';
-import { State, initialState, reducer } from './user.reducer';
+import { initialState, reducer } from './user.reducer';
 
 describe('User Reducer', () => {
 

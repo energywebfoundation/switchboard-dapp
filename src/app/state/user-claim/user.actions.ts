@@ -17,6 +17,21 @@ export const loadUserClaimsFailure = createAction(
   props<{ error: any }>()
 );
 
+export const updateUserClaims = createAction(
+  '[User] Update User Claims',
+  props<{profile: Partial<Profile>}>()
+);
+
+export const updateUserClaimsFailure = createAction(
+  '[User] Update User Claims Failure',
+  props<{error: any}>()
+);
+
+export const updateUserClaimsSuccess = createAction(
+  '[User] Update User Claims Success',
+  props<{profile: Partial<Profile>}>()
+);
+
 export const setDidDocument = createAction(
   '[User] Set User Did Document',
   props<{ didDocument: any }>()

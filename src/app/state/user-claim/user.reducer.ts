@@ -7,24 +7,18 @@ export const USER_FEATURE_KEY = 'user';
 export interface State {
   didDocument: any;
   profile: Profile;
-  loading: boolean;
   error?: string | null;
 }
 
-export interface UserPartialState {
-  readonly [USER_FEATURE_KEY]: State;
-}
-
 export const initialState: State = {
-  didDocument: '',
-  profile: {},
-  loading: false,
+  didDocument: null,
+  profile: null,
   error: ''
 };
 
 const userReducer = createReducer(
   initialState,
-  on(UserActions.setProfile, (state, {profile}) => ({...state, profile})),
+  on(UserActions.setProfile, UserActions.updateUserClaimsSuccess, (state, {profile}) => ({...state, profile})),
   on(UserActions.setDidDocument, (state, {didDocument}) => ({...state, didDocument}))
 );
 
