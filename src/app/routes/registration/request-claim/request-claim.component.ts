@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Asset, ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
+import { Asset, ENSNamespaceTypes, IRoleDefinition, PreconditionTypes } from 'iam-client-lib';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -15,7 +15,7 @@ import { ViewColorsSetter, SubjectElements } from '../models/view-colors-setter'
 const SWAL = require('sweetalert');
 
 const TOASTR_HEADER = 'Enrolment';
-const DEFAULT_CLAIM_TYPE_VERSION = '1.0.0';
+const DEFAULT_CLAIM_TYPE_VERSION = 1;
 const REDIRECT_TO_ENROLMENT = true;
 const EnrolForType = {
   ME: 'me',
@@ -43,20 +43,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     enrolFor: EnrolForType.ME,
     assetDid: ''
   });
-  public fieldList: {
-    fieldType: string,
-    label: string,
-    required: boolean,
-    minLength: number,
-    maxLength: number,
-    pattern: string,
-    minValue: number,
-    maxValue: number,
-    minDate: string,
-    maxDate: string,
-    minDateValue: Date,
-    maxDateValue: Date
-  }[];
+  public fieldList: IRoleDefinition['fields'];
 
   public orgAppDetails: any;
   public roleList: any;
@@ -81,7 +68,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   private callbackUrl: string;
   private defaultRole: string;
   private roleType: string;
-  private selectedRole: any;
+  private selectedRole: IRoleDefinition;
   private selectedNamespace: string;
   private stayLoggedIn = false;
 
@@ -224,7 +211,8 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
           let claim = {
             fields: JSON.parse(JSON.stringify(fields)),
             claimType: this.selectedNamespace,
-            claimTypeVersion: this.selectedRole.version || DEFAULT_CLAIM_TYPE_VERSION
+            // toString() on claimTypeVersion because expected type on iam-cache-server is string but roleDefinition type is 
+            claimTypeVersion: (this.selectedRole.version || DEFAULT_CLAIM_TYPE_VERSION).toString()
           };
 
           await this.iamService.iam.createClaimRequest({
