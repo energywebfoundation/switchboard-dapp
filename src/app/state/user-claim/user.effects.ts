@@ -10,6 +10,7 @@ import { LoadingService } from '../../shared/services/loading.service';
 import { CancelButton } from '../../layout/loading/loading.component';
 import { Store } from '@ngrx/store';
 import * as UserSelectors from './user.selectors';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable()
 export class UserEffects {
@@ -49,15 +50,18 @@ export class UserEffects {
           .pipe(
             map(() => UserActions.updateUserClaimsSuccess({profile})),
             catchError(err => of(UserActions.updateUserClaimsFailure({ error: err }))),
-            finalize(() => this.loadingService.hide())
+            finalize(() => {
+              this.loadingService.hide();
+              this.dialog.closeAll();
+            })
           )
-      ),
-      finalize(() => this.loadingService.hide())
+      )
     ));
 
   constructor(private actions$: Actions,
               private store: Store,
               private iamService: IamService,
-              private loadingService: LoadingService) {
+              private loadingService: LoadingService,
+              private dialog: MatDialog) {
   }
 }
