@@ -6,7 +6,7 @@
         <div class="d-flex align-items-center opacity-50 text-truncate-middle did-wrapper"
              appCopyToClipboard [copyClipboard]="accountDid" message="User Did"
              matTooltip="Copy to clipboard">
-            <div>{{ accountDid }}</div>
+            <div>{{ accountDid | didFormatMinifier}}</div>
             <mat-icon class="ml-2">content_copy</mat-icon>
         </div>
     </ng-container>
