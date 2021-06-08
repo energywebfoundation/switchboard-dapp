@@ -73,12 +73,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   private stayLoggedIn = false;
 
   constructor(private fb: FormBuilder,
-              private route: Router,
-              private activeRoute: ActivatedRoute,
-              private iamService: IamService,
-              private toastr: ToastrService,
-              public dialog: MatDialog,
-              private loadingService: LoadingService) {
+    private route: Router,
+    private activeRoute: ActivatedRoute,
+    private iamService: IamService,
+    private toastr: ToastrService,
+    public dialog: MatDialog,
+    private loadingService: LoadingService) {
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -207,12 +207,19 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             });
           }
 
-          // Submit
-          let claim = {
+          // Submit first digit of version
+          // because legacy role's had version format of '1.0.0'
+          // but we version should be persisted as numbers
+          const parseVersion = (version: string | number) => {
+            if (typeof (version) === 'string') {
+              return parseInt(version.split('.')[0], 10);
+            }
+            return version;
+          };
+          const claim = {
             fields: JSON.parse(JSON.stringify(fields)),
             claimType: this.selectedNamespace,
-            // toString() on claimTypeVersion because expected type on iam-cache-server is string but roleDefinition type is 
-            claimTypeVersion: (this.selectedRole.version || DEFAULT_CLAIM_TYPE_VERSION).toString()
+            claimTypeVersion: parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION
           };
 
           await this.iamService.iam.createClaimRequest({
@@ -291,7 +298,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
     this.callbackUrl = params.returnUrl || (others ? others.returnUrl : undefined);
 
-    const viewColorsSetter = new ViewColorsSetter({...others, ...params});
+    const viewColorsSetter = new ViewColorsSetter({ ...others, ...params });
     viewColorsSetter.applyTo(this);
   }
 
@@ -467,7 +474,9 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         let retVal = true;
         let defaultRole = `${this.defaultRole}.${ENSNamespaceTypes.Roles}.${this.namespace}`;
         for (let i = 0; i < this.userRoleList.length; i++) {
-          if (role.namespace === this.userRoleList[i].claimType && role.definition.version === this.userRoleList[i].claimTypeVersion) {
+          if (role.namespace === this.userRoleList[i].claimType &&
+            // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
+            role.definition.version.toString().split('.')[0] === this.userRoleList[i].claimTypeVersion.toString().split('.')[0]) {
             if (role.namespace === defaultRole) {
               // Display Error
               if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
