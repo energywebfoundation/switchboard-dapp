@@ -1,10 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ToastrService } from 'ngx-toastr';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { CancelButton } from '../../loading/loading.component';
 import { Store } from '@ngrx/store';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { takeUntil } from 'rxjs/operators';
@@ -25,9 +21,6 @@ export class DialogUserComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<DialogUserComponent>,
     private fb: FormBuilder,
-    private iamService: IamService,
-    private toastr: ToastrService,
-    private loadingService: LoadingService,
     private store: Store) {
     this.profileForm = fb.group({
       name: ['', Validators.compose([
