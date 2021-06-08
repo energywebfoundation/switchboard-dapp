@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Asset, ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
+import { Asset, ENSNamespaceTypes, IRoleDefinition, PreconditionTypes } from 'iam-client-lib';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -15,7 +15,7 @@ import { ViewColorsSetter, SubjectElements } from '../models/view-colors-setter'
 const SWAL = require('sweetalert');
 
 const TOASTR_HEADER = 'Enrolment';
-const DEFAULT_CLAIM_TYPE_VERSION = '1.0.0';
+const DEFAULT_CLAIM_TYPE_VERSION = 1;
 const REDIRECT_TO_ENROLMENT = true;
 const EnrolForType = {
   ME: 'me',
@@ -43,20 +43,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     enrolFor: EnrolForType.ME,
     assetDid: ''
   });
-  public fieldList: {
-    fieldType: string,
-    label: string,
-    required: boolean,
-    minLength: number,
-    maxLength: number,
-    pattern: string,
-    minValue: number,
-    maxValue: number,
-    minDate: string,
-    maxDate: string,
-    minDateValue: Date,
-    maxDateValue: Date
-  }[];
+  public fieldList: IRoleDefinition['fields'];
 
   public orgAppDetails: any;
   public roleList: any;
@@ -81,17 +68,17 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   private callbackUrl: string;
   private defaultRole: string;
   private roleType: string;
-  private selectedRole: any;
+  private selectedRole: IRoleDefinition;
   private selectedNamespace: string;
   private stayLoggedIn = false;
 
   constructor(private fb: FormBuilder,
-              private route: Router,
-              private activeRoute: ActivatedRoute,
-              private iamService: IamService,
-              private toastr: ToastrService,
-              public dialog: MatDialog,
-              private loadingService: LoadingService) {
+    private route: Router,
+    private activeRoute: ActivatedRoute,
+    private iamService: IamService,
+    private toastr: ToastrService,
+    public dialog: MatDialog,
+    private loadingService: LoadingService) {
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -220,11 +207,19 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             });
           }
 
-          // Submit
-          let claim = {
+          // Submit first digit of version
+          // because legacy role's had version format of '1.0.0'
+          // but we version should be persisted as numbers
+          const parseVersion = (version: string | number) => {
+            if (typeof (version) === 'string') {
+              return parseInt(version.split('.')[0], 10);
+            }
+            return version;
+          };
+          const claim = {
             fields: JSON.parse(JSON.stringify(fields)),
             claimType: this.selectedNamespace,
-            claimTypeVersion: this.selectedRole.version || DEFAULT_CLAIM_TYPE_VERSION
+            claimTypeVersion: parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION
           };
 
           await this.iamService.iam.createClaimRequest({
@@ -303,7 +298,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
     this.callbackUrl = params.returnUrl || (others ? others.returnUrl : undefined);
 
-    const viewColorsSetter = new ViewColorsSetter({...others, ...params});
+    const viewColorsSetter = new ViewColorsSetter({ ...others, ...params });
     viewColorsSetter.applyTo(this);
   }
 
@@ -479,7 +474,9 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         let retVal = true;
         let defaultRole = `${this.defaultRole}.${ENSNamespaceTypes.Roles}.${this.namespace}`;
         for (let i = 0; i < this.userRoleList.length; i++) {
-          if (role.namespace === this.userRoleList[i].claimType && role.definition.version === this.userRoleList[i].claimTypeVersion) {
+          if (role.namespace === this.userRoleList[i].claimType &&
+            // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
+            role.definition.version.toString().split('.')[0] === this.userRoleList[i].claimTypeVersion.toString().split('.')[0]) {
             if (role.namespace === defaultRole) {
               // Display Error
               if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
