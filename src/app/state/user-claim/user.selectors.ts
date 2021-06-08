@@ -14,6 +14,11 @@ export const getUserName = createSelector(
   (state: Profile) => state?.name ? state.name : ''
 );
 
+export const getAssetProfile = (profileId: string) => createSelector(
+  getUserProfile,
+  (state: Profile) => state?.assetProfiles && state.assetProfiles[profileId]
+);
+
 export const getDid = createSelector(
   getUserState,
   (state: UserClaimState) => state?.didDocument?.id

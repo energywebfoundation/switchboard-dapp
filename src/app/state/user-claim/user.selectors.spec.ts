@@ -1,4 +1,5 @@
 import * as UserSelectors from './user.selectors';
+import { AssetProfile } from 'iam-client-lib';
 
 describe('User Selectors', () => {
 
@@ -20,6 +21,18 @@ describe('User Selectors', () => {
     it('should return value specified in profile', () => {
       const name = 'name';
       expect(UserSelectors.getUserName.projector({name})).toEqual(name);
+    });
+
+    it('should return undefined when assetProfiles are not defined', () => {
+      expect(UserSelectors.getAssetProfile('1').projector({})).toBeUndefined();
+    });
+
+    it('should return undefined when assetProfiles is an empty object', () => {
+      expect(UserSelectors.getAssetProfile('1').projector({assetProfiles: {}})).toBeUndefined();
+    });
+
+    it('should return value when assetProfiles contains id', () => {
+      expect(UserSelectors.getAssetProfile('1').projector({assetProfiles: {1: '123'}})).toEqual('123' as AssetProfile);
     });
   });
 
