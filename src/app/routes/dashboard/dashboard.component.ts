@@ -10,6 +10,7 @@ import { LoadingCount } from 'src/app/shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import { loadUserClaims } from '../../state/user-claim/user.actions';
 import * as userSelectors from '../../state/user-claim/user.selectors';
+import { UserClaimState } from '../../state/user-claim/user.reducer';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,7 +37,7 @@ export class DashboardComponent implements AfterViewInit {
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService,
     private fb: FormBuilder,
-    private store: Store
+    private store: Store<UserClaimState>
   ) {
     // Init Search
     this.searchForm = fb.group({

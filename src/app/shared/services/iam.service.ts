@@ -8,6 +8,7 @@ import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
 import { Store } from '@ngrx/store';
 import * as userClaims from '../../state/user-claim/user.actions';
+import { UserClaimState } from '../../state/user-claim/user.reducer';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
@@ -49,7 +50,7 @@ export class IamService {
   private _deepLink = '';
 
   constructor(private loadingService: LoadingService, configService: ConfigService,
-              private store: Store) {
+              private store: Store<UserClaimState>) {
     // Set Cache Server
     setCacheClientOptions(VOLTA_CHAIN_ID, {
       url: cacheServerUrl

@@ -4,13 +4,13 @@ import * as UserActions from './user.actions';
 
 export const USER_FEATURE_KEY = 'user';
 
-export interface State {
+export interface UserClaimState {
   didDocument: any;
   profile: Profile;
   error?: string | null;
 }
 
-export const initialState: State = {
+export const initialState: UserClaimState = {
   didDocument: null,
   profile: null,
   error: ''
@@ -22,6 +22,6 @@ const userReducer = createReducer(
   on(UserActions.setDidDocument, (state, {didDocument}) => ({...state, didDocument}))
 );
 
-export function reducer(state: State | undefined, action: Action) {
+export function reducer(state: UserClaimState | undefined, action: Action) {
   return userReducer(state, action);
 }

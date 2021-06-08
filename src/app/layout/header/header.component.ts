@@ -18,6 +18,7 @@ import { Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import { Store } from '@ngrx/store';
+import { UserClaimState } from '../../state/user-claim/user.reducer';
 
 @Component({
     selector: 'app-header',
@@ -74,7 +75,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 private notifService: NotificationService,
                 public userblockService: UserblockService,
                 public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer,
-                private store: Store) {
+                private store: Store<UserClaimState>) {
         // show only a few items on demo
         this.menuItems = menu.getMenu().slice(0, 4); // for horizontal layout
 

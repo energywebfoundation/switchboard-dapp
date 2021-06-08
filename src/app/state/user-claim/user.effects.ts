@@ -11,6 +11,7 @@ import { CancelButton } from '../../layout/loading/loading.component';
 import { Store } from '@ngrx/store';
 import * as UserSelectors from './user.selectors';
 import { MatDialog } from '@angular/material/dialog';
+import { UserClaimState } from './user.reducer';
 
 @Injectable()
 export class UserEffects {
@@ -59,7 +60,7 @@ export class UserEffects {
     ));
 
   constructor(private actions$: Actions,
-              private store: Store,
+              private store: Store<UserClaimState>,
               private iamService: IamService,
               private loadingService: LoadingService,
               private dialog: MatDialog) {

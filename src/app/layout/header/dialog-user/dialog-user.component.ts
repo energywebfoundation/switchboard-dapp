@@ -6,6 +6,7 @@ import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import * as userActions from '../../../state/user-claim/user.actions';
+import { UserClaimState } from '../../../state/user-claim/user.reducer';
 
 @Component({
   selector: 'app-dialog-user',
@@ -21,7 +22,7 @@ export class DialogUserComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<DialogUserComponent>,
     private fb: FormBuilder,
-    private store: Store) {
+    private store: Store<UserClaimState>) {
     this.profileForm = fb.group({
       name: ['', Validators.compose([
         Validators.maxLength(256),
