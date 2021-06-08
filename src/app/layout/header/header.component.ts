@@ -37,7 +37,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isNavMenuVisible = true;
 
     currentNav = '';
-    userName = '';
 
     //Tasks
     tasks = {
@@ -153,11 +152,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // Stay in current screen and display user name if available
         this.iamService.userProfile
             .pipe(takeUntil(this._subscription$))
-            .subscribe((data: any) => {
-                if (data && data.name) {
-                    this.userName = data.name;
-                }
-
+            .subscribe(() => {
                 if (this.iamService.accountAddress) {
                     // Initialize Notifications
                     this._initNotificationsAndTasks();
