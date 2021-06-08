@@ -18,7 +18,6 @@ import * as userSelectors from '../../state/user-claim/user.selectors';
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
   public accountDid = '';
-  public userName = '';
   private readonly walletProvider: WalletProvider = undefined;
 
   public filteredOptions: Observable<any[]>;
@@ -81,13 +80,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }, 30);
       } else {
         this.loadingService.hide();
-
-        // Stay in current screen and display user name if available
-        this.iamService.userProfile.subscribe((data: any) => {
-          if (data && data.name) {
-            this.userName = data.name;
-          }
-        });
       }
     });
   }
