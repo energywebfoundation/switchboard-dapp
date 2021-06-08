@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -16,8 +16,7 @@ import * as userSelectors from '../../state/user-claim/user.selectors';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
-  public accountDid = '';
+export class DashboardComponent implements AfterViewInit {
   private readonly walletProvider: WalletProvider = undefined;
 
   public filteredOptions: Observable<any[]>;
@@ -52,7 +51,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
-      let returnUrl = undefined;
+      let returnUrl;
       this.loadingService.show();
 
       // Check Login
@@ -84,14 +83,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit() {
-  }
-
   private async _setupUser() {
-    // Format DID
-    let did = this.iamService.iam.getDid();
-    this.accountDid = `${did.substr(0, 15)}...${did.substring(did.length - 5)}`;
-
     // Setup User Data
     await this.iamService.setupUser();
   }
@@ -102,7 +94,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     try {
       if (keyword) {
-        let word = undefined;
+        let word;
         if (!keyword.trim && keyword.name) {
           word = keyword.name;
         } else {
