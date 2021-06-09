@@ -15,7 +15,7 @@ import { UserClaimState } from './user.reducer';
 
 @Injectable()
 export class UserEffects {
-  init$ = createEffect(() =>
+  loadUserClaims$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.loadUserClaims),
       switchMap(() =>
