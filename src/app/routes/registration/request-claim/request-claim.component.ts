@@ -2,7 +2,13 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Asset, ENSNamespaceTypes, IRoleDefinition, PreconditionTypes } from 'iam-client-lib';
+import {
+  Asset,
+  ENSNamespaceTypes,
+  IRoleDefinition,
+  PreconditionTypes,
+  RegistrationTypes
+} from 'iam-client-lib';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -48,9 +54,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     assetDid: ''
   });
 
+  registrationTypesOfRole: Record<string, Set<RegistrationTypes>>;
   public registrationTypesForm = this.fb.group({
-    offChain: true,
-    onChain: false
+    offChain: new FormControl({value: true, disabled: false}),
+    onChain: new FormControl({value: false, disabled: true}),
   });
 
   public fieldList: IRoleDefinition['fields'];
@@ -135,6 +142,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
             // Initialize Roles
             await this.initRoles();
+            if (this.roleList) {
+              await this.getRegistrationTypesOfRoles();
+            }
+
           } else {
             // Display Error
             if (this.roleType === RoleType.APP) {
@@ -156,11 +167,16 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     });
   }
 
+  private async getRegistrationTypesOfRoles() {
+    this.registrationTypesOfRole = await this.iamService.iam.registrationTypesOfRoles(this.roleList.map(role => role.namespace));
+  }
+
   roleTypeSelected(e: any) {
     if (e && e.value && e.value.definition) {
       this.fieldList = e.value.definition.fields || [];
       this.selectedRole = e.value.definition;
       this.selectedNamespace = e.value.namespace;
+      this.resetRegistrationTypesForm();
 
       // Init Preconditions
       this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
@@ -168,6 +184,16 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       this.createEnrolmentForm();
 
     }
+  }
+
+  private resetRegistrationTypesForm(): void {
+    this.registrationTypesForm.reset({
+      offChain: {value: true, disabled: false},
+      onChain: {
+        value: false,
+        disabled: !this.registrationTypesOfRole[this.selectedNamespace].has(RegistrationTypes.OnChain)
+      }
+    });
   }
 
   isEnrolForMyself(): boolean {
@@ -219,7 +245,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
           issuer: did,
           claim: this.createClaim(),
           subject: this.roleTypeForm.value.assetDid ? this.roleTypeForm.value.assetDid : undefined,
-          registrationTypes: this.getRegistrationTypes()
+          registrationTypes: this.isEnrolForMyself() ? this.getRegistrationTypes() : []
         } as any);
 
       } catch (e) {
@@ -300,12 +326,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private getRegistrationTypes(): string[] {
     const result = [];
-    if (this.registrationTypesForm.get('offChain')) {
-      result.push('add here offChain enum');
+    if (this.registrationTypesForm.get('offChain').value) {
+      result.push(RegistrationTypes.OffChain);
     }
 
-    if (this.registrationTypesForm.get('onChain')) {
-      result.push('add here onChain enum');
+    if (this.registrationTypesForm.get('onChain').value) {
+      result.push(RegistrationTypes.OnChain);
     }
 
     return result;
@@ -554,7 +580,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       await this._getDIDSyncedRoles();
 
       if (this.roleList && this.roleList.length) {
-
         // Set Default Selected
         if (this.defaultRole) {
           this.roleList
