@@ -1,6 +1,6 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import { Profile } from 'iam-client-lib';
-import * as UserActions from './user.actions';
+import * as userActions from './user.actions';
 
 export const USER_FEATURE_KEY = 'user';
 
@@ -18,8 +18,8 @@ export const initialState: UserClaimState = {
 
 const userReducer = createReducer(
   initialState,
-  on(UserActions.setProfile, UserActions.updateUserClaimsSuccess, (state, {profile}) => ({...state, profile})),
-  on(UserActions.setDidDocument, (state, {didDocument}) => ({...state, didDocument}))
+  on(userActions.setProfile, userActions.updateUserClaimsSuccess, (state, {profile}) => ({...state, profile})),
+  on(userActions.setDidDocument, (state, {didDocument}) => ({...state, didDocument}))
 );
 
 export function reducer(state: UserClaimState | undefined, action: Action) {

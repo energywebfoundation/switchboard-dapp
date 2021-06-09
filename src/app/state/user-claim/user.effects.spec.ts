@@ -7,11 +7,10 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { LoadingService } from '../../shared/services/loading.service';
 import { IamService } from '../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
-import * as UserActions from './user.actions';
+import * as userActions from './user.actions';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { UserClaimState } from './user.reducer';
-import { Store } from '@ngrx/store';
-import * as UserSelectors from './user.selectors';
+import * as userSelectors from './user.selectors';
 import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
@@ -56,20 +55,20 @@ describe('UserEffects', () => {
       const claims = [{
         iat: 1612522971162,
       }];
-      actions$.next(UserActions.loadUserClaims());
+      actions$.next(userActions.loadUserClaims());
       iamSpy.getUserClaims.and.returnValue(of(claims));
 
       effects.loadUserClaims$.subscribe(resultAction => {
-        expect(resultAction).toEqual(UserActions.loadUserClaimsSuccess({userClaims: claims} as any));
+        expect(resultAction).toEqual(userActions.loadUserClaimsSuccess({userClaims: claims} as any));
         done();
       });
     });
     it('should return error action when get 404 error', (done) => {
-      actions$.next(UserActions.loadUserClaims());
+      actions$.next(userActions.loadUserClaims());
       iamSpy.getUserClaims.and.returnValue(throwError({status: 404}));
 
       effects.loadUserClaims$.subscribe(resultAction => {
-        expect(resultAction).toEqual(UserActions.loadUserClaimsFailure({error: {status: 404}}));
+        expect(resultAction).toEqual(userActions.loadUserClaimsFailure({error: {status: 404}}));
         done();
       });
     });
@@ -82,10 +81,10 @@ describe('UserEffects', () => {
 
     it('should return undefined profile when passing empty list', (done) => {
       const claims = [];
-      actions$.next(UserActions.loadUserClaimsSuccess({userClaims: claims}));
+      actions$.next(userActions.loadUserClaimsSuccess({userClaims: claims}));
 
       effects.getUserProfile$.subscribe(resultAction => {
-        expect(resultAction).toEqual(UserActions.setProfile({profile: undefined}));
+        expect(resultAction).toEqual(userActions.setProfile({profile: undefined}));
         done();
       });
     });
@@ -94,10 +93,10 @@ describe('UserEffects', () => {
       const claims = [{
         iat: 1612522971162,
       }];
-      actions$.next(UserActions.loadUserClaimsSuccess({userClaims: claims} as any));
+      actions$.next(userActions.loadUserClaimsSuccess({userClaims: claims} as any));
 
       effects.getUserProfile$.subscribe(resultAction => {
-        expect(resultAction).toEqual(UserActions.setProfile({profile: undefined}));
+        expect(resultAction).toEqual(userActions.setProfile({profile: undefined}));
         done();
       });
     });
@@ -123,10 +122,10 @@ describe('UserEffects', () => {
         profile,
       }];
 
-      actions$.next(UserActions.loadUserClaimsSuccess({userClaims: claims} as any));
+      actions$.next(userActions.loadUserClaimsSuccess({userClaims: claims} as any));
 
       effects.getUserProfile$.subscribe(resultAction => {
-        expect(resultAction).toEqual(UserActions.setProfile({profile}));
+        expect(resultAction).toEqual(userActions.setProfile({profile}));
         done();
       });
     });
@@ -169,10 +168,10 @@ describe('UserEffects', () => {
         },
       };
       const claims = [lastClaim, firstClaim, secondClaim];
-      actions$.next(UserActions.loadUserClaimsSuccess({userClaims: claims} as any));
+      actions$.next(userActions.loadUserClaimsSuccess({userClaims: claims} as any));
 
       effects.getUserProfile$.subscribe(resultAction => {
-        expect(resultAction).toEqual(UserActions.setProfile({profile: firstClaim.profile} as any));
+        expect(resultAction).toEqual(userActions.setProfile({profile: firstClaim.profile} as any));
         done();
       });
     });
@@ -186,8 +185,8 @@ describe('UserEffects', () => {
     });
 
     it('should set user profile and check for called methods', (done) => {
-      userProfile = store.overrideSelector(UserSelectors.getUserProfile, {});
-      actions$.next(UserActions.updateUserClaims({profile: {name: 'test'}}));
+      userProfile = store.overrideSelector(userSelectors.getUserProfile, {});
+      actions$.next(userActions.updateUserClaims({profile: {name: 'test'}}));
       iamSpy.createSelfSignedClaim.and.returnValue(Promise.resolve(true));
 
       effects.updateUserProfile$.pipe(
@@ -198,22 +197,22 @@ describe('UserEffects', () => {
       ).subscribe(resultAction => {
         expect(loadingServiceSpy.show).toHaveBeenCalled();
         expect(toastrSpy.success).toHaveBeenCalled();
-        expect(resultAction).toEqual(UserActions.updateUserClaimsSuccess({profile: {name: 'test', assetProfiles: {}}}));
+        expect(resultAction).toEqual(userActions.updateUserClaimsSuccess({profile: {name: 'test', assetProfiles: {}}}));
         done();
       });
     });
 
     it('should update existing user profile name', (done) => {
       const assetProfiles = {'did:ethr': {name: 'asset name', icon: ''}};
-      userProfile = store.overrideSelector(UserSelectors.getUserProfile,
+      userProfile = store.overrideSelector(userSelectors.getUserProfile,
         {name: 'old', assetProfiles}
       );
-      actions$.next(UserActions.updateUserClaims({profile: {name: 'new'}}));
+      actions$.next(userActions.updateUserClaims({profile: {name: 'new'}}));
       iamSpy.createSelfSignedClaim.and.returnValue(Promise.resolve(true));
 
       effects.updateUserProfile$.subscribe(resultAction => {
         expect(resultAction).toEqual(
-          UserActions.updateUserClaimsSuccess({profile: {name: 'new', assetProfiles}})
+          userActions.updateUserClaimsSuccess({profile: {name: 'new', assetProfiles}})
         );
         done();
       });
@@ -221,16 +220,16 @@ describe('UserEffects', () => {
 
     it('should update asset profiles', (done) => {
       const assetProfilesOld = {'did:ethr': {name: 'asset name', icon: ''}};
-      userProfile = store.overrideSelector(UserSelectors.getUserProfile,
+      userProfile = store.overrideSelector(userSelectors.getUserProfile,
         {name: 'old', assetProfiles: assetProfilesOld}
       );
       const assetProfilesNew = {'did:ethr23': {name: 'asset', icon: ''}};
-      actions$.next(UserActions.updateUserClaims({profile: {name: 'new', assetProfiles: assetProfilesNew}}));
+      actions$.next(userActions.updateUserClaims({profile: {name: 'new', assetProfiles: assetProfilesNew}}));
       iamSpy.createSelfSignedClaim.and.returnValue(Promise.resolve(true));
 
       effects.updateUserProfile$.subscribe(resultAction => {
         expect(resultAction).toEqual(
-          UserActions.updateUserClaimsSuccess({
+          userActions.updateUserClaimsSuccess({
             profile: {
               name: 'new',
               assetProfiles: {
