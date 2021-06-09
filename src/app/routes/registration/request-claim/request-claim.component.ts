@@ -318,7 +318,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     };
 
     return {
-      fields: JSON.parse(JSON.stringify(this.buildFields())),
+      fields: JSON.parse(JSON.stringify(this.buildEnrolmentFormFields())),
       claimType: this.selectedNamespace,
       claimTypeVersion: parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION
     };
@@ -337,7 +337,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     return result;
   }
 
-  private buildFields() {
+  private buildEnrolmentFormFields() {
     const values = this.enrolmentForm.value.fields;
     return this.fieldList.map((field, index) => (
       {
