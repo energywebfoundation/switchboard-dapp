@@ -1,17 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Observable, of, ReplaySubject, throwError } from 'rxjs';
-
+import { of, ReplaySubject, throwError } from 'rxjs';
 
 import { UserEffects } from './user.effects';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { ToastrService } from 'ngx-toastr';
 import { LoadingService } from '../../shared/services/loading.service';
 import { IamService } from '../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
 import * as UserActions from './user.actions';
-import { provideMockStore } from '@ngrx/store/testing';
-import { throwErr } from 'sweetalert/typings/modules/utils';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { UserClaimState } from './user.reducer';
+import { Store } from '@ngrx/store';
+import * as UserSelectors from './user.selectors';
+import { finalize } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 beforeEach(() => {
   TestBed.configureTestingModule({
@@ -20,12 +22,13 @@ beforeEach(() => {
 });
 describe('UserEffects', () => {
 
-  const iamSpy = jasmine.createSpyObj('iam', ['getUserClaims']);
+  const iamSpy = jasmine.createSpyObj('iam', ['getUserClaims', 'createSelfSignedClaim']);
   const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
-  // const toastrSpy = jasmine.createSpyObj('ToastrService', ['success']);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['success']);
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll']);
   let actions$: ReplaySubject<any>;
   let effects: UserEffects;
+  let store: MockStore<UserClaimState>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -34,33 +37,24 @@ describe('UserEffects', () => {
         {provide: IamService, useValue: {iam: iamSpy}},
         {provide: LoadingService, useValue: loadingServiceSpy},
         {provide: MatDialog, useValue: dialogSpy},
+        {provide: ToastrService, useValue: toastrSpy},
         provideMockStore(),
-        // { provide: ToastrService, useValue: toastrSpy },
         provideMockActions(() => actions$),
       ],
     });
+    store = TestBed.inject(MockStore);
 
     effects = TestBed.inject(UserEffects);
   });
 
-  describe('load user claims', () => {
+  describe('loadUserClaims', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
     });
 
     it('should return user claims success action with loaded claims', (done) => {
       const claims = [{
-        id: '711fde8d-8e8c-40c8-8538-be83991bf9c2',
-        did: 'roe.roles.salmon.iam.ewc',
         iat: 1612522971162,
-        iss: 'did:ethr:0x7dD4cF86e6f143300C4550220c4eD66690a655fc',
-        sub: 'roe.roles.salmon.iam.ewc',
-        hash: 'e9a2529ca1c8f46e8af4047f40ce1fa3e184f0fce6b412261f14774ad79a60f4',
-        fields: [],
-        signer: 'did:ethr:0x7dD4cF86e6f143300C4550220c4eD66690a655fc',
-        hashAlg: 'SHA256',
-        claimType: 'roe.roles.salmon.iam.ewc',
-        serviceEndpoint: 'Qma2igryU69hhH7M8nzGf6pgw3pXuCA1nGKwjdNfAh4t77'
       }];
       actions$.next(UserActions.loadUserClaims());
       iamSpy.getUserClaims.and.returnValue(of(claims));
@@ -79,7 +73,175 @@ describe('UserEffects', () => {
         done();
       });
     });
+  });
 
+  describe('loadUserClaimsSuccess', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should return undefined profile when passing empty list', (done) => {
+      const claims = [];
+      actions$.next(UserActions.loadUserClaimsSuccess({userClaims: claims}));
+
+      effects.getUserProfile$.subscribe(resultAction => {
+        expect(resultAction).toEqual(UserActions.setProfile({profile: undefined}));
+        done();
+      });
+    });
+
+    it('should return undefined profile when claim do not have profile', (done) => {
+      const claims = [{
+        iat: 1612522971162,
+      }];
+      actions$.next(UserActions.loadUserClaimsSuccess({userClaims: claims} as any));
+
+      effects.getUserProfile$.subscribe(resultAction => {
+        expect(resultAction).toEqual(UserActions.setProfile({profile: undefined}));
+        done();
+      });
+    });
+
+    it('should return profile when claim contains it', (done) => {
+      const profile = {
+        name: 'name',
+        address: 'address',
+        birthdate: '-2335224240000',
+        assetProfiles: {
+          'did:ethr:0x': {
+            icon: '',
+            name: 'test123'
+          },
+          'did:ethr:0x1': {
+            icon: '',
+            name: 'test'
+          }
+        }
+      };
+      const claims = [{
+        iat: 1621349891424,
+        profile,
+      }];
+
+      actions$.next(UserActions.loadUserClaimsSuccess({userClaims: claims} as any));
+
+      effects.getUserProfile$.subscribe(resultAction => {
+        expect(resultAction).toEqual(UserActions.setProfile({profile}));
+        done();
+      });
+    });
+
+    it('should return newest claim profile', (done) => {
+      const lastClaim = {
+        iat: 1623158758154,
+        profile: {
+          name: 'last',
+          address: 'last address',
+          birthdate: 360194400000
+        }
+      };
+      const secondClaim = {
+        iat: 1623180791487,
+        profile: {
+          name: 'second',
+          address: 'second address',
+          birthdate: 360194400000,
+          assetProfiles: {
+            'did:ethr:0x': {
+              icon: '',
+              name: 'second name'
+            }
+          }
+        },
+      };
+      const firstClaim = {
+        iat: 1623180894274,
+        profile: {
+          name: 'first',
+          address: 'd',
+          birthdate: 360194400000,
+          assetProfiles: {
+            'did:ethr:0x': {
+              icon: '',
+              name: 'first name'
+            }
+          }
+        },
+      };
+      const claims = [lastClaim, firstClaim, secondClaim];
+      actions$.next(UserActions.loadUserClaimsSuccess({userClaims: claims} as any));
+
+      effects.getUserProfile$.subscribe(resultAction => {
+        expect(resultAction).toEqual(UserActions.setProfile({profile: firstClaim.profile} as any));
+        done();
+      });
+    });
 
   });
+
+  describe('updateUserProfile$', () => {
+    let userProfile;
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should set user profile and check for called methods', (done) => {
+      userProfile = store.overrideSelector(UserSelectors.getUserProfile, {});
+      actions$.next(UserActions.updateUserClaims({profile: {name: 'test'}}));
+      iamSpy.createSelfSignedClaim.and.returnValue(Promise.resolve(true));
+
+      effects.updateUserProfile$.pipe(
+        finalize(() => {
+          expect(loadingServiceSpy.hide).toHaveBeenCalled();
+          expect(dialogSpy.closeAll).toHaveBeenCalled();
+        })
+      ).subscribe(resultAction => {
+        expect(loadingServiceSpy.show).toHaveBeenCalled();
+        expect(toastrSpy.success).toHaveBeenCalled();
+        expect(resultAction).toEqual(UserActions.updateUserClaimsSuccess({profile: {name: 'test', assetProfiles: {}}}));
+        done();
+      });
+    });
+
+    it('should update existing user profile name', (done) => {
+      const assetProfiles = {'did:ethr': {name: 'asset name', icon: ''}};
+      userProfile = store.overrideSelector(UserSelectors.getUserProfile,
+        {name: 'old', assetProfiles}
+      );
+      actions$.next(UserActions.updateUserClaims({profile: {name: 'new'}}));
+      iamSpy.createSelfSignedClaim.and.returnValue(Promise.resolve(true));
+
+      effects.updateUserProfile$.subscribe(resultAction => {
+        expect(resultAction).toEqual(
+          UserActions.updateUserClaimsSuccess({profile: {name: 'new', assetProfiles}})
+        );
+        done();
+      });
+    });
+
+    it('should update asset profiles', (done) => {
+      const assetProfilesOld = {'did:ethr': {name: 'asset name', icon: ''}};
+      userProfile = store.overrideSelector(UserSelectors.getUserProfile,
+        {name: 'old', assetProfiles: assetProfilesOld}
+      );
+      const assetProfilesNew = {'did:ethr23': {name: 'asset', icon: ''}};
+      actions$.next(UserActions.updateUserClaims({profile: {name: 'new', assetProfiles: assetProfilesNew}}));
+      iamSpy.createSelfSignedClaim.and.returnValue(Promise.resolve(true));
+
+      effects.updateUserProfile$.subscribe(resultAction => {
+        expect(resultAction).toEqual(
+          UserActions.updateUserClaimsSuccess({
+            profile: {
+              name: 'new',
+              assetProfiles: {
+                ...assetProfilesOld, ...assetProfilesNew
+              }
+            }
+          })
+        );
+        done();
+      });
+    });
+  });
+
 });

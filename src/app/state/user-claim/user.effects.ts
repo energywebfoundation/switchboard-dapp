@@ -12,6 +12,7 @@ import { Store } from '@ngrx/store';
 import * as UserSelectors from './user.selectors';
 import { MatDialog } from '@angular/material/dialog';
 import { UserClaimState } from './user.reducer';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class UserEffects {
@@ -28,7 +29,7 @@ export class UserEffects {
     )
   );
 
-  getUserProfile = createEffect(() =>
+  getUserProfile$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.loadUserClaimsSuccess),
       map(userClaimsAction => userClaimsAction.userClaims),
@@ -42,15 +43,24 @@ export class UserEffects {
       ofType(UserActions.updateUserClaims),
       tap(() => this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED)),
       withLatestFrom(this.store.select(UserSelectors.getUserProfile)),
-      map(([{ profile }, oldProfile]) => ({...oldProfile, ...profile})),
+      map(([{ profile }, oldProfile]) => ({...oldProfile, ...profile, assetProfiles: {
+        ...(oldProfile?.assetProfiles), ...(profile?.assetProfiles)
+        }})),
       switchMap((profile: Profile) => from(this.iamService.iam.createSelfSignedClaim({
           data: {
             profile
           }
         }))
           .pipe(
-            map(() => UserActions.updateUserClaimsSuccess({profile})),
-            catchError(err => of(UserActions.updateUserClaimsFailure({ error: err }))),
+            map(() => {
+              this.toastr.success('Identity is updated.', 'Success');
+              return UserActions.updateUserClaimsSuccess({profile});
+            }),
+            catchError(err => {
+              this.toastr.error(err.message, 'System Error');
+              console.error('Saving Identity Error', err);
+              return of(UserActions.updateUserClaimsFailure({ error: err }));
+            }),
             finalize(() => {
               this.loadingService.hide();
               this.dialog.closeAll();
@@ -63,6 +73,7 @@ export class UserEffects {
               private store: Store<UserClaimState>,
               private iamService: IamService,
               private loadingService: LoadingService,
+              private toastr: ToastrService,
               private dialog: MatDialog) {
   }
 }
