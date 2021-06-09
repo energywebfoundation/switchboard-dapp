@@ -23,8 +23,8 @@ export class UserEffects {
       switchMap(() =>
         from(this.iamService.iam.getUserClaims())
           .pipe(
-            map(data => UserActions.loadUserClaimsSuccess({ userClaims: data })),
-            catchError(err => of(UserActions.loadUserClaimsFailure({ error: err }))),
+            map(data => UserActions.loadUserClaimsSuccess({userClaims: data})),
+            catchError(err => of(UserActions.loadUserClaimsFailure({error: err}))),
             finalize(() => this.loadingService.hide())
           )
       )
@@ -36,7 +36,7 @@ export class UserEffects {
       ofType(UserActions.loadUserClaimsSuccess),
       map(userClaimsAction => userClaimsAction.userClaims),
       mapClaimsProfile(),
-      map((profile: Profile) => UserActions.setProfile({ profile }))
+      map((profile: Profile) => UserActions.setProfile({profile}))
     )
   );
 
@@ -45,9 +45,7 @@ export class UserEffects {
       ofType(UserActions.updateUserClaims),
       tap(() => this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED)),
       withLatestFrom(this.store.select(UserSelectors.getUserProfile)),
-      map(([{ profile }, oldProfile]) => ({...oldProfile, ...profile, assetProfiles: {
-        ...(oldProfile?.assetProfiles), ...(profile?.assetProfiles)
-        }})),
+      map(([{profile}, oldProfile]) => this.mergeProfiles(oldProfile, profile)),
       switchMap((profile: Profile) => from(this.iamService.iam.createSelfSignedClaim({
           data: {
             profile
@@ -61,7 +59,7 @@ export class UserEffects {
             catchError(err => {
               this.toastr.error(err.message, 'System Error');
               console.error('Saving Identity Error', err);
-              return of(UserActions.updateUserClaimsFailure({ error: err }));
+              return of(UserActions.updateUserClaimsFailure({error: err}));
             }),
             finalize(() => {
               this.loadingService.hide();
@@ -70,6 +68,17 @@ export class UserEffects {
           )
       )
     ));
+
+  private mergeProfiles(oldProfile: Partial<Profile>, newProfile: Partial<Profile>): Partial<Profile> {
+    return {
+      ...oldProfile,
+      ...newProfile,
+      assetProfiles: {
+        ...(oldProfile?.assetProfiles),
+        ...(newProfile?.assetProfiles)
+      }
+    };
+  }
 
   constructor(private actions$: Actions,
               private store: Store<UserClaimState>,
