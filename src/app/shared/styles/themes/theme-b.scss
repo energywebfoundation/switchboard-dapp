@@ -65,12 +65,14 @@ body, .wrapper .section-container {
     @include gradient-x($nav-top-bg-start, $nav-top-bg-end);
 
     @include media-breakpoint-up(lg) {
+        border-bottom: 1px solid #ffffff08;
         .navbar-nav > .nav-item.show > .nav-link {
             &, &:hover, &:focus {
-                box-shadow: 0 -3px 0 darken($nav-top-bg, 6%) inset;
+                box-shadow: 0 -3px 0 transparent inset;
             }
         }
     }
+
 
     .navbar-nav > .nav-item > .navbar-text {
         color: $nav-top-item;
@@ -84,12 +86,24 @@ body, .wrapper .section-container {
         }
     }
 
+    .navbar-nav>.nav-item {
+        padding: 12px 0;
+    }
+
     .navbar-nav>.nav-item.active {
+        background-color: transparent;
         &,
         &:hover,
         &:focus {
             color: #33CBCB;
             background-color: transparent;
+        }
+
+        @include media-breakpoint-up(lg) {
+            border-bottom: 1px solid #33cbcb;
+        }
+        @include media-breakpoint-down(sm) {
+            border-top: 1px solid #33cbcb;
         }
     }
 

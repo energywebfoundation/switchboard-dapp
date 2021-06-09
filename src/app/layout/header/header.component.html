@@ -7,7 +7,7 @@
         </a>
     </div>
     <ul class="menu-top navbar-nav mx-auto flex-row align-items-center" *ngIf="isNavMenuVisible">
-        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'assets' }">
+        <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('assets') }">
             <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/assets">
                 <div class="icon-footer-center">
                     <img src="../assets/img/icons/assets-icon.png" width="auto" height="21" alt="assets image">
@@ -15,7 +15,7 @@
                 <h6 class="mb-0">Assets</h6>
             </a>
         </li>
-        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'governance' }">
+        <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('governance') }">
             <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/governance">
                 <div class="icon-footer-center">
                     <img src="../assets/img/icons/governance-icon.png" width="auto" height="21" alt="Governance image">
@@ -23,7 +23,7 @@
                 <h6 class="mb-0">Governance</h6>
             </a>
         </li>
-        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'services' }">
+        <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('services') }">
             <a class="nav-link d-lg-block d-xl-block coming-soon link-footer">
                 <div class="icon-footer-center">
                     <img src="../assets/img/icons/services-icon.png" width="auto" height="21" alt="Services image">
@@ -31,7 +31,7 @@
                 <h6 class="mb-0">Services</h6>
             </a>
         </li>
-        <li class="nav-item" [ngClass]="{ 'active': currentNav === 'enrolment' }">
+        <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('enrolment') }">
             <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/enrolment">
                 <div class="icon-footer-center">
                     <img src="../assets/img/icons/enrollment-icon.png" width="auto" height="21" alt="Enrolments image">
@@ -39,7 +39,7 @@
                 <h6 class="mb-0">Enrolments</h6>
             </a>
         </li>
-        <li class="nav-item coming-soon" [ngClass]="{ 'active': currentNav === 'applications' }">
+        <li class="nav-item coming-soon" [ngClass]="{ 'active': currentNav.includes('applications') }">
             <a class="nav-link d-lg-block d-xl-block coming-soon link-footer">
                 <div class="icon-footer-center">
                     <img src="../assets/img/icons/applications-icon.png" width="auto" height="21" alt="Dashboard image">
@@ -119,9 +119,10 @@
                                 </div>
                             </div>
                         </a>
-                        <div class="d-flex align-items-center justify-content-center">
+                        <!-- Show only when empty or no task -->
+                        <!-- <div class="d-flex align-items-center justify-content-center">
                             <div class="color-white no-record mt-3 mb-4"><i>No task</i></div>
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>

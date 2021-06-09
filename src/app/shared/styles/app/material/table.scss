@@ -15,10 +15,13 @@ th.mat-header-cell {
     font-weight: 600 !important;
     font-size: 12px;
     color: #FFFFFF !important;
-    letter-spacing: 1.5px;
     text-transform: uppercase;
     border-bottom-style: none !important;
 } 
+
+.mat-sort-header-content {
+    letter-spacing: 1px;
+}
 
 .mat-header-cell, .mat-cell, .mat-footer-cell {
     color: #FFF !important;
