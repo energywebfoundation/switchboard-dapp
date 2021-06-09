@@ -151,6 +151,7 @@
               </button>
 
               <!-- View Roles -->
+              <!-- To disable menu item (action button), add disabled to button -->
               <button mat-menu-item class="btn-color-primary" (click)="viewRoles(listType, element)"
                 *ngIf="listType !== ListType.ROLE">
                 <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-role-icon"></mat-icon>
@@ -164,6 +165,7 @@
               </button>
 
               <!-- Create New Role -->
+              <!-- To disable menu item (action button), add disabled to button -->
               <button mat-menu-item class="btn-color-primary" (click)="newRole(listType, element)"
                 *ngIf="listType !== ListType.ROLE">
                 <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-role-icon"></mat-icon>
