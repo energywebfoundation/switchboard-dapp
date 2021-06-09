@@ -19,11 +19,13 @@ export class UserEffects {
   loadUserClaims$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.loadUserClaims),
+      tap(() => this.loadingService.show()),
       switchMap(() =>
         from(this.iamService.iam.getUserClaims())
           .pipe(
             map(data => UserActions.loadUserClaimsSuccess({ userClaims: data })),
-            catchError(err => of(UserActions.loadUserClaimsFailure({ error: err })))
+            catchError(err => of(UserActions.loadUserClaimsFailure({ error: err }))),
+            finalize(() => this.loadingService.hide())
           )
       )
     )
