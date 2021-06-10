@@ -32,7 +32,7 @@ const SwalButtons = {
   ENROL_FOR_MYSELF: 'enrolForSelf'
 };
 
-interface ClaimList extends Claim {
+interface FormClaim extends Claim {
   isSynced?: boolean;
   claimTypeVersion?: string;
 }
@@ -80,7 +80,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     APPROVED: 'approved',
     PENDING: 'pending'
   };
-  private userRoleList: ClaimList[];
+  private userRoleList: FormClaim[];
   private namespace: string;
   private callbackUrl: string;
   private defaultRole: string;
