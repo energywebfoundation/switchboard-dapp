@@ -9,7 +9,7 @@ import { Location } from '@angular/common';
 })
 export class UrlService {
   private previousUrl = new BehaviorSubject<string>(null);
-  private currentUrl = new BehaviorSubject(null);
+  private currentUrl = new BehaviorSubject<string>(null);
 
   get previous(): Observable<string> {
     return this.previousUrl.asObservable();

@@ -53,12 +53,11 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   back() {
     this.urlService.previous.pipe(
       takeUntil(this.subscription$)
-    ).subscribe(url => {
-      this.navigateBack(url);
-    });
+    ).subscribe(url => this.navigateBackHandler(url));
   }
 
-  navigateBack(url: string): void {
+  private navigateBackHandler(url: string): void {
+    // 'returnUrl' is taken as an indicator back() would trigger an loop back to asset-enrolment
     if (url.includes('returnUrl')) {
       this.urlService.goTo('assets');
       return;
