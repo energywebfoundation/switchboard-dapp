@@ -142,9 +142,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
             // Initialize Roles
             await this.initRoles();
-            if (this.roleList) {
-              await this.getRegistrationTypesOfRoles();
-            }
 
           } else {
             // Display Error
@@ -245,7 +242,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
           issuer: did,
           claim: this.createClaim(),
           subject: this.roleTypeForm.value.assetDid ? this.roleTypeForm.value.assetDid : undefined,
-          registrationTypes: this.isEnrolForMyself() ? this.getRegistrationTypes() : []
+          registrationTypes: this.getRegistrationTypes()
         } as any);
 
       } catch (e) {
@@ -575,11 +572,11 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     try {
       this.loadingService.show();
       this.roleList = await this.getNotEnrolledRoles();
-
       // Initialize Claims Synced in DID
       await this._getDIDSyncedRoles();
 
       if (this.roleList && this.roleList.length) {
+        await this.getRegistrationTypesOfRoles();
         // Set Default Selected
         if (this.defaultRole) {
           this.roleList
