@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EnrolmentListComponent } from '../../enrolment/enrolment-list/enrolment-list.component';
-import { Location } from '@angular/common';
+import { UrlService } from '../../../shared/services/url-service/url.service';
 
 @Component({
   selector: 'app-asset-enrolment-list',
@@ -28,7 +28,7 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   private subscription$ = new Subject();
 
   constructor(private activatedRoute: ActivatedRoute,
-              private location: Location) {
+              private urlService: UrlService) {
   }
 
   ngOnDestroy(): void {
@@ -51,6 +51,18 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.location.back();
+    this.urlService.previous.pipe(
+      takeUntil(this.subscription$)
+    ).subscribe(url => {
+      this.navigateBack(url);
+    });
+  }
+
+  navigateBack(url: string): void {
+    if (url.includes('returnUrl')) {
+      this.urlService.goTo('assets');
+      return;
+    }
+    this.urlService.back();
   }
 }
