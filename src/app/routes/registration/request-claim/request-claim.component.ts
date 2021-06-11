@@ -21,7 +21,6 @@ import swal from 'sweetalert';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
-const REDIRECT_TO_ENROLMENT = true;
 const EnrolForType = {
   ME: 'me',
   ASSET: 'asset'
@@ -79,11 +78,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     APPROVED: 'approved',
     PENDING: 'pending'
   };
+  public roleType: string;
+
   private userRoleList: FormClaim[];
   private namespace: string;
   private callbackUrl: string;
   private defaultRole: string;
-  private roleType: string;
   private selectedRole: IRoleDefinition;
   private selectedNamespace: string;
   private stayLoggedIn = false;
@@ -99,7 +99,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   @HostListener('window:beforeunload', ['$event'])
-  public onPageUnload($event: BeforeUnloadEvent) {
+  public onPageUnload() {
     if (this.isLoggedIn && !this.stayLoggedIn) {
       // Always logout if user refreshes this screen or closes this tab
       this.iamService.logout();
