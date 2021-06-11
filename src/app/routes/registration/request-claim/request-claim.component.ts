@@ -220,45 +220,54 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       return;
     }
     this.loadingService.show();
-    let did;
+
+    let issuerDids = [];
+    if (this.registrationTypesForm.get('offChain').value) {
+      issuerDids = await this.getIssuerDid();
+      if (!(issuerDids && issuerDids.length > 0)) {
+        this.toastr.error('Cannot identify issuer for this role.', TOASTR_HEADER);
+        this.loadingService.hide();
+        return;
+      }
+    }
+
+    this.submitting = true;
+    this.loadingService.show('Please confirm this transaction in your connected wallet.');
+
+    try {
+      // Submit
+      await this.iamService.iam.createClaimRequest({
+        issuer: issuerDids,
+        claim: this.createClaim(),
+        subject: this.roleTypeForm.value.assetDid ? this.roleTypeForm.value.assetDid : undefined,
+        registrationTypes: this.getRegistrationTypes()
+      } as any);
+
+    } catch (e) {
+      console.error('Enrolment Failed', e);
+      this.toastr.error(e, TOASTR_HEADER);
+      this.submitting = false;
+    } finally {
+      this.loadingService.hide();
+    }
+
+    this.displayAlert('Request to enrol as ' + this.roleTypeForm.value.roleType.name.toUpperCase() + ' is submitted for review and approval.',
+      'success');
+
+    this.loadingService.hide();
+  }
+
+  private async getIssuerDid(): Promise<string[]> {
     if (this.selectedRole.issuer) {
       if (this.selectedRole.issuer.roleName) {
         // Retrieve list of issuers by roleName
-        did = await this.iamService.iam.getRoleDIDs({
+        return await this.iamService.iam.getRoleDIDs({
           namespace: this.selectedRole.issuer.roleName
         });
       } else if (this.selectedRole.issuer.did) {
-        did = this.selectedRole.issuer.did;
+        return this.selectedRole.issuer.did;
       }
     }
-
-    if (did && did.length) {
-      this.submitting = true;
-      this.loadingService.show('Please confirm this transaction in your connected wallet.');
-
-      try {
-        // Submit
-        await this.iamService.iam.createClaimRequest({
-          issuer: did,
-          claim: this.createClaim(),
-          subject: this.roleTypeForm.value.assetDid ? this.roleTypeForm.value.assetDid : undefined,
-          registrationTypes: this.getRegistrationTypes()
-        } as any);
-
-      } catch (e) {
-        console.error('Enrolment Failed', e);
-        this.toastr.error(e, TOASTR_HEADER);
-        this.submitting = false;
-      } finally {
-        this.loadingService.hide();
-      }
-
-      this.displayAlert('Request to enrol as ' + this.roleTypeForm.value.roleType.name.toUpperCase() + ' is submitted for review and approval.',
-        'success');
-    } else {
-      this.toastr.error('Cannot identify issuer for this role.', TOASTR_HEADER);
-    }
-    this.loadingService.hide();
   }
 
   goToEnrolment() {
