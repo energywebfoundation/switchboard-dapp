@@ -492,7 +492,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showFieldsForm = false;
   }
 
+  isRoleNameInValid(): boolean {
+    return this.roleForm.get('roleName').valid;
+  }
+
   async proceedSettingIssuer() {
+    if (!this.isRoleNameInValid()) {
+      return;
+    }
     of(null)
     .pipe(
         take(1),
