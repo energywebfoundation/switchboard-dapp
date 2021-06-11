@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -46,8 +46,11 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   public RoleType = RoleType;
   public EnrolForType = EnrolForType;
-
-  public enrolmentForm: FormGroup;
+  public enrolmentForm: FormGroup = this.fb.group({
+    offChain: new FormControl({value: true, disabled: false}),
+    onChain: new FormControl({value: false, disabled: true}),
+    fields: this.fb.array([])
+  });
   public roleTypeForm = this.fb.group({
     roleType: '',
     enrolFor: EnrolForType.ME,
@@ -55,10 +58,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   });
 
   registrationTypesOfRole: Record<string, Set<RegistrationTypes>>;
-  public registrationTypesForm = this.fb.group({
-    offChain: new FormControl({value: true, disabled: false}),
-    onChain: new FormControl({value: false, disabled: true}),
-  });
 
   public fieldList: IRoleDefinition['fields'];
 
@@ -173,32 +172,17 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       this.fieldList = e.value.definition.fields || [];
       this.selectedRole = e.value.definition;
       this.selectedNamespace = e.value.namespace;
-      this.resetRegistrationTypesForm();
 
       // Init Preconditions
       this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
 
-      this.createEnrolmentForm();
+      this.updateEnrolmentForm();
 
     }
   }
 
-  private resetRegistrationTypesForm(): void {
-    this.registrationTypesForm.reset({
-      offChain: {value: true, disabled: false},
-      onChain: {
-        value: false,
-        disabled: !this.registrationTypesOfRole[this.selectedNamespace].has(RegistrationTypes.OnChain)
-      }
-    });
-  }
-
-  isEnrolForMyself(): boolean {
-    return this.roleTypeForm.get('enrolFor').value === EnrolForType.ME;
-  }
-
   isRegistrationTypeSelected(): boolean {
-    return this.registrationTypesForm.get('offChain').value || this.registrationTypesForm.get('onChain').value;
+    return this.enrolmentForm.get('offChain').value || this.enrolmentForm.get('onChain').value;
   }
 
   async enrolForSelected(e: any) {
@@ -222,7 +206,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     this.loadingService.show();
 
     let issuerDids = [];
-    if (this.registrationTypesForm.get('offChain').value) {
+    if (this.enrolmentForm.get('offChain').value) {
       issuerDids = await this.getIssuerDid();
       if (!(issuerDids && issuerDids.length > 0)) {
         this.toastr.error('Cannot identify issuer for this role.', TOASTR_HEADER);
@@ -235,7 +219,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     this.loadingService.show('Please confirm this transaction in your connected wallet.');
 
     try {
-      // Submit
       await this.iamService.iam.createClaimRequest({
         issuer: issuerDids,
         claim: this.createClaim(),
@@ -243,16 +226,15 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         registrationTypes: this.getRegistrationTypes()
       } as any);
 
+      this.displayAlert('Request to enrol as ' + this.roleTypeForm.value.roleType.name.toUpperCase() + ' is submitted for review and approval.',
+        'success');
     } catch (e) {
       console.error('Enrolment Failed', e);
-      this.toastr.error(e, TOASTR_HEADER);
+      this.toastr.error(e.message, TOASTR_HEADER);
       this.submitting = false;
     } finally {
       this.loadingService.hide();
     }
-
-    this.displayAlert('Request to enrol as ' + this.roleTypeForm.value.roleType.name.toUpperCase() + ' is submitted for review and approval.',
-      'success');
 
     this.loadingService.hide();
   }
@@ -332,11 +314,11 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private getRegistrationTypes(): string[] {
     const result = [];
-    if (this.registrationTypesForm.get('offChain').value) {
+    if (this.enrolmentForm.get('offChain').value) {
       result.push(RegistrationTypes.OffChain);
     }
 
-    if (this.registrationTypesForm.get('onChain').value) {
+    if (this.enrolmentForm.get('onChain').value) {
       result.push(RegistrationTypes.OnChain);
     }
 
@@ -594,7 +576,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
               this.selectedRole = role.definition;
               this.selectedNamespace = role.namespace;
               this.fieldList = this.selectedRole.fields || [];
-              this.createEnrolmentForm();
+              this.updateEnrolmentForm();
               this.roleTypeForm.get('roleType').setValue(role);
 
               // Init Preconditions
@@ -660,10 +642,18 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     }
   }
 
-  private createEnrolmentForm() {
-    this.enrolmentForm = this.fb.group({
-      fields: this.fb.array(this.createControls())
-    });
+  private updateEnrolmentForm() {
+    this.enrolmentForm.removeControl('fields');
+    this.enrolmentForm.controls.fields = new FormArray(this.createControls());
+    this.enrolmentForm.reset(
+      {
+        offChain: {value: true, disabled: false},
+        onChain: {
+          value: false,
+          disabled: !this.registrationTypesOfRole[this.selectedNamespace].has(RegistrationTypes.OnChain)
+        }
+      }
+    );
   }
 
   private buildValidationOptions(field: any) {
