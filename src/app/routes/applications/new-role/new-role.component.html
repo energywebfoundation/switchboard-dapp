@@ -32,7 +32,8 @@
                     <input matInput autocomplete="off" formControlName="roleName" appBlockPaste type="text"
                       placeholder="Role Name" required oninput="this.value = this.value.toLowerCase()"
                       (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256" />
-                    <mat-error>Role Name is <strong>required</strong></mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'required')">Role Name is <strong>required</strong></mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'minlength')">Role Name need to have at least 3 characters</mat-error>
                   </mat-form-field>
                 </div>
                 <div *ngIf="roleForm.get('roleName').value"

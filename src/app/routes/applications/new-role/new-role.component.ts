@@ -68,7 +68,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public roleForm     = this.fb.group({
     roleType: [null, Validators.required],
     parentNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-    roleName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    roleName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256)]],
     namespace: '',
     data: this.fb.group({
       version: 1,
@@ -310,6 +310,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       this.fieldsForm.get('validation').get('minDate'),
       this.fieldsForm.get('validation').get('maxDate')
     );
+  }
+
+  controlHasError(control: string, errorType: string) {
+    return this.roleForm.get(control).hasError(errorType);
   }
 
   alphaNumericOnly(event: any, includeDot?: boolean) {
