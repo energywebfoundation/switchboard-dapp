@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -18,6 +18,7 @@ import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/conn
 import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-dialog.component';
 import { SubjectElements, ViewColorsSetter } from '../models/view-colors-setter';
 import swal from 'sweetalert';
+import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -46,6 +47,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public RoleType = RoleType;
   public EnrolForType = EnrolForType;
   public enrolmentForm: FormGroup = this.fb.group({
+    registrationTypes: new FormGroup({
+      offChain: new FormControl({value: true, disabled: false}),
+      onChain: new FormControl({value: false, disabled: true}),
+    }, requireCheckboxesToBeCheckedValidator()),
     offChain: new FormControl({value: true, disabled: false}),
     onChain: new FormControl({value: false, disabled: true}),
     fields: this.fb.array([])
@@ -181,10 +186,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     }
   }
 
-  isRegistrationTypeSelected(): boolean {
-    return this.enrolmentForm.get('offChain').value || this.enrolmentForm.get('onChain').value;
-  }
-
   async enrolForSelected(e: any) {
     this.roleTypeForm.patchValue({
       enrolType: '',
@@ -199,7 +200,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   async submit() {
-    if (!this.enrolmentForm.valid && !this.isRegistrationTypeSelected()) {
+    if (!this.enrolmentForm.valid) {
       this.toastr.error('Enrolment Form is invalid.', TOASTR_HEADER);
       return;
     }
@@ -312,13 +313,17 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     };
   }
 
+  private get registrationTypesGroup(): AbstractControl {
+    return this.enrolmentForm.get('registrationTypes');
+  }
+
   private getRegistrationTypes(): string[] {
     const result = [];
-    if (this.enrolmentForm.get('offChain').value) {
+    if (this.registrationTypesGroup.get('offChain').value) {
       result.push(RegistrationTypes.OffChain);
     }
 
-    if (this.enrolmentForm.get('onChain').value) {
+    if (this.registrationTypesGroup.get('onChain').value) {
       result.push(RegistrationTypes.OnChain);
     }
 
@@ -645,7 +650,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   private updateEnrolmentForm() {
     this.enrolmentForm.removeControl('fields');
     this.enrolmentForm.controls.fields = new FormArray(this.createControls());
-    this.enrolmentForm.reset(
+    this.registrationTypesGroup.reset(
       {
         offChain: {value: true, disabled: false},
         onChain: {
