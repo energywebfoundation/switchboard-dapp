@@ -22,10 +22,10 @@
               (keyup.enter)="search()" (input)="updateSearchTxtFieldValue($event)" autocomplete="off">
             <div matSuffix class="d-flex" *ngIf="searchForm?.value?.searchTxt?.trim()?.length > 2">
               <ng-container *ngIf="!isAutolistLoading?.value" >
-                <button mat-icon-button (click)="search()">
+                <button mat-icon-button class="bg-transparent" (click)="search()">
                   <mat-icon>search</mat-icon>
                 </button>
-                <button mat-icon-button (click)="clearSearchTxt()">
+                <button mat-icon-button class="bg-transparent" (click)="clearSearchTxt()">
                   <mat-icon>close</mat-icon>
                 </button>
               </ng-container>
