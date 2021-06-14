@@ -56,6 +56,7 @@ export class VerificationMethodComponent implements OnInit {
     }
     this.verificationService.updateDocumentAndReload(this.dialogData.id, this.publicKey.value).subscribe((publicKeys) => {
       this.handleLoadedPublicKeys(publicKeys);
+      this.clearControls();
     });
   }
 
@@ -69,6 +70,11 @@ export class VerificationMethodComponent implements OnInit {
     }
 
     return '';
+  }
+
+  private clearControls(): void {
+    this.selectControl.reset();
+    this.publicKey.reset();
   }
 
   private handleLoadedPublicKeys(publicKeys): void {
