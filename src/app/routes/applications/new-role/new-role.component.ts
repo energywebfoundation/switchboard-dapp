@@ -19,6 +19,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, of } from 'rxjs';
+import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 
 export const RoleType = {
   ORG: 'org',
@@ -68,7 +69,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public roleForm     = this.fb.group({
     roleType: [null, Validators.required],
     parentNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-    roleName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    roleName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256), isAlphanumericValidator]],
     namespace: '',
     data: this.fb.group({
       version: 1,
@@ -312,6 +313,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
+  controlHasError(control: string, errorType: string) {
+    return this.roleForm.get(control).hasError(errorType);
+  }
+
   alphaNumericOnly(event: any, includeDot?: boolean) {
     return this.iamService.isAlphaNumericOnly(event, includeDot);
   }
@@ -488,7 +493,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showFieldsForm = false;
   }
 
+  isRoleNameInValid(): boolean {
+    return this.roleForm.get('roleName').valid;
+  }
+
   async proceedSettingIssuer() {
+    if (!this.isRoleNameInValid()) {
+      return;
+    }
     of(null)
     .pipe(
         take(1),
