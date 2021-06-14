@@ -8,6 +8,8 @@ import { Subject } from 'rxjs';
 import * as userActions from '../../../state/user-claim/user.actions';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
 
+const MAJORITY_AGE = 18;
+
 @Component({
   selector: 'app-dialog-user',
   templateUrl: 'dialog-user.component.html',
@@ -15,7 +17,17 @@ import { UserClaimState } from '../../../state/user-claim/user.reducer';
 })
 export class DialogUserComponent implements OnInit, OnDestroy {
 
-  public profileForm: FormGroup;
+  public profileForm: FormGroup = this.fb.group({
+    name: ['', Validators.compose([
+      Validators.maxLength(256),
+      Validators.required
+    ])],
+    birthdate: ['', Validators.required],
+    address: ['', Validators.compose([
+      Validators.maxLength(500),
+      Validators.required
+    ])]
+  });
   public maxDate: Date;
   private destroy$ = new Subject<void>();
 
@@ -23,21 +35,6 @@ export class DialogUserComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<DialogUserComponent>,
     private fb: FormBuilder,
     private store: Store<UserClaimState>) {
-    this.profileForm = fb.group({
-      name: ['', Validators.compose([
-        Validators.maxLength(256),
-        Validators.required
-      ])],
-      birthdate: ['', Validators.required],
-      address: ['', Validators.compose([
-        Validators.maxLength(500),
-        Validators.required
-      ])]
-    });
-
-    const today = new Date();
-    today.setFullYear(today.getFullYear() - 18);
-    this.maxDate = today;
   }
 
   ngOnDestroy() {
@@ -46,6 +43,7 @@ export class DialogUserComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.maxDate = this.getLegalAge();
     this.store.select(userSelectors.getUserProfile)
       .pipe(takeUntil(this.destroy$))
       .subscribe((profile => this.profileForm.patchValue({
@@ -66,7 +64,13 @@ export class DialogUserComponent implements OnInit, OnDestroy {
         data.birthdate = date;
       }
 
-      this.store.dispatch(userActions.updateUserClaims({ profile: data }));
+      this.store.dispatch(userActions.updateUserClaims({profile: data}));
     }
+  }
+
+  private getLegalAge() {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - MAJORITY_AGE);
+    return today;
   }
 }
