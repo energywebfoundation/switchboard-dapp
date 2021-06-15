@@ -14,7 +14,7 @@ enum MessageType {
     providedIn: 'root'
 })
 export class SwitchboardToasterService {
-    private massageList = new BehaviorSubject<{ message: string; type: string }[]>([{message: 'asdasdasd', type: 'toast-error'}]);
+    private massageList = new BehaviorSubject<{ message: string; type: string }[]>([]);
 
     constructor(private toaster: ToastrService) {
     }
