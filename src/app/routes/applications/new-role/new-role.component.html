@@ -345,7 +345,7 @@
                         </div>
                         <div class="d-flex flex-row justify-content-between align-items-center mx-2">
                           <div class="d-flex align-items-center pt-2">
-                            <div class="d-flex flex-column" *ngIf="element.fieldType !== 'boolean'">
+                            <div class="d-flex flex-column" *ngIf="element.fieldType === 'text'">
                               <h4 class="small font-weight-600 mb-1">PATTERN</h4>
                               <span class="f-16">{{element?.pattern || '--'}}</span>
                             </div>
