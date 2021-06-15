@@ -3,7 +3,6 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ToastrService } from 'ngx-toastr';
 import { Md5 } from 'ts-md5/dist/md5';
 import { AssetHistoryEventType, ENSNamespaceTypes } from 'iam-client-lib';
 
@@ -16,6 +15,7 @@ import { IamService } from 'src/app/shared/services/iam.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
+import { SwitchboardToasterService } from '../../shared/services/switchboard-toaster.service';
 
 @Component({
     selector: 'app-header',
@@ -53,6 +53,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     userDid: string;
 
     isLoadingNotif = true;
+    notificationList$ = this.toastr.getMessageList();
 
     private _pendingApprovalCountListener: any;
     private _pendingSyncCountListener: any;
@@ -68,7 +69,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 // private authenticationService: AuthService,
                 private iamService: IamService,
                 private router: Router,
-                private toastr: ToastrService,
+                private toastr: SwitchboardToasterService,
                 private notifService: NotificationService,
                 public userblockService: UserblockService,
                 public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer) {
@@ -400,6 +401,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     logout() {
+       this.clearSwitchboardToaster();
         this.iamService.logoutAndRefresh();
+    }
+
+    clearSwitchboardToaster(): void {
+        this.toastr.reset();
     }
 }

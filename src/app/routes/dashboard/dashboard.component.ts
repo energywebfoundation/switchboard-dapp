@@ -2,12 +2,12 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { IamService, LoginType } from 'src/app/shared/services/iam.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from 'src/app/shared/services/loading.service';
-import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map, switchMap, debounceTime } from 'rxjs/operators';
 import { ENSNamespaceTypes, WalletProvider } from 'iam-client-lib';
 import { LoadingCount } from 'src/app/shared/constants/shared-constants';
+import { SwitchboardToasterService } from "../../shared/services/switchboard-toaster.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private route: Router,
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService,
-    private toastr: ToastrService,
+    private toastr: SwitchboardToasterService,
     private fb: FormBuilder
   ) {
     // Init Search

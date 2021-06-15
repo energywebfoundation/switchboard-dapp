@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IAM, WalletProvider } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import { IamService, VOLTA_CHAIN_ID } from 'src/app/shared/services/iam.service';
 
 import { version } from '../../../../package.json';
@@ -23,8 +22,7 @@ export class WelcomeComponent implements OnInit {
   constructor(private route: Router, 
     private activeRoute: ActivatedRoute,
     private iamService: IamService, 
-    private spinner: NgxSpinnerService,
-    private toastr: ToastrService) { }
+    private spinner: NgxSpinnerService) { }
 
   async ngOnInit() {
     this.activeRoute.queryParams.subscribe((queryParams: any) => {

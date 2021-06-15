@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ClaimData, ENSNamespaceTypes } from 'iam-client-lib';
-import { ToastrService } from 'ngx-toastr';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
@@ -13,6 +12,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import {FormControl} from "@angular/forms";
+import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
@@ -49,7 +49,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   constructor(private loadingService: LoadingService,
               private iamService: IamService,
               private dialog: MatDialog,
-              private toastr: ToastrService,
+              private toastr: SwitchboardToasterService,
               private notifService: NotificationService) {
   }
 

@@ -3,7 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import { debounceTime, delay, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
@@ -20,6 +19,7 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, of } from 'rxjs';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
+import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
 
 export const RoleType = {
   ORG: 'org',
@@ -142,7 +142,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
     private iamService: IamService,
-    private toastr: ToastrService,
+    private toastr: SwitchboardToasterService,
     private spinner: NgxSpinnerService,
     private fieldValidationService: FieldValidationService,
     private changeDetectorRef: ChangeDetectorRef,

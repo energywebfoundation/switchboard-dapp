@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { CancelButton } from '../../loading/loading.component';
+import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
 
 @Component({
     selector: 'dialog-user',
@@ -21,7 +21,7 @@ export class DialogUser implements OnInit {
         public dialogRef: MatDialogRef<DialogUser>,
         private fb: FormBuilder,
         private iamService: IamService,
-        private toastr: ToastrService,
+        private toastr: SwitchboardToasterService,
         private loadingService: LoadingService) {
             this.profileForm = fb.group({
                 name: ['', Validators.compose([

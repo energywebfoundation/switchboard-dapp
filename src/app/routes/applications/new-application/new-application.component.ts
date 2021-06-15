@@ -2,7 +2,6 @@ import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/co
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
@@ -11,6 +10,7 @@ import { ViewType } from '../new-organization/new-organization.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
+import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
 
 @Component({
   selector: 'app-new-application',
@@ -55,7 +55,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
   constructor(private fb: FormBuilder,
     private iamService: IamService,
-    private toastr: ToastrService,
+    private toastr: SwitchboardToasterService,
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,

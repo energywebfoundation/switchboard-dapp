@@ -10,7 +10,6 @@ import {
   RegistrationTypes
 } from 'iam-client-lib';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
-import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
@@ -19,6 +18,7 @@ import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-
 import { SubjectElements, ViewColorsSetter } from '../models/view-colors-setter';
 import swal from 'sweetalert';
 import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
+import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -98,7 +98,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
               private route: Router,
               private activeRoute: ActivatedRoute,
               private iamService: IamService,
-              private toastr: ToastrService,
+              private toastr: SwitchboardToasterService,
               public dialog: MatDialog,
               private loadingService: LoadingService) {
   }
