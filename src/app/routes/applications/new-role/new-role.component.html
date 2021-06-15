@@ -333,21 +333,21 @@
                           <ng-container *ngIf="element.fieldType === 'number' || element.fieldType === 'date'">
                             <div class="text-center pt-1">
                               <h4 class="small font-weight-600 mb-1">MIN VALUE</h4>
-                              <span class="f-16">{{ element.fieldType === 'date' ? (element?.minDate | date: 'M/d/yyyy') :
-                                      element?.minValue || '--' }}</span>
+                              <span class="f-16">{{ element.fieldType === 'date' ? ((element?.maxDate | date: 'M/d/yyyy') || '--') :
+                                      (element?.minValue || '--') }}</span>
                             </div>
                             <div class="text-right pt-1">
                               <h4 class="small font-weight-600 mb-1">MAX VALUE</h4>
-                              <span class="f-16">{{ element.fieldType === 'date' ? (element?.maxDate | date: 'M/d/yyyy') :
-                                      element?.maxValue || '--' }}</span>
+                              <span class="f-16">{{ element.fieldType === 'date' ? ((element?.maxDate | date: 'M/d/yyyy') || '--') :
+                                      (element?.maxValue || '--') }}</span>
                             </div>
                           </ng-container>
                         </div>
                         <div class="d-flex flex-row justify-content-between align-items-center mx-2">
                           <div class="d-flex align-items-center pt-2">
-                            <div class="d-flex flex-column">
+                            <div class="d-flex flex-column" *ngIf="element.fieldType !== 'boolean'">
                               <h4 class="small font-weight-600 mb-1">PATTERN</h4>
-                              <span class="f-16">{{element?.pattern}}</span>
+                              <span class="f-16">{{element?.pattern || '--'}}</span>
                             </div>
                           </div>
                           <div>
