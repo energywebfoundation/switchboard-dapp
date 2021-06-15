@@ -11,7 +11,7 @@ import { UserblockService } from './sidebar/userblock/userblock.service';
 import { FooterComponent } from './footer/footer.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatMenuModule } from '@angular/material/menu';
-import { DialogUser } from './header/dialog-user/dialog-user.component';
+import { DialogUserComponent } from './header/dialog-user/dialog-user.component';
 import { LoadingComponent } from './loading/loading.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
@@ -39,10 +39,10 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
         NavsearchComponent,
         OffsidebarComponent,
         FooterComponent,
-        DialogUser,
+        DialogUserComponent,
         LoadingComponent
     ],
-    entryComponents: [DialogUser],
+    entryComponents: [DialogUserComponent],
     exports: [
         LayoutComponent,
         SidebarComponent,

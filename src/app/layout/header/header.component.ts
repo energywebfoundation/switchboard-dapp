@@ -11,11 +11,14 @@ import { UserblockService } from '../sidebar/userblock/userblock.service';
 import { SettingsService } from '../../core/settings/settings.service';
 import { MenuService } from '../../core/menu/menu.service';
 import { Identicon } from 'src/app/shared/directives/identicon/identicon';
-import { DialogUser } from './dialog-user/dialog-user.component';
+import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
+import * as userSelectors from '../../state/user-claim/user.selectors';
+import { Store } from '@ngrx/store';
+import { UserClaimState } from '../../state/user-claim/user.reducer';
 
 @Component({
     selector: 'app-header',
@@ -35,7 +38,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isNavMenuVisible = true;
 
     currentNav = '';
-    userName = '';
 
     //Tasks
     tasks = {
@@ -50,9 +52,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         totalCount: 0,
         pendingSyncCount: 0
     };
-    userDid: string;
 
     isLoadingNotif = true;
+    userName$ = this.store.select(userSelectors.getUserName).pipe(map(value => value ? value : 'Manage Profile'));
+    userDid$ = this.store.select(userSelectors.getDid);
 
     private _pendingApprovalCountListener: any;
     private _pendingSyncCountListener: any;
@@ -71,7 +74,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 private toastr: ToastrService,
                 private notifService: NotificationService,
                 public userblockService: UserblockService,
-                public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer) {
+                public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer,
+                private store: Store<UserClaimState>) {
         // show only a few items on demo
         this.menuItems = menu.getMenu().slice(0, 4); // for horizontal layout
 
@@ -122,7 +126,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     openDialogUser(): void {
-        const dialogRef = this.dialog.open(DialogUser, {
+        const dialogRef = this.dialog.open(DialogUserComponent, {
             width: '440px',
             data: {},
             maxWidth: '100%',
@@ -149,11 +153,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // Stay in current screen and display user name if available
         this.iamService.userProfile
             .pipe(takeUntil(this._subscription$))
-            .subscribe((data: any) => {
-                if (data && data.name) {
-                    this.userName = data.name;
-                }
-
+            .subscribe(() => {
                 if (this.iamService.accountAddress) {
                     // Initialize Notifications
                     this._initNotificationsAndTasks();
@@ -161,10 +161,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
                     this.isLoadingNotif = false;
                 }
             });
-    }
-
-    setUserDid() {
-        this.userDid = this.iamService.iam.getDid();
     }
 
     private _initNotificationsAndTasks() {
