@@ -1,12 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 
 import { IamService } from './iam.service';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('IamService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let service: IamService;
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [IamService, provideMockStore()]
+    });
+
+    service = TestBed.inject(IamService);
+  });
 
   it('should be created', () => {
-    const service: IamService = TestBed.get(IamService);
     expect(service).toBeTruthy();
   });
 });
