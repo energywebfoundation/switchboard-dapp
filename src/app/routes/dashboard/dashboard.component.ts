@@ -8,7 +8,6 @@ import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { WalletProvider } from 'iam-client-lib';
 import { LoadingCount } from 'src/app/shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
-import { loadUserClaims } from '../../state/user-claim/user.actions';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import { UserClaimState } from '../../state/user-claim/user.reducer';
 
@@ -70,7 +69,6 @@ export class DashboardComponent implements AfterViewInit {
 
       // Setup User Data
       await this._setupUser();
-      this.store.dispatch(loadUserClaims());
       // Redirect to actual screen
       if (returnUrl) {
         let timeout$ = setTimeout(() => {

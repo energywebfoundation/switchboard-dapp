@@ -144,6 +144,7 @@ export class IamService {
 
     this._didDocument = await this._iam.getDidDocument();
     this.store.dispatch(userClaimsActions.setDidDocument({didDocument: this._didDocument}));
+    this.store.dispatch(userClaimsActions.loadUserClaims());
   }
 
   private get isUserSettedUp(): boolean {
