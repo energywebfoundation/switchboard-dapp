@@ -187,6 +187,7 @@ export class IamService {
     return this._iam;
   }
 
+  // TODO: remove in future this method and _user property in favor of the store.
   setUserProfile(data: Profile) {
     this._user.next(data);
   }
