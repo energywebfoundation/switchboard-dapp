@@ -13,9 +13,9 @@ import { Identicon } from 'src/app/shared/directives/identicon/identicon';
 import { DialogUser } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
-import { SwitchboardToasterService } from '../../shared/services/switchboard-toaster.service';
+import { Observable, Subject } from 'rxjs';
+import { filter, takeUntil, tap } from 'rxjs/operators';
+import { SwitchboardToaster, SwitchboardToasterService } from '../../shared/services/switchboard-toaster.service';
 
 @Component({
     selector: 'app-header',
@@ -53,7 +53,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     userDid: string;
 
     isLoadingNotif = true;
-    notificationList$ = this.toastr.getMessageList();
+    notificationNewItems = 0;
+    notificationList$: Observable<SwitchboardToaster[]> = this.toastr.getMessageList()
+        .pipe(tap(items => {
+            this.notificationNewItems = 0;
+            items.forEach(item => {
+                if (item.isNew) {
+                    this.notificationNewItems++;
+                }
+            });
+        }));
 
     private _pendingApprovalCountListener: any;
     private _pendingSyncCountListener: any;
@@ -401,11 +410,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     logout() {
-       this.clearSwitchboardToaster();
+        this.clearSwitchboardToaster();
         this.iamService.logoutAndRefresh();
     }
 
     clearSwitchboardToaster(): void {
         this.toastr.reset();
+    }
+
+    onHiddenNotificationList(): void {
+        this.toastr.readAllItems();
     }
 }

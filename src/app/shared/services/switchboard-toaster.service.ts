@@ -10,21 +10,33 @@ enum MessageType {
     warning = 'toast-warning'
 }
 
+export interface SwitchboardToaster {
+    message: string;
+    type: string;
+    isNew: boolean;
+}
 @Injectable({
     providedIn: 'root'
 })
 export class SwitchboardToasterService {
-    private massageList = new BehaviorSubject<{ message: string; type: string }[]>([]);
+    private massageList = new BehaviorSubject<SwitchboardToaster[]>([]);
 
     constructor(private toaster: ToastrService) {
     }
 
-    getMessageList(): Observable<{ message: string; type: string }[]> {
+    getMessageList(): Observable<SwitchboardToaster[]> {
         return this.massageList.asObservable();
     }
 
     reset(): void {
         this.massageList.next([]);
+    }
+
+    readAllItems(): void {
+        this.massageList.next(this.massageList.getValue().map(item => {
+            item.isNew = false;
+            return item;
+        }));
     }
 
     show(message?: string, title?: string, override?: Partial<IndividualConfig>, type?: string): any {
@@ -55,7 +67,7 @@ export class SwitchboardToasterService {
 
     private updateMessageList(message: string, type: string): void {
         let list = this.massageList.getValue();
-        list.unshift({message, type});
+        list.unshift({message, type, isNew: true});
         if (list.length > 20) {
             list = list.slice(0, 20);
         }

@@ -129,10 +129,10 @@
             </div>
 
         </li>
-        <li class="nav-item dropdown dropdown-list" dropdown *ngIf="notificationList$ | async as notificationList">
+        <li class="nav-item dropdown dropdown-list" dropdown *ngIf="notificationList$ | async as notificationList" (onHidden)="onHiddenNotificationList()">
             <a class="nav-link dropdown-toggle dropdown-toggle-nocaret cursor-pointer" dropdownToggle>
                 <em class="icon-bell"></em>
-                <span class="badge badge-danger" *ngIf="notificationList?.length">{{ notificationList?.length }}</span>
+                <span class="badge badge-danger" *ngIf="notificationNewItems">{{ notificationNewItems }}</span>
             </a>
             <ng-container *ngIf="notificationList?.length">
                 <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
@@ -153,7 +153,7 @@
                                         <div class="notification-icon align-self-start mr-2  ngx-toastr" [ngClass]="item.type">
                                         </div>
                                         <div class="media-body d-flex flex-row justify-content-between align-items-center">
-                                            <p class="m-0 pr-2 color-white">{{item.message}}</p>
+                                            <p class="m-0 pr-2 color-white" [ngClass]="{'font-weight-bold': item.isNew}">{{item.message}}</p>
                                         </div>
                                     </div>
 
