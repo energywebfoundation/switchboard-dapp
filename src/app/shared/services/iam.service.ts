@@ -138,7 +138,7 @@ export class IamService {
   }
 
   async setupUser() {
-    if (this.isUserSettedUp) {
+    if (this.isUserSetUp) {
       return;
     }
 
@@ -147,7 +147,7 @@ export class IamService {
     this.store.dispatch(userClaimsActions.loadUserClaims());
   }
 
-  private get isUserSettedUp(): boolean {
+  private get isUserSetUp(): boolean {
     return Boolean(this._didDocument);
   }
 
