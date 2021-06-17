@@ -3,7 +3,7 @@ import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 @Component({
   selector: 'app-new-passive-asset',
@@ -16,7 +16,7 @@ export class NewPassiveAssetComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<NewPassiveAssetComponent>,
     private loadingService: LoadingService,
-    private toastr: SwitchboardToasterService,
+    private toastr: SwitchboardToastrService,
     private iamService: IamService) { }
 
   ngOnInit(): void {

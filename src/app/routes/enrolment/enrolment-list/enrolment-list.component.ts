@@ -12,7 +12,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import {FormControl} from "@angular/forms";
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
@@ -49,7 +49,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   constructor(private loadingService: LoadingService,
               private iamService: IamService,
               private dialog: MatDialog,
-              private toastr: SwitchboardToasterService,
+              private toastr: SwitchboardToastrService,
               private notifService: NotificationService) {
   }
 

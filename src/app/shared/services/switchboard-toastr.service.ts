@@ -10,7 +10,7 @@ enum MessageType {
     warning = 'toast-warning'
 }
 
-export interface SwitchboardToaster {
+export interface SwitchboardToastr {
     message: string;
     type: string;
     isNew: boolean;
@@ -18,13 +18,14 @@ export interface SwitchboardToaster {
 @Injectable({
     providedIn: 'root'
 })
-export class SwitchboardToasterService {
-    private massageList = new BehaviorSubject<SwitchboardToaster[]>([]);
+export class SwitchboardToastrService {
+    private readonly maxLength = 20;
+    private massageList = new BehaviorSubject<SwitchboardToastr[]>([]);
 
-    constructor(private toaster: ToastrService) {
+    constructor(private toastr: ToastrService) {
     }
 
-    getMessageList(): Observable<SwitchboardToaster[]> {
+    getMessageList(): Observable<SwitchboardToastr[]> {
         return this.massageList.asObservable();
     }
 
@@ -33,44 +34,37 @@ export class SwitchboardToasterService {
     }
 
     readAllItems(): void {
-        this.massageList.next(this.massageList.getValue().map(item => {
-            item.isNew = false;
-            return item;
-        }));
+        this.massageList.next(this.massageList.getValue().map(item => ({...item, isNew: false})));
     }
 
     show(message?: string, title?: string, override?: Partial<IndividualConfig>, type?: string): any {
-        this.toaster.show(message, title, override, type);
+        this.toastr.show(message, title, override, type);
         this.updateMessageList(message, type);
 
     }
 
     error(message?: string, title?: string, override?: Partial<IndividualConfig>): any {
-        this.toaster.error(message, title, override);
+        this.toastr.error(message, title, override);
         this.updateMessageList(message, MessageType.error);
     }
 
     info(message?: string, title?: string, override?: Partial<IndividualConfig>): any {
-        this.toaster.info(message, title, override);
+        this.toastr.info(message, title, override);
         this.updateMessageList(message, MessageType.info);
     }
 
     success(message?: string, title?: string, override?: Partial<IndividualConfig>): any {
-        this.toaster.success(message, title, override);
+        this.toastr.success(message, title, override);
         this.updateMessageList(message, MessageType.success);
     }
 
     warning(message?: string, title?: string, override?: Partial<IndividualConfig>): any {
-        this.toaster.warning(message, title, override);
+        this.toastr.warning(message, title, override);
         this.updateMessageList(message, MessageType.warning);
     }
 
     private updateMessageList(message: string, type: string): void {
-        let list = this.massageList.getValue();
-        list.unshift({message, type, isNew: true});
-        if (list.length > 20) {
-            list = list.slice(0, 20);
-        }
+        const list = [{message, type, isNew: true}, ...this.massageList.getValue()].slice(0, this.maxLength);
         this.massageList.next(list);
     }
 }

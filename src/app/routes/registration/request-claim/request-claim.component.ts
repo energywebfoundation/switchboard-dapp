@@ -18,7 +18,7 @@ import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-
 import { SubjectElements, ViewColorsSetter } from '../models/view-colors-setter';
 import swal from 'sweetalert';
 import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -98,7 +98,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
               private route: Router,
               private activeRoute: ActivatedRoute,
               private iamService: IamService,
-              private toastr: SwitchboardToasterService,
+              private toastr: SwitchboardToastrService,
               public dialog: MatDialog,
               private loadingService: LoadingService) {
   }

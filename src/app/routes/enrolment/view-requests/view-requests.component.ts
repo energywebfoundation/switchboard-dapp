@@ -5,7 +5,7 @@ import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -23,7 +23,7 @@ export class ViewRequestsComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any,
               public dialog: MatDialog,
               private iamService: IamService,
-              private toastr: SwitchboardToasterService,
+              private toastr: SwitchboardToastrService,
               private loadingService: LoadingService,
               private notifService: NotificationService) {
   }

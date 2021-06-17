@@ -10,7 +10,7 @@ import { SettingsService } from '../../core/settings/settings.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { SwitchboardToasterService } from '../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 
 xdescribe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -24,7 +24,7 @@ xdescribe('HeaderComponent', () => {
         { provide: MenuService, useValue: {} },
         { provide: IamService, useValue: {} },
         { provide: Router, useValue: {} },
-        { provide: SwitchboardToasterService, useValue: {} },
+        { provide: SwitchboardToastrService, useValue: {} },
         { provide: NotificationService, useValue: {} },
         { provide: UserblockService, useValue: {} },
         { provide: SettingsService, useValue: {} },

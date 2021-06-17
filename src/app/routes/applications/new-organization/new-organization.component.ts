@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment'
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 export const ViewType = {
   UPDATE: 'update',
@@ -60,7 +60,7 @@ export class NewOrganizationComponent implements OnInit {
   public constructor(
     private fb: FormBuilder,
     private iamService: IamService,
-    private toastr: SwitchboardToasterService,
+    private toastr: SwitchboardToastrService,
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<NewOrganizationComponent>,
     public dialog: MatDialog,

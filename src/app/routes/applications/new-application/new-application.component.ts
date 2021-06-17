@@ -10,7 +10,7 @@ import { ViewType } from '../new-organization/new-organization.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 @Component({
   selector: 'app-new-application',
@@ -55,7 +55,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
   constructor(private fb: FormBuilder,
     private iamService: IamService,
-    private toastr: SwitchboardToasterService,
+    private toastr: SwitchboardToastrService,
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,

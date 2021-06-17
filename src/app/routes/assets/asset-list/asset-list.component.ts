@@ -17,7 +17,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { mapClaimsProfile } from '../operators/map-claims-profile';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 export const RESET_LIST = true;
 
@@ -47,7 +47,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
 
   private _iamSubscriptionId: number;
 
-  constructor(private toastr: SwitchboardToasterService,
+  constructor(private toastr: SwitchboardToastrService,
               private dialog: MatDialog,
               private iamService: IamService,
               private notifService: NotificationService,

@@ -13,7 +13,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatStepper } from '@angular/material/stepper';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 const TOASTR_HEADER = 'Transfer Ownership';
 
@@ -57,7 +57,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   DIDPattern = `^did:ethr:[a-z0-9]+:(${this.ethAddrPattern})$`;
 
   constructor(private iamService: IamService,
-    private toastr: SwitchboardToasterService,
+    private toastr: SwitchboardToastrService,
     private spinner: NgxSpinnerService,
     private iamRequestService: IamRequestService,
     private loadingService: LoadingService,

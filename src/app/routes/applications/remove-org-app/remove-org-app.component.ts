@@ -6,7 +6,7 @@ import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 @Component({
   selector: 'app-remove-org-app',
@@ -32,7 +32,7 @@ export class RemoveOrgAppComponent implements OnInit {
 
   constructor(
     private iamService: IamService,
-    private toastr: SwitchboardToasterService,
+    private toastr: SwitchboardToastrService,
     private loadingService: LoadingService,
     private iamRequestService: IamRequestService,
     public dialogRef: MatDialogRef<RemoveOrgAppComponent>,

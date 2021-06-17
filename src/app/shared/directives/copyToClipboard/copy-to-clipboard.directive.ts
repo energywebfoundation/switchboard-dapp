@@ -1,5 +1,5 @@
 import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { SwitchboardToasterService } from '../../services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../services/switchboard-toastr.service';
 
 @Directive({
   selector: '[appCopyToClipboard]'
@@ -11,7 +11,7 @@ export class CopyToClipboardDirective {
 
   @Output() public copied: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor(private toastr: SwitchboardToasterService) {
+  constructor(private toastr: SwitchboardToastrService) {
   }
 
   @HostListener('click', ['$event'])

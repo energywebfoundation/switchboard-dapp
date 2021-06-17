@@ -19,7 +19,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -67,7 +67,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
       private iamService: IamService,
       private dialog: MatDialog,
       private fb: FormBuilder,
-      private toastr: SwitchboardToasterService,
+      private toastr: SwitchboardToastrService,
       private configService: ConfigService) { }
 
   async ngOnInit() {

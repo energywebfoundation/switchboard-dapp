@@ -6,7 +6,7 @@ import { Algorithms, DIDAttribute, Encoding, PubKeyType } from 'iam-client-lib';
 import { Keys } from '@ew-did-registry/keys';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
-import { SwitchboardToasterService } from "../../../shared/services/switchboard-toaster.service";
+import { SwitchboardToastrService } from "../../../shared/services/switchboard-toastr.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class VerificationService {
 
   constructor(private iamService: IamService,
               private loadingService: LoadingService,
-              private toastr: SwitchboardToasterService) {
+              private toastr: SwitchboardToastrService) {
   }
 
   getPublicKeys(did, includeClaims) {

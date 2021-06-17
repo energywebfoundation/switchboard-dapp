@@ -19,7 +19,7 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, of } from 'rxjs';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 export const RoleType = {
   ORG: 'org',
@@ -142,7 +142,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
     private iamService: IamService,
-    private toastr: SwitchboardToasterService,
+    private toastr: SwitchboardToastrService,
     private spinner: NgxSpinnerService,
     private fieldValidationService: FieldValidationService,
     private changeDetectorRef: ChangeDetectorRef,

@@ -18,7 +18,7 @@ import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../state/user-claim/user.reducer';
-import { SwitchboardToaster, SwitchboardToasterService } from '../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastr, SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 
 @Component({
     selector: 'app-header',
@@ -57,15 +57,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     userName$ = this.store.select(userSelectors.getUserName).pipe(map(value => value ? value : 'Manage Profile'));
     userDid$ = this.store.select(userSelectors.getDid);
     notificationNewItems = 0;
-    notificationList$: Observable<SwitchboardToaster[]> = this.toastr.getMessageList()
-        .pipe(tap(items => {
-            this.notificationNewItems = 0;
-            items.forEach(item => {
-                if (item.isNew) {
-                    this.notificationNewItems++;
-                }
-            });
-        }));
+    notificationList$: Observable<SwitchboardToastr[]> = this.toastr.getMessageList()
+        .pipe(tap(items => this.notificationNewItems = items.filter(item => item.isNew).length));
 
     private _pendingApprovalCountListener: any;
     private _pendingSyncCountListener: any;
@@ -81,7 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 // private authenticationService: AuthService,
                 private iamService: IamService,
                 private router: Router,
-                private toastr: SwitchboardToasterService,
+                private toastr: SwitchboardToastrService,
                 private notifService: NotificationService,
                 public userblockService: UserblockService,
                 public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer,

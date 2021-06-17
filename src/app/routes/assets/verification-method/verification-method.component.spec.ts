@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { TypeAlgorithmPipe } from '../pipes/type-algorithm.pipe';
 import { DidFormatMinifierPipe } from '../../../shared/pipes/did-format-minifier.pipe';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 describe('VerificationMethodComponent', () => {
   let component: VerificationMethodComponent;
@@ -32,7 +32,7 @@ describe('VerificationMethodComponent', () => {
           provide: MatDialogRef, useValue: matDialogRefSpy
         },
         { provide: VerificationService, useValue: verificationServiceSpy },
-        { provide: SwitchboardToasterService, useValue: toastrSpy }
+        { provide: SwitchboardToastrService, useValue: toastrSpy }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

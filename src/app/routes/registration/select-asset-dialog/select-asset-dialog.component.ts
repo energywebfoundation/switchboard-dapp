@@ -5,7 +5,7 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { IDialogData } from './select-asset-dialog.interface';
-import { SwitchboardToasterService } from '../../../shared/services/switchboard-toaster.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 @Component({
   selector: 'app-select-asset-dialog',
@@ -22,7 +22,7 @@ export class SelectAssetDialogComponent implements OnInit {
       public dialogRef: MatDialogRef<SelectAssetDialogComponent>,
       private loadingService: LoadingService,
       private iamService: IamService,
-      private toastr: SwitchboardToasterService) { }
+      private toastr: SwitchboardToastrService) { }
 
   async ngOnInit(): Promise<void> {
     try {
