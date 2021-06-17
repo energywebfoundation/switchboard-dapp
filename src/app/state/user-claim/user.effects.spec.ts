@@ -33,7 +33,7 @@ describe('UserEffects', () => {
     TestBed.configureTestingModule({
       providers: [
         UserEffects,
-        {provide: IamService, useValue: {iam: iamSpy, setUserProfile: () => {}}},
+        {provide: IamService, useValue: {iam: iamSpy}},
         {provide: LoadingService, useValue: loadingServiceSpy},
         {provide: MatDialog, useValue: dialogSpy},
         {provide: ToastrService, useValue: toastrSpy},

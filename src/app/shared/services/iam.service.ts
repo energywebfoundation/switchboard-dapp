@@ -3,14 +3,12 @@ import { AbstractControl } from '@angular/forms';
 import {
   IAM,
   MessagingMethod,
-  Profile,
   SafeIam,
   setCacheClientOptions,
   setChainConfig,
   setMessagingOptions,
   WalletProvider
 } from 'iam-client-lib';
-import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
@@ -19,6 +17,8 @@ import { Store } from '@ngrx/store';
 import * as userClaimsActions from '../../state/user-claim/user.actions';
 import { UserClaimState } from '../../state/user-claim/user.reducer';
 import { ToastrService } from 'ngx-toastr';
+import { getUserProfile } from '../../state/user-claim/user.selectors';
+import { take } from 'rxjs/operators';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
@@ -45,7 +45,6 @@ export enum LoginType {
 })
 export class IamService {
   private _iam: IAM;
-  private _user: BehaviorSubject<Profile | undefined> = new BehaviorSubject(null);
   private _didDocument: any;
   public accountAddress = undefined;
 
@@ -95,7 +94,7 @@ export class IamService {
     let retVal = false;
 
     // Check if account address exists
-    if (!this.isUserPresent) {
+    if (!(await this.isUserPresent())) {
       const connectionOpts = {walletProvider, reinitializeMetamask};
       try {
         const {did, connected, userClosedModal} = await this._iam.initializeConnection(connectionOpts);
@@ -133,8 +132,8 @@ export class IamService {
     return retVal;
   }
 
-  private get isUserPresent(): boolean {
-    return Boolean(this._user.getValue());
+  private async isUserPresent(): Promise<boolean> {
+    return Boolean(await this.store.select(getUserProfile).pipe(take(1)).toPromise());
   }
 
   async setupUser() {
@@ -157,7 +156,6 @@ export class IamService {
   logout(saveDeepLink?: boolean) {
     this._iam.closeConnection();
     this.store.dispatch(userClaimsActions.clearUserClaim());
-    this._user.next(null);
 
     saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/#/welcome';
 
@@ -186,11 +184,6 @@ export class IamService {
    */
   get iam(): IAM {
     return this._iam;
-  }
-
-  // TODO: remove in future this method and _user property in favor of the store.
-  setUserProfile(data: Profile) {
-    this._user.next(data);
   }
 
   public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean) {

@@ -36,10 +36,7 @@ export class UserEffects {
       ofType(userActions.loadUserClaimsSuccess),
       map(userClaimsAction => userClaimsAction.userClaims),
       mapClaimsProfile(),
-      map((profile: Profile) => {
-        this.iamService.setUserProfile(profile);
-        return userActions.setProfile({profile});
-      })
+      map((profile: Profile) => userActions.setProfile({profile}))
     )
   );
 
