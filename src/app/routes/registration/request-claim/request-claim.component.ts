@@ -51,8 +51,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       offChain: new FormControl({value: true, disabled: false}),
       onChain: new FormControl({value: false, disabled: true}),
     }, requireCheckboxesToBeCheckedValidator()),
-    offChain: new FormControl({value: true, disabled: false}),
-    onChain: new FormControl({value: false, disabled: true}),
     fields: this.fb.array([])
   });
   public roleTypeForm = this.fb.group({
@@ -649,7 +647,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private updateEnrolmentForm() {
     this.enrolmentForm.removeControl('fields');
-    this.enrolmentForm.controls.fields = new FormArray(this.createControls());
+    this.enrolmentForm.registerControl( 'fields', new FormArray(this.createControls()));
     this.registrationTypesGroup.reset(
       {
         offChain: {value: true, disabled: false},
