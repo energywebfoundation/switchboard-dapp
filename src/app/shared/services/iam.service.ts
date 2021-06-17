@@ -17,7 +17,7 @@ import { Store } from '@ngrx/store';
 import * as userClaimsActions from '../../state/user-claim/user.actions';
 import { UserClaimState } from '../../state/user-claim/user.reducer';
 import { ToastrService } from 'ngx-toastr';
-import { getUserProfile } from '../../state/user-claim/user.selectors';
+import { getDid, getUserProfile } from '../../state/user-claim/user.selectors';
 import { take } from 'rxjs/operators';
 
 const LS_WALLETCONNECT = 'walletconnect';
@@ -45,7 +45,6 @@ export enum LoginType {
 })
 export class IamService {
   private _iam: IAM;
-  private _didDocument: any;
   public accountAddress = undefined;
 
   private _throwTimeoutError = false;
@@ -137,17 +136,17 @@ export class IamService {
   }
 
   async setupUser() {
-    if (this.isUserSetUp) {
+    if (await this.isUserSetUp()) {
       return;
     }
 
-    this._didDocument = await this._iam.getDidDocument();
-    this.store.dispatch(userClaimsActions.setDidDocument({didDocument: this._didDocument}));
+    const didDocument = await this._iam.getDidDocument();
+    this.store.dispatch(userClaimsActions.setDidDocument({didDocument}));
     this.store.dispatch(userClaimsActions.loadUserClaims());
   }
 
-  private get isUserSetUp(): boolean {
-    return Boolean(this._didDocument);
+  private async isUserSetUp(): Promise<boolean> {
+    return Boolean(await this.store.select(getDid).pipe(take(1)).toPromise());
   }
 
   /**
