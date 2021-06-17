@@ -59,7 +59,7 @@
 
         &:focus {
             background-color: rgb(255 223 192);
-        } 
+        }
         &:not(:disabled):not(.disabled):active:focus, :not(:disabled):not(.disabled).active:focus, .show > .dropdown-toggle:focus {
             background-color: $inverse;
             border: 0 !important;
@@ -129,11 +129,6 @@
 .md-enroll.btn-primary {
     color:#FFF;
     background: #33cbcb;
-}
-
-.md-enroll.mat-raised-button[disabled] {
-    color: rgba(0,0,0,.26) !important;
-    background: rgba(0,0,0,.12) !important;     
 }
 
 //

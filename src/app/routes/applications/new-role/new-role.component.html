@@ -20,7 +20,7 @@
               <mat-icon>info</mat-icon>
                 <div class="d-flex flex-column">
                 <mat-label>{{ (roleForm.value.roleType === RoleType.ORG) ? 'Organization'
-                : 'Application' }}</mat-label> 
+                : 'Application' }}</mat-label>
                 <div class="f-14">{{ roleForm.value.parentNamespace }}</div>
               </div>
             </div>
@@ -28,20 +28,22 @@
               <div class="row">
                 <div class="col-lg-12">
                   <mat-label class="ml-3 pl-1">Role Name</mat-label>
-                  <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                  <mat-form-field class="mt-2 multi-errors" appearance="outline" floatPlaceholder="never">
                     <input matInput autocomplete="off" formControlName="roleName" appBlockPaste type="text"
                       placeholder="Role Name" required oninput="this.value = this.value.toLowerCase()"
                       (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256" />
-                    <mat-error>Role Name is <strong>required</strong></mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'required')">Role Name is <strong>required</strong></mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'minlength')">Role Name need to have at least 3 characters.</mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'isAlphaNumericInvalid')">Role Name can only contain alphanumeric characters.</mat-error>
                   </mat-form-field>
                 </div>
                 <div *ngIf="roleForm.get('roleName').value"
-                  class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mx-3 mb-3 w-100">
+                  class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mx-3 mt-2 mb-3 w-100">
                   <div>
                     <mat-icon>check_circle</mat-icon>
                   </div>
                   <div class="d-flex flex-column">
-                  <mat-label>ENS NAMESPACE</mat-label><div class="f-14">{{ roleForm?.value?.roleName + '.' + ENSPrefixes.Roles + '.' +
+                  <mat-label>ENS Namespace</mat-label><div class="f-14">{{ roleForm?.value?.roleName + '.' + ENSPrefixes.Roles + '.' +
                     roleForm?.value?.parentNamespace }}</div>
                 </div>
                 </div>
@@ -290,197 +292,82 @@
                         </div>
                       </div>
                     </form>
+
                     <!-- Fields New Field Layout -->
-
-                    <div class="field-list py-2">
-                      <div class="field-list-item my-3 px-2 pb-3">
+                    <div class="field-list py-2" *ngIf="dataSource?.data?.length">
+                      <div class="field-list-item my-3 px-2 pb-3" *ngFor="let element of dataSource.data; let i = index; let first = first; let last = last">
                         <div class="d-flex justify-content-end align-items-center pt-2">
                           <div class="d-flex align-items-center">
-                            <button mat-icon-button matSuffix class="mat-primary">
-                              <mat-icon>arrow_circle_down</mat-icon>
-                            </button>
-                            <button mat-icon-button matSuffix class="mat-primary color-error" matTooltip="Delete">
-                              <mat-icon>delete</mat-icon>
-                            </button>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-column justify-content-start px-2">
-                          <div class="d-flex align-items-center pb-3">
-                            <mat-icon class="color-info pr-2">check_circle</mat-icon>
-                            <div class="d-flex flex-column pl-2">
-                              <h4 class="small font-weight-600 mb-1">LABEL</h4>
-                              <span class="f-16">Sample Label 1</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="d-flex flex-row justify-content-between bg-sub-row px-2 px-md-4 py-2 mb-2 mx-0 mx-md-2">
-                          <div class="text-left pt-1">
-                            <h4 class="small font-weight-600 mb-1">MIN LENGTH</h4>
-                            <span class="f-16">12</span>
-                          </div>
-                          <div class="text-center pt-1">
-                            <h4 class="small font-weight-600 mb-1">MAX LENGTH</h4>
-                            <span class="f-16">16</span>
-                          </div>
-                          <div class="text-center pt-1">
-                            <h4 class="small font-weight-600 mb-1">MIN VALUE</h4>
-                            <span class="f-16">12</span>
-                          </div>
-                          <div class="text-right pt-1">
-                            <h4 class="small font-weight-600 mb-1">MAX VALUE</h4>
-                            <span class="f-16">16</span>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-row justify-content-between align-items-center mx-2">
-                          <div class="d-flex align-items-center pt-2">
-                            <div class="d-flex flex-column">
-                              <h4 class="small font-weight-600 mb-1">PATTERN</h4>
-                              <span class="f-16">Sample Pattern</span>
-                            </div>
-                          </div>
-                          <div>
-                            <div class="bg-type">Text</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="field-list-item my-3 px-2 pb-3">
-                        <div class="d-flex justify-content-end align-items-center pt-2">
-                          <div class="d-flex align-items-center">
-                            <button mat-icon-button matSuffix class="mat-primary">
-                              <mat-icon>arrow_circle_up</mat-icon>
-                            </button>
-                            <button mat-icon-button matSuffix class="mat-primary color-error" matTooltip="Delete">
-                              <mat-icon>delete</mat-icon>
-                            </button>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-column justify-content-start px-2">
-                          <div class="d-flex align-items-center pb-3">
-                            <mat-icon class="color-info pr-2">highlight_off</mat-icon>
-                            <div class="d-flex flex-column pl-2">
-                              <h4 class="small font-weight-600 mb-1">LABEL</h4>
-                              <span class="f-16">Sample Label 2</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          class="d-flex flex-row justify-content-between bg-sub-row px-2 px-md-4 py-2 mb-2 mx-0 mx-md-2">
-                          <div class="text-left pt-1">
-                            <h4 class="small font-weight-600 mb-1">MIN LENGTH</h4>
-                            <span class="f-16">12</span>
-                          </div>
-                          <div class="text-center pt-1">
-                            <h4 class="small font-weight-600 mb-1">MAX LENGTH</h4>
-                            <span class="f-16">16</span>
-                          </div>
-                          <div class="text-center pt-1">
-                            <h4 class="small font-weight-600 mb-1">MIN VALUE</h4>
-                            <span class="f-16">12</span>
-                          </div>
-                          <div class="text-right pt-1">
-                            <h4 class="small font-weight-600 mb-1">MAX VALUE</h4>
-                            <span class="f-16">16</span>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-row justify-content-between align-items-center mx-2">
-                          <div class="d-flex align-items-center pt-2">
-                            <div class="d-flex flex-column">
-                              <h4 class="small font-weight-600 mb-1">PATTERN</h4>
-                              <span class="f-16">Sample Pattern</span>
-                            </div>
-                          </div>
-                          <div>
-                            <div class="bg-type">Numbers</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <!-- End New Field Layout -->
 
-                    <div>
-                      <table mat-table [dataSource]="dataSource" *ngIf="dataSource?.data?.length">
-
-                        <ng-container matColumnDef="type">
-                          <th mat-header-cell *matHeaderCellDef> Type </th>
-                          <td mat-cell *matCellDef="let element" data-label="Type"> {{element.fieldType}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="label">
-                          <th mat-header-cell *matHeaderCellDef> Label </th>
-                          <td mat-cell *matCellDef="let element" data-label="Label"> {{element.label}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="required">
-                          <th mat-header-cell *matHeaderCellDef> Required </th>
-                          <td mat-cell *matCellDef="let element" data-label="Required"> {{ element?.required ? 'Yes' :
-                            'No' }} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="minLength">
-                          <th mat-header-cell *matHeaderCellDef> Min Length </th>
-                          <td mat-cell *matCellDef="let element" data-label="Min Length"> {{element?.minLength}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="maxLength">
-                          <th mat-header-cell *matHeaderCellDef> Max Length </th>
-                          <td mat-cell *matCellDef="let element" data-label="Max Length"> {{element?.maxLength}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="pattern">
-                          <th mat-header-cell *matHeaderCellDef> Pattern </th>
-                          <td mat-cell *matCellDef="let element" data-label="Pattern"> {{element?.pattern}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="minValue">
-                          <th mat-header-cell *matHeaderCellDef> Min Value </th>
-                          <td mat-cell *matCellDef="let element" data-label="Min Value">
-                            {{ element.fieldType === 'date' ? (element?.minDate | date: 'M/d/yyyy') :
-                            element?.minValue }}
-                          </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="maxValue">
-                          <th mat-header-cell *matHeaderCellDef> Max Value </th>
-                          <td mat-cell *matCellDef="let element" data-label="Max Value">
-                            {{ element.fieldType === 'date' ? (element?.maxDate | date: 'M/d/yyyy') :
-                            element?.maxValue }}
-                          </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="actions">
-                          <th mat-header-cell *matHeaderCellDef> Actions </th>
-                          <td mat-cell *matCellDef="let element; let i = index; let last = last; let first = first;"
-                            data-label="">
                             <button mat-icon-button matSuffix class="mat-primary" *ngIf="!first" (click)="moveUp(i)">
                               <mat-icon>arrow_circle_up</mat-icon>
                             </button>
                             <button mat-icon-button matSuffix class="mat-primary" *ngIf="!last" (click)="moveDown(i)">
                               <mat-icon>arrow_circle_down</mat-icon>
                             </button>
-                            <!-- <button mat-icon-button matSuffix class="mat-primary" matTooltip="Edit" (click)="editField(i)">
-                                <mat-icon class="btn-color-primary">edit</mat-icon>
-                              </button> -->
-                            <button mat-icon-button matSuffix class="mat-primary color-error" matTooltip="Delete"
-                              (click)="deleteField(i)">
+
+                            <button mat-icon-button matSuffix class="mat-primary color-error" matTooltip="Delete" (click)="deleteField(i)">
                               <mat-icon>delete</mat-icon>
                             </button>
-                          </td>
-                        </ng-container>
-
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                      </table>
-                      <!-- Shows when table is empty -->
-                      <div class="d-flex justify-content-center align-items-center mb-4"
-                        *ngIf="!dataSource?.data?.length">
-                        <div class="d-flex align-items-center no-record color-white">
-                          <mat-icon class="mr-2 my-2">info</mat-icon>
-                          <i>Empty</i>
+                          </div>
+                        </div>
+                        <div class="d-flex flex-column justify-content-start px-2">
+                          <div class="d-flex align-items-center pb-3">
+                            <mat-icon class="color-info pr-2">{{element?.required ? 'check_circle' : 'highlight_off'}}</mat-icon>
+                            <div class="d-flex flex-column pl-2">
+                              <h4 class="small font-weight-600 mb-1">LABEL</h4>
+                              <span class="f-16">{{element.label}}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="element.fieldType !== 'boolean'"
+                             class="d-flex flex-row justify-content-between bg-sub-row px-2 px-md-4 py-2 mb-2 mx-0 mx-md-2">
+                          <ng-container *ngIf="element.fieldType === 'text'">
+                            <div class="text-left pt-1">
+                              <h4 class="small font-weight-600 mb-1">MIN LENGTH</h4>
+                              <span class="f-16">{{element?.minLength || '--'}}</span>
+                            </div>
+                            <div class="text-center pt-1">
+                              <h4 class="small font-weight-600 mb-1">MAX LENGTH</h4>
+                              <span class="f-16">{{element?.maxLength || '--'}}</span>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="element.fieldType === 'number' || element.fieldType === 'date'">
+                            <div class="text-center pt-1">
+                              <h4 class="small font-weight-600 mb-1">MIN VALUE</h4>
+                              <span class="f-16">{{ element.fieldType === 'date' ? ((element?.maxDate | date: 'M/d/yyyy') || '--') :
+                                      (element?.minValue || '--') }}</span>
+                            </div>
+                            <div class="text-right pt-1">
+                              <h4 class="small font-weight-600 mb-1">MAX VALUE</h4>
+                              <span class="f-16">{{ element.fieldType === 'date' ? ((element?.maxDate | date: 'M/d/yyyy') || '--') :
+                                      (element?.maxValue || '--') }}</span>
+                            </div>
+                          </ng-container>
+                        </div>
+                        <div class="d-flex flex-row justify-content-between align-items-center mx-2">
+                          <div class="d-flex align-items-center pt-2">
+                            <div class="d-flex flex-column" *ngIf="element.fieldType === 'text'">
+                              <h4 class="small font-weight-600 mb-1">PATTERN</h4>
+                              <span class="f-16">{{element?.pattern || '--'}}</span>
+                            </div>
+                          </div>
+                          <div>
+                            <div class="bg-type">{{element.fieldType}}</div>
+                          </div>
                         </div>
                       </div>
                     </div>
+
+                    <div class="d-flex justify-content-center align-items-center mb-4"
+                         *ngIf="!dataSource?.data?.length">
+                      <div class="d-flex align-items-center no-record color-white">
+                        <mat-icon class="mr-2 my-2">info</mat-icon>
+                        <i>Empty</i>
+                      </div>
+                    </div>
+                    <!-- End New Field Layout -->
+
                   </div>
                 </div>
               </div>

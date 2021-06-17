@@ -29,7 +29,7 @@
 
         <!-- Name -->
         <ng-container matColumnDef="name">
-            <th mat-header-cell class="d-flex align-items-center" *matHeaderCellDef>Asset Name
+            <th mat-header-cell class="d-flex align-items-center pt-1" *matHeaderCellDef mat-sort-header>Asset Name
                 <mat-icon class="btn-color-disabled ml-2">visibility_off</mat-icon></th>
             <td mat-cell *matCellDef="let element" data-label="Name">
                 <div class="d-flex flex-row align-items-center justify-content-between justify-content-lg-start">
@@ -37,7 +37,9 @@
                         {{element.name ? element.name : 'Asset Name'}}
                     </div>
                     <div>
-                        <button class="btn mat-stroked-table-button ml-0 mr-2 mr-md-0 ml-md-2" (click)="viewAssetEnrolments(element)">Enrolments</button>
+                        <button class="btn mat-stroked-table-button ml-0 mr-2 mr-md-0 ml-md-2"
+                                *ngIf="element.hasEnrolments"
+                                (click)="viewAssetEnrolments(element)">Enrolments</button>
                     </div>
                 </div>
             </td>
@@ -122,11 +124,10 @@
                                 <span>View Ownership History</span>
                             </button>
 
-                            <!-- Verification Method-->
-<!--                            <button mat-menu-item class="btn-color-primary" (click)="viewVerificationMethod(element)">-->
-<!--                                <mat-icon class="btn-color-primary btn-action-3">verified</mat-icon>-->
-<!--                                <span>Verification</span>-->
-<!--                            </button>-->
+                            <button mat-menu-item class="btn-color-primary" *ngIf="AssetListType.MY_ASSETS === listType" (click)="viewVerificationMethod(element)">
+                                <mat-icon class="btn-color-primary btn-action-3">verified</mat-icon>
+                                <span>Verification Method</span>
+                            </button>
 
                             <ng-container *ngIf="listType === AssetListType.MY_ASSETS">
                                 <!-- Offer Ownership -->

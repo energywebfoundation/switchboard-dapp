@@ -13,7 +13,7 @@
 // If modified or removed make sure to check the variable
 // shared with other components
 // -------------------------------------------------------------
-$aside-wd:                                170px;
+$aside-wd:                                200px;
 $aside-wd-collapsed:                      70px;
 $aside-wd-collapsed-text:                 90px;
 $aside-bg:                                #fff;
@@ -252,7 +252,6 @@ body {
 
     ul.menu-top {
         background-color: rgb(21 17 31 / 95%);
-        padding: 15px 0;
         position: fixed;
         bottom: 0;
         display: flex !important;
@@ -553,6 +552,10 @@ body {
         }
         .section-container {
             margin-top: $navbar-hg;
+
+            @include media-breakpoint-up(lg) {
+                margin-top: 80px;
+            }
         }
     }
 }
@@ -652,7 +655,6 @@ _:-ms-lang(x),
 
     ul.menu-top {
         background-color: rgb(21 17 31 / 95%);
-        padding: 15px 0;
         position: fixed;
         bottom: 0;
         display: flex !important;

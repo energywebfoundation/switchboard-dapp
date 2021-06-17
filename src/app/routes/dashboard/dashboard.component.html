@@ -2,16 +2,10 @@
   <div class="row w-100 mx-0 justify-content-lg-center">
     <div class="col-xl-12">
       <div class="card bg-transparent mt-0 mb-3 py-2">
-          <div class="d-flex align-items-center justify-content-center">
-            <div class="text-center d-flex flex-column align-items-center cursor-pointer m-4">
-              <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="64" height="64"
-                alt="identity image">
-              <h2 class="color-white mt-4 mb-0" *ngIf="!userName">My Decentralised Identifier:</h2>
-              <h2 class="color-white mt-4 mb-0" *ngIf="userName"> {{ userName }} </h2>
-              <div class="opacity-50 text-truncate-middle did-wrapper" *ngIf="accountDid" (click)="copyToClipboard()">{{ accountDid }}</div>
-              <div class="opacity-50 text-truncate-middle did-wrapper" *ngIf="!accountDid">Fetching decentralised identifier...</div>
-            </div> 
-          </div>
+          <app-user-info class="d-flex align-items-center justify-content-center"
+                         [userName]="userName$ | async"
+                         [accountDid]="userDid$ | async">
+          </app-user-info>
           <div class="d-flex align-items-center justify-content-center w-100">
             <form class="search-field px-0 px-md-2 pb-0 py-md-2" [formGroup]="searchForm">
               <mat-form-field class="md-search" appearance="outline">
@@ -36,13 +30,13 @@
                       <span class="opacity-50">{{ item?.definition?.description }}</span>
                     </div>
                   </mat-option>
-                </mat-autocomplete>                
+                </mat-autocomplete>
                   <div matSuffix class="d-flex" *ngIf="searchTxtFieldValue?.trim()?.length > 2">
                     <ng-container *ngIf="!isAutolistLoading?.value" >
-                      <button mat-icon-button (click)="search()">
+                      <button mat-icon-button class="bg-transparent" (click)="search()">
                         <mat-icon>search</mat-icon>
                       </button>
-                      <button mat-icon-button (click)="clearSearchTxt()">
+                      <button mat-icon-button class="bg-transparent" (click)="clearSearchTxt()">
                         <mat-icon>close</mat-icon>
                       </button>
                     </ng-container>
@@ -57,14 +51,14 @@
       <div class="card card-icon d-flex justify-content-center align-items-center py-3 mb-3" (click)="goToAssets()">
         <img class="img-dashboard mt-4 m-3 m-lg-4" src="../assets/img/icons/assets-icon.png"
                 alt="assets image">
-        <h4 class="color-white mt-3 mb-4 my-lg-4">Assets</h4>         
+        <h4 class="color-white mt-3 mb-4 my-lg-4">Assets</h4>
       </div>
     </div>
     <div class="col-6 col-md-3 col-lg-2">
       <div class="card card-icon d-flex justify-content-center align-items-center py-3 mb-3" (click)="goToGovernance()">
         <img class="img-dashboard mt-4 m-3 m-lg-4" src="../assets/img/icons/governance-icon.png"
                 alt="assets image">
-        <h4 class="color-white mt-3 mb-4 my-lg-4">Governance</h4>        
+        <h4 class="color-white mt-3 mb-4 my-lg-4">Governance</h4>
       </div>
     </div>
     <div class="col-6 col-md-3 col-lg-2">
@@ -74,13 +68,13 @@
         </div>
         <img class="img-dashboard opacity-01 mt-4 m-3 m-lg-4" src="../assets/img/icons/services-icon.png"
                 alt="assets image">
-                <h4 class="color-white opacity-01 mt-3 mb-4 my-lg-4">Services</h4> 
+                <h4 class="color-white opacity-01 mt-3 mb-4 my-lg-4">Services</h4>
       </div>
     </div>
     <div class="col-6 col-md-3 col-lg-2">
       <div class="card card-icon d-flex justify-content-center align-items-center py-3 mb-3" (click)="goToEnrolment()">
         <img class="img-dashboard mt-4 m-3 m-lg-4" src="../assets/img/icons/enrollment-icon.png" alt="assets image">
-        <h4 class="color-white mt-3 mb-4 my-lg-4">Enrolments</h4>         
+        <h4 class="color-white mt-3 mb-4 my-lg-4">Enrolments</h4>
       </div>
     </div>
     <div class="col-6 col-md-3 col-lg-2">
@@ -89,7 +83,7 @@
           <h3 class="color-white opacity-50">Coming Soon</h3>
         </div>
         <img class="img-dashboard opacity-01 mt-4 m-3 m-lg-4" src="../assets/img/icons/applications-icon.png" alt="applications image">
-        <h4 class="color-white opacity-01 mt-3 mb-4 my-lg-4">Applications</h4>         
+        <h4 class="color-white opacity-01 mt-3 mb-4 my-lg-4">Applications</h4>
       </div>
     </div>
   </div>

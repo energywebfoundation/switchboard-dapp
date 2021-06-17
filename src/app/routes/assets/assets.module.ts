@@ -25,6 +25,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { VerificationMethodComponent } from './verification-method/verification-method.component';
 import { HistoryElementComponent } from './asset-ownership-history/history-element/history-element.component';
 import { HistoryPeriodComponent } from './asset-ownership-history/history-period/history-period.component';
+import { TypeAlgorithmPipe } from './pipes/type-algorithm.pipe';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent },
@@ -43,7 +45,8 @@ const routes: Routes = [
     EditAssetDialogComponent,
     VerificationMethodComponent,
     HistoryElementComponent,
-    HistoryPeriodComponent
+    HistoryPeriodComponent,
+    TypeAlgorithmPipe
   ],
   imports: [
     CommonModule,
@@ -62,7 +65,8 @@ const routes: Routes = [
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    NgMatSearchBarModule
+    NgMatSearchBarModule,
+    ClipboardModule
   ],
   entryComponents: [NewAssetTypeComponent, NewPassiveAssetComponent, AssetOwnershipHistoryComponent, EditAssetDialogComponent, VerificationMethodComponent]
 })

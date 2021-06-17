@@ -19,6 +19,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, of } from 'rxjs';
+import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 
 export const RoleType = {
   ORG: 'org',
@@ -68,10 +69,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public roleForm     = this.fb.group({
     roleType: [null, Validators.required],
     parentNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-    roleName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    roleName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256), isAlphanumericValidator]],
     namespace: '',
     data: this.fb.group({
-      version: '1.0.0',
+      version: 1,
       issuer: this.fb.group({
         issuerType: this.IssuerType.DID,
         roleName: '',
@@ -209,10 +210,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       let arrParentNamespace = this.origData.namespace.split(ENSNamespaceTypes.Roles);
       let parentNamespace = arrParentNamespace[1].substring(1);
 
-      // Construct Version
-      let arrVersion = def.version.split('.');
-      let version = `${parseInt(arrVersion[0]) + 1}.0.0`;
-
       // Construct Fields
       this.dataSource.data = def.fields ? [...def.fields] : [];
       this._initDates();
@@ -223,7 +220,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         roleName: def.roleName,
         namespace: `${this.ENSPrefixes.Roles}.${parentNamespace}`,
         data: {
-          version: version,
+          version: this._incrementVersion(def.version),
           issuer: {
             issuerType: def.issuer.issuerType,
             roleName: def.issuer.roleName,
@@ -237,6 +234,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.issuerList = [...def.issuer.did];
       }
     }
+  }
+
+  private _incrementVersion(version: string | number) {
+    if (typeof(version) === 'string') {
+      return parseInt(version.split('.')[0], 10) + 1;
+    }
+    return version + 1;
   }
 
   private _initPreconditions(preconditionList: any[]) {
@@ -307,6 +311,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       this.fieldsForm.get('validation').get('minDate'),
       this.fieldsForm.get('validation').get('maxDate')
     );
+  }
+
+  controlHasError(control: string, errorType: string) {
+    return this.roleForm.get(control).hasError(errorType);
   }
 
   alphaNumericOnly(event: any, includeDot?: boolean) {
@@ -485,7 +493,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showFieldsForm = false;
   }
 
+  isRoleNameInValid(): boolean {
+    return this.roleForm.get('roleName').valid;
+  }
+
   async proceedSettingIssuer() {
+    if (!this.isRoleNameInValid()) {
+      return;
+    }
     of(null)
     .pipe(
         take(1),

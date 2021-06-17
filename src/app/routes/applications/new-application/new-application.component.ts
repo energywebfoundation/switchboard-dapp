@@ -10,6 +10,7 @@ import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/c
 import { ViewType } from '../new-organization/new-organization.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
+import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 
 @Component({
   selector: 'app-new-application',
@@ -26,7 +27,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
   public appForm = this.fb.group({
     orgNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-    appName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    appName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256), isAlphanumericValidator]],
     namespace: '',
     data: this.fb.group({
       applicationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],

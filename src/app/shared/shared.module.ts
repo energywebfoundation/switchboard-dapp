@@ -65,7 +65,43 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { SmartSearchComponent } from './components/smart-search/smart-search.component';
 import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
+import { CopyToClipboardDirective } from './directives/copyToClipboard/copy-to-clipboard.directive';
 
+
+const MATERIAL_MODULES = [
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatTableModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSlideToggleModule,
+  MatSliderModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  MatNativeDateModule,
+  MatStepperModule,
+];
 
 // https://angular.io/styleguide#!#04-10
 @NgModule({
@@ -91,39 +127,7 @@ import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
     TooltipModule.forRoot(),
     PopoverModule.forRoot(),
     TypeaheadModule.forRoot(),
-    // Material Modules
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatTableModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatRippleModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSlideToggleModule,
-    MatSliderModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatNativeDateModule,
-    MatStepperModule
+    MATERIAL_MODULES
   ],
   providers: [
     ColorsService
@@ -138,7 +142,8 @@ import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
     MinifiedDidViewerDirective,
     MinifiedDidViewerDialogComponent,
     SmartSearchComponent,
-    ReplaceUnderscorePipe
+    ReplaceUnderscorePipe,
+    CopyToClipboardDirective
   ],
   exports: [
     CommonModule,
@@ -170,41 +175,10 @@ import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
     MinifiedDidViewerDirective,
     DidFormatMinifierPipe,
     EnrolmentListComponent,
-    // Material Modules
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatTableModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatRippleModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSlideToggleModule,
-    MatSliderModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatNativeDateModule,
-    MatStepperModule,
+    MATERIAL_MODULES,
     SmartSearchComponent,
-    ReplaceUnderscorePipe
+    ReplaceUnderscorePipe,
+    CopyToClipboardDirective
   ],
   entryComponents: [MinifiedDidViewerDialogComponent]
 })
