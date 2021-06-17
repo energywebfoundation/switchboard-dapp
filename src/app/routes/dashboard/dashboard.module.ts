@@ -20,6 +20,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { UserInfoComponent } from './user-info/user-info.component';
+import { CardComponent } from './card/card.component';
 
 
 const routes: Routes = [
@@ -55,7 +56,7 @@ const routes: Routes = [
     ],
     entryComponents: [],
 
-    declarations: [DashboardComponent, UserInfoComponent],
+    declarations: [DashboardComponent, UserInfoComponent, CardComponent],
     exports: [
         RouterModule
     ]

@@ -158,6 +158,10 @@ export class DashboardComponent implements AfterViewInit {
     this.route.navigate(['assets']);
   }
 
+  goToStake() {
+    this.route.navigate(['stake']);
+  }
+
   clearSearchTxt() {
     this.searchTxtFieldValue = '';
     this.searchForm.get('searchTxt').setValue('');
