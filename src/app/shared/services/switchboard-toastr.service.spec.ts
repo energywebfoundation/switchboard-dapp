@@ -6,10 +6,19 @@ import { BehaviorSubject } from 'rxjs';
 
 fdescribe('SwitchboardToastrService', () => {
   let service: SwitchboardToastrService;
+  const toastrSpy = jasmine.createSpyObj('ToastrService',
+      [
+        'success',
+        'show',
+        'error',
+        'info',
+        'warning',
+      ]
+  );
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ToastrService],
+      providers: [{ provide: ToastrService, useValue: toastrSpy }],
       imports: [ToastrModule.forRoot()]
     });
     service = TestBed.inject(SwitchboardToastrService);
