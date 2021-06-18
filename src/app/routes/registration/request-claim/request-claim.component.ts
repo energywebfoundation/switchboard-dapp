@@ -65,7 +65,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public orgAppDetails: any;
   public roleList: any;
   public submitting = false;
-  public appError = false;
   public bgColor = {};
   public txtColor = {};
   public btnColor = {};
@@ -610,7 +609,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private resetForm() {
     this.submitting = false;
-    this.appError = false;
     this.selectedRole = undefined;
     this.selectedNamespace = undefined;
 
