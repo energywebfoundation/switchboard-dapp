@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { StakeComponent } from './stake.component';
-import { ProvidersComponent } from './providers/providers.component';
 import { StakeListComponent } from './stake-list/stake-list.component';
+import { ProviderComponent } from './provider/provider/provider.component';
 
 const routes = [
   {
@@ -11,6 +11,7 @@ const routes = [
     component: StakeComponent,
     children: [
       {path: '', component: StakeListComponent},
+      {path: 'ewf', component: ProviderComponent}
     ]
   }
 ];

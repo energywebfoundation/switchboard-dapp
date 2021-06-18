@@ -8,13 +8,16 @@ import { StakeRoutingModule } from './stake-routing.module';
 import { ProvidersComponent } from './providers/providers.component';
 import { StakeListComponent } from './stake-list/stake-list.component';
 import { StakeListCardComponent } from './stake-list/stake-list-card/stake-list-card.component';
+import { ProviderModule } from './provider/provider.module';
+
 
 @NgModule({
   imports: [
     CommonModule,
     StakeRoutingModule,
     MatCardModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    ProviderModule
   ],
   declarations: [StakeComponent, ProvidersComponent, StakeListComponent, StakeListCardComponent]
 })
