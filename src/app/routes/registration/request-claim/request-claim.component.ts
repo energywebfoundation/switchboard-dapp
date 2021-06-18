@@ -44,7 +44,6 @@ interface FormClaim extends Claim {
 })
 export class RequestClaimComponent implements OnInit, SubjectElements {
 
-  public RoleType = RoleType;
   public EnrolForType = EnrolForType;
   public enrolmentForm: FormGroup = this.fb.group({
     registrationTypes: new FormGroup({
@@ -107,6 +106,14 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       // Always logout if user refreshes this screen or closes this tab
       this.iamService.logout();
     }
+  }
+
+  isOrganization(): boolean {
+    return this.roleType === RoleType.ORG;
+  }
+
+  isApplication(): boolean {
+    return this.roleType === RoleType.APP;
   }
 
   async ngOnInit() {
@@ -647,7 +654,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private updateEnrolmentForm() {
     this.enrolmentForm.removeControl('fields');
-    this.enrolmentForm.registerControl( 'fields', new FormArray(this.createControls()));
+    this.enrolmentForm.registerControl('fields', new FormArray(this.createControls()));
     this.registrationTypesGroup.reset(
       {
         offChain: {value: true, disabled: false},

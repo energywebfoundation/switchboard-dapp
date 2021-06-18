@@ -4,8 +4,8 @@
     [ngStyle]="bgColor">
     <img src="{{ orgAppDetails?.logoUrl }}" height="48px" *ngIf="orgAppDetails?.logoUrl" />
     <ng-container *ngIf="!orgAppDetails?.logoUrl">
-      <img src="../assets/img/no-organization-image.png" height="48px" *ngIf="roleType === RoleType.ORG" />
-      <img src="../assets/img/no-application-image.png" height="48px" *ngIf="roleType === RoleType.APP" />
+      <img src="../assets/img/no-organization-image.png" height="48px" *ngIf="isOrganization()" />
+      <img src="../assets/img/no-application-image.png" height="48px" *ngIf="isApplication()" />
     </ng-container>
     <div>
       <button mat-button class="btn btn-small md-enroll px-4 mr-2" (click)="logout()" *ngIf="isLoggedIn">
