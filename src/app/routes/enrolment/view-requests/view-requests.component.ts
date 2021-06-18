@@ -51,11 +51,10 @@ export class ViewRequestsComponent implements OnInit {
         requester: this.claim.requester,
         id: this.claim.id,
         token: this.claim.token,
-        subjectAgreement: null,
-        registrationTypes: []
+        subjectAgreement: this.claim.subjectAgreement,
+        registrationTypes: this.claim.registrationTypes
       };
 
-      // console.log('issue claim', req);
       await this.iamService.iam.issueClaimRequest(req);
 
       this.notifService.decreasePendingApprovalCount();
