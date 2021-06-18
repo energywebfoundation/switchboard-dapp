@@ -1,0 +1,26 @@
+<div class="d-flex color-white justify-content-between mb-3">
+    <div class="d-flex">
+        <img width="60px" height="60px" [src]="logo" alt="logo">
+        <div class="d-flex flex-column ml-2">
+            <h2 class="title mb-0">
+                {{provider}}
+            </h2>
+            <h4 class="subtitle">
+                Provider Since {{since | date: 'MMMM, y'}}
+            </h4>
+        </div>
+    </div>
+    <div class="patrons">
+        Accepting Patrons
+        <ng-container *ngIf="acceptingPatrons">
+            <i class="fas fa-lg fa-check color-success ml-1"></i>
+        </ng-container>
+        <ng-container *ngIf="!acceptingPatrons">
+            <i class="fas fa-lg fa-times color-error ml-1"></i>
+        </ng-container>
+    </div>
+</div>
+
+<div class="description">
+    {{description}}
+</div>

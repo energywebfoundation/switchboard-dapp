@@ -3,7 +3,7 @@
     <div class="row">
         
         <div class="col col-md-3" *ngFor="let data of mockData">
-            <app-stake-list-card
+            <app-stake-list-card (click)="goToDetails()"
                 [organization]="data?.organization"
                 [organizationImage]="data?.organizationImage"
                 [providerDate]="data?.providerDate"

@@ -1,0 +1,22 @@
+<div class="d-flex flex-column justify-content-center justify-content-lg-center align-items-lg-center align-items-center overflow-hidden">
+    <div class="row w-100 mx-0 justify-content-lg-center">
+        <div class="col-sm-12 col-md-7">
+            <app-description [description]="description" [acceptingPatrons]="acceptingPatrons"
+                             [provider]="provider" [logo]="logo"></app-description>
+            <app-performance-chart></app-performance-chart>
+        </div>
+        <div class="col-sm-12 col-md-5">
+            <app-summary title="Summary Statistics" [list]="summary"></app-summary>
+            <app-terms [terms]="terms"></app-terms>
+        </div>
+    </div>
+    <div class="row w-100 mt-sm-3">
+        <div class="col-md-7 col-sm-12 justify-content-md-end justify-content-sm-center d-flex separator">
+            <button mat-raised-button
+                    class="btn block-center btn-primary btn-small mt-3 mb-3 mb-lg-0"
+                    (click)="goToEnrolment()">
+                Stake
+            </button>
+        </div>
+    </div>
+</div>

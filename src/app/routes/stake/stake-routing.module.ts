@@ -1,17 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { StakeComponent } from './stake.component';
 import { StakeListComponent } from './stake-list/stake-list.component';
-import { ProviderComponent } from './provider/provider/provider.component';
+import { DetailsComponent } from './details/details/details.component';
+import { EnrolmentComponent } from './enrolment/enrolment.component';
 
-const routes = [
+const routes: Routes = [
   {
     path: '',
     component: StakeComponent,
     children: [
       {path: '', component: StakeListComponent},
-      {path: 'ewf', component: ProviderComponent}
+      {
+        path: ':id',
+        component: DetailsComponent,
+      },
+      {path: ':id/enrolment', component: EnrolmentComponent}
     ]
   }
 ];
@@ -23,4 +28,5 @@ const routes = [
   ],
   exports: [RouterModule]
 })
-export class StakeRoutingModule { }
+export class StakeRoutingModule {
+}

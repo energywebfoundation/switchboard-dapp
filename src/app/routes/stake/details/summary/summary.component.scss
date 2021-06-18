@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  padding: 16px;
+  background: #242230;
+}
+
+.header {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 23px;
+  line-height: 29px;
+  letter-spacing: 0.04em;
+  color: #FFFDFD;
+}
+
+.line {
+  padding: 20px 0;
+
+  font-family: "Source Sans Pro", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+
+  letter-spacing: 0.02em;
+  color: #C8C7CB;
+
+  border-bottom: 1px solid #2A2738;
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 4px;
+  }
+}

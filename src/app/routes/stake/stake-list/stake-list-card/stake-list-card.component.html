@@ -4,7 +4,7 @@
             <mat-card-title class="color-white-flat">{{organization}}</mat-card-title>
             <mat-card-subtitle class="text-subtitle">Provider Since {{providerDate}}</mat-card-subtitle>
         </div>
-        <img src="/assets/img/{{organizationImage}}" ngs class="card-header-image img-fluid" alt="card header" />
+        <img src="/assets/img/{{organizationImage}}" class="card-header-image img-fluid" alt="card header" />
     </mat-card-header>
 
     <mat-card-content>
@@ -20,11 +20,7 @@
                 <i class="fas fa-lg fa-times color-error ml-1"></i>
             </ng-container>
         </span>
-
-        <div class="card-progress" [ngClass]="getStakeRatingClass()">
-            <span>{{getStakeRatingText()}}</span>
-            <mat-progress-bar color="0FB544" mode="determinate" [value]="stakeRating"></mat-progress-bar>
-        </div>
+        <app-progress-bar class="card-progress" size="long" [rating]="stakeRating"></app-progress-bar>
     </mat-card-content>
 
     <mat-card-actions>

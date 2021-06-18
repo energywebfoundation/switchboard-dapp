@@ -1,0 +1,19 @@
+<div class="d-flex color-white align-items-center">
+    <img src="../assets/img/icons/terms-icon.svg" alt="terms and condition icon">
+    <div class="title-container ml-2">
+        <h2 class="title">
+            Terms and Conditions
+        </h2>
+    </div>
+</div>
+<ul class="list">
+    <li *ngFor="let term of terms" class="triangle"> {{term.text}}
+        <ng-container *ngIf="term.subList">
+            <ul class="sublist">
+                <li *ngFor="let subTerm of term.subList" class="circle">
+                    {{subTerm.text}}
+                </li>
+            </ul>
+        </ng-container>
+    </li>
+</ul>
