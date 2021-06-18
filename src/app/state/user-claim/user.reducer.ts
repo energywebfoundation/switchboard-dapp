@@ -19,6 +19,7 @@ export const initialState: UserClaimState = {
 const userReducer = createReducer(
   initialState,
   on(userActions.setProfile, userActions.updateUserClaimsSuccess, (state, {profile}) => ({...state, profile})),
+  on(userActions.clearUserClaim, (state) => ({...state, profile: null, didDocument: null})),
   on(userActions.setDidDocument, (state, {didDocument}) => ({...state, didDocument}))
 );
 

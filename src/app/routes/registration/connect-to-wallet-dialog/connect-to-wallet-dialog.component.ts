@@ -45,7 +45,7 @@ export class ConnectToWalletDialogComponent implements OnInit {
 
   async connectToWallet(walletProvider: WalletProvider) {
     this.iamService.waitForSignature(walletProvider, true);
-    let isLoggedIn = await this.iamService.login(walletProvider);
+    const isLoggedIn = await this.iamService.login(walletProvider);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
@@ -61,7 +61,7 @@ export class ConnectToWalletDialogComponent implements OnInit {
     // Proceed with Login Process
     const walletProvider = WalletProvider.MetaMask;
     this.iamService.waitForSignature(walletProvider, true);
-    let isLoggedIn = await this.iamService.login(walletProvider, true);
+    const isLoggedIn = await this.iamService.login(walletProvider, true);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
@@ -74,6 +74,6 @@ export class ConnectToWalletDialogComponent implements OnInit {
   }
 
   private async cleanMe() {
-    this.iamService.logoutAndRefresh();
+    this.iamService.logout(true);
   }
 }

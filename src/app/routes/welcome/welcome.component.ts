@@ -1,8 +1,6 @@
-import { query } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IAM, WalletProvider } from 'iam-client-lib';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { IamService, VOLTA_CHAIN_ID } from 'src/app/shared/services/iam.service';
 
@@ -18,13 +16,12 @@ export class WelcomeComponent implements OnInit {
   disableMetamaskButton = false;
   version: string = version;
 
-  private _returnUrl = undefined;
+  private _returnUrl;
 
-  constructor(private route: Router, 
-    private activeRoute: ActivatedRoute,
-    private iamService: IamService, 
-    private spinner: NgxSpinnerService,
-    private toastr: ToastrService) { }
+  constructor(private route: Router,
+              private activeRoute: ActivatedRoute,
+              private iamService: IamService) {
+  }
 
   async ngOnInit() {
     this.activeRoute.queryParams.subscribe((queryParams: any) => {
@@ -39,7 +36,7 @@ export class WelcomeComponent implements OnInit {
     }
 
     // Check metamask availability
-    let { isMetamaskPresent, chainId } = await IAM.isMetamaskExtensionPresent();
+    const {isMetamaskPresent, chainId} = await IAM.isMetamaskExtensionPresent();
     if (isMetamaskPresent) {
       this.isMetamaskExtensionAvailable = true;
 
@@ -59,22 +56,21 @@ export class WelcomeComponent implements OnInit {
 
   private async connectToWallet(walletProvider: WalletProvider) {
     this.iamService.waitForSignature(walletProvider, true);
-    let isLoggedIn = await this.iamService.login(walletProvider);
+    const isLoggedIn = await this.iamService.login(walletProvider);
     this.iamService.clearWaitSignatureTimer();
     if (isLoggedIn) {
       // Check deep link
-      let queryParams = undefined;
+      let queryParams;
       if (this._returnUrl) {
-        queryParams = { returnUrl: this._returnUrl };
+        queryParams = {returnUrl: this._returnUrl};
       }
 
       // Navigate to dashboard to initalize user data
-      this.route.navigate(['dashboard'], { 
-        state: { data: { fresh: true }},
-        queryParams: queryParams
+      this.route.navigate(['dashboard'], {
+        state: {data: {fresh: true}},
+        queryParams
       });
-    }
-    else {
+    } else {
       await this.cleanMe();
     }
   }
@@ -83,28 +79,27 @@ export class WelcomeComponent implements OnInit {
     // Proceed with Login Process
     const walletProvider = WalletProvider.MetaMask;
     this.iamService.waitForSignature(walletProvider, true);
-    let isLoggedIn = await this.iamService.login(walletProvider, true);
+    const isLoggedIn = await this.iamService.login(walletProvider, true);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
       // Check deep link
-      let queryParams = undefined;
+      let queryParams;
       if (this._returnUrl) {
-        queryParams = { returnUrl: this._returnUrl };
+        queryParams = {returnUrl: this._returnUrl};
       }
 
       // Navigate to dashboard to initalize user data
-      this.route.navigate(['dashboard'], { 
-        state: { data: { fresh: true }},
-        queryParams: queryParams
+      this.route.navigate(['dashboard'], {
+        state: {data: {fresh: true}},
+        queryParams
       });
-    }
-    else {
+    } else {
       await this.cleanMe();
     }
   }
-  
+
   private async cleanMe() {
-    this.iamService.logoutAndRefresh();
+    this.iamService.logout();
   }
 }

@@ -150,12 +150,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.fsbutton.nativeElement.style.display = 'none';
         }
 
-        // Stay in current screen and display user name if available
-        this.iamService.userProfile
+        this.store.select(userSelectors.getUserProfile)
             .pipe(takeUntil(this._subscription$))
             .subscribe(() => {
                 if (this.iamService.accountAddress) {
-                    // Initialize Notifications
                     this._initNotificationsAndTasks();
                 } else {
                     this.isLoadingNotif = false;
