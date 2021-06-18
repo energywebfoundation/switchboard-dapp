@@ -37,6 +37,12 @@ interface FormClaim extends Claim {
   claimTypeVersion?: string;
 }
 
+enum RolePreconditionType{
+  SYNCED= 'synced',
+  APPROVED = 'approved',
+  PENDING = 'pending'
+}
+
 @Component({
   selector: 'app-request-claim',
   templateUrl: './request-claim.component.html',
@@ -74,11 +80,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public isPrecheckSuccess = false;
   isLoading = false;
   rolePreconditionList = [];
-  RolePreconditionType = {
-    SYNCED: 'synced',
-    APPROVED: 'approved',
-    PENDING: 'pending'
-  };
   public roleType: string;
 
   private userRoleList: FormClaim[];
@@ -113,6 +114,14 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   isApplication(): boolean {
     return this.roleType === RoleType.APP;
+  }
+
+  isRolePreconditionApproved(status: RolePreconditionType): boolean {
+    return status === RolePreconditionType.APPROVED;
+  }
+
+  isRolePreconditionPending(status: RolePreconditionType): boolean {
+    return status === RolePreconditionType.PENDING;
   }
 
   async ngOnInit() {
@@ -695,16 +704,16 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   private _getRoleConditionStatus(namespace: string) {
-    let status = this.RolePreconditionType.PENDING;
+    let status = RolePreconditionType.PENDING;
 
     // Check if namespace exists in synced DID Doc Roles
     for (const roleObj of this.userRoleList) {
       if (roleObj.claimType === namespace) {
         if (roleObj.isAccepted) {
           if (roleObj.isSynced) {
-            status = this.RolePreconditionType.SYNCED;
+            status = RolePreconditionType.SYNCED;
           } else {
-            status = this.RolePreconditionType.APPROVED;
+            status = RolePreconditionType.APPROVED;
           }
         }
         break;
@@ -733,7 +742,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
                   status
                 });
 
-                if (status !== this.RolePreconditionType.SYNCED) {
+                if (status !== RolePreconditionType.SYNCED) {
                   retVal = false;
                 }
               }
