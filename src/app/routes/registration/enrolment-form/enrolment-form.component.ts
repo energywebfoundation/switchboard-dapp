@@ -29,6 +29,7 @@ export class EnrolmentFormComponent implements OnInit {
   });
 
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
+
   @Input() set fieldList(list: IRoleDefinition['fields']) {
     this.fields = list;
     this.updateEnrolmentForm(new FormArray(this.createControls(list)));
@@ -101,6 +102,10 @@ export class EnrolmentFormComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
+  getControl(id: number): FormControl {
+    return (this.enrolmentForm?.get('fields') as FormArray)?.controls[id] as FormControl;
+  }
+
   private get registrationTypesGroup(): AbstractControl {
     return this.enrolmentForm.get('registrationTypes');
   }
@@ -123,10 +128,10 @@ export class EnrolmentFormComponent implements OnInit {
         break;
       case 'date':
         if (field.maxDate) {
-          field.maxDateValue = new Date(field.maxDate);
+          field.maxDate = new Date(field.maxDate);
         }
         if (field.minDate) {
-          field.minDateValue = new Date(field.minDate);
+          field.minDate = new Date(field.minDate);
         }
         break;
       case 'boolean':
