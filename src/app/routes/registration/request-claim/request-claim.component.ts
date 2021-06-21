@@ -207,7 +207,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     this.loadingService.show();
 
     let issuerDids = [];
-    if (this.enrolmentForm.get('offChain').value) {
+    if (this.registrationTypesGroup.get('offChain').value) {
       issuerDids = await this.getIssuerDid();
       if (!(issuerDids && issuerDids.length > 0)) {
         this.toastr.error('Cannot identify issuer for this role.', TOASTR_HEADER);
