@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
 import { IRoleDefinition, RegistrationTypes } from 'iam-client-lib';
 
@@ -19,7 +19,7 @@ export interface EnrolmentSubmission {
   templateUrl: './enrolment-form.component.html',
   styleUrls: ['./enrolment-form.component.scss']
 })
-export class EnrolmentFormComponent implements OnInit {
+export class EnrolmentFormComponent {
   enrolmentForm: FormGroup = new FormGroup({
     registrationTypes: new FormGroup({
       offChain: new FormControl({value: true, disabled: false}),
@@ -48,9 +48,6 @@ export class EnrolmentFormComponent implements OnInit {
   private fields;
 
   constructor(private cdRef: ChangeDetectorRef) {
-  }
-
-  ngOnInit() {
   }
 
   submit() {
