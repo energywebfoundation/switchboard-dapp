@@ -7,14 +7,14 @@
         
         <div class="col col-md-3" *ngFor="let data of mockData">
             <app-stake-list-card
-                organization={{data.organization}}
-                organizationImage={{data.organizationImage}}
-                providerDate={{data.providerDate}}
-                stakeAmount={{data.stakeAmount}}
-                stakeRating={{data.stakeRating}}
-                activeServices={{data.activeServices}}
-                numberOfNodes={{data.numberOfNodes}}
-                isAcceptingPatrons={{data.isAcceptingPatrons}}
+                [organization]="data?.organization"
+                [organizationImage]="data?.organizationImage"
+                [providerDate]="data?.providerDate"
+                [stakeAmount]="data?.stakeAmount"
+                [stakeRating]="data?.stakeRating"
+                [activeServices]="data?.activeServices"
+                [numberOfNodes]="data?.numberOfNodes"
+                [isAcceptingPatrons]="data?.isAcceptingPatrons"
             ></app-stake-list-card>
         </div>
     </div>

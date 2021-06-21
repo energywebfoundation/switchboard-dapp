@@ -10,7 +10,7 @@ export class StakeListCardComponent implements OnInit {
   @Input() organizationImage: string;
   @Input() providerDate: string;
   @Input() stakeAmount: number;
-  @Input() stakeRating: number;
+  @Input() stakeRating: number = 0;
   @Input() activeServices: number;
   @Input() numberOfNodes: number;
   @Input() isAcceptingPatrons: Boolean;
@@ -20,7 +20,7 @@ export class StakeListCardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getStakeRatingText(stakeRating: number = this.stakeRating || 0){
+  getStakeRatingText(stakeRating: number = this.stakeRating){
     if (stakeRating <= 25) {
       return `${stakeRating}% (Bad)`;
     }
