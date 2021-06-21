@@ -103,7 +103,7 @@ export class EnrolmentFormComponent {
     return (this.enrolmentForm?.get('fields') as FormArray)?.controls[id] as FormControl;
   }
 
-  private get registrationTypesGroup(): AbstractControl {
+  get registrationTypesGroup(): AbstractControl {
     return this.enrolmentForm.get('registrationTypes');
   }
 
