@@ -78,9 +78,9 @@
       </ng-container>
         <app-enrolment-form
                 *ngIf="isPrecheckSuccess"
+                [namespaceRegistrationRoles]="getNamespaceRegistrationRoles()"
                 [fieldList]="fieldList"
                 [disabledSubmit]="isSubmitDisabled()"
-                [namespaceRegistrationRoles]="getNamespaceRegistrationRoles()"
                 [txtboxColor]="txtboxColor"
                 [txtColor]="txtColor"
                 [btnColor]="btnColor"
