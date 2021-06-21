@@ -17,6 +17,6 @@ export class CardComponent implements OnInit {
   }
 
   buildIconUrl() {
-    this.iconUrl = `../assets/img/icons/${this.image}`;
+    this.iconUrl = `/assets/img/icons/${this.image}`;
   }
 }

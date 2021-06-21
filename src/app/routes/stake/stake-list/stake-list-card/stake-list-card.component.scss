@@ -1,0 +1,116 @@
+::ng-deep .mat-card-header-text {
+    margin: 0px !important;
+    display: none; 
+}
+
+*{
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.text-subtitle{
+    color: #A6A5AC;
+    font-size: .7rem;
+}
+
+.mat-card{
+    background: #242230;
+    padding: 0;
+
+    > * {
+        padding: 1rem;
+    }
+}
+
+.card-header{
+    display: flex;
+    justify-content: space-between;
+    background-color: inherit;
+    padding-bottom: 0 !important;
+    border: 0px;
+
+    .card-header-image{
+        width: 2.8rem;
+        height: 2.9rem;
+    }
+
+    .mat-card-title{
+        font-size: 1rem;
+        margin-bottom: .5rem;
+    }
+}
+
+.mat-card-content{
+
+    p{
+        font-size: 1.6rem;
+        margin-bottom: 0;
+
+        span{
+            font-size: 1.6rem;
+        }
+    }
+
+    .card-progress{
+        display: flex;
+        flex-direction: column;
+        text-align: right;
+        padding-top: 1rem;
+
+        ::ng-deep .mat-progress-bar-fill::after {
+            border-radius: 1em;
+        }
+        
+        ::ng-deep .mat-progress-bar-buffer {
+            background: #181522;
+        }
+        
+        ::ng-deep .mat-progress-bar {
+            border-radius: 1em;
+        }
+    }
+
+    .card-progress-bad{
+        color: #FF0000;
+        
+        ::ng-deep .mat-progress-bar-fill::after {
+            background-color: #FF0000;
+        }
+    }
+    .card-progress-fair{
+        color: #FFA500;
+        
+        ::ng-deep .mat-progress-bar-fill::after {
+            background-color: #FFA500;
+        }
+    }
+    .card-progress-good{
+        color: #40AD87;
+        
+        ::ng-deep .mat-progress-bar-fill::after {
+            background-color: #40AD87;
+        }
+    }
+    .card-progress-excellent{
+        color: #0FB544;
+        
+        ::ng-deep .mat-progress-bar-fill::after {
+            background-color: #0FB544;
+        }
+    }
+}
+
+.mat-card-actions{
+    display: flex;
+    justify-content: space-between;
+    background: #201E2B;
+    margin: 0;
+
+    span span{
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    &:last-child{
+        padding-bottom: 1rem !important;
+    }
+}

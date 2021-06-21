@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani&display=swap');
+*{
+    font-family: 'Rajdhani', sans-serif !important;
+}
+
+.stake-list{
+    display: flex;
+    flex-direction: column;
+
+    .stake-list-banner{
+        width: auto;
+        margin: 1rem 0;
+    }
+
+    .row {
+        margin-top: 1rem;
+    }
+}

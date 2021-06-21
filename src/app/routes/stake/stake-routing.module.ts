@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { StakeComponent } from './stake.component';
 import { ProvidersComponent } from './providers/providers.component';
+import { StakeListComponent } from './stake-list/stake-list.component';
 
 const routes = [
   {
     path: '',
     component: StakeComponent,
     children: [
-      {path: '', component: ProvidersComponent},
+      {path: '', component: StakeListComponent},
     ]
   }
 ];
