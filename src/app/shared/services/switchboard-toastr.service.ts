@@ -19,22 +19,22 @@ export interface SwitchboardToastr {
     providedIn: 'root'
 })
 export class SwitchboardToastrService {
-    private readonly maxLength = 20;
-    private massageList = new BehaviorSubject<SwitchboardToastr[]>([]);
+    private readonly maxMessagesNumber = 20;
+    private messageList = new BehaviorSubject<SwitchboardToastr[]>([]);
 
     constructor(private toastr: ToastrService) {
     }
 
     getMessageList(): Observable<SwitchboardToastr[]> {
-        return this.massageList.asObservable();
+        return this.messageList.asObservable();
     }
 
     reset(): void {
-        this.massageList.next([]);
+        this.messageList.next([]);
     }
 
     readAllItems(): void {
-        this.massageList.next(this.massageList.getValue().map(item => ({...item, isNew: false})));
+        this.messageList.next(this.messageList.getValue().map(item => ({...item, isNew: false})));
     }
 
     show(message?: string, title?: string, override?: Partial<IndividualConfig>, type?: string): any {
@@ -64,7 +64,7 @@ export class SwitchboardToastrService {
     }
 
     private updateMessageList(message: string, type: string): void {
-        const list = [{message, type, isNew: true}, ...this.massageList.getValue()].slice(0, this.maxLength);
-        this.massageList.next(list);
+        const list = [{message, type, isNew: true}, ...this.messageList.getValue()].slice(0, this.maxMessagesNumber);
+        this.messageList.next(list);
     }
 }

@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
 import { SwitchboardToastr, SwitchboardToastrService } from './switchboard-toastr.service';
-import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
 
-fdescribe('SwitchboardToastrService', () => {
+describe('SwitchboardToastrService', () => {
   let service: SwitchboardToastrService;
-  const toastrSpy = jasmine.createSpyObj('ToastrService',
+  const toastrSpyObj = jasmine.createSpyObj('ToastrService',
       [
         'success',
         'show',
@@ -18,10 +18,10 @@ fdescribe('SwitchboardToastrService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: ToastrService, useValue: toastrSpy }],
-      imports: [ToastrModule.forRoot()]
+      providers: [{ provide: ToastrService, useValue: toastrSpyObj }]
     });
     service = TestBed.inject(SwitchboardToastrService);
+
   });
 
   it('should be created', () => {
@@ -29,7 +29,7 @@ fdescribe('SwitchboardToastrService', () => {
   });
 
   it('should be run reset', () => {
-    (service as any).massageList = new BehaviorSubject<SwitchboardToastr[]>([{
+    (service as any).messageList = new BehaviorSubject<SwitchboardToastr[]>([{
       isNew: true,
       message: 'test',
       type: 'test'
@@ -37,7 +37,7 @@ fdescribe('SwitchboardToastrService', () => {
     spyOn(service, 'reset');
     service.reset();
     expect(service.reset).toHaveBeenCalled();
-    expect((service as any).massageList.getValue.length).toBe(0);
+    expect((service as any).messageList.getValue.length).toBe(0);
   });
 
   it('should be run getMessageList', () => {
@@ -47,7 +47,7 @@ fdescribe('SwitchboardToastrService', () => {
   });
 
   it('should be run readAllItems', () => {
-    (service as any).massageList = new BehaviorSubject<SwitchboardToastr[]>([{
+    (service as any).messageList = new BehaviorSubject<SwitchboardToastr[]>([{
       isNew: true,
       message: 'test',
       type: 'test'
@@ -63,9 +63,8 @@ fdescribe('SwitchboardToastrService', () => {
     const override = {};
     const type = 'type test';
 
-    spyOn(service, 'show');
     service.show(message, title, override, type);
-    expect(service.show).toHaveBeenCalledWith(message, title, override, type);
+    expect(toastrSpyObj.show).toHaveBeenCalledWith(message, title, override, type);
   });
 
   it('should be run error', () => {
@@ -73,9 +72,8 @@ fdescribe('SwitchboardToastrService', () => {
     const title = 'title test';
     const override = {};
 
-    spyOn(service, 'error');
     service.error(message, title, override);
-    expect(service.error).toHaveBeenCalledWith(message, title, override);
+    expect(toastrSpyObj.error).toHaveBeenCalledWith(message, title, override);
   });
 
   it('should be run info', () => {
@@ -83,9 +81,8 @@ fdescribe('SwitchboardToastrService', () => {
     const title = 'title test';
     const override = {};
 
-    spyOn(service, 'info');
     service.info(message, title, override);
-    expect(service.info).toHaveBeenCalledWith(message, title, override);
+    expect(toastrSpyObj.info).toHaveBeenCalledWith(message, title, override);
   });
 
   it('should be run success', () => {
@@ -93,9 +90,8 @@ fdescribe('SwitchboardToastrService', () => {
     const title = 'title test';
     const override = {};
 
-    spyOn(service, 'success');
     service.success(message, title, override);
-    expect(service.success).toHaveBeenCalledWith(message, title, override);
+    expect(toastrSpyObj.success).toHaveBeenCalledWith(message, title, override);
   });
 
   it('should be run warning', () => {
@@ -103,18 +99,7 @@ fdescribe('SwitchboardToastrService', () => {
     const title = 'title test';
     const override = {};
 
-    spyOn(service, 'warning');
     service.warning(message, title, override);
-    expect(service.warning).toHaveBeenCalledWith(message, title, override);
+    expect(toastrSpyObj.warning).toHaveBeenCalledWith(message, title, override);
   });
-
-  it('should be run updateMessageList', () => {
-    const message = 'message test';
-    const type = 'type test';
-
-    spyOn((service as any), 'updateMessageList');
-    (service as any).updateMessageList(message, type);
-    expect((service as any).updateMessageList).toHaveBeenCalledWith(message, type);
-  });
-
 });
