@@ -28,22 +28,13 @@ describe('SwitchboardToastrService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be run reset', () => {
-    (service as any).messageList = new BehaviorSubject<SwitchboardToastr[]>([{
-      isNew: true,
-      message: 'test',
-      type: 'test'
-    }]);
-    spyOn(service, 'reset');
+  it('should be run reset', (done) => {
+    service.success('test');
     service.reset();
-    expect(service.reset).toHaveBeenCalled();
-    expect((service as any).messageList.getValue.length).toBe(0);
-  });
-
-  it('should be run getMessageList', () => {
-    spyOn(service, 'getMessageList');
-    service.getMessageList();
-    expect(service.getMessageList).toHaveBeenCalled();
+    service.getMessageList().subscribe(list => {
+      expect(list).toEqual([]);
+      done();
+    });
   });
 
   it('should be run readAllItems', () => {
