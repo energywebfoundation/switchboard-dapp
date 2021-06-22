@@ -11,7 +11,15 @@
         <p class="color-white-flat stake-amount">
           {{stakeAmount}} <span class="text-subtitle">EWT</span>
         </p>
-        <span class="text-subtitle patrons">Accepting Patrons <i class="fas fa-check"></i></span>
+        <span class="text-subtitle patrons">
+            Accepting Patrons
+            <ng-container *ngIf="isAcceptingPatrons">
+                <i class="fas fa-lg fa-check color-success ml-1"></i>
+            </ng-container>
+            <ng-container *ngIf="!isAcceptingPatrons">
+                <i class="fas fa-lg fa-times color-error ml-1"></i>
+            </ng-container>
+        </span>
 
         <div class="card-progress" [ngClass]="getStakeRatingClass()">
             <span>{{getStakeRatingText()}}</span>

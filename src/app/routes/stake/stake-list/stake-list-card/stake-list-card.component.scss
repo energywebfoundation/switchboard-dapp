@@ -3,10 +3,6 @@
     display: none; 
 }
 
-*{
-    font-family: 'Rajdhani', sans-serif;
-}
-
 .text-subtitle{
     color: #A6A5AC;
     font-size: .7rem;
@@ -15,6 +11,7 @@
 .mat-card{
     background: #242230;
     padding: 0;
+    font-family: 'Rajdhani', sans-serif;
 
     > * {
         padding: 1rem;
