@@ -43,7 +43,7 @@ const providers: Provider[] = [
       configService.loadConfigData(),
     multi: true,
   },
-  {provide: FEAT_TOGGLE_TOKEN, useFactory: getEnv, multi: true}
+  {provide: FEAT_TOGGLE_TOKEN, useFactory: getEnv}
 ];
 
 if (environment.SENTRY_DNS) {
