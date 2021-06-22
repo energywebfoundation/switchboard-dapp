@@ -27,8 +27,8 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { UserEffects } from './state/user-claim/user.effects';
-import { reducer } from './state/user-claim/user.reducer';
 import { rootReducer } from './state/root.reducer';
+import { FEAT_TOGGLE_TOKEN, getEnv } from './shared/feature-toggle/feature-toggle.token';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -43,6 +43,7 @@ const providers: Provider[] = [
       configService.loadConfigData(),
     multi: true,
   },
+  {provide: FEAT_TOGGLE_TOKEN, useFactory: getEnv, multi: true}
 ];
 
 if (environment.SENTRY_DNS) {

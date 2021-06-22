@@ -66,6 +66,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SmartSearchComponent } from './components/smart-search/smart-search.component';
 import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
 import { CopyToClipboardDirective } from './directives/copyToClipboard/copy-to-clipboard.directive';
+import { FeatureToggleDirective } from './feature-toggle/feature-toggle.directive';
 
 
 const MATERIAL_MODULES = [
@@ -143,7 +144,8 @@ const MATERIAL_MODULES = [
     MinifiedDidViewerDialogComponent,
     SmartSearchComponent,
     ReplaceUnderscorePipe,
-    CopyToClipboardDirective
+    CopyToClipboardDirective,
+    FeatureToggleDirective
   ],
   exports: [
     CommonModule,
@@ -178,7 +180,8 @@ const MATERIAL_MODULES = [
     MATERIAL_MODULES,
     SmartSearchComponent,
     ReplaceUnderscorePipe,
-    CopyToClipboardDirective
+    CopyToClipboardDirective,
+    FeatureToggleDirective
   ],
   entryComponents: [MinifiedDidViewerDialogComponent]
 })

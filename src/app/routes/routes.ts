@@ -2,6 +2,7 @@ import { LayoutComponent } from '../layout/layout.component';
 import { AuthGuard } from '../shared/services/auth.guard';
 import { LogOutComponent } from './profile/logout/logout.component';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
+import { FeatureToggleGuard } from '../shared/feature-toggle/feature-toggle.guard';
 
 export const routes = [
   {
@@ -22,7 +23,7 @@ export const routes = [
         path: 'search-result',
         loadChildren: () => import('./search-result/search-result.module').then(m => m.SearchResultModule)
       },
-      {path: 'stake', loadChildren: () => import('./stake/stake.module').then(m => m.StakeModule)}
+      {path: 'stake', canActivate: [FeatureToggleGuard], loadChildren: () => import('./stake/stake.module').then(m => m.StakeModule)}
     ]
   },
   {
