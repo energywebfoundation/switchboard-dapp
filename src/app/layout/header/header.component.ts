@@ -3,7 +3,6 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ToastrService } from 'ngx-toastr';
 import { Md5 } from 'ts-md5/dist/md5';
 import { AssetHistoryEventType, ENSNamespaceTypes } from 'iam-client-lib';
 
@@ -14,11 +13,12 @@ import { Identicon } from 'src/app/shared/directives/identicon/identicon';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { Subject } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../state/user-claim/user.reducer';
+import { SwitchboardToastr, SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 
 @Component({
     selector: 'app-header',
@@ -56,6 +56,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isLoadingNotif = true;
     userName$ = this.store.select(userSelectors.getUserName).pipe(map(value => value ? value : 'Manage Profile'));
     userDid$ = this.store.select(userSelectors.getDid);
+    notificationNewItems = 0;
+    notificationList$: Observable<SwitchboardToastr[]> = this.toastr.getMessageList()
+        .pipe(tap(items => this.notificationNewItems = items.filter(item => item.isNew).length));
 
     private _pendingApprovalCountListener: any;
     private _pendingSyncCountListener: any;
@@ -71,7 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 // private authenticationService: AuthService,
                 private iamService: IamService,
                 private router: Router,
-                private toastr: ToastrService,
+                private toastr: SwitchboardToastrService,
                 private notifService: NotificationService,
                 public userblockService: UserblockService,
                 public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer,
@@ -394,6 +397,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     logout() {
+        this.clearSwitchboardToaster();
         this.iamService.logoutAndRefresh();
+    }
+
+    clearSwitchboardToaster(): void {
+        this.toastr.reset();
+    }
+
+    onHiddenNotificationList(): void {
+        this.toastr.readAllItems();
     }
 }

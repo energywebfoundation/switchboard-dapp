@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { VerificationService } from './verification.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { ToastrService } from 'ngx-toastr';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 describe('VerificationService', () => {
   let service: VerificationService;
@@ -16,7 +16,7 @@ describe('VerificationService', () => {
       providers: [
         { provide: IamService, useValue: iamServiceSpy },
         { provide: LoadingService, useValue: loadingServiceSpy },
-        { provide: ToastrService, useValue: toastrSpy }
+        { provide: SwitchboardToastrService, useValue: toastrSpy }
       ]
     });
     service = TestBed.inject(VerificationService);

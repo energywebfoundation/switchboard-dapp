@@ -2,11 +2,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { ToastrService } from 'ngx-toastr';
 
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { sortByEmittedDate } from '../utils/sort/sort-by-emitted-date';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 const TOASTR_HEADER = 'Asset Ownership History';
 
@@ -23,7 +23,7 @@ export class AssetOwnershipHistoryComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<AssetOwnershipHistoryComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private iamService: IamService,
-              private toastr: ToastrService,
+              private toastr: SwitchboardToastrService,
               private loadingService: LoadingService) {
   }
 
