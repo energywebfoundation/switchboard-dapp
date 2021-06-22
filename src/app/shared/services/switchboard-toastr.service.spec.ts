@@ -37,15 +37,14 @@ describe('SwitchboardToastrService', () => {
     });
   });
 
-  it('should be run readAllItems', () => {
-    (service as any).messageList = new BehaviorSubject<SwitchboardToastr[]>([{
-      isNew: true,
-      message: 'test',
-      type: 'test'
-    }]);
-    spyOn(service, 'readAllItems');
+  it('should be run readAllItems', (done) => {
+    service.success('test');
+    const expectedResult = {message: 'test', type: 'toast-success', isNew: false};
     service.readAllItems();
-    expect(service.readAllItems).toHaveBeenCalled();
+    service.getMessageList().subscribe(list => {
+      expect(list).toEqual([expectedResult]);
+      done();
+    });
   });
 
   it('should be run show', () => {
