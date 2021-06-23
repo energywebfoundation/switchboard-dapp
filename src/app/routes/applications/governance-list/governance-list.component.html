@@ -173,13 +173,13 @@
               </button>
 
               <!-- Create Staking Pool -->
-              <!-- <button mat-menu-item class="btn-color-primary">
-                <mat-icon class="btn-color-primary btn-action-3" (click)="newRole(listType)" svgIcon="create-staking-icon"></mat-icon>
+              <button mat-menu-item class="btn-color-primary" (click)="openStakingPool(element)">
+                <mat-icon class="btn-color-primary btn-action-3" svgIcon="create-staking-icon"></mat-icon>
                 <span>Create Staking Pool</span>
-              </button> -->
+              </button>
 
               <!-- Edit Details -->
-              <button mat-menu-item class="btn-color-primary" (click)="openAddStaking()">
+              <button mat-menu-item class="btn-color-primary" (click)="edit(listType, element)">
                 <mat-icon class="btn-color-primary">edit</mat-icon>
                 <span>Edit</span>
               </button>
