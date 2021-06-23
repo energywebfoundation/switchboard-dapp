@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IAM, WalletProvider } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import { IamService, VOLTA_CHAIN_ID } from 'src/app/shared/services/iam.service';
 
 @Component({
@@ -15,13 +14,12 @@ export class ConnectToWalletDialogComponent implements OnInit {
   disableMetamaskButton = false;
   appName: string;
 
-  constructor(private iamService: IamService, 
-    private spinner: NgxSpinnerService,
-    private toastr: ToastrService,
-    public dialogRef: MatDialogRef<ConnectToWalletDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { 
-      this.appName = data.appName;
-    }
+  constructor(private iamService: IamService,
+              private spinner: NgxSpinnerService,
+              public dialogRef: MatDialogRef<ConnectToWalletDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.appName = data.appName;
+  }
 
   async ngOnInit() {
     // Check metamask availability
@@ -45,7 +43,7 @@ export class ConnectToWalletDialogComponent implements OnInit {
 
   async connectToWallet(walletProvider: WalletProvider) {
     this.iamService.waitForSignature(walletProvider, true);
-    let isLoggedIn = await this.iamService.login(walletProvider);
+    const isLoggedIn = await this.iamService.login(walletProvider);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
@@ -61,7 +59,7 @@ export class ConnectToWalletDialogComponent implements OnInit {
     // Proceed with Login Process
     const walletProvider = WalletProvider.MetaMask;
     this.iamService.waitForSignature(walletProvider, true);
-    let isLoggedIn = await this.iamService.login(walletProvider, true);
+    const isLoggedIn = await this.iamService.login(walletProvider, true);
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
@@ -74,6 +72,6 @@ export class ConnectToWalletDialogComponent implements OnInit {
   }
 
   private async cleanMe() {
-    this.iamService.logoutAndRefresh();
+    this.iamService.logout(true);
   }
 }

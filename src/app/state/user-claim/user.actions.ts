@@ -32,6 +32,10 @@ export const updateUserClaimsSuccess = createAction(
   props<{profile: Partial<Profile>}>()
 );
 
+export const clearUserClaim = createAction(
+  '[User] Clear User Claim'
+);
+
 export const setDidDocument = createAction(
   '[User] Set User Did Document',
   props<{ didDocument: any }>()

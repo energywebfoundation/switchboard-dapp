@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } 
 import { FormBuilder } from '@angular/forms';
 
 import { ENSNamespaceTypes, IApp, IOrganization, IRole } from 'iam-client-lib';
-import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 
 import { ListType } from 'src/app/shared/constants/shared-constants';
@@ -20,6 +19,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -67,7 +67,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
       private iamService: IamService,
       private dialog: MatDialog,
       private fb: FormBuilder,
-      private toastr: ToastrService,
+      private toastr: SwitchboardToastrService,
       private configService: ConfigService) { }
 
   async ngOnInit() {

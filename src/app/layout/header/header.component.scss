@@ -37,6 +37,19 @@ a:hover {
     bottom: 15px;
 }
 
+.notification {
+    &-item {
+        padding: 10px 0;
+    }
+
+    &-icon {
+        width: 20px;
+        height: 20px;
+        background-size: contain;
+        border-radius: 100%;
+    }
+}
+
 .header-notification {
     background-color: #2a2937;
 }
