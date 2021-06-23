@@ -2,13 +2,13 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from '../../../../environments/environment'
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 export const ViewType = {
   UPDATE: 'update',
@@ -60,7 +60,7 @@ export class NewOrganizationComponent implements OnInit {
   public constructor(
     private fb: FormBuilder,
     private iamService: IamService,
-    private toastr: ToastrService,
+    private toastr: SwitchboardToastrService,
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<NewOrganizationComponent>,
     public dialog: MatDialog,

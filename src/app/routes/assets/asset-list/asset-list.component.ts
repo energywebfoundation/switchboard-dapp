@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Asset, AssetHistoryEventType } from 'iam-client-lib';
-import { ToastrService } from 'ngx-toastr';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { AssetListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -18,6 +17,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { mapClaimsProfile } from '../operators/map-claims-profile';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 export const RESET_LIST = true;
 
@@ -47,7 +47,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
 
   private _iamSubscriptionId: number;
 
-  constructor(private toastr: ToastrService,
+  constructor(private toastr: SwitchboardToastrService,
               private dialog: MatDialog,
               private iamService: IamService,
               private notifService: NotificationService,

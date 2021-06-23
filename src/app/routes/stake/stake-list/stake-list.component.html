@@ -1,0 +1,21 @@
+<div class="stake-list">
+    <h4 class="color-white">Providers</h4>
+
+    <img src="/assets/img/icons/stake-list-banner.svg" alt="stake-list-banner" class="stake-list-banner">
+
+    <div class="row">
+        
+        <div class="col col-md-3" *ngFor="let data of mockData">
+            <app-stake-list-card
+                [organization]="data?.organization"
+                [organizationImage]="data?.organizationImage"
+                [providerDate]="data?.providerDate"
+                [stakeAmount]="data?.stakeAmount"
+                [stakeRating]="data?.stakeRating"
+                [activeServices]="data?.activeServices"
+                [numberOfNodes]="data?.numberOfNodes"
+                [isAcceptingPatrons]="data?.isAcceptingPatrons"
+            ></app-stake-list-card>
+        </div>
+    </div>
+</div>

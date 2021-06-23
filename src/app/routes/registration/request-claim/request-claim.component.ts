@@ -2,15 +2,8 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  Asset,
-  ENSNamespaceTypes,
-  IRoleDefinition,
-  PreconditionTypes,
-  RegistrationTypes
-} from 'iam-client-lib';
+import { Asset, ENSNamespaceTypes, IRoleDefinition, PreconditionTypes, RegistrationTypes } from 'iam-client-lib';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
-import { ToastrService } from 'ngx-toastr';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
@@ -19,6 +12,8 @@ import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-
 import { SubjectElements, ViewColorsSetter } from '../models/view-colors-setter';
 import swal from 'sweetalert';
 import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
+import { EnrolmentField, EnrolmentSubmission } from '../enrolment-form/enrolment-form.component';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -37,6 +32,12 @@ interface FormClaim extends Claim {
   claimTypeVersion?: string;
 }
 
+enum RolePreconditionType {
+  SYNCED = 'synced',
+  APPROVED = 'approved',
+  PENDING = 'pending'
+}
+
 @Component({
   selector: 'app-request-claim',
   templateUrl: './request-claim.component.html',
@@ -44,31 +45,20 @@ interface FormClaim extends Claim {
 })
 export class RequestClaimComponent implements OnInit, SubjectElements {
 
-  public RoleType = RoleType;
   public EnrolForType = EnrolForType;
-  public enrolmentForm: FormGroup = this.fb.group({
-    registrationTypes: new FormGroup({
-      offChain: new FormControl({value: true, disabled: false}),
-      onChain: new FormControl({value: false, disabled: true}),
-    }, requireCheckboxesToBeCheckedValidator()),
-    offChain: new FormControl({value: true, disabled: false}),
-    onChain: new FormControl({value: false, disabled: true}),
-    fields: this.fb.array([])
-  });
   public roleTypeForm = this.fb.group({
     roleType: '',
     enrolFor: EnrolForType.ME,
     assetDid: ''
   });
 
-  registrationTypesOfRole: Record<string, Set<RegistrationTypes>>;
+  private registrationTypesOfRole: Record<string, Set<RegistrationTypes>>;
 
   public fieldList: IRoleDefinition['fields'];
 
   public orgAppDetails: any;
   public roleList: any;
   public submitting = false;
-  public appError = false;
   public bgColor = {};
   public txtColor = {};
   public btnColor = {};
@@ -78,11 +68,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public isPrecheckSuccess = false;
   isLoading = false;
   rolePreconditionList = [];
-  RolePreconditionType = {
-    SYNCED: 'synced',
-    APPROVED: 'approved',
-    PENDING: 'pending'
-  };
   public roleType: string;
 
   private userRoleList: FormClaim[];
@@ -98,7 +83,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
               private route: Router,
               private activeRoute: ActivatedRoute,
               private iamService: IamService,
-              private toastr: ToastrService,
+              private toastr: SwitchboardToastrService,
               public dialog: MatDialog,
               private loadingService: LoadingService) {
   }
@@ -109,6 +94,34 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       // Always logout if user refreshes this screen or closes this tab
       this.iamService.logout();
     }
+  }
+
+  isOrganization(): boolean {
+    return this.roleType === RoleType.ORG;
+  }
+
+  isApplication(): boolean {
+    return this.roleType === RoleType.APP;
+  }
+
+  isRolePreconditionApproved(status: RolePreconditionType): boolean {
+    return status === RolePreconditionType.APPROVED;
+  }
+
+  isRolePreconditionPending(status: RolePreconditionType): boolean {
+    return status === RolePreconditionType.PENDING;
+  }
+
+  getNamespaceRegistrationRoles(): Set<RegistrationTypes> {
+    return this.registrationTypesOfRole[this.selectedNamespace];
+  }
+
+  // TODO: check if everything is needed.
+  isSubmitDisabled(): boolean {
+    return !this.roleTypeForm?.value?.roleType ||
+      this.submitting ||
+      !this.roleTypeForm?.valid ||
+      (this.roleTypeForm?.value?.enrolFor === EnrolForType.ASSET && !this.roleTypeForm?.value?.assetDid);
   }
 
   async ngOnInit() {
@@ -181,8 +194,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       // Init Preconditions
       this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
 
-      this.updateEnrolmentForm();
-
     }
   }
 
@@ -199,15 +210,15 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     }
   }
 
-  async submit() {
-    if (!this.enrolmentForm.valid) {
+  async submit(enrolForm?: EnrolmentSubmission) {
+    if (!enrolForm.valid) {
       this.toastr.error('Enrolment Form is invalid.', TOASTR_HEADER);
       return;
     }
     this.loadingService.show();
 
     let issuerDids = [];
-    if (this.registrationTypesGroup.get('offChain').value) {
+    if (enrolForm.registrationTypes.includes(RegistrationTypes.OffChain)) {
       issuerDids = await this.getIssuerDid();
       if (!(issuerDids && issuerDids.length > 0)) {
         this.toastr.error('Cannot identify issuer for this role.', TOASTR_HEADER);
@@ -222,9 +233,9 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     try {
       await this.iamService.iam.createClaimRequest({
         issuer: issuerDids,
-        claim: this.createClaim(),
+        claim: this.createClaim(enrolForm.fields),
         subject: this.roleTypeForm.value.assetDid ? this.roleTypeForm.value.assetDid : undefined,
-        registrationTypes: this.getRegistrationTypes()
+        registrationTypes: enrolForm.registrationTypes
       } as any);
 
       this.displayAlert('Request to enrol as ' + this.roleTypeForm.value.roleType.name.toUpperCase() + ' is submitted for review and approval.',
@@ -295,7 +306,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     }
   }
 
-  private createClaim() {
+  private createClaim(fields: EnrolmentField[]) {
     // Submit first digit of version
     // because legacy role's had version format of '1.0.0'
     // but we version should be persisted as numbers
@@ -307,37 +318,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     };
 
     return {
-      fields: JSON.parse(JSON.stringify(this.buildEnrolmentFormFields())),
+      fields: JSON.parse(JSON.stringify(fields)),
       claimType: this.selectedNamespace,
       claimTypeVersion: parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION
     };
-  }
-
-  private get registrationTypesGroup(): AbstractControl {
-    return this.enrolmentForm.get('registrationTypes');
-  }
-
-  private getRegistrationTypes(): string[] {
-    const result = [];
-    if (this.registrationTypesGroup.get('offChain').value) {
-      result.push(RegistrationTypes.OffChain);
-    }
-
-    if (this.registrationTypesGroup.get('onChain').value) {
-      result.push(RegistrationTypes.OnChain);
-    }
-
-    return result;
-  }
-
-  private buildEnrolmentFormFields() {
-    const values = this.enrolmentForm.value.fields;
-    return this.fieldList.map((field, index) => (
-      {
-        key: field.label,
-        value: values[index]
-      }
-    ));
   }
 
   private setUrlParams(params: any) {
@@ -581,7 +565,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
               this.selectedRole = role.definition;
               this.selectedNamespace = role.namespace;
               this.fieldList = this.selectedRole.fields || [];
-              this.updateEnrolmentForm();
               this.roleTypeForm.get('roleType').setValue(role);
 
               // Init Preconditions
@@ -605,103 +588,25 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private resetForm() {
     this.submitting = false;
-    this.appError = false;
     this.selectedRole = undefined;
     this.selectedNamespace = undefined;
 
     if (this.fieldList) {
       this.fieldList = [];
     }
-
-    if (this.enrolmentForm) {
-      this.enrolmentForm.reset();
-    }
-  }
-
-  private createControls() {
-    return this.fieldList.map((field) => {
-      this.setFieldDefaults(field);
-
-      const control = new FormControl();
-      control.setValidators(this.buildValidationOptions(field));
-      return control;
-    });
-  }
-
-  private setFieldDefaults(field) {
-    switch (field.fieldType) {
-      case 'text':
-        break;
-      case 'number':
-        break;
-      case 'date':
-        if (field.maxDate) {
-          field.maxDateValue = new Date(field.maxDate);
-        }
-        if (field.minDate) {
-          field.minDateValue = new Date(field.minDate);
-        }
-        break;
-      case 'boolean':
-        break;
-    }
-  }
-
-  private updateEnrolmentForm() {
-    this.enrolmentForm.removeControl('fields');
-    this.enrolmentForm.controls.fields = new FormArray(this.createControls());
-    this.registrationTypesGroup.reset(
-      {
-        offChain: {value: true, disabled: false},
-        onChain: {
-          value: false,
-          disabled: !this.registrationTypesOfRole[this.selectedNamespace].has(RegistrationTypes.OnChain)
-        }
-      }
-    );
-  }
-
-  private buildValidationOptions(field: any) {
-    const validations = [];
-
-    if (field.required) {
-      validations.push(Validators.required);
-    }
-
-    if (field.minLength) {
-      validations.push(Validators.minLength(field.minLength));
-    }
-
-    if (field.maxLength) {
-      validations.push(Validators.maxLength(field.maxLength));
-    }
-
-    if (field.pattern) {
-      validations.push(Validators.pattern(field.pattern));
-    }
-
-    if (field.minValue) {
-      validations.push(Validators.min(field.minValue));
-    }
-
-    if (field.maxValue) {
-      validations.push(Validators.max(field.maxValue));
-    }
-
-    return validations;
   }
 
   private _getRoleConditionStatus(namespace: string) {
-    let status = this.RolePreconditionType.PENDING;
+    let status = RolePreconditionType.PENDING;
 
     // Check if namespace exists in synced DID Doc Roles
     for (const roleObj of this.userRoleList) {
       if (roleObj.claimType === namespace) {
         if (roleObj.isAccepted) {
           if (roleObj.isSynced) {
-            status = this.RolePreconditionType.SYNCED;
+            status = RolePreconditionType.SYNCED;
           } else {
-            status = this.RolePreconditionType.APPROVED;
+            status = RolePreconditionType.APPROVED;
           }
         }
         break;
@@ -730,7 +635,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
                   status
                 });
 
-                if (status !== this.RolePreconditionType.SYNCED) {
+                if (status !== RolePreconditionType.SYNCED) {
                   retVal = false;
                 }
               }

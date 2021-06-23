@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import { ConfigService } from 'src/app/shared/services/config.service';
 import { ExpiredRequestError } from 'src/app/shared/errors/errors';
 import { IamRequestService } from 'src/app/shared/services/iam-request.service';
@@ -14,6 +13,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatStepper } from '@angular/material/stepper';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 const TOASTR_HEADER = 'Transfer Ownership';
 
@@ -57,7 +57,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   DIDPattern = `^did:ethr:[a-z0-9]+:(${this.ethAddrPattern})$`;
 
   constructor(private iamService: IamService,
-    private toastr: ToastrService,
+    private toastr: SwitchboardToastrService,
     private spinner: NgxSpinnerService,
     private iamRequestService: IamRequestService,
     private loadingService: LoadingService,
