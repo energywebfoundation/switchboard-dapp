@@ -6,7 +6,6 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./description.component.scss']
 })
 export class DescriptionComponent implements OnInit {
-  @Input() acceptingPatrons: boolean;
   @Input() provider: string;
   @Input() since: string;
   @Input() logo: string;

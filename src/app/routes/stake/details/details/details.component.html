@@ -4,8 +4,19 @@
 <div class="d-flex flex-column justify-content-center justify-content-lg-center align-items-lg-center align-items-center overflow-hidden separator">
     <div class="row w-100 mx-0 justify-content-lg-center mt-3">
         <div class="col-sm-12 col-md-7">
-            <app-description [description]="description" [acceptingPatrons]="acceptingPatrons"
-                             [provider]="provider" [logo]="logo"></app-description>
+            <app-description [description]="description"
+                             [provider]="provider"
+                             [logo]="logo">
+                <div class="patrons">
+                    Accepting Patrons
+                    <ng-container *ngIf="acceptingPatrons">
+                        <i class="fas fa-lg fa-check color-success ml-1"></i>
+                    </ng-container>
+                    <ng-container *ngIf="!acceptingPatrons">
+                        <i class="fas fa-lg fa-times color-error ml-1"></i>
+                    </ng-container>
+                </div>
+            </app-description>
             <app-performance-chart></app-performance-chart>
         </div>
         <div class="col-sm-12 col-md-5">

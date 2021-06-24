@@ -10,15 +10,8 @@
             </h4>
         </div>
     </div>
-    <div class="patrons">
-        Accepting Patrons
-        <ng-container *ngIf="acceptingPatrons">
-            <i class="fas fa-lg fa-check color-success ml-1"></i>
-        </ng-container>
-        <ng-container *ngIf="!acceptingPatrons">
-            <i class="fas fa-lg fa-times color-error ml-1"></i>
-        </ng-container>
-    </div>
+    <ng-content>
+    </ng-content>
 </div>
 
 <div class="description">
