@@ -1,0 +1,11 @@
+<ul class="list">
+    <li *ngFor="let element of list" class="triangle"> {{element?.text}}
+        <ng-container *ngIf="element.subList">
+            <ul class="sublist">
+                <li *ngFor="let subTerm of element.subList" class="circle">
+                    {{subTerm?.text}}
+                </li>
+            </ul>
+        </ng-container>
+    </li>
+</ul>

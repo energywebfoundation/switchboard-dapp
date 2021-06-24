@@ -1,0 +1,25 @@
+<app-title mat-dialog-title logoUrl="../assets/img/icons/review-icon.svg" title="Final Review">
+    <button mat-icon-button [mat-dialog-close]="true">
+        <mat-icon>close</mat-icon>
+    </button>
+</app-title>
+
+<div mat-dialog-content>
+    <p class="acceptance-info">
+        “Please review all the terms and conditions of the contract below.
+        <br>
+        Once you click the Accept the Contract and Stake button, the agreed amount of your EWT will be sent to the
+        staking contract. You will not be able to access the staked EWT until they are returned to you on [date from the
+        contract]
+        <br>
+        The stake with reward will be returned to the same address from which the stake was received.”
+    </p>
+    <app-nested-list [list]="terms"></app-nested-list>
+    <div class="d-flex justify-content-center">
+        <button mat-raised-button
+                class="btn block-center btn-primary btn-md mt-3 mb-3 mb-lg-0"
+                (click)="acceptContract()">
+            Accept the contract and stake
+        </button>
+    </div>
+</div>
