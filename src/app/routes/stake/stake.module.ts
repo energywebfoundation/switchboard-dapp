@@ -20,6 +20,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EnrolmentComponent } from './enrolment/enrolment.component';
+import { TopBarComponent } from './top-bar/top-bar.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { EnrolmentComponent } from './enrolment/enrolment.component';
     PerformanceChartComponent,
     DescriptionComponent,
     ProgressBarComponent,
-    EnrolmentComponent
+    EnrolmentComponent,
+    TopBarComponent
   ]
 })
 export class StakeModule {

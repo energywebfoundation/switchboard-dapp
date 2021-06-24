@@ -1,0 +1,21 @@
+.provider-font {
+  font-family: Rajdhani, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 21px;
+  line-height: 27px;
+}
+
+.provider {
+  position: relative;
+  color: #268489;
+
+  &:before {
+    position: absolute;
+
+  }
+}
+
+.provider-name {
+  color: #C5C4C7;
+}
