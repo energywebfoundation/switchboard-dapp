@@ -295,17 +295,20 @@
 
                     <!-- Fields New Field Layout -->
                     <div class="field-list py-2" *ngIf="dataSource?.data?.length">
-                      <div class="field-list-item my-3 px-2 pb-3" *ngFor="let element of dataSource.data; let i = index; let first = first; let last = last">
+                      <div class="field-list-item my-3 px-2 pb-3 card-others-fields" *ngFor="let element of dataSource.data; let i = index; let first = first; let last = last">
                         <div class="d-flex justify-content-end align-items-center pt-2">
                           <div class="d-flex align-items-center">
 
-                            <button mat-icon-button matSuffix class="mat-primary" *ngIf="!first" (click)="moveUp(i)">
+                            <button mat-icon-button matSuffix class="mat-primary" *ngIf="!first" matTooltip="Move up" (click)="moveUp(i)">
                               <mat-icon>arrow_circle_up</mat-icon>
                             </button>
-                            <button mat-icon-button matSuffix class="mat-primary" *ngIf="!last" (click)="moveDown(i)">
+                            <button mat-icon-button matSuffix class="mat-primary" *ngIf="!last" matTooltip="Move down" (click)="moveDown(i)">
                               <mat-icon>arrow_circle_down</mat-icon>
                             </button>
 
+                            <button mat-icon-button matSuffix class="mat-primary btn-color-primary" matTooltip="Edit Fields">
+                              <mat-icon>edit</mat-icon>
+                            </button>
                             <button mat-icon-button matSuffix class="mat-primary color-error" matTooltip="Delete" (click)="deleteField(i)">
                               <mat-icon>delete</mat-icon>
                             </button>
