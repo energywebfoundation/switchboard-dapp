@@ -24,14 +24,14 @@
                     <h6 class="mb-0">Governance</h6>
                 </a>
             </li>
-            <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('services') }">
+            <!-- <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('services') }">
                 <a class="nav-link d-lg-block d-xl-block coming-soon link-footer">
                     <div class="icon-footer-center">
                         <img src="../assets/img/icons/services-icon.png" width="auto" height="21" alt="Services image">
                     </div>
                     <h6 class="mb-0">Services</h6>
                 </a>
-            </li>
+            </li> -->
             <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('enrolment') }">
                 <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/enrolment">
                     <div class="icon-footer-center">
@@ -51,7 +51,7 @@
             <li *appIsFeatureEnabled class="nav-item" [ngClass]="{ 'active': currentNav.includes('stake') }">
                 <a class="nav-link d-lg-block d-xl-block link-footer" routerLink="stake">
                     <div class="icon-footer-center">
-                        <img src="../assets/img/icons/stake-icon.png" width="auto" height="21" alt="Stake EWT image">
+                        <img src="../assets/img/icons/stake-icon.svg" width="auto" height="21" alt="Stake EWT image">
                     </div>
                     <h6 class="mb-0">Stake EWT</h6>
                 </a>
