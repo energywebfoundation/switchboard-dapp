@@ -238,12 +238,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.roleName = this.roleForm.value.roleName;
 
     this.roleForm.valueChanges
-        .pipe(filter(value => value.roleName !== this.roleName))
-        .subscribe(value => {
-          if (typeof value.roleName !== 'string') {
-            this.roleName = value.roleName.namespace;
-          }
-        });
+      .subscribe(value => {
+        if (typeof value.roleName !== 'string') {
+          this.roleName = value.roleName.namespace;
+        } else {
+          this.roleName = value.roleName;
+        }
+      });
   }
 
   private _incrementVersion(version: string | number) {

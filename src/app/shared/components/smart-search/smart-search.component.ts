@@ -55,12 +55,6 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
         }
     }
 
-    onSelectedItem(event: any): void {
-        if (event.option.value.namespace) {
-            this.searchText.patchValue({namespace: event.option.value.namespace});
-        }
-    }
-
   clearSearchTxt(): void {
     this.searchTxtFieldValue = '';
     this.searchText.setValue('');
@@ -81,7 +75,7 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
                     word = word.toLowerCase();
                     retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
                         search: word,
-                        types: ['App', 'Org']
+                        types: this.fieldName === 'rolePage' ? [ 'Role'] : ['App', 'Org']
                     });
                     this.isAutolistLoading.value = false;
                 }

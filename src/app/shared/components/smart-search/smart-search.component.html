@@ -5,7 +5,7 @@
            [formControl]="searchText"
            [matAutocomplete]="auto"
            (input)="updateSearchTxtFieldValue($event)">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelectedItem($event)">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option *ngFor="let item of filteredOptions | async" [value]="item" class="d-flex align-items-start">
             <div class=" d-flex flex-column">
                 <span>{{ item?.namespace }}</span>
