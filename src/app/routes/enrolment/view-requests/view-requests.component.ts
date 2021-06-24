@@ -6,6 +6,9 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { Store } from '@ngrx/store';
+import { UserClaimState } from '../../../state/user-claim/user.reducer';
+import * as userSelectors from '../../../state/user-claim/user.selectors';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -18,6 +21,7 @@ export class ViewRequestsComponent implements OnInit {
   listType: string;
   claim: any;
   fields = [];
+  userDid$ = this.store.select(userSelectors.getDid);
 
   constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -25,6 +29,7 @@ export class ViewRequestsComponent implements OnInit {
               private iamService: IamService,
               private toastr: SwitchboardToastrService,
               private loadingService: LoadingService,
+              private store: Store<UserClaimState>,
               private notifService: NotificationService) {
   }
 
