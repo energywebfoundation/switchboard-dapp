@@ -66,12 +66,12 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openNewOrgComponent(): void {
     if (!this.isIamEwcOwner) {
-      const namespace = 'orgowner.roles.orgcreator.apps.energyweb.iam.ewc';
+      const namespace = 'orgcreator.apps.testorg.iam.ewc';
       const roleName = 'orgowner';
-      const siteUrl = `${location.origin}/#/enrol?org=${namespace}&roleName=${roleName}`;
-      window.open('//' + siteUrl, '_blank');
+      this.router.navigate([`enrol`], {queryParams: {roleName, app: namespace, stayLoggedIn: true}});
       return;
     }
+
     const dialogRef = this.dialog.open(NewOrganizationComponent, {
       width: '600px',
       data: {},
