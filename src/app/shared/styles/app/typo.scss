@@ -45,6 +45,13 @@ h3,.h3 {
 
 h4,.h4 {
     font-size: 1.125rem; // 18px
+
+    small {
+        line-height: 12px;
+        font-family: 'Source Sans Pro', sans-serif;
+        opacity: 0.6;
+        letter-spacing: 0.2px;
+    }
 }
 
 h5,.h5 {

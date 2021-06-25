@@ -15,6 +15,7 @@ export const environment = {
     rpcUrl: 'https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/',
     chainId: 73799
   },
+  featureVisible: true,
   ...constants  
 };
 
