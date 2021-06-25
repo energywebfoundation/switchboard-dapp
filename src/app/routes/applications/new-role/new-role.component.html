@@ -127,7 +127,10 @@
                             [searchText]="roleForm.get('roleName')"
                             [fieldName]="'rolePage'">
                     </app-smart-search>
-                    <mat-error *ngIf="roleForm.get('roleName').errors?.required">Issuer Role Namespace is <strong>required</strong></mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'required')">Issuer Role Namespace is <strong>required</strong></mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'minlength')">Role Name need to have at least 3 characters.</mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'maxlength')">Role Name need to have at max 256 characters.</mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'isAlphaNumericInvalid')">Role Name can only contain alphanumeric characters.</mat-error>
                   </div>
                 </div>
               </div>
