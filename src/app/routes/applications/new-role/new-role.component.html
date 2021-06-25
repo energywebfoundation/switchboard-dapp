@@ -127,7 +127,7 @@
                             [searchText]="roleForm.get('roleName')"
                             [fieldName]="'rolePage'">
                     </app-smart-search>
-                    <mat-error>Issuer Role Namespace is <strong>required</strong></mat-error>
+                    <mat-error *ngIf="roleForm.get('roleName').errors?.required">Issuer Role Namespace is <strong>required</strong></mat-error>
                   </div>
                 </div>
               </div>
