@@ -160,6 +160,10 @@ export class AppComponent implements OnInit {
             "ethereum-icon",
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/assets-icons/ethereum-icon.svg")
         );
+        this.matIconRegistry.addSvgIcon(
+            "create-staking-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/create-staking-icon.svg")
+        );
     }
 
     ngOnInit() {
