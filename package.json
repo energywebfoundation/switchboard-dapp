@@ -104,7 +104,6 @@
     "karma-typescript": "^5.2.0",
     "lerna": "^3.20.2",
     "loaders.css": "0.1.2",
-    "ng2-charts-schematics": "^0.1.7",
     "protractor": "~7.0.0",
     "ts-node": "7.0.0",
     "tslint": "~6.1.0",
