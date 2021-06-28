@@ -478,9 +478,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   editField(i: number) {
     this.fieldIndex = i;
-    let field = this.dataSource.data[i];
-    let fieldKeys = Object.keys(field);
-    let valueToPatch = {}
+    const field = this.dataSource.data[i];
+    const fieldKeys = Object.keys(field);
+    const valueToPatch = {};
 
     fieldKeys.map(fieldKey => {
       this.fieldsForm.get(fieldKey)?.setValue(field[fieldKey]);
