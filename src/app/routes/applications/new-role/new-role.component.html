@@ -287,8 +287,10 @@
                         </div>
                         <div class="d-flex justify-content-end mb-2">
                           <button mat-stroked-button class="btn-small mr-2" (click)="cancelAddField()">Cancel</button>
-                          <button mat-raised-button class="btn btn-small btn btn-primary" type="submit"
+                          <button mat-raised-button class="btn btn-small btn btn-primary" type="submit" *ngIf="!isEditFieldForm"
                             (click)="addField()" [disabled]="!fieldsForm.valid || !fieldsForm.dirty">Add</button>
+                          <button mat-raised-button class="btn btn-small btn btn-primary" *ngIf="isEditFieldForm"
+                            (click)="updateField()" [disabled]="!fieldsForm.valid">Update</button>
                         </div>
                       </div>
                     </form>
@@ -306,7 +308,7 @@
                               <mat-icon>arrow_circle_down</mat-icon>
                             </button>
 
-                            <button mat-icon-button matSuffix class="mat-primary btn-color-primary" matTooltip="Edit Fields">
+                            <button mat-icon-button matSuffix class="mat-primary btn-color-primary" matTooltip="Edit Fields" (click)="editField(i)">
                               <mat-icon>edit</mat-icon>
                             </button>
                             <button mat-icon-button matSuffix class="mat-primary color-error" matTooltip="Delete" (click)="deleteField(i)">
