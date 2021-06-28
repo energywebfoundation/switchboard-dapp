@@ -54,10 +54,11 @@ export class VerificationMethodComponent implements OnInit {
     if (this.isFormDisabled) {
       return;
     }
-    this.verificationService.updateDocumentAndReload(this.dialogData.id, this.publicKey.value).subscribe((publicKeys) => {
-      this.handleLoadedPublicKeys(publicKeys);
-      this.clearControls();
-    });
+    this.verificationService.updateDocumentAndReload(this.dialogData.id, this.publicKey.value, this.verificationsAmount)
+      .subscribe((publicKeys) => {
+        this.handleLoadedPublicKeys(publicKeys);
+        this.clearControls();
+      });
   }
 
   getPublicKeyErrorMsg() {

@@ -5,6 +5,7 @@ import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
+
 describe('VerificationService', () => {
   let service: VerificationService;
   const iamSpy = jasmine.createSpyObj('iam', ['updateDidDocument', 'getDidDocument']);
@@ -27,7 +28,7 @@ describe('VerificationService', () => {
   });
 
   describe('updateDocumentAndReload', () => {
-    it('should check returned value', () => {
+    it('should check returned value', (done) => {
       const publicKey = {
         controller: '0xAB6b0b9f9002B2a962D5Fe7a0F2A3402C4A8FaFC',
         id: 'did:ethr:0xAB6b0b9f9002B2a962D5Fe7a0F2A3402C4A8FaFC#key-owner',
@@ -38,9 +39,10 @@ describe('VerificationService', () => {
       iamSpy.getDidDocument.and.returnValue(Promise.resolve({
         publicKey: [publicKey]
       }));
-      service.updateDocumentAndReload('', '').subscribe((publicKeys) => {
+      service.updateDocumentAndReload('', '', 0).subscribe((publicKeys) => {
         expect(publicKeys.length).toBe(1);
         expect(publicKeys).toContain(jasmine.objectContaining(publicKey));
+        done();
       });
       expect(loadingServiceSpy.show).toHaveBeenCalled();
     });
@@ -48,7 +50,7 @@ describe('VerificationService', () => {
     it('should check while error occurs', () => {
       iamSpy.updateDidDocument.and.returnValue(Promise.reject());
 
-      service.updateDocumentAndReload('', '').subscribe(() => {
+      service.updateDocumentAndReload('', '', 0).subscribe(() => {
       }, () => {
         expect(toastrSpy.error).toHaveBeenCalled();
       });
