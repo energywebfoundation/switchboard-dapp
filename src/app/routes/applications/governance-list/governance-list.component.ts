@@ -607,4 +607,8 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
     return retVal;
   }
+
+  openStakingPool() {
+    
+  }
 }

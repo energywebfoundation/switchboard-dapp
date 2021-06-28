@@ -1,0 +1,21 @@
+.mat-dialog-content {
+    padding: 0 0 !important;
+}
+
+::ng-deep {
+    .mat-radio-outer-circle {
+        border-color: #52446f !important;
+    }
+
+    .mat-radio-button.mat-radio-checked .mat-radio-outer-circle {
+        border-color: #33CBCB !important;
+    }
+
+    .mat-radio-button .mat-radio-inner-circle, .mat-radio-button .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple), .mat-radio-button.mat-radio-checked .mat-radio-persistent-ripple, .mat-radio-button:active .mat-radio-persistent-ripple {
+        background-color: #33CBCB !important;
+    }
+}
+
+.mat-radio-button {
+    margin-left: 16px;
+}
