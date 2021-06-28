@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { from, of } from 'rxjs';
-import { Algorithms, DIDAttribute, Encoding, PubKeyType } from 'iam-client-lib';
-import { Keys } from '@ew-did-registry/keys';
+import { DIDAttribute, PubKeyType } from 'iam-client-lib';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
-import { SwitchboardToastrService } from "../../../shared/services/switchboard-toastr.service";
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { CancelButton } from '../../../layout/loading/loading.component';
+import { retryWhenWithDelay } from '../operators/retry-when-with-delay';
 
 @Injectable({
   providedIn: 'root'
@@ -25,15 +26,11 @@ export class VerificationService {
     );
   }
 
-  updateDocumentAndReload(did: string, publicKey: string) {
-    this.loadingService.show();
+  updateDocumentAndReload(did: string, publicKey: string, publicKeysAmount: number) {
+    this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
     return from(
       this.iamService.iam.updateDidDocument(this.getUpdateOptions(did, publicKey))
     ).pipe(
-      tap(() => this.toastr.success(
-        'New Verification Type has been successfully added.',
-        'Asset Verification')
-      ),
       catchError(err => {
         this.loadingService.hide();
         this.toastr.error('Error occurred while adding New Verification Type', 'Asset Verification');
@@ -42,13 +39,34 @@ export class VerificationService {
       })
     ).pipe(
       switchMap(() => this.loadDocumentPublicKeys(did, true)),
+      tap((publicKeys) => {
+          if (publicKeys.length !== publicKeysAmount) {
+            this.toastr.success(
+              'New Verification Type has been successfully added.',
+              'Asset Verification');
+          }
+        }
+      ),
+      map((publicKeys) => {
+        if (publicKeys.length === publicKeysAmount) {
+          throw publicKeys;
+        }
+        return publicKeys;
+      }),
+      retryWhenWithDelay(),
+      catchError(err => {
+        this.loadingService.hide();
+        this.toastr.error('Backend hasn\'t been updated with newest blockchain data', 'Asset Verification');
+        console.error(err);
+        return of(err);
+      }),
       finalize(() => this.loadingService.hide())
     );
   }
 
   private loadDocumentPublicKeys(did, includeClaims) {
     return from(
-      this.iamService.iam.getDidDocument({ did, includeClaims })
+      this.iamService.iam.getDidDocument({did, includeClaims})
     ).pipe(
       map((document) => document.publicKey),
     );
@@ -60,7 +78,7 @@ export class VerificationService {
       did,
       data: {
         type: PubKeyType.SignatureAuthentication2018,
-        value: { publicKey, tag: uuidv4() }
+        value: {publicKey, tag: uuidv4()}
       }
     };
   }
