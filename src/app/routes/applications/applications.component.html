@@ -8,16 +8,14 @@
           <div class="d-flex align-item-center">
             <!-- <button (click)="toggleFilter(ListType.ORG)" class="btn mat-stroked-filter-button btn-small mb-3 mb-lg-0 mr-2">Filter
             </button> -->
-            <ng-container *ngIf="isIamEwcOwner">
-              <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
-                *ngIf="!listOrg?.orgHierarchy?.length" (click)="openNewOrgComponent()">Create Organization
-              </button>
-              <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
-                *ngIf="listOrg?.orgHierarchy?.length"
-                (click)="listOrg?.newSubOrg(listOrg?.orgHierarchy[listOrg?.orgHierarchy?.length - 1])">Create
-                Sub-Organization
-              </button>
-            </ng-container>
+            <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
+                    *ngIf="!listOrg?.orgHierarchy?.length" (click)="openNewOrgComponent()">Create Organization
+            </button>
+            <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
+                    *ngIf="listOrg?.orgHierarchy?.length"
+                    (click)="listOrg?.newSubOrg(listOrg?.orgHierarchy[listOrg?.orgHierarchy?.length - 1])">Create
+              Sub-Organization
+            </button>
           </div>
         </div>
         <app-governance-list list-type="org" #listOrg [isFilterShown]="showFilter.org"
