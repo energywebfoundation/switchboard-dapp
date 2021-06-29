@@ -1,22 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StakeComponent } from './stake.component';
+import { ProgressBarComponent } from './progress-bar.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-describe('StakingComponent', () => {
-  let component: StakeComponent;
-  let fixture: ComponentFixture<StakeComponent>;
+describe('ProgressBarComponent', () => {
+  let component: ProgressBarComponent;
+  let fixture: ComponentFixture<ProgressBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StakeComponent],
+      declarations: [ ProgressBarComponent ],
       schemas: [NO_ERRORS_SCHEMA]
     })
-      .compileComponents();
+    .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StakeComponent);
+    fixture = TestBed.createComponent(ProgressBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

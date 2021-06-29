@@ -1,26 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StakeListComponent } from './stake-list.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { TopBarComponent } from './top-bar.component';
 import { Router } from '@angular/router';
 
-describe('StakeListComponent', () => {
-  let component: StakeListComponent;
-  let fixture: ComponentFixture<StakeListComponent>;
+describe('TopBarComponent', () => {
+  let component: TopBarComponent;
+  let fixture: ComponentFixture<TopBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StakeListComponent],
+      declarations: [TopBarComponent],
       providers: [
         {provide: Router, useValue: {}}
       ],
-      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StakeListComponent);
+    fixture = TestBed.createComponent(TopBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

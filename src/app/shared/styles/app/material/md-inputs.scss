@@ -414,3 +414,7 @@ mat-label {
 .dropdown-menu {
   border-color: transparent !important;
 }
+
+.mat-calendar-body-in-range>.mat-calendar-body-comparison-identical, .mat-calendar-body-in-comparison-range.mat-calendar-body-in-range::after {
+  background: #1d1c27;
+}

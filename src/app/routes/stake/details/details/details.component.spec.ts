@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StakeListComponent } from './stake-list.component';
+import { DetailsComponent } from './details.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 
-describe('StakeListComponent', () => {
-  let component: StakeListComponent;
-  let fixture: ComponentFixture<StakeListComponent>;
+describe('DetailsComponent', () => {
+  let component: DetailsComponent;
+  let fixture: ComponentFixture<DetailsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StakeListComponent],
+      declarations: [DetailsComponent],
       providers: [
         {provide: Router, useValue: {}}
       ],
@@ -20,7 +20,7 @@ describe('StakeListComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StakeListComponent);
+    fixture = TestBed.createComponent(DetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

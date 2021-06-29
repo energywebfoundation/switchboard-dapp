@@ -1,0 +1,28 @@
+<h3 class="color-white">Performance Chart</h3>
+<div class="d-flex flex-sm-column flex-lg-row justify-content-md-between">
+    <app-progress-bar class="mb-3 flex-grow-1" [rating]="stakeRating" size="short"></app-progress-bar>
+    <mat-form-field class="form-color md-enroll bg-transparent flex-grow-0" appearance="fill">
+        <mat-label class="label">Select a Date Range</mat-label>
+        <mat-date-range-input
+                [formGroup]="rangeDates"
+                [rangePicker]="campaignOnePicker"
+                [comparisonStart]="rangeDates.value.start"
+                [comparisonEnd]="rangeDates.value.end">
+            <input matStartDate placeholder="Start date" formControlName="start">
+            <input matEndDate placeholder="End date" formControlName="end">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+    </mat-form-field>
+</div>
+<div class="chart-wrapper">
+    <canvas baseChart width="400" height="400"
+            [datasets]="lineChartData"
+            [labels]="lineChartLabels"
+            [options]="lineChartOptions"
+            [colors]="lineChartColors"
+            [legend]="lineChartLegend"
+            [chartType]="lineChartType"
+            [plugins]="lineChartPlugins">
+    </canvas>
+</div>

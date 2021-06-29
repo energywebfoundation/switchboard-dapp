@@ -1,0 +1,19 @@
+<div class="d-flex color-white justify-content-between mb-3">
+    <div class="d-flex">
+        <img width="60px" height="60px" [src]="logo" alt="logo">
+        <div class="d-flex flex-column ml-2">
+            <h2 class="title mt-1 mb-0">
+                {{provider}}
+            </h2>
+            <h4 class="f-16"> 
+                Provider Since {{since | date: 'MMMM, y'}}
+            </h4>
+        </div>
+    </div>
+    <ng-content>
+    </ng-content>
+</div>
+
+<div class="description">
+    {{description}}
+</div>

@@ -1,22 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StakeComponent } from './stake.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { DescriptionComponent } from './description.component';
 
-describe('StakingComponent', () => {
-  let component: StakeComponent;
-  let fixture: ComponentFixture<StakeComponent>;
+describe('DescriptionComponent', () => {
+  let component: DescriptionComponent;
+  let fixture: ComponentFixture<DescriptionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StakeComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+      declarations: [DescriptionComponent]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StakeComponent);
+    fixture = TestBed.createComponent(DescriptionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

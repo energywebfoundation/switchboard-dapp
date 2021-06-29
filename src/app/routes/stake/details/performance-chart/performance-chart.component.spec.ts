@@ -1,26 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StakeListComponent } from './stake-list.component';
+import { PerformanceChartComponent } from './performance-chart.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Router } from '@angular/router';
 
-describe('StakeListComponent', () => {
-  let component: StakeListComponent;
-  let fixture: ComponentFixture<StakeListComponent>;
+describe('PerformanceChartComponent', () => {
+  let component: PerformanceChartComponent;
+  let fixture: ComponentFixture<PerformanceChartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StakeListComponent],
-      providers: [
-        {provide: Router, useValue: {}}
-      ],
+      declarations: [PerformanceChartComponent],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StakeListComponent);
+    fixture = TestBed.createComponent(PerformanceChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
