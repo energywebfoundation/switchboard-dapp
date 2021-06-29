@@ -62,7 +62,7 @@
             <ng-container formGroupName="data">
               <div *ngIf="viewType === ViewType.UPDATE"
                 class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
-                <span class="pb-2">{{ roleForm?.value?.roleName + '.' + ENSPrefixes.Roles + '.' +
+                <span class="pb-2">{{ roleName + '.' + ENSPrefixes.Roles + '.' +
                   roleForm?.value?.parentNamespace }}</span>
               </div>
               <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer">
@@ -127,7 +127,9 @@
                             [searchText]="roleForm.get('roleName')"
                             [fieldName]="'rolePage'">
                     </app-smart-search>
-                    <mat-error>Issuer Role Namespace is <strong>required</strong></mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'required')">Issuer Role Namespace is <strong>required</strong></mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'minlength')">Role Name need to have at least 3 characters.</mat-error>
+                    <mat-error *ngIf="controlHasError('roleName', 'maxlength')">Role Name need to have at max 256 characters.</mat-error>
                   </div>
                 </div>
               </div>

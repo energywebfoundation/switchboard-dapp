@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { debounceTime, delay, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, delay, filter, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 import { ListType } from 'src/app/shared/constants/shared-constants';
@@ -130,7 +130,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public ViewType = ViewType;
   viewType: string = ViewType.NEW;
   origData: any;
-
+  roleName: string;
   private TOASTR_HEADER = 'Create New Role';
 
   public txs: any[];
@@ -233,7 +233,18 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       if (def.issuer.did && def.issuer.did.length) {
         this.issuerList = [...def.issuer.did];
       }
+
     }
+    this.roleName = this.roleForm.value.roleName;
+
+    this.roleForm.valueChanges
+      .subscribe(value => {
+        if (typeof value.roleName !== 'string') {
+          this.roleName = value.roleName.namespace;
+        } else {
+          this.roleName = value.roleName;
+        }
+      });
   }
 
   private _incrementVersion(version: string | number) {
@@ -567,10 +578,19 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async proceedAddingFields() {
-    const issuerType = this.roleForm.value.data.issuer.issuerType;
+    const roleFormValue = this.roleForm.value;
+    if (typeof roleFormValue.roleName !== 'string') {
+      roleFormValue.roleName = roleFormValue.roleName.namespace;
+    }
+
+    if (roleFormValue.roleName !== roleFormValue.data.issuer.roleName) {
+      roleFormValue.data.issuer.roleName = roleFormValue.roleName;
+    }
+
+    const issuerType = roleFormValue.data.issuer.issuerType;
     if (this.IssuerType.DID === issuerType && !this.issuerList.length) {
       this.toastr.error('Issuer list is empty.', this.TOASTR_HEADER);
-    } else if (this.IssuerType.Role === issuerType && !this.roleForm.value.data.issuer.roleName) {
+    } else if (this.IssuerType.Role === issuerType && !roleFormValue.data.issuer.roleName) {
       this.toastr.error('Issuer Role is empty.', this.TOASTR_HEADER);
     } else {
       let allowToProceed = true;
@@ -586,17 +606,17 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // Check if rolename exists or valid
         const exists = await this.iamService.iam.checkExistenceOfDomain({
-          domain: this.roleForm.value.data.issuer.roleName
+          domain: roleFormValue.data.issuer.roleName
         });
 
-        if (!exists || !this.roleForm.value.data.issuer.roleName.includes(`.${ENSNamespaceTypes.Roles}.`)) {
+        if (!exists || !roleFormValue.data.issuer.roleName.includes(`.${ENSNamespaceTypes.Roles}.`)) {
           this.toastr.error('Issuer Role Namespace does not exist or is invalid.', this.TOASTR_HEADER);
           allowToProceed = false;
         }
         else {
           // Check if there are approved users to issue the claim
           let did = await this.iamService.iam.getRoleDIDs({
-            namespace: this.roleForm.value.data.issuer.roleName
+            namespace: roleFormValue.data.issuer.roleName
           });
 
           if (!did || !did.length) {
