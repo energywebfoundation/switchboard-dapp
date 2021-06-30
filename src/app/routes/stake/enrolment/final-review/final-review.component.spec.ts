@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FinalReviewComponent } from './final-review.component';
+import { MatDialogRef } from '@angular/material/dialog';
 
 describe('FinalReviewComponent', () => {
   let component: FinalReviewComponent;
@@ -8,9 +9,17 @@ describe('FinalReviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FinalReviewComponent ]
+      declarations: [FinalReviewComponent],
+      providers: [
+        {
+          provide: MatDialogRef, useValue: {
+            open: () => {
+            }
+          }
+        }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

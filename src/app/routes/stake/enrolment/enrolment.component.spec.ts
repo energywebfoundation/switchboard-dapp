@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnrolmentComponent } from './enrolment.component';
+import { MatDialog } from '@angular/material/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('EnrolmentComponent', () => {
   let component: EnrolmentComponent;
@@ -8,9 +10,13 @@ describe('EnrolmentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EnrolmentComponent ]
+      declarations: [EnrolmentComponent],
+      imports: [ReactiveFormsModule, FormsModule],
+      providers: [
+        {provide: MatDialog, useValue: {}}
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
