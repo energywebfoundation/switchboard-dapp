@@ -21,6 +21,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EnrolmentComponent } from './enrolment/enrolment.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
+import { ProviderNameComponent } from './provider-name/provider-name.component';
+import { EnrolmentStakeComponent } from './enrolment/enrolment-stake/enrolment-stake.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+import { FinalReviewComponent } from './enrolment/final-review/final-review.component';
+import { MatIconModule } from '@angular/material/icon';
+import { TitleComponent } from './title/title.component';
+import { NestedListComponent } from './nested-list/nested-list.component';
 
 
 @NgModule({
@@ -33,7 +42,11 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     MatButtonModule,
     MatDatepickerModule,
     MatFormFieldModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatStepperModule,
+    MatInputModule,
+    MatDialogModule,
+    MatIconModule
   ],
   declarations: [
     StakeComponent,
@@ -47,7 +60,12 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     DescriptionComponent,
     ProgressBarComponent,
     EnrolmentComponent,
-    TopBarComponent
+    TopBarComponent,
+    ProviderNameComponent,
+    EnrolmentStakeComponent,
+    FinalReviewComponent,
+    TitleComponent,
+    NestedListComponent
   ]
 })
 export class StakeModule {
