@@ -396,7 +396,12 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   updateField() {
     if (this.fieldsForm.valid) {
-      this.dataSource.data.splice(this.fieldIndex, 1, this._extractValidationObject(this.fieldsForm.value))
+      this.dataSource.data = this.dataSource.data.map((item, index) => {
+        if (this.fieldIndex === index) {
+          return this._extractValidationObject(this.fieldsForm.value);
+        }
+        return item;
+      });
       this.fieldsForm.reset();
       this.showFieldsForm = false;
       this.isEditFieldForm = false;
