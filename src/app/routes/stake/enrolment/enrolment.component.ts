@@ -46,7 +46,7 @@ export class EnrolmentComponent implements OnInit {
 
   finalReview() {
     this.dialog.open(FinalReviewComponent, {
-      width: '440px',
+      width: '500px',
       data: {},
       maxWidth: '100%',
       disableClose: true

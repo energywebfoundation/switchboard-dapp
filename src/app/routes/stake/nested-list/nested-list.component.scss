@@ -4,7 +4,7 @@
   font-weight: normal;
   font-size: 16px;
   line-height: 20px;
-  text-align: justify;
+  text-align: initial;
 
   color: #828188;
 
@@ -15,7 +15,7 @@
 
 .triangle {
   position: relative;
-  padding-left: 15px;
+  padding-left: 18px;
 
   &:before {
     content: '';
@@ -33,7 +33,7 @@
 
 .circle {
   position: relative;
-  padding-left: 15px;
+  padding-left: 18px;
 
   &:before {
     content: '';
