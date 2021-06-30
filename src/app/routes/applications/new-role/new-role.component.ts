@@ -120,6 +120,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   });
   showFieldsForm      = false;
   isEditFieldForm     = false;
+  fieldIndex          : number;
   isAutolistLoading   = false;
   hasSearchResult     = true;
   displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
@@ -404,6 +405,21 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  updateField() {
+    if (this.fieldsForm.valid) {
+      this.dataSource.data = this.dataSource.data.map((item, index) => {
+        if (this.fieldIndex === index) {
+          return this._extractValidationObject(this.fieldsForm.value);
+        }
+        return item;
+      });
+      this.fieldsForm.reset();
+      this.showFieldsForm = false;
+      this.isEditFieldForm = false;
+      this.changeDetectorRef.detectChanges();
+    }
+  }
+
   private _extractValidationObject(value: any) {
     let retVal: any = value;
 
@@ -474,6 +490,23 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     let list = this.dataSource.data;
     list.splice(i, 1);
     this.dataSource.data = [...list];
+  }
+
+  editField(i: number) {
+    this.fieldIndex = i;
+    const field = this.dataSource.data[i];
+    const fieldKeys = Object.keys(field);
+    const valueToPatch = {};
+
+    fieldKeys.map(fieldKey => {
+      this.fieldsForm.get(fieldKey)?.setValue(field[fieldKey]);
+      valueToPatch[fieldKey] = field[fieldKey];
+    });
+
+    this.fieldsForm.get('validation').patchValue(valueToPatch);
+
+    this.isEditFieldForm = true;
+    this.showFieldsForm = true;
   }
 
   moveUp(i: number) {

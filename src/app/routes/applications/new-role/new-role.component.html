@@ -289,8 +289,10 @@
                         </div>
                         <div class="d-flex justify-content-end mb-2">
                           <button mat-stroked-button class="btn-small mr-2" (click)="cancelAddField()">Cancel</button>
-                          <button mat-raised-button class="btn btn-small btn btn-primary" type="submit"
+                          <button mat-raised-button class="btn btn-small btn btn-primary" type="submit" *ngIf="!isEditFieldForm"
                             (click)="addField()" [disabled]="!fieldsForm.valid || !fieldsForm.dirty">Add</button>
+                          <button mat-raised-button class="btn btn-small btn btn-primary" *ngIf="isEditFieldForm"
+                            (click)="updateField()" [disabled]="!fieldsForm.valid">Update</button>
                         </div>
                       </div>
                     </form>
@@ -308,7 +310,7 @@
                               <mat-icon>arrow_circle_down</mat-icon>
                             </button>
 
-                            <button mat-icon-button matSuffix class="mat-primary btn-color-primary" matTooltip="Edit Fields">
+                            <button mat-icon-button matSuffix class="mat-primary btn-color-primary" matTooltip="Edit Fields" (click)="editField(i)">
                               <mat-icon>edit</mat-icon>
                             </button>
                             <button mat-icon-button matSuffix class="mat-primary color-error" matTooltip="Delete" (click)="deleteField(i)">
@@ -337,16 +339,24 @@
                               <span class="f-16">{{element?.maxLength || '--'}}</span>
                             </div>
                           </ng-container>
-                          <ng-container *ngIf="element.fieldType === 'number' || element.fieldType === 'date'">
+                          <ng-container *ngIf="element.fieldType === 'number'">
                             <div class="text-center pt-1">
                               <h4 class="small font-weight-600 mb-1">MIN VALUE</h4>
-                              <span class="f-16">{{ element.fieldType === 'date' ? ((element?.minDate | date: 'M/d/yyyy') || '--') :
-                                      (element?.minValue || '--') }}</span>
+                              <span class="f-16">{{ element?.minValue || '--' }}</span>
                             </div>
                             <div class="text-right pt-1">
                               <h4 class="small font-weight-600 mb-1">MAX VALUE</h4>
-                              <span class="f-16">{{ element.fieldType === 'date' ? ((element?.maxDate | date: 'M/d/yyyy') || '--') :
-                                      (element?.maxValue || '--') }}</span>
+                              <span class="f-16">{{ element?.maxValue || '--' }}</span>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="element.fieldType === 'date'">
+                            <div class="text-center pt-1">
+                              <h4 class="small font-weight-600 mb-1">MIN DATE</h4>
+                              <span class="f-16">{{ (element?.minDate | date: 'M/d/yyyy') || '--' }}</span>
+                            </div>
+                            <div class="text-right pt-1">
+                              <h4 class="small font-weight-600 mb-1">MAX DATE</h4>
+                              <span class="f-16">{{ (element?.maxDate | date: 'M/d/yyyy') || '--' }}</span>
                             </div>
                           </ng-container>
                         </div>
