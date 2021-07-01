@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { takeUntil } from 'rxjs/operators';
@@ -33,7 +32,6 @@ export class DialogUserComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
-    public dialogRef: MatDialogRef<DialogUserComponent>,
     private fb: FormBuilder,
     private store: Store<UserClaimState>) {
   }
