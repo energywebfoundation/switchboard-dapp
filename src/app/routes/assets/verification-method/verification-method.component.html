@@ -14,7 +14,7 @@
             <div class="history-list-item mb-3 p-2" *ngFor="let publicKey of dataSource">
                 <div class="d-flex flex-row justify-content-between align-items-center px-2">
                     <div class="d-flex align-items-center">
-                        <mat-icon class="color-info pr-2" svgIcon="ethereum-icon"></mat-icon>
+                        <mat-icon class="color-info list-icon pr-2" svgIcon="ethereum-bitcoin"></mat-icon>
                         <div class="flex-md-row">
                             <div class="d-flex flex-row pl-2 align-items-baseline">
                                 <h4 class="small font-weight-600 mb-1">TYPE</h4>
@@ -51,7 +51,7 @@
         <mat-form-field appearance="outline" floatPlaceholder="never">
             <mat-select [formControl]="selectControl" placeholder="Select type">
                 <mat-option [value]="option[1]" *ngFor="let option of selectOptions">
-                    <mat-icon class="color-info pr-2" svgIcon="ethereum-icon"></mat-icon>
+                    <mat-icon class="color-info pr-2" [svgIcon]="option[0].toLowerCase()"></mat-icon>
                     {{option[0]}}
                 </mat-option>
             </mat-select>

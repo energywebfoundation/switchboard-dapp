@@ -19,7 +19,7 @@ export interface PublicKey {
 export class VerificationMethodComponent implements OnInit {
   pageIndex = 0;
   pageSize = 5;
-  verificationsAmount;
+  verificationsAmount: number;
   dataSource: PublicKey[] = [];
   selectControl = new FormControl('', [Validators.required]);
   publicKey = new FormControl('',
