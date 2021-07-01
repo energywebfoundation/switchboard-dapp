@@ -185,215 +185,24 @@
               (click)="proceedAddingFields()">Next</button>
           </div>
         </mat-step>
+        
         <mat-step [completed]="false">
           <form [formGroup]="roleForm">
             <ng-template matStepLabel>Set Fields</ng-template>
-            <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-              <div class="row">
-                <div class="col-lg-12 mb-2">
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="label color-white opacity-50 pl-3">Fields</span>
-                    <button mat-icon-button (click)="showAddFieldForm()" matTooltip="Add field">
-                      <mat-icon class="btn-color-primary">add</mat-icon>
-                    </button>
-                  </div>
-                  <div>
-                    <form role="form" [formGroup]="fieldsForm">
-                      <div class="mb-3 py-3" *ngIf="showFieldsForm">
-                        <div class="row">
-                          <div class="col-lg-12">
-                            <mat-label class="ml-3 pl-1">Type</mat-label>
-                            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                              <mat-select placeholder="Type" formControlName="fieldType" required>
-                                <mat-option *ngFor="let fieldType of FieldTypes" [value]="fieldType">{{ fieldType |
-                                  uppercase }}
-                                </mat-option>
-                              </mat-select>
-                              <mat-error>Type is <strong>required</strong></mat-error>
-                            </mat-form-field>
-                          </div>
-                          <div class="col-lg-12">
-                            <mat-label class="ml-3 pl-1">Label</mat-label>
-                            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                              <input matInput placeholder="Label" autocomplete="off" formControlName="label"
-                                maxlength="256" required>
-                              <mat-error>Label is <strong>required</strong></mat-error>
-                            </mat-form-field>
-                          </div>
-                        </div>
-                        <div class="card card-default d-flex shadow-none px-0" *ngIf="fieldsForm?.value?.fieldType"
-                          formGroupName="validation">
-                          <div class="pl-3 pb-2">
-                            <mat-label class="pl-1">Validation</mat-label>
-                          </div>
-                          <div class="px-0">
-                            <mat-checkbox class="pl-3 md-create" formControlName="required">
-                              <span class="mb-3 d-inline-flex">Required</span>
-                            </mat-checkbox>
-                          </div>
-                          <div class="px-0" *ngIf="fieldsForm?.value?.fieldType === 'text'">
-                            <mat-label class="ml-3 pl-1">Min Length</mat-label>
-                            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                              <input matInput type="number" min="0" placeholder="Min Length" autocomplete="off"
-                                formControlName="minLength">
-                              <mat-error>Min Length must be greater than or equal to 0.</mat-error>
-                            </mat-form-field>
-                          </div>
-                          <div class="px-0" *ngIf="fieldsForm?.value?.fieldType === 'text'">
-                            <mat-label class="ml-3 pl-1">Max Length</mat-label>
-                            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                              <input matInput type="number" min="1" placeholder="Max Length" autocomplete="off"
-                                formControlName="maxLength">
-                              <mat-error>Max Length must be greater than 0.</mat-error>
-                            </mat-form-field>
-                          </div>
-                          <div class="px-0" *ngIf="fieldsForm?.value?.fieldType === 'text'">
-                            <mat-label class="ml-3 pl-1">Pattern</mat-label>
-                            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                              <input matInput placeholder="Pattern" autocomplete="off" formControlName="pattern"
-                                maxlength="500">
-                            </mat-form-field>
-                          </div>
-                          <div class="px-0" *ngIf="fieldsForm?.value?.fieldType === 'number'">
-                            <mat-label class="ml-3 pl-1">Min Value</mat-label>
-                            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                              <input matInput type="number" placeholder="Min Value" autocomplete="off"
-                                formControlName="minValue">
-                            </mat-form-field>
-                          </div>
-                          <div class="px-0" *ngIf="fieldsForm?.value?.fieldType === 'number'">
-                            <mat-label class="ml-3 pl-1">Max Value</mat-label>
-                            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                              <input matInput type="number" placeholder="Max Value" autocomplete="off"
-                                formControlName="maxValue">
-                            </mat-form-field>
-                          </div>
-                          <div class="px-0" *ngIf="fieldsForm?.value?.fieldType === 'date'">
-                            <mat-label class="ml-3 pl-1">Min Date</mat-label>
-                            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                              <input [matDatepicker]="pickerMin" matInput placeholder="Min Date" autocomplete="off"
-                                formControlName="minDate" (keypress)="$event.preventDefault()">
-                              <mat-datepicker-toggle matSuffix [for]="pickerMin"></mat-datepicker-toggle>
-                              <mat-datepicker #pickerMin></mat-datepicker>
-                            </mat-form-field>
-                          </div>
-                          <div class="px-0" *ngIf="fieldsForm?.value?.fieldType === 'date'">
-                            <mat-label class="ml-3 pl-1">Max Date</mat-label>
-                            <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                              <input [matDatepicker]="pickerMax" matInput placeholder="Max Date" autocomplete="off"
-                                formControlName="maxDate" (keypress)="$event.preventDefault()">
-                              <mat-datepicker-toggle matSuffix [for]="pickerMax"></mat-datepicker-toggle>
-                              <mat-datepicker #pickerMax></mat-datepicker>
-                            </mat-form-field>
-                          </div>
-                        </div>
-                        <div class="d-flex justify-content-end mb-2">
-                          <button mat-stroked-button class="btn-small mr-2" (click)="cancelAddField()">Cancel</button>
-                          <button mat-raised-button class="btn btn-small btn btn-primary" type="submit" *ngIf="!isEditFieldForm"
-                            (click)="addField()" [disabled]="!fieldsForm.valid || !fieldsForm.dirty">Add</button>
-                          <button mat-raised-button class="btn btn-small btn btn-primary" *ngIf="isEditFieldForm"
-                            (click)="updateField()" [disabled]="!fieldsForm.valid">Update</button>
-                        </div>
-                      </div>
-                    </form>
 
-                    <!-- Fields New Field Layout -->
-                    <div class="field-list py-2" *ngIf="dataSource?.data?.length">
-                      <div class="field-list-item my-3 px-2 pb-3" *ngFor="let element of dataSource.data; let i = index; let first = first; let last = last">
-                        <div class="d-flex justify-content-end align-items-center pt-2">
-                          <div class="d-flex align-items-center">
+            <app-role-field
+              [fieldsForm]="fieldsForm"
+              [dataSource]="dataSource"
+              [isChecking]="isChecking"
+              (resetFormEvent)="formResetHandler()"
+              (updateDataSourceEvent)="dataSourceChangeHandler($event)"
+              (backEvent)="back()"
+              (proceedConfirmDetailsEvent)="proceedConfirmDetails()"
+            ></app-role-field>
 
-                            <button mat-icon-button matSuffix class="mat-primary" *ngIf="!first" matTooltip="Move up" (click)="moveUp(i)">
-                              <mat-icon>arrow_circle_up</mat-icon>
-                            </button>
-                            <button mat-icon-button matSuffix class="mat-primary" *ngIf="!last" matTooltip="Move down" (click)="moveDown(i)">
-                              <mat-icon>arrow_circle_down</mat-icon>
-                            </button>
-
-                            <button mat-icon-button matSuffix class="mat-primary btn-color-primary" matTooltip="Edit Fields" (click)="editField(i)">
-                              <mat-icon>edit</mat-icon>
-                            </button>
-                            <button mat-icon-button matSuffix class="mat-primary color-error" matTooltip="Delete" (click)="deleteField(i)">
-                              <mat-icon>delete</mat-icon>
-                            </button>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-column justify-content-start px-2">
-                          <div class="d-flex align-items-center pb-3">
-                            <mat-icon class="color-info pr-2">{{element?.required ? 'check_circle' : 'highlight_off'}}</mat-icon>
-                            <div class="d-flex flex-column pl-2">
-                              <h4 class="small font-weight-600 mb-1">LABEL</h4>
-                              <span class="f-16">{{element.label}}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div *ngIf="element.fieldType !== 'boolean'"
-                             class="d-flex flex-row justify-content-between bg-sub-row px-2 px-md-4 py-2 mb-2 mx-0 mx-md-2">
-                          <ng-container *ngIf="element.fieldType === 'text'">
-                            <div class="text-left pt-1">
-                              <h4 class="small font-weight-600 mb-1">MIN LENGTH</h4>
-                              <span class="f-16">{{element?.minLength || '--'}}</span>
-                            </div>
-                            <div class="text-center pt-1">
-                              <h4 class="small font-weight-600 mb-1">MAX LENGTH</h4>
-                              <span class="f-16">{{element?.maxLength || '--'}}</span>
-                            </div>
-                          </ng-container>
-                          <ng-container *ngIf="element.fieldType === 'number'">
-                            <div class="text-center pt-1">
-                              <h4 class="small font-weight-600 mb-1">MIN VALUE</h4>
-                              <span class="f-16">{{ element?.minValue || '--' }}</span>
-                            </div>
-                            <div class="text-right pt-1">
-                              <h4 class="small font-weight-600 mb-1">MAX VALUE</h4>
-                              <span class="f-16">{{ element?.maxValue || '--' }}</span>
-                            </div>
-                          </ng-container>
-                          <ng-container *ngIf="element.fieldType === 'date'">
-                            <div class="text-center pt-1">
-                              <h4 class="small font-weight-600 mb-1">MIN DATE</h4>
-                              <span class="f-16">{{ (element?.minDate | date: 'M/d/yyyy') || '--' }}</span>
-                            </div>
-                            <div class="text-right pt-1">
-                              <h4 class="small font-weight-600 mb-1">MAX DATE</h4>
-                              <span class="f-16">{{ (element?.maxDate | date: 'M/d/yyyy') || '--' }}</span>
-                            </div>
-                          </ng-container>
-                        </div>
-                        <div class="d-flex flex-row justify-content-between align-items-center mx-2">
-                          <div class="d-flex align-items-center pt-2">
-                            <div class="d-flex flex-column" *ngIf="element.fieldType === 'text'">
-                              <h4 class="small font-weight-600 mb-1">PATTERN</h4>
-                              <span class="f-16">{{element?.pattern || '--'}}</span>
-                            </div>
-                          </div>
-                          <div>
-                            <div class="bg-type">{{element.fieldType}}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center align-items-center mb-4"
-                         *ngIf="!dataSource?.data?.length">
-                      <div class="d-flex align-items-center no-record color-white">
-                        <mat-icon class="mr-2 my-2">info</mat-icon>
-                        <i>Empty</i>
-                      </div>
-                    </div>
-                    <!-- End New Field Layout -->
-
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="d-flex justify-content-end mb-2">
-              <button mat-stroked-button class="btn btn-small mr-2" (click)="back()">Back</button>
-              <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking"
-                (click)="proceedConfirmDetails()">Next</button>
-            </div>
           </form>
         </mat-step>
+
         <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Confirm Details</ng-template>
           <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">

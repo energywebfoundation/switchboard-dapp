@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
@@ -42,10 +42,6 @@ export interface RolesFields {
   validation: string;
   actions: string;
 }
-
-const FIELD_TYPES = [
-  'text', 'number', 'date', 'boolean'
-];
 
 @Component({
   selector: 'app-new-role',
@@ -91,9 +87,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public RoleTypeList = RoleTypeList;
   public ENSPrefixes  = ENSNamespaceTypes;
   public issuerList   : string[] = [this.iamService.iam.getDid()];
-
+  
   // Fields
-  public FieldTypes   = FIELD_TYPES;
   fieldsForm          = this.fb.group({
     fieldType: ['', Validators.required],
     label: ['', Validators.required],
@@ -118,9 +113,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       maxDate: undefined
     })
   });
-  showFieldsForm      = false;
-  isEditFieldForm     = false;
-  fieldIndex          : number;
   isAutolistLoading   = false;
   hasSearchResult     = true;
   displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
@@ -146,7 +138,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     private toastr: SwitchboardToastrService,
     private spinner: NgxSpinnerService,
     private fieldValidationService: FieldValidationService,
-    private changeDetectorRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<NewRoleComponent>,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -388,94 +379,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  showAddFieldForm() {
-    if (this.isEditFieldForm) {
-      this.fieldsForm.reset();
-    }
-    this.isEditFieldForm = false;
-    this.showFieldsForm = true;
-  }
-
-  addField() {
-    if (this.fieldsForm.valid) {
-      this.dataSource.data = [...this.dataSource.data, this._extractValidationObject(this.fieldsForm.value)];
-      this.fieldsForm.reset();
-      this.showFieldsForm = false;
-      this.changeDetectorRef.detectChanges();
-    }
-  }
-
-  updateField() {
-    if (this.fieldsForm.valid) {
-      this.dataSource.data = this.dataSource.data.map((item, index) => {
-        if (this.fieldIndex === index) {
-          return this._extractValidationObject(this.fieldsForm.value);
-        }
-        return item;
-      });
-      this.fieldsForm.reset();
-      this.showFieldsForm = false;
-      this.isEditFieldForm = false;
-      this.changeDetectorRef.detectChanges();
-    }
-  }
-
-  private _extractValidationObject(value: any) {
-    let retVal: any = value;
-
-    if (value && value.fieldType) {
-      let validation = undefined;
-      let {
-        required,
-        minLength,
-        maxLength,
-        pattern,
-        minValue,
-        maxValue,
-        minDate,
-        maxDate
-      } = value.validation;
-
-      switch (this.fieldsForm.value.fieldType) {
-        case 'text':
-          validation = {
-            required,
-            minLength,
-            maxLength,
-            pattern
-          };
-          break;
-        case 'number':
-          validation = {
-            required,
-            minValue,
-            maxValue
-          };
-          break;
-        case 'date':
-          minDate = minDate;// this._getDate(minDate);
-          maxDate = maxDate;// this._getDate(maxDate);
-          validation = {
-            required,
-            minDate,
-            maxDate
-          };
-          break;
-        case 'boolean':
-          validation = {
-            required
-          };
-          break;
-        default:
-          validation = value.validation;
-      }
-      retVal = JSON.parse(JSON.stringify(Object.assign(retVal, validation)));
-      delete retVal.validation;
-    }
-
-    return retVal;
-  }
-
   private _getDate(origDate: any) {
     let retVal = origDate;
 
@@ -485,56 +388,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return retVal;
   }
-
-  deleteField(i: number) {
-    let list = this.dataSource.data;
-    list.splice(i, 1);
-    this.dataSource.data = [...list];
-  }
-
-  editField(i: number) {
-    this.fieldIndex = i;
-    const field = this.dataSource.data[i];
-    const fieldKeys = Object.keys(field);
-    const valueToPatch = {};
-
-    fieldKeys.map(fieldKey => {
-      this.fieldsForm.get(fieldKey)?.setValue(field[fieldKey]);
-      valueToPatch[fieldKey] = field[fieldKey];
-    });
-
-    this.fieldsForm.get('validation').patchValue(valueToPatch);
-
-    this.isEditFieldForm = true;
-    this.showFieldsForm = true;
-  }
-
-  moveUp(i: number) {
-    let list = this.dataSource.data;
-    let tmp = list[i - 1];
-
-    // Switch
-    list[i - 1] = list[i];
-    list[i] = tmp;
-
-    this.dataSource.data = [...list];
-  }
-
-  moveDown(i: number) {
-    let list = this.dataSource.data;
-    let tmp = list[i + 1];
-
-    // Switch
-    list[i + 1] = list[i];
-    list[i] = tmp;
-
-    this.dataSource.data = [...list];
-  }
-
-  cancelAddField() {
+  
+  formResetHandler() {
     this.fieldsForm.reset();
-    this.isEditFieldForm = false;
-    this.showFieldsForm = false;
+  }
+
+  dataSourceChangeHandler(data) {
+    this.dataSource.data = [...data];
   }
 
   isRoleNameInValid(): boolean {
