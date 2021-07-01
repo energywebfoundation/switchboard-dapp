@@ -38,6 +38,7 @@ export class VerificationMethodComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(Object.entries(AlgorithmsEnum));
     this.loadPublicKeys();
   }
 

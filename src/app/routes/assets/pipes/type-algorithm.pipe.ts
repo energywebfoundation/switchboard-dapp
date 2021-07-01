@@ -10,8 +10,14 @@ export class TypeAlgorithmPipe implements PipeTransform {
     if (!value) {
       return '';
     }
-    const index = this.getIndex(value);
-    return index < 0 ? value : this.getKeys(index);
+
+    const result = Object.entries(AlgorithmsEnum).filter((entry) => {
+      if (value.includes(entry[1])) {
+        return entry[0];
+      }
+    }).map(entry => entry[0]).join(' / ');
+
+    return result.length > 0 ? result : value;
   }
 
   getIndex(value) {

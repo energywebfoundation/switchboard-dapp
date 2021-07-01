@@ -21,13 +21,19 @@ describe('TypeAlgorithmPipe', () => {
     expect(pipe.transform(null)).toBe('');
   });
 
-  it('should return ethereum when gets Secp256k1', () => {
+  it('should return ethereum or bitcoin when gets Secp256k1', () => {
     const text = AlgorithmsEnum.Ethereum;
-    expect(pipe.transform(text)).toBe('Ethereum');
+    expect(pipe.transform(text)).toBe('Ethereum / Bitcoin');
   });
 
-  it('should return ethereum when string contains Secp256k1', () => {
+  it('should return ethereum or bitcoin when string contains Secp256k1', () => {
     const text = 'text' + AlgorithmsEnum.Ethereum + 'text';
-    expect(pipe.transform(text)).toBe('Ethereum');
+    expect(pipe.transform(text)).toBe('Ethereum / Bitcoin');
   });
+
+  it('extend algorithms enum and check if displays without /', () => {
+    (AlgorithmsEnum as any).Test  = 'test';
+    const text = (AlgorithmsEnum as any).Test;
+    expect(pipe.transform(text)).toBe('Test');
+  })
 });
