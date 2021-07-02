@@ -107,13 +107,18 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   }
 
   changeNewOwnerAddressValue(result: string): void {
-    if (result.match(this.ethAddrPattern) && !result.match(this.DIDPattern)) {
-      this.isShowingDIDDropDown = true;
-      this.newOwnerAddress.patchValue(this.prefixDropDown.value + result);
-    } else {
+    // TODO      temporary removal of logic with different types DiD
+    // if (result.match(this.ethAddrPattern) && !result.match(this.DIDPattern)) {
+    //   this.isShowingDIDDropDown = true;
+    //   this.newOwnerAddress.patchValue(this.prefixDropDown.value + result);
+    // } else {
+    //   this.isShowingDIDDropDown = false;
+    //   this.newOwnerAddress.patchValue(result);
+    // }
+    // TODO end!
+
       this.isShowingDIDDropDown = false;
       this.newOwnerAddress.patchValue(result);
-    }
   }
 
   private async confirm(confirmationMsg: string, showDiscardButton?: boolean) {
