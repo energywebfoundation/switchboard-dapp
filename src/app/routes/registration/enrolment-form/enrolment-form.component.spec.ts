@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { DebugElement } from '@angular/core';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { RegistrationTypes } from 'iam-client-lib';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -35,7 +35,8 @@ describe('EnrolmentFormComponent', () => {
         MatDatepickerModule,
         MatNativeDateModule,
         NoopAnimationsModule
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));
