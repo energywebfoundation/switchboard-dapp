@@ -54,7 +54,7 @@ describe('DialogUserComponent', () => {
   });
 
   it('should update form with values from store', () => {
-    const date = new Date('2001-06-12T22:00:00.000Z');
+    const date = new Date('2001-06-12');
     const data = {
       name: 'name',
       address: '123',
