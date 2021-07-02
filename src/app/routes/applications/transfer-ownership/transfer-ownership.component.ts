@@ -117,6 +117,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
     // }
     // TODO end!
 
+      result.replace(this.prefixDropDown.value, '');
       this.isShowingDIDDropDown = false;
       this.newOwnerAddress.patchValue(result);
   }
