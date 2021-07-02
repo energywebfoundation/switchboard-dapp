@@ -1,14 +1,13 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, ViewChild } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ENSNamespaceTypes } from 'iam-client-lib';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
-import { environment } from '../../../../environments/environment'
+import { environment } from '../../../../environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 export const ViewType = {
   UPDATE: 'update',
@@ -20,8 +19,9 @@ export const ViewType = {
   templateUrl: './new-organization.component.html',
   styleUrls: ['./new-organization.component.scss']
 })
-export class NewOrganizationComponent implements OnInit {
+export class NewOrganizationComponent {
   private stepper: MatStepper;
+
   @ViewChild('stepper') set content(content: MatStepper) {
     if (content) {
       this.stepper = content;
@@ -61,15 +61,14 @@ export class NewOrganizationComponent implements OnInit {
     private fb: FormBuilder,
     private iamService: IamService,
     private toastr: SwitchboardToastrService,
-    private spinner: NgxSpinnerService,
+    private loaderService: LoadingService,
     public dialogRef: MatDialogRef<NewOrganizationComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private configService: ConfigService) {
+    @Inject(MAT_DIALOG_DATA) public data: any) {
     if (data && data.viewType && (data.origData || data.parentOrg)) {
-      this.viewType   = data.viewType;
-      this.origData   = data.origData;
-      this.parentOrg  = data.parentOrg;
+      this.viewType = data.viewType;
+      this.origData = data.origData;
+      this.parentOrg = data.parentOrg;
 
       if (this.viewType === ViewType.UPDATE) {
         this.TOASTR_HEADER = 'Update Organization';
@@ -84,15 +83,12 @@ export class NewOrganizationComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
-
   private _isSubOrg(origData: any) {
     let retVal = false;
 
     if (origData && origData.namespace) {
-      let arr = origData.namespace.split('.');
-    
+      const arr = origData.namespace.split('.');
+
       if (arr.length > 3) {
         retVal = true;
       }
@@ -102,15 +98,15 @@ export class NewOrganizationComponent implements OnInit {
   }
 
   private _constructParentOrg(subOrgNamespace: string) {
-    let arr = subOrgNamespace.split('.');
+    const arr = subOrgNamespace.split('.');
     arr.splice(0, 1);
     return arr.join('.');
   }
 
   private initFormData() {
     if (this.origData) {
-      let def = this.origData.definition;
-      let others = undefined;
+      const def = this.origData.definition;
+      let others;
 
       if (def.others) {
         others = JSON.stringify(def.others);
@@ -123,7 +119,7 @@ export class NewOrganizationComponent implements OnInit {
           logoUrl: def.logoUrl,
           websiteUrl: def.websiteUrl,
           description: def.description,
-          others: others
+          others
         }
       });
     }
@@ -134,21 +130,21 @@ export class NewOrganizationComponent implements OnInit {
   }
 
   async createNewOrg() {
-    this.spinner.show();
+    this.loaderService.show();
     this.isChecking = true;
 
     if (this.orgForm.valid) {
       let allowToProceed = true;
 
       // Check if org namespace is taken
-      let orgData = this.orgForm.value;
-      let exists = await this.iamService.iam.checkExistenceOfDomain({
+      const orgData = this.orgForm.value;
+      const exists = await this.iamService.iam.checkExistenceOfDomain({
         domain: `${orgData.orgName}.${orgData.namespace}`
       });
 
       if (exists) {
         // If exists check if current user is the owner of this namespace and allow him/her to overwrite
-        let isOwner = await this.iamService.iam.isOwner({
+        const isOwner = await this.iamService.iam.isOwner({
           domain: `${orgData.orgName}.${orgData.namespace}`
         });
 
@@ -157,16 +153,14 @@ export class NewOrganizationComponent implements OnInit {
 
           // Do not allow to overwrite if user is not the owner
           this.toastr.error('Organization namespace exists. You have no access rights to it.', this.TOASTR_HEADER);
-        }
-        else {
-          this.spinner.hide();
-          
+        } else {
+          this.loaderService.hide();
+
           // Prompt if user wants to overwrite this namespace
           if (!await this.confirm('Organization namespace already exists. Do you wish to continue?')) {
             allowToProceed = false;
-          }
-          else {
-            this.spinner.show();
+          } else {
+            this.loaderService.show();
           }
         }
       }
@@ -174,25 +168,24 @@ export class NewOrganizationComponent implements OnInit {
       if (allowToProceed) {
         this.allowToProceed(orgData);
       }
-    }
-    else {
+    } else {
       this.toastr.error('Form is invalid.', this.TOASTR_HEADER);
     }
 
     this.isChecking = false;
-    this.spinner.hide();
+    this.loaderService.hide();
   }
 
   async updateOrg() {
-    this.spinner.show();
+    this.loaderService.show();
     this.isChecking = true;
 
     if (this.orgForm.valid) {
       let allowToProceed = true;
-      let orgData = this.orgForm.value;
+      const orgData = this.orgForm.value;
 
       // If exists check if current user is the owner of this namespace and allow him/her to overwrite
-      let isOwner = await this.iamService.iam.isOwner({
+      const isOwner = await this.iamService.iam.isOwner({
         domain: `${orgData.orgName}.${orgData.namespace}`
       });
 
@@ -201,29 +194,26 @@ export class NewOrganizationComponent implements OnInit {
 
         // Do not allow to overwrite if user is not the owner
         this.toastr.error('You have no update rights to this namespace.', this.TOASTR_HEADER);
-      }
-      else {
-        this.spinner.hide();
-        
+      } else {
+        this.loaderService.hide();
+
         // Prompt if user wants to overwrite this namespace
         if (!await this.confirm('You are updating details of this organization. Do you wish to continue?')) {
           allowToProceed = false;
-        }
-        else {
-          this.spinner.show();
+        } else {
+          this.loaderService.show();
         }
       }
 
       if (allowToProceed) {
         this.allowToProceed(orgData);
       }
-    }
-    else {
+    } else {
       this.toastr.error('Form is invalid.', this.TOASTR_HEADER);
     }
 
     this.isChecking = false;
-    this.spinner.hide();
+    this.loaderService.hide();
   }
 
   private allowToProceed(orgData: any) {
@@ -231,8 +221,7 @@ export class NewOrganizationComponent implements OnInit {
       // Let the user confirm the info before proceeding to the next step
       this.stepper.selected.completed = true;
       this.stepper.next();
-    }
-    else {
+    } else {
       try {
         // Check if others is in JSON Format
         JSON.parse(orgData.data.others);
@@ -240,8 +229,7 @@ export class NewOrganizationComponent implements OnInit {
         // Let the user confirm the info before proceeding to the next step
         this.stepper.selected.completed = true;
         this.stepper.next();
-      }
-      catch (e) {
+      } catch (e) {
         console.error(orgData.data.others, e);
         this.toastr.error('Others must be in JSON format.', this.TOASTR_HEADER);
       }
@@ -249,7 +237,7 @@ export class NewOrganizationComponent implements OnInit {
   }
 
   async confirmOrg(skipNextStep?: boolean) {
-    let req = JSON.parse(JSON.stringify({ ...this.orgForm.value, returnSteps: true }));
+    const req = JSON.parse(JSON.stringify({...this.orgForm.value, returnSteps: true}));
     req.data.orgName = req.data.organizationName;
     delete req.data.organizationName;
 
@@ -263,13 +251,11 @@ export class NewOrganizationComponent implements OnInit {
     if (req.data.others && req.data.others.trim()) {
       try {
         req.data.others = JSON.parse(req.data.others);
-      }
-      catch (e) {
+      } catch (e) {
         this.toastr.error('Others must be in JSON format.', this.TOASTR_HEADER);
         return;
       }
-    }
-    else {
+    } else {
       delete req.data.others;
     }
 
@@ -280,17 +266,16 @@ export class NewOrganizationComponent implements OnInit {
 
     if (this.viewType === ViewType.UPDATE) {
       this.proceedUpdateStep(req, skipNextStep);
-    }
-    else {
+    } else {
       this.proceedCreateSteps(req);
     }
   }
 
   private async next(requestIdx: number, skipNextStep?: boolean) {
-    let steps = this._requests[`${requestIdx}`];
+    const steps = this._requests[`${requestIdx}`];
 
     if (steps && steps.length) {
-      let step = steps[0];
+      const step = steps[0];
 
       if (!skipNextStep) {
         // Show the next step
@@ -312,8 +297,7 @@ export class NewOrganizationComponent implements OnInit {
         // Process
         await this.next(requestIdx);
       }
-    }
-    else if (this._requests['0']) {
+    } else if (this._requests['0']) {
       // Move to Complete Step
       this.stepper.selected.completed = true;
       this.stepper.next();
@@ -321,7 +305,7 @@ export class NewOrganizationComponent implements OnInit {
   }
 
   async proceedCreateSteps(req: any) {
-    req = { ...req, returnSteps: this._returnSteps };
+    req = {...req, returnSteps: this._returnSteps};
     try {
       const call = this.iamService.iam.createOrganization(req);
       // Retrieve the steps to create an organization
@@ -335,8 +319,7 @@ export class NewOrganizationComponent implements OnInit {
 
       // Process
       await this.next(0);
-    }
-    catch (e) {
+    } catch (e) {
       console.error('New Org Error', e);
       this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
     }
@@ -347,7 +330,7 @@ export class NewOrganizationComponent implements OnInit {
       // Copy pending steps
       this._requests[`${this._retryCount + 1}`] = [...this._requests[`${this._retryCount}`]];
 
-      //Remove previous request
+      // Remove previous request
       delete this._requests[`${this._retryCount}`];
       const retryCount = ++this._retryCount;
 
@@ -360,17 +343,15 @@ export class NewOrganizationComponent implements OnInit {
           this.stepper.selected.completed = true;
           this.stepper.next();
         }
-      }
-      catch (e) {
+      } catch (e) {
         console.error('New Org Error', e);
         this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
       }
-    }
-    else {
+    } else {
       delete this._requests[`${this._retryCount++}`];
       await this.confirmOrg(true);
     }
-    
+
   }
 
   private async proceedUpdateStep(req: any, skipNextStep?: boolean) {
@@ -406,8 +387,7 @@ export class NewOrganizationComponent implements OnInit {
         this.stepper.selected.completed = true;
         this.stepper.next();
       }
-    }
-    catch (e) {
+    } catch (e) {
       console.error('Update Org Error', e);
       this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
     }
@@ -433,7 +413,7 @@ export class NewOrganizationComponent implements OnInit {
       data: {
         header: this.TOASTR_HEADER,
         message: confirmationMsg,
-        isDiscardButton: isDiscardButton
+        isDiscardButton
       },
       maxWidth: '100%',
       disableClose: true
@@ -445,13 +425,11 @@ export class NewOrganizationComponent implements OnInit {
       if (await this.confirm('There are unsaved changes.', true)) {
         this.dialogRef.close(false);
       }
-    }
-    else {
+    } else {
       if (isSuccess) {
         if (this.origData) {
           this.toastr.success('Organization is successfully updated.', this.TOASTR_HEADER);
-        }
-        else {
+        } else {
           this.toastr.success('Organization is successfully created.', this.TOASTR_HEADER);
         }
       }
