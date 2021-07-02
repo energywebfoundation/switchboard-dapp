@@ -52,6 +52,10 @@ export class DialogUserComponent implements OnInit, OnDestroy {
       }));
   }
 
+  disableSubmit(): boolean {
+    return this.profileForm.pristine || this.profileForm.invalid;
+  }
+
   save() {
     if (this.profileForm.invalid) {
       return;
