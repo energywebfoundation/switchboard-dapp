@@ -8,6 +8,8 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { LoadingService } from '../../../shared/services/loading.service';
+import { isValidJsonFormatValidator } from '../../../utils/validators/is-valid-json-format.validator';
+import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 
 export const ViewType = {
   UPDATE: 'update',
@@ -36,10 +38,9 @@ export class NewOrganizationComponent {
       logoUrl: ['', Validators.pattern('https?://.*')],
       websiteUrl: ['', Validators.pattern('https?://.*')],
       description: '',
-      others: [undefined, this.iamService.isValidJsonFormat]
+      others: [undefined, isValidJsonFormatValidator]
     })
   });
-  public environment = environment;
   public isChecking = false;
   private _isLogoUrlValid = true;
   public ENSPrefixes = ENSNamespaceTypes;
@@ -125,8 +126,8 @@ export class NewOrganizationComponent {
     }
   }
 
-  alphaNumericOnly(event: any) {
-    return this.iamService.isAlphaNumericOnly(event);
+  alphaNumericOnly(event: KeyboardEvent) {
+    return isAlphaNumericOnly(event);
   }
 
   async createNewOrg() {
