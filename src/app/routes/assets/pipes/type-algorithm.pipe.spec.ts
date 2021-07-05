@@ -1,5 +1,5 @@
 import { TypeAlgorithmPipe } from './type-algorithm.pipe';
-import { AlgorithmsEnum } from '../models/algorithms.enum';
+import { KeyTypesEnum } from '../models/keyTypesEnum';
 
 describe('TypeAlgorithmPipe', () => {
   let pipe;
@@ -22,18 +22,18 @@ describe('TypeAlgorithmPipe', () => {
   });
 
   it('should return ethereum or bitcoin when gets Secp256k1', () => {
-    const text = AlgorithmsEnum.Ethereum;
+    const text = KeyTypesEnum.Ethereum;
     expect(pipe.transform(text)).toBe('Ethereum / Bitcoin');
   });
 
   it('should return ethereum or bitcoin when string contains Secp256k1', () => {
-    const text = 'text' + AlgorithmsEnum.Ethereum + 'text';
+    const text = 'text' + KeyTypesEnum.Ethereum + 'text';
     expect(pipe.transform(text)).toBe('Ethereum / Bitcoin');
   });
 
   it('extend algorithms enum and check if displays without /', () => {
-    (AlgorithmsEnum as any).Test  = 'test';
-    const text = (AlgorithmsEnum as any).Test;
+    (KeyTypesEnum as any).Test  = 'test';
+    const text = (KeyTypesEnum as any).Test;
     expect(pipe.transform(text)).toBe('Test');
   })
 });

@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VerificationService } from './verification.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { AlgorithmsEnum } from '../models/algorithms.enum';
+import { KeyTypesEnum } from '../models/keyTypesEnum';
 import { isHexValidator } from '../../../utils/validators/is-hex.validator';
 
 export interface PublicKey {
@@ -25,7 +25,7 @@ export class VerificationMethodComponent implements OnInit {
   publicKey = new FormControl('',
     [Validators.required, isHexValidator]
   );
-  selectOptions = Object.entries(AlgorithmsEnum);
+  selectOptions = Object.entries(KeyTypesEnum);
   private publicKeys;
 
   constructor(private dialogRef: MatDialogRef<VerificationMethodComponent>,
@@ -38,7 +38,7 @@ export class VerificationMethodComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(Object.entries(AlgorithmsEnum));
+    console.log(Object.entries(KeyTypesEnum));
     this.loadPublicKeys();
   }
 

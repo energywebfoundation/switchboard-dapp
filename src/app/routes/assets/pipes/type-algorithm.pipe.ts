@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AlgorithmsEnum } from '../models/algorithms.enum';
+import { KeyTypesEnum } from '../models/keyTypesEnum';
 
 @Pipe({
   name: 'typeAlgorithm'
@@ -11,21 +11,14 @@ export class TypeAlgorithmPipe implements PipeTransform {
       return '';
     }
 
-    const result = Object.entries(AlgorithmsEnum).filter((entry) => {
-      if (value.includes(entry[1])) {
-        return entry[0];
-      }
-    }).map(entry => entry[0]).join(' / ');
+    const result = this.getListOfKeys(value).join(' / ');
 
     return result.length > 0 ? result : value;
   }
 
-  getIndex(value) {
-    return Object.values(AlgorithmsEnum).findIndex((algVal) => value.includes(algVal));
+  getListOfKeys(value: string): string[] {
+    return Object.entries(KeyTypesEnum)
+      .filter((entry) => value.includes(entry[1]))
+      .map(entry => entry[0]);
   }
-
-  getKeys(id) {
-    return Object.keys(AlgorithmsEnum)[id];
-  }
-
 }
