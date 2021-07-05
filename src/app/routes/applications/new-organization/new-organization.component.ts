@@ -8,7 +8,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { isValidJsonFormatValidator } from '../../../utils/validators/is-valid-json-format.validator';
+import { isValidJsonFormatValidator } from '../../../utils/validators/json-format/is-valid-json-format.validator';
 import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 
 export const ViewType = {
