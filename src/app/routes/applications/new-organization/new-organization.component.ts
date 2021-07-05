@@ -49,7 +49,6 @@ export class NewOrganizationComponent {
 
   viewType: string = ViewType.NEW;
   origData: any;
-  parentOrg: any;
 
   private TOASTR_HEADER = 'Create New Organization';
 
@@ -71,15 +70,14 @@ export class NewOrganizationComponent {
     if (data && data.viewType && (data.origData || data.parentOrg)) {
       this.viewType = data.viewType;
       this.origData = data.origData;
-      this.parentOrg = data.parentOrg;
 
       if (this.viewType === ViewType.UPDATE) {
         this.TOASTR_HEADER = 'Update Organization';
         this.initFormData();
       }
 
-      if (this.parentOrg) {
-        this.orgForm.get('namespace').setValue(this.parentOrg.namespace);
+      if (data.parentOrg) {
+        this.orgForm.get('namespace').setValue(data.parentOrg.namespace);
       } else if (this._isSubOrg(this.origData)) {
         this.orgForm.get('namespace').setValue(this._constructParentOrg(this.origData.namespace));
       }
