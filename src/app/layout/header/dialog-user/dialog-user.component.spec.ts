@@ -17,7 +17,6 @@ describe('DialogUserComponent', () => {
   let hostDebug: DebugElement;
   let store: MockStore<UserClaimState>;
 
-  const fieldSelector = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=field-${id}] ${postSelector}`));
   const dispatchEvent = (el) => {
     el.dispatchEvent(new Event('input'));
     el.dispatchEvent(new Event('blur'));
@@ -64,15 +63,19 @@ describe('DialogUserComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
 
-    const {name, birthdate, address} = setup(hostDebug);
+    const {name, birthdate, address} = selectors(hostDebug);
 
     expect(name.value).toBe(data.name);
     expect(address.value).toBe(data.address);
-    expect(new Date(birthdate.value)).toEqual(date);
+
+    const birth = new Date(birthdate.value);
+    expect(birth.getFullYear()).toEqual(date.getFullYear());
+    expect(birth.getDay()).toEqual(date.getDay());
+    expect(birth.getMonth()).toEqual(date.getMonth());
   });
 
   it('should dispatch updateUserClaims action when submitting', () => {
-    const {name, birthdate, address, submit} = setup(hostDebug);
+    const {name, birthdate, address, submit} = selectors(hostDebug);
     const dispatchSpy = spyOn(store, 'dispatch');
     component.ngOnInit();
     fixture.detectChanges();
@@ -93,7 +96,7 @@ describe('DialogUserComponent', () => {
   });
 
   it('should display error message for maximum allowed date', () => {
-    const {birthdate} = setup(hostDebug);
+    const {birthdate} = selectors(hostDebug);
     component.ngOnInit();
     fixture.detectChanges();
 
@@ -107,12 +110,15 @@ describe('DialogUserComponent', () => {
   });
 });
 
-const setup = (hostDebug: DebugElement) => {
+const selectors = (hostDebug: DebugElement) => {
+  const getElement = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
+
   return {
-    submit: hostDebug.query(By.css('[data-qa-id=submit]')).nativeElement,
-    name: hostDebug.query(By.css('[data-qa-id=name]')).nativeElement,
-    birthdate: hostDebug.query(By.css('[data-qa-id=birthdate]')).nativeElement,
-    address: hostDebug.query(By.css('[data-qa-id=address]')).nativeElement,
+    submit: getElement('submit').nativeElement,
+    name: getElement('name').nativeElement,
+    birthdate: getElement('birthdate').nativeElement,
+    address: getElement('address').nativeElement,
+    getElement
   };
 };
 

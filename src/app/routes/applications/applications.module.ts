@@ -26,7 +26,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 
 const routes: Routes = [
-  { path: '', component: ApplicationsComponent }
+  {path: '', component: ApplicationsComponent}
 ];
 
 @NgModule({
@@ -39,7 +39,8 @@ const routes: Routes = [
     GovernanceListComponent,
     GovernanceViewComponent,
     TransferOwnershipComponent,
-    RemoveOrgAppComponent],
+    RemoveOrgAppComponent,
+  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -60,14 +61,15 @@ const routes: Routes = [
     NgMatSearchBarModule
   ],
   entryComponents: [
-    NewOrganizationComponent, 
-    NewApplicationComponent, 
-    NewRoleComponent, 
-    GovernanceViewComponent, 
+    NewOrganizationComponent,
+    NewApplicationComponent,
+    NewRoleComponent,
+    GovernanceViewComponent,
     TransferOwnershipComponent,
     RemoveOrgAppComponent],
   exports: [
     TransferOwnershipComponent
   ]
 })
-export class ApplicationsModule { }
+export class ApplicationsModule {
+}
