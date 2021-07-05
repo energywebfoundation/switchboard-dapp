@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { VerificationMethodComponent } from './verification-method.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -21,8 +21,8 @@ describe('VerificationMethodComponent', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       declarations: [VerificationMethodComponent, TypeAlgorithmPipe, DidFormatMinifierPipe],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { id: 1 } },
@@ -34,7 +34,7 @@ describe('VerificationMethodComponent', () => {
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(VerificationMethodComponent);
