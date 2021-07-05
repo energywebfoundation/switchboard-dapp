@@ -3,8 +3,13 @@
         <div class="col-lg-12 mb-2">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="label color-white opacity-50 pl-3">Fields</span>
-            <button mat-icon-button (click)="showAddFieldForm()" matTooltip="Add field">
-            <mat-icon class="btn-color-primary">add</mat-icon>
+            <button
+                mat-icon-button
+                (click)="showAddFieldForm()"
+                matTooltip="Add field"
+                data-qa-id="show-field"
+            >
+                <mat-icon class="btn-color-primary">add</mat-icon>
             </button>
         </div>
         <div>
@@ -99,8 +104,17 @@
                 </div>
                 <div class="d-flex justify-content-end mb-2">
                 <button mat-stroked-button class="btn-small mr-2" (click)="cancelAddField()">Cancel</button>
-                <button mat-raised-button class="btn btn-small btn btn-primary" type="submit" *ngIf="!isEditFieldForm"
-                    (click)="addField()" [disabled]="!fieldsForm.valid || !fieldsForm.dirty">Add</button>
+                <button
+                    mat-raised-button
+                    class="btn btn-small btn btn-primary"
+                    type="submit"
+                    *ngIf="!isEditFieldForm"
+                    (click)="addField()"
+                    [disabled]="!fieldsForm.valid || !fieldsForm.dirty"
+                    data-qa-id="add-field"
+                >
+                    Add
+                </button>
                 <button mat-raised-button class="btn btn-small btn btn-primary" *ngIf="isEditFieldForm"
                     (click)="updateField()" [disabled]="!fieldsForm.valid">Update</button>
                 </div>
