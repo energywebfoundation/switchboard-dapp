@@ -128,7 +128,7 @@ export class NewOrganizationComponent {
   }
 
   isNextFormButtonDisabled() {
-    return this.isChecking || deepEqualObjects(this.defaultFormValues, this.orgForm.value);
+    return this.isChecking || deepEqualObjects(this.defaultFormValues, this.orgForm.value) || this.orgForm.invalid;
   }
 
   alphaNumericOnly(event: KeyboardEvent) {
