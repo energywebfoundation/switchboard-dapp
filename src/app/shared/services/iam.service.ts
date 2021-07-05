@@ -278,6 +278,12 @@ export class IamService {
     }
   }
 
+  /**
+   * @deprecated
+   * Use isAlphaNumericOnly function from utils/functions instead.
+   * @param event
+   * @param includeDot
+   */
   isAlphaNumericOnly(event: any, includeDot?: boolean) {
     const charCode = (event.which) ? event.which : event.keyCode;
 
@@ -312,6 +318,11 @@ export class IamService {
     return retVal;
   }
 
+  /**
+   * @deprecated
+   * Use isValidJsonFormat function from utils/validators/json-format instead.
+   * @param jsonFormatCtrl
+   */
   isValidJsonFormat(jsonFormatCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
     let jsonStr = jsonFormatCtrl.value;
