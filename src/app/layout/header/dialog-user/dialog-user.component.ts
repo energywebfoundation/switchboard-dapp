@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import * as userActions from '../../../state/user-claim/user.actions';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import { Profile } from 'iam-client-lib';
+import { deepEqualObjects } from '../../../utils/functions/deep-equal-objects/deep-equal-objects';
 
 const MAJORITY_AGE = 18;
 
@@ -28,6 +29,7 @@ export class DialogUserComponent implements OnInit, OnDestroy {
       Validators.required
     ]]
   });
+  private defaultFormValues;
   public maxDate: Date;
   private destroy$ = new Subject<void>();
 
@@ -45,15 +47,18 @@ export class DialogUserComponent implements OnInit, OnDestroy {
     this.maxDate = this.getLegalAge();
     this.store.select(userSelectors.getUserProfile)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(profile => this.profileForm.patchValue({
-        name: profile?.name,
-        birthdate: new Date(profile?.birthdate),
-        address: profile?.address
-      }));
+      .subscribe(profile => {
+        this.profileForm.patchValue({
+          name: profile?.name,
+          birthdate: new Date(profile?.birthdate),
+          address: profile?.address
+        });
+        this.defaultFormValues = this.profileForm.value;
+      });
   }
 
   disableSubmit(): boolean {
-    return this.profileForm.pristine || this.profileForm.invalid;
+    return this.profileForm.pristine || this.profileForm.invalid || deepEqualObjects(this.defaultFormValues, this.profileForm.value);
   }
 
   save() {
