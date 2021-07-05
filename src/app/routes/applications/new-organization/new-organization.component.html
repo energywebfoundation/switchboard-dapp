@@ -106,9 +106,9 @@
             <div class="d-flex justify-content-end mb-2">
               <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
               <button mat-raised-button class="btn btn-small btn-primary" *ngIf="viewType !== ViewType.UPDATE"
-                [disabled]="isChecking" (click)="createNewOrg()">Next</button>
+                [disabled]="isNextFormButtonDisabled()" (click)="createNewOrg()">Next</button>
               <button mat-raised-button class="btn btn-small btn-primary" *ngIf="viewType === ViewType.UPDATE"
-                [disabled]="isChecking" (click)="updateOrg()">Next</button>
+                [disabled]="isNextFormButtonDisabled()" (click)="updateOrg()">Next</button>
             </div>
           </form>
         </mat-step>
