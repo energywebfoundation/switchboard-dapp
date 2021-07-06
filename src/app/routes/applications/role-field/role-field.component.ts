@@ -23,10 +23,10 @@ export class RoleFieldComponent implements OnInit {
   @Output() backEvent: EventEmitter<any> = new EventEmitter();
   @Output() proceedConfirmDetailsEvent: EventEmitter<any> = new EventEmitter();
 
-  showFieldsForm      = false;
-  isEditFieldForm     = false;
-  fieldIndex          : number;
-  public FieldTypes   = FIELD_TYPES;
+  showFieldsForm = false;
+  isEditFieldForm = false;
+  fieldIndex : number;
+  public FieldTypes = FIELD_TYPES;
 
   showAddFieldForm() {
     this.resetForm();
