@@ -4,40 +4,33 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: [
-      'jasmine',
-      // '@angular-devkit/build-angular',
-      'karma-typescript'
+    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    plugins: [
+      require('karma-jasmine'),
+      require('karma-chrome-launcher'),
+      require('karma-jasmine-html-reporter'),
+      require('karma-coverage'),
+      require('@angular-devkit/build-angular/plugins/karma')
     ],
-    // plugins: [
-    //   require('karma-jasmine'),
-    //   require('karma-chrome-launcher'),
-    //   require('karma-jasmine-html-reporter'),
-    //   require('karma-coverage-istanbul-reporter'),
-    //   require('@angular-devkit/build-angular'),
-    // ],
     client: {
+      jasmine: {
+        // you can add configuration options for Jasmine here
+        // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
+        // for example, you can disable the random execution with `random: false`
+        // or set a specific seed with `seed: 4321`
+      },
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    files: [
-      { pattern: 'test/didRegistry/*.spec.ts', watch: true }
-    ],
-    preprocessors: {
-      '**/*.ts': ['karma-typescript']
+    jasmineHtmlReporter: {
+      suppressAll: true // removes the duplicated traces
     },
-    coverageIstanbulReporter: {
-      dir: require('path').join(__dirname, './coverage/ewUIBoilerPlate'),
-      reports: ['html', 'lcovonly', 'text-summary'],
-      fixWebpackSourcePaths: true
-    },
-    karmaTypescriptConfig: {
-      compilerOptions: {
-        target: 'ES2015'
-      },
-      files: [
-        'test/didRegistry/*.spec.ts'
-      ],
-      exclude: ["node_modules"]
+    coverageReporter: {
+      dir: require('path').join(__dirname, './coverage/testing-project'),
+      subdir: '.',
+      reporters: [
+        { type: 'html' },
+        { type: 'text-summary' }
+      ]
     },
     reporters: ['progress', 'kjhtml'],
     port: 9876,

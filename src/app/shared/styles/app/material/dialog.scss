@@ -72,6 +72,23 @@ mat-datetimepicker-content {
     }
 }
 
+.history-list-item {
+    background-color: #363446;
+}
+
+.field-list-item {
+    background-color: #363446;
+}
+
+.bg-status, .bg-type {
+    background-color: #3e3d4c;
+    padding: 8px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 .mat-dialog-content {
     padding: 0 24px !important;
     margin: 0 !important;
@@ -105,7 +122,7 @@ mat-datetimepicker-content {
 }
 
 .cdk-overlay-dark-backdrop {
-    background: transparent !important;
+    background: transparent;
 }
 
 .mat-dialog-actions {

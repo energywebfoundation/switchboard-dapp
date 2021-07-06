@@ -8,16 +8,14 @@
           <div class="d-flex align-item-center">
             <!-- <button (click)="toggleFilter(ListType.ORG)" class="btn mat-stroked-filter-button btn-small mb-3 mb-lg-0 mr-2">Filter
             </button> -->
-            <ng-container *ngIf="isIamEwcOwner">
-              <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
-                *ngIf="!listOrg?.orgHierarchy?.length" (click)="openNewOrgComponent()">Create Organization
-              </button>
-              <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
-                *ngIf="listOrg?.orgHierarchy?.length"
-                (click)="listOrg?.newSubOrg(listOrg?.orgHierarchy[listOrg?.orgHierarchy?.length - 1])">Create
-                Sub-Organization
-              </button>
-            </ng-container>
+            <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
+                    *ngIf="!listOrg?.orgHierarchy?.length" (click)="openNewOrgComponent()">Create Organization
+            </button>
+            <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
+                    *ngIf="listOrg?.orgHierarchy?.length"
+                    (click)="listOrg?.newSubOrg(listOrg?.orgHierarchy[listOrg?.orgHierarchy?.length - 1])">Create
+              Sub-Organization
+            </button>
           </div>
         </div>
         <app-governance-list list-type="org" #listOrg [isFilterShown]="showFilter.org"
@@ -31,16 +29,16 @@
       <div class="col-xl-12">
         <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
           <h4 class="color-white strong my-4">Application Management</h4>
-          <div class="d-flex justify-content-end flex-column flex-md-row">
-            <div class="d-flex justify-content-end align-items-center mr-0 mr-md-2 color-white">
-              <mat-search-bar matTooltip="Search"></mat-search-bar>
+          <div class="d-flex justify-content-end flex-column align-items-center mb-3 flex-md-row">
+            <div class="d-flex justify-content-end align-items-center mr-0 mr-md-2 mb-4 mb-md-0 color-white search-bar-wrapper">
+              <mat-search-bar matTooltip="Search" class="ml-3"></mat-search-bar>
             </div>
             <div class="d-flex align-item-center">
               <button (click)="toggleFilter(ListType.APP)"
-                class="btn mat-stroked-filter-button btn-small mb-3 mb-lg-0 mr-2">Filter
+                class="btn mat-stroked-filter-button btn-small mb-lg-0 mr-2">Filter
               </button>
 <!--              <div class="d-flex align-item-center">-->
-<!--                <button class="btn mat-raised-header-button btn-small mb-3 mb-lg-0 mr-2">-->
+<!--                <button class="btn mat-raised-header-button btn-small mb-lg-0 mr-2">-->
 <!--                  Add Asset Type-->
 <!--                </button>-->
 <!--              </div>-->

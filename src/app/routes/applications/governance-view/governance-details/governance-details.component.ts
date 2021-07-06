@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
-import { ToastrService } from 'ngx-toastr';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -36,9 +35,7 @@ export class GovernanceDetailsComponent implements OnInit {
   constructor(
     private iamService: IamService,
     private loadingService: LoadingService,
-    private dialog: MatDialog,
-    private toastr: ToastrService
-  ) {}
+    private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.data = this.origData;

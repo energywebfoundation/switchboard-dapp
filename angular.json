@@ -17,20 +17,37 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",            
+            "tsConfig": "tsconfig.app.json",
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "@gnosis.pm/safe-apps-sdk",
+              "iam-client-lib"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets",
               "src/manifest.webmanifest",
               "src/manifest.json"
             ],
+            "extractCss": true,
             "styles": [
               "src/app/core/preloader/preloader.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              {
+                "input": "src/app/shared/styles/themes/theme-a.scss",
+                "bundleName": "theme-a",
+                "inject": false
+              },
+              {
+                "input": "src/app/shared/styles/themes/theme-b.scss",
+                "bundleName": "theme-b",
+                "inject": false
+              }
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -66,6 +83,10 @@
                   "type": "initial",
                   "maximumWarning": "15mb",
                   "maximumError": "30mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ],
               "serviceWorker": true,
@@ -92,10 +113,20 @@
                   "type": "initial",
                   "maximumWarning": "10mb",
                   "maximumError": "10mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             },
             "dev": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -180,5 +211,8 @@
       }
     }
   },
-  "defaultProject": "ew-boilerplate-ui"
+  "defaultProject": "ew-boilerplate-ui",
+  "cli": {
+    "analytics": false
+  }
 }

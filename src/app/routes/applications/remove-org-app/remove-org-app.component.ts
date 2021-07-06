@@ -1,11 +1,12 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MatStepper, MAT_DIALOG_DATA } from '@angular/material';
-import { ToastrService } from 'ngx-toastr';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { ExpiredRequestError } from 'src/app/shared/errors/errors';
 import { IamRequestService } from 'src/app/shared/services/iam-request.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 @Component({
   selector: 'app-remove-org-app',
@@ -14,7 +15,7 @@ import { LoadingService } from 'src/app/shared/services/loading.service';
 })
 export class RemoveOrgAppComponent implements OnInit {
   private stepper: MatStepper;
-  @ViewChild('stepper', { static: false }) set content(content: MatStepper) {
+  @ViewChild('stepper') set content(content: MatStepper) {
     if(content) { // initially setter gets called with undefined
         this.stepper = content;
     }
@@ -31,21 +32,18 @@ export class RemoveOrgAppComponent implements OnInit {
 
   constructor(
     private iamService: IamService,
-    private toastr: ToastrService,
+    private toastr: SwitchboardToastrService,
     private loadingService: LoadingService,
     private iamRequestService: IamRequestService,
     public dialogRef: MatDialogRef<RemoveOrgAppComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) { 
-    // console.log(data);
+    @Inject(MAT_DIALOG_DATA) public data: any) {
     this.listType = data.listType;
     this.namespace = data.namespace;
     this.steps = data.steps;
 
     if (this.listType === ListType.ORG) {
       this.TOASTR_HEADER = 'Remove Organization'
-    }
-    else if (this.listType === ListType.APP) {
+    } else if (this.listType === ListType.APP) {
       this.TOASTR_HEADER = 'Remove Application';
     }
   }

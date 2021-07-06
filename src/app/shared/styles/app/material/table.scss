@@ -15,10 +15,13 @@ th.mat-header-cell {
     font-weight: 600 !important;
     font-size: 12px;
     color: #FFFFFF !important;
-    letter-spacing: 1.5px;
     text-transform: uppercase;
     border-bottom-style: none !important;
 } 
+
+.mat-sort-header-content {
+    letter-spacing: 1px;
+}
 
 .mat-header-cell, .mat-cell, .mat-footer-cell {
     color: #FFF !important;
@@ -49,6 +52,10 @@ tr.mat-row {
 
 .mat-row:nth-child(even){
     background-color: #1E1C29;
+}
+
+.mat-sort-header-button {
+    text-transform: uppercase;
 }
 
 .mat-paginator {
@@ -84,8 +91,16 @@ mat-paginator {
     }
 }
 
+.bg-sub-row {
+    background: #302e40;
+}
+
+.color-info {
+    color: #c1fff9;
+}
+
 .color-primary {
-    color: #9253ec!important;
+    color: #33CBCB!important;
 }
 
 .border-default {

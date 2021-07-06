@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ViewRoleComponent } from './view-role.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
 
 describe('ViewRoleComponent', () => {
   let component: ViewRoleComponent;
@@ -8,9 +10,11 @@ describe('ViewRoleComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewRoleComponent ]
+      declarations: [ViewRoleComponent],
+      imports: [MatTableModule],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

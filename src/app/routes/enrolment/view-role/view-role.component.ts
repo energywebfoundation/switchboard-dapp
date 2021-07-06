@@ -6,16 +6,10 @@ import { MatDialogRef } from '@angular/material/dialog';
   templateUrl: './view-role.component.html',
   styleUrls: ['./view-role.component.scss']
 })
-export class ViewRoleComponent implements OnInit {
+export class ViewRoleComponent {
 
   displayedColumns: string[] = ['type', 'label', 'validation'];
   dataSource: RolesFields[] = FIELD_DATA;
-
-  constructor(public dialogRef: MatDialogRef<ViewRoleComponent>) { }
-
-  ngOnInit() {
-  }
-
 }
 
 export interface RolesFields {
@@ -25,6 +19,5 @@ export interface RolesFields {
 }
 
 const FIELD_DATA: RolesFields[] = [
-  {type: 'Date', label: 'My Label', validation: 'maxLength:30'},
-
+  { type: 'Date', label: 'My Label', validation: 'maxLength:30' },
 ];

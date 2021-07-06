@@ -1,0 +1,11 @@
+<h4 *ngIf="!provider; else stakeProvider" class="color-white">Providers</h4>
+<ng-template #stakeProvider>
+    <div class="d-flex flex-row align-items-center">
+        <h4 class="provider provider-font mb-0 cursor-pointer" (click)="providersList()">Providers</h4>
+        <div class="provider-name ml-2 d-flex align-items-center">
+            <span>/</span>
+            <img class="ml-2" width="16" height="16" [src]="providerLogo"/>
+            <span class="ml-2 provider-font">{{provider}}</span>
+        </div>
+    </div>
+</ng-template>

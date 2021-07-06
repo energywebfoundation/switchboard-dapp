@@ -59,7 +59,7 @@
 
         &:focus {
             background-color: rgb(255 223 192);
-        } 
+        }
         &:not(:disabled):not(.disabled):active:focus, :not(:disabled):not(.disabled).active:focus, .show > .dropdown-toggle:focus {
             background-color: $inverse;
             border: 0 !important;
@@ -89,6 +89,19 @@
         }
 }
 
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+    display: block;
+    font-size: inherit;
+    width: 2em !important;
+    height: 2em !important;
+    position: relative;
+    top: -3px;
+    background-color: #33cbcb;
+    color: #FFF;
+    padding: 3px;
+
+}
+
 .btn-primary {
     background-color: $inverse;
     box-shadow: 0 8px 20px 0 rgba(0,14,38,0.26);
@@ -116,11 +129,6 @@
 .md-enroll.btn-primary {
     color:#FFF;
     background: #33cbcb;
-}
-
-.md-enroll.mat-raised-button[disabled] {
-    color: rgba(0,0,0,.26) !important;
-    background: rgba(0,0,0,.12) !important;     
 }
 
 //

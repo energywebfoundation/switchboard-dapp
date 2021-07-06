@@ -1,0 +1,17 @@
+<div class="stake-list">
+    <app-top-bar></app-top-bar>
+    <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 mb-4 cursor-pointer" *ngFor="let data of mockData">
+            <app-stake-list-card (click)="goToDetails()"
+                                 [organization]="data?.organization"
+                                 [organizationImage]="data?.organizationImage"
+                                 [providerDate]="data?.providerDate"
+                                 [stakeAmount]="data?.stakeAmount"
+                                 [stakeRating]="data?.stakeRating"
+                                 [activeServices]="data?.activeServices"
+                                 [numberOfNodes]="data?.numberOfNodes"
+                                 [isAcceptingPatrons]="data?.isAcceptingPatrons"
+            ></app-stake-list-card>
+        </div>
+    </div>
+</div>

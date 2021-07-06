@@ -19,7 +19,7 @@ const FilterTypes = {
   styleUrls: ['./search-result.component.scss']
 })
 export class SearchResultComponent implements OnInit {
-  @ViewChild('detailView', undefined) detailView: GovernanceDetailsComponent;
+  @ViewChild('detailView') detailView: GovernanceDetailsComponent;
 
   FilterTypes = FilterTypes;
   screenWidth: number;
@@ -77,10 +77,6 @@ export class SearchResultComponent implements OnInit {
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
       // Get requested claims
       try {
-        this.requestedClaims = await this.iamService.iam.getRequestedClaims({
-          did: this.iamService.iam.getDid()
-        });
-
         if (queryParams.keyword) {
           this.searchForm.get('searchTxt').setValue(queryParams.keyword);
         }

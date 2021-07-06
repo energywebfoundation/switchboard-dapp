@@ -32,7 +32,7 @@ h1,h2,h3,h4,h5
 }
 
 h1,.h1 {
-    font-size: 24px; // 34px
+    font-size: 26px; // 34px
 }
 
 h2,.h2 {
@@ -45,6 +45,13 @@ h3,.h3 {
 
 h4,.h4 {
     font-size: 1.125rem; // 18px
+
+    small {
+        line-height: 12px;
+        font-family: 'Source Sans Pro', sans-serif;
+        opacity: 0.6;
+        letter-spacing: 0.2px;
+    }
 }
 
 h5,.h5 {
@@ -53,6 +60,15 @@ h5,.h5 {
 
 h6,.h6 {
     font-size: 1rem;
+}
+
+.f-14 {
+    font-size:14px;
+}
+
+
+.f-16 {
+    font-size:16px;
 }
 
 p {
@@ -91,6 +107,11 @@ p {
 
 .small {
     font-size: 12px !important;
+}
+
+.text-blur {
+    color: transparent; 
+    text-shadow: 0 0 5px rgba(255,255,255,0.5);
 }
 
 @include media-breakpoint-down(sm) {

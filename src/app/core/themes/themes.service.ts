@@ -1,44 +1,42 @@
 import { Injectable } from '@angular/core';
 
-const themeA = require('../../shared/styles/themes/theme-a.scss');
-const themeB = require('../../shared/styles/themes/theme-b.scss');
-
 @Injectable()
 export class ThemesService {
 
-    styleTag: any;
-    defaultTheme: string = 'B';
+  readonly defaultTheme = 'B';
+  private styleTag: any;
 
-    constructor() {
-        this.createStyle();
-        this.setTheme(this.defaultTheme);
-    }
+  constructor() {
+    this.createElement();
+    this.setTheme('B');
+  }
 
-    private createStyle() {
-        const head = document.head || document.getElementsByTagName('head')[0];
-        this.styleTag = document.createElement('style');
-        this.styleTag.type = 'text/css';
-        this.styleTag.id = 'appthemes';
-        head.appendChild(this.styleTag);
+  setTheme(name: 'A' | 'B') {
+    switch (name) {
+      case 'A':
+        return this.injectStylesheet('theme-a.css');
+      case 'B':
+      default:
+        return this.injectStylesheet('theme-b.css');
     }
+  }
 
-    setTheme(name) {
-        switch (name) {
-            case 'A':
-                this.injectStylesheet(themeA);
-                break;
-            case 'B':
-                this.injectStylesheet(themeB);
-                break;
-        }
-    }
+  injectStylesheet(theme: string) {
+    this.styleTag.href = `${theme}`;
+  }
 
-    injectStylesheet(css) {
-        this.styleTag.innerHTML = css;
-    }
+  getDefaultTheme() {
+    return this.defaultTheme;
+  }
 
-    getDefaultTheme() {
-        return this.defaultTheme;
-    }
+  private createElement() {
+    const head = document.head || document.getElementsByTagName('head')[0];
+    this.styleTag = document.createElement('link');
+    this.styleTag.id = 'client-theme';
+    this.styleTag.type = 'text/css';
+    this.styleTag.rel = 'stylesheet';
+
+    head.appendChild(this.styleTag);
+  }
 
 }

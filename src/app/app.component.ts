@@ -3,6 +3,7 @@ import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 
 import { SettingsService } from './core/settings/settings.service';
+import { UrlService } from './shared/services/url-service/url.service';
 
 @Component({
     selector: 'app-root',
@@ -22,7 +23,10 @@ export class AppComponent implements OnInit {
     @HostBinding('class.aside-toggled') get asideToggled() { return this.settings.getLayoutSetting('asideToggled'); };
     @HostBinding('class.aside-collapsed-text') get isCollapsedText() { return this.settings.getLayoutSetting('isCollapsedText'); };
 
-    constructor(public settings: SettingsService, private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
+    constructor(public settings: SettingsService,
+                private matIconRegistry: MatIconRegistry,
+                private domSanitizer: DomSanitizer,
+                private urlHistoryService: UrlService) {
         this.matIconRegistry.addSvgIcon(
             "wallet-icon",
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/wallet-icon.svg")
@@ -96,6 +100,10 @@ export class AppComponent implements OnInit {
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/scan-qr-icon.svg")
         );
         this.matIconRegistry.addSvgIcon(
+            "view-qr-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/qr-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
             "new-claim-icon",
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/new-claim-icon.svg")
         );
@@ -148,9 +156,26 @@ export class AppComponent implements OnInit {
             "organization-list-icon",
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/organization-list-icon.svg")
         );
+        this.matIconRegistry.addSvgIcon(
+            "ethereum",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/assets-icons/ethereum-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "bitcoin",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/assets-icons/bitcoin-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "ethereum-bitcoin",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/assets-icons/bitcoin-or-ethereum-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "create-staking-icon",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/create-staking-icon.svg")
+        );
     }
 
     ngOnInit() {
+      this.urlHistoryService.init();
         // prevent empty links to reload the page
         document.addEventListener('click', e => {
             const target = e.target as HTMLElement;

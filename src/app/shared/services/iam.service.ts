@@ -1,15 +1,28 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { IAM, DIDAttribute, MessagingMethod, WalletProvider, SafeIam, setCacheClientOptions, setChainConfig, setMessagingOptions } from 'iam-client-lib';
-import { BehaviorSubject } from 'rxjs';
+import {
+  IAM,
+  MessagingMethod,
+  SafeIam,
+  setCacheClientOptions,
+  setChainConfig,
+  setMessagingOptions,
+  WalletProvider
+} from 'iam-client-lib';
 import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
+import { Store } from '@ngrx/store';
+import * as userClaimsActions from '../../state/user-claim/user.actions';
+import { UserClaimState } from '../../state/user-claim/user.reducer';
+import { ToastrService } from 'ngx-toastr';
+import { getDid, getUserProfile } from '../../state/user-claim/user.selectors';
+import { take } from 'rxjs/operators';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
-const { walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl } = environment;
+const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
 
 const SWAL = require('sweetalert');
 
@@ -25,28 +38,23 @@ export const VOLTA_CHAIN_ID = 73799;
 export enum LoginType {
   LOCAL = 'local',
   REMOTE = 'remote'
-};
-
-declare type User = {
-  name: string,
-  birthdate: Date,
-  address: string
-};
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class IamService {
   private _iam: IAM;
-  private _user: BehaviorSubject<User | undefined>;
-  private _didDocument: any;
   public accountAddress = undefined;
 
   private _throwTimeoutError = false;
   private _timer = undefined;
   private _deepLink = '';
 
-  constructor(private loadingService: LoadingService, configService: ConfigService) {
+  constructor(private loadingService: LoadingService,
+              configService: ConfigService,
+              private store: Store<UserClaimState>,
+              private toastr: ToastrService) {
     // Set Cache Server
     setCacheClientOptions(VOLTA_CHAIN_ID, {
       url: cacheServerUrl
@@ -60,10 +68,10 @@ export class IamService {
     // Set Messaging Options
     setMessagingOptions(VOLTA_CHAIN_ID, {
       messagingMethod: MessagingMethod.Nats,
-      natsServerUrl: natsServerUrl,
+      natsServerUrl,
     });
 
-    let connectionOptions = undefined;
+    let connectionOptions;
     if (kmsServerUrl) {
       connectionOptions = {
         ewKeyManagerUrl: kmsServerUrl
@@ -71,7 +79,6 @@ export class IamService {
     }
 
     // Initialize Data
-    this._user = new BehaviorSubject<User>(undefined);
     if (configService.safeInfo) {
       this._iam = new SafeIam(safeAppSdk, connectionOptions);
     } else {
@@ -86,10 +93,10 @@ export class IamService {
     let retVal = false;
 
     // Check if account address exists
-    if (!this._user.getValue()) {
-      const connectionOpts = { walletProvider, reinitializeMetamask };
+    if (!(await this.isUserPresent())) {
+      const connectionOpts = {walletProvider, reinitializeMetamask};
       try {
-        const { did, connected, userClosedModal } = await this._iam.initializeConnection(connectionOpts);
+        const {did, connected, userClosedModal} = await this._iam.initializeConnection(connectionOpts);
         if (did && connected && !userClosedModal) {
           // Setup Account Address
           const signer = this._iam.getSigner();
@@ -112,14 +119,11 @@ export class IamService {
 
           retVal = true;
         }
-      }
-      catch (e) {
+      } catch (e) {
         console.error(e);
-        this.logout();
-        location.reload();
+        this.toastr.error('Could not login, please try again later');
       }
-    }
-    else {
+    } else {
       // The account address is set so it means the user is current loggedin
       retVal = true;
     }
@@ -127,35 +131,22 @@ export class IamService {
     return retVal;
   }
 
+  private async isUserPresent(): Promise<boolean> {
+    return Boolean(await this.store.select(getUserProfile).pipe(take(1)).toPromise());
+  }
+
   async setupUser() {
-    // No need to setup user again
-    if (this._didDocument) {
+    if (await this.isUserSetUp()) {
       return;
     }
 
-    // Setup DID Document
-    this._didDocument = await this._iam.getDidDocument();
+    const didDocument = await this._iam.getDidDocument();
+    this.store.dispatch(userClaimsActions.setDidDocument({didDocument}));
+    this.store.dispatch(userClaimsActions.loadUserClaims());
+  }
 
-    // Get User Claims
-    let data: any[] = await this.iam.getUserClaims();
-    // console.log('getUserClaims()', JSON.parse(JSON.stringify(data)));
-
-    // Get Profile Related Claims
-    data = data.filter((item: any) => item.profile ? true : false );
-    // console.log('Profile Claims', JSON.parse(JSON.stringify(data)));
-
-    // Get the most recent claim
-    if (data.length) {
-        let tmp: any = data[0].profile;
-        this._user.next({
-          name: tmp.name,
-          birthdate: new Date(tmp.birthdate),
-          address: tmp.address
-      });
-    }
-    else {
-      this._user.next(undefined);
-    }
+  private async isUserSetUp(): Promise<boolean> {
+    return Boolean(await this.store.select(getDid).pipe(take(1)).toPromise());
   }
 
   /**
@@ -163,7 +154,12 @@ export class IamService {
    */
   logout(saveDeepLink?: boolean) {
     this._iam.closeConnection();
-    this._user = undefined;
+    this.store.dispatch(userClaimsActions.clearUserClaim());
+
+    saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/#/welcome';
+
+    // Clean up loader.
+    this.loadingService.hide();
   }
 
   setDeepLink(deepLink: any) {
@@ -172,13 +168,14 @@ export class IamService {
 
   logoutAndRefresh(saveDeepLink?: boolean) {
     this.logout(saveDeepLink);
-    let $navigate = setTimeout(() => {
+    const $navigate = setTimeout(() => {
       clearTimeout($navigate);
-      if (saveDeepLink) {
-        location.href = location.origin + '/#/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
-      }
       location.reload();
-  }, 100);
+    }, 100);
+  }
+
+  private saveDeepLink(): void {
+    location.href = location.origin + '/#/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
   }
 
   /**
@@ -186,14 +183,6 @@ export class IamService {
    */
   get iam(): IAM {
     return this._iam;
-  }
-
-  get userProfile() {
-    return this._user.asObservable();
-  }
-
-  setUserProfile(data: any) {
-    this._user.next(data);
   }
 
   public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean) {
@@ -240,19 +229,19 @@ export class IamService {
   private async _displayTimeout(isConnectAndSign?: boolean) {
     let message = 'sign';
     if (isConnectAndSign) {
-      message = 'connect with your wallet and sign'
+      message = 'connect with your wallet and sign';
     }
-    let config = {
-        title: 'Wallet Signature Timeout',
-        text: `The period to ${message} the requested signature has elapsed. Please login again.`,
-        icon: 'error',
-        button: 'Proceed',
-        closeOnClickOutside: false
-      };
+    const config = {
+      title: 'Wallet Signature Timeout',
+      text: `The period to ${message} the requested signature has elapsed. Please login again.`,
+      icon: 'error',
+      button: 'Proceed',
+      closeOnClickOutside: false
+    };
 
-    let result = await SWAL(config);
+    const result = await SWAL(config);
     if (result) {
-        this.logoutAndRefresh();
+      this.logoutAndRefresh();
     }
   }
 
@@ -275,29 +264,35 @@ export class IamService {
         break;
     }
 
-    let config = {
-        title: title,
-        text: `${message} Please login again.`,
-        icon: 'warning',
-        button: 'Proceed',
-        closeOnClickOutside: false
-      };
+    const config = {
+      title,
+      text: `${message} Please login again.`,
+      icon: 'warning',
+      button: 'Proceed',
+      closeOnClickOutside: false
+    };
 
-    let result = await SWAL(config);
+    const result = await SWAL(config);
     if (result) {
       this.logoutAndRefresh();
     }
   }
 
+  /**
+   * @deprecated
+   * Use isAlphaNumericOnly function from utils/functions instead.
+   * @param event
+   * @param includeDot
+   */
   isAlphaNumericOnly(event: any, includeDot?: boolean) {
     const charCode = (event.which) ? event.which : event.keyCode;
 
     // Check if key is alphanumeric key
     return (
-        (charCode > 96 && charCode < 123) || // a-z
-        (charCode > 64 && charCode < 91) || // A-Z
-        (charCode > 47 && charCode < 58) || // 0-9
-        (includeDot && charCode === 46) // .
+      (charCode > 96 && charCode < 123) || // a-z
+      (charCode > 64 && charCode < 91) || // A-Z
+      (charCode > 47 && charCode < 58) || // 0-9
+      (includeDot && charCode === 46) // .
     );
   }
 
@@ -306,7 +301,7 @@ export class IamService {
     let ethAddress = ethAddressCtrl.value;
 
     if (ethAddress && !RegExp(ethAddrPattern).test(ethAddress.trim())) {
-      retVal = { invalidEthAddress: true };
+      retVal = {invalidEthAddress: true};
     }
 
     return retVal;
@@ -317,12 +312,17 @@ export class IamService {
     let did = didCtrl.value;
 
     if (did && !RegExp(DIDPattern).test(did.trim())) {
-      retVal = { invalidDid: true };
+      retVal = {invalidDid: true};
     }
 
     return retVal;
   }
 
+  /**
+   * @deprecated
+   * Use isValidJsonFormat function from utils/validators/json-format instead.
+   * @param jsonFormatCtrl
+   */
   isValidJsonFormat(jsonFormatCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
     let jsonStr = jsonFormatCtrl.value;
@@ -330,9 +330,8 @@ export class IamService {
     if (jsonStr && jsonStr.trim()) {
       try {
         JSON.parse(jsonStr);
-      }
-      catch (e) {
-        retVal = { invalidJsonFormat: true };
+      } catch (e) {
+        retVal = {invalidJsonFormat: true};
       }
     }
 

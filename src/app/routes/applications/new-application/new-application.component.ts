@@ -1,14 +1,16 @@
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MatStepper, MAT_DIALOG_DATA } from '@angular/material';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
 import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
+import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 @Component({
   selector: 'app-new-application',
@@ -17,13 +19,24 @@ import { ViewType } from '../new-organization/new-organization.component';
 })
 export class NewApplicationComponent implements OnInit, AfterViewInit {
   private stepper: MatStepper;
-  @ViewChild('stepper', { static: false }) set content(content: MatStepper) {
+  @ViewChild('stepper') set content(content: MatStepper) {
     if (content) {
       this.stepper = content;
     }
   }
 
-  public appForm: FormGroup;
+  public appForm = this.fb.group({
+    orgNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    appName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256), isAlphanumericValidator]],
+    namespace: '',
+    data: this.fb.group({
+      applicationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+      logoUrl: ['', Validators.pattern('https?://.*')],
+      websiteUrl: ['', Validators.pattern('https?://.*')],
+      description: '',
+      others: ['', this.iamService.isValidJsonFormat]
+    })
+  });
   public environment = environment;
   public isChecking = false;
   private _isLogoUrlValid = true;
@@ -42,38 +55,21 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
   constructor(private fb: FormBuilder,
     private iamService: IamService,
-    private toastr: ToastrService,
+    private toastr: SwitchboardToastrService,
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private configService: ConfigService) {
-      this.appForm = fb.group({
-        orgNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-        appName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-        namespace: '',
-        data: fb.group({
-          applicationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-          logoUrl: ['', Validators.pattern('https?://.*')],
-          websiteUrl: ['', Validators.pattern('https?://.*')],
-          description: '',
-          others: ['', this.iamService.isValidJsonFormat]
-        })
-      });
-
       if (data && data.viewType) {
         this.viewType = data.viewType;
-        
-  
+
         if (this.viewType === ViewType.UPDATE && data.origData) {
           this.origData = data.origData;
           this.TOASTR_HEADER = 'Update Application';
-        }
-        else if (this.viewType === ViewType.NEW && data.organizationNamespace) {
+        } else if (this.viewType === ViewType.NEW && data.organizationNamespace) {
           this.appForm.patchValue({ orgNamespace: data.organizationNamespace });
         }
-  
-        this.initFormData();
       }
     }
 
@@ -82,6 +78,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.initFormData();
   }
 
   private initFormData() {
