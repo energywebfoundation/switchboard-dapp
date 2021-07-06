@@ -107,7 +107,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   }
 
   changeNewOwnerAddressValue(result: string): void {
-    // TODO      temporary removal of logic with different types DiD
+    // TODO      temporary removal of logic with different types DID until DIDs can own ENS namespaces. See https://energyweb.atlassian.net/browse/SWTCH-790
     // if (result.match(this.ethAddrPattern) && !result.match(this.DIDPattern)) {
     //   this.isShowingDIDDropDown = true;
     //   this.newOwnerAddress.patchValue(this.prefixDropDown.value + result);
