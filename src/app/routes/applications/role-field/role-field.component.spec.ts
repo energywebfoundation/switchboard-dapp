@@ -12,7 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { RoleFieldComponent } from './role-field.component';
 
@@ -37,7 +37,7 @@ fdescribe('RoleFieldComponent', () => {
         MatDividerModule,
         MatInputModule,
         MatButtonModule,
-        BrowserAnimationsModule
+        NoopAnimationsModule
       ]
     })
     .compileComponents();
@@ -84,27 +84,28 @@ fdescribe('RoleFieldComponent', () => {
   describe('add field button', () => {
 
     it('should open form to add field', () => {
-      const { showField } = setup(hostDebug);
+      const { showField } = getSelectors(hostDebug);
       showField.nativeElement.click();
       fixture.detectChanges();
       expect(component.showAddFieldForm).toBeTruthy();
     });
-    
+
     it('add button should be disabled', () => {
-      const { showField } = setup(hostDebug);
+      const { showField } = getSelectors(hostDebug);
       showField.nativeElement.click();
       fixture.detectChanges();
       
-      const isButtonDisabled = component.fieldsForm.valid;
-      expect(isButtonDisabled).toBeFalsy();
+      const { addField } = getSelectors(hostDebug);
+      
+      expect(addField.nativeElement.disabled).toBeTruthy();
     });
   })
 
 });
-const setup = (hostDebug: DebugElement) => {
+const getSelectors = (hostDebug: DebugElement) => {
   return {
     showField: hostDebug.query(By.css('[data-qa-id=show-field]')),
-    addField: hostDebug.query(By.css('[data-qa-id="add-field"')),
+    addField: hostDebug.query(By.css('[data-qa-id="add-field"]')),
   };
 };
 

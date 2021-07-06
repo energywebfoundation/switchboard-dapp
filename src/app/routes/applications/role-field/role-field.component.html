@@ -108,7 +108,6 @@
                     mat-raised-button
                     class="btn btn-small btn btn-primary"
                     type="submit"
-                    *ngIf="!isEditFieldForm"
                     (click)="addField()"
                     [disabled]="!fieldsForm.valid || !fieldsForm.dirty"
                     data-qa-id="add-field"
