@@ -5,11 +5,14 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { NgMatSearchBarModule } from 'ng-mat-search-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { RoleFieldComponent } from './role-field.component';
 
@@ -27,11 +30,14 @@ fdescribe('RoleFieldComponent', () => {
         ReactiveFormsModule,
         MatCardModule,
         MatIconModule,
+        NgMatSearchBarModule,
         MatFormFieldModule,
         MatSelectModule,
         MatDialogModule,
+        MatDividerModule,
         MatInputModule,
-        MatButtonModule
+        MatButtonModule,
+        BrowserAnimationsModule
       ]
     })
     .compileComponents();
@@ -40,11 +46,32 @@ fdescribe('RoleFieldComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleFieldComponent);
 
-    component = fixture.componentInstance;
-
     const fb = new FormBuilder();
-    component.fieldsForm = fb.group({});
-    
+    component = fixture.componentInstance;
+    component.fieldsForm = fb.group({
+      fieldType: ['', Validators.required],
+      label: ['', Validators.required],
+      validation: fb.group({
+        required: undefined,
+        minLength: [undefined, {
+          validators: Validators.min(0),
+          updateOn: 'blur'
+        }],
+        maxLength: [undefined, {
+          validators: Validators.min(1),
+          updateOn: 'blur'
+        }],
+        pattern: undefined,
+        minValue: [undefined, {
+          updateOn: 'blur'
+        }],
+        maxValue: [undefined, {
+          updateOn: 'blur'
+        }],
+        minDate: undefined,
+        maxDate: undefined
+      })
+    });
     hostDebug = fixture.debugElement;
     host = hostDebug.nativeElement;
     // fixture.detectChanges();
@@ -60,13 +87,16 @@ fdescribe('RoleFieldComponent', () => {
       const { showField } = setup(hostDebug);
       showField.nativeElement.click();
       fixture.detectChanges();
-      expect(true).toBeTruthy();
+      expect(component.showAddFieldForm).toBeTruthy();
     });
+    
     it('add button should be disabled', () => {
-      const { showField, addField } = setup(hostDebug);
+      const { showField } = setup(hostDebug);
       showField.nativeElement.click();
       fixture.detectChanges();
-      expect(addField.nativeElement.disabled).toBeTruthy();
+      
+      const isButtonDisabled = component.fieldsForm.valid;
+      expect(isButtonDisabled).toBeFalsy();
     });
   })
 
@@ -74,7 +104,7 @@ fdescribe('RoleFieldComponent', () => {
 const setup = (hostDebug: DebugElement) => {
   return {
     showField: hostDebug.query(By.css('[data-qa-id=show-field]')),
-    addField: hostDebug.query(By.css('[data-qa-id=add-field]')),
+    addField: hostDebug.query(By.css('[data-qa-id="add-field"')),
   };
 };
 
