@@ -173,7 +173,7 @@
               </button>
 
               <!-- Create Staking Pool -->
-              <button mat-menu-item class="btn-color-primary" (click)="openStakingPool(element)">
+              <button mat-menu-item class="btn-color-primary" *appIsFeatureEnabled (click)="openStakingPool(element)">
                 <mat-icon class="btn-color-primary btn-action-3" svgIcon="create-staking-icon"></mat-icon>
                 <span>Create Staking Pool</span>
               </button>
