@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import {
-  IAM,
+  IAM, IStakable,
   MessagingMethod,
   SafeIam,
   setCacheClientOptions,
   setChainConfig,
-  setMessagingOptions,
+  setMessagingOptions, Stakable,
   WalletProvider
 } from 'iam-client-lib';
 import { environment } from 'src/environments/environment';

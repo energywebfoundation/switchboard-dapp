@@ -611,6 +611,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
   openStakingPool(element: any) {
     this.dialog.open(NewStakingPoolComponent, {
+      data: element,
       width: '600px',
       maxWidth: '100%',
       disableClose: true
