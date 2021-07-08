@@ -6,6 +6,7 @@ import { from } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
 import { utils } from 'ethers';
+import { MatDialog } from '@angular/material/dialog';
 
 const {parseEther} = utils;
 
@@ -16,7 +17,8 @@ export class StakingPoolService {
 
   constructor(private iamService: IamService,
               private sbToastr: SwitchboardToastrService,
-              private loadingService: LoadingService) {
+              private loadingService: LoadingService,
+              private dialog: MatDialog) {
   }
 
   createStakingPool(org: string, revenue: number, period: number) {
@@ -39,6 +41,7 @@ export class StakingPoolService {
         finalize(() => this.loadingService.hide())
       ).subscribe(() => {
         this.sbToastr.success('You successfully created a staking pool');
+        this.dialog.closeAll();
     });
   }
 }

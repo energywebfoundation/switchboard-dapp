@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { StakingPoolService } from './staking-pool.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 @Component({
   selector: 'app-new-staking-pool',
   templateUrl: './new-staking-pool.component.html',
@@ -13,8 +14,8 @@ export class NewStakingPoolComponent implements OnInit {
     patrons: new FormControl(''),
     revenue: new FormControl('', [Validators.required, Validators.min(0), Validators.max(1000)]),
     range: new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
+      start: new FormControl('', [Validators.required]),
+      end: new FormControl('', [Validators.required])
     })
   });
 
@@ -26,14 +27,24 @@ export class NewStakingPoolComponent implements OnInit {
     console.log(this.data);
   }
 
+  getRangeControlError(control: string, error: string) {
+    return this.form.get('range').get(control).hasError(error);
+  }
+
   isFormInvalid() {
     return this.form.invalid;
   }
 
-  submit() {
+  getTimeInSeconds(): number {
+    const {start, end}: { start: Date, end: Date } = this.form.get('range').value;
+    return (end.getTime() - start.getTime()) / 1000;
+  }
 
-    console.log(this.form.value);
-    this.stakingPoolService.createStakingPool(this.data.namespace, this.form.get('revenue').value, 100);
+  submit() {
+    if (this.isFormInvalid()) {
+      return;
+    }
+    this.stakingPoolService.createStakingPool(this.data.namespace, this.form.get('revenue').value, this.getTimeInSeconds());
   }
 
 }
