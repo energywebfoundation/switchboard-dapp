@@ -29,7 +29,7 @@
                         </mat-icon>
                     </div>
                     <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                        <input matInput autocomplete="off" formControlName="revenue" type="number"
+                        <input matInput autocomplete="off" data-qa-id="revenue" formControlName="revenue" type="number"
                                placeholder="Percentage %"/>
                         <mat-error *ngIf="form.get('revenue').hasError('required')">This field is
                             <strong>required</strong></mat-error>
@@ -46,8 +46,8 @@
                         <div class="w-50">
                             <mat-form-field class="mt-2 mr-1" appearance="outline" floatPlaceholder="never">
                                 <mat-date-range-input formGroupName="range" [rangePicker]="picker">
-                                    <input matStartDate formControlName="start" placeholder="Start date">
-                                    <input matEndDate formControlName="end" placeholder="End date">
+                                    <input matStartDate formControlName="start" data-qa-id="start" placeholder="Start date">
+                                    <input matEndDate formControlName="end" data-qa-id="end" placeholder="End date">
                                 </mat-date-range-input>
                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-date-range-picker #picker></mat-date-range-picker>
@@ -73,7 +73,7 @@
     </div>
 </div>
 <div mat-dialog-actions class="d-flex justify-content-end">
-    <button mat-raised-button [disabled]="isFormInvalid()" class="btn btn-primary w-100" type="submit"
+    <button mat-raised-button [disabled]="isFormInvalid()" data-qa-id="submit" class="btn btn-primary w-100" type="submit"
             (click)="submit()">Submit
     </button>
 </div>

@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { StakingPoolService } from './staking-pool.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-new-staking-pool',
@@ -10,17 +10,18 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class NewStakingPoolComponent {
 
-  form = new FormGroup({
-    patrons: new FormControl(''),
-    revenue: new FormControl('', [Validators.required, Validators.min(0), Validators.max(1000)]),
-    range: new FormGroup({
-      start: new FormControl('', [Validators.required]),
-      end: new FormControl('', [Validators.required])
+  form = this.fb.group({
+    patrons: '',
+    revenue: ['', [Validators.required, Validators.min(0), Validators.max(1000)]],
+    range: this.fb.group({
+      start: ['', [Validators.required]],
+      end: ['', [Validators.required]]
     })
   });
 
   constructor(private stakingPoolService: StakingPoolService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              private fb: FormBuilder,
+              @Inject(MAT_DIALOG_DATA) public data: { namespace }) {
   }
 
   getRangeControlError(control: string, error: string) {
@@ -31,16 +32,16 @@ export class NewStakingPoolComponent {
     return this.form.invalid;
   }
 
-  getTimeInSeconds(): number {
-    const {start, end}: { start: Date, end: Date } = this.form.get('range').value;
-    return (end.getTime() - start.getTime()) / 1000;
-  }
-
   submit() {
     if (this.isFormInvalid()) {
       return;
     }
     this.stakingPoolService.createStakingPool(this.data.namespace, this.form.get('revenue').value, this.getTimeInSeconds());
+  }
+
+  private getTimeInSeconds(): number {
+    const {start, end}: { start: Date, end: Date } = this.form.get('range').value;
+    return (end.getTime() - start.getTime()) / 1000;
   }
 
 }
