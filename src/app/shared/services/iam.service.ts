@@ -51,7 +51,7 @@ export enum LoginType {
   providedIn: 'root'
 })
 export class IamService {
-  private _iam: IAM;
+  private _iam: IAM & IStakable;
   public accountAddress = undefined;
 
   private _throwTimeoutError = false;
@@ -87,9 +87,9 @@ export class IamService {
 
     // Initialize Data
     if (configService.safeInfo) {
-      this._iam = new SafeIam(safeAppSdk, connectionOptions);
+      this._iam = new (Stakable(SafeIam))(safeAppSdk, connectionOptions);
     } else {
-      this._iam = new IAM(connectionOptions);
+      this._iam = new (Stakable(IAM))(connectionOptions);
     }
   }
 
@@ -126,6 +126,7 @@ export class IamService {
           retVal = true;
         }
       } catch (e) {
+        debugger;
         console.error(e);
         this.toastr.error('Could not login, please try again later');
       }
@@ -193,7 +194,7 @@ export class IamService {
   /**
    * Retrieve IAM Object Reference
    */
-  get iam(): IAM {
+  get iam(): IAM & IStakable{
     return this._iam;
   }
 
