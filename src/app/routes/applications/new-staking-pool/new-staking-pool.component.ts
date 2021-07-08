@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { StakingPoolService } from './staking-pool.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -8,7 +8,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   templateUrl: './new-staking-pool.component.html',
   styleUrls: ['./new-staking-pool.component.scss']
 })
-export class NewStakingPoolComponent implements OnInit {
+export class NewStakingPoolComponent {
 
   form = new FormGroup({
     patrons: new FormControl(''),
@@ -21,10 +21,6 @@ export class NewStakingPoolComponent implements OnInit {
 
   constructor(private stakingPoolService: StakingPoolService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
-  }
-
-  ngOnInit(): void {
-    console.log(this.data);
   }
 
   getRangeControlError(control: string, error: string) {
