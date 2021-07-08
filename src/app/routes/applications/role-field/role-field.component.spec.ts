@@ -1,48 +1,43 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { FormBuilder, Validators } from '@angular/forms';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { NgMatSearchBarModule } from 'ng-mat-search-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { RoleFieldComponent } from './role-field.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
-fdescribe('RoleFieldComponent', () => {
+describe('RoleFieldComponent', () => {
   let component: RoleFieldComponent;
   let fixture: ComponentFixture<RoleFieldComponent>;
   let hostDebug: DebugElement;
   let host: HTMLElement;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ RoleFieldComponent ],
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [RoleFieldComponent],
       imports: [
         FormsModule,
         ReactiveFormsModule,
-        MatCardModule,
         MatIconModule,
-        NgMatSearchBarModule,
         MatFormFieldModule,
         MatSelectModule,
         MatDialogModule,
-        MatDividerModule,
         MatInputModule,
         MatButtonModule,
         NoopAnimationsModule,
+        MatCheckboxModule
       ]
     })
-    .compileComponents();
-  });
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleFieldComponent);
@@ -98,9 +93,9 @@ fdescribe('RoleFieldComponent', () => {
       const { showField } = getSelectors(hostDebug);
       showField.nativeElement.click();
       fixture.detectChanges();
-      
+
       const { addField } = getSelectors(hostDebug);
-      
+
       expect(addField.nativeElement.disabled).toBeTruthy();
     });
 
@@ -126,11 +121,11 @@ fdescribe('RoleFieldComponent', () => {
       // fixture.detectChanges();
 
       console.log(component.fieldsForm.getRawValue());
-      
+
       expect(false).toBeFalsy();
     });
 
-  })
+  });
 
 });
 const getSelectors = (hostDebug: DebugElement) => {
