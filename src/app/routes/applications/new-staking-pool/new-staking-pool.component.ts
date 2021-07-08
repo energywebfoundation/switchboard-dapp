@@ -11,7 +11,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 export class NewStakingPoolComponent {
 
   form = this.fb.group({
-    patrons: '',
+    patrons: 'Yes',
     revenue: ['', [Validators.required, Validators.min(0), Validators.max(1000)]],
     range: this.fb.group({
       start: ['', [Validators.required]],
