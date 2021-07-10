@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 describe('StakingPoolService', () => {
   let service: StakingPoolService;
-  const iamSpy = jasmine.createSpyObj('iam', ['launchStakingPool']);
+  const iamSpy = jasmine.createSpyObj('iam', ['launchStakingPool', 'getENSTypesByOwner']);
   const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
   const toastrSpy = jasmine.createSpyObj('ToastrService', ['success', 'error']);
   const matDialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll']);
@@ -33,7 +33,7 @@ describe('StakingPoolService', () => {
 
   it('should check if will show and hide loader', fakeAsync(() => {
     iamSpy.launchStakingPool.and.returnValue(Promise.resolve());
-    service.createStakingPool('', 0, 0);
+    service.createStakingPool({} as any);
     tick(1);
     expect(loadingServiceSpy.show).toHaveBeenCalled();
     expect(loadingServiceSpy.hide).toHaveBeenCalled();
@@ -41,10 +41,30 @@ describe('StakingPoolService', () => {
 
   it('should close dialog and display message when launchStakingPool do not return an error', fakeAsync(() => {
     iamSpy.launchStakingPool.and.returnValue(Promise.resolve());
-    service.createStakingPool('', 0, 0);
+    service.createStakingPool({} as any);
     tick(1);
     expect(matDialogSpy.closeAll).toHaveBeenCalled();
     expect(toastrSpy.success).toHaveBeenCalled();
   }));
+
+  it('should check if loader is shown for getting list', (done) => {
+    iamSpy.getENSTypesByOwner.and.returnValue(Promise.resolve([]));
+    service.getListOfOrganizationRoles('org').subscribe(() => {
+      expect(loadingServiceSpy.show).toHaveBeenCalled();
+      expect(loadingServiceSpy.hide).toHaveBeenCalled();
+      done();
+    });
+
+  });
+
+  it('should catch error when getting list', (done) => {
+    iamSpy.getENSTypesByOwner.and.returnValue(Promise.reject());
+
+    service.getListOfOrganizationRoles('org').subscribe(() => {
+    }, () => {
+      expect(toastrSpy.error).toHaveBeenCalled();
+      done();
+    });
+  })
 
 });

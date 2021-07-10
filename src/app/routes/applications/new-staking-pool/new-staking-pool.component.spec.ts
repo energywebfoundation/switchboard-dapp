@@ -11,12 +11,15 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { of } from 'rxjs';
+import { MatSelectModule } from '@angular/material/select';
+import { utils } from 'ethers';
 
 describe('NewStakingPoolComponent', () => {
   let component: NewStakingPoolComponent;
   let fixture: ComponentFixture<NewStakingPoolComponent>;
   let hostDebug: DebugElement;
-  const stakingPoolServiceStub = jasmine.createSpyObj('StakingPoolService', ['createStakingPool']);
+  const stakingPoolServiceStub = jasmine.createSpyObj('StakingPoolService', ['createStakingPool', 'getListOfOrganizationRoles']);
   const namespace = 'test';
 
   const dispatchEvent = (el) => {
@@ -34,7 +37,8 @@ describe('NewStakingPoolComponent', () => {
         MatNativeDateModule,
         NoopAnimationsModule,
         MatInputModule,
-        MatRadioModule
+        MatRadioModule,
+        MatSelectModule
       ],
       providers: [
         {provide: MAT_DIALOG_DATA, useValue: {namespace}},
@@ -49,11 +53,11 @@ describe('NewStakingPoolComponent', () => {
     fixture = TestBed.createComponent(NewStakingPoolComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
+    stakingPoolServiceStub.getListOfOrganizationRoles.and.returnValue(of([{name: 'test'}]));
     fixture.detectChanges();
   });
 
   it('should create', () => {
-
     expect(component).toBeTruthy();
   });
 
@@ -65,7 +69,7 @@ describe('NewStakingPoolComponent', () => {
   });
 
   it('should call createStakingPool method when clicking on submit when form is valid', () => {
-    const {revenue, start, end, submit} = selectors(hostDebug);
+    const {revenue, start, end, principal, getElement, patronRoles, submit} = selectors(hostDebug);
     const revenueAmount = 5;
     console.log(component.form);
     revenue.value = revenueAmount;
@@ -76,13 +80,22 @@ describe('NewStakingPoolComponent', () => {
 
     end.value = '7/15/2021';
     dispatchEvent(end);
+
+    principal.value = 105;
+    dispatchEvent(principal);
+
     fixture.detectChanges();
 
     expect(submit.disabled).toBeFalsy();
 
     submit.click();
 
-    expect(stakingPoolServiceStub.createStakingPool).toHaveBeenCalledWith(namespace, revenueAmount, 604800);
+    expect(stakingPoolServiceStub.createStakingPool).toHaveBeenCalledWith({
+      org: namespace, minStakingPeriod: 604800,
+      patronRewardPortion: revenueAmount,
+      patronRoles: [],
+      principal: 105
+    });
   });
 });
 
@@ -94,6 +107,8 @@ const selectors = (hostDebug: DebugElement) => {
     revenue: getElement('revenue').nativeElement,
     start: getElement('start').nativeElement,
     end: getElement('end').nativeElement,
+    patronRoles: getElement('patronRoles').nativeElement,
+    principal: getElement('principal').nativeElement,
     getElement
   };
 };
