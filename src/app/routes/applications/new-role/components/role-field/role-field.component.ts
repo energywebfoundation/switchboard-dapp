@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, ChangeDetectorRef, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 
 const FIELD_TYPES = [
   'text', 'number', 'date', 'boolean'

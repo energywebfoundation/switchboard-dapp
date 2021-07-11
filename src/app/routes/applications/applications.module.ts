@@ -24,7 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
-import { RoleFieldComponent } from './role-field/role-field.component';
+import { RoleFieldComponent } from './new-role/components/role-field/role-field.component';
 
 const routes: Routes = [
   { path: '', component: ApplicationsComponent }
