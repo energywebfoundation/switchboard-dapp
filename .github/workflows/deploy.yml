@@ -47,11 +47,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ca-central-1
 
-      - name: Set Sentry release
-        run: |
-          export SENTRY_RELEASE=$(echo ${GITHUB_SHA} | cut -c1-8)
-          echo $SENTRY_RELEASE
-
       - name: Install npm packages
         run: |
           npm install
@@ -71,11 +66,11 @@ jobs:
           echo "Prod Env Disabled"
           npm run build
 
-      # - name: Run test
-      # - uses: actions/checkout@v2
-      #   with:
-      #     ref: develop
-      #   run: npm run test:headless
+      - name: Run test
+      - uses: actions/checkout@v2
+        with:
+          ref: DOI-887_*
+        run: npm run test:headless
 
       - name: Deploy on develop branch
         if: github.ref == 'refs/heads/DOI-887_*'
@@ -96,7 +91,4 @@ jobs:
         if: github.ref != 'refs/heads/master'
         with:
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
-        if: github.ref == 'refs/heads/master'
-        with:
-          environment: ${{ secrets.SENTRY_PROD_ENV }}
 
