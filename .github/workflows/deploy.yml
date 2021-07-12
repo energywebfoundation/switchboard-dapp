@@ -29,13 +29,15 @@ jobs:
           node-version: '10.22.0'
           registry-url: https://registry.npmjs.org/
 
-      - name: Generate build number
-        id: buildnumber
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{ secrets.github_token }}
-      - name: Print new build number
-        run: echo "Build number is $BUILD_NUMBER"
+      - name: Get branch
+        uses: tj-actions/branch-names@v2.1
+        id: branch-name
+
+      - name: Get commit hash
+        if: github.event_name == 'push'
+        run: |
+          echo ${{ steps.branch-name.outputs.current_branch }}
+          echo ${GITHUB_SHA} | cut -c1-8
 
       - name: Setup AWS Host machine
         uses: aws-actions/configure-aws-credentials@v1
@@ -57,6 +59,7 @@ jobs:
         run: |
           cp src/environments/environment.prod.ts src/environments/environment.ts
           echo "Prod Env Enabled"
+          npm install
           npm run build-prod
 
       - name: Prepare for non-master branch
@@ -64,6 +67,7 @@ jobs:
         run: |
           cp src/environments/environment.dev.ts src/environments/environment.ts
           echo "Prod Env Disabled"
+          npm install
           npm run build
           npm run test:headless
 
