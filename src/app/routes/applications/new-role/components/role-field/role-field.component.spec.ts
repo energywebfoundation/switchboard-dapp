@@ -20,6 +20,11 @@ fdescribe('RoleFieldComponent', () => {
   let hostDebug: DebugElement;
   let host: HTMLElement;
 
+  const dispatchEvent = (el) => {
+    el.nativeElement.dispatchEvent(new Event('input'));
+    el.nativeElement.dispatchEvent(new Event('blur'));
+  };
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [RoleFieldComponent],
@@ -86,7 +91,8 @@ fdescribe('RoleFieldComponent', () => {
       const { showField } = getSelectors(hostDebug);
       showField.nativeElement.click();
       fixture.detectChanges();
-      expect(component.showAddFieldForm).toBeTruthy();
+
+      expect(component.showFieldsForm).toBeTruthy();
     });
 
     it('add button should be disabled', () => {
@@ -100,41 +106,75 @@ fdescribe('RoleFieldComponent', () => {
     });
 
     it('add button should be enabled when validation passes', () => {
-      const { showField } = getSelectors(hostDebug);
-      showField.nativeElement.click();
+      addFieldToRole();
+      
+      const { addField } = getSelectors(hostDebug);
+      expect(addField.nativeElement.disabled).toBeFalsy();
+    });
+
+    it('add button adds user selected values to list of fields and form hidden', () => {
+      addFieldToRole();
+      
+      let user: any;
+      component.updateDataSourceEvent.subscribe(value => user = value);
+
+      const { addField } = getSelectors(hostDebug);
+      addField.nativeElement.click();
       fixture.detectChanges();
-
-      const { fieldtype } = getSelectors(hostDebug);
-      fieldtype.nativeElement.click();
-      fixture.detectChanges();
-      console.log(1);
-
-      const { fieldTypeOption } = getSelectors(hostDebug);
-      fieldTypeOption.nativeElement.click();
-      fixture.detectChanges();
-      console.log(2);
-
-      const { fieldTypeOptionSelected } = getSelectors(hostDebug);
-      // component.fieldsForm.get('fieldType').setValue('text');
-      // fieldtype.nativeElement.value = 'text'; // undefined
-      console.log(fieldTypeOptionSelected.nativeElement.innerHTML)
-      // fixture.detectChanges();
-
-      console.log(component.fieldsForm.getRawValue());
-
-      expect(false).toBeFalsy();
+      
+      expect(user[0].fieldType).toBe('text');      
+      expect(user[0].label).toBe('Test');
+      expect(component.showFieldsForm).toBeFalsy();     
     });
 
   });
 
+  describe('edit field button', () => {
+
+    it('edit button should open form to edit field with correct selected values', () => {
+      addFieldToRole();
+      
+      const { addField } = getSelectors(hostDebug);
+      addField.nativeElement.click();
+      fixture.detectChanges();
+
+      const { editField } = getSelectors(hostDebug);
+      editField.nativeElement.click();
+      fixture.detectChanges();
+      
+      expect(component.showAddFieldForm).toBeTruthy();
+    });
+
+  })
+
+  function addFieldToRole() {
+    const { showField } = getSelectors(hostDebug);
+    showField.nativeElement.click();
+    fixture.detectChanges();
+
+    const { fieldtype } = getSelectors(hostDebug);
+    fieldtype.nativeElement.click();
+    fixture.detectChanges();
+
+    const { fieldTypeOption } = getSelectors(hostDebug);
+    const { fieldLabel } = getSelectors(hostDebug);
+    fieldTypeOption.nativeElement.click();
+    fieldLabel.nativeElement.value = 'Test';
+    dispatchEvent(fieldLabel);
+    fixture.detectChanges();
+  }
+
 });
+
 const getSelectors = (hostDebug: DebugElement) => {
   return {
     showField: hostDebug.query(By.css('[data-qa-id=show-field]')),
     addField: hostDebug.query(By.css('[data-qa-id="add-field"]')),
     fieldtype: hostDebug.query(By.css('.mat-select-trigger')),
+    fieldLabel: hostDebug.query(By.css('[data-qa-id="field-label"]')),
     fieldTypeOption: hostDebug.query(By.css('.mat-option')),
     fieldTypeOptionSelected: hostDebug.query(By.css('[data-qa-id=fieldType] .ng-star-inserted')),
+    editField: hostDebug.query(By.css('[data-qa-id="edit-field"]')),
   };
 };
 
