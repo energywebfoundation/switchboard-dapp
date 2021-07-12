@@ -33,9 +33,11 @@ jobs:
         id: buildnumber
         uses: einaregilsson/build-number@v3
         with:
-          token: ${{ github_token }}
+          token: ${{ secrets.github_token }}
+      - name: Print new build number
+        run: echo "Build number is $BUILD_NUMBER
 
-     - name: Configure AWS Credentials
+     - name: Setup AWS Host machine
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -43,8 +45,7 @@ jobs:
           aws-region: ca-central-1
 
       - name: Build Number
-        run: |
-          export SENTRY_RELEASE=$BUILD_NUMBER
+        run: export SENTRY_RELEASE=$BUILD_NUMBER
 
       - name: Install npm packages
         run: |
