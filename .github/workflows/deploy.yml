@@ -62,7 +62,7 @@ jobs:
       - name: Prepare for non-master branch
         if: github.ref != 'refs/heads/master'
         run: |
-          cp src/environments/environment.dev.ts src/environments/environment.ts
+          cp ${{ env.SB_APP_DIR }}/src/environments/environment.dev.ts ${{ env.SB_APP_DIR }}/src/environments/environment.ts
           echo "Prod Env Disabled"
           npm run build
           npm run test:headless
