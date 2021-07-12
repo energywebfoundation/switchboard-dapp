@@ -54,11 +54,6 @@ jobs:
           echo "Prod Env Disabled"
           npm run build
 
-      - name: Checkout develop branch
-        uses: actions/checkout@v2
-        with:
-          ref: develop
-
       - name: Run Test
         run: |
           npm install
