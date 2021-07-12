@@ -32,8 +32,8 @@ jobs:
       - name: Generate build number
         id: buildnumber
         uses: einaregilsson/build-number@v3
-          with:
-            token: ${{ github_token }}
+        with:
+          token: ${{ github_token }}
 
      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
