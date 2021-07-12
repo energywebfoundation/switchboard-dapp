@@ -69,7 +69,8 @@ jobs:
           echo "Prod Env Disabled"
           npm run build
 
-      - name: Run test
+      - name: Run test on develop branch
+        if: github.ref == 'refs/heads/develop'
         run: npm run test:headless
 
       - name: Deploy on develop branch
