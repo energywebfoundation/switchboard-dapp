@@ -34,6 +34,7 @@ jobs:
         id: branch-name
 
       - name: Get commit hash
+        id: commithash
         if: github.event_name == 'push'
         run: |
           echo ${{ steps.branch-name.outputs.current_branch }}
@@ -47,7 +48,7 @@ jobs:
           aws-region: ca-central-1
 
       - name: Set Sentry release
-        run: export SENTRY_RELEASE=($GITHUB_SHA | cut -c1-8)
+        run: export SENTRY_RELEASE=$(echo ${GITHUB_SHA} | cut -c1-8)
 
       - name: Install npm packages
         run: |
