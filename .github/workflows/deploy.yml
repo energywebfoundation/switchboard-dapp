@@ -72,7 +72,9 @@ jobs:
           ref: develop
 
       - name: Run Test
-        run: npm run test:headless
+        run: |
+          npm install
+          npm run test:headless
 
       - name: Deploy on develop branch
         if: github.ref == 'refs/heads/DOI-887_*'
