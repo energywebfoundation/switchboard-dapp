@@ -2,8 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches:
-      - 'DOI-887_*'
+    branches: [ 'develop', 'master' ]
 
 jobs:
   cancel-previous:
@@ -29,23 +28,12 @@ jobs:
           node-version: '10.22.0'
           registry-url: https://registry.npmjs.org/
 
-      - name: Get branch
-        uses: tj-actions/branch-names@v2.1
-        id: branch-name
-
-      - name: Get commit hash
-        id: commithash
-        if: github.event_name == 'push'
-        run: |
-          echo ${{ steps.branch-name.outputs.current_branch }}
-          echo $GITHUB_SHA | cut -c1-8
-
       - name: Setup AWS Host machine
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ca-central-1
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Install npm packages
         run: |
@@ -77,7 +65,7 @@ jobs:
           npm run test:headless
 
       - name: Deploy on develop branch
-        if: github.ref == 'refs/heads/DOI-887_*'
+        if: github.ref == 'refs/heads/develop'
         run: |
           rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/develop
 
