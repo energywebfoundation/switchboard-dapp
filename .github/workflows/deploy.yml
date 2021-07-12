@@ -66,10 +66,12 @@ jobs:
           echo "Prod Env Disabled"
           npm run build
 
-      - name: Run test
+      - name: Checkout develop branch
         uses: actions/checkout@v2
         with:
           ref: DOI-887_*
+
+      - name: Run Test
         run: npm run test:headless
 
       - name: Deploy on develop branch
