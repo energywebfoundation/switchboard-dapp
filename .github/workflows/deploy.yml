@@ -67,7 +67,7 @@ jobs:
           npm run build
 
       - name: Run test
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
         with:
           ref: DOI-887_*
         run: npm run test:headless
