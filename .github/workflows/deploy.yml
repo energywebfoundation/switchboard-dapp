@@ -69,7 +69,7 @@ jobs:
       - name: Checkout develop branch
         uses: actions/checkout@v2
         with:
-          ref: DOI-887_*
+          ref: develop
 
       - name: Run Test
         run: npm run test:headless
