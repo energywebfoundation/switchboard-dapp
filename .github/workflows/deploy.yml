@@ -47,7 +47,7 @@ jobs:
           aws-region: ca-central-1
 
       - name: Set Sentry release
-        run: export SENTRY_RELEASE=(${GITHUB_SHA | cut -c1-8)
+        run: export SENTRY_RELEASE=($GITHUB_SHA | cut -c1-8)
 
       - name: Install npm packages
         run: |
