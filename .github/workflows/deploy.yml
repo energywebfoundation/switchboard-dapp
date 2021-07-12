@@ -71,8 +71,14 @@ jobs:
           echo "Prod Env Disabled"
           npm run build
 
+      # - name: Run test
+      # - uses: actions/checkout@v2
+      #   with:
+      #     ref: develop
+      #   run: npm run test:headless
+
       - name: Deploy on develop branch
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/DOI-887_*'
         run: |
           rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/develop
 
@@ -87,5 +93,10 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        if: github.ref != 'refs/heads/master'
         with:
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
+        if: github.ref == 'refs/heads/master'
+        with:
+          environment: ${{ secrets.SENTRY_PROD_ENV }}
+
