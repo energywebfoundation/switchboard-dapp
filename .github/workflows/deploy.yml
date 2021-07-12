@@ -37,7 +37,7 @@ jobs:
         if: github.event_name == 'push'
         run: |
           echo ${{ steps.branch-name.outputs.current_branch }}
-          echo ${GITHUB_SHA} | cut -c1-8
+          echo $GITHUB_SHA | cut -c1-8
 
       - name: Setup AWS Host machine
         uses: aws-actions/configure-aws-credentials@v1
@@ -47,7 +47,7 @@ jobs:
           aws-region: ca-central-1
 
       - name: Build Number
-        run: export SENTRY_RELEASE=$BUILD_NUMBER
+        run: export SENTRY_RELEASE=${GITHUB_SHA | cut -c1-8}
 
       - name: Install npm packages
         run: |
@@ -59,7 +59,6 @@ jobs:
         run: |
           cp src/environments/environment.prod.ts src/environments/environment.ts
           echo "Prod Env Enabled"
-          npm install
           npm run build-prod
 
       - name: Prepare for non-master branch
@@ -67,9 +66,10 @@ jobs:
         run: |
           cp src/environments/environment.dev.ts src/environments/environment.ts
           echo "Prod Env Disabled"
-          npm install
           npm run build
-          npm run test:headless
+
+      - name: Run test
+        run: npm run test:headless
 
       - name: Deploy on develop branch
         if: github.ref == 'refs/heads/develop'
