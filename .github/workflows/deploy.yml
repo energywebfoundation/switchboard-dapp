@@ -3,6 +3,8 @@ name: Deploy
 on:
   push:
     branches: [ 'develop', 'master' ]
+  pull_requests:
+    branches: [ 'develop', 'master' ]
 
 jobs:
   cancel-previous:
@@ -69,7 +71,7 @@ jobs:
         run: |
           rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/master
 
-      - name: Sentry Release
+      - name: Sentry Release Staging
         uses: getsentry/action-release@v1.0.0
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -78,4 +80,14 @@ jobs:
         if: github.ref != 'refs/heads/master'
         with:
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
+
+      - name: Sentry Release Prod
+        uses: getsentry/action-release@v1.0.0
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        if: github.ref == 'refs/heads/master'
+        with:
+          environment: ${{ secrets.SENTRY_PROD_ENV }}
 
