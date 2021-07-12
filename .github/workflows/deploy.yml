@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - 'master'
+      - 'DOI-887_*'
 
 jobs:
   cancel-previous:
