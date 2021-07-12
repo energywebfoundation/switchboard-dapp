@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stake-amount-btn {
+  color: #32DCDC;
+  border: 1px solid #32DCDC;
+  padding: 8px 24px;
+  text-align: center;
+  border-radius: 16px;
+}
+
+.selected {
+  color: #FFFFFF;
+  background: #32DCDC;
+}

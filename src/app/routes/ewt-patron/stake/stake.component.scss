@@ -1,0 +1,59 @@
+:host {
+  display: block;
+  width: 100%;
+  padding: 32px;
+  border-radius: 32px;
+  background: linear-gradient(320.92deg, rgba(37, 232, 232, 0.1) -1.22%, rgba(98, 104, 249, 0.1) 47.93%, rgba(155, 84, 255, 0.1) 95.01%), rgba(0, 0, 0, 0.02);
+}
+
+.amount-input {
+  color: #FFFFFF;
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  &[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+  }
+}
+
+.slide-toggle {
+
+  &.mat-slide-toggle.mat-checked ::ng-deep {
+    .mat-slide-toggle-thumb {
+      background-color: #FFFFFF;
+    }
+
+    .mat-slide-toggle-bar {
+      background-color: #A566FF;
+    }
+
+  }
+
+  ::ng-deep {
+    .mat-slide-toggle-bar {
+      background: #A6A5AC;
+    }
+  }
+}
+
+.stake-btn {
+  font-family: Rajdhani, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px;
+  border-radius: 16px;
+  background-color: #A566FF;
+  padding: 0 16px !important;
+}
+
+.color-grey {
+  color: #A6A5AC;
+}
+
+.tc {
+  color: #32DCDC;
+}
+

@@ -1,0 +1,69 @@
+<div class="d-flex flex-lg-row flex-column">
+    <div class="col-12 col-lg-4 color-white">
+        <h2>
+            Stake
+        </h2>
+        <small class="text-uppercase">
+            Your account balance
+        </small>
+        <h2>
+            {{tokenAmount}} <small>EWT</small>
+        </h2>
+    </div>
+    <div class="col-12 col-lg-8">
+        <mat-form-field class="mt-2" appearance="outline">
+            <mat-label class="ml-3 pl-1">EWT Stake Amount</mat-label>
+            <input matInput class="amount-input" [formControl]="stakeAmount" autocomplete="off" type="number" [max]="tokenAmount" maxlength="256"
+                   (focus)="inputFocused = true"/>
+            <div matSuffix class="d-flex" *ngIf="inputFocused">
+                <button mat-icon-button class="bg-transparent" (click)="clear($event)">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </mat-form-field>
+        <app-percent-buttons (percent)="calcStakeAmount($event)">
+        </app-percent-buttons>
+        <div class="mt-2 d-flex justify-content-between color-grey">
+            <div class="info">
+                Reward payment interval
+            </div>
+            <div class="color-white">
+                Daily
+            </div>
+        </div>
+        <div class="mt-1 d-flex justify-content-between color-grey">
+            <div class="info">
+                Estimated daily reward
+            </div>
+            <div class="color-white">
+                0.03%
+            </div>
+        </div>
+        <div class="mt-4 color-grey">
+            By clicking "STAKE", you agree to the <span class="tc">Terms & Conditions</span>.
+        </div>
+        <div class="mt-2 d-flex justify-content-between align-items-center color-white">
+            <mat-slide-toggle [formControl]="compound" class="slide-toggle">Compound</mat-slide-toggle>
+            <button mat-raised-button class="stake-btn color-white text-uppercase">Stake</button>
+        </div>
+    </div>
+
+</div>
+<ng-container *ngIf="compound.value">
+    <app-divider></app-divider>
+
+    <div class="mt-3 d-flex justify-content-between align-items-center color-white">
+        <div class="col-6">
+            <small class="text-uppercase">
+                Currently staking
+            </small>
+            <h2>
+                {{stakeAmount.value || 0}} <small>EWT</small>
+            </h2>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+            <button mat-raised-button disabled class="stake-btn color-white text-uppercase">Withdraw</button>
+        </div>
+    </div>
+
+</ng-container>
