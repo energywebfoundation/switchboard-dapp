@@ -46,8 +46,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ca-central-1
 
-      - name: Build Number
-        run: export SENTRY_RELEASE=${GITHUB_SHA | cut -c1-8}
+      - name: Set Sentry release
+        run: export SENTRY_RELEASE=(${GITHUB_SHA | cut -c1-8)
 
       - name: Install npm packages
         run: |
