@@ -133,16 +133,24 @@ fdescribe('RoleFieldComponent', () => {
 
     it('edit button should open form to edit field with correct selected values', () => {
       addFieldToRole();
+      editFieldAdded();
       
-      const { addField } = getSelectors(hostDebug);
-      addField.nativeElement.click();
-      fixture.detectChanges();
+      const fieldsValue = component.fieldsForm.getRawValue();
 
-      const { editField } = getSelectors(hostDebug);
-      editField.nativeElement.click();
-      fixture.detectChanges();
-      
       expect(component.showAddFieldForm).toBeTruthy();
+      expect(fieldsValue.fieldType).toBe('text');
+      expect(fieldsValue.label).toBe('Test');
+    });
+
+    it('update button should replace old data and close form', () => {
+      addFieldToRole();
+      editFieldAdded();
+      
+      const fieldsValue = component.fieldsForm.getRawValue();
+
+      expect(component.showAddFieldForm).toBeTruthy();
+      expect(fieldsValue.fieldType).toBe('text');
+      expect(fieldsValue.label).toBe('Test');
     });
 
   })
@@ -164,12 +172,29 @@ fdescribe('RoleFieldComponent', () => {
     fixture.detectChanges();
   }
 
+  function editFieldAdded() {
+
+    component.updateDataSourceEvent.subscribe(value => {
+      component.dataSource.data = [...value];
+      fixture.detectChanges();
+    });
+
+    const { addField } = getSelectors(hostDebug);
+    addField.nativeElement.click();
+    fixture.detectChanges();
+
+    const { editField } = getSelectors(hostDebug);
+    editField.nativeElement.click();
+    fixture.detectChanges();
+  }
+
 });
 
 const getSelectors = (hostDebug: DebugElement) => {
   return {
     showField: hostDebug.query(By.css('[data-qa-id=show-field]')),
     addField: hostDebug.query(By.css('[data-qa-id="add-field"]')),
+    fieldtypeSelect: hostDebug.query(By.css('[data-qa-id="field-type"]')),
     fieldtype: hostDebug.query(By.css('.mat-select-trigger')),
     fieldLabel: hostDebug.query(By.css('[data-qa-id="field-label"]')),
     fieldTypeOption: hostDebug.query(By.css('.mat-option')),
