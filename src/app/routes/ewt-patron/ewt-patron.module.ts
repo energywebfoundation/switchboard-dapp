@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EwtPatronComponent } from './ewt-patron/ewt-patron.component';
-import { RoutesModule } from '../routes.module';
 import { RouterModule } from '@angular/router';
-import { AssetsComponent } from '../assets/assets.component';
 import { StakeComponent } from './stake/stake.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,7 +18,15 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
-  declarations: [EwtPatronComponent, StakeComponent, PercentButtonsComponent, DividerComponent, StakeSuccessComponent, WithdrawComponent, ClaimRewardComponent],
+  declarations: [
+    EwtPatronComponent,
+    StakeComponent,
+    PercentButtonsComponent,
+    DividerComponent,
+    StakeSuccessComponent,
+    WithdrawComponent,
+    ClaimRewardComponent
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild([{path: '', component: EwtPatronComponent}]),
