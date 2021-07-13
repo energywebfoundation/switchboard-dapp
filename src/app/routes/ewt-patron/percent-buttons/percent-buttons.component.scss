@@ -9,6 +9,22 @@
   padding: 8px 24px;
   text-align: center;
   border-radius: 16px;
+
+  @media screen and (max-width: 800px) {
+    padding: 8px 5px;
+  }
+}
+
+.btn-margin {
+  margin: 0 0.5rem;
+
+  &:first-of-type {
+    margin-left: 0;
+  }
+
+  &:last-of-type {
+    margin-right: 0;
+  }
 }
 
 .selected {

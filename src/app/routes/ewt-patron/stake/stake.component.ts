@@ -35,7 +35,7 @@ export class StakeComponent implements OnInit {
 
   stake() {
     this.dialog.open(StakeSuccessComponent, {
-      width: '600px',
+      width: '400px',
       maxWidth: '100%',
       disableClose: true
     });
@@ -43,7 +43,7 @@ export class StakeComponent implements OnInit {
 
   withdraw() {
     this.dialog.open(WithdrawComponent, {
-      width: '600px',
+      width: '400px',
       maxWidth: '100%',
       disableClose: true
     });
@@ -51,7 +51,7 @@ export class StakeComponent implements OnInit {
 
   claimReward() {
     this.dialog.open(ClaimRewardComponent, {
-      width: '600px',
+      width: '400px',
       maxWidth: '100%',
       disableClose: true
     });

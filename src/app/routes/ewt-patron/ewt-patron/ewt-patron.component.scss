@@ -20,6 +20,7 @@
 }
 
 h2 {
+    font-family: Rajdhani, sans-serif;
     font-size: 46px !important;
     font-weight: 600 !important;
 
@@ -30,16 +31,19 @@ h2 {
 }
 
 h3 {
+    font-family: Rajdhani, sans-serif;
     font-weight: 600 !important;
     letter-spacing: 0.25px !important;
     font-size: 34px !important;
 
     .staking-currency {
         font-size: 16px !important;
+        color: #A6A5AC;
     }
 }
 
 h5 {
+    font-family: Rajdhani, sans-serif;
     letter-spacing: 1.25px !important;
     font-weight: 700 !important;
 } 
@@ -54,21 +58,39 @@ a {
     letter-spacing: 1.25px;
 }
 
+::ng-deep {
+    .mat-progress-bar {
+        height: 6px !important;
+    }
+    
+    .mat-progress-bar-fill::after {
+        background: linear-gradient(272.06deg, #25E8E8 0.21%, #6268F9 49.1%, #9B54FF 98.25%);
+    }
+
+    .mat-progress-bar .mat-progress-bar-element, .mat-progress-bar .mat-progress-bar-fill::after {
+        border-radius: 100px;
+    }
+
+    .mat-progress-bar-buffer {
+        background-color: #000000;
+        border-radius: 100px;
+    }
+}
+
 .staking-widget-xs-label {
-    font-family: Roboto;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
 }
 
 .staking-widget-sm-label {
-    font-family: Roboto;
-    font-weight: 600;
-    font-size: 10px;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.25px;
 }
 
 .staking-widget-xl-label {
-    font-family: Roboto;
+    font-family: Rajdhani, sans-serif;
     font-size: 24px;
 }
 
@@ -141,7 +163,7 @@ a {
 }
 
 .widget-inner {
-    max-width: 226px;
+    max-width: 100%;
     
     @media screen and (max-width: 800px) {
         width: 100%;

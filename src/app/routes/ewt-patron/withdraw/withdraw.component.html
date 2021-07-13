@@ -1,1 +1,20 @@
-<p>withdraw works!</p>
+<div class="d-flex justify-content-center align-items-center flex-column stake-success-container">
+    <h3 class="mt-3 mb-4">Withdraw?</h3>
+    <p class="text-center mt-1">EWT will be transfered to your account balance.</p>
+
+    <mat-form-field class="staking-textfield w-100 mt-3" appearance="outline">
+        <mat-label class="ml-3 pl-1">EWT Withdraw Amount</mat-label>
+        <input matInput class="amount-input" (focus)="inputFocused = true" />
+        <div matSuffix class="d-flex">
+            <button mat-icon-button class="bg-transparent" (click)="clear($event)">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </mat-form-field>
+
+    <app-divider></app-divider>
+    <div class="d-flex justify-content-center mt-3">
+        <button mat-raised-button class="stake-secondary-btn color-white text-uppercase mr-4">Close</button>
+        <button mat-raised-button class="stake-btn color-white text-uppercase">Withdraw</button>
+    </div>
+</div>

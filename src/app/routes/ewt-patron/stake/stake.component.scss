@@ -1,10 +1,116 @@
 :host {
   display: block;
   width: 100%;
-  padding: 32px;
-  border-radius: 32px;
-  background: linear-gradient(320.92deg, rgba(37, 232, 232, 0.1) -1.22%, rgba(98, 104, 249, 0.1) 47.93%, rgba(155, 84, 255, 0.1) 95.01%), rgba(0, 0, 0, 0.02);
 }
+
+.staking-widget {
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: 32px;
+  background: linear-gradient(320.92deg, rgba(37, 232, 232, 0.1) -1.22%, rgba(98, 104, 249, 0.1) 47.93%, rgba(155, 84, 255, 0.1) 95.01%);
+  background-clip: padding-box;
+  padding: 10px;
+  backdrop-filter: blur(4px);
+
+  &::before {
+      content:"";
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      border-radius: 32px; 
+      padding: 1px; 
+      background: linear-gradient(314.24deg, #25E8E8 1.72%, rgba(83, 134, 245, 0.16) 33.86%, rgba(98, 104, 249, 0.16) 62.17%, #9B54FF 97.07%);
+      mask: 
+          linear-gradient(#fff 0 0) content-box, 
+          linear-gradient(#fff 0 0);
+      -webkit-mask: 
+          linear-gradient(#fff 0 0) content-box, 
+          linear-gradient(#fff 0 0);
+      mask-composite: exclude;     
+      -webkit-mask-composite: destination-out; 
+  }   
+}
+
+h2 {
+  font-size: 46px !important;
+  font-weight: 600 !important;
+
+  @media screen and (max-width: 800px) {
+      font-size: 38px !important;
+      margin-top: 8px;
+  }
+}
+
+h3 {
+  font-weight: 600 !important;
+  letter-spacing: 0.25px !important;
+  font-size: 34px !important;
+
+  .staking-currency {
+      font-size: 16px !important;
+      color: #A6A5AC;
+  }
+}
+
+h5 {
+  letter-spacing: 1.25px !important;
+  font-weight: 700 !important;
+} 
+
+.staking-widget-xs-label {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+  ::ng-deep {
+    .staking-textfield {   
+      &.mat-form-field-appearance-outline .mat-form-field-outline {
+        background: #231F32 !important;
+        color: transparent;
+        border-radius: 16px;
+      }
+    }
+    .staking-textfield .mat-form-field-label-wrapper {
+      left: -5px;
+    }
+
+    .staking-textfield .mat-form-field-appearance-outline .mat-form-field-infix {
+      padding: 0.9em 0.3em !important;
+    }
+
+    .staking-textfield.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+      transform: translateY(-0.65em) scale(0.75) !important;
+    }
+
+    .staking-textfield.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+      border-top-color: initial;
+    }
+
+    .staking-textfield .mat-input-element {
+     top: 1.3px !important;
+    }
+
+    .staking-textfield.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+      color: #33CBCB;
+    }
+
+    .staking-textfield.mat-form-field-appearance-outline .mat-form-field-label {
+      top: 1.59em;
+    }
+
+    .staking-textfield.mat-form-field-appearance-outline .mat-form-field-outline-start {
+      border-radius: 16px 0 0 16px;
+    }
+
+    .staking-textfield.mat-form-field-appearance-outline .mat-form-field-outline-end {
+      border-radius: 0 16px 16px 0;
+    }
+}
+
+
 
 .amount-input {
   color: #FFFFFF;
@@ -38,6 +144,11 @@
   }
 }
 
+.payment-details {
+  font-family: Rajdhani, sans-serif;
+  font-weight: 600;
+}
+
 .stake-btn {
   font-family: Rajdhani, sans-serif;
   font-style: normal;
@@ -45,8 +156,20 @@
   font-size: 14px;
   line-height: 16px;
   border-radius: 16px;
+  letter-spacing: 1.25px;
   background-color: #A566FF;
-  padding: 0 16px !important;
+  padding: 0 0 !important;
+  height: 40px;
+  width: 115px;
+
+  &.mat-raised-button[disabled] {
+    color: #AF76FF !important;
+    background-color: rgb(165 102 255 / 20%) !important;
+  }
+
+  &:hover {
+      background-color: #ad74ff;   
+  }
 }
 
 .color-grey {

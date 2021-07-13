@@ -1,81 +1,63 @@
-<div class="d-flex flex-lg-row flex-column">
-    <div class="col-12 col-lg-4 color-white">
-        <h2>
-            Stake
-        </h2>
-        <small class="text-uppercase">
-            Your account balance
-        </small>
-        <h2>
-            {{tokenAmount}} <small>EWT</small>
-        </h2>
-    </div>
-    <div class="col-12 col-lg-8">
-        <mat-form-field class="mt-2" appearance="outline">
-            <mat-label class="ml-3 pl-1">EWT Stake Amount</mat-label>
-            <input matInput class="amount-input" [formControl]="stakeAmount" autocomplete="off" type="number" [max]="tokenAmount" maxlength="256"
-                   (focus)="inputFocused = true"/>
-            <div matSuffix class="d-flex" *ngIf="inputFocused">
-                <button mat-icon-button class="bg-transparent" (click)="clear($event)">
-                    <mat-icon>close</mat-icon>
-                </button>
-            </div>
-        </mat-form-field>
-        <app-percent-buttons (percent)="calcStakeAmount($event)">
-        </app-percent-buttons>
-        <div class="mt-2 d-flex justify-content-between color-grey">
-            <div class="info">
-                Reward payment interval
-            </div>
-            <div class="color-white">
-                Daily
-            </div>
+<div class="d-flex flex-column staking-widget py-3 p-5">
+    <div class="row">
+        <div class="col-12 col-lg-5 color-white">
+            <h3>Stake</h3>
+            <div class="staking-widget-xs-label color-white mb-2">Your account balance</div>
+            <h3 class="mb-0 color-white">{{tokenAmount}}<span class="staking-currency ml-2">EWT</span></h3>
         </div>
-        <div class="mt-1 d-flex justify-content-between color-grey">
-            <div class="info">
-                Estimated daily reward
+        <div class="col-12 col-lg-7 pt-3 pt-lg-0">
+            <mat-form-field class="staking-textfield" appearance="outline">
+                <mat-label class="ml-3 pl-1">EWT Stake Amount</mat-label>
+                <input matInput class="amount-input" [formControl]="stakeAmount" autocomplete="off" type="number"
+                    [max]="tokenAmount" maxlength="256" (focus)="inputFocused = true" />
+                <div matSuffix class="d-flex" *ngIf="inputFocused">
+                    <button mat-icon-button class="bg-transparent" (click)="clear($event)">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </mat-form-field>
+            <app-percent-buttons (percent)="calcStakeAmount($event)">
+            </app-percent-buttons>
+            <div class="mt-4 d-flex justify-content-between color-grey payment-details">
+                <div class="info">
+                    Reward payment interval
+                </div>
+                <div class="color-white">
+                    Daily
+                </div>
             </div>
-            <div class="color-white">
-                0.03%
+            <div class="mt-1 d-flex justify-content-between payment-details color-grey">
+                <div class="info">
+                    Estimated daily reward
+                </div>
+                <div class="color-white">
+                    0.03%
+                </div>
             </div>
-        </div>
-        <div class="mt-4 color-grey">
-            By clicking "STAKE", you agree to the <span class="highlight">Terms & Conditions</span>.
-        </div>
-        <div class="mt-2 d-flex justify-content-between align-items-center color-white">
-            <mat-slide-toggle [formControl]="compound" class="slide-toggle">Compound</mat-slide-toggle>
-            <button mat-raised-button class="stake-btn color-white text-uppercase" (click)="stake()">Stake</button>
+            <div class="mt-4 color-grey">
+                By clicking "STAKE", you agree to the <a href="#" class="highlight">Terms & Conditions</a>.
+            </div>
+            <div class="mt-2 d-flex justify-content-end align-items-center color-white">
+                <!-- <mat-slide-toggle [formControl]="compound" class="slide-toggle">Compound</mat-slide-toggle> -->
+                <button mat-raised-button class="stake-btn color-white text-uppercase" (click)="stake()">Stake</button>
+            </div>
         </div>
     </div>
-
+    <div>
+        <app-divider></app-divider>
+        <div class="mt-3 d-flex justify-content-between align-items-center color-white">
+            <div>
+                <div class="staking-widget-xs-label color-white mb-2">
+                    Currently staking
+                </div>
+                <h3 class="mb-0 color-white">
+                    {{stakeAmount.value || 0}} <span class="staking-currency">EWT</span>
+                </h3>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button mat-raised-button disabled class="stake-btn color-white text-uppercase"
+                    (click)="withdraw()">Withdraw</button>
+            </div>
+        </div>
+    </div>
 </div>
-<ng-container *ngIf="compound.value">
-    <app-divider></app-divider>
-    <div class="mt-3 d-flex justify-content-between align-items-center color-white">
-        <div class="col-6">
-            <small class="text-uppercase highlight">
-                Earned reward
-            </small>
-            <h2>
-                {{earnedReward}} <small>EWT</small>
-            </h2>
-        </div>
-        <div class="col-6 d-flex justify-content-end">
-            <button mat-raised-button disabled class="stake-btn color-white text-uppercase" (click)="claimReward()">Claim</button>
-        </div>
-    </div>
-    <div class="mt-3 d-flex justify-content-between align-items-center color-white">
-        <div class="col-6">
-            <small class="text-uppercase">
-                Currently staking
-            </small>
-            <h2>
-                {{stakeAmount.value || 0}} <small>EWT</small>
-            </h2>
-        </div>
-        <div class="col-6 d-flex justify-content-end">
-            <button mat-raised-button disabled class="stake-btn color-white text-uppercase" (click)="withdraw()">Withdraw</button>
-        </div>
-    </div>
-
-</ng-container>
