@@ -168,6 +168,12 @@ export class IamService {
     this.loadingService.hide();
   }
 
+  disconnect() {
+    this._iam.closeConnection();
+    this.store.dispatch(userClaimsActions.clearUserClaim());
+    this.loadingService.hide();
+  }
+
   setDeepLink(deepLink: any) {
     this._deepLink = deepLink;
   }
@@ -191,7 +197,7 @@ export class IamService {
     return this._iam;
   }
 
-  public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean) {
+  public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean, refreshOnTimeout: boolean = true) {
     this._throwTimeoutError = false;
     const timeoutInMinutes = walletProvider === WalletProvider.EwKeyManager ? 2 : 1;
     const connectionMessage = isConnectAndSign ? 'connection to a wallet and ' : '';
@@ -215,7 +221,7 @@ export class IamService {
       .map(m => m.message);
     this.loadingService.show(waitForSignatureMessage);
     this._timer = setTimeout(() => {
-      this._displayTimeout(isConnectAndSign);
+      this._displayTimeout(isConnectAndSign, refreshOnTimeout);
       this.clearWaitSignatureTimer();
       this._throwTimeoutError = true;
     }, timeoutInMinutes * 60000);
@@ -232,7 +238,7 @@ export class IamService {
     }
   }
 
-  private async _displayTimeout(isConnectAndSign?: boolean) {
+  private async _displayTimeout(isConnectAndSign?: boolean, navigateOnTimeout?: boolean) {
     let message = 'sign';
     if (isConnectAndSign) {
       message = 'connect with your wallet and sign';
@@ -247,7 +253,12 @@ export class IamService {
 
     const result = await SWAL(config);
     if (result) {
-      this.logoutAndRefresh();
+      if (navigateOnTimeout) {
+        this.logoutAndRefresh();
+      } else {
+        this.disconnect();
+        location.reload();
+      }
     }
   }
 

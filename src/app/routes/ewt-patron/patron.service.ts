@@ -23,7 +23,7 @@ export class PatronService {
 
   init() {
     const walletProvider = WalletProvider.MetaMask;
-    this.iamService.waitForSignature(walletProvider, true);
+    this.iamService.waitForSignature(walletProvider, true, false);
     from(this.iamService.login({
       walletProvider,
       reinitializeMetamask: true,
