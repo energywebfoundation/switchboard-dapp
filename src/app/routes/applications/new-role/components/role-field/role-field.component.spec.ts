@@ -137,7 +137,7 @@ fdescribe('RoleFieldComponent', () => {
       
       const fieldsValue = component.fieldsForm.getRawValue();
 
-      expect(component.showAddFieldForm).toBeTruthy();
+      expect(component.showFieldsForm).toBeTruthy();
       expect(fieldsValue.fieldType).toBe('text');
       expect(fieldsValue.label).toBe('Test');
     });
@@ -145,12 +145,22 @@ fdescribe('RoleFieldComponent', () => {
     it('update button should replace old data and close form', () => {
       addFieldToRole();
       editFieldAdded();
-      
-      const fieldsValue = component.fieldsForm.getRawValue();
 
-      expect(component.showAddFieldForm).toBeTruthy();
-      expect(fieldsValue.fieldType).toBe('text');
-      expect(fieldsValue.label).toBe('Test');
+      selectFieldTypeAndLabel(1, 'Edit Label');
+
+      component.updateDataSourceEvent.subscribe(value => {
+        component.dataSource.data = [...value];
+        fixture.detectChanges();
+      });
+  
+      const { updateField } = getSelectors(hostDebug);
+      updateField.nativeElement.click();
+      fixture.detectChanges();
+
+      const field = component.dataSource.data;
+      expect(field[0].fieldType).toBe('number');
+      expect(field[0].label).toBe('Edit Label');
+      expect(component.showFieldsForm).toBeFalsy();
     });
 
   })
@@ -160,16 +170,7 @@ fdescribe('RoleFieldComponent', () => {
     showField.nativeElement.click();
     fixture.detectChanges();
 
-    const { fieldtype } = getSelectors(hostDebug);
-    fieldtype.nativeElement.click();
-    fixture.detectChanges();
-
-    const { fieldTypeOption } = getSelectors(hostDebug);
-    const { fieldLabel } = getSelectors(hostDebug);
-    fieldTypeOption.nativeElement.click();
-    fieldLabel.nativeElement.value = 'Test';
-    dispatchEvent(fieldLabel);
-    fixture.detectChanges();
+    selectFieldTypeAndLabel(0, 'Test');
   }
 
   function editFieldAdded() {
@@ -188,16 +189,32 @@ fdescribe('RoleFieldComponent', () => {
     fixture.detectChanges();
   }
 
+  function selectFieldTypeAndLabel(option: number, labelText: string) {
+
+    const { fieldtype } = getSelectors(hostDebug);
+    fieldtype.nativeElement.click();
+    fixture.detectChanges();
+
+    const { fieldTypeOptionAll } = getSelectors(hostDebug);
+    const { fieldLabel } = getSelectors(hostDebug);
+    fieldTypeOptionAll[option].nativeElement.click();
+    fieldLabel.nativeElement.value = labelText;
+    
+    dispatchEvent(fieldLabel);
+    fixture.detectChanges();
+  }
+
 });
 
 const getSelectors = (hostDebug: DebugElement) => {
   return {
     showField: hostDebug.query(By.css('[data-qa-id=show-field]')),
     addField: hostDebug.query(By.css('[data-qa-id="add-field"]')),
+    updateField: hostDebug.query(By.css('[data-qa-id="update-field"]')),
     fieldtypeSelect: hostDebug.query(By.css('[data-qa-id="field-type"]')),
     fieldtype: hostDebug.query(By.css('.mat-select-trigger')),
     fieldLabel: hostDebug.query(By.css('[data-qa-id="field-label"]')),
-    fieldTypeOption: hostDebug.query(By.css('.mat-option')),
+    fieldTypeOptionAll: hostDebug.queryAll(By.css('.mat-option')),
     fieldTypeOptionSelected: hostDebug.query(By.css('[data-qa-id=fieldType] .ng-star-inserted')),
     editField: hostDebug.query(By.css('[data-qa-id="edit-field"]')),
   };

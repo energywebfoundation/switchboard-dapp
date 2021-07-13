@@ -125,8 +125,16 @@
                         >
                             Add
                         </button>
-                        <button mat-raised-button class="btn btn-small btn btn-primary" *ngIf="isEditFieldForm"
-                            (click)="updateField()" [disabled]="!fieldsForm.valid">Update</button>
+                        <button
+                            mat-raised-button
+                            class="btn btn-small btn btn-primary"
+                            *ngIf="isEditFieldForm"
+                            (click)="updateField()"
+                            [disabled]="!fieldsForm.valid"
+                            data-qa-id="update-field"
+                        >
+                            Update
+                        </button>
                     </div>
                 </div>
             </form>
