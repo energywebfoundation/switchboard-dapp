@@ -15,6 +15,7 @@ import { StakeSuccessComponent } from './stake-success/stake-success.component';
 import { WithdrawComponent } from './withdraw/withdraw.component';
 import { ClaimRewardComponent } from './claim-reward/claim-reward.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -36,8 +37,10 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatIconModule,
     MatButtonModule,
     MatSlideToggleModule,
-    MatDialogModule
-  ]
+    MatDialogModule,
+    MatProgressBarModule,
+  ],
+
 })
 export class EwtPatronModule {
 }
