@@ -16,6 +16,8 @@ import { WithdrawComponent } from './withdraw/withdraw.component';
 import { ClaimRewardComponent } from './claim-reward/claim-reward.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { SharedModule } from '../../shared/shared.module';
+import { LayoutModule } from '../../layout/layout.module';
 
 
 @NgModule({
@@ -39,6 +41,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatSlideToggleModule,
     MatDialogModule,
     MatProgressBarModule,
+    SharedModule,
+    LayoutModule
   ],
 
 })

@@ -56,7 +56,7 @@ export class WelcomeComponent implements OnInit {
 
   private async connectToWallet(walletProvider: WalletProvider) {
     this.iamService.waitForSignature(walletProvider, true);
-    const isLoggedIn = await this.iamService.login(walletProvider);
+    const isLoggedIn = await this.iamService.login({walletProvider});
     this.iamService.clearWaitSignatureTimer();
     if (isLoggedIn) {
       // Check deep link
@@ -79,7 +79,7 @@ export class WelcomeComponent implements OnInit {
     // Proceed with Login Process
     const walletProvider = WalletProvider.MetaMask;
     this.iamService.waitForSignature(walletProvider, true);
-    const isLoggedIn = await this.iamService.login(walletProvider, true);
+    const isLoggedIn = await this.iamService.login({walletProvider, reinitializeMetamask: true});
     this.iamService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {

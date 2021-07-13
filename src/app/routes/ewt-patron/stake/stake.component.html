@@ -3,20 +3,20 @@
         <div class="col-12 col-lg-5 color-white">
             <h3>Stake</h3>
             <div class="staking-widget-xs-label color-white mb-2">Your account balance</div>
-            <h3 class="mb-0 color-white">{{tokenAmount}}<span class="staking-currency ml-2">EWT</span></h3>
+            <h3 class="mb-0 color-white">{{tokenAmount$ | async}}<span class="staking-currency ml-2">EWT</span></h3>
         </div>
         <div class="col-12 col-lg-7 pt-3 pt-lg-0">
             <mat-form-field class="staking-textfield" appearance="outline">
                 <mat-label class="ml-3 pl-1">EWT Stake Amount</mat-label>
                 <input matInput class="amount-input" [formControl]="stakeAmount" autocomplete="off" type="number"
-                    [max]="tokenAmount" maxlength="256" (focus)="inputFocused = true" />
+                    [max]="tokenAmount" maxlength="256" (focus)="inputFocused = true" (keydown)="inputChangeHandler()" />
                 <div matSuffix class="d-flex" *ngIf="inputFocused">
                     <button mat-icon-button class="bg-transparent" (click)="clear($event)">
                         <mat-icon>close</mat-icon>
                     </button>
                 </div>
             </mat-form-field>
-            <app-percent-buttons (percent)="calcStakeAmount($event)">
+            <app-percent-buttons #percentButtons (percent)="calcStakeAmount($event)">
             </app-percent-buttons>
             <div class="mt-4 d-flex justify-content-between color-grey payment-details">
                 <div class="info">

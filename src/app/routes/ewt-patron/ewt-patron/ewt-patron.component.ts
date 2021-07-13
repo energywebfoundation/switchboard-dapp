@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PatronService } from '../patron.service';
+
 
 @Component({
   selector: 'app-ewt-patron',
@@ -6,10 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./ewt-patron.component.scss']
 })
 export class EwtPatronComponent implements OnInit {
+  balance$ = this.patronService.balance$;
 
-  constructor() { }
+  constructor(private patronService: PatronService) {
+  }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.patronService.init();
   }
 
 }

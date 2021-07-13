@@ -1,5 +1,6 @@
 <div class="staking-container">
     <div class="content-wrapper">
+        <app-loading></app-loading>
         <div class="row">
             <div class="col-12">
                 <div class="staking-card widget-main row p-3 p-md-5 pt-md-4 m-1 m-md-0">
@@ -24,7 +25,7 @@
                         <div class="d-flex justify-content-md-end">
                             <div class="staking-widget widget-inner px-4 py-4">
                                 <div class="staking-widget-xs-label color-white mb-2">Your account balance</div>
-                                <h3 class="mb-0 color-white">200<span class="staking-currency ml-2">EWT</span></h3>
+                                <h3 class="mb-0 color-white">{{balance$ | async}}<span class="staking-currency ml-2">EWT</span></h3>
                             </div>
                         </div>
                     </div>

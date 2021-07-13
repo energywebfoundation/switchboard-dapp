@@ -35,6 +35,13 @@ const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
 
 export const VOLTA_CHAIN_ID = 73799;
 
+export interface LoginOptions {
+  walletProvider?: WalletProvider;
+  reinitializeMetamask?: boolean;
+  initCacheServer?: boolean;
+  initDid?: boolean;
+}
+
 export enum LoginType {
   LOCAL = 'local',
   REMOTE = 'remote'
@@ -89,14 +96,13 @@ export class IamService {
   /**
    * Login via IAM and retrieve basic user info
    */
-  async login(walletProvider?: WalletProvider, reinitializeMetamask?: boolean): Promise<boolean> {
+  async login(loginOptions?: LoginOptions): Promise<boolean> {
     let retVal = false;
 
     // Check if account address exists
     if (!(await this.isUserPresent())) {
-      const connectionOpts = {walletProvider, reinitializeMetamask};
       try {
-        const {did, connected, userClosedModal} = await this._iam.initializeConnection(connectionOpts);
+        const {did, connected, userClosedModal} = await this._iam.initializeConnection(loginOptions);
         if (did && connected && !userClosedModal) {
           // Setup Account Address
           const signer = this._iam.getSigner();
