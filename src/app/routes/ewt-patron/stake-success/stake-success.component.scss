@@ -1,6 +1,10 @@
 .stake-success-container {
     background: #13111B;
     padding: 32px;
+
+    @media screen and (max-width: 800px) {
+        height: 100%;
+    }
 }
 
 h3 {
@@ -32,5 +36,26 @@ p {
 
     &:hover {
         background-color: #ad74ff;   
+    }
+  }
+
+.stake-secondary-btn{
+    font-family: Rajdhani, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+    border-radius: 16px;
+    letter-spacing: 1.25px;
+    color: #A566FF;
+    border: 1px solid #A566FF;
+    background-color: transparent;
+    padding: 0 0 !important;
+    height: 40px;
+    width: 115px;
+
+    &:hover {
+    color: #ad74ff; 
+    border: 1px solid #ad74ff; 
     }
   }
