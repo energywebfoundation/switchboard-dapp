@@ -43,7 +43,7 @@ export class StakeEffects {
       switchMap(([, organization]) =>
         from(this.stakingPoolService.getPool(organization))
           .pipe(
-            map(({pool}: StakingPool) => this.pool = pool)
+            map((pool: StakingPool) => this.pool = pool)
           )
       )
     ), {dispatch: false}
@@ -55,7 +55,7 @@ export class StakeEffects {
       switchMap(({organization}) =>
         from(this.stakingPoolService.getPool(organization))
           .pipe(
-            map(({pool}: StakingPool) => this.pool = pool)
+            map((pool: StakingPool) => this.pool = pool)
           )
       )
     ), {dispatch: false}
