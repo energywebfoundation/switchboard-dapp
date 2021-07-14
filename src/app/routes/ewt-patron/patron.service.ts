@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { IAM, MessagingMethod, SafeIam, setChainConfig, setMessagingOptions, WalletProvider } from 'iam-client-lib';
-import { safeAppSdk } from '../../shared/services/gnosis.safe.service';
-import { IamService, VOLTA_CHAIN_ID } from '../../shared/services/iam.service';
-import { environment } from '../../../environments/environment';
-import { getUserProfile } from '../../state/user-claim/user.selectors';
-import { finalize, map, switchMap, take, tap } from 'rxjs/operators';
+import { WalletProvider } from 'iam-client-lib';
+import { IamService } from '../../shared/services/iam.service';
+import { switchMap } from 'rxjs/operators';
 
 import { utils } from 'ethers';
 import { BehaviorSubject, from, Observable } from 'rxjs';
-import { LoadingService } from '../../shared/services/loading.service';
+import { StakeState } from '../../state/stake/stake.reducer';
+import { Store } from '@ngrx/store';
+import * as StakeActions from '../../state/stake/stake.actions';
 
 const {formatEther} = utils;
 
@@ -16,9 +15,8 @@ const {formatEther} = utils;
   providedIn: 'root'
 })
 export class PatronService {
-  private balance = new BehaviorSubject<number>(500);
 
-  constructor(private iamService: IamService) {
+  constructor(private iamService: IamService, private store: Store<StakeState>) {
   }
 
   init() {
@@ -27,26 +25,20 @@ export class PatronService {
     from(this.iamService.login({
       walletProvider,
       reinitializeMetamask: true,
-      initCacheServer: false,
-      initDid: false
+      initCacheServer: true,
+      initDid: true
     })).pipe()
       .subscribe(() => {
         this.iamService.clearWaitSignatureTimer();
-        this.setBalance();
+        this.store.dispatch(StakeActions.initStakingPool());
       });
   }
 
-  get balance$(): Observable<number> {
-    return this.balance.asObservable();
+  launch() {
+    this.store.dispatch(StakeActions.launchStakingPool());
   }
 
-  setBalance(): void {
-    from(this.iamService.iam.getSigner().getAddress())
-      .pipe(
-        switchMap((address) => from(this.iamService.iam.getSigner().provider.getBalance(address)))
-      )
-      .subscribe((bigNumber => {
-        this.balance.next(+formatEther(bigNumber));
-      }));
+  services() {
+    this.store.dispatch(StakeActions.services());
   }
 }

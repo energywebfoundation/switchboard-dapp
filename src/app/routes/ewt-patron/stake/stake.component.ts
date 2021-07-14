@@ -1,30 +1,32 @@
-import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { StakeSuccessComponent } from '../stake-success/stake-success.component';
 import { WithdrawComponent } from '../withdraw/withdraw.component';
 import { ClaimRewardComponent } from '../claim-reward/claim-reward.component';
 
-import { PatronService } from '../patron.service';
 import { tap } from 'rxjs/operators';
 import { PercentButtonsComponent } from '../percent-buttons/percent-buttons.component';
-
+import { StakeState } from '../../../state/stake/stake.reducer';
+import { Store } from '@ngrx/store';
+import * as stakeSelectors from '../../../state/stake/stake.selectors';
+import * as StakeActions from '../../../state/stake/stake.actions';
 
 @Component({
   selector: 'app-stake',
   templateUrl: './stake.component.html',
   styleUrls: ['./stake.component.scss']
 })
-export class StakeComponent implements OnInit {
+export class StakeComponent {
   inputFocused: boolean;
-  tokenAmount: number = 200;
-  tokenAmount$ = this.patronService.balance$.pipe(tap(balance => this.tokenAmount = balance));
+  tokenAmount: number;
+  tokenAmount$ = this.store.select(stakeSelectors.getBalance).pipe(tap(balance => this.tokenAmount = balance));
   stakeAmount = new FormControl();
   earnedReward = 0;
   compound = new FormControl(false);
   @ViewChild('percentButtons') percentButtons: PercentButtonsComponent;
 
-  constructor(private dialog: MatDialog, private patronService: PatronService) {
+  constructor(private dialog: MatDialog, private store: Store<StakeState>) {
   }
 
   clear(e) {
@@ -44,11 +46,12 @@ export class StakeComponent implements OnInit {
   }
 
   stake() {
-    this.dialog.open(StakeSuccessComponent, {
-      width: '400px',
-      maxWidth: '100%',
-      disableClose: true
-    });
+    this.store.dispatch(StakeActions.stakeToService({amount: this.stakeAmount.value.toString()}));
+    // this.dialog.open(StakeSuccessComponent, {
+    //   width: '400px',
+    //   maxWidth: '100%',
+    //   disableClose: true
+    // });
   }
 
   withdraw() {
