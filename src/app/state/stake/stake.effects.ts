@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { StakeState } from './stake.reducer';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import * as StakeActions from './stake.actions';
-import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, filter, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { utils } from 'ethers';
 import { Stake, StakeStatus, StakingPool, StakingPoolService } from 'iam-client-lib';
@@ -83,14 +83,16 @@ export class StakeEffects {
               .pipe(
                 filter<Stake>(Boolean),
                 mergeMap((stake) => {
-                  const actions = [StakeActions.getStakeSuccess({stake})];
-                  if (stake.status !== StakeStatus.NONSTAKING) {
-                    return [...actions, StakeActions.checkReward()];
+                    const actions = [StakeActions.getStakeSuccess({stake})];
+                    if (stake.status !== StakeStatus.NONSTAKING) {
+                      return [...actions, StakeActions.checkReward()];
+                    }
+                    return actions;
                   }
-                  return actions;
-                })
+                )
               )
-            ))
+            )
+          )
       )
     )
   );
@@ -98,6 +100,7 @@ export class StakeEffects {
   putStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.putStake),
+      tap(() => this.loadingService.show()),
       switchMap(({amount}) =>
         from(this.pool.putStake(parseEther(amount)))
           .pipe(
@@ -107,8 +110,9 @@ export class StakeEffects {
                 maxWidth: '100%',
                 disableClose: true
               });
-              return [StakeActions.getAccountBalance(), StakeActions.checkReward()];
-            })
+              return [StakeActions.getAccountBalance(), StakeActions.checkReward(), StakeActions.getStake()];
+            }),
+            finalize(() => this.loadingService.hide())
           )
       )
     )
@@ -117,6 +121,7 @@ export class StakeEffects {
   withdrawReward$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.withdrawReward),
+      tap(() => this.loadingService.show()),
       switchMap(() =>
         from(this.pool.requestWithdraw())
           .pipe(
@@ -126,7 +131,8 @@ export class StakeEffects {
                 catchError(err => {
                   console.error(err);
                   return of(StakeActions.withdrawRewardFailure({err}));
-                })
+                }),
+                finalize(() => this.loadingService.hide())
               ),
             )
           )
