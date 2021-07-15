@@ -3,6 +3,8 @@ import { PatronService } from '../patron.service';
 import { StakeState } from '../../../state/stake/stake.reducer';
 import { Store } from '@ngrx/store';
 import * as stakeSelectors from '../../../state/stake/stake.selectors';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 
 @Component({
   selector: 'app-ewt-patron',
@@ -14,11 +16,17 @@ export class EwtPatronComponent implements OnInit {
   performance$ = this.store.select(stakeSelectors.getPerformance);
   annualReward$ = this.store.select(stakeSelectors.getAnnualReward);
 
-  constructor(private patronService: PatronService, private store: Store<StakeState>) {
+  constructor(private dialog: MatDialog, private store: Store<StakeState>) {
   }
 
   ngOnInit() {
-    this.patronService.init();
+    this.dialog.open(LoginDialogComponent, {
+      width: '434px',
+      panelClass: 'connect-to-wallet',
+      backdropClass: 'backdrop-hide-content',
+      maxWidth: '100%',
+      disableClose: true
+    });
   }
 
 }

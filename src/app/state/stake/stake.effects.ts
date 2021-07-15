@@ -39,6 +39,7 @@ export class StakeEffects {
           .pipe(
             mergeMap((stakingPoolServ) => {
               this.stakingPoolService = stakingPoolServ;
+              this.dialog.closeAll();
               return [StakeActions.initStakingPoolSuccess(), StakeActions.getAccountBalance()];
             })
           )

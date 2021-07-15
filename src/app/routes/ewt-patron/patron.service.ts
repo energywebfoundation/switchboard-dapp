@@ -19,7 +19,7 @@ export class PatronService {
   constructor(private iamService: IamService, private store: Store<StakeState>) {
   }
 
-  init() {
+  login(): void {
     const walletProvider = WalletProvider.MetaMask;
     this.iamService.waitForSignature(walletProvider, true, false);
     from(this.iamService.login({
