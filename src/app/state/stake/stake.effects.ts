@@ -125,7 +125,8 @@ export class StakeEffects {
               this.dialog.open(StakeSuccessComponent, {
                 width: '400px',
                 maxWidth: '100%',
-                disableClose: true
+                disableClose: true,
+                backdropClass: 'backdrop-shadow'
               });
               return [StakeActions.getAccountBalance(), StakeActions.checkReward(), StakeActions.getStake()];
             }),

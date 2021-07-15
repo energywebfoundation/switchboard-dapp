@@ -57,7 +57,8 @@ export class StakeComponent {
     this.dialog.open(WithdrawComponent, {
       width: '400px',
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
+      backdropClass: 'backdrop-shadow'
     });
   }
 
@@ -65,7 +66,8 @@ export class StakeComponent {
     this.dialog.open(ClaimRewardComponent, {
       width: '400px',
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
+      backdropClass: 'backdrop-shadow'
     });
   }
 
