@@ -3,7 +3,7 @@
         <div class="col-12 col-lg-5 color-white">
             <h3>Stake</h3>
             <div class="staking-widget-xs-label color-white mb-2">Your account balance</div>
-            <h3 class="mb-0 color-white">{{tokenAmount$ | async}}<span class="staking-currency ml-2">EWT</span></h3>
+            <h3 class="mb-0 color-white"><ng-container *ngIf="(balance$ | async) as balance">{{balance | lastDigits}}</ng-container><span class="staking-currency ml-2">EWT</span></h3>
         </div>
         <div class="col-12 col-lg-7 pt-3 pt-lg-0">
             <mat-form-field class="staking-textfield" appearance="outline">

@@ -29,8 +29,9 @@
                         <div class="d-flex justify-content-md-end">
                             <div class="staking-widget widget-inner px-4 py-4">
                                 <div class="staking-widget-xs-label color-white mb-2">Your account balance</div>
-                                <h3 class="mb-0 color-white">{{balance$ | async}}<span
-                                        class="staking-currency ml-2">EWT</span></h3>
+                                <h3 class="mb-0 color-white">
+                                    <ng-container *ngIf="balance$ | async as balance">{{balance | lastDigits}} </ng-container>
+                                        <span class="staking-currency ml-2">EWT</span></h3>
                             </div>
                         </div>
                     </div>

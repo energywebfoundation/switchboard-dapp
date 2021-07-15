@@ -20,7 +20,7 @@ import * as StakeActions from '../../../state/stake/stake.actions';
 export class StakeComponent {
   inputFocused: boolean;
   tokenAmount: number;
-  tokenAmount$ = this.store.select(stakeSelectors.getBalance).pipe(tap(balance => this.tokenAmount = balance));
+  balance$ = this.store.select(stakeSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
   stakeAmount = new FormControl();
   earnedReward = 0;
   compound = new FormControl(false);

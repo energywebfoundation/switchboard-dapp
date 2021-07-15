@@ -10,7 +10,7 @@ export const getReward = createSelector(
 
 export const getBalance = createSelector(
   getStakeState,
-  (state: StakeState) => +state?.balance
+  (state: StakeState) => state?.balance
 );
 
 export const getPerformance = createSelector(
