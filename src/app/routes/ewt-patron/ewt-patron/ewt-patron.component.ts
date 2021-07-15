@@ -17,14 +17,6 @@ export class EwtPatronComponent implements OnInit {
   constructor(private patronService: PatronService, private store: Store<StakeState>) {
   }
 
-  launch() {
-    this.patronService.launch();
-  }
-
-  services() {
-    this.patronService.services();
-  }
-
   ngOnInit() {
     this.patronService.init();
   }

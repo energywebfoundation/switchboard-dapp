@@ -23,7 +23,7 @@ export const setOrganization = createAction(
   '[Stake] Set Organization For Pool',
   props<{organization: string}>()
 );
-export const stakeToService = createAction(
+export const putStake = createAction(
   '[Stake] Stake To Service',
   props<{amount: string}>()
 );
@@ -35,14 +35,4 @@ export const withdrawReward = createAction(
 export const withdrawRewardSuccess = createAction(
   '[Stake] Withdraw Reward Success'
 );
-
-export const launchStakingPool = createAction(
-  '[Stake] Launch Staking Pool',
-)
-export const services = createAction(
-  '[Stake] services',
-)
-
-
-
 

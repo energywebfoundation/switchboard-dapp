@@ -9,7 +9,7 @@ import { StakeState } from './stake.reducer';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import * as StakeActions from './stake.actions';
 import * as stakeSelectors from './stake.selectors';
-import { map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { from } from 'rxjs';
 import { utils } from 'ethers';
 
@@ -61,9 +61,9 @@ export class StakeEffects {
     ), {dispatch: false}
   );
 
-  stakeToService$ = createEffect(() =>
+  putStake = createEffect(() =>
     this.actions$.pipe(
-      ofType(StakeActions.stakeToService),
+      ofType(StakeActions.putStake),
       switchMap(({amount}) =>
         from(this.pool.putStake(parseEther(amount)))
           .pipe(
@@ -100,28 +100,6 @@ export class StakeEffects {
       )
     )
   );
-
-  launchStakingPool$ = createEffect( () =>
-    this.actions$.pipe(
-      ofType(StakeActions.launchStakingPool),
-      tap(() => console.log(this))
-      // switchMap(() => from(this.stakingPoolService.launchStakingPool({
-      //   org: 'dawidgil.iam.ewc',
-      //   minStakingPeriod: 1000,
-      //   patronRewardPortion: 10,
-      //   patronRoles: [],
-      //   principal: parseEther('100')
-      // })))
-    ), {dispatch: false}
-  )
-  //
-  // services$ = createEffect(
-  //   () =>
-  //     this.actions$.pipe(
-  //       ofType(StakeActions.services),
-  //       switchMap((stakingPool) => from(this.stakingPoolService.allServices()).pipe(map((serv) => console.log(serv))))
-  //     ), {dispatch: false}
-  // )
 
   constructor(private actions$: Actions,
               private store: Store<StakeState>,

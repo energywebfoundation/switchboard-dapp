@@ -34,11 +34,4 @@ export class PatronService {
       });
   }
 
-  launch() {
-    this.store.dispatch(StakeActions.launchStakingPool());
-  }
-
-  services() {
-    this.store.dispatch(StakeActions.services());
-  }
 }

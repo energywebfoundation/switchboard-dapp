@@ -46,7 +46,7 @@ export class StakeComponent {
   }
 
   stake() {
-    this.store.dispatch(StakeActions.stakeToService({amount: this.stakeAmount.value.toString()}));
+    this.store.dispatch(StakeActions.putStake({amount: this.stakeAmount.value.toString()}));
     // this.dialog.open(StakeSuccessComponent, {
     //   width: '400px',
     //   maxWidth: '100%',
