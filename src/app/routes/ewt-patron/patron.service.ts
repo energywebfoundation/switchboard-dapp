@@ -27,8 +27,7 @@ export class PatronService {
       reinitializeMetamask: true,
       initCacheServer: true,
       initDid: true
-    })).pipe()
-      .subscribe(() => {
+    })).subscribe(() => {
         this.iamService.clearWaitSignatureTimer();
         this.store.dispatch(StakeActions.initStakingPool());
       });
