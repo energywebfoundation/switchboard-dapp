@@ -21,4 +21,8 @@ describe('LastDigitsPipe', () => {
   it('should cut part of string when it have more than 3 digits after a dot', () => {
     expect(pipe.transform('1.123456')).toEqual('1.123');
   });
+
+  it('should return 0 when gets 0', () => {
+    expect(pipe.transform('0')).toEqual('0');
+  });
 });
