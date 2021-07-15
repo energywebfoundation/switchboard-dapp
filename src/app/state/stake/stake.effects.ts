@@ -8,12 +8,13 @@ import { StakeState } from './stake.reducer';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import * as StakeActions from './stake.actions';
 import * as stakeSelectors from './stake.selectors';
-import { catchError, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { utils } from 'ethers';
 import { StakingService } from '../../shared/services/staking/staking.service';
 import { StakingPool, StakingPoolService } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
+import { ActivatedRoute } from '@angular/router';
 
 const {formatEther, parseEther} = utils;
 
@@ -21,6 +22,13 @@ const {formatEther, parseEther} = utils;
 export class StakeEffects {
   private stakingPoolService: StakingPoolService;
   private pool: StakingPool;
+
+  getOrganizationName$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(StakeActions.initStakingPool),
+      ),
+    {dispatch: false}
+  );
 
 
   initStakingPoolService$ = createEffect(() =>
@@ -41,15 +49,12 @@ export class StakeEffects {
   initPool$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.initStakingPoolSuccess),
-      withLatestFrom(this.store.select(stakeSelectors.getOrganization)),
-      switchMap(([, organization]) =>
-        from(this.stakingPoolService.getPool(organization))
-          .pipe(
-            mergeMap((pool: StakingPool) => {
-              this.pool = pool;
-              return [StakeActions.checkReward(), StakeActions.getStake()];
-            })
-          )
+      switchMap(() =>
+        this.activatedRoute.queryParams.pipe(
+          map((params: { org: string }) => params?.org),
+          filter<string>(Boolean),
+          map((organization) => StakeActions.setOrganization({organization}))
+        )
       )
     )
   );
@@ -60,9 +65,9 @@ export class StakeEffects {
       switchMap(({organization}) =>
         from(this.stakingPoolService.getPool(organization))
           .pipe(
-            map((pool: StakingPool) => {
+            mergeMap((pool: StakingPool) => {
               this.pool = pool;
-              return StakeActions.checkReward();
+              return [StakeActions.checkReward(), StakeActions.getStake()];
             })
           )
       )
@@ -96,7 +101,7 @@ export class StakeEffects {
                 maxWidth: '100%',
                 disableClose: true
               });
-              return [StakeActions.getAccountBalance(), StakeActions.checkReward()]
+              return [StakeActions.getAccountBalance(), StakeActions.checkReward()];
             })
           )
       )
@@ -159,6 +164,7 @@ export class StakeEffects {
   constructor(private actions$: Actions,
               private store: Store<StakeState>,
               private iamService: IamService,
+              private activatedRoute: ActivatedRoute,
               private loadingService: LoadingService,
               private toastr: SwitchboardToastrService,
               private dialog: MatDialog) {

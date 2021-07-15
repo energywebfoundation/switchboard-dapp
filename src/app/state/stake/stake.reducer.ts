@@ -18,7 +18,7 @@ export const initialState: StakeState = {
   performance: 100,
   annualReward: 10,
   reward: '0',
-  organization: 'dmitryfesenko.iam.ewc',
+  organization: '',
   userStake: null
 };
 
