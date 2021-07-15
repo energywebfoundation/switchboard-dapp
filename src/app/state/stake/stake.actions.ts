@@ -1,7 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ClaimData } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
-import { IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
-import { Profile } from 'iam-client-lib';
+import { Stake } from 'iam-client-lib';
 
 export const initStakingPool = createAction('[Stake] Initialize Staking Pool Service');
 export const initStakingPoolSuccess = createAction('[Stake] Initialize Staking Pool Service Success');
@@ -9,9 +7,21 @@ export const initStakingPoolSuccess = createAction('[Stake] Initialize Staking P
 export const checkReward = createAction('[Stake] Check Accumulated Reward');
 export const checkRewardSuccess = createAction(
   '[Stake] Check Accumulated Reward Success',
-  props<{ reward: number }>()
+  props<{ reward: string }>()
+);
+export const checkRewardFailure = createAction(
+  '[Stake] Check Accumulated Reward Failure',
+  props<{ error: string }>()
 );
 
+export const getStake = createAction('[Stake] Get Stake');
+export const getStakeSuccess = createAction(
+  '[Stake] Get Stake Success',
+  props<{stake: Stake}>()
+);
+export const getStakeFailure = createAction(
+  '[Stake] Get Stake Failure'
+);
 
 export const getAccountBalance = createAction('[Stake] Get Actual Account Balance');
 export const getAccountSuccess = createAction(
@@ -21,11 +31,11 @@ export const getAccountSuccess = createAction(
 
 export const setOrganization = createAction(
   '[Stake] Set Organization For Pool',
-  props<{organization: string}>()
+  props<{ organization: string }>()
 );
 export const putStake = createAction(
-  '[Stake] Stake To Service',
-  props<{amount: string}>()
+  '[Stake] Put Stake',
+  props<{ amount: string }>()
 );
 
 export const withdrawReward = createAction(
@@ -34,5 +44,10 @@ export const withdrawReward = createAction(
 
 export const withdrawRewardSuccess = createAction(
   '[Stake] Withdraw Reward Success'
+);
+
+export const withdrawRewardFailure = createAction(
+  '[Stake] Withdraw Reward Failure',
+  props<{err: string}>()
 );
 

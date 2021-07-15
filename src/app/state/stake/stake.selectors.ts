@@ -1,5 +1,9 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { StakeState, USER_FEATURE_KEY } from './stake.reducer';
+import { Stake, StakeStatus } from 'iam-client-lib';
+import { utils } from 'ethers';
+
+const {formatEther} = utils;
 
 export const getStakeState = createFeatureSelector<StakeState>(USER_FEATURE_KEY);
 
@@ -28,4 +32,27 @@ export const getAnnualReward = createSelector(
   (state: StakeState) => state.annualReward
 );
 
+export const getStake = createSelector(
+  getStakeState,
+  (state: StakeState) => state?.userStake
+);
+
+export const isStakingDisabled = createSelector(
+  getStake,
+  (state: Stake) => {
+    console.log(state);
+    console.log(state?.status === StakeStatus.NONSTAKING);
+    return state?.status !== StakeStatus.NONSTAKING;
+  }
+);
+
+export const isWithdrawDisabled = createSelector(
+  getStake,
+  (state: Stake) => state?.status !== StakeStatus.STAKING
+);
+
+export const getStakeAmount = createSelector(
+  getStake,
+  (state: Stake) => state?.amount ? formatEther(state.amount) : '0'
+);
 

@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { StakeSuccessComponent } from '../stake-success/stake-success.component';
 import { WithdrawComponent } from '../withdraw/withdraw.component';
 import { ClaimRewardComponent } from '../claim-reward/claim-reward.component';
 
@@ -11,6 +10,8 @@ import { StakeState } from '../../../state/stake/stake.reducer';
 import { Store } from '@ngrx/store';
 import * as stakeSelectors from '../../../state/stake/stake.selectors';
 import * as StakeActions from '../../../state/stake/stake.actions';
+import { getStakeAmount, isWithdrawDisabled } from '../../../state/stake/stake.selectors';
+import { StakeSuccessComponent } from '../stake-success/stake-success.component';
 
 @Component({
   selector: 'app-stake',
@@ -21,8 +22,11 @@ export class StakeComponent {
   inputFocused: boolean;
   tokenAmount: number;
   balance$ = this.store.select(stakeSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
-  stakeAmount = new FormControl();
-  earnedReward = '1.37';
+  amountToStake = new FormControl();
+  earnedReward$ = this.store.select(stakeSelectors.getReward);
+  stakeAmount$ = this.store.select(stakeSelectors.getStakeAmount);
+  isStakingDisabled$ = this.store.select(stakeSelectors.isStakingDisabled);
+  isWithdrawDisabled$ = this.store.select(stakeSelectors.isWithdrawDisabled);
   compound = new FormControl(false);
   @ViewChild('percentButtons') percentButtons: PercentButtonsComponent;
 
@@ -34,7 +38,7 @@ export class StakeComponent {
     e.stopPropagation();
     this.inputFocused = false;
     this.percentButtons.selectedPercentButton = null;
-    this.stakeAmount.setValue('');
+    this.amountToStake.setValue('');
   }
 
   inputChangeHandler() {
@@ -42,16 +46,11 @@ export class StakeComponent {
   }
 
   calcStakeAmount(percent: number) {
-    this.stakeAmount.setValue(Math.floor(this.tokenAmount * percent / 100));
+    this.amountToStake.setValue(Math.floor(this.tokenAmount * percent / 100));
   }
 
   stake() {
-    this.store.dispatch(StakeActions.putStake({amount: this.stakeAmount.value.toString()}));
-    // this.dialog.open(StakeSuccessComponent, {
-    //   width: '400px',
-    //   maxWidth: '100%',
-    //   disableClose: true
-    // });
+    this.store.dispatch(StakeActions.putStake({amount: this.amountToStake.value.toString()}));
   }
 
   withdraw() {

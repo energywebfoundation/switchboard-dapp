@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { IamService } from '../../shared/services/iam.service';
-import { StakingPool, StakingPoolService } from 'iam-client-lib';
 import { LoadingService } from '../../shared/services/loading.service';
 import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,9 +8,12 @@ import { StakeState } from './stake.reducer';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import * as StakeActions from './stake.actions';
 import * as stakeSelectors from './stake.selectors';
-import { map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { catchError, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { from, of } from 'rxjs';
 import { utils } from 'ethers';
+import { StakingService } from '../../shared/services/staking/staking.service';
+import { StakingPool, StakingPoolService } from 'iam-client-lib';
+import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
 
 const {formatEther, parseEther} = utils;
 
@@ -29,7 +31,7 @@ export class StakeEffects {
           .pipe(
             mergeMap((stakingPoolServ) => {
               this.stakingPoolService = stakingPoolServ;
-              return [StakeActions.initStakingPoolSuccess(), StakeActions.getAccountBalance(), StakeActions.checkReward()];
+              return [StakeActions.initStakingPoolSuccess(), StakeActions.getAccountBalance()];
             })
           )
       )
@@ -43,10 +45,13 @@ export class StakeEffects {
       switchMap(([, organization]) =>
         from(this.stakingPoolService.getPool(organization))
           .pipe(
-            map((pool: StakingPool) => this.pool = pool)
+            mergeMap((pool: StakingPool) => {
+              this.pool = pool;
+              return [StakeActions.checkReward(), StakeActions.getStake()];
+            })
           )
       )
-    ), {dispatch: false}
+    )
   );
 
   setOrganization$ = createEffect(() =>
@@ -55,19 +60,44 @@ export class StakeEffects {
       switchMap(({organization}) =>
         from(this.stakingPoolService.getPool(organization))
           .pipe(
-            map((pool: StakingPool) => this.pool = pool)
+            map((pool: StakingPool) => {
+              this.pool = pool;
+              return StakeActions.checkReward();
+            })
           )
       )
-    ), {dispatch: false}
+    )
   );
 
-  putStake = createEffect(() =>
+  getStake = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StakeActions.getStake),
+      switchMap(() =>
+        from(this.iamService.iam.getSigner().getAddress())
+          .pipe(
+            switchMap((address) => from(this.pool.getStake(address))
+              .pipe(
+                map((stake) => StakeActions.getStakeSuccess({stake}))
+              )
+            ))
+      )
+    )
+  );
+
+  putStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.putStake),
       switchMap(({amount}) =>
         from(this.pool.putStake(parseEther(amount)))
           .pipe(
-            mergeMap(() => [StakeActions.getAccountBalance(), StakeActions.checkReward()])
+            mergeMap(() => {
+              this.dialog.open(StakeSuccessComponent, {
+                width: '400px',
+                maxWidth: '100%',
+                disableClose: true
+              });
+              return [StakeActions.getAccountBalance(), StakeActions.checkReward()]
+            })
           )
       )
     )
@@ -77,12 +107,37 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.withdrawReward),
       switchMap(() =>
-        from(this.pool.withdraw())
+        from(this.pool.requestWithdraw())
           .pipe(
-            map(() => StakeActions.withdrawRewardSuccess())
+            switchMap(() =>
+              from(this.pool.withdraw()).pipe(
+                mergeMap(() => [StakeActions.withdrawRewardSuccess(), StakeActions.getStake()]),
+                catchError(err => {
+                  console.error(err);
+                  return of(StakeActions.withdrawRewardFailure({err}));
+                })
+              ),
+            )
           )
       )
-    ));
+    )
+  );
+
+
+  checkReward$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StakeActions.checkReward),
+      switchMap(() =>
+        from(this.pool.checkReward()).pipe(
+          map((reward) => StakeActions.checkRewardSuccess({reward: formatEther(reward as any)})),
+          catchError(err => {
+            console.error(err);
+            return of(StakeActions.checkRewardFailure(err));
+          })
+        )
+      )
+    )
+  );
 
   getAccountBalance$ = createEffect(() =>
     this.actions$.pipe(
