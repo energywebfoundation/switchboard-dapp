@@ -21,14 +21,6 @@ export class StakeEffects {
   private stakingPoolService: StakingPoolService;
   private pool: StakingPool;
 
-  getOrganizationName$ = createEffect(() =>
-      this.actions$.pipe(
-        ofType(StakeActions.initStakingPool),
-      ),
-    {dispatch: false}
-  );
-
-
   initStakingPoolService$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.initStakingPool),
