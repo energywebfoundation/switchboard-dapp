@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { PatronService } from '../patron.service';
 import { StakeState } from '../../../state/stake/stake.reducer';
 import { Store } from '@ngrx/store';
 import * as stakeSelectors from '../../../state/stake/stake.selectors';

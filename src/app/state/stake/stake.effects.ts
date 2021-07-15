@@ -7,12 +7,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { StakeState } from './stake.reducer';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import * as StakeActions from './stake.actions';
-import * as stakeSelectors from './stake.selectors';
-import { catchError, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { utils } from 'ethers';
-import { StakingService } from '../../shared/services/staking/staking.service';
-import { StakingPool, StakingPoolService } from 'iam-client-lib';
+import { Stake, StakeStatus, StakingPool, StakingPoolService } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
 import { ActivatedRoute } from '@angular/router';
 
@@ -68,7 +66,7 @@ export class StakeEffects {
           .pipe(
             mergeMap((pool: StakingPool) => {
               this.pool = pool;
-              return [StakeActions.checkReward(), StakeActions.getStake()];
+              return [StakeActions.getStake()];
             })
           )
       )
@@ -83,7 +81,14 @@ export class StakeEffects {
           .pipe(
             switchMap((address) => from(this.pool.getStake(address))
               .pipe(
-                map((stake) => StakeActions.getStakeSuccess({stake}))
+                filter<Stake>(Boolean),
+                mergeMap((stake) => {
+                  const actions = [StakeActions.getStakeSuccess({stake})];
+                  if (stake.status !== StakeStatus.NONSTAKING) {
+                    return [...actions, StakeActions.checkReward()];
+                  }
+                  return actions;
+                })
               )
             ))
       )
@@ -160,6 +165,28 @@ export class StakeEffects {
         )
       )
     )
+  );
+
+  launchStakingPool$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StakeActions.launchStakingPool),
+      switchMap(() => from(this.stakingPoolService.launchStakingPool({
+        org: '',
+        minStakingPeriod: 1000,
+        patronRewardPortion: 10,
+        patronRoles: [],
+        principal: parseEther('100')
+      })))
+    ), {dispatch: false}
+  );
+
+
+  getAllServices = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(StakeActions.getAllServices),
+        switchMap(() => from(this.stakingPoolService.allServices()).pipe(map((service) => console.log(service))))
+      ), {dispatch: false}
   );
 
   constructor(private actions$: Actions,

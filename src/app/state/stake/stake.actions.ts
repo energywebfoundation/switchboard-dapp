@@ -51,3 +51,10 @@ export const withdrawRewardFailure = createAction(
   props<{err: string}>()
 );
 
+export const launchStakingPool = createAction(
+  '[Stake] Launch Staking Pool',
+);
+
+export const getAllServices = createAction(
+  '[Stake] Get All Services'
+);
