@@ -20,6 +20,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { LayoutModule } from '../../layout/layout.module';
 import { LastDigitsPipe } from './pipes/last-digits.pipe';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -46,7 +47,7 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
     MatDialogModule,
     MatProgressBarModule,
     SharedModule,
-    LayoutModule
+    LayoutModule,
   ],
 
 })

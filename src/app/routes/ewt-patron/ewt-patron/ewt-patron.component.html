@@ -26,8 +26,9 @@
                             <div class="staking-widget widget-inner px-4 py-4">
                                 <div class="staking-widget-xs-label color-white mb-2">Your account balance</div>
                                 <h3 class="mb-0 color-white">
-                                    <ng-container *ngIf="balance$ | async as balance">{{balance | lastDigits}} </ng-container>
-                                        <span class="staking-currency ml-2">EWT</span></h3>
+                                    <ng-container
+                                            *ngIf="balance$ | async as balance">{{balance | lastDigits}} </ng-container>
+                                    <span class="staking-currency ml-2">EWT</span></h3>
                             </div>
                         </div>
                     </div>
@@ -39,8 +40,11 @@
                         <div class="staking-widget p-4">
                             <ng-container *ngIf="(performance$ | async) as performance">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div class="d-flex flex-column">
-                                        <div class="staking-widget-xl-label color-white">Performance</div>
+                                    <div class="d-flex flex-column" matTooltipPosition="below"
+                                         matTooltip="Recent performance of the Provider, based on the performance of the nodes and any events of EWT salshed.">
+                                        <div class="staking-widget-xl-label color-white">
+                                            Performance
+                                        </div>
                                         <div class="staking-widget-sm-label color-white">Excellent</div>
                                     </div>
                                     <h3 class="mb-0 color-white">{{performance}}%</h3>
@@ -57,8 +61,16 @@
                                 <img src="../../../../assets/img/staking/annual-reward-image.png" width="82px"
                                      height="88px">
                                 <div class="d-flex flex-column">
-                                    <div class="staking-widget-xl-label color-white">Annual Reward</div>
-                                    <div class="staking-widget-sm-label color-white">Estimated daily reward 0.03%</div>
+                                    <div class="staking-widget-xl-label color-white"
+                                         matTooltip="You will not be able to access the staked EWT until they are returned to you.
+The stake with reward will be returned to the same address from which the stake was received."
+                                         matTooltipPosition="below">Annual Reward
+                                    </div>
+                                    <div class="staking-widget-sm-label color-white"
+                                         matTooltip="0.0270% per day yields 10.355% per year when compounded daily or 9.855% per year not compounded."
+                                         matTooltipPosition="below">
+                                        Estimated daily reward 0.03%
+                                    </div>
                                 </div>
                                 <h3 class="mb-0 color-white">{{annualReward$ | async}}%</h3>
                             </div>

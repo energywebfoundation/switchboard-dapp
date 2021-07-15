@@ -46,7 +46,7 @@ h5 {
     font-family: Rajdhani, sans-serif;
     letter-spacing: 1.25px !important;
     font-weight: 700 !important;
-} 
+}
 
 p {
     color: #A6A5AC;
@@ -62,7 +62,7 @@ a {
     .mat-progress-bar {
         height: 6px !important;
     }
-    
+
     .mat-progress-bar-fill::after {
         background: linear-gradient(272.06deg, #25E8E8 0.21%, #6268F9 49.1%, #9B54FF 98.25%);
     }
@@ -140,34 +140,35 @@ a {
         left:0;
         right:0;
         bottom:0;
-        border-radius: 32px; 
-        padding: 1px; 
+        border-radius: 32px;
+        padding: 1px;
         background: linear-gradient(314.24deg, #25E8E8 1.72%, rgba(83, 134, 245, 0.16) 33.86%, rgba(98, 104, 249, 0.16) 62.17%, #9B54FF 97.07%);
-        mask: 
-            linear-gradient(#fff 0 0) content-box, 
+        mask:
+            linear-gradient(#fff 0 0) content-box,
             linear-gradient(#fff 0 0);
-        -webkit-mask: 
-            linear-gradient(#fff 0 0) content-box, 
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
             linear-gradient(#fff 0 0);
-        mask-composite: exclude;     
-        -webkit-mask-composite: destination-out; 
-    }   
+        mask-composite: exclude;
+        -webkit-mask-composite: destination-out;
+        z-index: -1;
+    }
 }
 
 .widget-main {
     min-height: 440px !important;
 
     @media screen and (max-width: 800px) {
-        min-height: 600px !important; 
+        min-height: 600px !important;
     }
 }
 
 .widget-inner {
     max-width: 100%;
-    
+
     @media screen and (max-width: 800px) {
         width: 100%;
-        max-width: 300px; 
+        max-width: 300px;
     }
 }
 
