@@ -22,7 +22,7 @@ export class StakeComponent {
   tokenAmount: number;
   balance$ = this.store.select(stakeSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
   stakeAmount = new FormControl();
-  earnedReward = 0;
+  earnedReward = '1.37';
   compound = new FormControl(false);
   @ViewChild('percentButtons') percentButtons: PercentButtonsComponent;
 
