@@ -212,3 +212,9 @@ li {
     padding-left: 3px;
     font-weight: 400;
 }
+
+::ng-deep {
+    .swal-text {
+        text-align: center;
+    }
+}
