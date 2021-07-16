@@ -5,6 +5,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { KeyTypesEnum } from '../models/keyTypesEnum';
 import { isHexValidator } from '../../../utils/validators/is-hex.validator';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 export interface PublicKey {
   publicKeyHex: string;
@@ -30,7 +31,8 @@ export class VerificationMethodComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<VerificationMethodComponent>,
               @Inject(MAT_DIALOG_DATA) private dialogData: any,
-              private verificationService: VerificationService) {
+              private verificationService: VerificationService,
+              private toastr: SwitchboardToastrService) {
   }
 
   get isFormDisabled() {
@@ -55,6 +57,14 @@ export class VerificationMethodComponent implements OnInit {
     if (this.isFormDisabled) {
       return;
     }
+
+    const publicKeyExists = this.dataSource.map(key => key.publicKeyHex === this.publicKey.value);
+    if (publicKeyExists) {
+      this.toastr.error('Public key entered already exists, please choose another');
+      this.clearControls();
+      return;
+    }
+
     this.verificationService.updateDocumentAndReload(this.dialogData.id, this.publicKey.value, this.verificationsAmount)
       .subscribe((publicKeys) => {
         this.handleLoadedPublicKeys(publicKeys);
