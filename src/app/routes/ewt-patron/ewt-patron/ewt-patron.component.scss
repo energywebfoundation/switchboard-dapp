@@ -19,6 +19,10 @@
     }
 }
 
+.content-wrapper {
+    margin-bottom: 0 !important;
+}
+
 h2 {
     font-family: Rajdhani, sans-serif;
     font-size: 46px !important;
@@ -60,7 +64,7 @@ a {
 
 ::ng-deep {
     .mat-progress-bar {
-        height: 6px !important;
+        height: 8px !important;
     }
 
     .mat-progress-bar-fill::after {
@@ -75,6 +79,11 @@ a {
         background-color: #000000;
         border-radius: 100px;
     }
+}
+
+.description {
+    position: relative;
+    top: -50px;
 }
 
 .staking-widget-xs-label {
@@ -97,7 +106,7 @@ a {
 .staking-card {
     background: linear-gradient(337deg, #231F32 2%, #050608 98%);
     border-radius: 64px;
-    height: 100%;
+    height: auto;
 
     &::before {
         content: " ";
@@ -112,9 +121,16 @@ a {
         background-size: contain;
     }
 
+    @media screen and (max-width: 1200px) {
+        &::before {
+            width: 700px;
+        }
+    }
+
     @media screen and (max-width: 800px) {
         &::before {
             width: 100%;
+            max-width: 380px;
         }
     }
 }
@@ -156,19 +172,22 @@ a {
 }
 
 .widget-main {
-    min-height: 440px !important;
+    min-height: 502px !important;
 
     @media screen and (max-width: 800px) {
-        min-height: 600px !important;
+        min-height: 500px !important;
     }
 }
 
 .widget-inner {
     max-width: 100%;
 
+    @media screen and (max-width: 1024px) {
+        min-height: 132px;
+    }
+
     @media screen and (max-width: 800px) {
         width: 100%;
-        max-width: 300px;
     }
 }
 
@@ -193,17 +212,17 @@ ul {
 }
 
 ul li:before{
-   content: '';
-   position: absolute;
-   border-right:2px solid #33CBCB;
-   border-bottom:2px solid #33CBCB;
-   width:10px;
-   height:10px;
-   top: calc(50% - 4px);
-   left: -23px;
-   transform: translateY(-50%) rotate(-45deg);
-}
-
+    content: '';
+    position: absolute;
+    border-right:2px solid #33CBCB;
+    border-bottom:2px solid #33CBCB;
+    width:10px;
+    height:10px;
+    top: calc(5% - -10px);
+    left: -23px;
+    transform: translateY(-50%) rotate(-45deg);
+ }
+ 
 li {
     color: #FFF;
     font-size: 16px;
@@ -216,5 +235,42 @@ li {
 ::ng-deep {
     .swal-text {
         text-align: center;
+    }
+    .mat-tooltip {
+        font-size: 12px;
+        padding: 16px 24px !important;
+        line-height: 16px !important;
+        color: #A6A5AC !important;
+        background: #13111B;
+        border-radius: 24px !important;
+        box-shadow: 0px 0px 4px #A2A1FF, 0px 4px 20px rgba(193, 192, 255, 0.25);
+        width: 100%;
+    }
+}
+
+.staking-footer {
+    height: 56px;
+    background-color: #130E21;
+    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.25);
+    width: 100%;
+
+    .footer-text {
+        font-family: Rajdhani, sans-serif;
+        color: #A6A5AC;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .footer-wrapper {
+        padding: 15px;
+        width: 100%;
+        max-width: 1402px;
+        margin-bottom: 100px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    @media screen and (max-width: 1200px) {
+        height: auto;
     }
 }

@@ -65,6 +65,12 @@ h5 {
   text-transform: uppercase;
 }
 
+  ::ng-deep mat-label {
+    color: #A6A5AC !important;
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 400 !important;
+  }
+
   ::ng-deep {
     .staking-textfield {   
       &.mat-form-field-appearance-outline .mat-form-field-outline {
@@ -76,7 +82,6 @@ h5 {
     .staking-textfield .mat-form-field-label-wrapper {
       left: -5px;
     }
-
     .staking-textfield .mat-form-field-appearance-outline .mat-form-field-infix {
       padding: 0.9em 0.3em !important;
     }

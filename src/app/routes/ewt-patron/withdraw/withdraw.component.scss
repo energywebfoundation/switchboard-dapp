@@ -1,10 +1,6 @@
 .stake-success-container {
     background: #13111B;
     padding: 32px;
-
-    @media screen and (max-width: 800px) {
-        height: 100%;
-    }
 }
 
 h3 {
@@ -44,7 +40,7 @@ p {
     font-style: normal;
     font-weight: bold;
     font-size: 14px;
-    line-height: 16px;
+    line-height: 16px !important;
     border-radius: 16px;
     letter-spacing: 1.25px;
     color: #A566FF;
@@ -58,4 +54,12 @@ p {
     color: #ad74ff; 
     border: 1px solid #ad74ff; 
     }
+  }
+
+  ::ng-deep {
+    .mat-dialog-container {
+        height: auto !important;
+        box-shadow: 0px 0px 4px #a2a1ff, 0px 4px 20px rgb(193 192 255 / 25%);
+        border-radius: 24px; 
+    }  
   }
