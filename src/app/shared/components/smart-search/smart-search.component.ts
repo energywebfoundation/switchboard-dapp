@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { IamService } from '../../services/iam.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 @Component({
     selector: 'app-smart-search',
@@ -14,6 +15,9 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
     @Input() searchText: FormControl;
     @Input() placeholderSearch: string;
     @Input() fieldName: string;
+    @Input() SearchType = "restrictions";
+
+    @Output() SearchTextEvent: EventEmitter<any> = new EventEmitter();
 
     searchTxtFieldValue: string;
     searchForm: FormGroup;
@@ -23,9 +27,11 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
     };
 
     public filteredOptions: Observable<any[]>;
+    private TOASTR_HEADER = 'Create New Role';
 
     constructor(private route: Router,
-                private iamService: IamService) {
+        private iamService: IamService,
+        private toastr: SwitchboardToastrService) {
     }
 
     ngOnInit(): void {
@@ -53,6 +59,20 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
         } else {
             this.searchTxtFieldValue = this.searchText.value.option.value.namespace;
         }
+    }
+
+    addRole() {
+        const searchText = this.searchText.value;
+        if (typeof searchText === 'string') {
+            this.toastr.error('Role you want to add does not exists');
+            return;
+        }
+
+        this.SearchTextEvent.emit({
+            Role: searchText,
+            SearchType: this.SearchType
+        });
+        this.clearSearchTxt();
     }
 
   clearSearchTxt(): void {

@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
+import { ENSNamespaceTypes, PreconditionTypes, IRole } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { debounceTime, delay, filter, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -36,12 +36,21 @@ const RoleTypeList = [{
     value: RoleType.APP
   }];
 
+const SmartSearchType =  {
+  RoleIssuers : "roleissuers",
+  Restrictions : "restrictions"
+}
 export interface RolesFields {
   type: string;
   label: string;
   validation: string;
   actions: string;
 }
+
+interface ISmartSearch {
+  Role: IRole,
+  SearchType: string
+} 
 
 const FIELD_TYPES = [
   'text', 'number', 'date', 'boolean'
@@ -91,6 +100,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public RoleTypeList = RoleTypeList;
   public ENSPrefixes  = ENSNamespaceTypes;
   public issuerList   : string[] = [this.iamService.iam.getDid()];
+  public restrictionList: IRole[] = [];
 
   // Fields
   public FieldTypes   = FIELD_TYPES;
@@ -385,6 +395,24 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   removeDid(i: number) {
     if (this.issuerList.length > 1) {
       this.issuerList.splice(i, 1);
+    }
+  }
+
+  addRestriction(event: ISmartSearch) {
+    if (event.SearchType === 'restrictions') {
+      if (this.roleForm.get('data').value.enrolmentPreconditions[0].conditions.length > 0) {
+        this.toastr.error('You can only add one precondition, please remove previously added role to add a new one');
+        return;
+      }
+
+      const newValueToPatch = [
+        {
+          type: PreconditionTypes.Role,
+          conditions: [event.Role.namespace]
+        }
+      ];
+
+      this.roleForm.get('data').get('enrolmentPreconditions').patchValue(newValueToPatch);
     }
   }
 
