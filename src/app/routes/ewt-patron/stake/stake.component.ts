@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { WithdrawComponent } from '../withdraw/withdraw.component';
 import { ClaimRewardComponent } from '../claim-reward/claim-reward.component';
@@ -10,8 +10,6 @@ import { StakeState } from '../../../state/stake/stake.reducer';
 import { Store } from '@ngrx/store';
 import * as stakeSelectors from '../../../state/stake/stake.selectors';
 import * as StakeActions from '../../../state/stake/stake.actions';
-import { getStakeAmount, isWithdrawDisabled } from '../../../state/stake/stake.selectors';
-import { StakeSuccessComponent } from '../stake-success/stake-success.component';
 
 @Component({
   selector: 'app-stake',
@@ -22,7 +20,7 @@ export class StakeComponent {
   inputFocused: boolean;
   tokenAmount: number;
   balance$ = this.store.select(stakeSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
-  amountToStake = new FormControl();
+  amountToStake = new FormControl('', [Validators.min(0), Validators.required]);
   earnedReward$ = this.store.select(stakeSelectors.getReward);
   stakeAmount$ = this.store.select(stakeSelectors.getStakeAmount);
   isStakingDisabled$ = this.store.select(stakeSelectors.isStakingDisabled);
@@ -39,6 +37,10 @@ export class StakeComponent {
     this.inputFocused = false;
     this.percentButtons.selectedPercentButton = null;
     this.amountToStake.setValue('');
+  }
+
+  isAmountInvalid() {
+    return this.amountToStake.invalid;
   }
 
   inputChangeHandler() {
