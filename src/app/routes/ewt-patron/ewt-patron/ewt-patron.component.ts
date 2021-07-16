@@ -19,13 +19,13 @@ export class EwtPatronComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.dialog.open(LoginDialogComponent, {
-    //   width: '434px',
-    //   panelClass: 'connect-to-wallet',
-    //   backdropClass: 'backdrop-hide-content',
-    //   maxWidth: '100%',
-    //   disableClose: true
-    // });
+    this.dialog.open(LoginDialogComponent, {
+      width: '434px',
+      panelClass: 'connect-to-wallet',
+      backdropClass: 'backdrop-hide-content',
+      maxWidth: '100%',
+      disableClose: true
+    });
   }
 
 }
