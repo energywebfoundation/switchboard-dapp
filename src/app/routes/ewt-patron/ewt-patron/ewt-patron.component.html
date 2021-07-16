@@ -33,7 +33,7 @@
                             <h3 class="mb-0 color-white">
                                 <ng-container *ngIf="balance$ | async as balance">{{balance | lastDigits}}
                                 </ng-container>
-                                <span class="staking-currency">EWT</span>
+                                <span class="staking-currency">VT</span>
                             </h3>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                             <ng-container *ngIf="(performance$ | async) as performance">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex flex-column" matTooltipPosition="below"
-                                        matTooltip="Recent performance of the Provider, based on the performance of the nodes and any events of EWT salshed.">
+                                        matTooltip="Recent performance of the Provider, based on the performance of the nodes and any events of VT salshed.">
                                         <div class="staking-widget-xl-label color-white">
                                             Performance
                                         </div>
@@ -59,7 +59,7 @@
                     <div class="col-md-12 my-2">
                         <div class="staking-widget py-3 px-4">
                             <div class="d-flex flex-column mt-2">
-                                <div class="staking-widget-xl-label color-white" matTooltip="You will not be able to access the staked EWT until they are returned to you.
+                                <div class="staking-widget-xl-label color-white" matTooltip="You will not be able to access the staked VT until they are returned to you.
 The stake with reward will be returned to the same address from which the stake was received."
                                     matTooltipPosition="below">Annual Reward
                                 </div>

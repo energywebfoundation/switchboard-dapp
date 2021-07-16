@@ -22,7 +22,7 @@ export class EwtPatronComponent implements OnInit {
     this.dialog.open(LoginDialogComponent, {
       width: '434px',
       panelClass: 'connect-to-wallet',
-      backdropClass: 'backdrop-hide-content',
+      backdropClass: 'backdrop-shadow',
       maxWidth: '100%',
       disableClose: true
     });
