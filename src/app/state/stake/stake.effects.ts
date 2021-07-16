@@ -15,6 +15,7 @@ import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/sta
 import { ActivatedRoute } from '@angular/router';
 
 import swal from 'sweetalert';
+import { BigNumberish } from 'ethers/utils/bignumber';
 const {formatEther, parseEther} = utils;
 
 @Injectable()
@@ -102,7 +103,7 @@ export class StakeEffects {
               .pipe(
                 filter<Stake>(Boolean),
                 mergeMap((stake) => {
-                    const actions = [StakeActions.getStakeSuccess({stake})];
+                    const actions = [StakeActions.getStakeSuccess({stake}), StakeActions.getAccountBalance()];
                     if (stake.status !== StakeStatus.NONSTAKING) {
                       return [...actions, StakeActions.checkReward()];
                     }
@@ -142,9 +143,9 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.getWithdrawDelay),
       switchMap(() =>
-        from(this.pool.withdrawalDelay())
+        from(this.pool.requestWithdrawDelay())
           .pipe(
-            map((withdrawalDelay) => StakeActions.getWithdrawDelaySuccess({delay: formatEther(withdrawalDelay)})),
+            map((withdrawalDelay: BigNumberish) => StakeActions.getWithdrawDelaySuccess({delay: formatEther(withdrawalDelay)})),
           )
       )
     )
@@ -214,7 +215,7 @@ export class StakeEffects {
       ofType(StakeActions.launchStakingPool),
       switchMap(() => from(this.stakingPoolService.launchStakingPool({
         org: 'dawidgil.iam.ewc',
-        minStakingPeriod: 1000,
+        minStakingPeriod: 1,
         patronRewardPortion: 10,
         patronRoles: [],
         principal: parseEther('100')
