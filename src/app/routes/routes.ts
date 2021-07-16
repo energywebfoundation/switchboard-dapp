@@ -31,7 +31,7 @@ export const routes = [
     component: RequestClaimComponent,
   },
   {
-    path: 'ewt-patron',
+    path: 'staking',
     loadChildren: () => import('./ewt-patron/ewt-patron.module').then(m => m.EwtPatronModule)
   },
   {
