@@ -1,17 +1,17 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { StakeComponent } from './stake.component';
 
-describe('StakeComponent', () => {
+xdescribe('StakeComponent', () => {
   let component: StakeComponent;
   let fixture: ComponentFixture<StakeComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync( () => {
+    TestBed.configureTestingModule({
       declarations: [ StakeComponent ]
     })
     .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(StakeComponent);
