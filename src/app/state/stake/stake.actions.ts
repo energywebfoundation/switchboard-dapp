@@ -58,3 +58,12 @@ export const launchStakingPool = createAction(
 export const getAllServices = createAction(
   '[Stake] Get All Services'
 );
+
+export const getWithdrawDelay = createAction(
+  '[Stake] Get Withdraw Delay'
+);
+
+export const getWithdrawDelaySuccess = createAction(
+  '[Stake] Get Withdraw Delay Success',
+  props<{delay: any}>()
+);

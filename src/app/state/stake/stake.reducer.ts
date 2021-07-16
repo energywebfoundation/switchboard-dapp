@@ -11,6 +11,7 @@ export interface StakeState {
   reward: string;
   organization: string;
   userStake: Stake;
+  delay: string;
 }
 
 export const initialState: StakeState = {
@@ -19,7 +20,8 @@ export const initialState: StakeState = {
   annualReward: 10,
   reward: '0',
   organization: '',
-  userStake: null
+  userStake: null,
+  delay: ''
 };
 
 const stakeReducer = createReducer(
@@ -36,7 +38,8 @@ const stakeReducer = createReducer(
         depositEnd: stake.depositEnd,
         depositStart: stake.depositStart
       }
-    }))
+    })),
+  on(StakeActions.getWithdrawDelaySuccess, (state, {delay}) => ({...state, delay}))
 );
 
 export function reducer(state: StakeState | undefined, action: Action) {
