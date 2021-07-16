@@ -113,6 +113,14 @@ h5 {
     .staking-textfield.mat-form-field-appearance-outline .mat-form-field-outline-end {
       border-radius: 0 16px 16px 0;
     }
+
+    .staking-textfield.mat-form-field-appearance-outline .mat-form-field-flex {
+      padding: 0.1em 0.6em !important;
+      
+      @media screen and (max-width: 800px) {
+        padding: 0.35em 0.6em !important;
+      }
+  }
 }
 
 
@@ -164,8 +172,8 @@ h5 {
   letter-spacing: 1.25px;
   background-color: #A566FF;
   padding: 0 0 !important;
-  height: 40px;
-  width: 115px;
+  height: 44px;
+  width: 124px;
 
   &.mat-raised-button[disabled] {
     color: #AF76FF !important;
