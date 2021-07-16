@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LoginDialogComponent } from './login-dialog.component';
-import { PatronService } from '../patron.service';
+import { PatronLoginService } from '../patron-login.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('LoginDialogComponent', () => {
@@ -12,7 +12,7 @@ describe('LoginDialogComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ LoginDialogComponent ],
       providers: [
-        {provide: PatronService, useValue: {}}
+        {provide: PatronLoginService, useValue: {}}
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

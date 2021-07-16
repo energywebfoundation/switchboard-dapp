@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PatronService } from './patron.service';
+import { PatronLoginService } from './patron-login.service';
 
-xdescribe('PatronService', () => {
-  let service: PatronService;
+xdescribe('PatronLoginService', () => {
+  let service: PatronLoginService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PatronService);
+    service = TestBed.inject(PatronLoginService);
   });
 
   it('should be created', () => {
