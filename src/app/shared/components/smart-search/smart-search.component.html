@@ -14,11 +14,11 @@
     </mat-autocomplete>
     <div matSuffix class="d-flex" *ngIf="searchTxtFieldValue?.trim()?.length > 2">
         <ng-container *ngIf="!isAutolistLoading?.value">
-            <button mat-icon-button (click)="search()">
+            <button mat-icon-button (click)="search()" class="searchButton">
                 <mat-icon>search</mat-icon>
             </button>
-            <button mat-icon-button (click)="clearSearchTxt()">
-                <mat-icon>close</mat-icon>
+            <button mat-icon-button (click)="addRole()">
+                <mat-icon>add</mat-icon>
             </button>
         </ng-container>
         <mat-spinner *ngIf="isAutolistLoading?.value" diameter="21" class="color-white"></mat-spinner>
