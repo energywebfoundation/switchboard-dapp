@@ -171,11 +171,13 @@
             </div>
             <div class="row mt-2">
               <div class="col-lg-12">
-              <app-smart-search
-              [placeholderSearch]="'Search Role Namespace (Optional)'"
-              [searchText]="roleControl"
-              [fieldName]="'rolePage'"
-              ></app-smart-search>
+                <app-smart-search
+                  [placeholderSearch]="'Search Role Namespace (Optional)'"
+                  [searchText]="roleControl"
+                  [fieldName]="'rolePage'"
+                  SearchType="restrictions"
+                  (SearchTextEvent)="addRestriction($event)"
+                ></app-smart-search>
               </div>
             </div>
           </div>
