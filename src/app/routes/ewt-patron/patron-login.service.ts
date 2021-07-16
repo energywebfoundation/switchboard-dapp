@@ -20,8 +20,8 @@ export class PatronLoginService {
     from(this.iamService.login({
       walletProvider,
       reinitializeMetamask: true,
-      initCacheServer: true,
-      initDid: true
+      initCacheServer: false,
+      initDID: false
     })).subscribe(() => {
         this.iamService.clearWaitSignatureTimer();
         this.store.dispatch(StakeActions.initStakingPool());
