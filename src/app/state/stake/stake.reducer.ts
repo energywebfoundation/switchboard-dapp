@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as StakeActions from './stake.actions';
-import { Stake } from '../../../../../iam-client-lib';
+import { Stake } from 'iam-client-lib';
 
 export const USER_FEATURE_KEY = 'stake';
 
