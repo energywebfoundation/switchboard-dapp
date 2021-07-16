@@ -15,7 +15,7 @@ import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/sta
 import { ActivatedRoute } from '@angular/router';
 
 import swal from 'sweetalert';
-import { BigNumberish } from 'ethers/utils/bignumber';
+
 const {formatEther, parseEther} = utils;
 
 @Injectable()
@@ -139,17 +139,17 @@ export class StakeEffects {
     )
   );
 
-  withdrawDelay$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(StakeActions.getWithdrawDelay),
-      switchMap(() =>
-        from(this.pool.requestWithdrawDelay())
-          .pipe(
-            map((withdrawalDelay: BigNumberish) => StakeActions.getWithdrawDelaySuccess({delay: formatEther(withdrawalDelay)})),
-          )
-      )
-    )
-  );
+  // withdrawDelay$ = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType(StakeActions.getWithdrawDelay),
+  //     switchMap(() =>
+  //       from(this.pool.requestWithdrawDelay())
+  //         .pipe(
+  //           map((withdrawalDelay: BigNumberish) => StakeActions.getWithdrawDelaySuccess({delay: formatEther(withdrawalDelay)})),
+  //         )
+  //     )
+  //   )
+  // );
 
   withdrawReward$ = createEffect(() =>
     this.actions$.pipe(
