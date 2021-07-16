@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IAM } from '../../../../../../iam-client-lib';
+import { IAM } from 'iam-client-lib';
 import { VOLTA_CHAIN_ID } from '../../../shared/services/iam.service';
 import { PatronService } from '../patron.service';
 
