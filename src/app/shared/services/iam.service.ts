@@ -39,7 +39,7 @@ export interface LoginOptions {
   walletProvider?: WalletProvider;
   reinitializeMetamask?: boolean;
   initCacheServer?: boolean;
-  initDid?: boolean;
+  initDID?: boolean;
 }
 
 export enum LoginType {
