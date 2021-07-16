@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { StakeState } from './stake.reducer';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import * as StakeActions from './stake.actions';
-import { catchError, filter, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, delay, filter, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { utils } from 'ethers';
 import { Stake, StakeStatus, StakingPool, StakingPoolService } from 'iam-client-lib';
@@ -146,6 +146,7 @@ export class StakeEffects {
       switchMap(() =>
         from(this.pool.requestWithdraw())
           .pipe(
+            delay(5000),
             switchMap(() =>
               from(this.pool.withdraw()).pipe(
                 mergeMap(() => [StakeActions.withdrawRewardSuccess(), StakeActions.getStake()]),
@@ -153,7 +154,10 @@ export class StakeEffects {
                   console.error(err);
                   return of(StakeActions.withdrawRewardFailure({err}));
                 }),
-                finalize(() => this.loadingService.hide())
+                finalize(() => {
+                  this.loadingService.hide();
+                  this.dialog.closeAll();
+                })
               ),
             )
           )
@@ -198,7 +202,7 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.launchStakingPool),
       switchMap(() => from(this.stakingPoolService.launchStakingPool({
-        org: '',
+        org: 'dawidgil.iam.ewc',
         minStakingPeriod: 1000,
         patronRewardPortion: 10,
         patronRoles: [],
