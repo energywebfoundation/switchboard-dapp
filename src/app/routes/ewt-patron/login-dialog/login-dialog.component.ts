@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { IAM } from '../../../../../../iam-client-lib';
 import { VOLTA_CHAIN_ID } from '../../../shared/services/iam.service';
 import { PatronService } from '../patron.service';
-import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login-dialog',
@@ -13,8 +12,7 @@ export class LoginDialogComponent implements OnInit {
   isMetamaskExtensionAvailable: boolean;
   disableMetamaskButton: boolean;
 
-  constructor(private patronService: PatronService,
-              private dialogRef: MatDialogRef<LoginDialogComponent>) {
+  constructor(private patronService: PatronService) {
   }
 
   ngOnInit() {
