@@ -36,10 +36,6 @@ const RoleTypeList = [{
     value: RoleType.APP
   }];
 
-const SmartSearchType =  {
-  RoleIssuers : "roleissuers",
-  Restrictions : "restrictions"
-}
 export interface RolesFields {
   type: string;
   label: string;
@@ -100,7 +96,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public RoleTypeList = RoleTypeList;
   public ENSPrefixes  = ENSNamespaceTypes;
   public issuerList   : string[] = [this.iamService.iam.getDid()];
-  public restrictionList: IRole[] = [];
 
   // Fields
   public FieldTypes   = FIELD_TYPES;
