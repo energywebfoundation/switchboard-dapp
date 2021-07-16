@@ -82,6 +82,9 @@ export class StakeEffects {
         from(this.stakingPoolService.getPool(organization))
           .pipe(
             mergeMap((pool: StakingPool) => {
+              if (!pool) {
+                this.toastr.error(`Organization ${organization} do not exist as a provider.`);
+              }
               this.pool = pool;
               return [StakeActions.getStake()];
             })
