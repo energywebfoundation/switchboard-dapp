@@ -75,8 +75,11 @@ export class AuthEffects {
   logout$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.logout),
-      tap(() => this.iamService.disconnect())
-    ), {dispatch: false}
+      tap(() => {
+        this.iamService.disconnect();
+        location.reload();
+      })
+    )
   );
 
   constructor(private actions$: Actions,
