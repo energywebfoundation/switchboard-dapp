@@ -23,7 +23,7 @@ export class PatronLoginService {
       reinitializeMetamask: true,
       initCacheServer: false,
       initDID: false
-    })).pipe(finalize(() => this.iamService.clearWaitSignatureTimer()));
+    }, false)).pipe(finalize(() => this.iamService.clearWaitSignatureTimer()));
   }
 
 }
