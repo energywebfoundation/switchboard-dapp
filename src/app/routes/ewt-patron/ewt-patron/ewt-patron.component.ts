@@ -4,8 +4,6 @@ import { Store } from '@ngrx/store';
 import * as stakeSelectors from '../../../state/stake/stake.selectors';
 import * as authSelectors from '../../../state/auth/auth.selectors';
 import * as AuthActions from '../../../state/auth/auth.actions';
-import { tap } from 'rxjs/operators';
-import { PatronLoginService } from '../patron-login.service';
 
 @Component({
   selector: 'app-ewt-patron',
@@ -16,13 +14,13 @@ export class EwtPatronComponent {
   balance$ = this.store.select(stakeSelectors.getBalance);
   performance$ = this.store.select(stakeSelectors.getPerformance);
   annualReward$ = this.store.select(stakeSelectors.getAnnualReward);
-  disableMetamaskButton$ = this.store.select(authSelectors.isMetamaskDisabled).pipe(tap(v => console.log('disabled: ',v)));
+  disableMetamaskButton$ = this.store.select(authSelectors.isMetamaskDisabled);
   loggedIn$ = this.store.select(authSelectors.isUserLoggedIn);
-  constructor(private store: Store<StakeState>, private patronLoginService: PatronLoginService) {
+  constructor(private store: Store<StakeState>) {
   }
 
   connectToMetamask() {
-    this.patronLoginService.login();
+    this.store.dispatch(AuthActions.loginHeaderStakingButton());
   }
 
   logOut() {

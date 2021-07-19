@@ -6,9 +6,13 @@ export const init = createAction(
   '[AUTH] Initialize Possible Options To Log In'
 );
 
-export const login = createAction(
-  '[AUTH] User Login',
-  props<{ options: LoginOptions }>()
+export const loginHeaderStakingButton = createAction(
+  '[AUTH] Staking User Login With Button In Header',
+);
+
+export const loginBeforeStakeIfNotLoggedIn = createAction(
+  '[AUTH] Staking Login Before Stake If Not Logged In',
+  props<{ amount: string }>()
 );
 
 export const loginSuccess = createAction(

@@ -9,7 +9,7 @@ import { PercentButtonsComponent } from '../percent-buttons/percent-buttons.comp
 import { StakeState } from '../../../state/stake/stake.reducer';
 import { Store } from '@ngrx/store';
 import * as stakeSelectors from '../../../state/stake/stake.selectors';
-import * as StakeActions from '../../../state/stake/stake.actions';
+import * as AuthActions from '../../../state/auth/auth.actions';
 
 @Component({
   selector: 'app-stake',
@@ -52,7 +52,8 @@ export class StakeComponent {
   }
 
   stake() {
-    this.store.dispatch(StakeActions.putStake({amount: this.amountToStake.value.toString()}));
+    this.store.dispatch(AuthActions.loginBeforeStakeIfNotLoggedIn({amount: this.amountToStake.value.toString()}));
+    this.amountToStake.reset();
   }
 
   withdraw() {
