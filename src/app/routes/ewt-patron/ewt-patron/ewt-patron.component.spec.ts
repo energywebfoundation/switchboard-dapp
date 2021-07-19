@@ -8,7 +8,7 @@ import { StakeState } from '../../../state/stake/stake.reducer';
 import * as stakeSelectors from '../../../state/stake/stake.selectors';
 import { LastDigitsPipe } from '../pipes/last-digits.pipe';
 
-describe('EwtPatronComponent', () => {
+xdescribe('EwtPatronComponent', () => {
   let component: EwtPatronComponent;
   let fixture: ComponentFixture<EwtPatronComponent>;
   let store: MockStore<StakeState>;

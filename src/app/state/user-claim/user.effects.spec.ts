@@ -14,11 +14,6 @@ import * as userSelectors from './user.selectors';
 import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    providers: []
-  });
-});
 describe('UserEffects', () => {
 
   const iamSpy = jasmine.createSpyObj('iam', ['getUserClaims', 'createSelfSignedClaim']);

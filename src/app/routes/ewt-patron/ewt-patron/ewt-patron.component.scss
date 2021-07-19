@@ -242,9 +242,47 @@ li {
         line-height: 16px !important;
         color: #A6A5AC !important;
         background: #13111B;
-        border-radius: 24px !important;
+        border-radius: 26px !important;
         box-shadow: 0px 0px 4px #A2A1FF, 0px 4px 20px rgba(193, 192, 255, 0.25);
         width: 100%;
+    }
+}
+
+.connect-btn {
+    font-family: Rajdhani, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px !important;
+    border-radius: 16px;
+    letter-spacing: 1.25px;
+    background-color: #A566FF;
+    padding: 0 24px !important;
+    height: 42px;
+    width: auto;
+  
+    &.mat-raised-button[disabled] {
+      color: #AF76FF !important;
+      background-color: rgb(165 102 255 / 20%) !important;
+    }
+  
+    &:hover {
+        background-color: #ad74ff;   
+    }
+  }
+
+.staking-header {
+    height: 56px;
+    background-color: transparent;
+    width: 100%;
+
+    .header-wrapper {
+        padding: 15px;
+        width: 100%;
+        max-width: 1402px;
+        margin-bottom: 100px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
