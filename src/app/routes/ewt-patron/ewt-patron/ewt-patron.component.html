@@ -1,13 +1,15 @@
 <div class="staking-container">
-    <div class="staking-footer">
-        <div class="d-flex justify-content-end flex-column flex-md-row">
+    <div class="staking-header">
+        <div class="header-wrapper d-flex flex-grow-1 justify-content-end">
             <ng-container *ngIf="(loggedIn$ | async) else notLogged">
-                <button mat-raised-button (click)="logOut()">Logout</button>
+                <button mat-raised-button class="connect-btn color-white text-uppercase mr-2"
+                    (click)="logOut()">Logout</button>
             </ng-container>
             <ng-template #notLogged>
                 <button mat-raised-button (click)="connectToMetamask()"
-                        class="btn btn-connect" type="submit" [disabled]="disableMetamaskButton$ | async">
-                    LogIn
+                    class="connect-btn color-white text-uppercase mr-2" type="submit"
+                    [disabled]="disableMetamaskButton$ | async">
+                    Connect to Wallet
                 </button>
             </ng-template>
         </div>
@@ -55,7 +57,7 @@
                             <ng-container *ngIf="(performance$ | async) as performance">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex flex-column" matTooltipPosition="below"
-                                         matTooltip="Recent performance of the Provider, based on the performance of the nodes and any events of VT salshed.">
+                                        matTooltip="Recent performance of the Provider, based on the performance of the nodes and any events of VT salshed.">
                                         <div class="staking-widget-xl-label color-white">
                                             Performance
                                         </div>
@@ -74,17 +76,17 @@
                             <div class="d-flex flex-column mt-2">
                                 <div class="staking-widget-xl-label color-white" matTooltip="You will not be able to access the staked VT until they are returned to you.
 The stake with reward will be returned to the same address from which the stake was received."
-                                     matTooltipPosition="below">Annual Reward
+                                    matTooltipPosition="below">Annual Reward
                                 </div>
                                 <div class="staking-widget-sm-label color-white"
-                                     matTooltip="0.0270% per day yields 10.355% per year when compounded daily or 9.855% per year not compounded."
-                                     matTooltipPosition="below">
+                                    matTooltip="0.0270% per day yields 10.355% per year when compounded daily or 9.855% per year not compounded."
+                                    matTooltipPosition="below">
                                     Estimated daily reward 0.03%
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center my-3">
                                 <img src="../../../../assets/img/staking/annual-reward-image.png" width="82px"
-                                     height="88px">
+                                    height="88px">
                                 <h3 class="mb-0 color-white">{{annualReward$ | async}}%</h3>
                             </div>
                         </div>
