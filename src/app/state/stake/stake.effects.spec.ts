@@ -14,12 +14,7 @@ import * as userSelectors from '../user-claim/user.selectors';
 import * as userActions from '../user-claim/user.actions';
 import { finalize } from 'rxjs/operators';
 
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    providers: []
-  });
-});
-describe('UserEffects', () => {
+xdescribe('UserEffects', () => {
 
   const iamSpy = jasmine.createSpyObj('iam', ['getUserClaims', 'createSelfSignedClaim']);
   const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);

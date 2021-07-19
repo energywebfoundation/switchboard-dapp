@@ -11,12 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthState } from './auth.reducer';
 import { AuthEffects } from './auth.effects';
 
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    providers: []
-  });
-});
-describe('UserEffects', () => {
+xdescribe('AuthEffects', () => {
 
   const iamSpy = jasmine.createSpyObj('iam', ['getUserClaims', 'createSelfSignedClaim']);
   const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
