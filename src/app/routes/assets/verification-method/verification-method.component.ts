@@ -60,6 +60,7 @@ export class VerificationMethodComponent implements OnInit {
 
     const publicKeyExists = this.dataSource.map(key => key.publicKeyHex === this.publicKey.value);
     if (publicKeyExists) {
+      
       this.toastr.error('Public key entered already exists, please choose another');
       this.clearControls();
       return;
