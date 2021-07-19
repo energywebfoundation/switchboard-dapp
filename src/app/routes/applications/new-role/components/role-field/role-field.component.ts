@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, ChangeDetectorRef, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, EventEmitter, ChangeDetectorRef, Output } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 
 const FIELD_TYPES = [
@@ -11,21 +11,23 @@ const FIELD_TYPES = [
   templateUrl: './role-field.component.html',
   styleUrls: ['./role-field.component.scss']
 })
-export class RoleFieldComponent implements OnInit {
+export class RoleFieldComponent {
 
   @Input() fieldsForm: FormGroup;
   @Input() dataSource: MatTableDataSource<any>;
-  @Input() isChecking: Boolean;
+  @Input() isChecking: boolean;
 
-  @Output() resetFormEvent: EventEmitter<Boolean> = new EventEmitter();
+  @Output() resetFormEvent = new EventEmitter<boolean>();
   @Output() updateDataSourceEvent: EventEmitter<MatTableDataSource<any>> = new EventEmitter();
   @Output() backEvent: EventEmitter<any> = new EventEmitter();
   @Output() proceedConfirmDetailsEvent: EventEmitter<any> = new EventEmitter();
 
   showFieldsForm = false;
   isEditFieldForm = false;
-  fieldIndex : number;
+  fieldIndex: number;
   public FieldTypes = FIELD_TYPES;
+
+  constructor(private changeDetectorRef: ChangeDetectorRef) { }
 
   showAddFieldForm() {
     this.resetForm();
@@ -104,11 +106,29 @@ export class RoleFieldComponent implements OnInit {
     this.resetForm();
   }
 
+  updateDataSource(data) {
+    this.updateDataSourceEvent.emit(data);
+  }
+
+  resetForm() {
+    this.isEditFieldForm = false;
+    this.showFieldsForm = false;
+    this.resetFormEvent.emit(true);
+  }
+
+  back() {
+    this.backEvent.emit();
+  }
+
+  proceedConfirmDetails() {
+    this.proceedConfirmDetailsEvent.emit();
+  }
+
   private _extractValidationObject(value: any) {
     let retVal: any = value;
 
     if (value && value.fieldType) {
-      let validation = undefined;
+      let validation;
       let {
         required,
         minLength,
@@ -137,8 +157,8 @@ export class RoleFieldComponent implements OnInit {
           };
           break;
         case 'date':
-          minDate = minDate;// this._getDate(minDate);
-          maxDate = maxDate;// this._getDate(maxDate);
+          minDate = minDate; // this._getDate(minDate);
+          maxDate = maxDate; // this._getDate(maxDate);
           validation = {
             required,
             minDate,
@@ -158,29 +178,6 @@ export class RoleFieldComponent implements OnInit {
     }
 
     return retVal;
-  }
-
-  updateDataSource(data) {
-    this.updateDataSourceEvent.emit(data);
-  }
-
-  resetForm() {
-    this.isEditFieldForm = false;
-    this.showFieldsForm = false;
-    this.resetFormEvent.emit(true);
-  }
-
-  back() {
-    this.backEvent.emit();
-  }
-
-  proceedConfirmDetails() {
-    this.proceedConfirmDetailsEvent.emit();
-  }
-
-  constructor(private changeDetectorRef: ChangeDetectorRef,) { }
-
-  ngOnInit(): void {
   }
 
 }
