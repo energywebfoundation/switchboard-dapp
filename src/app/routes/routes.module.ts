@@ -10,6 +10,7 @@ import { ApplicationsModule } from './applications/applications.module';
 import { WidgetsModule } from './widgets/widgets.module';
 import { SearchResultModule } from './search-result/search-result.module';
 import { AssetsModule } from './assets/assets.module';
+import { EwtPatronModule } from './ewt-patron/ewt-patron.module';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { AssetsModule } from './assets/assets.module';
     AssetsModule,
     EnrolmentModule,
     SearchResultModule,
-    WidgetsModule
+    WidgetsModule,
+    EwtPatronModule
   ],
   declarations: [],
   exports: [

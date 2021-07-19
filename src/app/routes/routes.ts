@@ -3,6 +3,7 @@ import { AuthGuard } from '../shared/services/auth.guard';
 import { LogOutComponent } from './profile/logout/logout.component';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 import { FeatureToggleGuard } from '../shared/feature-toggle/feature-toggle.guard';
+import { EwtPatronComponent } from './ewt-patron/ewt-patron/ewt-patron.component';
 
 export const routes = [
   {
@@ -32,7 +33,7 @@ export const routes = [
   },
   {
     path: 'staking',
-    loadChildren: () => import('./ewt-patron/ewt-patron.module').then(m => m.EwtPatronModule)
+    component: EwtPatronComponent
   },
   {
     path: 'welcome',
