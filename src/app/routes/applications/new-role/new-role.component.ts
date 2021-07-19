@@ -3,12 +3,11 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { debounceTime, delay, filter, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, delay, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { FieldValidationService } from 'src/app/shared/services/field-validation.service';
-import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -87,7 +86,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public RoleTypeList = RoleTypeList;
   public ENSPrefixes  = ENSNamespaceTypes;
   public issuerList   : string[] = [this.iamService.iam.getDid()];
-  
+
   // Fields
   fieldsForm          = this.fb.group({
     fieldType: ['', Validators.required],
@@ -134,15 +133,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   private subscription$ = new Subject();
 
   constructor(private fb: FormBuilder,
-    private iamService: IamService,
-    private toastr: SwitchboardToastrService,
-    private spinner: NgxSpinnerService,
-    private fieldValidationService: FieldValidationService,
-    public dialogRef: MatDialogRef<NewRoleComponent>,
-    public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private configService: ConfigService) {
-    }
+              private iamService: IamService,
+              private toastr: SwitchboardToastrService,
+              private spinner: NgxSpinnerService,
+              private fieldValidationService: FieldValidationService,
+              public dialogRef: MatDialogRef<NewRoleComponent>,
+              public dialog: MatDialog,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+  }
 
   async ngAfterViewInit() {
     await this.confirmParentNamespace();
@@ -175,7 +173,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.TOASTR_HEADER = 'Update Role';
       }
       else if (this.viewType === ViewType.NEW && data.namespace) {
-        let tmp = {
+        const tmp = {
           parentNamespace: data.namespace,
           roleType: undefined
         };
@@ -196,11 +194,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _initFormData() {
     if (this.origData) {
-      let def = this.origData.definition;
+      const def = this.origData.definition;
 
       // Construct Parent Namespace
-      let arrParentNamespace = this.origData.namespace.split(ENSNamespaceTypes.Roles);
-      let parentNamespace = arrParentNamespace[1].substring(1);
+      const arrParentNamespace = this.origData.namespace.split(ENSNamespaceTypes.Roles);
+      const parentNamespace = arrParentNamespace[1].substring(1);
 
       // Construct Fields
       this.dataSource.data = def.fields ? [...def.fields] : [];
@@ -208,7 +206,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.roleForm.patchValue({
         roleType: def.roleType,
-        parentNamespace: parentNamespace,
+        parentNamespace,
         roleName: def.roleName,
         namespace: `${this.ENSPrefixes.Roles}.${parentNamespace}`,
         data: {
@@ -247,7 +245,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _initPreconditions(preconditionList: any[]) {
-    let retVal = [];
+    const retVal = [];
 
     if (preconditionList) {
       for (let precondition of preconditionList) {
@@ -348,7 +346,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addDid() {
-    let newIssuerDid = this.issuerGroup.get('newIssuer').value.trim();
+    const newIssuerDid = this.issuerGroup.get('newIssuer').value.trim();
 
     if (!newIssuerDid) {
       this.toastr.error('Issuer DID is empty.', this.TOASTR_HEADER);
@@ -388,7 +386,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return retVal;
   }
-  
+
   formResetHandler() {
     this.fieldsForm.reset();
   }
@@ -419,14 +417,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       let allowToProceed = true;
 
       // Check if namespace is taken
-      let orgData = this.roleForm.value;
-      let exists = await this.iamService.iam.checkExistenceOfDomain({
+      const orgData = this.roleForm.value;
+      const exists = await this.iamService.iam.checkExistenceOfDomain({
         domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
       });
 
       if (exists) {
         // If exists check if current user is the owner of this namespace and allow him/her to overwrite
-        let isOwner = await this.iamService.iam.isOwner({
+        const isOwner = await this.iamService.iam.isOwner({
           domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
         });
 
@@ -508,7 +506,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         else {
           // Check if there are approved users to issue the claim
-          let did = await this.iamService.iam.getRoleDIDs({
+          const did = await this.iamService.iam.getRoleDIDs({
             namespace: roleFormValue.data.issuer.roleName
           });
 
@@ -562,7 +560,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
           if (exists) {
             // check if user is authorized to create a role under this namespace
-            let isOwner = await this.iamService.iam.isOwner({
+            const isOwner = await this.iamService.iam.isOwner({
               domain: this.roleForm.value.parentNamespace
             });
 
@@ -597,7 +595,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async confirmRole(skipNextStep?: boolean) {
-    let req = JSON.parse(JSON.stringify({ ...this.roleForm.value, returnSteps: true }));
+    const req = JSON.parse(JSON.stringify({ ...this.roleForm.value, returnSteps: true }));
 
     req.namespace = `${this.ENSPrefixes.Roles}.${req.parentNamespace}`;
     delete req.parentNamespace;
@@ -613,7 +611,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (!skipNextStep) {
       // Set the second step to non-editable
-      let list = this.stepper.steps.toArray();
+      const list = this.stepper.steps.toArray();
       list[1].editable = false;
     }
 
@@ -628,10 +626,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private async next(requestIdx: number, skipNextStep?: boolean) {
-    let steps = this._requests[`${requestIdx}`];
+    const steps = this._requests[`${requestIdx}`];
 
     if (steps && steps.length) {
-      let step = steps[0];
+      const step = steps[0];
 
       if (!skipNextStep) {
         // Show the next step
@@ -690,7 +688,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       // Copy pending steps
       this._requests[`${this._retryCount + 1}`] = [...this._requests[`${this._retryCount}`]];
 
-      //Remove previous request
+      // Remove previous request
       delete this._requests[`${this._retryCount}`];
       const retryCount = ++this._retryCount;
 
@@ -717,7 +715,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private async proceedUpdateStep(req: any, skipNextStep?: boolean) {
     try {
-      let retryCount = this._retryCount;
+      const retryCount = this._retryCount;
       if (!skipNextStep) {
         // Update steps
         this.stepper.selected.completed = true;
@@ -762,7 +760,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       data: {
         header: this.TOASTR_HEADER,
         message: confirmationMsg,
-        isDiscardButton: isDiscardButton
+        isDiscardButton
       },
       maxWidth: '100%',
       disableClose: true
