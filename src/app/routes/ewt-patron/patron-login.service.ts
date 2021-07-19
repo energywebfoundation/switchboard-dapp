@@ -16,7 +16,6 @@ export class PatronLoginService {
   }
 
   login(): Observable<boolean> {
-    //todo: delete subscribe, use while login with metamask in effect (?).
     const walletProvider = WalletProvider.MetaMask;
     this.iamService.waitForSignature(walletProvider, true, false);
     return from(this.iamService.login({
@@ -24,16 +23,7 @@ export class PatronLoginService {
       reinitializeMetamask: true,
       initCacheServer: false,
       initDID: false
-    })).pipe(finalize( () => this.iamService.clearWaitSignatureTimer()))
-    //   .subscribe((loggedIn) => {
-    //   if (loggedIn) {
-    //     this.store.dispatch(AuthActions.loginSuccess());
-    //     this.store.dispatch(StakeActions.initStakingPool());
-    //   } else {
-    //     this.store.dispatch(AuthActions.loginFailure())
-    //   }
-    //   this.iamService.clearWaitSignatureTimer();
-    // });
+    })).pipe(finalize(() => this.iamService.clearWaitSignatureTimer()));
   }
 
 }
