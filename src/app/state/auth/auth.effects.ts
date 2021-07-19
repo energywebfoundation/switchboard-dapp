@@ -4,11 +4,12 @@ import { IamService } from '../../shared/services/iam.service';
 import { Store } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
-import { catchError, concatMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, concatMap, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { IAM } from 'iam-client-lib';
 import { from, of } from 'rxjs';
 import { PatronLoginService } from '../../routes/ewt-patron/patron-login.service';
 import * as StakeActions from '../../state/stake/stake.actions';
+import * as authSelectors from './auth.selectors';
 
 @Injectable()
 export class AuthEffects {
@@ -47,8 +48,10 @@ export class AuthEffects {
 
   loginBeforeStake = createEffect(() =>
     this.actions$.pipe(
-      ofType(AuthActions.loginBeforeStakeIfNotLoggedIn),
-      switchMap(({amount}) =>
+      ofType(AuthActions.loginAndStake),
+      withLatestFrom(this.store.select(authSelectors.isUserLoggedIn)),
+      filter(([, loggedIn]) => !loggedIn),
+      switchMap(([{amount}]) =>
         this.patronLoginService.login().pipe(
           concatMap(() => [AuthActions.loginSuccess(), StakeActions.initStakingPool(), StakeActions.putStake({amount})]),
           catchError((err) => {
@@ -57,6 +60,15 @@ export class AuthEffects {
           })
         )
       )
+    )
+  );
+
+  stakeWhenLoggedIn = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.loginAndStake),
+      withLatestFrom(this.store.select(authSelectors.isUserLoggedIn)),
+      filter(([{amount}, loggedIn]) => loggedIn),
+      map(([{amount}]) => StakeActions.putStake({amount})),
     )
   );
 

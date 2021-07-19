@@ -52,7 +52,7 @@ export class StakeComponent {
   }
 
   stake() {
-    this.store.dispatch(AuthActions.loginBeforeStakeIfNotLoggedIn({amount: this.amountToStake.value.toString()}));
+    this.store.dispatch(AuthActions.loginAndStake({amount: this.amountToStake.value.toString()}));
     this.amountToStake.reset();
   }
 

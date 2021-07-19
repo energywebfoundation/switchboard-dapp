@@ -16,6 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import swal from 'sweetalert';
 import * as authSelectors from '../auth/auth.selectors';
+import * as stakeSelectors from './stake.selectors';
 
 const {formatEther, parseEther} = utils;
 
@@ -121,23 +122,45 @@ export class StakeEffects {
   putStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.putStake),
-      withLatestFrom(this.store.select(authSelectors.isUserLoggedIn)),
-      filter(([, loggedIn]) => loggedIn),
+      delay(1000), // todo: remove workaround with actions.
+      withLatestFrom(
+        this.store.select(authSelectors.isUserLoggedIn),
+        this.store.select(stakeSelectors.getBalance),
+        this.store.select(stakeSelectors.isStakingDisabled)
+      ),
+      filter(([, loggedIn]) => {
+        if (!loggedIn) {
+          this.toastr.error('You can not stake when you are not logged in!');
+        }
+        return loggedIn;
+      }),
+      filter(([, , , isStakeDisabled]) => {
+        if (isStakeDisabled) {
+          this.toastr.error('You can not stake to this provider because you already staked to it!');
+        }
+        return !isStakeDisabled;
+      }),
       tap(() => this.loadingService.show()),
-      switchMap(([{amount}]) =>
-        from(this.pool.putStake(parseEther(amount)))
-          .pipe(
-            mergeMap(() => {
-              this.dialog.open(StakeSuccessComponent, {
-                width: '400px',
-                maxWidth: '100%',
-                disableClose: true,
-                backdropClass: 'backdrop-shadow'
-              });
-              return [StakeActions.getAccountBalance(), StakeActions.checkReward(), StakeActions.getStake()];
-            }),
-            finalize(() => this.loadingService.hide())
-          )
+      switchMap(([{amount}, , balance]) => {
+          const amountLesserThanBalance = parseInt(amount, 10) <= parseInt(balance, 10);
+          if (!amountLesserThanBalance) {
+            this.toastr.error('You try to stake higher amount of tokens that your account have. Will be used your balance instead');
+          }
+
+          return from(this.pool.putStake(amountLesserThanBalance ? parseEther(amount) : parseEther(balance)))
+            .pipe(
+              mergeMap(() => {
+                this.dialog.open(StakeSuccessComponent, {
+                  width: '400px',
+                  maxWidth: '100%',
+                  disableClose: true,
+                  backdropClass: 'backdrop-shadow'
+                });
+                return [StakeActions.getAccountBalance(), StakeActions.checkReward(), StakeActions.getStake()];
+              }),
+              finalize(() => this.loadingService.hide())
+            );
+        }
       )
     )
   );

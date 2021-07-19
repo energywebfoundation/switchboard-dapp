@@ -10,8 +10,8 @@ export const loginHeaderStakingButton = createAction(
   '[AUTH] Staking User Login With Button In Header',
 );
 
-export const loginBeforeStakeIfNotLoggedIn = createAction(
-  '[AUTH] Staking Login Before Stake If Not Logged In',
+export const loginAndStake = createAction(
+  '[AUTH] Login And Stake',
   props<{ amount: string }>()
 );
 
