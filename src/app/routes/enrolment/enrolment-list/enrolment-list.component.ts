@@ -290,7 +290,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   private _updateList(value): void{
     if (value) {
-      this.dataSource.data = this._shadowList.filter((item) => item.parentNamespace.includes(value));
+      this.dataSource.data = this._shadowList.filter((item) => item.namespace.includes(value));
     } else {
       this.dataSource.data = this._shadowList;
     }

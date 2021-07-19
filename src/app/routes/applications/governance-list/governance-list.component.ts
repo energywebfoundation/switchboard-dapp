@@ -20,6 +20,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { NewStakingPoolComponent } from '../new-staking-pool/new-staking-pool.component';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -608,7 +609,11 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     return retVal;
   }
 
-  openStakingPool() {
-    
+  openStakingPool(element: any) {
+    this.dialog.open(NewStakingPoolComponent, {
+      width: '600px',
+      maxWidth: '100%',
+      disableClose: true
+    });
   }
 }

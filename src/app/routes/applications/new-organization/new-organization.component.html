@@ -39,11 +39,11 @@
                 <div class="col-lg-12" *ngIf="viewType !== ViewType.UPDATE">
                   <mat-label class="ml-3 pl-1">Organization Namespace</mat-label>
                   <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                    
+
                     <input matInput autocomplete="off" formControlName="orgName" type="text" placeholder="Organization Namespace" required
                       oninput="this.value = this.value.toLowerCase()" appBlockPaste (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256"/>
                     <mat-error>Organization Namespace is <strong>required</strong></mat-error>
-                    
+
                   </mat-form-field>
                 </div>
 
@@ -106,9 +106,9 @@
             <div class="d-flex justify-content-end mb-2">
               <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
               <button mat-raised-button class="btn btn-small btn-primary" *ngIf="viewType !== ViewType.UPDATE"
-                [disabled]="isChecking" (click)="createNewOrg()">Next</button>
+                [disabled]="isNextFormButtonDisabled()" (click)="createNewOrg()">Next</button>
               <button mat-raised-button class="btn btn-small btn-primary" *ngIf="viewType === ViewType.UPDATE"
-                [disabled]="isChecking" (click)="updateOrg()">Next</button>
+                [disabled]="isNextFormButtonDisabled()" (click)="updateOrg()">Next</button>
             </div>
           </form>
         </mat-step>
@@ -153,7 +153,7 @@
             </div>
           </div>
         </mat-step>
- 
+
         <ng-container *ngFor="let step of txs; let i = index;">
           <mat-step #customStep [editable]="false" [completed]="false">
             <ng-template matStepLabel>{{ step.info }}</ng-template>
@@ -169,7 +169,7 @@
             </div>
           </mat-step>
         </ng-container>
-        
+
         <mat-step [completed]="false">
           <ng-template matStepLabel>Organization {{ viewType === ViewType.UPDATE ? 'Updated' : 'Created' }}
           </ng-template>

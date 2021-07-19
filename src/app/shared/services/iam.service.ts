@@ -35,6 +35,13 @@ const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
 
 export const VOLTA_CHAIN_ID = 73799;
 
+export interface LoginOptions {
+  walletProvider?: WalletProvider;
+  reinitializeMetamask?: boolean;
+  initCacheServer?: boolean;
+  initDID?: boolean;
+}
+
 export enum LoginType {
   LOCAL = 'local',
   REMOTE = 'remote'
@@ -89,14 +96,13 @@ export class IamService {
   /**
    * Login via IAM and retrieve basic user info
    */
-  async login(walletProvider?: WalletProvider, reinitializeMetamask?: boolean): Promise<boolean> {
+  async login(loginOptions?: LoginOptions): Promise<boolean> {
     let retVal = false;
 
     // Check if account address exists
     if (!(await this.isUserPresent())) {
-      const connectionOpts = {walletProvider, reinitializeMetamask};
       try {
-        const {did, connected, userClosedModal} = await this._iam.initializeConnection(connectionOpts);
+        const {did, connected, userClosedModal} = await this._iam.initializeConnection(loginOptions);
         if (did && connected && !userClosedModal) {
           // Setup Account Address
           const signer = this._iam.getSigner();
@@ -162,6 +168,12 @@ export class IamService {
     this.loadingService.hide();
   }
 
+  disconnect() {
+    this._iam.closeConnection();
+    this.store.dispatch(userClaimsActions.clearUserClaim());
+    this.loadingService.hide();
+  }
+
   setDeepLink(deepLink: any) {
     this._deepLink = deepLink;
   }
@@ -185,7 +197,7 @@ export class IamService {
     return this._iam;
   }
 
-  public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean) {
+  public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean, refreshOnTimeout: boolean = true) {
     this._throwTimeoutError = false;
     const timeoutInMinutes = walletProvider === WalletProvider.EwKeyManager ? 2 : 1;
     const connectionMessage = isConnectAndSign ? 'connection to a wallet and ' : '';
@@ -209,7 +221,7 @@ export class IamService {
       .map(m => m.message);
     this.loadingService.show(waitForSignatureMessage);
     this._timer = setTimeout(() => {
-      this._displayTimeout(isConnectAndSign);
+      this._displayTimeout(isConnectAndSign, refreshOnTimeout);
       this.clearWaitSignatureTimer();
       this._throwTimeoutError = true;
     }, timeoutInMinutes * 60000);
@@ -226,7 +238,7 @@ export class IamService {
     }
   }
 
-  private async _displayTimeout(isConnectAndSign?: boolean) {
+  private async _displayTimeout(isConnectAndSign?: boolean, navigateOnTimeout?: boolean) {
     let message = 'sign';
     if (isConnectAndSign) {
       message = 'connect with your wallet and sign';
@@ -241,7 +253,12 @@ export class IamService {
 
     const result = await SWAL(config);
     if (result) {
-      this.logoutAndRefresh();
+      if (navigateOnTimeout) {
+        this.logoutAndRefresh();
+      } else {
+        this.disconnect();
+        location.reload();
+      }
     }
   }
 
@@ -278,6 +295,12 @@ export class IamService {
     }
   }
 
+  /**
+   * @deprecated
+   * Use isAlphaNumericOnly function from utils/functions instead.
+   * @param event
+   * @param includeDot
+   */
   isAlphaNumericOnly(event: any, includeDot?: boolean) {
     const charCode = (event.which) ? event.which : event.keyCode;
 
@@ -312,6 +335,11 @@ export class IamService {
     return retVal;
   }
 
+  /**
+   * @deprecated
+   * Use isValidJsonFormat function from utils/validators/json-format instead.
+   * @param jsonFormatCtrl
+   */
   isValidJsonFormat(jsonFormatCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
     let jsonStr = jsonFormatCtrl.value;

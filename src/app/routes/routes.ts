@@ -28,7 +28,11 @@ export const routes = [
   },
   {
     path: 'enrol',
-    component: RequestClaimComponent
+    component: RequestClaimComponent,
+  },
+  {
+    path: 'staking',
+    loadChildren: () => import('./ewt-patron/ewt-patron.module').then(m => m.EwtPatronModule)
   },
   {
     path: 'welcome',

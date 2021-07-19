@@ -157,8 +157,16 @@ export class AppComponent implements OnInit {
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/organization-list-icon.svg")
         );
         this.matIconRegistry.addSvgIcon(
-            "ethereum-icon",
+            "ethereum",
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/assets-icons/ethereum-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "bitcoin",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/assets-icons/bitcoin-icon.svg")
+        );
+        this.matIconRegistry.addSvgIcon(
+            "ethereum-bitcoin",
+            this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/assets-icons/bitcoin-or-ethereum-icon.svg")
         );
         this.matIconRegistry.addSvgIcon(
             "create-staking-icon",
