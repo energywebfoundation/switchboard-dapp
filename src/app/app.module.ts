@@ -30,6 +30,7 @@ import { UserEffects } from './state/user-claim/user.effects';
 import { rootReducer } from './state/root.reducer';
 import { FEAT_TOGGLE_TOKEN, getEnv } from './shared/feature-toggle/feature-toggle.token';
 import { StakeEffects } from './state/stake/stake.effects';
+import { AuthEffects } from './state/auth/auth.effects';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -79,7 +80,7 @@ if (environment.SENTRY_DNS) {
     }),
     StoreModule.forRoot(rootReducer, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot([UserEffects, StakeEffects]),
+    EffectsModule.forRoot([UserEffects, StakeEffects, AuthEffects]),
   ],
   providers,
   bootstrap: [AppComponent],

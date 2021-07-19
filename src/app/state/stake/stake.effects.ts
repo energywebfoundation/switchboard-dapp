@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { StakeState } from './stake.reducer';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import * as StakeActions from './stake.actions';
-import { catchError, delay, filter, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, delay, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { utils } from 'ethers';
 import { Stake, StakeStatus, StakingPool, StakingPoolService } from 'iam-client-lib';
@@ -15,6 +15,7 @@ import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/sta
 import { ActivatedRoute } from '@angular/router';
 
 import swal from 'sweetalert';
+import * as authSelectors from '../auth/auth.selectors';
 
 const {formatEther, parseEther} = utils;
 
@@ -120,8 +121,10 @@ export class StakeEffects {
   putStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.putStake),
+      withLatestFrom(this.store.select(authSelectors.isUserLoggedIn)),
+      filter(([, loggedIn]) => loggedIn),
       tap(() => this.loadingService.show()),
-      switchMap(({amount}) =>
+      switchMap(([{amount}]) =>
         from(this.pool.putStake(parseEther(amount)))
           .pipe(
             mergeMap(() => {
