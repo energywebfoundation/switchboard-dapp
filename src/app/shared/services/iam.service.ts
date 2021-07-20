@@ -19,6 +19,7 @@ import { UserClaimState } from '../../state/user-claim/user.reducer';
 import { ToastrService } from 'ngx-toastr';
 import { getDid, getUserProfile } from '../../state/user-claim/user.selectors';
 import { take } from 'rxjs/operators';
+import * as StakeActions from '../../state/stake/stake.actions';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
@@ -122,7 +123,7 @@ export class IamService {
           this._iam.on('disconnected', () => {
             this._displayAccountAndNetworkChanges(EVENT_DISCONNECTED, redirectOnAccountChange);
           });
-
+          this.store.dispatch(StakeActions.initOnlyStakingPoolService());
           retVal = true;
         }
       } catch (e) {
