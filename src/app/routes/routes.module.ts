@@ -16,7 +16,7 @@ import { EwtPatronModule } from './ewt-patron/ewt-patron.module';
 @NgModule({
   imports: [
     SharedModule,
-    RouterModule.forRoot(routes, { useHash: true, onSameUrlNavigation: 'reload' }),
+    RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' }),
     ProfileModule,
     RegistrationModule,
     WelcomeModule,
