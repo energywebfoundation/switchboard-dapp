@@ -1,4 +1,4 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { StakingPoolService } from './staking-pool.service';
 import { IamService } from '../../../shared/services/iam.service';
@@ -30,22 +30,6 @@ describe('StakingPoolService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
-  it('should check if will show and hide loader', fakeAsync(() => {
-    iamSpy.launchStakingPool.and.returnValue(Promise.resolve());
-    service.createStakingPool({} as any);
-    tick(1);
-    expect(loadingServiceSpy.show).toHaveBeenCalled();
-    expect(loadingServiceSpy.hide).toHaveBeenCalled();
-  }));
-
-  it('should close dialog and display message when launchStakingPool do not return an error', fakeAsync(() => {
-    iamSpy.launchStakingPool.and.returnValue(Promise.resolve());
-    service.createStakingPool({} as any);
-    tick(1);
-    expect(matDialogSpy.closeAll).toHaveBeenCalled();
-    expect(toastrSpy.success).toHaveBeenCalled();
-  }));
 
   it('should check if loader is shown for getting list', (done) => {
     iamSpy.getENSTypesByOwner.and.returnValue(Promise.resolve([]));

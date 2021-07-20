@@ -14,13 +14,19 @@ import { MatRadioModule } from '@angular/material/radio';
 import { of } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { utils } from 'ethers';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { UserClaimState } from '../../../state/user-claim/user.reducer';
+import { launchStakingPool } from '../../../state/stake/stake.actions';
+
+const {parseEther} = utils;
 
 describe('NewStakingPoolComponent', () => {
   let component: NewStakingPoolComponent;
   let fixture: ComponentFixture<NewStakingPoolComponent>;
   let hostDebug: DebugElement;
-  const stakingPoolServiceStub = jasmine.createSpyObj('StakingPoolService', ['createStakingPool', 'getListOfOrganizationRoles']);
+  const stakingPoolServiceStub = jasmine.createSpyObj('StakingPoolService', ['getListOfOrganizationRoles']);
   const namespace = 'test';
+  let store: MockStore<UserClaimState>;
 
   const dispatchEvent = (el) => {
     el.dispatchEvent(new Event('input'));
@@ -42,11 +48,13 @@ describe('NewStakingPoolComponent', () => {
       ],
       providers: [
         {provide: MAT_DIALOG_DATA, useValue: {namespace}},
-        {provide: StakingPoolService, useValue: stakingPoolServiceStub}
+        {provide: StakingPoolService, useValue: stakingPoolServiceStub},
+        provideMockStore()
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
+    store = TestBed.inject(MockStore);
   }));
 
   beforeEach(() => {
@@ -68,10 +76,10 @@ describe('NewStakingPoolComponent', () => {
     expect(submit.disabled).toBeTruthy();
   });
 
-  it('should call createStakingPool method when clicking on submit when form is valid', () => {
+  it('should dispatch an action to launch staking pool when clicking on submit when form is valid', () => {
     const {revenue, start, end, principal, getElement, patronRoles, submit} = selectors(hostDebug);
     const revenueAmount = 5;
-    console.log(component.form);
+    const dispatchSpy = spyOn(store, 'dispatch');
     revenue.value = revenueAmount;
     dispatchEvent(revenue);
 
@@ -89,13 +97,16 @@ describe('NewStakingPoolComponent', () => {
     expect(submit.disabled).toBeFalsy();
 
     submit.click();
-
-    expect(stakingPoolServiceStub.createStakingPool).toHaveBeenCalledWith({
-      org: namespace, minStakingPeriod: 604800,
-      patronRewardPortion: revenueAmount,
-      patronRoles: [],
-      principal: 105
-    });
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      launchStakingPool({
+        pool: {
+          org: namespace,
+          minStakingPeriod: 604800,
+          patronRewardPortion: revenueAmount,
+          patronRoles: [],
+          principal: parseEther('105')
+        }
+      }));
   });
 });
 

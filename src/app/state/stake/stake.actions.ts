@@ -1,8 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Stake } from 'iam-client-lib';
+import { IStakingPool } from '../../routes/applications/new-staking-pool/staking-pool.service';
 
 export const initStakingPool = createAction('[Stake] Initialize Staking Pool Service');
 export const initStakingPoolSuccess = createAction('[Stake] Initialize Staking Pool Service Success');
+export const initOnlyStakingPoolService = createAction('[Stake] Init Only Staking Pool Service');
 
 export const checkReward = createAction('[Stake] Check Accumulated Reward');
 export const checkRewardSuccess = createAction(
@@ -53,6 +55,7 @@ export const withdrawRewardFailure = createAction(
 
 export const launchStakingPool = createAction(
   '[Stake] Launch Staking Pool',
+  props<{pool: IStakingPool}>()
 );
 
 export const getAllServices = createAction(

@@ -17,6 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert';
 import * as authSelectors from '../auth/auth.selectors';
 import * as stakeSelectors from './stake.selectors';
+import { initOnlyStakingPoolService } from './stake.actions';
 
 const {formatEther, parseEther} = utils;
 
@@ -39,6 +40,20 @@ export class StakeEffects {
           )
       )
     )
+  );
+
+  initOnlyStakingPoolService$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StakeActions.initOnlyStakingPoolService),
+      switchMap(() =>
+        from(StakingPoolService.init(this.iamService.iam.getSigner()))
+          .pipe(
+            tap((stakingPoolServ) => {
+              this.stakingPoolService = stakingPoolServ;
+            })
+          )
+      )
+    ), {dispatch: false}
   );
 
   initPool$ = createEffect(() =>
@@ -239,13 +254,23 @@ export class StakeEffects {
   launchStakingPool$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.launchStakingPool),
-      switchMap(() => from(this.stakingPoolService.launchStakingPool({
-        org: 'dawidgil.iam.ewc',
-        minStakingPeriod: 1,
-        patronRewardPortion: 10,
-        patronRoles: [],
-        principal: parseEther('100')
-      })))
+      tap(() => this.loadingService.show()),
+      tap(({pool}) => console.log(pool)),
+      switchMap(({pool}) =>
+        from(this.stakingPoolService.launchStakingPool(pool))
+          .pipe(
+            map(() => {
+              this.toastr.success(`You successfully created a staking pool for ${pool.org}`);
+              this.dialog.closeAll();
+            }),
+            catchError(err => {
+              console.error(err);
+              this.toastr.error('Error occurs while creating staking pool');
+              return err;
+            }),
+            finalize(() => this.loadingService.hide())
+          )
+      )
     ), {dispatch: false}
   );
 

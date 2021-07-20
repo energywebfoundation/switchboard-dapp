@@ -1,11 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { StakingPool, StakingPoolService } from './staking-pool.service';
+import { IStakingPool, StakingPoolService } from './staking-pool.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import * as StakeActions from '../../../state/stake/stake.actions';
+import { utils } from 'ethers';
 
 interface IRoleOption {
   namespace: string;
 }
+
+const {parseEther} = utils;
 
 @Component({
   selector: 'app-new-staking-pool',
@@ -29,7 +34,8 @@ export class NewStakingPoolComponent implements OnInit {
 
   constructor(private stakingPoolService: StakingPoolService,
               private fb: FormBuilder,
-              @Inject(MAT_DIALOG_DATA) public data: { namespace: string, owner: string }) {
+              @Inject(MAT_DIALOG_DATA) public data: { namespace: string, owner: string },
+              private store: Store) {
   }
 
   ngOnInit() {
@@ -48,7 +54,7 @@ export class NewStakingPoolComponent implements OnInit {
     if (this.isFormInvalid()) {
       return;
     }
-    this.stakingPoolService.createStakingPool(this.createStakingPoolObject());
+    this.store.dispatch(StakeActions.launchStakingPool({pool: this.createStakingPoolObject()}));
   }
 
   private getRolesList(): void {
@@ -56,14 +62,14 @@ export class NewStakingPoolComponent implements OnInit {
       .subscribe((list: IRoleOption[]) => this.rolesOptions = list);
   }
 
-  private createStakingPoolObject(): StakingPool {
+  private createStakingPoolObject(): IStakingPool {
     const rawValues = this.form.getRawValue();
     return {
       org: this.data.namespace,
       patronRewardPortion: rawValues.revenue,
       minStakingPeriod: this.getTimeInSeconds(),
       patronRoles: rawValues.patronRoles,
-      principal: rawValues.principal
+      principal: parseEther(rawValues.principal.toString())
     };
   }
 

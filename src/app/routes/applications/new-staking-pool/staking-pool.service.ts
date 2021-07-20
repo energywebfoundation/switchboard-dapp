@@ -6,17 +6,15 @@ import { from } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
 import { utils } from 'ethers';
-import { MatDialog } from '@angular/material/dialog';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 
-const {parseEther} = utils;
 
-export interface StakingPool {
+export interface IStakingPool {
   org: string;
   minStakingPeriod: number | utils.BigNumber;
   patronRewardPortion: number;
   principal: utils.BigNumber;
-  patronRoles?: string[];
+  patronRoles: string[];
 }
 
 @Injectable({
@@ -26,27 +24,7 @@ export class StakingPoolService {
 
   constructor(private iamService: IamService,
               private sbToastr: SwitchboardToastrService,
-              private loadingService: LoadingService,
-              private dialog: MatDialog) {
-  }
-
-  createStakingPool(stakingPool: StakingPool) {
-    this.loadingService.show();
-    from(
-      // TODO: remove 'any' type when new version of IAM will be deployed.
-      this.iamService.iam.launchStakingPool(stakingPool as any)
-    )
-      .pipe(
-        catchError(err => {
-          console.error(err);
-          this.sbToastr.error('Error occurs while creating staking pool');
-          return err;
-        }),
-        finalize(() => this.loadingService.hide())
-      ).subscribe(() => {
-      this.sbToastr.success('You successfully created a staking pool');
-      this.dialog.closeAll();
-    });
+              private loadingService: LoadingService) {
   }
 
   getListOfOrganizationRoles(org: string) {
