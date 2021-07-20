@@ -5,6 +5,7 @@ import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { MatDialog } from '@angular/material/dialog';
+import { finalize } from 'rxjs/operators';
 
 describe('StakingPoolService', () => {
   let service: StakingPoolService;
@@ -33,9 +34,10 @@ describe('StakingPoolService', () => {
 
   it('should check if loader is shown for getting list', (done) => {
     iamSpy.getENSTypesByOwner.and.returnValue(Promise.resolve([]));
-    service.getListOfOrganizationRoles('org').subscribe(() => {
+    service.getListOfOrganizationRoles('org').pipe(
+      finalize(() => expect(loadingServiceSpy.hide).toHaveBeenCalled())
+    ).subscribe(() => {
       expect(loadingServiceSpy.show).toHaveBeenCalled();
-      expect(loadingServiceSpy.hide).toHaveBeenCalled();
       done();
     });
 
@@ -49,6 +51,6 @@ describe('StakingPoolService', () => {
       expect(toastrSpy.error).toHaveBeenCalled();
       done();
     });
-  })
+  });
 
 });
