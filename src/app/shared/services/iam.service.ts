@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import {
-  IAM, IStakable,
+  IAM,
   MessagingMethod,
   SafeIam,
   setCacheClientOptions,
   setChainConfig,
-  setMessagingOptions, Stakable,
+  setMessagingOptions,
   WalletProvider
 } from 'iam-client-lib';
 import { environment } from 'src/environments/environment';
@@ -51,7 +51,7 @@ export enum LoginType {
   providedIn: 'root'
 })
 export class IamService {
-  private _iam: IAM & IStakable;
+  private _iam: IAM;
   public accountAddress = undefined;
 
   private _throwTimeoutError = false;
@@ -87,9 +87,9 @@ export class IamService {
 
     // Initialize Data
     if (configService.safeInfo) {
-      this._iam = new (Stakable(SafeIam))(safeAppSdk, connectionOptions);
+      this._iam = new SafeIam(safeAppSdk, connectionOptions);
     } else {
-      this._iam = new (Stakable(IAM))(connectionOptions);
+      this._iam = new IAM(connectionOptions);
     }
   }
 
@@ -194,7 +194,7 @@ export class IamService {
   /**
    * Retrieve IAM Object Reference
    */
-  get iam(): IAM & IStakable{
+  get iam(): IAM {
     return this._iam;
   }
 
