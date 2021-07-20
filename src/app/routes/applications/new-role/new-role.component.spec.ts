@@ -53,41 +53,17 @@ describe('NewRoleComponent', () => {
 
   describe('should be run', () => {
 
-    it('ngOnInit', () => {
-      spyOn((component as any), '_induceInt');
-      spyOn((component as any), '_induceRanges');
-      spyOn((component as any), '_init');
-      component.ngOnInit();
-
-      expect((component as any)._induceInt).toHaveBeenCalled();
-      expect((component as any)._induceRanges).toHaveBeenCalled();
-      expect((component as any)._init).toHaveBeenCalled();
-    });
-
-    it('ngOnDestroy', () => {
-      spyOn((component as any).subscription$, 'next');
-      spyOn((component as any).subscription$, 'complete');
-      component.ngOnDestroy();
-
-      expect((component as any).subscription$.next).toHaveBeenCalled();
-      expect((component as any).subscription$.complete).toHaveBeenCalled();
-    });
-
-    it('alphaNumericOnly', () => {
-      const event = { keyCode: 100 };
-      const includeDot = true;
-      spyOn((component as any).iamService, 'isAlphaNumericOnly');
-      component.alphaNumericOnly(event, includeDot);
-
-      expect((component as any).iamService.isAlphaNumericOnly).toHaveBeenCalledWith(event, includeDot);
-    });
-
     it('removeDid', () => {
       const i = 1;
       component.issuerList = ['1', '2', '3'];
       component.removeDid(i);
 
       expect(component.issuerList).toEqual(['1', '3']);
+
+      component.issuerList = ['1'];
+      component.removeDid(0);
+
+      expect(component.issuerList).toEqual(['1']);
     });
 
     it('formResetHandler', () => {
