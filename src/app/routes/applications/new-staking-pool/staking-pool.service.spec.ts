@@ -32,7 +32,7 @@ describe('StakingPoolService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should check if loader is shown for getting list', (done) => {
+  xit('should check if loader is shown for getting list', (done) => {
     iamSpy.getENSTypesByOwner.and.returnValue(Promise.resolve([]));
     service.getListOfOrganizationRoles('org').pipe(
       finalize(() => expect(loadingServiceSpy.hide).toHaveBeenCalled())
