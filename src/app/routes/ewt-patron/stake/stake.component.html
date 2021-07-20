@@ -18,6 +18,8 @@
                         <mat-icon>close</mat-icon>
                     </button>
                 </div>
+                <mat-error *ngIf="amountToStake.hasError('min')">Minimum value is 0</mat-error>
+                <mat-error *ngIf="amountToStake.hasError('required')">This field is <strong>required</strong></mat-error>
             </mat-form-field>
             <app-percent-buttons #percentButtons (percent)="calcStakeAmount($event)">
             </app-percent-buttons>

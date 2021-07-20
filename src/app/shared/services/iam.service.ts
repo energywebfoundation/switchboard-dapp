@@ -96,7 +96,7 @@ export class IamService {
   /**
    * Login via IAM and retrieve basic user info
    */
-  async login(loginOptions?: LoginOptions): Promise<boolean> {
+  async login(loginOptions?: LoginOptions, redirectOnAccountChange: boolean = true): Promise<boolean> {
     let retVal = false;
 
     // Check if account address exists
@@ -110,17 +110,17 @@ export class IamService {
 
           // Listen to Account Change
           this._iam.on('accountChanged', () => {
-            this._displayAccountAndNetworkChanges(EVENT_ACCOUNT_CHANGED);
+            this._displayAccountAndNetworkChanges(EVENT_ACCOUNT_CHANGED, redirectOnAccountChange);
           });
 
           // Listen to Network Change
           this._iam.on('networkChanged', () => {
-            this._displayAccountAndNetworkChanges(EVENT_NETWORK_CHANGED);
+            this._displayAccountAndNetworkChanges(EVENT_NETWORK_CHANGED, redirectOnAccountChange);
           });
 
           // Listen to Disconnection
           this._iam.on('disconnected', () => {
-            this._displayAccountAndNetworkChanges(EVENT_DISCONNECTED);
+            this._displayAccountAndNetworkChanges(EVENT_DISCONNECTED, redirectOnAccountChange);
           });
 
           retVal = true;
@@ -262,7 +262,7 @@ export class IamService {
     }
   }
 
-  private async _displayAccountAndNetworkChanges(changeType: string) {
+  private async _displayAccountAndNetworkChanges(changeType: string, redirectOnAccountChange: boolean) {
     let message: string;
     let title: string;
 
@@ -291,7 +291,12 @@ export class IamService {
 
     const result = await SWAL(config);
     if (result) {
-      this.logoutAndRefresh();
+      if (redirectOnAccountChange) {
+        this.logoutAndRefresh();
+      } else {
+        this.disconnect();
+        location.reload();
+      }
     }
   }
 

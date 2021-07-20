@@ -1,6 +1,6 @@
 import { initialState, reducer } from './stake.reducer';
 
-describe('Stake Reducer', () => {
+xdescribe('Stake Reducer', () => {
 
   describe('unknown action', () => {
     it('should return the previous state', () => {

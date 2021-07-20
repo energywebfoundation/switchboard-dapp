@@ -4,6 +4,8 @@ import { DomSanitizer } from "@angular/platform-browser";
 
 import { SettingsService } from './core/settings/settings.service';
 import { UrlService } from './shared/services/url-service/url.service';
+import { Store } from '@ngrx/store';
+import * as AuthActions from './state/auth/auth.actions';
 
 @Component({
     selector: 'app-root',
@@ -26,7 +28,8 @@ export class AppComponent implements OnInit {
     constructor(public settings: SettingsService,
                 private matIconRegistry: MatIconRegistry,
                 private domSanitizer: DomSanitizer,
-                private urlHistoryService: UrlService) {
+                private urlHistoryService: UrlService,
+                private store: Store) {
         this.matIconRegistry.addSvgIcon(
             "wallet-icon",
             this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/icons/wallet-icon.svg")
@@ -182,5 +185,7 @@ export class AppComponent implements OnInit {
             if (target.tagName === 'A' && ['', '#'].indexOf(target.getAttribute('href')) > -1)
                 e.preventDefault();
         });
+
+        this.store.dispatch(AuthActions.init());
     }
 }

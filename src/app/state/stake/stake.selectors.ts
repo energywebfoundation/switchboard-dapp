@@ -40,7 +40,7 @@ export const getStake = createSelector(
 export const isStakingDisabled = createSelector(
   getStake,
   (state: Stake) => {
-    return state?.status !== StakeStatus.NONSTAKING;
+    return state?.status === StakeStatus.STAKING || state?.status === StakeStatus.WITHDRAWING;
   }
 );
 

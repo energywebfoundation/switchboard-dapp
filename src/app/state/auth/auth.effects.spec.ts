@@ -1,33 +1,30 @@
 import { TestBed } from '@angular/core/testing';
 
-import { of, ReplaySubject, throwError } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
-import { StakeEffects } from './stake.effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { LoadingService } from '../../shared/services/loading.service';
 import { IamService } from '../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { ToastrService } from 'ngx-toastr';
-import { StakeState } from './stake.reducer';
-import * as userSelectors from '../user-claim/user.selectors';
-import * as userActions from '../user-claim/user.actions';
-import { finalize } from 'rxjs/operators';
+import { AuthState } from './auth.reducer';
+import { AuthEffects } from './auth.effects';
 
-xdescribe('UserEffects', () => {
+xdescribe('AuthEffects', () => {
 
   const iamSpy = jasmine.createSpyObj('iam', ['getUserClaims', 'createSelfSignedClaim']);
   const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
   const toastrSpy = jasmine.createSpyObj('ToastrService', ['success']);
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll']);
   let actions$: ReplaySubject<any>;
-  let effects: StakeEffects;
-  let store: MockStore<StakeState>;
+  let effects: AuthEffects;
+  let store: MockStore<AuthState>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        StakeEffects,
+        AuthEffects,
         {provide: IamService, useValue: {iam: iamSpy}},
         {provide: LoadingService, useValue: loadingServiceSpy},
         {provide: MatDialog, useValue: dialogSpy},
@@ -38,7 +35,7 @@ xdescribe('UserEffects', () => {
     });
     store = TestBed.inject(MockStore);
 
-    effects = TestBed.inject(StakeEffects);
+    effects = TestBed.inject(AuthEffects);
   });
 
 
