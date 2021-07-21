@@ -6,9 +6,8 @@
                     (click)="logOut()">Logout</button>
             </ng-container>
             <ng-template #notLogged>
-                <button mat-raised-button (click)="connectToMetamask()"
-                    class="connect-btn color-white text-uppercase mr-2" type="submit"
-                    [disabled]="disableMetamaskButton$ | async">
+                <button mat-raised-button (click)="openLoginDialog()"
+                    class="connect-btn color-white text-uppercase mr-2" type="submit">
                     Connect to Wallet
                 </button>
             </ng-template>

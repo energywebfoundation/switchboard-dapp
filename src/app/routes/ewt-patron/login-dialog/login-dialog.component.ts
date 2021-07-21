@@ -1,37 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import { IAM } from 'iam-client-lib';
-import { VOLTA_CHAIN_ID } from '../../../shared/services/iam.service';
-import { PatronLoginService } from '../patron-login.service';
+import { Component, Inject } from '@angular/core';
+import { WalletProvider } from 'iam-client-lib';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../../state/auth/auth.actions';
+import * as authSelectors from '../../../state/auth/auth.selectors';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login-dialog',
   templateUrl: './login-dialog.component.html',
   styleUrls: ['./login-dialog.component.scss']
 })
-export class LoginDialogComponent implements OnInit {
-  isMetamaskExtensionAvailable: boolean;
-  disableMetamaskButton: boolean;
+export class LoginDialogComponent {
+  disableMetamaskButton$ = this.store.select(authSelectors.isMetamaskDisabled);
+  isMetamaskExtensionAvailable$ = this.store.select(authSelectors.isMetamaskPresent);
 
-  constructor(private patronLoginService: PatronLoginService) {
+  constructor(private store: Store, @Inject(MAT_DIALOG_DATA) public data: { stakeAmount: string }) {
   }
 
-  ngOnInit() {
-    this.handleMetaMaskButton();
-  }
-
-  async handleMetaMaskButton() {
-    const {isMetamaskPresent, chainId} = await IAM.isMetamaskExtensionPresent();
-    if (isMetamaskPresent) {
-      this.isMetamaskExtensionAvailable = true;
-
-      if (chainId && parseInt(`${chainId}`, 16) !== VOLTA_CHAIN_ID) {
-        this.disableMetamaskButton = true;
-      }
-    }
+  connectToWalletConnect() {
+    this.loginWithProvider(WalletProvider.WalletConnect);
   }
 
   connectToMetamask() {
-    this.patronLoginService.login();
+    this.loginWithProvider(WalletProvider.MetaMask);
+  }
+
+  loginWithProvider(provider: WalletProvider) {
+    this.data?.stakeAmount ? this.loginAndStake(provider) : this.login(provider);
+  }
+
+  private login(provider: WalletProvider) {
+    this.store.dispatch(AuthActions.login({provider}));
+  }
+
+  private loginAndStake(provider: WalletProvider) {
+    this.store.dispatch(AuthActions.loginAndStake({provider, amount: this.data.stakeAmount}));
   }
 
 }

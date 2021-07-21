@@ -33,9 +33,9 @@ export class AuthEffects {
 
   login$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AuthActions.loginHeaderStakingButton),
-      switchMap(() =>
-        this.patronLoginService.login().pipe(
+      ofType(AuthActions.login),
+      switchMap(({provider}) =>
+        this.patronLoginService.login(provider).pipe(
           mergeMap(() => [AuthActions.loginSuccess(), StakeActions.initStakingPool()]),
           catchError((err) => {
             console.log(err);
@@ -51,8 +51,8 @@ export class AuthEffects {
       ofType(AuthActions.loginAndStake),
       withLatestFrom(this.store.select(authSelectors.isUserLoggedIn)),
       filter(([, loggedIn]) => !loggedIn),
-      switchMap(([{amount}]) =>
-        this.patronLoginService.login().pipe(
+      switchMap(([{amount, provider}]) =>
+        this.patronLoginService.login(provider).pipe(
           concatMap(() => [AuthActions.loginSuccess(), StakeActions.initStakingPool(), StakeActions.putStake({amount})]),
           catchError((err) => {
             console.log(err);
@@ -63,7 +63,7 @@ export class AuthEffects {
     )
   );
 
-  stakeWhenLoggedIn = createEffect(() =>
+  stakeAfterLogin$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginAndStake),
       withLatestFrom(this.store.select(authSelectors.isUserLoggedIn)),
@@ -75,11 +75,11 @@ export class AuthEffects {
   logout$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.logout),
-      tap(() => {
+      map(() => {
         this.iamService.disconnect();
         location.reload();
       })
-    )
+    ), {dispatch: false}
   );
 
   constructor(private actions$: Actions,

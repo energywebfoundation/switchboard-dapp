@@ -4,6 +4,8 @@ import { Store } from '@ngrx/store';
 import * as stakeSelectors from '../../../state/stake/stake.selectors';
 import * as authSelectors from '../../../state/auth/auth.selectors';
 import * as AuthActions from '../../../state/auth/auth.actions';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 
 @Component({
   selector: 'app-ewt-patron',
@@ -14,13 +16,17 @@ export class EwtPatronComponent {
   balance$ = this.store.select(stakeSelectors.getBalance);
   performance$ = this.store.select(stakeSelectors.getPerformance);
   annualReward$ = this.store.select(stakeSelectors.getAnnualReward);
-  disableMetamaskButton$ = this.store.select(authSelectors.isMetamaskDisabled);
   loggedIn$ = this.store.select(authSelectors.isUserLoggedIn);
-  constructor(private store: Store<StakeState>) {
+
+  constructor(private store: Store<StakeState>, private dialog: MatDialog) {
   }
 
-  connectToMetamask() {
-    this.store.dispatch(AuthActions.loginHeaderStakingButton());
+  openLoginDialog() {
+    this.dialog.open(LoginDialogComponent, {
+      width: '434px',
+      backdropClass: 'backdrop-shadow',
+      maxWidth: '100%',
+    });
   }
 
   logOut() {
