@@ -167,6 +167,16 @@ describe('RoleFieldComponent', () => {
 
   describe('should be run', () => {
 
+    it('addField is invalid form', () => {
+      component.fieldsForm.setErrors({ incorrect: true });
+      spyOn(component, 'resetForm');
+      spyOn(component, 'updateDataSource');
+      component.addField();
+
+      expect(component.resetForm).not.toHaveBeenCalled();
+      expect(component.updateDataSource).not.toHaveBeenCalled();
+    });
+
     it('back', () => {
       spyOn(component.backEvent, 'emit');
       component.back();
