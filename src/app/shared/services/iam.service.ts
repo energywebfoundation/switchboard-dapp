@@ -169,8 +169,8 @@ export class IamService {
     this.loadingService.hide();
   }
 
-  disconnect() {
-    this._iam.closeConnection();
+  async disconnect() {
+    await this._iam.closeConnection();
     this.store.dispatch(userClaimsActions.clearUserClaim());
     this.loadingService.hide();
   }
