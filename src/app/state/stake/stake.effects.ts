@@ -17,6 +17,8 @@ import swal from 'sweetalert';
 import * as authSelectors from '../auth/auth.selectors';
 import * as stakeSelectors from './stake.selectors';
 import { ToastrService } from 'ngx-toastr';
+import { WithdrawComponent } from '../../routes/ewt-patron/withdraw/withdraw.component';
+import { getWithdrawalDelay } from './stake.actions';
 
 const {formatEther, parseEther} = utils;
 
@@ -187,36 +189,58 @@ export class StakeEffects {
     )
   );
 
-  withdrawDelay$ = createEffect(() =>
+  withdrawalDelay$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.getWithdrawalDelay),
+      tap(() => this.loadingService.show()),
       switchMap(() =>
         from(this.pool.withdrawalDelay())
           .pipe(
-            map((withdrawalDelay) => StakeActions.getWithdrawalDelaySuccess({delay: formatEther(withdrawalDelay)})),
+            map((withdrawalDelay) => StakeActions.getWithdrawalDelaySuccess({requestDelay: withdrawalDelay.toNumber()})
+            ),
             catchError(err => {
               console.error('Could not get withdrawal delay', err);
               return of(StakeActions.getWithdrawalDelayFailure({err}));
             }),
+            finalize(() => this.loadingService.hide())
           )
       )
     )
   );
 
+  showProgressBar = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StakeActions.getWithdrawalDelaySuccess),
+      map(({requestDelay}: {requestDelay: number}) => {
+        this.dialog.open(WithdrawComponent, {
+          width: '400px',
+          maxWidth: '100%',
+          data: {
+            time: requestDelay
+          },
+          disableClose: true,
+          backdropClass: 'backdrop-shadow'
+        });
+      })
+    ), {dispatch: false}
+  );
+
   withdrawRequest$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.withdrawRequest),
+      tap(() => this.loadingService.show()),
       switchMap(() =>
         from(this.pool.requestWithdraw())
           .pipe(
             map(() => {
-              return StakeActions.withdrawRequestSuccess();
+              return StakeActions.getWithdrawalDelay();
             }),
             catchError((err) => {
               console.error(err);
               this.toastr.error('Error occurs while trying to request a withdraw.');
               return of(StakeActions.withdrawRequestFailure({err}));
-            })
+            }),
+            finalize(() => this.loadingService.hide())
           )
       )
     )
@@ -279,7 +303,6 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.launchStakingPool),
       tap(() => this.loadingService.show()),
-      tap(({pool}) => console.log(pool)),
       switchMap(({pool}) =>
         from(this.stakingPoolService.launchStakingPool(pool))
           .pipe(

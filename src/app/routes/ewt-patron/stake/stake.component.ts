@@ -76,12 +76,7 @@ export class StakeComponent implements OnInit {
   }
 
   withdraw() {
-    this.dialog.open(WithdrawComponent, {
-      width: '400px',
-      maxWidth: '100%',
-      disableClose: true,
-      backdropClass: 'backdrop-shadow'
-    });
+    this.store.dispatch(StakeActions.withdrawRequest());
   }
 
   claimReward() {

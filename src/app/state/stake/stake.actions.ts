@@ -76,15 +76,15 @@ export const getAllServices = createAction(
 );
 
 export const getWithdrawalDelay = createAction(
-  '[Stake] Get Withdrawal Delay'
+  '[Stake] Get Delay After Calling Request Withdraw'
 );
 
 export const getWithdrawalDelaySuccess = createAction(
-  '[Stake] Withdrawal Delay Success',
-  props<{ delay: any }>()
+  '[Stake] Get Delay After Calling Request Withdraw Success',
+  props<{ requestDelay: number }>()
 );
 
 export const getWithdrawalDelayFailure = createAction(
-  '[Stake] Withdrawal Delay Failure',
+  '[Stake] Get Delay After Calling Request Withdraw Failure',
   props<{ err: string }>()
 );
