@@ -165,7 +165,7 @@ export class IamService {
     this._iam.closeConnection();
     this.store.dispatch(userClaimsActions.clearUserClaim());
 
-    saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/#/welcome';
+    saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
 
     // Clean up loader.
     this.loadingService.hide();
@@ -190,7 +190,7 @@ export class IamService {
   }
 
   private saveDeepLink(): void {
-    location.href = location.origin + '/#/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
+    location.href = location.origin + '/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
   }
 
   /**
