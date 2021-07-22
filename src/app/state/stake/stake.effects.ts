@@ -18,7 +18,6 @@ import * as authSelectors from '../auth/auth.selectors';
 import * as stakeSelectors from './stake.selectors';
 import { ToastrService } from 'ngx-toastr';
 import { WithdrawComponent } from '../../routes/ewt-patron/withdraw/withdraw.component';
-import { getWithdrawalDelay } from './stake.actions';
 
 const {formatEther, parseEther} = utils;
 
