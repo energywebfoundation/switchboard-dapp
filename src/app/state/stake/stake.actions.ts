@@ -19,7 +19,7 @@ export const checkRewardFailure = createAction(
 export const getStake = createAction('[Stake] Get Stake');
 export const getStakeSuccess = createAction(
   '[Stake] Get Stake Success',
-  props<{stake: Stake}>()
+  props<{ stake: Stake }>()
 );
 export const getStakeFailure = createAction(
   '[Stake] Get Stake Failure'
@@ -50,7 +50,7 @@ export const withdrawRequestSuccess = createAction(
 
 export const withdrawRequestFailure = createAction(
   '[Stake] Withdraw Request Reward Failure',
-  props<{err: string}>()
+  props<{ err: string }>()
 );
 
 export const withdrawReward = createAction(
@@ -63,23 +63,28 @@ export const withdrawRewardSuccess = createAction(
 
 export const withdrawRewardFailure = createAction(
   '[Stake] Withdraw Reward Failure',
-  props<{err: string}>()
+  props<{ err: string }>()
 );
 
 export const launchStakingPool = createAction(
   '[Stake] Launch Staking Pool',
-  props<{pool: IStakingPool}>()
+  props<{ pool: IStakingPool }>()
 );
 
 export const getAllServices = createAction(
   '[Stake] Get All Services'
 );
 
-export const getWithdrawDelay = createAction(
-  '[Stake] Get Withdraw Delay'
+export const getWithdrawalDelay = createAction(
+  '[Stake] Get Withdrawal Delay'
 );
 
-export const getWithdrawDelaySuccess = createAction(
-  '[Stake] Get Withdraw Delay Success',
-  props<{delay: any}>()
+export const getWithdrawalDelaySuccess = createAction(
+  '[Stake] Withdrawal Delay Success',
+  props<{ delay: any }>()
+);
+
+export const getWithdrawalDelayFailure = createAction(
+  '[Stake] Withdrawal Delay Failure',
+  props<{ err: string }>()
 );

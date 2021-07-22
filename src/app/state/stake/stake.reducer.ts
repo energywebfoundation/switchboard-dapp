@@ -39,7 +39,7 @@ const stakeReducer = createReducer(
         depositStart: stake.depositStart
       }
     })),
-  on(StakeActions.getWithdrawDelaySuccess, (state, {delay}) => ({...state, delay}))
+  on(StakeActions.getWithdrawalDelaySuccess, (state, {delay}) => ({...state, delay}))
 );
 
 export function reducer(state: StakeState | undefined, action: Action) {

@@ -5,7 +5,6 @@ import { LoadingService } from '../../shared/services/loading.service';
 import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
 import { StakeState } from './stake.reducer';
-import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import * as StakeActions from './stake.actions';
 import { catchError, delay, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
@@ -17,7 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert';
 import * as authSelectors from '../auth/auth.selectors';
 import * as stakeSelectors from './stake.selectors';
-import { initOnlyStakingPoolService } from './stake.actions';
+import { ToastrService } from 'ngx-toastr';
 
 const {formatEther, parseEther} = utils;
 
@@ -121,8 +120,16 @@ export class StakeEffects {
                 filter<Stake>(Boolean),
                 mergeMap((stake) => {
                     const actions = [StakeActions.getStakeSuccess({stake}), StakeActions.getAccountBalance()];
-                    if (stake.status !== StakeStatus.NONSTAKING) {
+                    if (stake.status === StakeStatus.STAKING) {
                       return [...actions, StakeActions.checkReward()];
+                    }
+                    if (stake.status === StakeStatus.WITHDRAWING) {
+                      return [
+                        ...actions,
+                        StakeActions.checkReward(),
+                        StakeActions.withdrawRewardSuccess(),
+                        StakeActions.getWithdrawalDelay()
+                      ];
                     }
                     return actions;
                   }
@@ -180,40 +187,57 @@ export class StakeEffects {
     )
   );
 
-  // withdrawDelay$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(StakeActions.getWithdrawDelay),
-  //     switchMap(() =>
-  //       from(this.pool.requestWithdrawDelay())
-  //         .pipe(
-  //           map((withdrawalDelay: BigNumberish) => StakeActions.getWithdrawDelaySuccess({delay: formatEther(withdrawalDelay)})),
-  //         )
-  //     )
-  //   )
-  // );
+  withdrawDelay$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StakeActions.getWithdrawalDelay),
+      switchMap(() =>
+        from(this.pool.withdrawalDelay())
+          .pipe(
+            map((withdrawalDelay) => StakeActions.getWithdrawalDelaySuccess({delay: formatEther(withdrawalDelay)})),
+            catchError(err => {
+              console.error('Could not get withdrawal delay', err);
+              return of(StakeActions.getWithdrawalDelayFailure({err}));
+            }),
+          )
+      )
+    )
+  );
+
+  withdrawRequest$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StakeActions.withdrawRequest),
+      switchMap(() =>
+        from(this.pool.requestWithdraw())
+          .pipe(
+            map(() => {
+              return StakeActions.withdrawRequestSuccess();
+            }),
+            catchError((err) => {
+              console.error(err);
+              this.toastr.error('Error occurs while trying to request a withdraw.');
+              return of(StakeActions.withdrawRequestFailure({err}));
+            })
+          )
+      )
+    )
+  );
 
   withdrawReward$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.withdrawReward),
-      tap(() => this.loadingService.show()),
+      tap(() => this.loadingService.show('Withdrawing your reward...')),
       switchMap(() =>
-        from(this.pool.requestWithdraw())
-          .pipe(
-            delay(5000),
-            switchMap(() =>
-              from(this.pool.withdraw()).pipe(
-                mergeMap(() => [StakeActions.withdrawRewardSuccess(), StakeActions.getStake()]),
-                catchError(err => {
-                  console.error(err);
-                  return of(StakeActions.withdrawRewardFailure({err}));
-                }),
-                finalize(() => {
-                  this.loadingService.hide();
-                  this.dialog.closeAll();
-                })
-              ),
-            )
-          )
+        from(this.pool.withdraw()).pipe(
+          mergeMap(() => [StakeActions.withdrawRewardSuccess(), StakeActions.getStake()]),
+          catchError(err => {
+            console.error(err);
+            return of(StakeActions.withdrawRewardFailure({err}));
+          }),
+          finalize(() => {
+            this.loadingService.hide();
+            this.dialog.closeAll();
+          })
+        ),
       )
     )
   );
@@ -288,7 +312,7 @@ export class StakeEffects {
               private iamService: IamService,
               private activatedRoute: ActivatedRoute,
               private loadingService: LoadingService,
-              private toastr: SwitchboardToastrService,
+              private toastr: ToastrService,
               private dialog: MatDialog) {
   }
 
