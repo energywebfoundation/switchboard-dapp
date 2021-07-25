@@ -8,7 +8,7 @@
     >
     <mat-error *ngIf="controlHasError('required')">Role Name is <strong>required</strong></mat-error>
     <mat-error *ngIf="controlHasError('roleNotFound')">Role does not exist</mat-error>
-    <mat-error *ngIf="controlHasError('roleExist')">Role already exists</mat-error>
+    <mat-error *ngIf="controlHasError('roleExist')">Role has already been added</mat-error>
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option *ngFor="let item of filteredOptions | async" [value]="item" class="d-flex align-items-start">
             <div class=" d-flex flex-column">
@@ -21,8 +21,11 @@
             <button mat-icon-button (click)="search()" class="searchButton">
                 <mat-icon>search</mat-icon>
             </button>
-            <button mat-icon-button (click)="addRole()">
+            <button *ngIf="searchType === 'restrictions'" mat-icon-button (click)="addRole()">
                 <mat-icon>add</mat-icon>
+            </button>
+            <button *ngIf="searchType !== 'restrictions'" mat-icon-button (click)="clearSearchTxt()">
+                <mat-icon>close</mat-icon>
             </button>
         </ng-container>
         <mat-spinner *ngIf="isAutolistLoading?.value" diameter="21" class="color-white"></mat-spinner>

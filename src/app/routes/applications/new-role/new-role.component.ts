@@ -44,9 +44,9 @@ export interface RolesFields {
 }
 
 interface ISmartSearch {
-  Role: IRole,
-  SearchType: string
-} 
+  role: IRole;
+  searchType: string;
+}
 
 const FIELD_TYPES = [
   'text', 'number', 'date', 'boolean'
@@ -409,8 +409,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addRestriction(event: ISmartSearch) {
-    if (event.SearchType === 'restrictions') {
-      this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions.push(event.Role.namespace);
+    if (event.searchType === 'restrictions') {
+      this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions.push(event.role.namespace);
       this.restrictionRoleControl.setErrors(null);
     }
   }

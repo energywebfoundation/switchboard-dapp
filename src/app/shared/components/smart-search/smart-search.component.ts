@@ -4,8 +4,13 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { IamService } from '../../services/iam.service';
-import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { IRole } from 'iam-client-lib';
 
+interface ISmartSearch {
+    role: IRole;
+    searchType: string;
+}
+  
 @Component({
     selector: 'app-smart-search',
     templateUrl: './smart-search.component.html',
@@ -17,7 +22,7 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
     @Input() fieldName: string;
     @Input() searchType = "";
 
-    @Output() searchTextEvent: EventEmitter<any> = new EventEmitter();
+    @Output() searchTextEvent: EventEmitter<ISmartSearch> = new EventEmitter();
 
     searchTxtFieldValue: string;
     searchForm: FormGroup;
@@ -27,11 +32,9 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
     };
 
     public filteredOptions: Observable<any[]>;
-    private TOASTR_HEADER = 'Create New Role';
 
     constructor(private route: Router,
-        private iamService: IamService,
-        private toastr: SwitchboardToastrService) {
+        private iamService: IamService) {
     }
 
     ngOnInit(): void {
@@ -71,8 +74,8 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
         if (valid) {
             const searchText = this.searchText.value;
             this.searchTextEvent.emit({
-                Role: searchText,
-                SearchType: this.searchType
+                role: searchText,
+                searchType: this.searchType
             });
             this.clearSearchTxt();
         } 
