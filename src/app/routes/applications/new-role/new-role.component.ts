@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 import { ENSNamespaceTypes, PreconditionTypes, IRole } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -89,7 +89,22 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public issuerGroup  = this.fb.group({
     newIssuer: ['', this.iamService.isValidDid]
   });
+  
+  roleNotFoundValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const notFound = typeof control.value !== 'string';
+      return !notFound ? {roleNotFound: {value: control.value}} : null;
+    };
+  }
+  roleExistValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const valueConditions: string[] = this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions;
+      const exists = valueConditions.includes(control.value.namespace);
+      return exists ? {roleExist: {value: control.value}} : null;
+    };
+  }
   public roleControl  =  this.fb.control('');
+  public restrictionRoleControl  =  this.fb.control('', [Validators.required, this.roleNotFoundValidator(), this.roleExistValidator()]);
   public environment  = environment;
   public isChecking   = false;
   public RoleType     = RoleType;
@@ -395,19 +410,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addRestriction(event: ISmartSearch) {
     if (event.SearchType === 'restrictions') {
-      if (this.roleForm.get('data').value.enrolmentPreconditions[0].conditions.length > 0) {
-        this.toastr.error('You can only add one precondition, please remove previously added role to add a new one');
-        return;
-      }
-
-      const newValueToPatch = [
-        {
-          type: PreconditionTypes.Role,
-          conditions: [event.Role.namespace]
-        }
-      ];
-
-      this.roleForm.get('data').get('enrolmentPreconditions').patchValue(newValueToPatch);
+      this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions.push(event.Role.namespace);
+      this.restrictionRoleControl.setErrors(null);
     }
   }
 
@@ -560,14 +564,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showFieldsForm = false;
   }
 
-  isRoleNameInValid(): boolean {
-    return this.roleForm.get('roleName').valid;
-  }
-
   async proceedSettingIssuer() {
-    if (!this.isRoleNameInValid()) {
-      return;
-    }
     of(null)
     .pipe(
         take(1),
@@ -633,7 +630,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this.spinner.hide();
   }
 
-  async proceedAddingFields() {
+  async proceedSettingRestriction() {
     const roleFormValue = this.roleForm.value;
     if (typeof roleFormValue.roleName !== 'string') {
       roleFormValue.roleName = roleFormValue.roleName.namespace;
@@ -691,6 +688,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stepper.next();
       }
     }
+  }
+
+  async proceedAddingFields() {
+    // Proceed to Adding Fields Step
+    this.stepper.selected.editable = false;
+    this.stepper.selected.completed = true;
+    this.stepper.next();
   }
 
   proceedConfirmDetails() {

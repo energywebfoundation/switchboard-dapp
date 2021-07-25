@@ -15,9 +15,9 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
     @Input() searchText: FormControl;
     @Input() placeholderSearch: string;
     @Input() fieldName: string;
-    @Input() SearchType = "restrictions";
+    @Input() searchType = "";
 
-    @Output() SearchTextEvent: EventEmitter<any> = new EventEmitter();
+    @Output() searchTextEvent: EventEmitter<any> = new EventEmitter();
 
     searchTxtFieldValue: string;
     searchForm: FormGroup;
@@ -37,6 +37,10 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
     }
 
+    controlHasError(errorType: string) {
+        return this.searchText.hasError(errorType);
+    }
+    
     ngAfterViewInit(): void {
         this.filteredOptions = this.searchText.valueChanges.pipe(
             debounceTime(1200),
@@ -62,23 +66,23 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
     }
 
     addRole() {
-        const searchText = this.searchText.value;
-        if (typeof searchText === 'string') {
-            this.toastr.error('Role you want to add does not exists');
-            return;
-        }
+        const valid = this.searchText.valid;
 
-        this.SearchTextEvent.emit({
-            Role: searchText,
-            SearchType: this.SearchType
-        });
-        this.clearSearchTxt();
+        if (valid) {
+            const searchText = this.searchText.value;
+            this.searchTextEvent.emit({
+                Role: searchText,
+                SearchType: this.searchType
+            });
+            this.clearSearchTxt();
+        } 
     }
 
-  clearSearchTxt(): void {
-    this.searchTxtFieldValue = '';
-    this.searchText.setValue('');
-  }
+    clearSearchTxt(): void {
+        this.searchTxtFieldValue = '';
+        this.searchText.setValue('');
+        this.searchText.setErrors(null);
+    }
 
     private async _filterOrgsAndApps(keyword: any): Promise<any[]> {
         let retVal = [];
