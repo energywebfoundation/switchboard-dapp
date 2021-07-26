@@ -94,7 +94,7 @@
         <ng-container *ngIf="element?.subOrgs && element?.subOrgs?.length">
           <div>
             <span class="px-2 sub-btn" matTooltipClass="multiline-tooltip" matTooltip="{{ getTooltip(element) }}" matTooltipPosition="below">
-              +({{ element?.subOrgs?.length || 0 }})
+              +{{ element?.subOrgs?.length || 0 }}
             </span>
           </div>
         </ng-container>
@@ -196,6 +196,12 @@
                 *ngIf="listType === ListType.ORG">
                 <mat-icon class="btn-color-primary btn-action-1" svgIcon="transfer-ownership-icon"></mat-icon>
                 <span>Transfer Ownership</span>
+              </button>
+
+              <!-- Copy Staking URL -->
+              <button mat-menu-item class="btn-color-primary" *appIsFeatureEnabled>
+                <mat-icon class="btn-color-primary btn-action-3" svgIcon="copy-url-icon"></mat-icon>
+                <span>Copy Staking URL</span>
               </button>
 
               <!-- Remove -->

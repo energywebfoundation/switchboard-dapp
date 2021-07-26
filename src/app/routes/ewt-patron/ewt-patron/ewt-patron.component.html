@@ -3,7 +3,7 @@
         <div class="header-wrapper d-flex flex-grow-1 justify-content-end">
             <ng-container *ngIf="(loggedIn$ | async) else notLogged">
                 <button mat-raised-button class="connect-btn color-white text-uppercase mr-2"
-                    (click)="logOut()">Logout</button>
+                    (click)="logOut()">Disconnect Wallet</button>
             </ng-container>
             <ng-template #notLogged>
                 <button mat-raised-button (click)="openLoginDialog()"
