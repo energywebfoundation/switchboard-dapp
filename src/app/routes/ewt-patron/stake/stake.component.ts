@@ -3,14 +3,13 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ClaimRewardComponent } from '../claim-reward/claim-reward.component';
 
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { PercentButtonsComponent } from '../percent-buttons/percent-buttons.component';
 import { Store } from '@ngrx/store';
 import * as stakeSelectors from '../../../state/stake/stake.selectors';
 import * as StakeActions from '../../../state/stake/stake.actions';
 import * as authSelectors from '../../../state/auth/auth.selectors';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
-import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-stake',
@@ -20,17 +19,14 @@ import { combineLatest } from 'rxjs';
 export class StakeComponent implements OnInit {
   inputFocused: boolean;
   tokenAmount: number;
-  balance$ = this.store.select(stakeSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
   amountToStake = new FormControl('', [Validators.min(0), Validators.required]);
+  balance$ = this.store.select(stakeSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
   earnedReward$ = this.store.select(stakeSelectors.getReward);
   stakeAmount$ = this.store.select(stakeSelectors.getStakeAmount);
   isWithdrawDisabled$ = this.store.select(stakeSelectors.isWithdrawDisabled);
-  isStakingDisabled$ = combineLatest([
-    this.store.select(stakeSelectors.isStakingDisabled),
-    this.store.select(authSelectors.isUserLoggedIn)
-  ])
-    .pipe(map(([stakingDisabled, loggedIn]) => stakingDisabled && loggedIn));
+  isStakingDisabled$ = this.store.select(stakeSelectors.isStakingDisabled);
   isLoggedIn: boolean;
+
   @ViewChild('percentButtons') percentButtons: PercentButtonsComponent;
 
   constructor(private dialog: MatDialog, private store: Store) {
