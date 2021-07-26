@@ -323,7 +323,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
       namespace = arr[1];
     }
 
-    return `${location.origin}/#/enrol?${listType}=${namespace}&roleName=${name}`;
+    return `${location.origin}/enrol?${listType}=${namespace}&roleName=${name}`;
   }
 
   copyToClipboard(listType: string, roleDefinition: any) {
@@ -611,6 +611,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
   openStakingPool(element: any) {
     this.dialog.open(NewStakingPoolComponent, {
+      data: element,
       width: '600px',
       maxWidth: '100%',
       disableClose: true

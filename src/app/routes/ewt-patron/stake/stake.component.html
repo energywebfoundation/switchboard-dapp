@@ -19,7 +19,8 @@
                     </button>
                 </div>
                 <mat-error *ngIf="amountToStake.hasError('min')">Minimum value is 0</mat-error>
-                <mat-error *ngIf="amountToStake.hasError('required')">This field is <strong>required</strong></mat-error>
+                <mat-error *ngIf="amountToStake.hasError('required')">This field is <strong>required</strong>
+                </mat-error>
             </mat-form-field>
             <app-percent-buttons #percentButtons (percent)="calcStakeAmount($event)">
             </app-percent-buttons>
@@ -35,8 +36,9 @@
                 <div class="info">
                     Estimated daily reward
                 </div>
-                <div class="color-white" matTooltip="0.0270% per day yields 10.355% per year when compounded daily or 9.855% per year not compounded."
-                matTooltipPosition="below">
+                <div class="color-white"
+                     matTooltip="0.0270% per day yields 10.355% per year when compounded daily or 9.855% per year not compounded."
+                     matTooltipPosition="below">
                     0.03%
                 </div>
             </div>
@@ -46,7 +48,8 @@
             <div class="mt-2 d-flex justify-content-end align-items-center color-white">
                 <!-- <mat-slide-toggle [formControl]="compound" class="slide-toggle">Compound</mat-slide-toggle> -->
                 <button mat-raised-button class="stake-btn color-white text-uppercase"
-                        [disabled]="(isStakingDisabled$ | async) || isAmountInvalid()" (click)="stake()">Stake
+                        [disabled]="isAmountInvalid()" (click)="stake()">
+                    Stake
                 </button>
             </div>
         </div>

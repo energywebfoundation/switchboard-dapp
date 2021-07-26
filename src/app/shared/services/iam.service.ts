@@ -19,6 +19,7 @@ import { UserClaimState } from '../../state/user-claim/user.reducer';
 import { ToastrService } from 'ngx-toastr';
 import { getDid, getUserProfile } from '../../state/user-claim/user.selectors';
 import { take } from 'rxjs/operators';
+import * as StakeActions from '../../state/stake/stake.actions';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
@@ -34,6 +35,7 @@ const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
 const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
 
 export const VOLTA_CHAIN_ID = 73799;
+const STAKING_POOL_FACTORY_FAST_REWARD = '0xc017968e25b4aC91B5DDA64CB3a5eAf80409788a';
 
 export interface LoginOptions {
   walletProvider?: WalletProvider;
@@ -69,7 +71,8 @@ export class IamService {
 
     // Set RPC
     setChainConfig(VOLTA_CHAIN_ID, {
-      rpcUrl: walletConnectOptions.rpcUrl
+      rpcUrl: walletConnectOptions.rpcUrl,
+      stakingPoolFactoryAddress: STAKING_POOL_FACTORY_FAST_REWARD
     });
 
     // Set Messaging Options
@@ -122,7 +125,7 @@ export class IamService {
           this._iam.on('disconnected', () => {
             this._displayAccountAndNetworkChanges(EVENT_DISCONNECTED, redirectOnAccountChange);
           });
-
+          this.store.dispatch(StakeActions.initOnlyStakingPoolService());
           retVal = true;
         }
       } catch (e) {
@@ -162,14 +165,14 @@ export class IamService {
     this._iam.closeConnection();
     this.store.dispatch(userClaimsActions.clearUserClaim());
 
-    saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/#/welcome';
+    saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
 
     // Clean up loader.
     this.loadingService.hide();
   }
 
-  disconnect() {
-    this._iam.closeConnection();
+  async disconnect() {
+    await this._iam.closeConnection();
     this.store.dispatch(userClaimsActions.clearUserClaim());
     this.loadingService.hide();
   }
@@ -187,7 +190,7 @@ export class IamService {
   }
 
   private saveDeepLink(): void {
-    location.href = location.origin + '/#/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
+    location.href = location.origin + '/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
   }
 
   /**

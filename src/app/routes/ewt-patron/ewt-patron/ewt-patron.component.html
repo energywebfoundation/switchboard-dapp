@@ -6,9 +6,8 @@
                     (click)="logOut()">Logout</button>
             </ng-container>
             <ng-template #notLogged>
-                <button mat-raised-button (click)="connectToMetamask()"
-                    class="connect-btn color-white text-uppercase mr-2" type="submit"
-                    [disabled]="disableMetamaskButton$ | async">
+                <button mat-raised-button (click)="openLoginDialog()"
+                    class="connect-btn color-white text-uppercase mr-2" type="submit">
                     Connect to Wallet
                 </button>
             </ng-template>
@@ -112,11 +111,6 @@ The stake with reward will be returned to the same address from which the stake 
                                 not compounded)
                             </li>
                             <li>Rewards paid daily on tokens staked for 24h continuously</li>
-                            <li>Stake can be withdrawn at any time</li>
-                            <li>Daily reward: 0.0270% (yields 10.355% per year when compounded daily)
-                            </li>
-                            <li>Rewards paid daily on tokens staked for 24h continuously
-                            </li>
                             <li>Stake can be withdrawn at any time</li>
                             <li>Daily rewards will be added to the stake. They can earn interest, but can only be withdrawn as part of the stake ("unstaked")</li>
                         </ul>

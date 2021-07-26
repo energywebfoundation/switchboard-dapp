@@ -14,6 +14,10 @@
     .mat-radio-button .mat-radio-inner-circle, .mat-radio-button .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple), .mat-radio-button.mat-radio-checked .mat-radio-persistent-ripple, .mat-radio-button:active .mat-radio-persistent-ripple {
         background-color: #33CBCB !important;
     }
+
+    .mat-date-range-input-separator {
+        color: #b7bac9;
+    }
 }
 
 .mat-radio-button {

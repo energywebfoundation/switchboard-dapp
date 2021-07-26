@@ -54,3 +54,7 @@ export const getStakeAmount = createSelector(
   (state: Stake) => state?.amount ? formatEther(state.amount) : '0'
 );
 
+export const getDelay = createSelector(
+  getStakeState,
+  (state) => state.delay
+);

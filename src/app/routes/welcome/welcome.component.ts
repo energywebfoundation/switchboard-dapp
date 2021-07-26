@@ -47,6 +47,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   async connectToEwKeyManager() {
+    return;
     await this.connectToWallet(WalletProvider.EwKeyManager);
   }
 

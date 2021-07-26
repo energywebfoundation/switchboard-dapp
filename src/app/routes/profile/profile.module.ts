@@ -22,10 +22,6 @@ const routes: Routes = [];
     ],
     declarations: [
         LogOutComponent
-    ],
-    entryComponents: [],
-    exports: [
-        LogOutComponent
     ]
 })
 export class ProfileModule { }
