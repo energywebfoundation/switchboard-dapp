@@ -194,11 +194,11 @@
               [fieldsForm]="fieldsForm"
               [dataSource]="dataSource"
               [isChecking]="isChecking"
-              (resetFormEvent)="formResetHandler()"
-              (updateDataSourceEvent)="dataSourceChangeHandler($event)"
-              (backEvent)="back()"
-              (proceedConfirmDetailsEvent)="proceedConfirmDetails()"
-            ></app-role-field>
+              (cleanForm)="formResetHandler()"
+              (updateData)="dataSourceChangeHandler($event)"
+              (back)="back()"
+              (proceed)="proceedConfirmDetails()">
+            </app-role-field>
 
           </form>
         </mat-step>

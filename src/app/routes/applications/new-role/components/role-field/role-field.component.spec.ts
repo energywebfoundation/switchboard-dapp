@@ -87,8 +87,16 @@ describe('RoleFieldComponent', () => {
 
   describe('add field button', () => {
 
+    it('addField is invalid form', () => {
+      component.fieldsForm.setErrors({incorrect: true});
+      spyOn(component, 'updateDataSource');
+      component.addField();
+
+      expect(component.updateDataSource).not.toHaveBeenCalled();
+    });
+
     it('should open form to add field', () => {
-      const { showField } = getSelectors(hostDebug);
+      const {showField} = getSelectors(hostDebug);
       showField.nativeElement.click();
       fixture.detectChanges();
 
@@ -96,11 +104,11 @@ describe('RoleFieldComponent', () => {
     });
 
     it('add button should be disabled', () => {
-      const { showField } = getSelectors(hostDebug);
+      const {showField} = getSelectors(hostDebug);
       showField.nativeElement.click();
       fixture.detectChanges();
 
-      const { addField } = getSelectors(hostDebug);
+      const {addField} = getSelectors(hostDebug);
 
       expect(addField.nativeElement.disabled).toBeTruthy();
     });
@@ -108,7 +116,7 @@ describe('RoleFieldComponent', () => {
     it('add button should be enabled when validation passes', () => {
       addFieldToRole();
 
-      const { addField } = getSelectors(hostDebug);
+      const {addField} = getSelectors(hostDebug);
       expect(addField.nativeElement.disabled).toBeFalsy();
     });
 
@@ -116,9 +124,9 @@ describe('RoleFieldComponent', () => {
       addFieldToRole();
 
       let user: any;
-      component.updateDataSourceEvent.subscribe(value => user = value);
+      component.updateData.subscribe(value => user = value);
 
-      const { addField } = getSelectors(hostDebug);
+      const {addField} = getSelectors(hostDebug);
       addField.nativeElement.click();
       fixture.detectChanges();
 
@@ -148,12 +156,12 @@ describe('RoleFieldComponent', () => {
 
       selectFieldTypeAndLabel(1, 'Edit Label');
 
-      component.updateDataSourceEvent.subscribe(value => {
+      component.updateData.subscribe(value => {
         component.dataSource.data = [...value];
         fixture.detectChanges();
       });
 
-      const { updateField } = getSelectors(hostDebug);
+      const {updateField} = getSelectors(hostDebug);
       updateField.nativeElement.click();
       fixture.detectChanges();
 
@@ -165,105 +173,71 @@ describe('RoleFieldComponent', () => {
 
   });
 
-  describe('should be run', () => {
+  it('should be run back', () => {
+    const { back } = getSelectors(hostDebug);
+    spyOn(component.back, 'emit');
+    back.nativeElement.click();
+    fixture.detectChanges();
 
-    it('addField is invalid form', () => {
-      component.fieldsForm.setErrors({ incorrect: true });
-      spyOn(component, 'resetForm');
-      spyOn(component, 'updateDataSource');
-      component.addField();
-
-      expect(component.resetForm).not.toHaveBeenCalled();
-      expect(component.updateDataSource).not.toHaveBeenCalled();
-    });
-
-    it('back', () => {
-      spyOn(component.backEvent, 'emit');
-      component.back();
-
-      expect(component.backEvent.emit).toHaveBeenCalled();
-    });
-
-    it('proceedConfirmDetails', () => {
-      spyOn(component.proceedConfirmDetailsEvent, 'emit');
-      component.proceedConfirmDetails();
-
-      expect(component.proceedConfirmDetailsEvent.emit).toHaveBeenCalled();
-    });
-
-    it('resetForm', () => {
-      component.isEditFieldForm = true;
-      component.showFieldsForm = true;
-      spyOn(component.resetFormEvent, 'emit');
-
-      component.resetForm();
-
-      expect(component.isEditFieldForm).toBe(false);
-      expect(component.showFieldsForm).toBe(false);
-      expect(component.resetFormEvent.emit).toHaveBeenCalledWith(true);
-    });
-
-    it('updateDataSource', () => {
-      const data = {value: 'testData'};
-      spyOn(component.updateDataSourceEvent, 'emit');
-
-      component.updateDataSource(data);
-
-      expect(component.updateDataSourceEvent.emit).toHaveBeenCalledWith(data);
-    });
-
-    it('cancelAddField', () => {
-      spyOn(component, 'resetForm');
-
-      component.cancelAddField();
-
-      expect(component.resetForm).toHaveBeenCalled();
-    });
-
-    it('moveDown', () => {
-      component.dataSource.data = [1, 2, 3];
-      const i = 1;
-      spyOn(component, 'updateDataSource');
-
-      component.moveDown(i);
-
-      expect(component.updateDataSource).toHaveBeenCalledWith([1, 3, 2]);
-    });
-
-    it('moveUp', () => {
-      component.dataSource.data = [1, 2, 3];
-      const i = 1;
-      spyOn(component, 'updateDataSource');
-
-      component.moveUp(i);
-
-      expect(component.updateDataSource).toHaveBeenCalledWith([2, 1, 3]);
-    });
-
-    it('deleteField', () => {
-      component.dataSource.data = [1, 2, 3];
-      const i = 1;
-      spyOn(component, 'updateDataSource');
-
-      component.deleteField(i);
-
-      expect(component.updateDataSource).toHaveBeenCalledWith([1, 3]);
-    });
-
-    it('showAddFieldForm', () => {
-      component.showFieldsForm = false;
-      spyOn(component, 'resetForm');
-
-      component.showAddFieldForm();
-
-      expect(component.resetForm).toHaveBeenCalled();
-      expect(component.showFieldsForm).toBe(true);
-    });
-
+    expect(component.back.emit).toHaveBeenCalled();
   });
 
+  it('should be run proceedConfirmDetails', () => {
+    spyOn(component.proceed, 'emit');
+    component.proceedConfirmDetails();
+
+    expect(component.proceed.emit).toHaveBeenCalled();
+  });
+
+  it('should be run updateDataSource', () => {
+    const data = {value: 'testData'};
+    spyOn(component.updateData, 'emit');
+
+    component.updateDataSource(data);
+
+    expect(component.updateData.emit).toHaveBeenCalledWith(data);
+  });
+
+  it('should be run moveDown', () => {
+    component.dataSource.data = [1, 2, 3];
+    spyOn(component, 'updateDataSource');
+
+    component.moveDown(1);
+
+    expect(component.updateDataSource).toHaveBeenCalledWith([1, 3, 2]);
+  });
+
+  it('should be run moveUp', () => {
+    component.dataSource.data = [1, 2, 3];
+    const i = 1;
+    spyOn(component, 'updateDataSource');
+
+    component.moveUp(i);
+
+    expect(component.updateDataSource).toHaveBeenCalledWith([2, 1, 3]);
+  });
+
+  it('should be run deleteField', () => {
+    component.dataSource.data = [1, 2, 3];
+    const i = 1;
+    spyOn(component, 'updateDataSource');
+
+    component.deleteField(i);
+
+    expect(component.updateDataSource).toHaveBeenCalledWith([1, 3]);
+  });
+
+  it('should be run showAddFieldForm', () => {
+    component.showFieldsForm = false;
+
+    component.showAddFieldForm();
+
+    expect(component.showFieldsForm).toBe(true);
+  });
+
+
   function addFieldToRole() {
-    const { showField } = getSelectors(hostDebug);
+    const {showField} = getSelectors(hostDebug);
     showField.nativeElement.click();
     fixture.detectChanges();
 
@@ -272,28 +246,28 @@ describe('RoleFieldComponent', () => {
 
   function editFieldAdded() {
 
-    component.updateDataSourceEvent.subscribe(value => {
+    component.updateData.subscribe(value => {
       component.dataSource.data = [...value];
       fixture.detectChanges();
     });
 
-    const { addField } = getSelectors(hostDebug);
+    const {addField} = getSelectors(hostDebug);
     addField.nativeElement.click();
     fixture.detectChanges();
 
-    const { editField } = getSelectors(hostDebug);
+    const {editField} = getSelectors(hostDebug);
     editField.nativeElement.click();
     fixture.detectChanges();
   }
 
   function selectFieldTypeAndLabel(option: number, labelText: string) {
 
-    const { fieldtype } = getSelectors(hostDebug);
+    const {fieldtype} = getSelectors(hostDebug);
     fieldtype.nativeElement.click();
     fixture.detectChanges();
 
-    const { fieldTypeOptionAll } = getSelectors(hostDebug);
-    const { fieldLabel } = getSelectors(hostDebug);
+    const {fieldTypeOptionAll} = getSelectors(hostDebug);
+    const {fieldLabel} = getSelectors(hostDebug);
     fieldTypeOptionAll[option].nativeElement.click();
     fieldLabel.nativeElement.value = labelText;
 
@@ -314,6 +288,7 @@ const getSelectors = (hostDebug: DebugElement) => {
     fieldTypeOptionAll: hostDebug.queryAll(By.css('.mat-option')),
     fieldTypeOptionSelected: hostDebug.query(By.css('[data-qa-id=fieldType] .ng-star-inserted')),
     editField: hostDebug.query(By.css('[data-qa-id="edit-field"]')),
+    back: hostDebug.query(By.css('[data-qa-id="back"]')),
   };
 };
 

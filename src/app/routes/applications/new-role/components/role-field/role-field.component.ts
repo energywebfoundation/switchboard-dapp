@@ -17,17 +17,17 @@ export class RoleFieldComponent {
   @Input() dataSource: MatTableDataSource<any>;
   @Input() isChecking: boolean;
 
-  @Output() resetFormEvent = new EventEmitter<boolean>();
-  @Output() updateDataSourceEvent: EventEmitter<MatTableDataSource<any>> = new EventEmitter();
-  @Output() backEvent: EventEmitter<any> = new EventEmitter();
-  @Output() proceedConfirmDetailsEvent: EventEmitter<any> = new EventEmitter();
+  @Output() cleanForm = new EventEmitter<boolean>();
+  @Output() updateData = new EventEmitter<MatTableDataSource<any>>();
+  @Output() back = new EventEmitter<void>();
+  @Output() proceed = new EventEmitter<void>();
 
   showFieldsForm = false;
   isEditFieldForm = false;
   fieldIndex: number;
   public FieldTypes = FIELD_TYPES;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) { }
+  constructor() { }
 
   showAddFieldForm() {
     this.resetForm();
@@ -39,7 +39,6 @@ export class RoleFieldComponent {
       const data = [...this.dataSource.data, this._extractValidationObject(this.fieldsForm.value)];
       this.updateDataSource(data);
       this.resetForm();
-      this.changeDetectorRef.detectChanges();
     }
   }
 
@@ -53,7 +52,6 @@ export class RoleFieldComponent {
       });
       this.updateDataSource(data);
       this.resetForm();
-      this.changeDetectorRef.detectChanges();
     }
   }
 
@@ -107,21 +105,15 @@ export class RoleFieldComponent {
   }
 
   updateDataSource(data) {
-    this.updateDataSourceEvent.emit(data);
+    this.updateData.emit(data);
   }
 
-  resetForm() {
-    this.isEditFieldForm = false;
-    this.showFieldsForm = false;
-    this.resetFormEvent.emit(true);
-  }
-
-  back() {
-    this.backEvent.emit();
+  onBack() {
+    this.back.emit();
   }
 
   proceedConfirmDetails() {
-    this.proceedConfirmDetailsEvent.emit();
+    this.proceed.emit();
   }
 
   private _extractValidationObject(value: any) {
@@ -180,4 +172,9 @@ export class RoleFieldComponent {
     return retVal;
   }
 
+  private resetForm() {
+    this.isEditFieldForm = false;
+    this.showFieldsForm = false;
+    this.cleanForm.emit(true);
+  }
 }

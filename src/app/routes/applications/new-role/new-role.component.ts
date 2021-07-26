@@ -19,6 +19,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Observable, of } from 'rxjs';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 
 export const RoleType = {
   ORG: 'org',
@@ -319,7 +320,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   alphaNumericOnly(event: any, includeDot?: boolean) {
-    return this.iamService.isAlphaNumericOnly(event, includeDot);
+    return isAlphaNumericOnly(event, includeDot);
   }
 
   issuerTypeChanged(data: any) {
