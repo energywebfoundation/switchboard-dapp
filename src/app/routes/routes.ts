@@ -4,6 +4,8 @@ import { LogOutComponent } from './profile/logout/logout.component';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 import { FeatureToggleGuard } from '../shared/feature-toggle/feature-toggle.guard';
 import { EwtPatronComponent } from './ewt-patron/ewt-patron/ewt-patron.component';
+import { NgModule } from '@angular/core';
+import { NoPreloading, RouterModule } from '@angular/router';
 
 export const routes = [
   {
@@ -48,3 +50,15 @@ export const routes = [
   {path: '**', redirectTo: 'dashboard'}
 
 ];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload',
+      relativeLinkResolution: 'legacy',
+      useHash: false,
+      preloadingStrategy: NoPreloading
+    }),
+  ],
+  exports: [RouterModule]
+})
+export class RoutingModule{}

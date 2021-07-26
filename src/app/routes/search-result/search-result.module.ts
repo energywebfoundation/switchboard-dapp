@@ -28,7 +28,7 @@ const routes: Routes = [
   declarations: [SearchResultComponent],
   imports: [
     SharedModule,
-    RouterModule.forChild(routes), 
+    RouterModule.forChild(routes),
     RouterModule,
     HttpClientModule,
     MatButtonModule,
