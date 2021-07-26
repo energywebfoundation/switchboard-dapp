@@ -50,15 +50,9 @@ const routes: Routes = [
         WidgetsModule,
         NgxSpinnerModule,
         ProfileModule
-        
-        
-
     ],
     entryComponents: [],
 
-    declarations: [DashboardComponent, UserInfoComponent, CardComponent],
-    exports: [
-        RouterModule
-    ]
+    declarations: [DashboardComponent, UserInfoComponent, CardComponent]
 })
 export class DashboardModule { }

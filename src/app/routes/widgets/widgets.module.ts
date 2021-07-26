@@ -41,10 +41,6 @@ const routes: Routes = [];
   ],
   entryComponents: [
     ConfirmationDialogComponent
-  ],
-
-  exports: [
-    RouterModule,
   ]
 })
 export class WidgetsModule {
