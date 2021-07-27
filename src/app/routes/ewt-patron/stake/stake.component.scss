@@ -98,8 +98,16 @@ h5 {
      top: 1.3px !important;
     }
 
+    .staking-textfield.mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix {
+      right: .35em;
+    }
+
     .staking-textfield.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
       color: #33CBCB;
+    }
+
+    .staking-textfield .mat-form-field-subscript-wrapper {
+      top: calc(100% - 2.1em) !important;
     }
 
     .staking-textfield.mat-form-field-appearance-outline .mat-form-field-label {

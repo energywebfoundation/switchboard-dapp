@@ -60,6 +60,10 @@ p {
 a {
     color: #A566FF;
     letter-spacing: 1.25px;
+
+    &:hover {
+        opacity: 0.7;
+    }
 }
 
 ::ng-deep {
