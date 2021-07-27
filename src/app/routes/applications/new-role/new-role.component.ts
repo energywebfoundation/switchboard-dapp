@@ -1,14 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 import { ENSNamespaceTypes, PreconditionTypes, IRole } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { debounceTime, delay, filter, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, delay, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { FieldValidationService } from 'src/app/shared/services/field-validation.service';
-import { ConfigService } from 'src/app/shared/services/config.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -20,6 +19,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Observable, of } from 'rxjs';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 
 export const RoleType = {
   ORG: 'org',
@@ -47,10 +47,6 @@ export interface ISmartSearch {
   role: IRole;
   searchType: string;
 }
-
-const FIELD_TYPES = [
-  'text', 'number', 'date', 'boolean'
-];
 
 @Component({
   selector: 'app-new-role',
@@ -89,7 +85,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public issuerGroup  = this.fb.group({
     newIssuer: ['', this.iamService.isValidDid]
   });
-  
+
   roleNotFoundValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const notFound = typeof control.value !== 'string';
@@ -113,7 +109,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public issuerList   : string[] = [this.iamService.iam.getDid()];
 
   // Fields
-  public FieldTypes   = FIELD_TYPES;
   fieldsForm          = this.fb.group({
     fieldType: ['', Validators.required],
     label: ['', Validators.required],
@@ -138,9 +133,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       maxDate: undefined
     })
   });
-  showFieldsForm      = false;
-  isEditFieldForm     = false;
-  fieldIndex          : number;
   isAutolistLoading   = false;
   hasSearchResult     = true;
   displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
@@ -162,16 +154,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   private subscription$ = new Subject();
 
   constructor(private fb: FormBuilder,
-    private iamService: IamService,
-    private toastr: SwitchboardToastrService,
-    private spinner: NgxSpinnerService,
-    private fieldValidationService: FieldValidationService,
-    private changeDetectorRef: ChangeDetectorRef,
-    public dialogRef: MatDialogRef<NewRoleComponent>,
-    public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private configService: ConfigService) {
-    }
+              private iamService: IamService,
+              private toastr: SwitchboardToastrService,
+              private spinner: NgxSpinnerService,
+              private fieldValidationService: FieldValidationService,
+              public dialogRef: MatDialogRef<NewRoleComponent>,
+              public dialog: MatDialog,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+  }
 
   async ngAfterViewInit() {
     await this.confirmParentNamespace();
@@ -204,7 +194,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.TOASTR_HEADER = 'Update Role';
       }
       else if (this.viewType === ViewType.NEW && data.namespace) {
-        let tmp = {
+        const tmp = {
           parentNamespace: data.namespace,
           roleType: undefined
         };
@@ -225,11 +215,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _initFormData() {
     if (this.origData) {
-      let def = this.origData.definition;
+      const def = this.origData.definition;
 
       // Construct Parent Namespace
-      let arrParentNamespace = this.origData.namespace.split(ENSNamespaceTypes.Roles);
-      let parentNamespace = arrParentNamespace[1].substring(1);
+      const arrParentNamespace = this.origData.namespace.split(ENSNamespaceTypes.Roles);
+      const parentNamespace = arrParentNamespace[1].substring(1);
 
       // Construct Fields
       this.dataSource.data = def.fields ? [...def.fields] : [];
@@ -237,7 +227,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.roleForm.patchValue({
         roleType: def.roleType,
-        parentNamespace: parentNamespace,
+        parentNamespace,
         roleName: def.roleName,
         namespace: `${this.ENSPrefixes.Roles}.${parentNamespace}`,
         data: {
@@ -276,7 +266,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _initPreconditions(preconditionList: any[]) {
-    let retVal = [];
+    const retVal = [];
 
     if (preconditionList) {
       for (let precondition of preconditionList) {
@@ -350,7 +340,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   alphaNumericOnly(event: any, includeDot?: boolean) {
-    return this.iamService.isAlphaNumericOnly(event, includeDot);
+    return isAlphaNumericOnly(event, includeDot);
   }
 
   issuerTypeChanged(data: any) {
@@ -377,7 +367,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addDid() {
-    let newIssuerDid = this.issuerGroup.get('newIssuer').value.trim();
+    const newIssuerDid = this.issuerGroup.get('newIssuer').value.trim();
 
     if (!newIssuerDid) {
       this.toastr.error('Issuer DID is empty.', this.TOASTR_HEADER);
@@ -415,94 +405,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  showAddFieldForm() {
-    if (this.isEditFieldForm) {
-      this.fieldsForm.reset();
-    }
-    this.isEditFieldForm = false;
-    this.showFieldsForm = true;
-  }
-
-  addField() {
-    if (this.fieldsForm.valid) {
-      this.dataSource.data = [...this.dataSource.data, this._extractValidationObject(this.fieldsForm.value)];
-      this.fieldsForm.reset();
-      this.showFieldsForm = false;
-      this.changeDetectorRef.detectChanges();
-    }
-  }
-
-  updateField() {
-    if (this.fieldsForm.valid) {
-      this.dataSource.data = this.dataSource.data.map((item, index) => {
-        if (this.fieldIndex === index) {
-          return this._extractValidationObject(this.fieldsForm.value);
-        }
-        return item;
-      });
-      this.fieldsForm.reset();
-      this.showFieldsForm = false;
-      this.isEditFieldForm = false;
-      this.changeDetectorRef.detectChanges();
-    }
-  }
-
-  private _extractValidationObject(value: any) {
-    let retVal: any = value;
-
-    if (value && value.fieldType) {
-      let validation = undefined;
-      let {
-        required,
-        minLength,
-        maxLength,
-        pattern,
-        minValue,
-        maxValue,
-        minDate,
-        maxDate
-      } = value.validation;
-
-      switch (this.fieldsForm.value.fieldType) {
-        case 'text':
-          validation = {
-            required,
-            minLength,
-            maxLength,
-            pattern
-          };
-          break;
-        case 'number':
-          validation = {
-            required,
-            minValue,
-            maxValue
-          };
-          break;
-        case 'date':
-          minDate = minDate;// this._getDate(minDate);
-          maxDate = maxDate;// this._getDate(maxDate);
-          validation = {
-            required,
-            minDate,
-            maxDate
-          };
-          break;
-        case 'boolean':
-          validation = {
-            required
-          };
-          break;
-        default:
-          validation = value.validation;
-      }
-      retVal = JSON.parse(JSON.stringify(Object.assign(retVal, validation)));
-      delete retVal.validation;
-    }
-
-    return retVal;
-  }
-
   private _getDate(origDate: any) {
     let retVal = origDate;
 
@@ -513,55 +415,12 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     return retVal;
   }
 
-  deleteField(i: number) {
-    let list = this.dataSource.data;
-    list.splice(i, 1);
-    this.dataSource.data = [...list];
-  }
-
-  editField(i: number) {
-    this.fieldIndex = i;
-    const field = this.dataSource.data[i];
-    const fieldKeys = Object.keys(field);
-    const valueToPatch = {};
-
-    fieldKeys.map(fieldKey => {
-      this.fieldsForm.get(fieldKey)?.setValue(field[fieldKey]);
-      valueToPatch[fieldKey] = field[fieldKey];
-    });
-
-    this.fieldsForm.get('validation').patchValue(valueToPatch);
-
-    this.isEditFieldForm = true;
-    this.showFieldsForm = true;
-  }
-
-  moveUp(i: number) {
-    let list = this.dataSource.data;
-    let tmp = list[i - 1];
-
-    // Switch
-    list[i - 1] = list[i];
-    list[i] = tmp;
-
-    this.dataSource.data = [...list];
-  }
-
-  moveDown(i: number) {
-    let list = this.dataSource.data;
-    let tmp = list[i + 1];
-
-    // Switch
-    list[i + 1] = list[i];
-    list[i] = tmp;
-
-    this.dataSource.data = [...list];
-  }
-
-  cancelAddField() {
+  formResetHandler() {
     this.fieldsForm.reset();
-    this.isEditFieldForm = false;
-    this.showFieldsForm = false;
+  }
+
+  dataSourceChangeHandler(data) {
+    this.dataSource.data = [...data];
   }
 
   async proceedSettingIssuer() {
@@ -579,14 +438,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       let allowToProceed = true;
 
       // Check if namespace is taken
-      let orgData = this.roleForm.value;
-      let exists = await this.iamService.iam.checkExistenceOfDomain({
+      const orgData = this.roleForm.value;
+      const exists = await this.iamService.iam.checkExistenceOfDomain({
         domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
       });
 
       if (exists) {
         // If exists check if current user is the owner of this namespace and allow him/her to overwrite
-        let isOwner = await this.iamService.iam.isOwner({
+        const isOwner = await this.iamService.iam.isOwner({
           domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
         });
 
@@ -668,7 +527,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         else {
           // Check if there are approved users to issue the claim
-          let did = await this.iamService.iam.getRoleDIDs({
+          const did = await this.iamService.iam.getRoleDIDs({
             namespace: roleFormValue.data.issuer.roleName
           });
 
@@ -729,7 +588,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
           if (exists) {
             // check if user is authorized to create a role under this namespace
-            let isOwner = await this.iamService.iam.isOwner({
+            const isOwner = await this.iamService.iam.isOwner({
               domain: this.roleForm.value.parentNamespace
             });
 
@@ -764,7 +623,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async confirmRole(skipNextStep?: boolean) {
-    let req = JSON.parse(JSON.stringify({ ...this.roleForm.value, returnSteps: true }));
+    const req = JSON.parse(JSON.stringify({ ...this.roleForm.value, returnSteps: true }));
 
     req.namespace = `${this.ENSPrefixes.Roles}.${req.parentNamespace}`;
     delete req.parentNamespace;
@@ -780,7 +639,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (!skipNextStep) {
       // Set the second step to non-editable
-      let list = this.stepper.steps.toArray();
+      const list = this.stepper.steps.toArray();
       list[1].editable = false;
     }
 
@@ -795,10 +654,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private async next(requestIdx: number, skipNextStep?: boolean) {
-    let steps = this._requests[`${requestIdx}`];
+    const steps = this._requests[`${requestIdx}`];
 
     if (steps && steps.length) {
-      let step = steps[0];
+      const step = steps[0];
 
       if (!skipNextStep) {
         // Show the next step
@@ -857,7 +716,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       // Copy pending steps
       this._requests[`${this._retryCount + 1}`] = [...this._requests[`${this._retryCount}`]];
 
-      //Remove previous request
+      // Remove previous request
       delete this._requests[`${this._retryCount}`];
       const retryCount = ++this._retryCount;
 
@@ -884,7 +743,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private async proceedUpdateStep(req: any, skipNextStep?: boolean) {
     try {
-      let retryCount = this._retryCount;
+      const retryCount = this._retryCount;
       if (!skipNextStep) {
         // Update steps
         this.stepper.selected.completed = true;
@@ -929,7 +788,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       data: {
         header: this.TOASTR_HEADER,
         message: confirmationMsg,
-        isDiscardButton: isDiscardButton
+        isDiscardButton
       },
       maxWidth: '100%',
       disableClose: true

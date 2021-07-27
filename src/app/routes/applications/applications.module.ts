@@ -25,6 +25,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { NewStakingPoolComponent } from './new-staking-pool/new-staking-pool.component';
+import { RoleFieldComponent } from './new-role/components/role-field/role-field.component';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -41,7 +42,8 @@ const routes: Routes = [
     GovernanceViewComponent,
     TransferOwnershipComponent,
     RemoveOrgAppComponent,
-    NewStakingPoolComponent
+    NewStakingPoolComponent,
+    RoleFieldComponent
   ],
   imports: [
     CommonModule,

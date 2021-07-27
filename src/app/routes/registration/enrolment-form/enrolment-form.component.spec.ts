@@ -64,7 +64,7 @@ describe('EnrolmentFormComponent', () => {
     it('should have enabled submit button when initialized with empty fieldList', () => {
       component.fieldList = [];
       fixture.detectChanges();
-      const {submit, checkboxError} = setup(hostDebug);
+      const {submit, checkboxError} = getSelectors(hostDebug);
 
       expect(submit.nativeElement.disabled).toBeFalsy();
       expect(checkboxError).toBeFalsy();
@@ -73,11 +73,11 @@ describe('EnrolmentFormComponent', () => {
     it('should have disabled submit button when both registration types are deselected and message error showup', () => {
       component.fieldList = [];
 
-      const {submit, offChain, onChain} = setup(hostDebug);
+      const {submit, offChain, onChain} = getSelectors(hostDebug);
       offChain.nativeElement.click();
       fixture.detectChanges();
 
-      const {checkboxError} = setup(hostDebug);
+      const {checkboxError} = getSelectors(hostDebug);
       expect(offChain.nativeElement.checked).toBeFalsy();
       expect(onChain.nativeElement.checked).toBeFalsy();
       expect(submit.nativeElement.disabled).toBeTruthy();
@@ -90,7 +90,7 @@ describe('EnrolmentFormComponent', () => {
 
       fixture.detectChanges();
 
-      const {submit} = setup(hostDebug);
+      const {submit} = getSelectors(hostDebug);
       expect(submit.nativeElement.disabled).toBeTruthy();
     });
 
@@ -100,7 +100,7 @@ describe('EnrolmentFormComponent', () => {
 
       fixture.detectChanges();
 
-      const {onChain} = setup(hostDebug);
+      const {onChain} = getSelectors(hostDebug);
 
       expect(onChain.nativeElement.checked).toBeFalsy();
       expect(onChain.nativeElement.disabled).toBeTruthy();
@@ -109,7 +109,7 @@ describe('EnrolmentFormComponent', () => {
     it('should have enabled submit button when only on-chain is selected', () => {
       component.fieldList = [];
 
-      const {submit, offChain, onChain} = setup(hostDebug);
+      const {submit, offChain, onChain} = getSelectors(hostDebug);
       fixture.detectChanges();
       onChain.nativeElement.click();
       offChain.nativeElement.click();
@@ -146,7 +146,7 @@ describe('EnrolmentFormComponent', () => {
         required: true
       }];
 
-      const {submit} = setup(hostDebug);
+      const {submit} = getSelectors(hostDebug);
       fixture.detectChanges();
 
       const label = checkboxLabel(0);
@@ -172,7 +172,7 @@ describe('EnrolmentFormComponent', () => {
 
       it('submit button should be disabled when date input is empty', () => {
         fixture.detectChanges();
-        const {submit} = setup(hostDebug);
+        const {submit} = getSelectors(hostDebug);
 
         expect(submit.nativeElement.disabled).toBeTruthy();
       });
@@ -203,7 +203,7 @@ describe('EnrolmentFormComponent', () => {
 
       it('should have enabled submit button', () => {
         fixture.detectChanges();
-        const {submit} = setup(hostDebug);
+        const {submit} = getSelectors(hostDebug);
 
         expect(submit.nativeElement.disabled).toBeFalsy();
       });
@@ -346,7 +346,7 @@ describe('EnrolmentFormComponent', () => {
 
 });
 
-const setup = (hostDebug: DebugElement) => {
+const getSelectors = (hostDebug: DebugElement) => {
   return {
     submit: hostDebug.query(By.css('[data-qa-id=submit-request]')),
     offChain: hostDebug.query(By.css('[data-qa-id=off-chain] input')),

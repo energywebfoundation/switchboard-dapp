@@ -4,3 +4,4 @@ dist
 .idea
 lerna.json
 yarn.lock
+coverage
