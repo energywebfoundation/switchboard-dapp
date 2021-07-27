@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { IamService } from '../../services/iam.service';
-import { ISmartSearch } from '../../../routes/applications/new-role/new-role.component'
+import { ISmartSearch } from '../../../routes/applications/new-role/new-role.component';
 
 @Component({
     selector: 'app-smart-search',
