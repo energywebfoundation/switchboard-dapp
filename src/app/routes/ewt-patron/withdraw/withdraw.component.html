@@ -1,9 +1,7 @@
 <ng-container *ngIf="!countFinished else withdrawTemplate">
     <mat-progress-bar
-            class="example-margin"
             color="primary"
-            mode="determinate"
-            [value]="progressbarValue">
+            mode="indeterminate">
     </mat-progress-bar>
     <p class="text-center mt-2">Preparing your withdrawal…</p>
 </ng-container>
