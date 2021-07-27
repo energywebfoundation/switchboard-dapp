@@ -1,16 +1,15 @@
-<ng-container *ngIf="!countFinished else withdrawTemplate">
+<ng-container *ngIf="(isWithdrawingDelayFinished$ | async) else withdrawTemplate">
     <mat-progress-bar
-            class="example-margin"
             color="primary"
-            mode="determinate"
-            [value]="progressbarValue">
+            mode="indeterminate">
     </mat-progress-bar>
     <p class="text-center mt-2">Preparing your withdrawal…</p>
 </ng-container>
 <ng-template #withdrawTemplate>
     <div class="confirm-wrapper">
-        <p class="text-center">You are going to withdraw your tokens. Please confirm</p>
-        <div class="d-flex justify-content-center mt-2">
+        <p class="text-center">You are going to withdraw your tokens. <br>Please confirm.</p>
+        <app-divider></app-divider>
+        <div class="d-flex justify-content-center mt-3">
             <button mat-raised-button class="stake-btn color-white text-uppercase" (click)="withdraw()">Confirm</button>
         </div>
     </div>

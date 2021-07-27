@@ -55,3 +55,8 @@ export const getStakeAmount = createSelector(
   getStake,
   (state: Stake) => state?.amount ? formatEther(state.amount) : '0'
 );
+
+export const isWithdrawingDelayFinished = createSelector(
+  getStakeState,
+  (state: StakeState) => state.withdrawing
+)

@@ -4,7 +4,7 @@ import { WithdrawComponent } from './withdraw.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { StakeState } from '../../../state/stake/stake.reducer';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import * as stakeSelectors from '../../../state/stake/stake.selectors';
 
 describe('WithdrawComponent', () => {
   let component: WithdrawComponent;
@@ -14,7 +14,7 @@ describe('WithdrawComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [WithdrawComponent],
-      providers: [provideMockStore(), {provide: MAT_DIALOG_DATA, useValue: {time: 2}}],
+      providers: [provideMockStore()],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
@@ -24,10 +24,12 @@ describe('WithdrawComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(WithdrawComponent);
     component = fixture.componentInstance;
+    store.overrideSelector(stakeSelectors.isWithdrawingDelayFinished, false);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+
   });
 });

@@ -79,9 +79,12 @@ export const getWithdrawalDelay = createAction(
   '[Stake] Get Delay After Calling Request Withdraw'
 );
 
-export const getWithdrawalDelaySuccess = createAction(
-  '[Stake] Get Delay After Calling Request Withdraw Success',
-  props<{ requestDelay: number }>()
+export const displayConfirmationDialog = createAction(
+  '[Stake] Display Confirmation Dialog With Progress Bar'
+);
+
+export const withdrawalDelayExpired = createAction(
+  '[Stake] Withdrawal Delay Expired',
 );
 
 export const getWithdrawalDelayFailure = createAction(
