@@ -5,6 +5,7 @@ import { AbstractControl, FormControl, ValidationErrors, ValidatorFn, Validators
 import { PageEvent } from '@angular/material/paginator';
 import { KeyTypesEnum } from '../models/keyTypesEnum';
 import { isHexValidator } from '../../../utils/validators/is-hex.validator';
+import { listContainsValidator } from '../../../utils/validators/list-contains.validator';
 
 export interface PublicKey {
   publicKeyHex: string;
@@ -23,15 +24,7 @@ export class VerificationMethodComponent implements OnInit {
   dataSource: PublicKey[] = [];
   selectControl = new FormControl('', [Validators.required]);
 
-  publicKeyExistValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const exists = this.dataSource.find(key => key.publicKeyHex === control.value);
-      return exists ? {publicKeyExist: {value: control.value}} : null;
-    };
-  }
-  publicKey = new FormControl('',
-    [Validators.required, isHexValidator, this.publicKeyExistValidator()]
-  );
+  publicKey = new FormControl('');
   selectOptions = Object.entries(KeyTypesEnum);
   private publicKeys;
 
@@ -79,7 +72,7 @@ export class VerificationMethodComponent implements OnInit {
       return 'Invalid input. Public key must start with "0x" to be followed by 66 or 130 Hexadecimal characters.';
     }
 
-    if (this.publicKey.hasError('publicKeyExist')) {
+    if (this.publicKey.hasError('listContains')) {
       return 'Public key entered already exists, please choose another.';
     }
 
@@ -95,10 +88,12 @@ export class VerificationMethodComponent implements OnInit {
     this.publicKeys = publicKeys;
     this.verificationsAmount = publicKeys.length;
     this.setDataSource();
+    this.publicKey.setValidators([Validators.required, isHexValidator, listContainsValidator(this.dataSource, 'publicKeyHex')]);
   }
 
   private setDataSource(): void {
     this.dataSource = this.publicKeys.slice(this.pageIndex * this.pageSize, (this.pageIndex + 1) * this.pageSize);
+    console.log(this.dataSource)
   }
 
   private loadPublicKeys(): void {
