@@ -246,7 +246,10 @@ export class StakeEffects {
       tap(() => this.loadingService.show('Withdrawing your reward...')),
       switchMap(() =>
         from(this.pool.withdraw()).pipe(
-          mergeMap(() => [StakeActions.withdrawRewardSuccess(), StakeActions.getStake()]),
+          mergeMap(() => {
+            this.dialog.closeAll();
+            return [StakeActions.withdrawRewardSuccess(), StakeActions.getStake()]
+          }),
           catchError(err => {
             console.error(err);
             return of(StakeActions.withdrawRewardFailure({err}));
