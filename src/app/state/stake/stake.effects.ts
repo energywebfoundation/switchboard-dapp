@@ -253,7 +253,6 @@ export class StakeEffects {
           }),
           finalize(() => {
             this.loadingService.hide();
-            this.dialog.closeAll();
           })
         ),
       )
