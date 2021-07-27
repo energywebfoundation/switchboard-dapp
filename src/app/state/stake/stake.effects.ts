@@ -195,7 +195,7 @@ export class StakeEffects {
       switchMap(() =>
         from(this.pool.withdrawalDelay())
           .pipe(
-            map((withdrawalDelay) => StakeActions.getWithdrawalDelaySuccess({requestDelay: withdrawalDelay.toNumber()})
+            map((withdrawalDelay) => StakeActions.getWithdrawalDelaySuccess({requestDelay: withdrawalDelay})
             ),
             catchError(err => {
               console.error('Could not get withdrawal delay', err);
