@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VerificationService } from './verification.service';
-import { FormControl, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { KeyTypesEnum } from '../models/keyTypesEnum';
 import { isHexValidator } from '../../../utils/validators/is-hex.validator';
@@ -22,8 +22,15 @@ export class VerificationMethodComponent implements OnInit {
   verificationsAmount: number;
   dataSource: PublicKey[] = [];
   selectControl = new FormControl('', [Validators.required]);
+
+  publicKeyExistValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const exists = this.dataSource.find(key => key.publicKeyHex === control.value);
+      return exists ? {publicKeyExist: {value: control.value}} : null;
+    };
+  }
   publicKey = new FormControl('',
-    [Validators.required, isHexValidator]
+    [Validators.required, isHexValidator, this.publicKeyExistValidator()]
   );
   selectOptions = Object.entries(KeyTypesEnum);
   private publicKeys;
@@ -55,6 +62,7 @@ export class VerificationMethodComponent implements OnInit {
     if (this.isFormDisabled) {
       return;
     }
+
     this.verificationService.updateDocumentAndReload(this.dialogData.id, this.publicKey.value, this.verificationsAmount)
       .subscribe((publicKeys) => {
         this.handleLoadedPublicKeys(publicKeys);
@@ -69,6 +77,10 @@ export class VerificationMethodComponent implements OnInit {
 
     if (this.publicKey.hasError('isHexInvalid')) {
       return 'Invalid input. Public key must start with "0x" to be followed by 66 or 130 Hexadecimal characters.';
+    }
+
+    if (this.publicKey.hasError('publicKeyExist')) {
+      return 'Public key entered already exists, please choose another.';
     }
 
     return '';
