@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { WithdrawComponent } from '../withdraw/withdraw.component';
 import { ClaimRewardComponent } from '../claim-reward/claim-reward.component';
 
 import { tap } from 'rxjs/operators';
@@ -20,12 +19,14 @@ import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 export class StakeComponent implements OnInit {
   inputFocused: boolean;
   tokenAmount: number;
-  balance$ = this.store.select(stakeSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
   amountToStake = new FormControl('', [Validators.min(0), Validators.required]);
+  balance$ = this.store.select(stakeSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
   earnedReward$ = this.store.select(stakeSelectors.getReward);
   stakeAmount$ = this.store.select(stakeSelectors.getStakeAmount);
   isWithdrawDisabled$ = this.store.select(stakeSelectors.isWithdrawDisabled);
+  isStakingDisabled$ = this.store.select(stakeSelectors.isStakingDisabled);
   isLoggedIn: boolean;
+
   @ViewChild('percentButtons') percentButtons: PercentButtonsComponent;
 
   constructor(private dialog: MatDialog, private store: Store) {
