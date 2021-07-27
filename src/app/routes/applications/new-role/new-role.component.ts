@@ -43,7 +43,7 @@ export interface RolesFields {
   actions: string;
 }
 
-interface ISmartSearch {
+export interface ISmartSearch {
   role: IRole;
   searchType: string;
 }

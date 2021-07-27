@@ -4,13 +4,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { IamService } from '../../services/iam.service';
-import { IRole } from 'iam-client-lib';
+import { ISmartSearch } from '../../../routes/applications/new-role/new-role.component'
 
-interface ISmartSearch {
-    role: IRole;
-    searchType: string;
-}
-  
 @Component({
     selector: 'app-smart-search',
     templateUrl: './smart-search.component.html',
