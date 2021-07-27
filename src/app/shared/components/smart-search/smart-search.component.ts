@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { IamService } from '../../services/iam.service';
+import { ISmartSearch } from '../../../routes/applications/new-role/new-role.component';
 
 @Component({
     selector: 'app-smart-search',
@@ -14,6 +15,9 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
     @Input() searchText: FormControl;
     @Input() placeholderSearch: string;
     @Input() fieldName: string;
+    @Input() searchType = "";
+
+    @Output() searchTextEvent: EventEmitter<ISmartSearch> = new EventEmitter();
 
     searchTxtFieldValue: string;
     searchForm: FormGroup;
@@ -25,12 +29,16 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
     public filteredOptions: Observable<any[]>;
 
     constructor(private route: Router,
-                private iamService: IamService) {
+        private iamService: IamService) {
     }
 
     ngOnInit(): void {
     }
 
+    controlHasError(errorType: string) {
+        return this.searchText.hasError(errorType);
+    }
+    
     ngAfterViewInit(): void {
         this.filteredOptions = this.searchText.valueChanges.pipe(
             debounceTime(1200),
@@ -55,10 +63,24 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
         }
     }
 
-  clearSearchTxt(): void {
-    this.searchTxtFieldValue = '';
-    this.searchText.setValue('');
-  }
+    addRole() {
+        const valid = this.searchText.valid;
+
+        if (valid) {
+            const searchText = this.searchText.value;
+            this.searchTextEvent.emit({
+                role: searchText,
+                searchType: this.searchType
+            });
+            this.clearSearchTxt();
+        } 
+    }
+
+    clearSearchTxt(): void {
+        this.searchTxtFieldValue = '';
+        this.searchText.setValue('');
+        this.searchText.setErrors(null);
+    }
 
     private async _filterOrgsAndApps(keyword: any): Promise<any[]> {
         let retVal = [];

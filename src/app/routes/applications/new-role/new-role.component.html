@@ -139,7 +139,7 @@
                 (click)="closeDialog()">Cancel</button>
               <button mat-stroked-button class="btn btn-small mr-2" *ngIf="!origData" (click)="back()">Back</button>
               <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking"
-                (click)="proceedAddingFields()">Next</button>
+                (click)="proceedSettingRestriction()">Next</button>
             </div>
           </form>
         </mat-step>
@@ -171,11 +171,13 @@
             </div>
             <div class="row mt-2">
               <div class="col-lg-12">
-              <app-smart-search
-              [placeholderSearch]="'Search Role Namespace (Optional)'"
-              [searchText]="roleControl"
-              [fieldName]="'rolePage'"
-              ></app-smart-search>
+                <app-smart-search
+                  [placeholderSearch]="'Search Role Namespace (Optional)'"
+                  [searchText]="restrictionRoleControl"
+                  [fieldName]="'rolePage'"
+                  searchType="restrictions"
+                  (searchTextEvent)="addRestriction($event)"
+                ></app-smart-search>
               </div>
             </div>
           </div>
