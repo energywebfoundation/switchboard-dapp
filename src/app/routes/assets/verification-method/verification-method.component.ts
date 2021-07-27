@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VerificationService } from './verification.service';
-import { AbstractControl, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { KeyTypesEnum } from '../models/keyTypesEnum';
 import { isHexValidator } from '../../../utils/validators/is-hex.validator';
@@ -93,7 +93,6 @@ export class VerificationMethodComponent implements OnInit {
 
   private setDataSource(): void {
     this.dataSource = this.publicKeys.slice(this.pageIndex * this.pageSize, (this.pageIndex + 1) * this.pageSize);
-    console.log(this.dataSource)
   }
 
   private loadPublicKeys(): void {
