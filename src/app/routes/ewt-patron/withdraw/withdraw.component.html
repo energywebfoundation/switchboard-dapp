@@ -1,4 +1,4 @@
-<ng-container *ngIf="!countFinished else withdrawTemplate">
+<ng-container *ngIf="(isWithdrawingDelayFinished$ | async) else withdrawTemplate">
     <mat-progress-bar
             color="primary"
             mode="indeterminate">

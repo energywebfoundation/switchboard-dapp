@@ -1,6 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as StakeActions from './stake.actions';
 import { Stake } from 'iam-client-lib';
+import { withdrawalDelayExpired } from './stake.actions';
 
 export const USER_FEATURE_KEY = 'stake';
 
@@ -11,6 +12,7 @@ export interface StakeState {
   reward: string;
   organization: string;
   userStake: Stake;
+  withdrawing: boolean;
 }
 
 export const initialState: StakeState = {
@@ -20,6 +22,7 @@ export const initialState: StakeState = {
   reward: '0',
   organization: '',
   userStake: null,
+  withdrawing: false
 };
 
 const stakeReducer = createReducer(
@@ -37,6 +40,8 @@ const stakeReducer = createReducer(
         depositStart: stake.depositStart
       }
     })),
+  on(StakeActions.withdrawRequest, (state) => ({...state, withdrawing: true})),
+  on(StakeActions.withdrawalDelayExpired, (state) => ({...state, withdrawing: false}))
 );
 
 export function reducer(state: StakeState | undefined, action: Action) {

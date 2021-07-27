@@ -129,7 +129,7 @@ export class StakeEffects {
                         ...actions,
                         StakeActions.checkReward(),
                         StakeActions.withdrawRewardSuccess(),
-                        StakeActions.getWithdrawalDelay()
+                        StakeActions.displayConfirmationDialog()
                       ];
                     }
                     return actions;
@@ -191,32 +191,28 @@ export class StakeEffects {
   withdrawalDelay$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.getWithdrawalDelay),
-      tap(() => this.loadingService.show()),
       switchMap(() =>
         from(this.pool.withdrawalDelay())
           .pipe(
-            map((withdrawalDelay) => StakeActions.getWithdrawalDelaySuccess({requestDelay: withdrawalDelay})
+            map(withdrawalDelay => () => delay(withdrawalDelay)),
+            map(() => StakeActions.withdrawalDelayExpired()
             ),
             catchError(err => {
               console.error('Could not get withdrawal delay', err);
               return of(StakeActions.getWithdrawalDelayFailure({err}));
             }),
-            finalize(() => this.loadingService.hide())
           )
       )
     )
   );
 
-  showProgressBar = createEffect(() =>
+  showProgressBar$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(StakeActions.getWithdrawalDelaySuccess),
-      map(({requestDelay}: {requestDelay: number}) => {
+      ofType(StakeActions.withdrawRequest, StakeActions.displayConfirmationDialog),
+      map(() => {
         this.dialog.open(WithdrawComponent, {
           width: '400px',
           maxWidth: '100%',
-          data: {
-            time: requestDelay
-          },
           disableClose: true,
           backdropClass: 'backdrop-shadow'
         });
@@ -227,7 +223,6 @@ export class StakeEffects {
   withdrawRequest$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.withdrawRequest),
-      tap(() => this.loadingService.show()),
       switchMap(() =>
         from(this.pool.requestWithdraw())
           .pipe(
@@ -237,9 +232,9 @@ export class StakeEffects {
             catchError((err) => {
               console.error(err);
               this.toastr.error('Error occurs while trying to request a withdraw.');
+              this.dialog.closeAll();
               return of(StakeActions.withdrawRequestFailure({err}));
             }),
-            finalize(() => this.loadingService.hide())
           )
       )
     )
