@@ -4,12 +4,10 @@ import { IamService } from '../../shared/services/iam.service';
 import { Store } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
-import { catchError, concatMap, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { IAM } from 'iam-client-lib';
 import { from, of } from 'rxjs';
-import { PatronLoginService } from '../../routes/ewt-patron/patron-login.service';
 import * as StakeActions from '../../state/stake/stake.actions';
-import * as authSelectors from './auth.selectors';
 
 @Injectable()
 export class AuthEffects {
@@ -35,7 +33,7 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.login),
       switchMap(({provider}) =>
-        this.patronLoginService.login(provider).pipe(
+        from(this.iamService.login({walletProvider: provider})).pipe(
           mergeMap(() => [AuthActions.loginSuccess(), StakeActions.initStakingPool()]),
           catchError((err) => {
             console.log(err);
@@ -43,32 +41,6 @@ export class AuthEffects {
           })
         )
       )
-    )
-  );
-
-  loginBeforeStake = createEffect(() =>
-    this.actions$.pipe(
-      ofType(AuthActions.loginAndStake),
-      withLatestFrom(this.store.select(authSelectors.isUserLoggedIn)),
-      filter(([, loggedIn]) => !loggedIn),
-      switchMap(([{amount, provider}]) =>
-        this.patronLoginService.login(provider).pipe(
-          concatMap(() => [AuthActions.loginSuccess(), StakeActions.initStakingPool(), StakeActions.putStake({amount})]),
-          catchError((err) => {
-            console.log(err);
-            return of(AuthActions.loginFailure());
-          })
-        )
-      )
-    )
-  );
-
-  stakeAfterLogin$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(AuthActions.loginAndStake),
-      withLatestFrom(this.store.select(authSelectors.isUserLoggedIn)),
-      filter(([{amount}, loggedIn]) => loggedIn),
-      map(([{amount}]) => StakeActions.putStake({amount})),
     )
   );
 
@@ -84,8 +56,7 @@ export class AuthEffects {
 
   constructor(private actions$: Actions,
               private store: Store<AuthState>,
-              private iamService: IamService,
-              private patronLoginService: PatronLoginService) {
+              private iamService: IamService) {
   }
 
 }

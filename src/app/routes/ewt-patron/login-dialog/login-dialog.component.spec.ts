@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LoginDialogComponent } from './login-dialog.component';
-import { PatronLoginService } from '../patron-login.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
