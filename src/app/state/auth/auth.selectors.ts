@@ -11,13 +11,13 @@ export const isUserLoggedIn = createSelector(
 
 export const isMetamaskPresent = createSelector(
   getAuthState,
-  (state) => state.metamaskPresent
+  ({metamask}) => metamask.present
 );
 
 export const isMetamaskDisabled = createSelector(
   getAuthState,
-  (state) =>
-    state.metamaskChainId && parseInt(`${state.metamaskChainId}`, 16) !== VOLTA_CHAIN_ID
+  ({metamask}) =>
+    metamask.chainId && parseInt(`${metamask.chainId}`, 16) !== VOLTA_CHAIN_ID
 );
 
 
