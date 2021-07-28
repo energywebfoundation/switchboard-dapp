@@ -32,6 +32,7 @@ export class AuthEffects {
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.login),
+      tap(({provider}) => this.iamService.waitForSignature(provider, true, false)),
       switchMap(({provider}) =>
         from(this.iamService.login({walletProvider: provider})).pipe(
           mergeMap((loggedIn) => {
@@ -43,7 +44,8 @@ export class AuthEffects {
           catchError((err) => {
             console.log(err);
             return of(AuthActions.loginFailure());
-          })
+          }),
+          finalize(() => this.iamService.clearWaitSignatureTimer())
         )
       )
     )
