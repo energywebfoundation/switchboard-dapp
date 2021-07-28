@@ -26,4 +26,14 @@ describe('Auth Selectors', () => {
     });
   });
 
+  describe('isUserLoggedIn', () => {
+    it('should return false when user is not loggedIn', () => {
+      expect(authSelectors.isUserLoggedIn.projector({loggedIn: false})).toBeFalsy();
+    });
+
+    it('should return true when user is logged in', () => {
+      expect(authSelectors.isUserLoggedIn.projector({loggedIn: true})).toBeTruthy();
+    });
+  });
+
 });
