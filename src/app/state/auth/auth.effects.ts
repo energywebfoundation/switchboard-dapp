@@ -4,7 +4,7 @@ import { IamService } from '../../shared/services/iam.service';
 import { Store } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { IAM } from 'iam-client-lib';
 import { from, of } from 'rxjs';
 import * as StakeActions from '../../state/stake/stake.actions';
@@ -12,7 +12,7 @@ import * as StakeActions from '../../state/stake/stake.actions';
 @Injectable()
 export class AuthEffects {
 
-  metamaskLogIn$ = createEffect(() =>
+  metamaskOptions$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.init),
       switchMap(() =>
@@ -20,7 +20,7 @@ export class AuthEffects {
           .pipe(
             map(({isMetamaskPresent, chainId}) =>
               AuthActions.setMetamaskLoginOptions({
-                present: !!isMetamaskPresent,
+                present: isMetamaskPresent,
                 chainId
               })
             )
@@ -34,7 +34,12 @@ export class AuthEffects {
       ofType(AuthActions.login),
       switchMap(({provider}) =>
         from(this.iamService.login({walletProvider: provider})).pipe(
-          mergeMap(() => [AuthActions.loginSuccess(), StakeActions.initStakingPool()]),
+          mergeMap((loggedIn) => {
+            if (loggedIn) {
+              return [AuthActions.loginSuccess(), StakeActions.initStakingPool()];
+            }
+            return [AuthActions.loginFailure()];
+          }),
           catchError((err) => {
             console.log(err);
             return of(AuthActions.loginFailure());
