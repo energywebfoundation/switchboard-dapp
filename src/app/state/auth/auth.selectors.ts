@@ -16,7 +16,8 @@ export const isMetamaskPresent = createSelector(
 
 export const isMetamaskDisabled = createSelector(
   getAuthState,
-  (state) => !state.metamaskChainId && parseInt(`${state.metamaskChainId}`, 16) !== VOLTA_CHAIN_ID
+  (state) =>
+    state.metamaskChainId && parseInt(`${state.metamaskChainId}`, 16) !== VOLTA_CHAIN_ID
 );
 
 

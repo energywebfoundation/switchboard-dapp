@@ -19,7 +19,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SharedModule } from '../../shared/shared.module';
 import { LayoutModule } from '../../layout/layout.module';
 import { LastDigitsPipe } from './pipes/last-digits.pipe';
-import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 
 
 @NgModule({
@@ -32,7 +31,6 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
     WithdrawComponent,
     ClaimRewardComponent,
     LastDigitsPipe,
-    LoginDialogComponent
   ],
   imports: [
     CommonModule,
