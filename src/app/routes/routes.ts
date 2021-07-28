@@ -3,7 +3,6 @@ import { AuthGuard } from '../shared/services/auth.guard';
 import { LogOutComponent } from './profile/logout/logout.component';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 import { FeatureToggleGuard } from '../shared/feature-toggle/feature-toggle.guard';
-import { EwtPatronComponent } from './ewt-patron/ewt-patron/ewt-patron.component';
 import { NgModule } from '@angular/core';
 import { NoPreloading, RouterModule } from '@angular/router';
 
@@ -35,7 +34,7 @@ export const routes = [
   },
   {
     path: 'staking',
-    component: EwtPatronComponent
+    loadChildren: () => import('./ewt-patron/ewt-patron.module').then(m => m.EwtPatronModule)
   },
   {
     path: 'welcome',
