@@ -32,7 +32,7 @@ export class AuthEffects {
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.login),
-      tap(({provider}) => this.iamService.waitForSignature(provider, true, false)),
+      tap(({provider, navigateOnTimeout}) => this.iamService.waitForSignature(provider, true, navigateOnTimeout)),
       switchMap(({provider}) =>
         from(this.iamService.login({walletProvider: provider})).pipe(
           mergeMap((loggedIn) => {

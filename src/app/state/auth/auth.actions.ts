@@ -7,7 +7,7 @@ export const init = createAction(
 
 export const login = createAction(
   '[AUTH] Login User With Provider',
-  props<{provider: WalletProvider}>()
+  props<{ provider: WalletProvider, navigateOnTimeout?: boolean }>()
 );
 
 export const loginSuccess = createAction(

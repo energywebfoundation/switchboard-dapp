@@ -26,6 +26,9 @@ export class EwtPatronComponent implements OnInit {
       width: '434px',
       panelClass: 'connect-to-wallet',
       backdropClass: 'backdrop-hide-content',
+      data: {
+        navigateOnTimeout: false
+      },
       maxWidth: '100%',
       disableClose: true
     });

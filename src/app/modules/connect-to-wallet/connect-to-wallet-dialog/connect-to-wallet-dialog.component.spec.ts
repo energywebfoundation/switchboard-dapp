@@ -7,6 +7,7 @@ import * as authSelectors from '../../../state/auth/auth.selectors';
 import * as AuthActions from '../../../state/auth/auth.actions';
 import { By } from '@angular/platform-browser';
 import { WalletProvider } from 'iam-client-lib';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 describe('ConnectToWalletDialogComponent', () => {
   let component: ConnectToWalletDialogComponent;
@@ -28,7 +29,8 @@ describe('ConnectToWalletDialogComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ConnectToWalletDialogComponent],
       providers: [
-        provideMockStore()
+        provideMockStore(),
+        {provide: MAT_DIALOG_DATA, useValue: {navigateOnTimeout: true}}
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -73,7 +75,7 @@ describe('ConnectToWalletDialogComponent', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     metamaskBtn.nativeElement.click();
 
-    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.login({provider: WalletProvider.MetaMask}));
+    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.login({provider: WalletProvider.MetaMask, navigateOnTimeout: true}));
   });
 
   it('should dispatch login action with WalletConnect when clicking on wallet connect button', () => {
@@ -82,7 +84,7 @@ describe('ConnectToWalletDialogComponent', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     mobileWalletBtn.nativeElement.click();
 
-    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.login({provider: WalletProvider.WalletConnect}));
+    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.login({provider: WalletProvider.WalletConnect, navigateOnTimeout: true}));
   });
 
   it('should not find metamask button when is not available', () => {
