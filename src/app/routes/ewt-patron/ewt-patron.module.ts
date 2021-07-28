@@ -19,6 +19,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SharedModule } from '../../shared/shared.module';
 import { LayoutModule } from '../../layout/layout.module';
 import { LastDigitsPipe } from './pipes/last-digits.pipe';
+import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-to-wallet.module';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { LastDigitsPipe } from './pipes/last-digits.pipe';
     MatProgressBarModule,
     SharedModule,
     LayoutModule,
+    ConnectToWalletModule
   ],
 
 })

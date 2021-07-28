@@ -5,7 +5,7 @@ import * as stakeSelectors from '../../../state/stake/stake.selectors';
 import * as authSelectors from '../../../state/auth/auth.selectors';
 import * as AuthActions from '../../../state/auth/auth.actions';
 import { MatDialog } from '@angular/material/dialog';
-import { ConnectToWalletDialogComponent } from '../../registration/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
+import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 
 @Component({
   selector: 'app-ewt-patron',
