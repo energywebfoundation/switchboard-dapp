@@ -21,6 +21,7 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
   performance$ = this.store.select(stakeSelectors.getPerformance);
   annualReward$ = this.store.select(stakeSelectors.getAnnualReward);
   loggedIn$ = this.store.select(authSelectors.isUserLoggedIn);
+  details$ = this.store.select(stakeSelectors.getOrganizationDetails);
   destroy$ = new Subject<void>();
 
   constructor(private store: Store<StakeState>,

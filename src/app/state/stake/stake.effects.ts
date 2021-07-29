@@ -9,13 +9,14 @@ import * as StakeActions from './stake.actions';
 import { catchError, delay, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { utils } from 'ethers';
-import { Stake, StakeStatus, StakingPool, StakingPoolService } from 'iam-client-lib';
+import { ENSNamespaceTypes, Stake, StakeStatus, StakingPool, StakingPoolService } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
 import { ActivatedRoute } from '@angular/router';
 import * as authSelectors from '../auth/auth.selectors';
 import * as stakeSelectors from './stake.selectors';
 import { ToastrService } from 'ngx-toastr';
 import { WithdrawComponent } from '../../routes/ewt-patron/withdraw/withdraw.component';
+import { IOrganizationDefinition } from '@energyweb/iam-contracts';
 
 const {formatEther, parseEther} = utils;
 
@@ -39,20 +40,6 @@ export class StakeEffects {
     )
   );
 
-  initOnlyStakingPoolService$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(StakeActions.initOnlyStakingPoolService),
-      switchMap(() =>
-        from(StakingPoolService.init(this.iamService.iam.getSigner()))
-          .pipe(
-            tap((stakingPoolServ) => {
-              this.stakingPoolService = stakingPoolServ;
-            })
-          )
-      )
-    ), {dispatch: false}
-  );
-
   initPool$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.initPool),
@@ -66,7 +53,7 @@ export class StakeEffects {
                 this.toastr.error(`Organization ${organization} do not exist as a provider.`);
               }
               this.pool = pool;
-              return [StakeActions.getStake()];
+              return [StakeActions.getStake(), StakeActions.getOrganizationDetails()];
             })
           )
       )
@@ -295,6 +282,24 @@ export class StakeEffects {
                 map(balance => StakeActions.getAccountSuccess({balance}))
               )
           )
+        )
+      )
+    )
+  );
+
+  getOrganizationDetails$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StakeActions.getOrganizationDetails),
+      withLatestFrom(this.store.select(stakeSelectors.getOrganization)),
+      switchMap(([, organization]) => from(this.iamService.iam.getDefinition({
+          type: ENSNamespaceTypes.Organization,
+          namespace: organization
+        })).pipe(
+        map((definition: IOrganizationDefinition) => StakeActions.getOrganizationDetailsSuccess({orgDetails: definition})),
+        catchError(err => {
+          console.error(err);
+          return of(StakeActions.getOrganizationDetailsFailure({err}));
+        })
         )
       )
     )
