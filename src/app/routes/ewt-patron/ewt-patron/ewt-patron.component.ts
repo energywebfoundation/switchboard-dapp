@@ -6,10 +6,11 @@ import * as authSelectors from '../../../state/auth/auth.selectors';
 import * as AuthActions from '../../../state/auth/auth.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import * as StakeActions from '../../../state/stake/stake.actions';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-ewt-patron',
@@ -60,9 +61,20 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams
       .pipe(
         map((params: { org: string }) => params?.org),
-        filter<string>(Boolean),
         takeUntil(this.destroy$)
       )
-      .subscribe((organization) => this.store.dispatch(StakeActions.setOrganization({organization})));
+      .subscribe((organization) => {
+        if (organization) {
+          this.store.dispatch(StakeActions.setOrganization({organization}));
+        } else {
+          swal({
+            title: 'Stake',
+            text: 'URL is invalid. \n Url should contain org name. \n For example: ?org=example.iam.ewc',
+            icon: 'error',
+            buttons: {},
+            closeOnClickOutside: false
+          });
+        }
+      });
   }
 }
