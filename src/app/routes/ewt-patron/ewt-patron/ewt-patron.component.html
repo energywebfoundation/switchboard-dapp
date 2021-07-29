@@ -1,4 +1,12 @@
 <div class="staking-container">
+    <div class="staking-header">
+        <div class="header-wrapper d-flex flex-grow-1 justify-content-end">
+            <ng-container *ngIf="(loggedIn$ | async)">
+                <button mat-raised-button class="connect-btn color-white text-uppercase mr-2"
+                    (click)="logOut()">Disconnect Wallet</button>
+            </ng-container>
+        </div>
+    </div>
     <div class="content-wrapper">
         <app-loading></app-loading>
         <div class="row">
