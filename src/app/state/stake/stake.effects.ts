@@ -9,7 +9,7 @@ import * as StakeActions from './stake.actions';
 import { catchError, delay, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { utils } from 'ethers';
-import { ENSNamespaceTypes, Stake, StakeStatus, StakingPool } from 'iam-client-lib';
+import { ENSNamespaceTypes, Stake, StakeStatus } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
 import { ActivatedRoute } from '@angular/router';
 import * as authSelectors from '../auth/auth.selectors';
@@ -43,16 +43,7 @@ export class StakeEffects {
       withLatestFrom(this.store.select(stakeSelectors.getOrganization)),
       filter(([, org]) => Boolean(org)),
       switchMap(([, organization]) =>
-        from(this.stakingPoolService.getPool(organization))
-          .pipe(
-            mergeMap((pool: StakingPool) => {
-              if (!pool) {
-                this.toastr.error(`Organization ${organization} do not exist as a provider.`);
-              }
-              this.pool = pool;
-              return [StakeActions.getStake(), StakeActions.getOrganizationDetails()];
-            })
-          )
+        this.createPool(organization)
       )
     )
   );
@@ -62,16 +53,7 @@ export class StakeEffects {
       ofType(StakeActions.setOrganization),
       filter(() => Boolean(this.stakingService.getPool())),
       switchMap(({organization}) =>
-        from(this.stakingPoolService.getPool(organization))
-          .pipe(
-            mergeMap((pool: StakingPool) => {
-              if (!pool) {
-                this.toastr.error(`Organization ${organization} do not exist as a provider.`);
-              }
-              this.pool = pool;
-              return [StakeActions.getStake()];
-            })
-          )
+        this.createPool(organization)
       )
     )
   );
@@ -320,4 +302,15 @@ export class StakeEffects {
               private stakingService: StakingService) {
   }
 
+  private createPool(organization) {
+    return from(this.stakingService.createPool(organization))
+      .pipe(
+        mergeMap((pool) => {
+          if (!pool) {
+            this.toastr.error(`Organization ${organization} do not exist as a provider.`);
+          }
+          return [StakeActions.getStake(), StakeActions.getOrganizationDetails()];
+        })
+      );
+  }
 }
