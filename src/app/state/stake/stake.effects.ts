@@ -9,7 +9,7 @@ import * as StakeActions from './stake.actions';
 import { catchError, delay, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { utils } from 'ethers';
-import { ENSNamespaceTypes, Stake, StakeStatus, StakingPool, StakingPoolService } from 'iam-client-lib';
+import { ENSNamespaceTypes, Stake, StakeStatus, StakingPool } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
 import { ActivatedRoute } from '@angular/router';
 import * as authSelectors from '../auth/auth.selectors';
@@ -17,22 +17,19 @@ import * as stakeSelectors from './stake.selectors';
 import { ToastrService } from 'ngx-toastr';
 import { WithdrawComponent } from '../../routes/ewt-patron/withdraw/withdraw.component';
 import { IOrganizationDefinition } from '@energyweb/iam-contracts';
+import { StakingService } from '../../shared/services/staking/staking.service';
 
 const {formatEther, parseEther} = utils;
 
 @Injectable()
 export class StakeEffects {
-  private stakingPoolService: StakingPoolService;
-  private pool: StakingPool;
-
   initStakingPoolService$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.initStakingPool),
       switchMap(() =>
-        from(StakingPoolService.init(this.iamService.iam.getSigner()))
+        from(this.stakingService.init())
           .pipe(
-            mergeMap((stakingPoolServ) => {
-              this.stakingPoolService = stakingPoolServ;
+            mergeMap(() => {
               return [StakeActions.initPool(), StakeActions.getAccountBalance()];
             })
           )
@@ -63,7 +60,7 @@ export class StakeEffects {
   setOrganization$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.setOrganization),
-      filter(() => Boolean(this.pool)),
+      filter(() => Boolean(this.stakingService.getPool())),
       switchMap(({organization}) =>
         from(this.stakingPoolService.getPool(organization))
           .pipe(
@@ -85,7 +82,7 @@ export class StakeEffects {
       switchMap(() =>
         from(this.iamService.iam.getSigner().getAddress())
           .pipe(
-            switchMap((address) => from(this.pool.getStake(address))
+            switchMap((address) => from(this.stakingService.getPool().getStake(address))
               .pipe(
                 filter<Stake>(Boolean),
                 mergeMap((stake) => {
@@ -139,7 +136,7 @@ export class StakeEffects {
             this.toastr.error('You try to stake higher amount of tokens that your account have. Will be used your balance instead');
           }
 
-          return from(this.pool.putStake(amountLesserThanBalance ? parseEther(amount) : parseEther(balance)))
+          return from(this.stakingService.getPool().putStake(amountLesserThanBalance ? parseEther(amount) : parseEther(balance)))
             .pipe(
               mergeMap(() => {
                 this.dialog.open(StakeSuccessComponent, {
@@ -161,7 +158,7 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.getWithdrawalDelay),
       switchMap(() =>
-        from(this.pool.withdrawalDelay())
+        from(this.stakingService.getPool().withdrawalDelay())
           .pipe(
             map(withdrawalDelay => () => delay(withdrawalDelay as any)),
             map(() => StakeActions.withdrawalDelayExpired()
@@ -193,7 +190,7 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.withdrawRequest),
       switchMap(() =>
-        from(this.pool.requestWithdraw())
+        from(this.stakingService.getPool().requestWithdraw())
           .pipe(
             map(() => {
               return StakeActions.getWithdrawalDelay();
@@ -214,7 +211,7 @@ export class StakeEffects {
       ofType(StakeActions.withdrawReward),
       tap(() => this.loadingService.show('Withdrawing your reward...')),
       switchMap(() =>
-        from(this.pool.withdraw()).pipe(
+        from(this.stakingService.getPool().withdraw()).pipe(
           mergeMap(() => {
             this.dialog.closeAll();
             return [StakeActions.withdrawRewardSuccess(), StakeActions.getStake()];
@@ -236,7 +233,7 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.checkReward),
       switchMap(() =>
-        from(this.pool.checkReward()).pipe(
+        from(this.stakingService.getPool().checkReward()).pipe(
           map((reward) => StakeActions.checkRewardSuccess({reward: formatEther(reward as any)})),
           catchError(err => {
             console.error(err);
@@ -287,7 +284,7 @@ export class StakeEffects {
       ofType(StakeActions.launchStakingPool),
       tap(() => this.loadingService.show()),
       switchMap(({pool}) =>
-        from(this.stakingPoolService.launchStakingPool(pool))
+        from(this.stakingService.getStakingPoolService().launchStakingPool(pool))
           .pipe(
             map(() => {
               this.toastr.success(`You successfully created a staking pool for ${pool.org}`);
@@ -309,7 +306,7 @@ export class StakeEffects {
     () =>
       this.actions$.pipe(
         ofType(StakeActions.getAllServices),
-        switchMap(() => from(this.stakingPoolService.allServices()).pipe(map((service) => console.log(service))))
+        switchMap(() => from(this.stakingService.getStakingPoolService().allServices()).pipe(map((service) => console.log(service))))
       ), {dispatch: false}
   );
 
@@ -319,7 +316,8 @@ export class StakeEffects {
               private activatedRoute: ActivatedRoute,
               private loadingService: LoadingService,
               private toastr: ToastrService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private stakingService: StakingService) {
   }
 
 }
