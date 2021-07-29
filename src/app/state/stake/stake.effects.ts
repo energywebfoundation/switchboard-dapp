@@ -58,7 +58,7 @@ export class StakeEffects {
     )
   );
 
-  getStake = createEffect(() =>
+  getStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.getStake),
       switchMap(() =>
