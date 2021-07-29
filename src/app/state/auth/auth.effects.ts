@@ -39,8 +39,8 @@ export class AuthEffects {
           reinitializeMetamask: provider === WalletProvider.MetaMask
         }, navigateOnTimeout)).pipe(
           mergeMap((loggedIn) => {
-            this.dialog.closeAll();
             if (loggedIn) {
+              this.dialog.closeAll();
               return [AuthActions.loginSuccess()];
             }
             return [AuthActions.loginFailure()];
