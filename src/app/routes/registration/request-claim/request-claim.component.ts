@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Asset, ENSNamespaceTypes, IRoleDefinition, PreconditionTypes, RegistrationTypes } from 'iam-client-lib';
@@ -11,7 +11,6 @@ import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/conn
 import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-dialog.component';
 import { SubjectElements, ViewColorsSetter } from '../models/view-colors-setter';
 import swal from 'sweetalert';
-import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
 import { EnrolmentField, EnrolmentSubmission } from '../enrolment-form/enrolment-form.component';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
@@ -29,7 +28,7 @@ const SwalButtons = {
 
 interface FormClaim extends Claim {
   isSynced?: boolean;
-  claimTypeVersion?: string;
+  claimTypeVersion: string;
 }
 
 enum RolePreconditionType {
