@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ClaimRewardComponent } from '../claim-reward/claim-reward.component';
 
 import { tap } from 'rxjs/operators';
 import { PercentButtonsComponent } from '../percent-buttons/percent-buttons.component';
@@ -60,15 +59,6 @@ export class StakeComponent {
 
   withdraw() {
     this.store.dispatch(StakeActions.withdrawRequest());
-  }
-
-  claimReward() {
-    this.dialog.open(ClaimRewardComponent, {
-      width: '400px',
-      maxWidth: '100%',
-      disableClose: true,
-      backdropClass: 'backdrop-shadow'
-    });
   }
 
 }

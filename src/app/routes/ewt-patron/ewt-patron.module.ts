@@ -13,7 +13,6 @@ import { PercentButtonsComponent } from './percent-buttons/percent-buttons.compo
 import { DividerComponent } from './divider/divider.component';
 import { StakeSuccessComponent } from './stake-success/stake-success.component';
 import { WithdrawComponent } from './withdraw/withdraw.component';
-import { ClaimRewardComponent } from './claim-reward/claim-reward.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SharedModule } from '../../shared/shared.module';
@@ -30,7 +29,6 @@ import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-t
     DividerComponent,
     StakeSuccessComponent,
     WithdrawComponent,
-    ClaimRewardComponent,
     LastDigitsPipe,
   ],
   imports: [
