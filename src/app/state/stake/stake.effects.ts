@@ -60,29 +60,6 @@ export class StakeEffects {
     )
   );
 
-  // invalidUrl = createEffect(() =>
-  //     this.actions$.pipe(
-  //       ofType(StakeActions.initStakingPoolSuccess),
-  //       switchMap(() =>
-  //         this.activatedRoute.queryParams.pipe(
-  //           map((params: { org: string }) => params?.org),
-  //           filter(v => !v),
-  //           map(() => {
-  //             swal({
-  //               title: 'Stake',
-  //               text: 'URL is invalid. \n Url should contain org name. \n For example: ?org=example.iam.ewc',
-  //               icon: 'error',
-  //               buttons: {},
-  //               closeOnClickOutside: false
-  //             });
-  //           })
-  //         )
-  //       )
-  //     ),
-  //   {dispatch: false}
-  // );
-
-
   setOrganization$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.setOrganization),
