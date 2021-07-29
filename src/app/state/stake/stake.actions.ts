@@ -5,6 +5,7 @@ import { IStakingPool } from '../../routes/applications/new-staking-pool/staking
 export const initStakingPool = createAction('[Stake] Initialize Staking Pool Service');
 export const initStakingPoolSuccess = createAction('[Stake] Initialize Staking Pool Service Success');
 export const initOnlyStakingPoolService = createAction('[Stake] Init Only Staking Pool Service');
+export const initPool = createAction('[Stake] Initialize Pool');
 
 export const checkReward = createAction('[Stake] Check Accumulated Reward');
 export const checkRewardSuccess = createAction(

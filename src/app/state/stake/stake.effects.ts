@@ -12,8 +12,6 @@ import { utils } from 'ethers';
 import { Stake, StakeStatus, StakingPool, StakingPoolService } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
 import { ActivatedRoute } from '@angular/router';
-
-import swal from 'sweetalert';
 import * as authSelectors from '../auth/auth.selectors';
 import * as stakeSelectors from './stake.selectors';
 import { ToastrService } from 'ngx-toastr';
@@ -34,8 +32,7 @@ export class StakeEffects {
           .pipe(
             mergeMap((stakingPoolServ) => {
               this.stakingPoolService = stakingPoolServ;
-              this.dialog.closeAll();
-              return [StakeActions.initStakingPoolSuccess(), StakeActions.getAccountBalance()];
+              return [StakeActions.initPool(), StakeActions.getAccountBalance()];
             })
           )
       )
@@ -58,43 +55,51 @@ export class StakeEffects {
 
   initPool$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(StakeActions.initStakingPoolSuccess),
-      switchMap(() =>
-        this.activatedRoute.queryParams.pipe(
-          map((params: { org: string }) => params?.org),
-          filter<string>(Boolean),
-          map((organization) => StakeActions.setOrganization({organization}))
-        )
+      ofType(StakeActions.initPool),
+      withLatestFrom(this.store.select(stakeSelectors.getOrganization)),
+      filter(([, org]) => Boolean(org)),
+      switchMap(([, organization]) =>
+        from(this.stakingPoolService.getPool(organization))
+          .pipe(
+            mergeMap((pool: StakingPool) => {
+              if (!pool) {
+                this.toastr.error(`Organization ${organization} do not exist as a provider.`);
+              }
+              this.pool = pool;
+              return [StakeActions.getStake()];
+            })
+          )
       )
     )
   );
 
-  invalidUrl = createEffect(() =>
-      this.actions$.pipe(
-        ofType(StakeActions.initStakingPoolSuccess),
-        switchMap(() =>
-          this.activatedRoute.queryParams.pipe(
-            map((params: { org: string }) => params?.org),
-            filter(v => !v),
-            map(() => {
-              swal({
-                title: 'Stake',
-                text: 'URL is invalid. \n Url should contain org name. \n For example: ?org=example.iam.ewc',
-                icon: 'error',
-                buttons: {},
-                closeOnClickOutside: false
-              });
-            })
-          )
-        )
-      ),
-    {dispatch: false}
-  );
+  // invalidUrl = createEffect(() =>
+  //     this.actions$.pipe(
+  //       ofType(StakeActions.initStakingPoolSuccess),
+  //       switchMap(() =>
+  //         this.activatedRoute.queryParams.pipe(
+  //           map((params: { org: string }) => params?.org),
+  //           filter(v => !v),
+  //           map(() => {
+  //             swal({
+  //               title: 'Stake',
+  //               text: 'URL is invalid. \n Url should contain org name. \n For example: ?org=example.iam.ewc',
+  //               icon: 'error',
+  //               buttons: {},
+  //               closeOnClickOutside: false
+  //             });
+  //           })
+  //         )
+  //       )
+  //     ),
+  //   {dispatch: false}
+  // );
 
 
   setOrganization$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.setOrganization),
+      filter(() => Boolean(this.pool)),
       switchMap(({organization}) =>
         from(this.stakingPoolService.getPool(organization))
           .pipe(
@@ -248,7 +253,7 @@ export class StakeEffects {
         from(this.pool.withdraw()).pipe(
           mergeMap(() => {
             this.dialog.closeAll();
-            return [StakeActions.withdrawRewardSuccess(), StakeActions.getStake()]
+            return [StakeActions.withdrawRewardSuccess(), StakeActions.getStake()];
           }),
           catchError(err => {
             console.error(err);

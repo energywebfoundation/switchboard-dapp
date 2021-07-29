@@ -7,7 +7,7 @@ import * as AuthActions from './auth.actions';
 import { catchError, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { IAM } from 'iam-client-lib';
 import { from, of } from 'rxjs';
-import * as StakeActions from '../../state/stake/stake.actions';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable()
 export class AuthEffects {
@@ -36,8 +36,9 @@ export class AuthEffects {
       switchMap(({provider}) =>
         from(this.iamService.login({walletProvider: provider})).pipe(
           mergeMap((loggedIn) => {
+            this.dialog.closeAll();
             if (loggedIn) {
-              return [AuthActions.loginSuccess(), StakeActions.initStakingPool()];
+              return [AuthActions.loginSuccess()];
             }
             return [AuthActions.loginFailure()];
           }),
@@ -63,7 +64,8 @@ export class AuthEffects {
 
   constructor(private actions$: Actions,
               private store: Store<AuthState>,
-              private iamService: IamService) {
+              private iamService: IamService,
+              private dialog: MatDialog) {
   }
 
 }

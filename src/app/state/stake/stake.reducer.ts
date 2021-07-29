@@ -1,7 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as StakeActions from './stake.actions';
 import { Stake } from 'iam-client-lib';
-import { withdrawalDelayExpired } from './stake.actions';
 
 export const USER_FEATURE_KEY = 'stake';
 

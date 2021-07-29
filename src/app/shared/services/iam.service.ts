@@ -123,7 +123,8 @@ export class IamService {
           this._iam.on('disconnected', () => {
             this._displayAccountAndNetworkChanges(EVENT_DISCONNECTED, redirectOnAccountChange);
           });
-          this.store.dispatch(StakeActions.initOnlyStakingPoolService());
+          //TODO: remove it when login method will be fully handled by store and call it after login.
+          this.store.dispatch(StakeActions.initStakingPool());
           retVal = true;
         }
       } catch (e) {

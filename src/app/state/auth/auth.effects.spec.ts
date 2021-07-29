@@ -9,10 +9,12 @@ import { AuthState } from './auth.reducer';
 import { AuthEffects } from './auth.effects';
 import * as AuthActions from './auth.actions';
 import { IAM } from 'iam-client-lib';
+import { MatDialog } from '@angular/material/dialog';
 
 describe('AuthEffects', () => {
 
   const iamSpy = jasmine.createSpyObj('iam', ['login', 'disconnect', 'clearWaitSignatureTimer', 'waitForSignature']);
+  const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll']);
   let actions$: ReplaySubject<any>;
   let effects: AuthEffects;
   let store: MockStore<AuthState>;
@@ -22,6 +24,7 @@ describe('AuthEffects', () => {
       providers: [
         AuthEffects,
         {provide: IamService, useValue: {iam: iamSpy}},
+        {provide: MatDialog, useValue: dialogSpy},
         provideMockStore(),
         provideMockActions(() => actions$),
       ],
