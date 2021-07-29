@@ -123,7 +123,8 @@ export class IamService {
           this._iam.on('disconnected', () => {
             this._displayAccountAndNetworkChanges(EVENT_DISCONNECTED, redirectOnAccountChange);
           });
-          this.store.dispatch(StakeActions.initOnlyStakingPoolService());
+          //TODO: remove it when login method will be fully handled by store and call it after login.
+          this.store.dispatch(StakeActions.initStakingPool());
           retVal = true;
         }
       } catch (e) {
@@ -198,7 +199,7 @@ export class IamService {
     return this._iam;
   }
 
-  public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean, refreshOnTimeout: boolean = true) {
+  public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean, navigateOnTimeout: boolean = true) {
     this._throwTimeoutError = false;
     const timeoutInMinutes = walletProvider === WalletProvider.EwKeyManager ? 2 : 1;
     const connectionMessage = isConnectAndSign ? 'connection to a wallet and ' : '';
@@ -222,7 +223,7 @@ export class IamService {
       .map(m => m.message);
     this.loadingService.show(waitForSignatureMessage);
     this._timer = setTimeout(() => {
-      this._displayTimeout(isConnectAndSign, refreshOnTimeout);
+      this._displayTimeout(isConnectAndSign, navigateOnTimeout);
       this.clearWaitSignatureTimer();
       this._throwTimeoutError = true;
     }, timeoutInMinutes * 60000);

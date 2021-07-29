@@ -63,7 +63,7 @@
                 </div>
                 <h3 class="mb-0 color-white">
                     <ng-container *ngIf="(earnedReward$ | async) as earnedReward">
-                        {{earnedReward | lastDigits}}
+                        {{earnedReward | lastDigits: 6}}
                     </ng-container>
                     <span class="staking-currency">VT</span>
                 </h3>
