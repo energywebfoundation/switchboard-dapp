@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
 import { catchError, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { IAM } from 'iam-client-lib';
+import { IAM, WalletProvider } from 'iam-client-lib';
 import { from, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -33,8 +33,11 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.login),
       tap(({provider, navigateOnTimeout}) => this.iamService.waitForSignature(provider, true, navigateOnTimeout)),
-      switchMap(({provider}) =>
-        from(this.iamService.login({walletProvider: provider})).pipe(
+      switchMap(({provider, navigateOnTimeout}) =>
+        from(this.iamService.login({
+          walletProvider: provider,
+          reinitializeMetamask: provider === WalletProvider.MetaMask
+        }, navigateOnTimeout)).pipe(
           mergeMap((loggedIn) => {
             this.dialog.closeAll();
             if (loggedIn) {
