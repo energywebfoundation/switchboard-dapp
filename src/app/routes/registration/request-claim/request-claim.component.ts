@@ -7,7 +7,7 @@ import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClie
 import { IamService } from 'src/app/shared/services/iam.service';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
-import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
+import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-dialog.component';
 import { SubjectElements, ViewColorsSetter } from '../models/view-colors-setter';
 import swal from 'sweetalert';

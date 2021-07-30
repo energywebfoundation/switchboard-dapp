@@ -59,9 +59,4 @@ export const getStakeAmount = createSelector(
 export const isWithdrawingDelayFinished = createSelector(
   getStakeState,
   (state: StakeState) => state.withdrawing
-);
-
-export const getOrganizationDetails = createSelector(
-  getStakeState,
-  (state: StakeState) => state?.organizationDetails
-);
+)

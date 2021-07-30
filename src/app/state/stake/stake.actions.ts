@@ -1,12 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Stake } from 'iam-client-lib';
 import { IStakingPool } from '../../routes/applications/new-staking-pool/staking-pool.service';
-import { IOrganizationDefinition } from '@energyweb/iam-contracts';
 
 export const initStakingPool = createAction('[Stake] Initialize Staking Pool Service');
 export const initStakingPoolSuccess = createAction('[Stake] Initialize Staking Pool Service Success');
 export const initOnlyStakingPoolService = createAction('[Stake] Init Only Staking Pool Service');
-export const initPool = createAction('[Stake] Initialize Pool');
 
 export const checkReward = createAction('[Stake] Check Accumulated Reward');
 export const checkRewardSuccess = createAction(
@@ -91,17 +89,5 @@ export const withdrawalDelayExpired = createAction(
 
 export const getWithdrawalDelayFailure = createAction(
   '[Stake] Get Delay After Calling Request Withdraw Failure',
-  props<{ err: string }>()
-);
-
-export const getOrganizationDetails = createAction(
-  '[Stake] Get Organization Details'
-);
-export const getOrganizationDetailsSuccess = createAction(
-  '[Stake] Get Organization Details Success',
-  props<{ orgDetails: IOrganizationDefinition }>()
-);
-export const getOrganizationDetailsFailure = createAction(
-  '[Stake] Get Organization Details Failure',
   props<{ err: string }>()
 );

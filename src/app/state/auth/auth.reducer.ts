@@ -4,18 +4,14 @@ import * as AuthActions from './auth.actions';
 export const USER_FEATURE_KEY = 'auth';
 
 export interface AuthState {
-  metamask: {
-    present: boolean;
-    chainId: number | undefined;
-  };
+  metamaskPresent: boolean;
+  metamaskChainId: number | undefined;
   loggedIn: boolean;
 }
 
 export const initialState: AuthState = {
-  metamask: {
-    present: true,
-    chainId: undefined
-  },
+  metamaskPresent: true,
+  metamaskChainId: undefined,
   loggedIn: false
 };
 
@@ -24,7 +20,7 @@ const authReducer = createReducer(
   on(AuthActions.loginSuccess, (state) => ({...state, loggedIn: true})),
   on(AuthActions.logout, (state) => ({...state, loggedIn: false})),
   on(AuthActions.setMetamaskLoginOptions, (state, {present, chainId}) => ({
-      ...state, metamask: {present, chainId}
+      ...state, metamaskPresent: present, metamaskChainId: chainId
     })
   )
 );

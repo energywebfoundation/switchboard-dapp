@@ -7,7 +7,12 @@ export const init = createAction(
 
 export const login = createAction(
   '[AUTH] Login User With Provider',
-  props<{ provider: WalletProvider, navigateOnTimeout?: boolean }>()
+  props<{provider: WalletProvider}>()
+);
+
+export const loginAndStake = createAction(
+  '[AUTH] Login And Stake',
+  props<{ amount: string, provider: WalletProvider }>()
 );
 
 export const loginSuccess = createAction(
@@ -19,6 +24,11 @@ export const loginFailure = createAction(
 
 export const logout = createAction(
   '[AUTH] Logout'
+);
+
+export const setAuth = createAction(
+  '[AUTH] Setting User Authorization',
+  props<{ loggedIn: boolean }>()
 );
 
 export const getMetamaskOptions = createAction(
