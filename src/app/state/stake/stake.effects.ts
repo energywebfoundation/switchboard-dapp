@@ -9,9 +9,8 @@ import * as StakeActions from './stake.actions';
 import { catchError, delay, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { utils } from 'ethers';
-import { ENSNamespaceTypes, Stake, StakeStatus } from 'iam-client-lib';
+import { Stake, StakeStatus } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
-import { ActivatedRoute } from '@angular/router';
 import * as authSelectors from '../auth/auth.selectors';
 import * as stakeSelectors from './stake.selectors';
 import { ToastrService } from 'ngx-toastr';
@@ -62,7 +61,7 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.getStake),
       switchMap(() =>
-        from(this.iamService.iam.getSigner().getAddress())
+        from(this.iamService.getAddress())
           .pipe(
             switchMap((address) => from(this.stakingService.getPool().getStake(address))
               .pipe(
@@ -229,16 +228,12 @@ export class StakeEffects {
   getAccountBalance$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.getAccountBalance),
-      switchMap(() => from(this.iamService.iam.getSigner().getAddress())
-        .pipe(
-          switchMap((address: string) =>
-            from(this.iamService.iam.getSigner().provider.getBalance(address))
-              .pipe(
-                map((balance) => formatEther(balance)),
-                map(balance => StakeActions.getAccountSuccess({balance}))
-              )
+      switchMap(() =>
+        from(this.iamService.getBalance())
+          .pipe(
+            map((balance) => balance.toString()),
+            map(balance => StakeActions.getAccountSuccess({balance}))
           )
-        )
       )
     )
   );
@@ -247,10 +242,7 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.getOrganizationDetails),
       withLatestFrom(this.store.select(stakeSelectors.getOrganization)),
-      switchMap(([, organization]) => from(this.iamService.iam.getDefinition({
-          type: ENSNamespaceTypes.Organization,
-          namespace: organization
-        })).pipe(
+      switchMap(([, organization]) => from(this.iamService.getDefinition(organization)).pipe(
         map((definition: IOrganizationDefinition) => StakeActions.getOrganizationDetailsSuccess({orgDetails: definition})),
         catchError(err => {
           console.error(err);
@@ -295,7 +287,6 @@ export class StakeEffects {
   constructor(private actions$: Actions,
               private store: Store<StakeState>,
               private iamService: IamService,
-              private activatedRoute: ActivatedRoute,
               private loadingService: LoadingService,
               private toastr: ToastrService,
               private dialog: MatDialog,
@@ -308,6 +299,7 @@ export class StakeEffects {
         mergeMap((pool) => {
           if (!pool) {
             this.toastr.error(`Organization ${organization} do not exist as a provider.`);
+            return [StakeActions.getOrganizationDetails()];
           }
           return [StakeActions.getStake(), StakeActions.getOrganizationDetails()];
         })

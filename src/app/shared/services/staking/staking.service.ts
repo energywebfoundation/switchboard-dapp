@@ -12,7 +12,7 @@ export class StakingService {
 
   async init() {
     this.stakingPoolService = await StakingPoolService.init(this.iamService.iam.getSigner());
-    return this.stakingPoolService;
+    return Boolean(this.stakingPoolService);
   }
 
   async createPool(org: string) {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import {
+  ENSNamespaceTypes,
   IAM,
   MessagingMethod,
   SafeIam,
@@ -20,6 +21,7 @@ import { ToastrService } from 'ngx-toastr';
 import { getDid, getUserProfile } from '../../state/user-claim/user.selectors';
 import { take } from 'rxjs/operators';
 import * as StakeActions from '../../state/stake/stake.actions';
+import { from } from 'rxjs';
 
 const LS_WALLETCONNECT = 'walletconnect';
 const LS_KEY_CONNECTED = 'connected';
@@ -197,6 +199,21 @@ export class IamService {
    */
   get iam(): IAM {
     return this._iam;
+  }
+
+  getDefinition(organization: string) {
+    return from(this.iam.getDefinition({
+      type: ENSNamespaceTypes.Organization,
+      namespace: organization
+    }))
+  }
+
+  async getAddress() {
+    return await this.iam.getSigner().getAddress();
+  }
+
+  async getBalance() {
+    return await this.iam.getSigner().provider.getBalance(await this.getAddress());
   }
 
   public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean, navigateOnTimeout: boolean = true) {
