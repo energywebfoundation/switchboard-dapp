@@ -18,6 +18,30 @@
     .mat-date-range-input-separator {
         color: #b7bac9;
     }
+
+    .mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+        color: #4f4d5b;
+    }
+
+    .mat-radio-outer-circle {
+        border-color: #4d4b59 !important;
+    }
+
+    textarea.textarea-staking.mat-input-element {
+        box-sizing: content-box !important;
+    }
+
+    .staking-date-picker.mat-form-field-appearance-outline .mat-form-field-infix {
+        padding: 0.5em 0.5em 1.1em 0.5em;
+    }
+
+    .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+        top: 1.5px;
+    }
+
+    .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+        background-color: transparent;
+    }
 }
 
 .mat-radio-button {
