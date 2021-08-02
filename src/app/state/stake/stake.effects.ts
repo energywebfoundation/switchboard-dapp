@@ -91,7 +91,6 @@ export class StakeEffects {
   putStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.putStake),
-      delay(1000), // todo: remove workaround with actions.
       withLatestFrom(
         this.store.select(stakeSelectors.getBalance),
         this.store.select(stakeSelectors.isStakingDisabled)
