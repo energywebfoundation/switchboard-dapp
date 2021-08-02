@@ -33,7 +33,7 @@ describe('NewRoleComponent', () => {
     'getENSTypesBySearchPhrase'
   ]);
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [NewRoleComponent],
       imports: [ReactiveFormsModule],
@@ -48,7 +48,7 @@ describe('NewRoleComponent', () => {
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NewRoleComponent);

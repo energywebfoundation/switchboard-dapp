@@ -7,54 +7,65 @@
 <div mat-dialog-content>
   <!-- START: New Owner Form -->
   <ng-container *ngIf="!isProcessing">
-    <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3" *ngIf="namespace">
-      <mat-icon>info</mat-icon><span class="pb-2">NAMESPACE: {{ namespace }}</span>
+    <div
+        class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3"
+        *ngIf="namespace">
+      <mat-icon>info</mat-icon>
+      <span class="pb-2">NAMESPACE: {{ namespace }}</span>
     </div>
-    <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3" *ngIf="assetDid">
-      <mat-icon>info</mat-icon><span class="pb-2">ASSET: {{ assetDid }}</span>
+    <div
+        class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3"
+        *ngIf="assetDid">
+      <mat-icon>info</mat-icon>
+      <span class="pb-2">ASSET: {{ assetDid }}</span>
     </div>
     <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
       <div class="row">
 
-<!--  TODO      temporary removal of logic with different types of DID until DIDs can own ENS namespaces. See https://energyweb.atlassian.net/browse/SWTCH-790 -->
+        <!--  TODO      temporary removal of logic with different types of DID until DIDs can own ENS namespaces. See https://energyweb.atlassian.net/browse/SWTCH-790 -->
 
-<!--        <div class="col-3 mrgn-tp" *ngIf="isShowingDIDDropDown">-->
-<!--          <mat-label class="ml-3 pl-1">DID methods</mat-label>-->
-<!--          <mat-form-field appearance="outline" -->
-<!--          class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">-->
-<!--            <mat-select matNativeControl [formControl]="prefixDropDown" (selectionChange)="changeNewOwnerAddressValue(newOwnerModifiedAddress?.value)">-->
-<!--              <mat-option [value]="'did:ethr:'">did:ethr:</mat-option>-->
-<!--            </mat-select>-->
-<!--          </mat-form-field>-->
-<!--      </div>-->
-<!--        <div class="col-12" *ngIf="!isShowingDIDDropDown">-->
-<!--          <mat-label class="ml-3 pl-1">New Owner {{ namespace ? 'Address' : 'DID' }}</mat-label>-->
-<!--          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">-->
-<!--            <input matInput autocomplete="off" [formControl]="newOwnerModifiedAddress" type="text" placeholder="New Owner {{ namespace ? 'Address' : 'DID' }}" -->
-<!--                required maxlength="256"/>-->
-<!--              <mat-error *ngIf="newOwnerModifiedAddress?.errors?.required">New Owner {{ namespace ? 'Address' : 'DID' }} is <strong>required</strong></mat-error>-->
-<!--              <mat-error *ngIf="newOwnerModifiedAddress?.errors?.invalidEthAddress">ETH Address format is invalid</mat-error>-->
-<!--              <mat-error *ngIf="newOwnerModifiedAddress?.errors?.invalidDid">DID format is invalid</mat-error>-->
-<!--          </mat-form-field>-->
-<!--        </div>-->
+        <!--        <div class="col-3 mrgn-tp" *ngIf="isShowingDIDDropDown">-->
+        <!--          <mat-label class="ml-3 pl-1">DID methods</mat-label>-->
+        <!--          <mat-form-field appearance="outline" -->
+        <!--          class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">-->
+        <!--            <mat-select matNativeControl [formControl]="prefixDropDown" (selectionChange)="changeNewOwnerAddressValue(newOwnerModifiedAddress?.value)">-->
+        <!--              <mat-option [value]="'did:ethr:'">did:ethr:</mat-option>-->
+        <!--            </mat-select>-->
+        <!--          </mat-form-field>-->
+        <!--      </div>-->
+        <!--        <div class="col-12" *ngIf="!isShowingDIDDropDown">-->
+        <!--          <mat-label class="ml-3 pl-1">New Owner {{ namespace ? 'Address' : 'DID' }}</mat-label>-->
+        <!--          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">-->
+        <!--            <input matInput autocomplete="off" [formControl]="newOwnerModifiedAddress" type="text" placeholder="New Owner {{ namespace ? 'Address' : 'DID' }}" -->
+        <!--                required maxlength="256"/>-->
+        <!--              <mat-error *ngIf="newOwnerModifiedAddress?.errors?.required">New Owner {{ namespace ? 'Address' : 'DID' }} is <strong>required</strong></mat-error>-->
+        <!--              <mat-error *ngIf="newOwnerModifiedAddress?.errors?.invalidEthAddress">ETH Address format is invalid</mat-error>-->
+        <!--              <mat-error *ngIf="newOwnerModifiedAddress?.errors?.invalidDid">DID format is invalid</mat-error>-->
+        <!--          </mat-form-field>-->
+        <!--        </div>-->
 
-<!--        TODO   end-->
+        <!--        TODO   end-->
 
         <div class="col-12">
           <mat-label class="ml-3 pl-1">New Owner {{ namespace ? 'Address' : 'DID' }}</mat-label>
           <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-            <input matInput autocomplete="off" [formControl]="newOwnerModifiedAddress" type="text" placeholder="New Owner {{ namespace ? 'Address' : 'DID' }}" 
-                required maxlength="256"/>
-              <mat-error *ngIf="newOwnerModifiedAddress?.errors?.required">New Owner {{ namespace ? 'Address' : 'DID' }} is <strong>required</strong></mat-error>
-              <mat-error *ngIf="newOwnerModifiedAddress?.errors?.invalidEthAddress">ETH Address format is invalid</mat-error>
-              <mat-error *ngIf="newOwnerModifiedAddress?.errors?.invalidDid">DID format is invalid</mat-error>
+            <input matInput autocomplete="off" [formControl]="newOwnerModifiedAddress" type="text"
+                   placeholder="New Owner {{ namespace ? 'Address' : 'DID' }}"
+                   required maxlength="256"/>
+            <mat-error *ngIf="newOwnerModifiedAddress?.errors?.required">New Owner {{ namespace ? 'Address' : 'DID' }}is
+              <strong>required</strong></mat-error>
+            <mat-error *ngIf="newOwnerModifiedAddress?.errors?.invalidEthAddress">ETH Address format is invalid
+            </mat-error>
+            <mat-error *ngIf="newOwnerModifiedAddress?.errors?.invalidDid">DID format is invalid</mat-error>
           </mat-form-field>
         </div>
       </div>
     </div>
     <div class="d-flex justify-content-end mb-3" *ngIf="!mySteps?.length">
       <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-      <button mat-raised-button class="btn btn-small btn-primary" (click)="submit()" [disabled]="newOwnerAddress.invalid">Next</button>
+      <button mat-raised-button class="btn btn-small btn-primary" (click)="submit()"
+              [disabled]="newOwnerAddress.invalid">Next
+      </button>
     </div>
   </ng-container>
   <!-- END: New Owner Form -->
@@ -78,21 +89,29 @@
         </ng-template>
         <mat-step [completed]="false" *ngFor="let step of mySteps; let i = index;">
           <ng-template matStepLabel>Transfer Ownership</ng-template>
-          <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>info</mat-icon><span class="pb-2">{{ step.info }}</span>
+          <div
+              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            <mat-icon>info</mat-icon>
+            <span class="pb-2">{{ step.info }}</span>
           </div>
-          <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
+          <div
+              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            <mat-icon>notifications_none</mat-icon>
+            <span class="pb-2">Please confirm this transaction in your connected Wallet.</span>
           </div>
           <div class="d-flex justify-content-end mb-3">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper.selectedIndex === i" (appRetryBtn)="retry()">Retry</button>
+            <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper.selectedIndex === i"
+                    (appRetryBtn)="retry()">Retry
+            </button>
           </div>
         </mat-step>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Complete</ng-template>
-          <div class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon><span class="pb-2">All transactions are completely processed.</span>
+          <div
+              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            <mat-icon>notifications_none</mat-icon>
+            <span class="pb-2">All transactions are completely processed.</span>
           </div>
           <div>
             <div class="d-flex justify-content-end mb-2">

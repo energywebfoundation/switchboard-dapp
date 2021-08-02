@@ -1,83 +1,83 @@
 <h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
-    <div class="d-flex flex-column">
-        <span>Add Verification Method</span>
-    </div>
-    <button data-qa-id="close" mat-icon-button (click)="close()">
-        <mat-icon>close</mat-icon>
-    </button>
+  <div class="d-flex flex-column">
+    <span>Add Verification Method</span>
+  </div>
+  <button data-qa-id="close" mat-icon-button (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
 </h4>
 
 <div mat-dialog-content>
-    <ng-container *ngIf="verificationsAmount > 0; else emptyList">
-        <div class="label color-white ml-1 pt-3 pl-2">{{verificationsAmount}} Verification Method(s)</div>
-        <div class="history-list pt-2">
-            <div class="history-list-item mb-3 p-2" *ngFor="let publicKey of dataSource">
-                <div class="d-flex flex-row justify-content-between align-items-center px-2">
-                    <div class="d-flex align-items-center">
-                        <mat-icon class="color-info list-icon pr-2" svgIcon="ethereum-bitcoin"></mat-icon>
-                        <div class="flex-md-row">
-                            <div class="d-flex flex-row pl-2 align-items-baseline">
-                                <h4 class="small font-weight-600 mb-1">TYPE</h4>
-                                <span class="pl-2 f-14">{{ publicKey?.type | typeAlgorithm }}</span>
-                            </div>
-                            <div class="d-flex flex-row pl-2 align-items-baseline">
-                                <h4 class="small font-weight-600 mb-1">Public Key</h4>
-                                <span [tooltip]="publicKey?.publicKeyHex"
-                                      appCopyToClipboard
-                                      [copyClipboard]="publicKey?.publicKeyHex"
-                                      message="Public key"
-                                      class="pl-2 f-14 cursor-pointer">
+  <ng-container *ngIf="verificationsAmount > 0; else emptyList">
+    <div class="label color-white ml-1 pt-3 pl-2">{{verificationsAmount}} Verification Method(s)</div>
+    <div class="history-list pt-2">
+      <div class="history-list-item mb-3 p-2" *ngFor="let publicKey of dataSource">
+        <div class="d-flex flex-row justify-content-between align-items-center px-2">
+          <div class="d-flex align-items-center">
+            <mat-icon class="color-info list-icon pr-2" svgIcon="ethereum-bitcoin"></mat-icon>
+            <div class="flex-md-row">
+              <div class="d-flex flex-row pl-2 align-items-baseline">
+                <h4 class="small font-weight-600 mb-1">TYPE</h4>
+                <span class="pl-2 f-14">{{ publicKey?.type | typeAlgorithm }}</span>
+              </div>
+              <div class="d-flex flex-row pl-2 align-items-baseline">
+                <h4 class="small font-weight-600 mb-1">Public Key</h4>
+                <span [tooltip]="publicKey?.publicKeyHex"
+                      appCopyToClipboard
+                      [copyClipboard]="publicKey?.publicKeyHex"
+                      message="Public key"
+                      class="pl-2 f-14 cursor-pointer">
                                     {{ publicKey?.publicKeyHex | didFormatMinifier }}
                                 </span>
-                            </div>
-                        </div>
+              </div>
+            </div>
 
-                    </div>
-                    <!--                    <div class="d-flex align-items-center">-->
-                    <!--                        <button mat-icon-button aria-label="Delete" (click)="delete(verification)">-->
-                    <!--                            <mat-icon class="btn-color-error">delete</mat-icon>-->
-                    <!--                        </button>-->
-                    <!--                    </div>-->
-                </div>
-            </div>
+          </div>
+          <!--                    <div class="d-flex align-items-center">-->
+          <!--                        <button mat-icon-button aria-label="Delete" (click)="delete(verification)">-->
+          <!--                            <mat-icon class="btn-color-error">delete</mat-icon>-->
+          <!--                        </button>-->
+          <!--                    </div>-->
         </div>
-    </ng-container>
-    <div class="history-list-item mb-3 p-2">
-        <mat-form-field appearance="outline">
-            <input matInput [formControl]="publicKey" placeholder="Public Key"
-                   autocomplete="off">
-            <mat-error *ngIf="publicKey.invalid">{{getPublicKeyErrorMsg()}} </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" floatPlaceholder="never">
-            <mat-select [formControl]="selectControl" placeholder="Select type">
-                <mat-option [value]="option[1]" *ngFor="let option of selectOptions">
-                    <mat-icon class="color-info pr-2" [svgIcon]="option[0].toLowerCase()"></mat-icon>
-                    {{option[0]}}
-                </mat-option>
-            </mat-select>
-            <mat-error>Type is required.</mat-error>
-        </mat-form-field>
-        <div class="d-flex justify-content-end mb-2">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="close()">Close</button>
-            <button mat-raised-button [disabled]="isFormDisabled" class="btn btn-small btn-primary"
-                    (click)="add()">Add
-            </button>
-        </div>
+      </div>
     </div>
-    <!-- Shows when list is empty -->
-    <ng-template #emptyList>
-        <div class="d-flex justify-content-center align-items-center mt-4 mb-3">
-            <div class="d-flex align-items-center no-record color-white">
-                <mat-icon class="mr-2">info</mat-icon>
-                <i>No Record Found</i>
-            </div>
-        </div>
-    </ng-template>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                   [pageIndex]="pageIndex"
-                   [length]="verificationsAmount"
-                   [hidePageSize]="true"
-                   (page)="pageEvent($event)"
-                   showFirstLastButtons>
-    </mat-paginator>
+  </ng-container>
+  <div class="history-list-item mb-3 p-2">
+    <mat-form-field appearance="outline">
+      <input matInput [formControl]="publicKey" placeholder="Public Key"
+             autocomplete="off">
+      <mat-error *ngIf="publicKey.invalid">{{getPublicKeyErrorMsg()}} </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" floatPlaceholder="never">
+      <mat-select [formControl]="selectControl" placeholder="Select type">
+        <mat-option [value]="option[1]" *ngFor="let option of selectOptions">
+          <mat-icon class="color-info pr-2" [svgIcon]="option[0].toLowerCase()"></mat-icon>
+          {{option[0]}}
+        </mat-option>
+      </mat-select>
+      <mat-error>Type is required.</mat-error>
+    </mat-form-field>
+    <div class="d-flex justify-content-end mb-2">
+      <button mat-stroked-button class="btn btn-small mr-2" (click)="close()">Close</button>
+      <button mat-raised-button [disabled]="isFormDisabled" class="btn btn-small btn-primary"
+              (click)="add()">Add
+      </button>
+    </div>
+  </div>
+  <!-- Shows when list is empty -->
+  <ng-template #emptyList>
+    <div class="d-flex justify-content-center align-items-center mt-4 mb-3">
+      <div class="d-flex align-items-center no-record color-white">
+        <mat-icon class="mr-2">info</mat-icon>
+        <i>No Record Found</i>
+      </div>
+    </div>
+  </ng-template>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                 [pageIndex]="pageIndex"
+                 [length]="verificationsAmount"
+                 [hidePageSize]="true"
+                 (page)="pageEvent($event)"
+                 showFirstLastButtons>
+  </mat-paginator>
 </div>

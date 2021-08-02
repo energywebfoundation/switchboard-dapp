@@ -8,33 +8,30 @@ export class IamRequestService {
   private _counter = 0;
   private _queue = {};
 
-  constructor() { }
+  constructor() {
+  }
 
   async enqueue(request: any, params?: any[]): Promise<any> {
-    let counter = ++this._counter;
+    const counter = ++this._counter;
 
     try {
       this._queue[`${counter}`] = '';
 
-      let res = undefined;
+      let res;
       if (params) {
-        res = await request(... params);
-      }
-      else {
+        res = await request(...params);
+      } else {
         res = await request();
       }
 
       if (this._counter === counter) {
         return res;
-      }
-      else {
+      } else {
         throw new ExpiredRequestError('Expired Request');
       }
-    }
-    catch (e) {
+    } catch (e) {
       throw(e);
-    }
-    finally {
+    } finally {
       delete this._queue[`${counter}`];
     }
   }

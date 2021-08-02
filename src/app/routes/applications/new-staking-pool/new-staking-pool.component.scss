@@ -1,49 +1,49 @@
 .mat-dialog-content {
-    padding: 0 0 !important;
+  padding: 0 0 !important;
 }
 
 ::ng-deep {
-    .mat-radio-outer-circle {
-        border-color: #52446f !important;
-    }
+  .mat-radio-outer-circle {
+    border-color: #52446f !important;
+  }
 
-    .mat-radio-button.mat-radio-checked .mat-radio-outer-circle {
-        border-color: #33CBCB !important;
-    }
+  .mat-radio-button.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #33CBCB !important;
+  }
 
-    .mat-radio-button .mat-radio-inner-circle, .mat-radio-button .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple), .mat-radio-button.mat-radio-checked .mat-radio-persistent-ripple, .mat-radio-button:active .mat-radio-persistent-ripple {
-        background-color: #33CBCB !important;
-    }
+  .mat-radio-button .mat-radio-inner-circle, .mat-radio-button .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple), .mat-radio-button.mat-radio-checked .mat-radio-persistent-ripple, .mat-radio-button:active .mat-radio-persistent-ripple {
+    background-color: #33CBCB !important;
+  }
 
-    .mat-date-range-input-separator {
-        color: #b7bac9;
-    }
+  .mat-date-range-input-separator {
+    color: #b7bac9;
+  }
 
-    .mat-radio-button.mat-radio-disabled .mat-radio-label-content {
-        color: #4f4d5b;
-    }
+  .mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+    color: #4f4d5b;
+  }
 
-    .mat-radio-outer-circle {
-        border-color: #4d4b59 !important;
-    }
+  .mat-radio-outer-circle {
+    border-color: #4d4b59 !important;
+  }
 
-    textarea.textarea-staking.mat-input-element {
-        box-sizing: content-box !important;
-    }
+  textarea.textarea-staking.mat-input-element {
+    box-sizing: content-box !important;
+  }
 
-    .staking-date-picker.mat-form-field-appearance-outline .mat-form-field-infix {
-        padding: 0.5em 0.5em 1.1em 0.5em;
-    }
+  .staking-date-picker.mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.5em 0.5em 1.1em 0.5em;
+  }
 
-    .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
-        top: 1.5px;
-    }
+  .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+    top: 1.5px;
+  }
 
-    .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
-        background-color: transparent;
-    }
+  .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+    background-color: transparent;
+  }
 }
 
 .mat-radio-button {
-    margin-left: 16px;
+  margin-left: 16px;
 }

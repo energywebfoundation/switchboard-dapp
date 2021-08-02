@@ -8,9 +8,9 @@ xdescribe('GovernanceDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GovernanceDetailsComponent ]
+      declarations: [GovernanceDetailsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

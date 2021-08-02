@@ -42,7 +42,7 @@ export class ViewColorsSetter {
   }
 
   private setBgColor(subject, color): void {
-    subject.bgColor = { 'background-color': `#${color}` };
+    subject.bgColor = {'background-color': `#${color}`};
     subject.listColor['background-color'] = `#${color}`;
   }
 

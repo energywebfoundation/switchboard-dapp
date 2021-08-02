@@ -34,7 +34,7 @@ describe('MapClaimsProfile', () => {
 
   it('should get newest profile', () => {
     scheduler.run(({cold, expectObservable}) => {
-      const expectedObject =  {name: 'newer'};
+      const expectedObject = {name: 'newer'};
       const source$ = cold('-a-|', {
         a: [
           {profile: {name: 'old'}, iat: 2},

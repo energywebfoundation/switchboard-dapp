@@ -1,4 +1,4 @@
 export interface DialogData {
-    key: string;
-    serial: string;
+  key: string;
+  serial: string;
 }

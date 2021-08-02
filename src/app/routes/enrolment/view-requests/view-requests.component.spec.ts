@@ -24,17 +24,17 @@ describe('ViewRequestsComponent', () => {
       declarations: [ViewRequestsComponent],
       providers: [
         provideMockStore(),
-        { provide: NotificationService, useValue: notificationServiceSpy },
-        { provide: LoadingService, useValue: loadingServiceSpy },
-        { provide: IamService, useValue: iamServiceSpy },
-        { provide: SwitchboardToastrService, useValue: switchboardToastrServiceSpy },
-        { provide: MAT_DIALOG_DATA, useValue: {listType: 1, claimData: 2} },
-        { provide: MatDialogRef, useValue: matDialogRefSpy },
-        { provide: MatDialog, useValue: matDialogSpy },
+        {provide: NotificationService, useValue: notificationServiceSpy},
+        {provide: LoadingService, useValue: loadingServiceSpy},
+        {provide: IamService, useValue: iamServiceSpy},
+        {provide: SwitchboardToastrService, useValue: switchboardToastrServiceSpy},
+        {provide: MAT_DIALOG_DATA, useValue: {listType: 1, claimData: 2}},
+        {provide: MatDialogRef, useValue: matDialogRefSpy},
+        {provide: MatDialog, useValue: matDialogSpy},
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
-        .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

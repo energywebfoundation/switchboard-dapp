@@ -29,8 +29,8 @@ import { TypeAlgorithmPipe } from './pipes/type-algorithm.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
 const routes: Routes = [
-  { path: '', component: AssetsComponent },
-  { path: 'enrolment/:subject', component: AssetEnrolmentListComponent }
+  {path: '', component: AssetsComponent},
+  {path: 'enrolment/:subject', component: AssetEnrolmentListComponent}
 ];
 
 
@@ -68,7 +68,13 @@ const routes: Routes = [
     NgMatSearchBarModule,
     ClipboardModule
   ],
-  entryComponents: [NewAssetTypeComponent, NewPassiveAssetComponent, AssetOwnershipHistoryComponent, EditAssetDialogComponent, VerificationMethodComponent]
+  entryComponents: [
+    NewAssetTypeComponent,
+    NewPassiveAssetComponent,
+    AssetOwnershipHistoryComponent,
+    EditAssetDialogComponent,
+    VerificationMethodComponent
+  ]
 })
 export class AssetsModule {
 }

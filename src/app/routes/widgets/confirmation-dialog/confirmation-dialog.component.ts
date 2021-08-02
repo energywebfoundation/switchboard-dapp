@@ -11,14 +11,15 @@ export class ConfirmationDialogComponent implements OnInit {
   isProceedButton = false;
 
   constructor(public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { 
-      this.isDiscardButton = data && data.isDiscardButton ? true : false;
-      this.isProceedButton = data && data.isProceedButton ? true : false;
-    }
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.isDiscardButton = data && data.isDiscardButton ? true : false;
+    this.isProceedButton = data && data.isProceedButton ? true : false;
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
-  closeMe (accept: boolean) {
+  closeMe(accept: boolean) {
     this.dialogRef.close(accept);
   }
 }

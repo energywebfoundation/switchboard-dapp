@@ -10,11 +10,12 @@ export class ConfigService {
 
   loadConfigData() {
     return new Promise<void>((resolve) => {
-      safeAppSdk.getSafeInfo().
-        then((safeInfo: SafeInfo) => {
-          this.safeInfo = safeInfo;
-        })
-      setTimeout(() => { resolve(); }, 1000);
+      safeAppSdk.getSafeInfo().then((safeInfo: SafeInfo) => {
+        this.safeInfo = safeInfo;
+      });
+      setTimeout(() => {
+        resolve();
+      }, 1000);
     });
   }
 }

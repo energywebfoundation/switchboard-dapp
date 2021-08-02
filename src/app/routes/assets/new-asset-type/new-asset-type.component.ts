@@ -7,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewAssetTypeComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
-  closeDialog() {}
+  closeDialog() {
+  }
 }

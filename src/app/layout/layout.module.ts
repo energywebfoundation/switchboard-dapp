@@ -20,38 +20,39 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
-    imports: [
-        SharedModule,
-        MatDialogModule,
-        MatMenuModule,
-        NgxSpinnerModule,
-        ClipboardModule,
-        UserIdleModule.forRoot({idle: environment.userIdle, timeout: environment.userIdle})
-    ],
-    providers: [
-        UserblockService
-    ],
-    declarations: [
-        LayoutComponent,
-        SidebarComponent,
-        UserblockComponent,
-        HeaderComponent,
-        NavsearchComponent,
-        OffsidebarComponent,
-        FooterComponent,
-        DialogUserComponent,
-        LoadingComponent
-    ],
-    entryComponents: [DialogUserComponent],
-    exports: [
-        LayoutComponent,
-        SidebarComponent,
-        UserblockComponent,
-        HeaderComponent,
-        NavsearchComponent,
-        OffsidebarComponent,
-        FooterComponent,
-        LoadingComponent
-    ]
+  imports: [
+    SharedModule,
+    MatDialogModule,
+    MatMenuModule,
+    NgxSpinnerModule,
+    ClipboardModule,
+    UserIdleModule.forRoot({idle: environment.userIdle, timeout: environment.userIdle})
+  ],
+  providers: [
+    UserblockService
+  ],
+  declarations: [
+    LayoutComponent,
+    SidebarComponent,
+    UserblockComponent,
+    HeaderComponent,
+    NavsearchComponent,
+    OffsidebarComponent,
+    FooterComponent,
+    DialogUserComponent,
+    LoadingComponent
+  ],
+  entryComponents: [DialogUserComponent],
+  exports: [
+    LayoutComponent,
+    SidebarComponent,
+    UserblockComponent,
+    HeaderComponent,
+    NavsearchComponent,
+    OffsidebarComponent,
+    FooterComponent,
+    LoadingComponent
+  ]
 })
-export class LayoutModule { }
+export class LayoutModule {
+}

@@ -35,15 +35,15 @@ describe('HistoryPeriodComponent', () => {
   });
 
   it('should compare history part when period have event Asset_transferred', () => {
-    component.period = { type: 'ASSET_TRANSFERRED', relatedTo: 'relatedTo', emittedBy: 'emittedBy' } as Period;
-    expect(component.getTopPart()).toEqual(jasmine.objectContaining({ header: 'Offered from', did: 'relatedTo' }));
-    expect(component.getBottomPart()).toEqual(jasmine.objectContaining({ header: 'Owner', did: 'emittedBy' }));
+    component.period = {type: 'ASSET_TRANSFERRED', relatedTo: 'relatedTo', emittedBy: 'emittedBy'} as Period;
+    expect(component.getTopPart()).toEqual(jasmine.objectContaining({header: 'Offered from', did: 'relatedTo'}));
+    expect(component.getBottomPart()).toEqual(jasmine.objectContaining({header: 'Owner', did: 'emittedBy'}));
   });
 
   it('should compare history part when perdiod event is not equal to Asset_transferred', () => {
-    component.period = { type: '', relatedTo: 'relatedTo', emittedBy: 'emittedBy' } as Period;
-    expect(component.getTopPart()).toEqual(jasmine.objectContaining({ header: 'Owner', did: 'emittedBy' }));
-    expect(component.getBottomPart()).toEqual(jasmine.objectContaining({ header: 'Offered to', did: 'relatedTo' }));
+    component.period = {type: '', relatedTo: 'relatedTo', emittedBy: 'emittedBy'} as Period;
+    expect(component.getTopPart()).toEqual(jasmine.objectContaining({header: 'Owner', did: 'emittedBy'}));
+    expect(component.getBottomPart()).toEqual(jasmine.objectContaining({header: 'Offered to', did: 'relatedTo'}));
   });
 
   it('should not render line and second app-history-element when relatedTo is not defined', () => {

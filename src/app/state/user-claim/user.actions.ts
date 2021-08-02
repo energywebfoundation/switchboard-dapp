@@ -19,17 +19,17 @@ export const loadUserClaimsFailure = createAction(
 
 export const updateUserClaims = createAction(
   '[User] Update User Claims',
-  props<{profile: Partial<Profile>}>()
+  props<{ profile: Partial<Profile> }>()
 );
 
 export const updateUserClaimsFailure = createAction(
   '[User] Update User Claims Failure',
-  props<{error: any}>()
+  props<{ error: any }>()
 );
 
 export const updateUserClaimsSuccess = createAction(
   '[User] Update User Claims Success',
-  props<{profile: Partial<Profile>}>()
+  props<{ profile: Partial<Profile> }>()
 );
 
 export const clearUserClaim = createAction(

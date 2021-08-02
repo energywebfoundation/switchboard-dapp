@@ -25,7 +25,7 @@ describe('User Selectors', () => {
 
     it('should return true when user logged in and status is withdrawing', () => {
       expect(stakeSelectors.isStakingDisabled.projector({status: StakeStatus.WITHDRAWING}, true)).toBe(true);
-    })
-  })
+    });
+  });
 
 });

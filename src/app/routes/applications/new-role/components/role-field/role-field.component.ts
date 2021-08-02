@@ -27,7 +27,8 @@ export class RoleFieldComponent {
   fieldIndex: number;
   public FieldTypes = FIELD_TYPES;
 
-  constructor() { }
+  constructor() {
+  }
 
   showAddFieldForm() {
     this.resetForm();
@@ -121,13 +122,16 @@ export class RoleFieldComponent {
 
     if (value && value.fieldType) {
       let validation;
-      let {
+      const {
         required,
         minLength,
         maxLength,
         pattern,
         minValue,
         maxValue,
+      } = value.validation;
+
+      let {
         minDate,
         maxDate
       } = value.validation;

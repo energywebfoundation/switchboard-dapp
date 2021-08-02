@@ -6,12 +6,12 @@ xdescribe('TransferOwnershipComponent', () => {
   let component: TransferOwnershipComponent;
   let fixture: ComponentFixture<TransferOwnershipComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ TransferOwnershipComponent ]
+      declarations: [TransferOwnershipComponent]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TransferOwnershipComponent);

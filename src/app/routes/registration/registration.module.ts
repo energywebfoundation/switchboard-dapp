@@ -17,25 +17,26 @@ const routes: Routes = [];
 
 
 @NgModule({
-    imports: [
-        SharedModule,
-        RouterModule.forChild(routes),
-        RouterModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatButtonModule,
-        MatDividerModule,
-        NgxSpinnerModule,
-        LayoutModule,
-        ConnectToWalletModule
-    ],
-    declarations: [
-        RequestClaimComponent,
-        SelectAssetDialogComponent,
-        EnrolmentFormComponent
-    ],
-    entryComponents: [SelectAssetDialogComponent],
-    exports: []
+  imports: [
+    SharedModule,
+    RouterModule.forChild(routes),
+    RouterModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatDividerModule,
+    NgxSpinnerModule,
+    LayoutModule,
+    ConnectToWalletModule
+  ],
+  declarations: [
+    RequestClaimComponent,
+    SelectAssetDialogComponent,
+    EnrolmentFormComponent
+  ],
+  entryComponents: [SelectAssetDialogComponent],
+  exports: []
 })
 
-export class RegistrationModule { }
+export class RegistrationModule {
+}

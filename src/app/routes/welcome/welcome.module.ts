@@ -11,7 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 
 const routes: Routes = [
-  { path: '', component: WelcomeComponent }
+  {path: '', component: WelcomeComponent}
 ];
 
 @NgModule({
@@ -29,4 +29,5 @@ const routes: Routes = [
     LayoutModule
   ]
 })
-export class WelcomeModule { }
+export class WelcomeModule {
+}

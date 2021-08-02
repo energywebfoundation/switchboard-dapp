@@ -258,7 +258,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
   private assetListFactory(): Observable<AssetList[]> {
     if (this.listType === AssetListType.PREV_OWNED_ASSETS) {
       return this.loadAssetList(
-        this.iamService.iam.getPreviouslyOwnedAssets({ owner: this.iamService.iam.getDid() })
+        this.iamService.iam.getPreviouslyOwnedAssets({owner: this.iamService.iam.getDid()})
       ).pipe(
         this.mapEnrolments()
       );
@@ -278,7 +278,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         switchMap((assets: Asset[]) => from(this.iamService.iam.getClaimsBySubjects(this.getAssetsIds(assets)))
           .pipe(
             map((claims) => claims.map(claim => claim.subject)),
-            map(claims => assets.map((asset) => ({ ...asset, hasEnrolments: claims.includes(asset.id) })))
+            map(claims => assets.map((asset) => ({...asset, hasEnrolments: claims.includes(asset.id)})))
           )
         )
       );

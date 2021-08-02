@@ -38,12 +38,12 @@ export class ViewRequestsComponent implements OnInit {
     this.claim = this.data.claimData;
 
     if (this.claim && this.claim.token) {
-      const decoded = await this.iamService.iam.decodeJWTToken({
+      const decoded: any = await this.iamService.iam.decodeJWTToken({
         token: this.claim.token
       });
 
-      if (decoded['claimData'] && decoded['claimData']['fields']) {
-        this.fields = decoded['claimData']['fields'];
+      if (decoded.claimData && decoded.claimData.fields) {
+        this.fields = decoded.claimData.fields;
       }
     }
   }
@@ -65,9 +65,9 @@ export class ViewRequestsComponent implements OnInit {
       this.notifService.decreasePendingApprovalCount();
       this.toastr.success('Request is approved.', TOASTR_HEADER);
       this.dialogRef.close(true);
-    }    catch (e) {
+    } catch (e) {
       this.toastr.error(e, TOASTR_HEADER);
-    }    finally {
+    } finally {
       this.loadingService.hide();
     }
   }

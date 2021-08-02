@@ -8,9 +8,10 @@ import { MatDialog } from '@angular/material/dialog';
 export class MinifiedDidViewerDirective {
   @Input() appMinifiedDidViewer: string;
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) {
+  }
 
-  @HostListener("click", ["$event"])
+  @HostListener('click', ['$event'])
   onClick(event: MouseEvent) {
     if (this.appMinifiedDidViewer) {
       const viewDidDialog$ = this.dialog.open(MinifiedDidViewerDialogComponent, {

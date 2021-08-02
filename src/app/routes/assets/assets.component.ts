@@ -14,16 +14,17 @@ import { MatTabGroup } from '@angular/material/tabs';
 })
 export class AssetsComponent implements OnInit, AfterViewInit {
   @ViewChild('assetsTabGroup') assetsTabGroup: MatTabGroup;
-  @ViewChild('listMyAssets' ) listMyAssets: AssetListComponent;
+  @ViewChild('listMyAssets') listMyAssets: AssetListComponent;
   @ViewChild('listOfferedAssets') listOfferedAssets: AssetListComponent;
   @ViewChild('listPreviousAssets') listPreviousAssets: AssetListComponent;
 
   AssetListType = AssetListType;
 
   constructor(private dialog: MatDialog,
-    private urlParamService: UrlParamService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+              private urlParamService: UrlParamService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
 
@@ -35,32 +36,27 @@ export class AssetsComponent implements OnInit, AfterViewInit {
         if (queryParams.notif) {
           if (queryParams.notif === 'assetsOfferedToMe') {
             this.initDefault(1);
-          }
-          else {
+          } else {
             this.initDefault();
           }
-        }
-        else if (queryParams.selectedTab) {
+        } else if (queryParams.selectedTab) {
           if (queryParams.selectedTab) {
             this.initDefault(queryParams.selectedTab);
-          }
-          else {
+          } else {
             this.initDefault();
           }
-        }
-        else {
+        } else {
           this.initDefault();
         }
-      }
-      else {
+      } else {
         this.initDefault();
       }
     });
-   }
+  }
 
   registerAsset() {
     const dialogRef = this.dialog.open(NewPassiveAssetComponent, {
-      width: '600px',data:{},
+      width: '600px', data: {},
       maxWidth: '100%',
       disableClose: true
     });
@@ -101,6 +97,4 @@ export class AssetsComponent implements OnInit, AfterViewInit {
       this.assetsTabGroup.selectedIndex = index || 0;
     }
   }
-
-
 }

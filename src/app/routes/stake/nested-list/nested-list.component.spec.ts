@@ -8,9 +8,9 @@ describe('NestedListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NestedListComponent ]
+      declarations: [NestedListComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

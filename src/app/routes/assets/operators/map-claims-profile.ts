@@ -10,7 +10,7 @@ export function mapClaimsProfile() {
         const claimWithProfile = claimsData.filter(claim => !!claim.profile).reduce((prev, next) => {
           const isPrevNewerClaim = prev.iat > next.iat;
           return isPrevNewerClaim ? prev : next;
-        }, { iat: 0 }) as IServiceEndpoint & ClaimData;
+        }, {iat: 0}) as IServiceEndpoint & ClaimData;
 
         return claimWithProfile.profile;
       })

@@ -186,7 +186,7 @@ export class StakeEffects {
       switchMap(() =>
         from(this.pool.withdrawalDelay())
           .pipe(
-            map(withdrawalDelay => () => delay(withdrawalDelay)),
+            map(withdrawalDelay => () => delay(withdrawalDelay as any)),
             map(() => StakeActions.withdrawalDelayExpired()
             ),
             catchError(err => {

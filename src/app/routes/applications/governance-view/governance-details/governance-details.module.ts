@@ -17,4 +17,5 @@ import { MatInputModule } from '@angular/material/input';
     GovernanceDetailsComponent
   ]
 })
-export class GovernanceDetailsModule { }
+export class GovernanceDetailsModule {
+}

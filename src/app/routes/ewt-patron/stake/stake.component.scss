@@ -13,24 +13,22 @@
   backdrop-filter: blur(4px);
 
   &::before {
-      content:"";
-      position:absolute;
-      top:0;
-      left:0;
-      right:0;
-      bottom:0;
-      border-radius: 32px; 
-      padding: 1px; 
-      background: linear-gradient(314.24deg, #25E8E8 1.72%, rgba(83, 134, 245, 0.16) 33.86%, rgba(98, 104, 249, 0.16) 62.17%, #9B54FF 97.07%);
-      mask: 
-          linear-gradient(#fff 0 0) content-box, 
-          linear-gradient(#fff 0 0);
-      -webkit-mask: 
-          linear-gradient(#fff 0 0) content-box, 
-          linear-gradient(#fff 0 0);
-      mask-composite: exclude;     
-      -webkit-mask-composite: destination-out; 
-  }   
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 32px;
+    padding: 1px;
+    background: linear-gradient(314.24deg, #25E8E8 1.72%, rgba(83, 134, 245, 0.16) 33.86%, rgba(98, 104, 249, 0.16) 62.17%, #9B54FF 97.07%);
+    mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: destination-out;
+  }
 }
 
 h2 {
@@ -38,8 +36,8 @@ h2 {
   font-weight: 600 !important;
 
   @media screen and (max-width: 800px) {
-      font-size: 38px !important;
-      margin-top: 8px;
+    font-size: 38px !important;
+    margin-top: 8px;
   }
 }
 
@@ -49,15 +47,15 @@ h3 {
   font-size: 34px !important;
 
   .staking-currency {
-      font-size: 16px !important;
-      color: #A6A5AC;
+    font-size: 16px !important;
+    color: #A6A5AC;
   }
 }
 
 h5 {
   letter-spacing: 1.25px !important;
   font-weight: 700 !important;
-} 
+}
 
 .staking-widget-xs-label {
   font-size: 12px;
@@ -65,83 +63,85 @@ h5 {
   text-transform: uppercase;
 }
 
-  ::ng-deep mat-label {
-    color: #A6A5AC !important;
-    font-family: 'Roboto', sans-serif !important;
-    font-weight: 400 !important;
+::ng-deep mat-label {
+  color: #A6A5AC !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-weight: 400 !important;
+}
+
+::ng-deep {
+  .staking-textfield {
+    &.mat-form-field-appearance-outline .mat-form-field-outline {
+      background: #231F32 !important;
+      color: transparent;
+      border-radius: 16px;
+    }
   }
 
-  ::ng-deep {
-    .staking-textfield {   
-      &.mat-form-field-appearance-outline .mat-form-field-outline {
-        background: #231F32 !important;
-        color: transparent;
-        border-radius: 16px;
-      }
-    }
-    .staking-textfield .mat-form-field-label-wrapper {
-      left: -5px;
-    }
-    .staking-textfield .mat-form-field-appearance-outline .mat-form-field-infix {
-      padding: 0.9em 0.3em !important;
-    }
+  .staking-textfield .mat-form-field-label-wrapper {
+    left: -5px;
+  }
 
-    .staking-textfield.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
-      transform: translateY(-0.65em) scale(0.75) !important;
-    }
+  .staking-textfield .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.9em 0.3em !important;
+  }
 
-    .staking-textfield.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
-      border-top-color: initial;
-    }
+  .staking-textfield.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
+    transform: translateY(-0.65em) scale(0.75) !important;
+  }
 
-    .staking-textfield .mat-input-element {
-     top: 1.3px !important;
-    }
+  .staking-textfield.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+    border-top-color: initial;
+  }
 
-    .staking-textfield.mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix {
-      right: .35em;
-    }
+  .staking-textfield .mat-input-element {
+    top: 1.3px !important;
+  }
 
-    .staking-textfield.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
-      color: #33CBCB;
-    }
+  .staking-textfield.mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix {
+    right: .35em;
+  }
 
-    .staking-textfield .mat-form-field-subscript-wrapper {
-      top: calc(100% - 2.1em) !important;
-    }
+  .staking-textfield.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: #33CBCB;
+  }
 
-    .staking-textfield.mat-form-field-appearance-outline .mat-form-field-label {
-      top: 1.59em;
-    }
+  .staking-textfield .mat-form-field-subscript-wrapper {
+    top: calc(100% - 2.1em) !important;
+  }
 
-    .staking-textfield.mat-form-field-appearance-outline .mat-form-field-outline-start {
-      border-radius: 16px 0 0 16px;
-    }
+  .staking-textfield.mat-form-field-appearance-outline .mat-form-field-label {
+    top: 1.59em;
+  }
 
-    .staking-textfield.mat-form-field-appearance-outline .mat-form-field-outline-end {
-      border-radius: 0 16px 16px 0;
-    }
+  .staking-textfield.mat-form-field-appearance-outline .mat-form-field-outline-start {
+    border-radius: 16px 0 0 16px;
+  }
 
-    .staking-textfield.mat-form-field-appearance-outline .mat-form-field-flex {
-      padding: 0.1em 0.6em !important;
-      
-      @media screen and (max-width: 800px) {
-        padding: 0.35em 0.6em !important;
-      }
+  .staking-textfield.mat-form-field-appearance-outline .mat-form-field-outline-end {
+    border-radius: 0 16px 16px 0;
+  }
+
+  .staking-textfield.mat-form-field-appearance-outline .mat-form-field-flex {
+    padding: 0.1em 0.6em !important;
+
+    @media screen and (max-width: 800px) {
+      padding: 0.35em 0.6em !important;
+    }
   }
 }
 
 
-
 .amount-input {
   color: #FFFFFF;
+
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
 
   &[type=number] {
-    -moz-appearance:textfield; /* Firefox */
+    -moz-appearance: textfield; /* Firefox */
   }
 }
 
@@ -189,7 +189,7 @@ h5 {
   }
 
   &:hover {
-      background-color: #ad74ff;   
+    background-color: #ad74ff;
   }
 }
 

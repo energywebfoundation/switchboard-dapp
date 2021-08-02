@@ -27,7 +27,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isAppShown = false;
   isRoleShown = false;
-  isFilterShown: boolean = false;
+  isFilterShown = false;
   isIamEwcOwner = false;
 
   showFilter = {

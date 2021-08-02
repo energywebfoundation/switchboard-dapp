@@ -6,7 +6,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class UrlParamService {
 
-  constructor() { }
+  constructor() {
+  }
 
   updateQueryParams(router: Router, activatedRoute: ActivatedRoute, queryParams: any, paramListToRemove?: string[]) {
     if (paramListToRemove) {
@@ -19,13 +20,12 @@ export class UrlParamService {
         ...params,
         ...queryParams
       };
-  
+
       router.navigate([], {
         relativeTo: activatedRoute,
         queryParams: params
       });
-    }
-    else {
+    } else {
       router.navigate([], {
         relativeTo: activatedRoute,
         queryParams,
@@ -36,6 +36,6 @@ export class UrlParamService {
 
   removeQueryParams(router: Router, activatedRoute: ActivatedRoute, paramList: string[]) {
 
-    
+
   }
 }

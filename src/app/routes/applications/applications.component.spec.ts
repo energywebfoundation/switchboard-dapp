@@ -6,12 +6,12 @@ xdescribe('ApplicationsComponent', () => {
   let component: ApplicationsComponent;
   let fixture: ComponentFixture<ApplicationsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApplicationsComponent ]
+      declarations: [ApplicationsComponent]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ApplicationsComponent);

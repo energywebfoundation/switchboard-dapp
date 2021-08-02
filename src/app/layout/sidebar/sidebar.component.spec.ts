@@ -4,24 +4,24 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 xdescribe('SidebarComponent', () => {
-    let component: SidebarComponent;
-    let fixture: ComponentFixture<SidebarComponent>;
+  let component: SidebarComponent;
+  let fixture: ComponentFixture<SidebarComponent>;
 
-    beforeEach(async () => {
-        await TestBed.configureTestingModule({
-            declarations: [ SidebarComponent ],
-            schemas: [NO_ERRORS_SCHEMA]
-        })
-          .compileComponents();
-    });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [SidebarComponent],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+      .compileComponents();
+  });
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(SidebarComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SidebarComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

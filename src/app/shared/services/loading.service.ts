@@ -6,13 +6,13 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class LoadingService {
-  private _isLoading: BehaviorSubject<Number>;
+  private _isLoading: BehaviorSubject<number>;
   private _counter = 0;
   private _msg: BehaviorSubject<any>;
   private _isCancellable: BehaviorSubject<boolean>;
 
   constructor() {
-    this._isLoading = new BehaviorSubject<Number>(this._counter);
+    this._isLoading = new BehaviorSubject<number>(this._counter);
     this._msg = new BehaviorSubject<any>('');
     this._isCancellable = new BehaviorSubject<any>(false);
   }
@@ -36,8 +36,7 @@ export class LoadingService {
     }
     if (cancellable) {
       this._isCancellable.next(true);
-    }
-    else {
+    } else {
       this._isCancellable.next(false);
     }
     this._isLoading.next(++this._counter);
@@ -51,12 +50,11 @@ export class LoadingService {
     this._isLoading.next(this._counter);
   }
 
-  updateLocalLoadingFlag(loadingObj: { requests: any[], value: boolean}, method: LoadingCount) {
+  updateLocalLoadingFlag(loadingObj: { requests: any[], value: boolean }, method: LoadingCount) {
     if (loadingObj && loadingObj.requests) {
       if (method === LoadingCount.UP) {
         loadingObj.requests.push(true);
-      }
-      else if (method === LoadingCount.DOWN) {
+      } else if (method === LoadingCount.DOWN) {
         loadingObj.requests.pop();
       }
       loadingObj.value = loadingObj.requests.length > 0;
