@@ -92,18 +92,18 @@
                 <mat-label class="ml-3 pl-1">Min Date</mat-label>
                 <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                   <input [matDatepicker]="pickerMin" matInput placeholder="Min Date" autocomplete="off"
-                         formControlName="minDate" (keypress)="$event.preventDefault()">
+                         formControlName="minDate" disabled>
                   <mat-datepicker-toggle matSuffix [for]="pickerMin"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerMin></mat-datepicker>
+                  <mat-datepicker #pickerMin  disabled="false"></mat-datepicker>
                 </mat-form-field>
               </div>
               <div class="px-0" *ngIf="fieldsForm?.value?.fieldType === 'date'">
                 <mat-label class="ml-3 pl-1">Max Date</mat-label>
                 <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                   <input [matDatepicker]="pickerMax" matInput placeholder="Max Date" autocomplete="off"
-                         formControlName="maxDate" (keypress)="$event.preventDefault()">
+                         formControlName="maxDate" disabled>
                   <mat-datepicker-toggle matSuffix [for]="pickerMax"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerMax></mat-datepicker>
+                  <mat-datepicker #pickerMax  disabled="false"></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
