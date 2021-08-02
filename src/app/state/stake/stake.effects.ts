@@ -11,7 +11,6 @@ import { from, of } from 'rxjs';
 import { utils } from 'ethers';
 import { Stake, StakeStatus } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
-import * as authSelectors from '../auth/auth.selectors';
 import * as stakeSelectors from './stake.selectors';
 import { ToastrService } from 'ngx-toastr';
 import { WithdrawComponent } from '../../routes/ewt-patron/withdraw/withdraw.component';
@@ -94,24 +93,17 @@ export class StakeEffects {
       ofType(StakeActions.putStake),
       delay(1000), // todo: remove workaround with actions.
       withLatestFrom(
-        this.store.select(authSelectors.isUserLoggedIn),
         this.store.select(stakeSelectors.getBalance),
         this.store.select(stakeSelectors.isStakingDisabled)
       ),
-      filter(([, loggedIn]) => {
-        if (!loggedIn) {
-          this.toastr.error('You can not stake when you are not logged in!');
-        }
-        return loggedIn;
-      }),
-      filter(([, , , isStakeDisabled]) => {
+      filter(([, , isStakeDisabled]) => {
         if (isStakeDisabled) {
           this.toastr.error('You can not stake to this provider because you already staked to it!');
         }
         return !isStakeDisabled;
       }),
       tap(() => this.loadingService.show()),
-      switchMap(([{amount}, , balance]) => {
+      switchMap(([{amount}, balance]) => {
           const amountLesserThanBalance = parseInt(amount, 10) <= parseInt(balance, 10);
           if (!amountLesserThanBalance) {
             this.toastr.error('You try to stake higher amount of tokens that your account have. Will be used your balance instead');
