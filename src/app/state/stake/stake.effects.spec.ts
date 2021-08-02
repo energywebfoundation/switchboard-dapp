@@ -114,7 +114,6 @@ describe('StakeEffects', () => {
 
     it('should put a stake and refresh data', () => {
       actions$.next(StakeActions.putStake({amount: '5'}));
-      store.overrideSelector(stakeSelectors.getBalance, '100');
       store.overrideSelector(stakeSelectors.isStakingDisabled, false);
 
       stakingService.putStake.and.returnValue(Promise.resolve());
@@ -128,7 +127,6 @@ describe('StakeEffects', () => {
 
     it('should not put a stake when staking is disabled', waitForAsync(() => {
       actions$.next(StakeActions.putStake({amount: '5'}));
-      store.overrideSelector(stakeSelectors.getBalance, '100');
       store.overrideSelector(stakeSelectors.isStakingDisabled, true);
 
       stakingService.putStake.and.returnValue(Promise.resolve());
@@ -142,7 +140,6 @@ describe('StakeEffects', () => {
 
     it('should return failure action when putStake throws an error', () => {
       actions$.next(StakeActions.putStake({amount: '5'}));
-      store.overrideSelector(stakeSelectors.getBalance, '100');
       store.overrideSelector(stakeSelectors.isStakingDisabled, false);
 
       stakingService.putStake.and.returnValue(Promise.reject({message: 'message'}));

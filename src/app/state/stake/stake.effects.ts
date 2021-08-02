@@ -92,23 +92,18 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.putStake),
       withLatestFrom(
-        this.store.select(stakeSelectors.getBalance),
         this.store.select(stakeSelectors.isStakingDisabled)
       ),
-      filter(([, , isStakeDisabled]) => {
+      filter(([, isStakeDisabled]) => {
         if (isStakeDisabled) {
           this.toastr.error('You can not stake to this provider because you already staked to it!');
         }
         return !isStakeDisabled;
       }),
       tap(() => this.loadingService.show('Putting your stake')),
-      switchMap(([{amount}, balance]) => {
-          const amountLesserThanBalance = parseInt(amount, 10) <= parseInt(balance, 10);
-          if (!amountLesserThanBalance) {
-            this.toastr.error('You try to stake higher amount of tokens that your account have. Will be used your balance instead');
-          }
+      switchMap(([{amount}]) => {
 
-          return from(this.stakingService.putStake(amountLesserThanBalance ? parseEther(amount) : parseEther(balance)))
+          return from(this.stakingService.putStake(parseEther(amount)))
             .pipe(
               map(() => {
                 this.dialog.open(StakeSuccessComponent, {
