@@ -44,7 +44,8 @@ const stakeReducer = createReducer(
     })),
   on(StakeActions.withdrawRequest, (state) => ({...state, withdrawing: true})),
   on(StakeActions.withdrawalDelayExpired, (state) => ({...state, withdrawing: false})),
-  on(StakeActions.getOrganizationDetailsSuccess, (state, {orgDetails}) => ({...state, organizationDetails: orgDetails}))
+  on(StakeActions.getOrganizationDetailsSuccess, (state, {orgDetails}) => ({...state, organizationDetails: orgDetails})),
+  on(StakeActions.withdrawRewardSuccess, (state) => ({...state, reward: '0'}))
 );
 
 export function reducer(state: StakeState | undefined, action: Action) {
