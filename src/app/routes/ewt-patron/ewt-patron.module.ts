@@ -19,6 +19,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { LayoutModule } from '../../layout/layout.module';
 import { LastDigitsPipe } from './pipes/last-digits.pipe';
 import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-to-wallet.module';
+import { StakingHeaderComponent } from './staking-header/staking-header.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-t
     StakeSuccessComponent,
     WithdrawComponent,
     LastDigitsPipe,
+    StakingHeaderComponent,
   ],
   imports: [
     CommonModule,

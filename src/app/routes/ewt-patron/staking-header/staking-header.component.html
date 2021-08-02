@@ -1,0 +1,7 @@
+<div class="header-wrapper d-flex flex-grow-1 justify-content-end">
+    <ng-container *ngIf="(loggedIn$ | async)">
+        <button mat-raised-button data-qa-id="logout" class="connect-btn color-white text-uppercase mr-2"
+                (click)="logOut()">Disconnect Wallet
+        </button>
+    </ng-container>
+</div>
