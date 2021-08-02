@@ -8,9 +8,9 @@ xdescribe('SelectAssetDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SelectAssetDialogComponent ]
+      declarations: [SelectAssetDialogComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

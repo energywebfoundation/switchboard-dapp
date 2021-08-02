@@ -55,7 +55,7 @@ export class ProgressBarComponent implements OnInit {
   }
 
   setStakeClasses() {
-      this.stakeClasses = `${this.getStakeRatingClass(this.rating)} ${this.size}`;
+    this.stakeClasses = `${this.getStakeRatingClass(this.rating)} ${this.size}`;
   }
 
 }

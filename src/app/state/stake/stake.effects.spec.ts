@@ -20,7 +20,7 @@ xdescribe('UserEffects', () => {
   const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
   const toastrSpy = jasmine.createSpyObj('ToastrService', ['success']);
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll']);
-  let actions$: ReplaySubject<any>;
+  const actions$: ReplaySubject<any> = new ReplaySubject(1);
   let effects: StakeEffects;
   let store: MockStore<StakeState>;
 

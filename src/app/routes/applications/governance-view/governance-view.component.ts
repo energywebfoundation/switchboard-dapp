@@ -13,9 +13,10 @@ const ListType = {
   styleUrls: ['./governance-view.component.scss']
 })
 export class GovernanceViewComponent implements OnInit {
-  typeLabel : string;
+  typeLabel: string;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+  }
 
   ngOnInit() {
     switch (this.data.type) {

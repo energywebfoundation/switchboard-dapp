@@ -42,7 +42,7 @@ export const isStakingDisabled = createSelector(
   getStake,
   authSelectors.isUserLoggedIn,
   (state: Stake, loggedIn) => {
-    return (state?.status === StakeStatus.STAKING || state?.status === StakeStatus.WITHDRAWING) && loggedIn
+    return (state?.status === StakeStatus.STAKING || state?.status === StakeStatus.WITHDRAWING) && loggedIn;
   }
 );
 

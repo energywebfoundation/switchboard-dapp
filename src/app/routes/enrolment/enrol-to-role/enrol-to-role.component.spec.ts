@@ -6,12 +6,12 @@ describe('EnrolToRoleComponent', () => {
   let component: EnrolToRoleComponent;
   let fixture: ComponentFixture<EnrolToRoleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [ EnrolToRoleComponent ]
+      declarations: [EnrolToRoleComponent]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EnrolToRoleComponent);

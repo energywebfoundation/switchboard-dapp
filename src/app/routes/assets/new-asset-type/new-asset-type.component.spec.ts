@@ -8,9 +8,9 @@ xdescribe('NewAssetTypeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NewAssetTypeComponent ]
+      declarations: [NewAssetTypeComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

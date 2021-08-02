@@ -15,7 +15,8 @@ export class StakeListCardComponent implements OnInit {
   @Input() numberOfNodes: number;
   @Input() isAcceptingPatrons: boolean;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

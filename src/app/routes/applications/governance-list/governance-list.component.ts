@@ -42,21 +42,21 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  ListType        = ListType;
-  RoleType        = RoleType;
-  dataSource      = new MatTableDataSource([]);
-  origDatasource  = [];
+  ListType = ListType;
+  RoleType = RoleType;
+  dataSource = new MatTableDataSource([]);
+  origDatasource = [];
   displayedColumns: string[];
-  listTypeLabel   : string;
-  ensType         : any;
+  listTypeLabel: string;
+  ensType: any;
 
-  filterForm      = this.fb.group({
+  filterForm = this.fb.group({
     organization: '',
     application: '',
     role: ''
   });
 
-  orgHierarchy    = [];
+  orgHierarchy = [];
 
   DRILL_DOWN_SUBORG = true;
   currentUserEthAddress = this.iamService.accountAddress;
@@ -65,11 +65,12 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
   private subscription$ = new Subject();
 
   constructor(private loadingService: LoadingService,
-      private iamService: IamService,
-      private dialog: MatDialog,
-      private fb: FormBuilder,
-      private toastr: SwitchboardToastrService,
-      private configService: ConfigService) { }
+              private iamService: IamService,
+              private dialog: MatDialog,
+              private fb: FormBuilder,
+              private toastr: SwitchboardToastrService,
+              private configService: ConfigService) {
+  }
 
   async ngOnInit() {
     switch (this.listType) {
@@ -95,15 +96,16 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
       if (property === 'name') {
 
         switch (this.listType) {
-          case ListType.ORG: return item.definition.orgName.toLowerCase();
-          case ListType.APP: return item.definition.appName.toLowerCase();
-          case ListType.ROLE: return item.definition.roleName.toLowerCase();
+          case ListType.ORG:
+            return item.definition.orgName.toLowerCase();
+          case ListType.APP:
+            return item.definition.appName.toLowerCase();
+          case ListType.ROLE:
+            return item.definition.roleName.toLowerCase();
         }
-      }
-      else if (property === 'type') {
+      } else if (property === 'type') {
         return item.definition.roleType;
-      }
-      else {
+      } else {
         return item[property];
       }
     };
@@ -122,7 +124,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     }
     this.loadingService.show();
 
-    let $getOrgList = await this.iamService.iam.getENSTypesByOwner({
+    const $getOrgList = await this.iamService.iam.getENSTypesByOwner({
       type: this.ensType,
       owner: this.iamService.accountAddress,
       excludeSubOrgs: false
@@ -132,8 +134,8 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
     let orgList = await Promise.all(
       ($getOrgList as Domain[]).map(async (org) => {
-        const isOwnedByCurrentUser = await this.iamService.iam.isOwner({ domain: org.namespace });
-        return { ...org, isOwnedByCurrentUser };
+        const isOwnedByCurrentUser = await this.iamService.iam.isOwner({domain: org.namespace});
+        return {...org, isOwnedByCurrentUser};
       }));
 
     if (this.listType === ListType.ORG) {
@@ -155,16 +157,15 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
   }
 
   private _getMainOrgs($getOrgList: any[]) {
-    let list = [];
-    let subList = [];
+    const list = [];
+    const subList = [];
 
     // Separate Parent & Child Orgs
     $getOrgList.forEach((item: any) => {
-      let namespaceArr = item.namespace.split('.');
+      const namespaceArr = item.namespace.split('.');
       if (namespaceArr.length === 3) {
         list.push(item);
-      }
-      else {
+      } else {
         if (!subList[namespaceArr.length - 4]) {
           subList[namespaceArr.length - 4] = [];
         }
@@ -175,11 +176,11 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     // Remove Unnecessary Sub-Orgs from Main List
     if (list.length || subList.length) {
       for (let i = 0; i < subList.length; i++) {
-        let arr = subList[i];
+        const arr = subList[i];
         if (arr && arr.length) {
-          for (let subOrg of arr) {
+          for (const subOrg of arr) {
             let exists = false;
-            for (let mainOrg of list) {
+            for (const mainOrg of list) {
               if (subOrg.namespace && subOrg.namespace.includes(mainOrg.namespace)) {
                 exists = true;
                 break;
@@ -198,8 +199,8 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
   view(type: string, data: any) {
     const dialogRef = this.dialog.open(GovernanceViewComponent, {
-      width: '600px',data:{
-        type: type,
+      width: '600px', data: {
+        type,
         definition: data
       },
       maxWidth: '100%',
@@ -215,13 +216,12 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
   }
 
   viewRoles(type: string, data: any) {
-    let org = undefined;
-    let app = undefined;
+    let org;
+    let app;
 
     if (type === ListType.ORG) {
       org = data.namespace.split('.iam.ewc')[0];
-    }
-    else {
+    } else {
       let arr = data.namespace.split('.iam.ewc');
       arr = arr[0].split(ENSNamespaceTypes.Roles);
       arr = arr[arr.length - 1].split(ENSNamespaceTypes.Application);
@@ -270,16 +270,16 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
       });
 
       dialogRef.afterClosed()
-          .pipe(takeUntil(this.subscription$))
-          .subscribe(async (res: any) => {
-            if (res) {
-              if (this.orgHierarchy.length) {
-                await this.viewSubOrgs(this.orgHierarchy.pop());
-              } else {
-                await this.getList();
-              }
+        .pipe(takeUntil(this.subscription$))
+        .subscribe(async (res: any) => {
+          if (res) {
+            if (this.orgHierarchy.length) {
+              await this.viewSubOrgs(this.orgHierarchy.pop());
+            } else {
+              await this.getList();
             }
-          });
+          }
+        });
     }
   }
 
@@ -288,7 +288,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
       width: '600px',
       data: {
         namespace: data.namespace,
-        type: type,
+        type,
         owner: data.owner
       },
       maxWidth: '100%',
@@ -296,27 +296,27 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed()
-        .pipe(takeUntil(this.subscription$))
-        .subscribe(async result => {
+      .pipe(takeUntil(this.subscription$))
+      .subscribe(async result => {
 
-          if (result) {
-            if (this.orgHierarchy.length) {
-              const currentOrg = this.orgHierarchy.pop();
-              if (this.dataSource.data.length === 1) {
-                await this.viewSubOrgs(this.orgHierarchy.pop());
-              } else {
-                await this.viewSubOrgs(currentOrg);
-              }
+        if (result) {
+          if (this.orgHierarchy.length) {
+            const currentOrg = this.orgHierarchy.pop();
+            if (this.dataSource.data.length === 1) {
+              await this.viewSubOrgs(this.orgHierarchy.pop());
             } else {
-              await this.getList();
+              await this.viewSubOrgs(currentOrg);
             }
+          } else {
+            await this.getList();
           }
-        });
+        }
+      });
   }
 
-  private constructEnrolmentUrl(listType: string,roleDefinition: any) {
-    let name = roleDefinition.name;
-    let arr = roleDefinition.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
+  private constructEnrolmentUrl(listType: string, roleDefinition: any) {
+    const name = roleDefinition.name;
+    const arr = roleDefinition.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
     let namespace = '';
 
     if (arr.length > 1) {
@@ -327,22 +327,22 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
   }
 
   copyToClipboard(listType: string, roleDefinition: any) {
-    let listener = (e: ClipboardEvent) => {
-      let clipboard = e.clipboardData || window["clipboardData"];
-      clipboard.setData("text", this.constructEnrolmentUrl(listType, roleDefinition));
+    const listener = (e: ClipboardEvent) => {
+      const clipboard = e.clipboardData || window['clipboardData'];
+      clipboard.setData('text', this.constructEnrolmentUrl(listType, roleDefinition));
       e.preventDefault();
-    }
+    };
 
-    document.addEventListener("copy", listener, false)
-    document.execCommand("copy");
-    document.removeEventListener("copy", listener, false);
+    document.addEventListener('copy', listener, false);
+    document.execCommand('copy');
+    document.removeEventListener('copy', listener, false);
 
     this.toastr.success('Role Enrolment URL is copied to clipboard.');
   }
 
   async remove(listType: string, roleDefinition: any) {
     // Make sure that user confirms the removal of this namespace
-    let isConfirmed = this.dialog.open(ConfirmationDialogComponent, {
+    const isConfirmed = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
       maxHeight: '195px',
       data: {
@@ -355,15 +355,15 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
     if (await isConfirmed) {
       // Get Removal Steps
-      let steps = await this.getRemovalSteps(listType, roleDefinition);
+      const steps = await this.getRemovalSteps(listType, roleDefinition);
 
       if (steps) {
         // Launch Remove Org / App Dialog
-        let isRemoved = this.dialog.open(RemoveOrgAppComponent, {
-          width: '600px',data:{
+        const isRemoved = this.dialog.open(RemoveOrgAppComponent, {
+          width: '600px', data: {
             namespace: roleDefinition.namespace,
-            listType: listType,
-            steps: steps
+            listType,
+            steps
           },
           maxWidth: '100%',
           disableClose: true
@@ -372,15 +372,13 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
         // Refresh the list after successful removal
         if (await isRemoved) {
           if (this.orgHierarchy.length) {
-            let currentOrg = this.orgHierarchy.pop();
+            const currentOrg = this.orgHierarchy.pop();
             if (this.dataSource.data.length === 1) {
               await this.viewSubOrgs(this.orgHierarchy.pop());
-            }
-            else {
+            } else {
               await this.viewSubOrgs(currentOrg);
             }
-          }
-          else {
+          } else {
             await this.getList();
           }
         }
@@ -401,13 +399,13 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed()
-        .pipe(takeUntil(this.subscription$))
-        .subscribe(async (res: any) => {
-          if (res) {
-            // Redirect to Application List
-            this.viewApps(ListType.ORG, parentOrg);
-          }
-        });
+      .pipe(takeUntil(this.subscription$))
+      .subscribe(async (res: any) => {
+        if (res) {
+          // Redirect to Application List
+          this.viewApps(ListType.ORG, parentOrg);
+        }
+      });
   }
 
   async newRole(listType: string, roleDefinition: any) {
@@ -416,7 +414,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
       data: {
         viewType: ViewType.NEW,
         namespace: roleDefinition.namespace,
-        listType: listType,
+        listType,
         owner: roleDefinition.owner
       },
       maxWidth: '100%',
@@ -424,13 +422,13 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed()
-        .pipe(takeUntil(this.subscription$))
-        .subscribe(async (res: any) => {
-          if (res) {
-            // Redirect to Role List
-            this.viewRoles(listType, roleDefinition);
-          }
-        });
+      .pipe(takeUntil(this.subscription$))
+      .subscribe(async (res: any) => {
+        if (res) {
+          // Redirect to Role List
+          this.viewRoles(listType, roleDefinition);
+        }
+      });
   }
 
   private async getRemovalSteps(listType: string, roleDefinition: any) {
@@ -452,12 +450,10 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
           info: 'Confirm removal in your safe wallet',
           next: async () => await call
         }];
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
       this.toastr.error(e, 'Delete ' + (this.listType === ListType.ORG ? 'Organization' : 'Application'));
-    }
-    finally {
+    } finally {
       this.loadingService.hide();
     }
   }
@@ -477,7 +473,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
         arr = arr[0].split(ENSNamespaceTypes.Roles);
         arr = arr[arr.length - 1].split(ENSNamespaceTypes.Application);
 
-        let org = arr[arr.length - 1];
+        const org = arr[arr.length - 1];
         return (org.toUpperCase().indexOf(this.filterForm.value.organization.toUpperCase()) >= 0);
       });
     }
@@ -526,39 +522,36 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed()
-        .pipe(takeUntil(this.subscription$))
-        .subscribe(async (res: any) => {
-          if (res) {
-            this._isSubOrgCreated = true;
+      .pipe(takeUntil(this.subscription$))
+      .subscribe(async (res: any) => {
+        if (res) {
+          this._isSubOrgCreated = true;
 
-            // Refresh Screen
-            const currentOrg = displayMode === this.DRILL_DOWN_SUBORG ? parentOrg : this.orgHierarchy.pop();
-            await this.viewSubOrgs(currentOrg, ALLOW_NO_SUBORG);
-          }
-        });
+          // Refresh Screen
+          const currentOrg = displayMode === this.DRILL_DOWN_SUBORG ? parentOrg : this.orgHierarchy.pop();
+          await this.viewSubOrgs(currentOrg, ALLOW_NO_SUBORG);
+        }
+      });
   }
 
   async viewSubOrgs(element: any, allowNoSubOrg?: boolean) {
     if (element && ((element.subOrgs && element.subOrgs.length) || allowNoSubOrg)) {
       this.loadingService.show();
       try {
-        let $getSubOrgs = await this.iamService.iam.getOrgHierarchy({
+        const $getSubOrgs = await this.iamService.iam.getOrgHierarchy({
           namespace: element.namespace
         });
 
         if ($getSubOrgs.subOrgs && $getSubOrgs.subOrgs.length) {
           this.dataSource.data = JSON.parse(JSON.stringify($getSubOrgs.subOrgs));
           this.orgHierarchy.push(element);
+        } else {
+          this.toastr.warning('Sub-Organization List is empty.', 'Sub-Organization');
         }
-        else {
-          this.toastr.warning('Sub-Organization List is empty.', 'Sub-Organization')
-        }
-      }
-      catch (e) {
+      } catch (e) {
         console.error(e);
         this.toastr.error('An error has occured while retrieving the list.', 'Sub-Organization');
-      }
-      finally {
+      } finally {
         this.loadingService.hide();
       }
     }
@@ -572,15 +565,13 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
         this._isSubOrgCreated = false;
         this.orgHierarchy.length = 0;
         await this.getList(this.defaultFilterOptions, true);
-      }
-      else {
+      } else {
         this.dataSource.data = JSON.parse(JSON.stringify(this.origDatasource));
         this.orgHierarchy.length = 0;
       }
-    }
-    else {
-      let element = this.orgHierarchy[idx];
-      this.orgHierarchy.length = idx
+    } else {
+      const element = this.orgHierarchy[idx];
+      this.orgHierarchy.length = idx;
       await this.viewSubOrgs(element);
     }
   }
@@ -592,8 +583,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
       let count = 0;
       if (element.subOrgs.length > 1) {
         retVal = 'Sub-Organizations \n';
-      }
-      else {
+      } else {
         retVal = 'Sub-Organization \n';
       }
 
@@ -602,7 +592,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
       }
 
       if (element.subOrgs.length > MAX_TOOLTIP_SUBORG_ITEMS) {
-        retVal += `\n\n ... +${ element.subOrgs.length - MAX_TOOLTIP_SUBORG_ITEMS } More`;
+        retVal += `\n\n ... +${element.subOrgs.length - MAX_TOOLTIP_SUBORG_ITEMS} More`;
       }
     }
 

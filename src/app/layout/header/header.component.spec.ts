@@ -20,16 +20,16 @@ xdescribe('HeaderComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [HeaderComponent],
       providers: [
-        { provide: UserIdleService, useValue: {} },
-        { provide: MenuService, useValue: {} },
-        { provide: IamService, useValue: {} },
-        { provide: Router, useValue: {} },
-        { provide: SwitchboardToastrService, useValue: {} },
-        { provide: NotificationService, useValue: {} },
-        { provide: UserblockService, useValue: {} },
-        { provide: SettingsService, useValue: {} },
-        { provide: MatDialog, useValue: {} },
-        { provide: DomSanitizer, useValue: {} },
+        {provide: UserIdleService, useValue: {}},
+        {provide: MenuService, useValue: {}},
+        {provide: IamService, useValue: {}},
+        {provide: Router, useValue: {}},
+        {provide: SwitchboardToastrService, useValue: {}},
+        {provide: NotificationService, useValue: {}},
+        {provide: UserblockService, useValue: {}},
+        {provide: SettingsService, useValue: {}},
+        {provide: MatDialog, useValue: {}},
+        {provide: DomSanitizer, useValue: {}},
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

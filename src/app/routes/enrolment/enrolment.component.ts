@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UrlParamService } from 'src/app/shared/services/url-param.service';
 import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 import { MatTabGroup } from '@angular/material/tabs';
-import {NotificationService} from '../../shared/services/notification.service';
+import { NotificationService } from '../../shared/services/notification.service';
 
 @Component({
   selector: 'app-enrolment',
@@ -12,7 +12,7 @@ import {NotificationService} from '../../shared/services/notification.service';
   styleUrls: ['./enrolment.component.scss']
 })
 export class EnrolmentComponent implements OnInit, AfterViewInit {
-  @ViewChild("enrolmentTabGroup") enrolmentTabGroup: MatTabGroup;
+  @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
   @ViewChild('issuerList') issuerList: EnrolmentListComponent;
   @ViewChild('enrolmentList') enrolmentList: EnrolmentListComponent;
 
@@ -62,7 +62,7 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
             this.initDefault();
           }
         } else if (queryParams.selectedTab) {
-          if (queryParams.selectedTab == 1) {
+          if (queryParams.selectedTab === 1) {
             this.initDefaultMyEnrolments();
           } else {
             this.initDefault();
@@ -136,7 +136,7 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
       const timeout$ = setTimeout(() => {
         this.enrolmentDropdown.setValue(value);
         this.enrolmentList.getList(this.enrolmentDropdown.value === 'rejected',
-            this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
+          this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
         clearTimeout(timeout$);
       }, 30);
     }

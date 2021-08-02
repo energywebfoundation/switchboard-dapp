@@ -7,6 +7,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IDialogData } from './select-asset-dialog.interface';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
+interface DataAsset extends Asset{
+  minifiedId: string;
+}
+
 @Component({
   selector: 'app-select-asset-dialog',
   templateUrl: './select-asset-dialog.component.html',
@@ -18,25 +22,24 @@ export class SelectAssetDialogComponent implements OnInit {
   displayedColumns: string[] = ['logo', 'name', 'id', 'actions'];
 
   constructor(
-      @Inject(MAT_DIALOG_DATA) private data: IDialogData,
-      public dialogRef: MatDialogRef<SelectAssetDialogComponent>,
-      private loadingService: LoadingService,
-      private iamService: IamService,
-      private toastr: SwitchboardToastrService) { }
+    @Inject(MAT_DIALOG_DATA) private data: IDialogData,
+    public dialogRef: MatDialogRef<SelectAssetDialogComponent>,
+    private loadingService: LoadingService,
+    private iamService: IamService,
+    private toastr: SwitchboardToastrService) {
+  }
 
   async ngOnInit(): Promise<void> {
     try {
       this.loadingService.show();
-      this.dataSource.data = (await this.iamService.iam.getOwnedAssets()).map((data: Asset) => {
-        data['minifiedId'] = `${data.id.substr(0, 15)}...${data.id.substr(data.id.length - 5)}`;
-        return { ...data, isSelected: this.data.assetDiD === data.id };
+      this.dataSource.data = (await this.iamService.iam.getOwnedAssets()).map((data: DataAsset ) => {
+        data.minifiedId = `${data.id.substr(0, 15)}...${data.id.substr(data.id.length - 5)}`;
+        return {...data, isSelected: this.data.assetDiD === data.id};
       });
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
       this.toastr.show('Asset list could not be retrieved at this time.', 'System Error');
-    }
-    finally {
+    } finally {
       this.loadingService.hide();
     }
   }

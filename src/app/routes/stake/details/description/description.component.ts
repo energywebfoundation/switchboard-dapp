@@ -10,7 +10,9 @@ export class DescriptionComponent implements OnInit {
   @Input() since: string;
   @Input() logo: string;
   @Input() description: string;
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

@@ -19,5 +19,5 @@ export interface RolesFields {
 }
 
 const FIELD_DATA: RolesFields[] = [
-  { type: 'Date', label: 'My Label', validation: 'maxLength:30' },
+  {type: 'Date', label: 'My Label', validation: 'maxLength:30'},
 ];

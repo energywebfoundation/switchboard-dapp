@@ -24,35 +24,35 @@ import { CardComponent } from './card/card.component';
 
 
 const routes: Routes = [
-    { path: '', component: DashboardComponent }
+  {path: '', component: DashboardComponent}
 ];
 
 
-
 @NgModule({
-    imports: [
-        SharedModule,
-        RouterModule.forChild(routes),
-        MatTabsModule,
-        MatButtonModule,
-        MatPaginatorModule,
-        MatSelectModule,
-        MatIconModule,
-        MatTooltipModule,
-        MatFormFieldModule,
-        MatCheckboxModule,
-        MatStepperModule,
-        MatInputModule,
-        MatTableModule,
-        MatDialogModule,
-        MatAutocompleteModule,
-        MatDatepickerModule,
-        WidgetsModule,
-        NgxSpinnerModule,
-        ProfileModule
-    ],
-    entryComponents: [],
+  imports: [
+    SharedModule,
+    RouterModule.forChild(routes),
+    MatTabsModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    MatSelectModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatStepperModule,
+    MatInputModule,
+    MatTableModule,
+    MatDialogModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    WidgetsModule,
+    NgxSpinnerModule,
+    ProfileModule
+  ],
+  entryComponents: [],
 
-    declarations: [DashboardComponent, UserInfoComponent, CardComponent]
+  declarations: [DashboardComponent, UserInfoComponent, CardComponent]
 })
-export class DashboardModule { }
+export class DashboardModule {
+}

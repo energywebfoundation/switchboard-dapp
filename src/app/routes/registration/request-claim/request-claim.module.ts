@@ -10,7 +10,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 
 const routes: Routes = [
-  { path: '', component: RequestClaimComponent }
+  {path: '', component: RequestClaimComponent}
 ];
 
 @NgModule({
@@ -27,4 +27,5 @@ const routes: Routes = [
     NgxSpinnerModule
   ]
 })
-export class RequestClaimModule { }
+export class RequestClaimModule {
+}

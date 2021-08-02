@@ -15,9 +15,9 @@ describe('VerificationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: IamService, useValue: { iam: iamSpy } },
-        { provide: LoadingService, useValue: loadingServiceSpy },
-        { provide: SwitchboardToastrService, useValue: toastrSpy }
+        {provide: IamService, useValue: {iam: iamSpy}},
+        {provide: LoadingService, useValue: loadingServiceSpy},
+        {provide: SwitchboardToastrService, useValue: toastrSpy}
       ]
     });
     service = TestBed.inject(VerificationService);

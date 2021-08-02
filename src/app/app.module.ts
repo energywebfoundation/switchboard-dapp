@@ -79,7 +79,7 @@ if (environment.SENTRY_DNS) {
       enabled: environment.production,
     }),
     StoreModule.forRoot(rootReducer, {}),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
     EffectsModule.forRoot([UserEffects, StakeEffects, AuthEffects]),
   ],
   providers,

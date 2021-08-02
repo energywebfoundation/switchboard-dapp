@@ -8,9 +8,9 @@ xdescribe('SmartSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SmartSearchComponent ]
+      declarations: [SmartSearchComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

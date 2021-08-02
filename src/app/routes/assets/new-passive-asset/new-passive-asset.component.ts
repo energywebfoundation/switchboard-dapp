@@ -15,9 +15,10 @@ export class NewPassiveAssetComponent implements OnInit {
   private TOASTR_HEADER = 'Register Single Asset';
 
   constructor(public dialogRef: MatDialogRef<NewPassiveAssetComponent>,
-    private loadingService: LoadingService,
-    private toastr: SwitchboardToastrService,
-    private iamService: IamService) { }
+              private loadingService: LoadingService,
+              private toastr: SwitchboardToastrService,
+              private iamService: IamService) {
+  }
 
   ngOnInit(): void {
 
@@ -27,16 +28,14 @@ export class NewPassiveAssetComponent implements OnInit {
     let success = false;
     try {
       this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
-      let assetAddress = await this.iamService.iam.registerAsset();
+      const assetAddress = await this.iamService.iam.registerAsset();
       this.toastr.success('New asset is successfully registered.', this.TOASTR_HEADER);
       success = true;
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
-      this.toastr.error(e.message || 'Could not register asset at this time. Please contact system administrator', 
+      this.toastr.error(e.message || 'Could not register asset at this time. Please contact system administrator',
         this.TOASTR_HEADER);
-    }
-    finally {
+    } finally {
       this.loadingService.hide();
       this.closeDialog(success);
     }

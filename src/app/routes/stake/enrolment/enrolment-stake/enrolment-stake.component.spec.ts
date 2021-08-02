@@ -8,9 +8,9 @@ describe('EnrolmentStakeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EnrolmentStakeComponent ]
+      declarations: [EnrolmentStakeComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

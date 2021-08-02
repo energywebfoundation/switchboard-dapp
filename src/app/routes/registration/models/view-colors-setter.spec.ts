@@ -19,11 +19,11 @@ describe('ViewColorsSetter', () => {
 
   it('should set background color to background and list', () => {
     const color = 'fafafa';
-    const viewColorsSetter = new ViewColorsSetter({ bgcolor: color });
+    const viewColorsSetter = new ViewColorsSetter({bgcolor: color});
     viewColorsSetter.applyTo(subject);
 
-    expect(subject.bgColor).toEqual(jasmine.objectContaining({ 'background-color': `#${color}` }));
-    expect(subject.listColor).toEqual(jasmine.objectContaining({ 'background-color': `#${color}` }));
+    expect(subject.bgColor).toEqual(jasmine.objectContaining({'background-color': `#${color}`}));
+    expect(subject.listColor).toEqual(jasmine.objectContaining({'background-color': `#${color}`}));
     expect(subject.txtboxColor).toEqual({});
   });
 
@@ -32,8 +32,8 @@ describe('ViewColorsSetter', () => {
     const viewColorsSetter = new ViewColorsSetter({});
     viewColorsSetter.applyTo(subject);
 
-    expect(subject.txtColor).toEqual(jasmine.objectContaining({ color: `#${color}` }));
-    expect(subject.listColor).toEqual(jasmine.objectContaining({ color: `#${color}` }));
-    expect(subject.btnColor).toEqual(jasmine.objectContaining({ color: `#${color}` }));
+    expect(subject.txtColor).toEqual(jasmine.objectContaining({color: `#${color}`}));
+    expect(subject.listColor).toEqual(jasmine.objectContaining({color: `#${color}`}));
+    expect(subject.btnColor).toEqual(jasmine.objectContaining({color: `#${color}`}));
   });
 });

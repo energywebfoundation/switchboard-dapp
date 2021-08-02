@@ -10,38 +10,39 @@ export class StakeListComponent implements OnInit {
 
   mockData = [
     {
-      organization:"Energy Web Foundation",
-      organizationImage:"ew-flex-single-logo.png",
-      providerDate:"April, 2017",
-      stakeAmount:"2222.2222",
-      stakeRating:"97",
-      activeServices:"1",
-      numberOfNodes:"1",
-      isAcceptingPatrons:true
+      organization: 'Energy Web Foundation',
+      organizationImage: 'ew-flex-single-logo.png',
+      providerDate: 'April, 2017',
+      stakeAmount: '2222.2222',
+      stakeRating: '97',
+      activeServices: '1',
+      numberOfNodes: '1',
+      isAcceptingPatrons: true
     },
     {
-      organization:"Startup Co",
-      organizationImage:"startup-co-single.svg",
-      providerDate:"Sept, 2020",
-      stakeAmount:"23.444",
-      stakeRating:"50",
-      activeServices:"1",
-      numberOfNodes:"1",
-      isAcceptingPatrons:true
+      organization: 'Startup Co',
+      organizationImage: 'startup-co-single.svg',
+      providerDate: 'Sept, 2020',
+      stakeAmount: '23.444',
+      stakeRating: '50',
+      activeServices: '1',
+      numberOfNodes: '1',
+      isAcceptingPatrons: true
     },
     {
-      organization:"Startup Co",
-      organizationImage:"startup-co-single2.svg",
-      providerDate:"Sept, 2020",
-      stakeAmount:"32.434",
-      stakeRating:"75",
-      activeServices:"0",
-      numberOfNodes:"2",
-      isAcceptingPatrons:true
+      organization: 'Startup Co',
+      organizationImage: 'startup-co-single2.svg',
+      providerDate: 'Sept, 2020',
+      stakeAmount: '32.434',
+      stakeRating: '75',
+      activeServices: '0',
+      numberOfNodes: '2',
+      isAcceptingPatrons: true
     }
-  ]
+  ];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+  }
 
   ngOnInit(): void {
   }

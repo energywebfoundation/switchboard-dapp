@@ -7,20 +7,17 @@ import { MenuService } from './menu/menu.service';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 
 @NgModule({
-    imports: [
-    ],
-    providers: [
-        SettingsService,
-        ThemesService,
-        MenuService
-    ],
-    declarations: [
-    ],
-    exports: [
-    ]
+  imports: [],
+  providers: [
+    SettingsService,
+    ThemesService,
+    MenuService
+  ],
+  declarations: [],
+  exports: []
 })
 export class CoreModule {
-    constructor( @Optional() @SkipSelf() parentModule: CoreModule) {
-        throwIfAlreadyLoaded(parentModule, 'CoreModule');
-    }
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
+    throwIfAlreadyLoaded(parentModule, 'CoreModule');
+  }
 }

@@ -28,5 +28,6 @@ export class FinalReviewComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  acceptContract() {}
+  acceptContract() {
+  }
 }

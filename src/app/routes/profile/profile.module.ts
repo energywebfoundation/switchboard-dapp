@@ -11,17 +11,18 @@ import { LogOutComponent } from './logout/logout.component';
 const routes: Routes = [];
 
 @NgModule({
-    imports: [
-        SharedModule,
-        RouterModule.forChild(routes),
-        RouterModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatButtonModule,
-        MatDividerModule,
-    ],
-    declarations: [
-        LogOutComponent
-    ]
+  imports: [
+    SharedModule,
+    RouterModule.forChild(routes),
+    RouterModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatDividerModule,
+  ],
+  declarations: [
+    LogOutComponent
+  ]
 })
-export class ProfileModule { }
+export class ProfileModule {
+}

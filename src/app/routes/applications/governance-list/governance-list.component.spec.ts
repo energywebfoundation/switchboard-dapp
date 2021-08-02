@@ -6,12 +6,12 @@ xdescribe('GovernanceListComponent', () => {
   let component: GovernanceListComponent;
   let fixture: ComponentFixture<GovernanceListComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ GovernanceListComponent ]
+      declarations: [GovernanceListComponent]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GovernanceListComponent);

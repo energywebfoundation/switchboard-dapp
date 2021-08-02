@@ -7,13 +7,13 @@ describe('ViewOrganizationComponent', () => {
   let component: ViewOrganizationComponent;
   let fixture: ComponentFixture<ViewOrganizationComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewOrganizationComponent ],
+      declarations: [ViewOrganizationComponent],
       schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewOrganizationComponent);

@@ -1,209 +1,206 @@
 .staking-container {
-    background-color: #130E21;
-    background-image: url("../../../../assets/img/staking/staking-gradient-background.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  background-color: #130E21;
+  background-image: url("../../../../assets/img/staking/staking-gradient-background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 
-    &::before {
-        content: " ";
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        position: absolute;
-        background-image: url("../../../../assets/img/staking/staking-lines-background.png");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-    }
+  &::before {
+    content: " ";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background-image: url("../../../../assets/img/staking/staking-lines-background.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
 }
 
 .content-wrapper {
-    margin-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 h2 {
-    font-family: Rajdhani, sans-serif;
-    font-size: 46px !important;
-    font-weight: 600 !important;
+  font-family: Rajdhani, sans-serif;
+  font-size: 46px !important;
+  font-weight: 600 !important;
 
-    @media screen and (max-width: 800px) {
-        font-size: 38px !important;
-        margin-top: 8px;
-    }
+  @media screen and (max-width: 800px) {
+    font-size: 38px !important;
+    margin-top: 8px;
+  }
 }
 
 h3 {
-    font-family: Rajdhani, sans-serif;
-    font-weight: 600 !important;
-    letter-spacing: 0.25px !important;
-    font-size: 34px !important;
+  font-family: Rajdhani, sans-serif;
+  font-weight: 600 !important;
+  letter-spacing: 0.25px !important;
+  font-size: 34px !important;
 
-    .staking-currency {
-        font-size: 16px !important;
-        color: #A6A5AC;
-    }
+  .staking-currency {
+    font-size: 16px !important;
+    color: #A6A5AC;
+  }
 }
 
 h5 {
-    font-family: Rajdhani, sans-serif;
-    letter-spacing: 1.25px !important;
-    font-weight: 700 !important;
+  font-family: Rajdhani, sans-serif;
+  letter-spacing: 1.25px !important;
+  font-weight: 700 !important;
 }
 
 p {
-    color: #A6A5AC;
-    line-height: 24px;
+  color: #A6A5AC;
+  line-height: 24px;
 }
 
 a {
-    color: #A566FF;
-    letter-spacing: 1.25px;
+  color: #A566FF;
+  letter-spacing: 1.25px;
 
-    &:hover {
-        opacity: 0.7;
-    }
+  &:hover {
+    opacity: 0.7;
+  }
 }
 
 ::ng-deep {
-    .mat-progress-bar {
-        height: 8px !important;
-    }
+  .mat-progress-bar {
+    height: 8px !important;
+  }
 
-    .mat-progress-bar-fill::after {
-        background: linear-gradient(272.06deg, #25E8E8 0.21%, #6268F9 49.1%, #9B54FF 98.25%);
-    }
+  .mat-progress-bar-fill::after {
+    background: linear-gradient(272.06deg, #25E8E8 0.21%, #6268F9 49.1%, #9B54FF 98.25%);
+  }
 
-    .mat-progress-bar .mat-progress-bar-element, .mat-progress-bar .mat-progress-bar-fill::after {
-        border-radius: 100px;
-    }
+  .mat-progress-bar .mat-progress-bar-element, .mat-progress-bar .mat-progress-bar-fill::after {
+    border-radius: 100px;
+  }
 
-    .mat-progress-bar-buffer {
-        background-color: #000000;
-        border-radius: 100px;
-    }
+  .mat-progress-bar-buffer {
+    background-color: #000000;
+    border-radius: 100px;
+  }
 }
 
 .description {
-    position: relative;
-    top: -50px;
+  position: relative;
+  top: -50px;
 }
 
 .staking-widget-xs-label {
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .staking-widget-sm-label {
-    font-weight: 400;
-    font-size: 14px;
-    letter-spacing: 0.25px;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.25px;
 }
 
 .staking-widget-xl-label {
-    font-family: Rajdhani, sans-serif;
-    font-size: 24px;
+  font-family: Rajdhani, sans-serif;
+  font-size: 24px;
 }
 
 .staking-card {
-    background: linear-gradient(337deg, #231F32 2%, #050608 98%);
-    border-radius: 64px;
-    height: auto;
+  background: linear-gradient(337deg, #231F32 2%, #050608 98%);
+  border-radius: 64px;
+  height: auto;
 
+  &::before {
+    content: " ";
+    width: 800px;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    background-image: url("../../../../assets/img/staking/staking-banner.png");
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-size: contain;
+  }
+
+  @media screen and (max-width: 1200px) {
     &::before {
-        content: " ";
-        width: 800px;
-        height: 100%;
-        bottom: 0;
-        right: 0;
-        position: absolute;
-        background-image: url("../../../../assets/img/staking/staking-banner.png");
-        background-repeat: no-repeat;
-        background-position: bottom right;
-        background-size: contain;
+      width: 700px;
     }
+  }
 
-    @media screen and (max-width: 1200px) {
-        &::before {
-            width: 700px;
-        }
+  @media screen and (max-width: 800px) {
+    &::before {
+      width: 100%;
+      max-width: 380px;
     }
-
-    @media screen and (max-width: 800px) {
-        &::before {
-            width: 100%;
-            max-width: 380px;
-        }
-    }
+  }
 }
 
 .staking-terms {
-    background: rgba(13, 10, 25, 0.7);
-    border-radius: 32px;
+  background: rgba(13, 10, 25, 0.7);
+  border-radius: 32px;
 }
 
 .staking-widget {
-    position: relative;
-    border: 1px solid transparent;
-    border-radius: 32px;
-    background: linear-gradient(320.92deg, rgba(37, 232, 232, 0.1) -1.22%, rgba(98, 104, 249, 0.1) 47.93%, rgba(155, 84, 255, 0.1) 95.01%);
-    background-clip: padding-box;
-    padding: 10px;
-    backdrop-filter: blur(4px);
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: 32px;
+  background: linear-gradient(320.92deg, rgba(37, 232, 232, 0.1) -1.22%, rgba(98, 104, 249, 0.1) 47.93%, rgba(155, 84, 255, 0.1) 95.01%);
+  background-clip: padding-box;
+  padding: 10px;
+  backdrop-filter: blur(4px);
 
-    &::before {
-        content:"";
-        position:absolute;
-        top:0;
-        left:0;
-        right:0;
-        bottom:0;
-        border-radius: 32px;
-        padding: 1px;
-        background: linear-gradient(314.24deg, #25E8E8 1.72%, rgba(83, 134, 245, 0.16) 33.86%, rgba(98, 104, 249, 0.16) 62.17%, #9B54FF 97.07%);
-        mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        -webkit-mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        mask-composite: exclude;
-        -webkit-mask-composite: destination-out;
-        z-index: -1;
-    }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 32px;
+    padding: 1px;
+    background: linear-gradient(314.24deg, #25E8E8 1.72%, rgba(83, 134, 245, 0.16) 33.86%, rgba(98, 104, 249, 0.16) 62.17%, #9B54FF 97.07%);
+    mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: destination-out;
+    z-index: -1;
+  }
 }
 
 .widget-main {
-    min-height: 502px !important;
+  min-height: 502px !important;
 
-    @media screen and (max-width: 800px) {
-        min-height: 500px !important;
-    }
+  @media screen and (max-width: 800px) {
+    min-height: 500px !important;
+  }
 }
 
 .widget-inner {
-    max-width: 100%;
+  max-width: 100%;
 
-    @media screen and (max-width: 1024px) {
-        min-height: 132px;
-    }
+  @media screen and (max-width: 1024px) {
+    min-height: 132px;
+  }
 
-    @media screen and (max-width: 800px) {
-        width: 100%;
-    }
+  @media screen and (max-width: 800px) {
+    width: 100%;
+  }
 }
 
 #arrow {
-    border-right:2px solid black;
-    border-bottom:2px solid black;
-    width:10px;
-    height:10px;
-    transform: rotate(-45deg);
-    margin-top:40px;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  width: 10px;
+  height: 10px;
+  transform: rotate(-45deg);
+  margin-top: 40px;
 }
-
 
 
 ul li {
@@ -215,104 +212,105 @@ ul {
   list-style: none;
 }
 
-ul li:before{
-    content: '';
-    position: absolute;
-    border-right:2px solid #33CBCB;
-    border-bottom:2px solid #33CBCB;
-    width:10px;
-    height:10px;
-    top: calc(5% - -10px);
-    left: -23px;
-    transform: translateY(-50%) rotate(-45deg);
- }
- 
+ul li:before {
+  content: '';
+  position: absolute;
+  border-right: 2px solid #33CBCB;
+  border-bottom: 2px solid #33CBCB;
+  width: 10px;
+  height: 10px;
+  top: calc(5% - -10px);
+  left: -23px;
+  transform: translateY(-50%) rotate(-45deg);
+}
+
 li {
-    color: #FFF;
-    font-size: 16px;
-    letter-spacing: 0.30px;
-    left: 17px;
-    padding-left: 3px;
-    font-weight: 400;
+  color: #FFF;
+  font-size: 16px;
+  letter-spacing: 0.30px;
+  left: 17px;
+  padding-left: 3px;
+  font-weight: 400;
 }
 
 ::ng-deep {
-    .swal-text {
-        text-align: center;
-    }
-    .mat-tooltip {
-        font-size: 12px;
-        padding: 16px 24px !important;
-        line-height: 16px !important;
-        color: #A6A5AC !important;
-        background: #13111B;
-        border-radius: 26px !important;
-        box-shadow: 0px 0px 4px #A2A1FF, 0px 4px 20px rgba(193, 192, 255, 0.25);
-        width: 100%;
-    }
+  .swal-text {
+    text-align: center;
+  }
+
+  .mat-tooltip {
+    font-size: 12px;
+    padding: 16px 24px !important;
+    line-height: 16px !important;
+    color: #A6A5AC !important;
+    background: #13111B;
+    border-radius: 26px !important;
+    box-shadow: 0px 0px 4px #A2A1FF, 0px 4px 20px rgba(193, 192, 255, 0.25);
+    width: 100%;
+  }
 }
 
 .connect-btn {
-    font-family: Rajdhani, sans-serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 16px !important;
-    border-radius: 16px;
-    letter-spacing: 1.25px;
-    background-color: #A566FF;
-    padding: 0 24px !important;
-    height: 42px;
-    width: auto;
-  
-    &.mat-raised-button[disabled] {
-      color: #AF76FF !important;
-      background-color: rgb(165 102 255 / 20%) !important;
-    }
-  
-    &:hover {
-        background-color: #ad74ff;   
-    }
+  font-family: Rajdhani, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px !important;
+  border-radius: 16px;
+  letter-spacing: 1.25px;
+  background-color: #A566FF;
+  padding: 0 24px !important;
+  height: 42px;
+  width: auto;
+
+  &.mat-raised-button[disabled] {
+    color: #AF76FF !important;
+    background-color: rgb(165 102 255 / 20%) !important;
   }
 
-.staking-header {
-    height: 56px;
-    background-color: transparent;
-    width: 100%;
+  &:hover {
+    background-color: #ad74ff;
+  }
+}
 
-    .header-wrapper {
-        padding: 15px;
-        width: 100%;
-        max-width: 1402px;
-        margin-bottom: 100px;
-        margin-left: auto;
-        margin-right: auto;
-    }
+.staking-header {
+  height: 56px;
+  background-color: transparent;
+  width: 100%;
+
+  .header-wrapper {
+    padding: 15px;
+    width: 100%;
+    max-width: 1402px;
+    margin-bottom: 100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .staking-footer {
-    height: 56px;
-    background-color: #130E21;
-    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.25);
+  height: 56px;
+  background-color: #130E21;
+  box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.25);
+  width: 100%;
+
+  .footer-text {
+    font-family: Rajdhani, sans-serif;
+    color: #A6A5AC;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .footer-wrapper {
+    padding: 15px;
     width: 100%;
+    max-width: 1402px;
+    margin-bottom: 100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-    .footer-text {
-        font-family: Rajdhani, sans-serif;
-        color: #A6A5AC;
-        font-weight: 600;
-        font-size: 14px;
-    }
-
-    .footer-wrapper {
-        padding: 15px;
-        width: 100%;
-        max-width: 1402px;
-        margin-bottom: 100px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    @media screen and (max-width: 1200px) {
-        height: auto;
-    }
+  @media screen and (max-width: 1200px) {
+    height: auto;
+  }
 }

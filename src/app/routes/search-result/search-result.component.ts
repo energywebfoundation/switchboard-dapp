@@ -43,7 +43,8 @@ export class SearchResultComponent implements OnInit {
     private loadingService: LoadingService,
     private fb: FormBuilder,
     private iamService: IamService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this._initList();
@@ -132,7 +133,7 @@ export class SearchResultComponent implements OnInit {
 
     try {
       if (keyword) {
-        let word = undefined;
+        let word;
         if (!keyword.trim && keyword.name) {
           word = keyword.name;
         } else {
@@ -147,11 +148,9 @@ export class SearchResultComponent implements OnInit {
           });
         }
       }
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
-    }
-    finally {
+    } finally {
       this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.DOWN);
     }
 
@@ -181,7 +180,7 @@ export class SearchResultComponent implements OnInit {
 
     // Scroll Up
     el.scrollIntoView(true);
-    let body = document.getElementsByTagName('app-header');
+    const body = document.getElementsByTagName('app-header');
     if (body.length) {
       body[0].scrollTop -= 78;
     }

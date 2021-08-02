@@ -8,14 +8,14 @@ describe('ViewRoleComponent', () => {
   let component: ViewRoleComponent;
   let fixture: ComponentFixture<ViewRoleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ViewRoleComponent],
       imports: [MatTableModule],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewRoleComponent);

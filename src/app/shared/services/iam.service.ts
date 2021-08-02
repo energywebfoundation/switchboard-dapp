@@ -123,7 +123,7 @@ export class IamService {
           this._iam.on('disconnected', () => {
             this._displayAccountAndNetworkChanges(EVENT_DISCONNECTED, redirectOnAccountChange);
           });
-          //TODO: remove it when login method will be fully handled by store and call it after login.
+          // TODO: remove it when login method will be fully handled by store and call it after login.
           this.store.dispatch(StakeActions.initStakingPool());
           retVal = true;
         }
@@ -322,7 +322,7 @@ export class IamService {
 
   isValidEthAddress(ethAddressCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
-    let ethAddress = ethAddressCtrl.value;
+    const ethAddress = ethAddressCtrl.value;
 
     if (ethAddress && !RegExp(ethAddrPattern).test(ethAddress.trim())) {
       retVal = {invalidEthAddress: true};
@@ -333,7 +333,7 @@ export class IamService {
 
   isValidDid(didCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
-    let did = didCtrl.value;
+    const did = didCtrl.value;
 
     if (did && !RegExp(DIDPattern).test(did.trim())) {
       retVal = {invalidDid: true};
@@ -349,7 +349,7 @@ export class IamService {
    */
   isValidJsonFormat(jsonFormatCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
-    let jsonStr = jsonFormatCtrl.value;
+    const jsonStr = jsonFormatCtrl.value;
 
     if (jsonStr && jsonStr.trim()) {
       try {

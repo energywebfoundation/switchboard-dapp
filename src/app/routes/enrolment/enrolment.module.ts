@@ -17,7 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 
 const routes: Routes = [
-  { path: '', component: EnrolmentComponent }
+  {path: '', component: EnrolmentComponent}
 ];
 
 @NgModule({
@@ -39,4 +39,5 @@ const routes: Routes = [
   ],
   entryComponents: [ViewRequestsComponent, ViewRoleComponent]
 })
-export class EnrolmentModule { }
+export class EnrolmentModule {
+}

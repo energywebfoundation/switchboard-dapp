@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ClaimData, ENSNamespaceTypes } from 'iam-client-lib';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { CancelButton } from 'src/app/layout/loading/loading.component';
 import { IamService } from 'src/app/shared/services/iam.service';
@@ -11,7 +11,7 @@ import { ViewRequestsComponent } from '../view-requests/view-requests.component'
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import {FormControl} from "@angular/forms";
+import { FormControl } from '@angular/forms';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
 export const EnrolmentListType = {
@@ -109,17 +109,17 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       if (this.listType === EnrolmentListType.ASSET) {
         list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getClaimsBySubject({
           did: this.subject,
-          isAccepted: isAccepted
+          isAccepted
         }));
       } else if (this.listType === EnrolmentListType.ISSUER) {
         list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getClaimsByIssuer({
           did: this.iamService.iam.getDid(),
-          isAccepted: isAccepted
+          isAccepted
         }));
       } else {
         list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getClaimsByRequester({
           did: this.iamService.iam.getDid(),
-          isAccepted: isAccepted
+          isAccepted
         }));
       }
 
@@ -228,7 +228,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   private async appendDidDocSyncStatus(list: any[]) {
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    const did = this.listType === EnrolmentListType.ASSET ? { did: this.subject } : undefined;
+    const did = this.listType === EnrolmentListType.ASSET ? {did: this.subject} : undefined;
     const claims: ClaimData[] = (await this.iamService.iam.getUserClaims(did))
       .filter((item: ClaimData) => {
         if (item && item.claimType) {
@@ -281,14 +281,14 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
 
     this.namespaceFilterControl.valueChanges
-        .pipe(
-            distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
-            takeUntil(this._subscription$)
-        )
-        .subscribe(filterValue => this._updateList(filterValue));
+      .pipe(
+        distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
+        takeUntil(this._subscription$)
+      )
+      .subscribe(filterValue => this._updateList(filterValue));
   }
 
-  private _updateList(value): void{
+  private _updateList(value): void {
     if (value) {
       this.dataSource.data = this._shadowList.filter((item) => item.namespace.includes(value));
     } else {

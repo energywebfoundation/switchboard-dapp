@@ -1,138 +1,138 @@
 <div class="staking-container" *ngIf="(details$ | async) as details">
-    <div class="staking-header">
-        <div class="header-wrapper d-flex flex-grow-1 justify-content-end">
-            <ng-container *ngIf="(loggedIn$ | async)">
-                <button mat-raised-button class="connect-btn color-white text-uppercase mr-2"
-                        (click)="logOut()">Disconnect Wallet
-                </button>
-            </ng-container>
-        </div>
+  <div class="staking-header">
+    <div class="header-wrapper d-flex flex-grow-1 justify-content-end">
+      <ng-container *ngIf="(loggedIn$ | async)">
+        <button mat-raised-button class="connect-btn color-white text-uppercase mr-2"
+                (click)="logOut()">Disconnect Wallet
+        </button>
+      </ng-container>
     </div>
-    <div class="content-wrapper">
-        <app-loading></app-loading>
+  </div>
+  <div class="content-wrapper">
+    <app-loading></app-loading>
+    <div class="row">
+      <div class="col-md-12 col-lg-8 col-xl-9 mb-2 mb-md-0 mb-lg-0">
+        <div class="staking-card widget-main row p-3 p-md-5 pt-md-4 m-1 m-md-0">
+          <div class="col-md-12">
+            <div class="d-flex flex-row align-items-center">
+              <img [src]="details.logoUrl" width="61px" height="61px">
+              <div class="d-flex flex-column color-white ml-3 pt-3">
+                <h5 class="mb-0 color-primary letter-spacing text-uppercase">Staking</h5>
+                <h2>{{details.orgName}}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-8 description">
+            <p>
+              {{details.description}}
+            </p>
+            <a *ngIf="details?.websiteUrl" [href]="details?.websiteUrl" target="_blank" class="mx-1">READ
+              MORE</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-4 col-xl-3 mt-2 mt-lg-0">
         <div class="row">
-            <div class="col-md-12 col-lg-8 col-xl-9 mb-2 mb-md-0 mb-lg-0">
-                <div class="staking-card widget-main row p-3 p-md-5 pt-md-4 m-1 m-md-0">
-                    <div class="col-md-12">
-                        <div class="d-flex flex-row align-items-center">
-                            <img [src]="details.logoUrl" width="61px" height="61px">
-                            <div class="d-flex flex-column color-white ml-3 pt-3">
-                                <h5 class="mb-0 color-primary letter-spacing text-uppercase">Staking</h5>
-                                <h2>{{details.orgName}}</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xl-8 description">
-                        <p>
-                            {{details.description}}
-                        </p>
-                        <a *ngIf="details?.websiteUrl" [href]="details?.websiteUrl" target="_blank" class="mx-1">READ
-                            MORE</a>
-                    </div>
-                </div>
+          <div class="col-md-6 col-lg-12 my-2">
+            <div class="staking-widget widget-inner px-4 py-4">
+              <div class="staking-widget-xs-label color-white mb-2">Your account balance</div>
+              <h3 class="mb-0 color-white">
+                <ng-container *ngIf="balance$ | async as balance">{{balance | lastDigits}}
+                </ng-container>
+                <span class="staking-currency">VT</span>
+              </h3>
             </div>
-            <div class="col-md-12 col-lg-4 col-xl-3 mt-2 mt-lg-0">
-                <div class="row">
-                    <div class="col-md-6 col-lg-12 my-2">
-                        <div class="staking-widget widget-inner px-4 py-4">
-                            <div class="staking-widget-xs-label color-white mb-2">Your account balance</div>
-                            <h3 class="mb-0 color-white">
-                                <ng-container *ngIf="balance$ | async as balance">{{balance | lastDigits}}
-                                </ng-container>
-                                <span class="staking-currency">VT</span>
-                            </h3>
-                        </div>
+          </div>
+          <div class="col-md-6 col-lg-12 my-2">
+            <div class="staking-widget p-4">
+              <ng-container *ngIf="(performance$ | async) as performance">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex flex-column" matTooltipPosition="below"
+                       matTooltip="Recent performance of the Provider, based on the performance of the nodes and any events of VT salshed.">
+                    <div class="staking-widget-xl-label color-white">
+                      Performance
                     </div>
-                    <div class="col-md-6 col-lg-12 my-2">
-                        <div class="staking-widget p-4">
-                            <ng-container *ngIf="(performance$ | async) as performance">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="d-flex flex-column" matTooltipPosition="below"
-                                         matTooltip="Recent performance of the Provider, based on the performance of the nodes and any events of VT salshed.">
-                                        <div class="staking-widget-xl-label color-white">
-                                            Performance
-                                        </div>
-                                        <div class="staking-widget-sm-label color-white">Excellent</div>
-                                    </div>
-                                    <h3 class="mb-0 color-white">{{performance}}%</h3>
-                                </div>
-                                <div class="mt-3">
-                                    <mat-progress-bar mode="determinate" [value]="performance"></mat-progress-bar>
-                                </div>
-                            </ng-container>
-                        </div>
-                    </div>
-                    <div class="col-md-12 my-2">
-                        <div class="staking-widget py-3 px-4">
-                            <div class="d-flex flex-column mt-2">
-                                <div class="staking-widget-xl-label color-white" matTooltip="You will not be able to access the staked VT until they are returned to you.
+                    <div class="staking-widget-sm-label color-white">Excellent</div>
+                  </div>
+                  <h3 class="mb-0 color-white">{{performance}}%</h3>
+                </div>
+                <div class="mt-3">
+                  <mat-progress-bar mode="determinate" [value]="performance"></mat-progress-bar>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <div class="col-md-12 my-2">
+            <div class="staking-widget py-3 px-4">
+              <div class="d-flex flex-column mt-2">
+                <div class="staking-widget-xl-label color-white" matTooltip="You will not be able to access the staked VT until they are returned to you.
 The stake with reward will be returned to the same address from which the stake was received."
-                                     matTooltipPosition="below">Annual Reward
-                                </div>
-                                <div class="staking-widget-sm-label color-white"
-                                     matTooltip="0.0270% per day yields 10.355% per year when compounded daily or 9.855% per year not compounded."
-                                     matTooltipPosition="below">
-                                    Estimated daily reward 0.03%
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center my-3">
-                                <img src="../../../../assets/img/staking/annual-reward-image.png" width="82px"
-                                     height="88px">
-                                <h3 class="mb-0 color-white">{{annualReward$ | async}}%</h3>
-                            </div>
-                        </div>
-                    </div>
+                     matTooltipPosition="below">Annual Reward
                 </div>
-            </div>
-            <div class="col-xl-8 mt-2 mt-xl-4">
-                <div class="row">
-                    <div class="col-md-12 mt-0 mt-md-0 mb-xl-3">
-                        <app-stake></app-stake>
-                    </div>
+                <div class="staking-widget-sm-label color-white"
+                     matTooltip="0.0270% per day yields 10.355% per year when compounded daily or 9.855% per year not compounded."
+                     matTooltipPosition="below">
+                  Estimated daily reward 0.03%
                 </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center my-3">
+                <img src="../../../../assets/img/staking/annual-reward-image.png" width="82px"
+                     height="88px">
+                <h3 class="mb-0 color-white">{{annualReward$ | async}}%</h3>
+              </div>
             </div>
-            <div class="col-xl-4 mt-3 mt-md-4">
-                <div class="staking-terms p-4">
-                    <div class="d-flex flex-row align-items-center ml-0 ml-md-2 mt-2">
-                        <img src="../../../../assets/img/staking/terms-condition-image.png" width="65" height="64">
-                        <div class="staking-widget-xl-label color-white ml-0 ml-md-2">Terms and Conditions</div>
-                    </div>
-                    <div>
-                        <ul class="staking-list d-flex flex-column mt-4 mr-3 pl-2">
-                            <li>Daily reward: 0.0270% (yields 10.355% per year when compounded daily or 9.855% per
-                                year
-                                not compounded)
-                            </li>
-                            <li>Rewards paid daily on tokens staked for 24h continuously</li>
-                            <li>Stake can be withdrawn at any time</li>
-                            <li>Daily rewards will be added to the stake. They can earn interest, but can only be
-                                withdrawn as part of the stake ("unstaked")
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-    </div>
-    <div class="staking-footer">
-        <div class="footer-wrapper d-flex flex-column flex-md-row">
-            <div class="d-flex align-items-center justify-content-center justify-content-md-start">
-                <a href="https://www.energyweb.org/" target="_blank" class="mx-3 mr-md-4">
-                    <img src="../../../../assets/img/staking/ew-icon.png" width="24px" height="auto">
-                </a>
-                <a href="https://twitter.com/energywebx" target="_blank" class="mx-3 mr-md-4">
-                    <img src="../../../../assets/img/staking/twitter-icon.png" width="24px" height="auto">
-                </a>
-                <a href="https://t.me/energyweb" target="_blank" class="mx-3 mr-md-4">
-                    <img src="../../../../assets/img/staking/telegram-icon.png" width="24px" height="auto">
-                </a>
-            </div>
-            <div class="d-flex align-items-center flex-column flex-md-row mt-3 mt-md-0">
-                <div class="footer-text ml-0 ml-md-3 pt-1">Got feedback? Join our Discord Group</div>
-                <a href="https://discord.com/invite/psraNwqGqp" target="_blank" class="ml-0 mt-2 mt-md-0 ml-md-3">
-                    <img src="../../../../assets/img/staking/discord-icon.png" width="24px" height="auto">
-                </a>
-            </div>
+      </div>
+      <div class="col-xl-8 mt-2 mt-xl-4">
+        <div class="row">
+          <div class="col-md-12 mt-0 mt-md-0 mb-xl-3">
+            <app-stake></app-stake>
+          </div>
         </div>
+      </div>
+      <div class="col-xl-4 mt-3 mt-md-4">
+        <div class="staking-terms p-4">
+          <div class="d-flex flex-row align-items-center ml-0 ml-md-2 mt-2">
+            <img src="../../../../assets/img/staking/terms-condition-image.png" width="65" height="64">
+            <div class="staking-widget-xl-label color-white ml-0 ml-md-2">Terms and Conditions</div>
+          </div>
+          <div>
+            <ul class="staking-list d-flex flex-column mt-4 mr-3 pl-2">
+              <li>Daily reward: 0.0270% (yields 10.355% per year when compounded daily or 9.855% per
+                year
+                not compounded)
+              </li>
+              <li>Rewards paid daily on tokens staked for 24h continuously</li>
+              <li>Stake can be withdrawn at any time</li>
+              <li>Daily rewards will be added to the stake. They can earn interest, but can only be
+                withdrawn as part of the stake ("unstaked")
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="staking-footer">
+    <div class="footer-wrapper d-flex flex-column flex-md-row">
+      <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+        <a href="https://www.energyweb.org/" target="_blank" class="mx-3 mr-md-4">
+          <img src="../../../../assets/img/staking/ew-icon.png" width="24px" height="auto">
+        </a>
+        <a href="https://twitter.com/energywebx" target="_blank" class="mx-3 mr-md-4">
+          <img src="../../../../assets/img/staking/twitter-icon.png" width="24px" height="auto">
+        </a>
+        <a href="https://t.me/energyweb" target="_blank" class="mx-3 mr-md-4">
+          <img src="../../../../assets/img/staking/telegram-icon.png" width="24px" height="auto">
+        </a>
+      </div>
+      <div class="d-flex align-items-center flex-column flex-md-row mt-3 mt-md-0">
+        <div class="footer-text ml-0 ml-md-3 pt-1">Got feedback? Join our Discord Group</div>
+        <a href="https://discord.com/invite/psraNwqGqp" target="_blank" class="ml-0 mt-2 mt-md-0 ml-md-3">
+          <img src="../../../../assets/img/staking/discord-icon.png" width="24px" height="auto">
+        </a>
+      </div>
+    </div>
+  </div>
 </div>

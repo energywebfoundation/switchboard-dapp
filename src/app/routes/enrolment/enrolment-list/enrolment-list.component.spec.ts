@@ -8,9 +8,9 @@ xdescribe('EnrolmentListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnrolmentListComponent ]
+      declarations: [EnrolmentListComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
