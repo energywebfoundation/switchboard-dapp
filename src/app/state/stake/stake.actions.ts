@@ -42,6 +42,11 @@ export const putStake = createAction(
   props<{ amount: string }>()
 );
 
+export const putStakeFailure = createAction(
+  '[Stake] Put Stake Failure',
+  props<{ err: string }>()
+);
+
 export const withdrawRequest = createAction(
   '[Stake] Withdraw Request Reward'
 );

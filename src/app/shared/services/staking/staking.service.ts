@@ -24,6 +24,10 @@ export class StakingService {
     return this.stakingPoolService;
   }
 
+  async putStake(value) {
+    return await this.pool.putStake(value);
+  }
+
   getPool(): StakingPool {
     return this.pool;
   }

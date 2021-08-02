@@ -101,23 +101,28 @@ export class StakeEffects {
         }
         return !isStakeDisabled;
       }),
-      tap(() => this.loadingService.show()),
+      tap(() => this.loadingService.show('Putting your stake')),
       switchMap(([{amount}, balance]) => {
           const amountLesserThanBalance = parseInt(amount, 10) <= parseInt(balance, 10);
           if (!amountLesserThanBalance) {
             this.toastr.error('You try to stake higher amount of tokens that your account have. Will be used your balance instead');
           }
 
-          return from(this.stakingService.getPool().putStake(amountLesserThanBalance ? parseEther(amount) : parseEther(balance)))
+          return from(this.stakingService.putStake(amountLesserThanBalance ? parseEther(amount) : parseEther(balance)))
             .pipe(
-              mergeMap(() => {
+              map(() => {
                 this.dialog.open(StakeSuccessComponent, {
                   width: '400px',
                   maxWidth: '100%',
                   disableClose: true,
                   backdropClass: 'backdrop-shadow'
                 });
-                return [StakeActions.getAccountBalance(), StakeActions.checkReward(), StakeActions.getStake()];
+                return StakeActions.getStake();
+              }),
+              catchError(err => {
+                console.error(err);
+                this.toastr.error(err.message);
+                return of(StakeActions.putStakeFailure({err: err.message}));
               }),
               finalize(() => this.loadingService.hide())
             );
@@ -222,7 +227,7 @@ export class StakeEffects {
       switchMap(() =>
         from(this.iamService.getBalance())
           .pipe(
-            map((balance) => balance.toString()),
+            map((balance) => formatEther(balance)),
             map(balance => StakeActions.getAccountSuccess({balance}))
           )
       )

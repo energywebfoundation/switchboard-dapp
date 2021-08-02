@@ -14,14 +14,16 @@ import * as StakeActions from './stake.actions';
 import { StakingService } from '../../shared/services/staking/staking.service';
 import { skip, take } from 'rxjs/operators';
 import * as stakeSelectors from './stake.selectors';
+import { utils } from 'ethers';
 
+const {formatEther, parseEther} = utils;
 describe('StakeEffects', () => {
 
   const iamServiceSpy = jasmine.createSpyObj('IamService', ['getDefinition', 'getBalance', 'getAddress']);
   const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
   const toastrSpy = jasmine.createSpyObj('ToastrService', ['success', 'error']);
-  const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll']);
-  const stakingService = jasmine.createSpyObj('StakingService', ['init', 'createPool']);
+  const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll', 'open']);
+  const stakingService = jasmine.createSpyObj('StakingService', ['init', 'createPool', 'getPool', 'putStake']);
   let actions$: ReplaySubject<any>;
   let effects: StakeEffects;
   let store: MockStore<StakeState>;
@@ -102,6 +104,53 @@ describe('StakeEffects', () => {
         expect(resultAction).toEqual(StakeActions.getOrganizationDetails());
       });
 
+    });
+  });
+
+  describe('putStake$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should put a stake and refresh data', () => {
+      actions$.next(StakeActions.putStake({amount: '5'}));
+      store.overrideSelector(stakeSelectors.getBalance, '100');
+      store.overrideSelector(stakeSelectors.isStakingDisabled, false);
+
+      stakingService.putStake.and.returnValue(Promise.resolve());
+
+      effects.putStake$.subscribe(resultAction => {
+        expect(dialogSpy.open).toHaveBeenCalled();
+        expect(stakingService.putStake).toHaveBeenCalledWith(parseEther('5'));
+        expect(resultAction).toEqual(StakeActions.getStake());
+      });
+    });
+
+    it('should not put a stake when staking is disabled', waitForAsync(() => {
+      actions$.next(StakeActions.putStake({amount: '5'}));
+      store.overrideSelector(stakeSelectors.getBalance, '100');
+      store.overrideSelector(stakeSelectors.isStakingDisabled, true);
+
+      stakingService.putStake.and.returnValue(Promise.resolve());
+
+      effects.putStake$.subscribe(resultAction => {
+        expect(resultAction).toEqual(null, 'This subscribe should not return an action');
+      });
+
+      expect(toastrSpy.error).toHaveBeenCalled();
+    }));
+
+    it('should return failure action when putStake throws an error', () => {
+      actions$.next(StakeActions.putStake({amount: '5'}));
+      store.overrideSelector(stakeSelectors.getBalance, '100');
+      store.overrideSelector(stakeSelectors.isStakingDisabled, false);
+
+      stakingService.putStake.and.returnValue(Promise.reject({message: 'message'}));
+
+      effects.putStake$.subscribe(resultAction => {
+        expect(toastrSpy.error).toHaveBeenCalledWith('message');
+        expect(resultAction).toEqual(StakeActions.putStakeFailure({err: 'message'}));
+      });
     });
   });
 
