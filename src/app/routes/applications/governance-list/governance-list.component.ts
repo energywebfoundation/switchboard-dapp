@@ -326,6 +326,10 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     return `${location.origin}/enrol?${listType}=${namespace}&roleName=${name}`;
   }
 
+  getStakingUrl(namespace: string) {
+    return `${location.origin}/staking?org=${namespace}`;
+  }
+
   copyToClipboard(listType: string, roleDefinition: any) {
     const listener = (e: ClipboardEvent) => {
       const clipboard = e.clipboardData || window['clipboardData'];
