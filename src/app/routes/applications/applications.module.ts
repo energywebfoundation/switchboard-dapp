@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
@@ -26,6 +26,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { NewStakingPoolComponent } from './new-staking-pool/new-staking-pool.component';
 import { RoleFieldComponent } from './new-role/components/role-field/role-field.component';
+import { OrganizationActionsComponent } from './actions/organization-actions/organization-actions.component';
+import { ApplicationActionsComponent } from './actions/application-actions/application-actions.component';
+import { RoleActionsComponent } from './actions/role-actions/role-actions.component';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -43,7 +46,10 @@ const routes: Routes = [
     TransferOwnershipComponent,
     RemoveOrgAppComponent,
     NewStakingPoolComponent,
-    RoleFieldComponent
+    RoleFieldComponent,
+    OrganizationActionsComponent,
+    ApplicationActionsComponent,
+    RoleActionsComponent
   ],
   imports: [
     CommonModule,
