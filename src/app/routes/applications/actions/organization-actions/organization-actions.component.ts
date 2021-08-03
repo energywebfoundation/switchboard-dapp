@@ -7,25 +7,26 @@ import { ListType } from '../../../../shared/constants/shared-constants';
 import { NewStakingPoolComponent } from '../../new-staking-pool/new-staking-pool.component';
 import { TransferOwnershipComponent } from '../../transfer-ownership/transfer-ownership.component';
 import { ConfirmationDialogComponent } from '../../../widgets/confirmation-dialog/confirmation-dialog.component';
+import { ActionBaseAbstract } from '../action-base.abstract';
 
 @Component({
   selector: 'app-organization-actions',
   templateUrl: './organization-actions.component.html',
   styleUrls: ['./organization-actions.component.scss']
 })
-export class OrganizationActionsComponent implements OnInit {
+export class OrganizationActionsComponent extends ActionBaseAbstract implements OnInit {
   @Input() element;
   @Output() viewRoles = new EventEmitter();
   @Output() viewApps = new EventEmitter();
   @Output() organizationCreated = new EventEmitter();
   @Output() appCreated = new EventEmitter();
-  @Output() edited = new EventEmitter();
   @Output() transferred = new EventEmitter();
   @Output() deleteConfirmed = new EventEmitter();
 
   stakingUrl: string;
 
-  constructor(private dialog: MatDialog) {
+  constructor(dialog: MatDialog) {
+    super(dialog);
   }
 
   ngOnInit() {

@@ -1,20 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ViewType } from '../../new-organization/new-organization.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NewRoleComponent } from '../../new-role/new-role.component';
 import { ENSNamespaceTypes } from 'iam-client-lib';
+import { ActionBaseAbstract } from '../action-base.abstract';
 
 @Component({
   selector: 'app-role-actions',
   templateUrl: './role-actions.component.html',
   styleUrls: ['./role-actions.component.scss']
 })
-export class RoleActionsComponent implements OnInit {
+export class RoleActionsComponent extends ActionBaseAbstract implements OnInit {
   @Input() element;
-  @Output() edited = new EventEmitter();
   enrolmentUrl: string;
 
-  constructor(private dialog: MatDialog) {
+  constructor(dialog: MatDialog) {
+    super(dialog);
   }
 
   ngOnInit(): void {
@@ -22,6 +23,7 @@ export class RoleActionsComponent implements OnInit {
   }
 
   edit() {
+    this.showEditComponent()
     const dialogRef = this.dialog.open(NewRoleComponent, {
       width: '600px',
       data: {

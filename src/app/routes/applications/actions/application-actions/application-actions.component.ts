@@ -5,19 +5,20 @@ import { ListType } from '../../../../shared/constants/shared-constants';
 import { MatDialog } from '@angular/material/dialog';
 import { NewApplicationComponent } from '../../new-application/new-application.component';
 import { ConfirmationDialogComponent } from '../../../widgets/confirmation-dialog/confirmation-dialog.component';
+import { ActionBaseAbstract } from '../action-base.abstract';
 
 @Component({
   selector: 'app-application-actions',
   templateUrl: './application-actions.component.html',
   styleUrls: ['./application-actions.component.scss']
 })
-export class ApplicationActionsComponent {
+export class ApplicationActionsComponent extends ActionBaseAbstract{
   @Input() element;
   @Output() viewRoles = new EventEmitter();
-  @Output() edited = new EventEmitter();
   @Output() deleteConfirmed = new EventEmitter();
 
-  constructor(private dialog: MatDialog) {
+  constructor(dialog: MatDialog) {
+    super(dialog);
   }
 
   viewRolesHandler() {
