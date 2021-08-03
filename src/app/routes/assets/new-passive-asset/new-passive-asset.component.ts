@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { CancelButton } from 'src/app/layout/loading/loading.component';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { Component } from '@angular/core';
+import { CancelButton } from '../../../layout/loading/loading.component';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
@@ -10,7 +10,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
   templateUrl: './new-passive-asset.component.html',
   styleUrls: ['./new-passive-asset.component.scss']
 })
-export class NewPassiveAssetComponent implements OnInit {
+export class NewPassiveAssetComponent {
 
   private TOASTR_HEADER = 'Register Single Asset';
 
@@ -18,10 +18,6 @@ export class NewPassiveAssetComponent implements OnInit {
               private loadingService: LoadingService,
               private toastr: SwitchboardToastrService,
               private iamService: IamService) {
-  }
-
-  ngOnInit(): void {
-
   }
 
   async registerAsset() {

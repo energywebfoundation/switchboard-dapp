@@ -1,16 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-view-organization',
   templateUrl: './view-organization.component.html',
   styleUrls: ['./view-organization.component.scss']
 })
-export class ViewOrganizationComponent implements OnInit {
+export class ViewOrganizationComponent {
 
   constructor() {
-  }
-
-  ngOnInit() {
   }
 
 }

@@ -1,16 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-new-asset-type',
   templateUrl: './new-asset-type.component.html',
   styleUrls: ['./new-asset-type.component.scss']
 })
-export class NewAssetTypeComponent implements OnInit {
+export class NewAssetTypeComponent {
 
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
   closeDialog() {

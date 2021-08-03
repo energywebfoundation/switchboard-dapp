@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { UserblockService } from './userblock.service';
 
@@ -7,7 +7,7 @@ import { UserblockService } from './userblock.service';
   templateUrl: './userblock.component.html',
   styleUrls: ['./userblock.component.scss']
 })
-export class UserblockComponent implements OnInit {
+export class UserblockComponent {
   user: any;
 
   constructor(public userblockService: UserblockService) {
@@ -15,9 +15,6 @@ export class UserblockComponent implements OnInit {
     this.user = {
       picture: 'assets/img/user/01.jpg'
     };
-  }
-
-  ngOnInit() {
   }
 
   userBlockIsVisible() {

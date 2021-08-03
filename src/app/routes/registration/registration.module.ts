@@ -7,7 +7,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { RequestClaimComponent } from './request-claim/request-claim.component';
-import { LayoutModule } from 'src/app/layout/layout.module';
+import { LayoutModule } from '../../layout/layout.module';
 import { SelectAssetDialogComponent } from './select-asset-dialog/select-asset-dialog.component';
 import { EnrolmentFormComponent } from './enrolment-form/enrolment-form.component';
 import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-to-wallet.module';

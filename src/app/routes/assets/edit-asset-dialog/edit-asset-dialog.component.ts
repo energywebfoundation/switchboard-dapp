@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { IamService } from '../../../shared/services/iam.service';
 import { from } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Asset, AssetProfile, ClaimData, Profile } from 'iam-client-lib';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { CancelButton } from '../../../layout/loading/loading.component';

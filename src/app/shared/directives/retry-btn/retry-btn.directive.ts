@@ -4,7 +4,7 @@ import { Subject, timer } from 'rxjs';
 import { mapTo, scan, startWith, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from 'src/app/routes/widgets/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '../../../routes/widgets/confirmation-dialog/confirmation-dialog.component';
 
 
 @Directive({

@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
-import { ListType } from 'src/app/shared/constants/shared-constants';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { ListType } from '../../../../shared/constants/shared-constants';
+import { IamService } from '../../../../shared/services/iam.service';
+import { LoadingService } from '../../../../shared/services/loading.service';
 import { RoleType } from '../../new-role/new-role.component';
 import { GovernanceViewComponent } from '../governance-view.component';
 
@@ -13,9 +13,12 @@ import { GovernanceViewComponent } from '../governance-view.component';
   styleUrls: ['./governance-details.component.scss']
 })
 export class GovernanceDetailsComponent implements OnInit {
-  @Input('data') origData: any;
-  @Input('is-embedded') isEmbedded: boolean;
-  @Input('requestedClaims') requestedClaims: any[];
+  @Input() set origData(value: any) {
+    this.setData(value);
+  }
+
+  @Input() isEmbedded: boolean;
+  @Input() requestedClaims: any[];
 
   data: any;
 
@@ -31,6 +34,7 @@ export class GovernanceDetailsComponent implements OnInit {
 
   preconditions = {};
   PreconditionTypes = PreconditionTypes;
+  panelOpenState = false;
 
   constructor(
     private iamService: IamService,

@@ -2,10 +2,10 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ClaimData, ENSNamespaceTypes } from 'iam-client-lib';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { CancelButton } from 'src/app/layout/loading/loading.component';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { CancelButton } from '../../../layout/loading/loading.component';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { NotificationService } from '../../../shared/services/notification.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewRequestsComponent } from '../view-requests/view-requests.component';
 import { MatSort } from '@angular/material/sort';
@@ -28,10 +28,10 @@ const TOASTR_HEADER = 'Enrolment';
   styleUrls: ['./enrolment-list.component.scss']
 })
 export class EnrolmentListComponent implements OnInit, OnDestroy {
-  @Input('list-type') listType: string;
-  @Input('accepted') accepted: boolean;
-  @Input('rejected') rejected: boolean;
-  @Input('subject') subject: string;
+  @Input() listType: string;
+  @Input() accepted: boolean;
+  @Input() rejected: boolean;
+  @Input() subject: string;
   @Input() namespaceFilterControl!: FormControl;
 
   @ViewChild(MatSort) sort: MatSort;

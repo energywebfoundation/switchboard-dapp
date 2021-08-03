@@ -159,11 +159,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
         .on('mouseleave', () => {
           floatingNav.remove();
         })
-        .find('a').on('click', function(e) {
+        .find('a').on('click', function (e) {
         e.preventDefault(); // prevents page reload on click
         // get the exact route path to navigate
         const routeTo = $(this).attr('route');
-        if (routeTo) { self.router.navigate([routeTo]); }
+        if (routeTo) {
+          self.router.navigate([routeTo]);
+        }
       });
 
       this.listenForExternalClicks();

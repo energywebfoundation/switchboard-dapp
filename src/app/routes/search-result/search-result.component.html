@@ -10,8 +10,8 @@
             <mat-icon>close</mat-icon>
           </button>
         </div>
-        <app-governance-details class="side-panel-content" *ngIf="data" [data]="data"
-                                [requestedClaims]="requestedClaims" [is-embedded]="true" #detailView>
+        <app-governance-details class="side-panel-content" *ngIf="data" [origData]="data"
+                                [requestedClaims]="requestedClaims" [isEmbedded]="true" #detailView>
         </app-governance-details>
       </div>
     </mat-drawer>

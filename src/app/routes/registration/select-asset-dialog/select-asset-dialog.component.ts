@@ -1,13 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Asset } from 'iam-client-lib';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { IDialogData } from './select-asset-dialog.interface';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
-interface DataAsset extends Asset{
+interface DataAsset extends Asset {
   minifiedId: string;
 }
 
@@ -32,7 +32,7 @@ export class SelectAssetDialogComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       this.loadingService.show();
-      this.dataSource.data = (await this.iamService.iam.getOwnedAssets()).map((data: DataAsset ) => {
+      this.dataSource.data = (await this.iamService.iam.getOwnedAssets()).map((data: DataAsset) => {
         data.minifiedId = `${data.id.substr(0, 15)}...${data.id.substr(data.id.length - 5)}`;
         return {...data, isSelected: this.data.assetDiD === data.id};
       });

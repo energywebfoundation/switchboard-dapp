@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Asset, AssetHistoryEventType } from 'iam-client-lib';
-import { CancelButton } from 'src/app/layout/loading/loading.component';
-import { AssetListType } from 'src/app/shared/constants/shared-constants';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { CancelButton } from '../../../layout/loading/loading.component';
+import { AssetListType } from '../../../shared/constants/shared-constants';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { NotificationService } from '../../../shared/services/notification.service';
 import { TransferOwnershipComponent } from '../../applications/transfer-ownership/transfer-ownership.component';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
@@ -36,7 +36,7 @@ export interface AssetList extends Asset {
   styleUrls: ['./asset-list.component.scss']
 })
 export class AssetListComponent implements OnInit, OnDestroy {
-  @Input('list-type') listType: number;
+  @Input() listType: number;
   @ViewChild(MatSort) sort: MatSort;
   @Output() selectTab = new EventEmitter<any>();
 

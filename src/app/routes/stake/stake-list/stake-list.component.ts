@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
   templateUrl: './stake-list.component.html',
   styleUrls: ['./stake-list.component.scss']
 })
-export class StakeListComponent implements OnInit {
+export class StakeListComponent {
 
   mockData = [
     {
@@ -42,9 +42,6 @@ export class StakeListComponent implements OnInit {
   ];
 
   constructor(private router: Router) {
-  }
-
-  ngOnInit(): void {
   }
 
   goToDetails() {

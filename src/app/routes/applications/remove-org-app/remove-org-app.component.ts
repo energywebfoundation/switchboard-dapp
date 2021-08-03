@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { ListType } from 'src/app/shared/constants/shared-constants';
-import { ExpiredRequestError } from 'src/app/shared/errors/errors';
-import { IamRequestService } from 'src/app/shared/services/iam-request.service';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { ListType } from '../../../shared/constants/shared-constants';
+import { ExpiredRequestError } from '../../../shared/errors/errors';
+import { IamRequestService } from '../../../shared/services/iam-request.service';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';

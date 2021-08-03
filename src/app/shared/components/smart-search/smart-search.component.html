@@ -4,8 +4,8 @@
          matInput
          [formControl]="searchText"
          [matAutocomplete]="auto"
-         (input)="updateSearchTxtFieldValue($event)"
-  >
+         (input)="updateSearchTxtFieldValue($event)">
+
   <mat-error *ngIf="controlHasError('required')">Role Name is <strong>required</strong></mat-error>
   <mat-error *ngIf="controlHasError('roleNotFound')">Role does not exist</mat-error>
   <mat-error *ngIf="controlHasError('roleExist')">Role has already been added</mat-error>

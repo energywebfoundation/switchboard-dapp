@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ViewOrganizationComponent } from './view-organization.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';

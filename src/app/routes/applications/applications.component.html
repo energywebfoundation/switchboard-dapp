@@ -18,7 +18,7 @@
             </button>
           </div>
         </div>
-        <app-governance-list list-type="org" #listOrg [isFilterShown]="showFilter.org"
+        <app-governance-list listType="org" #listOrg [isFilterShown]="showFilter.org"
                              (updateFilter)="updateFilter($event)"></app-governance-list>
       </div>
     </div>
@@ -47,7 +47,7 @@
           </div>
         </div>
         <ng-container *ngIf="isAppShown">
-          <app-governance-list list-type="app" #listApp [isFilterShown]="showFilter.app"
+          <app-governance-list listType="app" #listApp [isFilterShown]="showFilter.app"
                                [defaultFilterOptions]="defaultFilterOptions.app" (updateFilter)="updateFilter($event)">
           </app-governance-list>
         </ng-container>
@@ -66,7 +66,7 @@
           </div>
         </div>
         <ng-container *ngIf="isRoleShown">
-          <app-governance-list list-type="role" #listRole [isFilterShown]="showFilter.role"
+          <app-governance-list listType="role" #listRole [isFilterShown]="showFilter.role"
                                [defaultFilterOptions]="defaultFilterOptions.role"></app-governance-list>
         </ng-container>
       </div>

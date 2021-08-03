@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { of } from 'rxjs';
 import { delay, take } from 'rxjs/operators';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { LoadingService } from '../../shared/services/loading.service';
 
 export const CancelButton = {
   ENABLED: true,
@@ -14,7 +14,7 @@ export const CancelButton = {
   templateUrl: './loading.component.html',
   styleUrls: ['./loading.component.scss']
 })
-export class LoadingComponent implements OnInit, AfterViewInit {
+export class LoadingComponent implements AfterViewInit {
 
   public showLoadingOverlay = true;
   public isCancellable = false;
@@ -68,9 +68,6 @@ export class LoadingComponent implements OnInit, AfterViewInit {
         clearTimeout($setTimeout);
       }, 30);
     });
-  }
-
-  ngOnInit() {
   }
 
   cancel() {

@@ -3,7 +3,7 @@ import { OnInit, Directive, Input, ElementRef } from '@angular/core';
 declare var $: any;
 
 @Directive({
-  selector: 'scrollable'
+  selector: '[appScrollable]'
 })
 export class ScrollableDirective implements OnInit {
 
