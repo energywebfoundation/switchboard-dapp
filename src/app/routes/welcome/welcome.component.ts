@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IAM, WalletProvider } from 'iam-client-lib';
-import { ToastrService } from 'ngx-toastr';
-import { IamService, VOLTA_CHAIN_ID } from 'src/app/shared/services/iam.service';
+import { IamService, VOLTA_CHAIN_ID } from '../../shared/services/iam.service';
 
-import { version } from '../../../../package.json';
+const { version } = require('../../../../package.json')
 
 @Component({
   selector: 'app-welcome',

@@ -20,7 +20,7 @@ export class AuthService {
    * Logout the user
    */
   public logout() {
-    const promise = new Promise( (resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       try {
         localStorage.removeItem('currentUser');
         localStorage.removeItem('EW-DID-CONFIG');
@@ -57,7 +57,7 @@ export class AuthService {
   }
 
   public setUser(user: any) {
-    const promise = new Promise( (resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       try {
         // console.log(JSON.parse(user).organizationType);
         // this.roles = [JSON.parse(user).organizationType];

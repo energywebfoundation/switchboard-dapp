@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { ISmartSearch } from '../../../routes/applications/new-role/new-role.com
   templateUrl: './smart-search.component.html',
   styleUrls: ['./smart-search.component.scss']
 })
-export class SmartSearchComponent implements OnInit, AfterViewInit {
+export class SmartSearchComponent implements AfterViewInit {
   @Input() searchText: FormControl;
   @Input() placeholderSearch: string;
   @Input() fieldName: string;
@@ -30,9 +30,6 @@ export class SmartSearchComponent implements OnInit, AfterViewInit {
 
   constructor(private route: Router,
               private iamService: IamService) {
-  }
-
-  ngOnInit(): void {
   }
 
   controlHasError(errorType: string) {

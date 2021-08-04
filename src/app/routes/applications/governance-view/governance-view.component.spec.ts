@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovernanceViewComponent } from './governance-view.component';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';

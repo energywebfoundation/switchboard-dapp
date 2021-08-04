@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UrlParamService } from 'src/app/shared/services/url-param.service';
+import { UrlParamService } from '../../shared/services/url-param.service';
 import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 import { MatTabGroup } from '@angular/material/tabs';
 import { NotificationService } from '../../shared/services/notification.service';
@@ -11,7 +11,7 @@ import { NotificationService } from '../../shared/services/notification.service'
   templateUrl: './enrolment.component.html',
   styleUrls: ['./enrolment.component.scss']
 })
-export class EnrolmentComponent implements OnInit, AfterViewInit {
+export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
   @ViewChild('issuerList') issuerList: EnrolmentListComponent;
   @ViewChild('enrolmentList') enrolmentList: EnrolmentListComponent;
@@ -75,9 +75,6 @@ export class EnrolmentComponent implements OnInit, AfterViewInit {
         this.initDefault();
       }
     });
-  }
-
-  ngOnInit() {
   }
 
   showMe(i: any) {

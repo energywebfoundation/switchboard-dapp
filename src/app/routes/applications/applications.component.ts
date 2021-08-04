@@ -7,9 +7,9 @@ import { NewOrganizationComponent } from './new-organization/new-organization.co
 import { NewApplicationComponent } from './new-application/new-application.component';
 import { NewRoleComponent } from './new-role/new-role.component';
 import { GovernanceListComponent } from './governance-list/governance-list.component';
-import { ListType } from 'src/app/shared/constants/shared-constants';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { UrlParamService } from 'src/app/shared/services/url-param.service';
+import { ListType } from '../../shared/constants/shared-constants';
+import { IamService } from '../../shared/services/iam.service';
+import { UrlParamService } from '../../shared/services/url-param.service';
 import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';

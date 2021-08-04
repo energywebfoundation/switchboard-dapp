@@ -1,7 +1,7 @@
 import { Component, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ENSNamespaceTypes } from 'iam-client-lib';
-import { IamService } from 'src/app/shared/services/iam.service';
+import { IamService } from '../../../shared/services/iam.service';
 import { environment } from '../../../../environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';

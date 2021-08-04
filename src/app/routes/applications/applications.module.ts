@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { ApplicationsComponent } from './applications.component';
 import { NewOrganizationComponent } from './new-organization/new-organization.component';

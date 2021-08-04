@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-stake-list-card',
   templateUrl: './stake-list-card.component.html',
   styleUrls: ['./stake-list-card.component.scss']
 })
-export class StakeListCardComponent implements OnInit {
+export class StakeListCardComponent {
   @Input() organization: string;
   @Input() organizationImage: string;
   @Input() providerDate: string;
@@ -16,9 +16,6 @@ export class StakeListCardComponent implements OnInit {
   @Input() isAcceptingPatrons: boolean;
 
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
 }

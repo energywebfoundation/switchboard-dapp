@@ -18,4 +18,5 @@ import { MatButtonModule } from '@angular/material/button';
     ConnectToWalletDialogComponent
   ]
 })
-export class ConnectToWalletModule { }
+export class ConnectToWalletModule {
+}

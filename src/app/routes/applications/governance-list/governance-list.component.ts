@@ -4,10 +4,10 @@ import { FormBuilder } from '@angular/forms';
 import { ENSNamespaceTypes, IApp, IOrganization, IRole } from 'iam-client-lib';
 import { Subject } from 'rxjs';
 
-import { ListType } from 'src/app/shared/constants/shared-constants';
-import { ConfigService } from 'src/app/shared/services/config.service';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { ListType } from '../../../shared/constants/shared-constants';
+import { ConfigService } from '../../../shared/services/config.service';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { NewApplicationComponent } from '../new-application/new-application.component';
@@ -35,8 +35,8 @@ const MAX_TOOLTIP_SUBORG_ITEMS = 5;
   styleUrls: ['./governance-list.component.scss']
 })
 export class GovernanceListComponent implements OnInit, OnDestroy {
-  @Input('list-type') listType: string;
-  @Input('isFilterShown') isFilterShown: boolean;
+  @Input() listType: string;
+  @Input() isFilterShown: boolean;
   @Input() defaultFilterOptions: any;
   @Output() updateFilter = new EventEmitter<any>();
 

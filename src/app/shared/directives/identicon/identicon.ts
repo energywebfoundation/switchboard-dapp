@@ -164,7 +164,9 @@ class Svg {
 
     for (i = 0; i < this.rectangles.length; i++) {
       rect = this.rectangles[i];
-      if (rect.color === bg) { continue; }
+      if (rect.color === bg) {
+        continue;
+      }
       xml += '<rect '
         + ' x=\'' + rect.x + '\''
         + ' y=\'' + rect.y + '\''

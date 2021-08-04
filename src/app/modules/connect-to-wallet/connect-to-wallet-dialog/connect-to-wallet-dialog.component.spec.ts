@@ -75,7 +75,10 @@ describe('ConnectToWalletDialogComponent', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     metamaskBtn.nativeElement.click();
 
-    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.login({provider: WalletProvider.MetaMask, navigateOnTimeout: true}));
+    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.login({
+      provider: WalletProvider.MetaMask,
+      navigateOnTimeout: true
+    }));
   });
 
   it('should dispatch login action with WalletConnect when clicking on wallet connect button', () => {
@@ -84,7 +87,10 @@ describe('ConnectToWalletDialogComponent', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     mobileWalletBtn.nativeElement.click();
 
-    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.login({provider: WalletProvider.WalletConnect, navigateOnTimeout: true}));
+    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.login({
+      provider: WalletProvider.WalletConnect,
+      navigateOnTimeout: true
+    }));
   });
 
   it('should not find metamask button when is not available', () => {

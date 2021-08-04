@@ -4,7 +4,7 @@ import { AssetsComponent } from './assets.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
 import { GovernanceDetailsModule } from '../applications/governance-view/governance-details/governance-details.module';
 import { NgMatSearchBarModule } from 'ng-mat-search-bar';
 import { NewAssetTypeComponent } from './new-asset-type/new-asset-type.component';

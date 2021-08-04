@@ -6,9 +6,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { debounceTime, delay, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { ListType } from 'src/app/shared/constants/shared-constants';
-import { FieldValidationService } from 'src/app/shared/services/field-validation.service';
-import { IamService } from 'src/app/shared/services/iam.service';
+import { ListType } from '../../../shared/constants/shared-constants';
+import { FieldValidationService } from '../../../shared/services/field-validation.service';
+import { IamService } from '../../../shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
@@ -88,13 +88,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     newIssuer: ['', this.iamService.isValidDid]
   });
 
-  public roleControl  =  this.fb.control('');
-  public restrictionRoleControl  =  this.fb.control('', [Validators.required, this.roleNotFoundValidator(), this.roleExistValidator()]);
-  public environment  = environment;
-  public isChecking   = false;
-  public RoleType     = RoleType;
+  public roleControl = this.fb.control('');
+  public restrictionRoleControl = this.fb.control('', [Validators.required, this.roleNotFoundValidator(), this.roleExistValidator()]);
+  public environment = environment;
+  public isChecking = false;
+  public RoleType = RoleType;
   public RoleTypeList = RoleTypeList;
-  public ENSPrefixes  = ENSNamespaceTypes;
+  public ENSPrefixes = ENSNamespaceTypes;
   public issuerList: string[] = [this.iamService.iam.getDid()];
 
   // Fields

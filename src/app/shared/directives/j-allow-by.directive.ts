@@ -3,11 +3,11 @@ import { AuthService } from '../services/auth.service';
 import { intersection } from 'lodash';
 
 @Directive({
-  selector: '[FHAllowBy]'
+  selector: '[appFHAllowBy]'
 })
 export class JAllowByDirective implements OnInit {
 
-  @Input('FHAllowBy') roles: Array<string>;
+  @Input('appFHAllowBy') roles: Array<string>;
 
   constructor(private el: ElementRef, private authService: AuthService) {
   }

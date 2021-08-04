@@ -12,7 +12,7 @@
             </button>
           </div>
         </div>
-        <app-asset-list #listMyAssets [list-type]="AssetListType.MY_ASSETS"></app-asset-list>
+        <app-asset-list #listMyAssets [listType]="AssetListType.MY_ASSETS"></app-asset-list>
       </div>
     </div>
   </mat-tab>
@@ -24,7 +24,7 @@
         <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
           <h4 class="color-white strong my-4">Assets Offered To Me</h4>
         </div>
-        <app-asset-list #listOfferedAssets [list-type]="AssetListType.OFFERED_ASSETS"
+        <app-asset-list #listOfferedAssets [listType]="AssetListType.OFFERED_ASSETS"
                         (selectTab)="setSelectedTab($event)"></app-asset-list>
       </div>
     </div>
@@ -37,7 +37,7 @@
         <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center">
           <h4 class="color-white strong my-4">Previously Owned Assets</h4>
         </div>
-        <app-asset-list #listPreviousAssets [list-type]="AssetListType.PREV_OWNED_ASSETS"></app-asset-list>
+        <app-asset-list #listPreviousAssets [listType]="AssetListType.PREV_OWNED_ASSETS"></app-asset-list>
       </div>
     </div>
   </mat-tab>

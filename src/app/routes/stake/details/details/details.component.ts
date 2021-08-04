@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss']
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent {
   terms = [
     {text: 'Minimum Patron commitment (#of months, minimum and maximum)'},
     {text: 'Patron revenue share (% of total EWT earned by Provider)'},
@@ -50,9 +50,6 @@ export class DetailsComponent implements OnInit {
     '    corporate energy buyers, and others—focused on open-source, decentralized digital technologies.\n';
 
   constructor(private router: Router) {
-  }
-
-  ngOnInit(): void {
   }
 
   goToEnrolment() {

@@ -1,12 +1,12 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { IamService } from 'src/app/shared/services/iam.service';
+import { IamService } from '../../shared/services/iam.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { LoadingService } from '../../shared/services/loading.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { WalletProvider } from 'iam-client-lib';
-import { LoadingCount } from 'src/app/shared/constants/shared-constants';
+import { LoadingCount } from '../../shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import { UserClaimState } from '../../state/user-claim/user.reducer';
