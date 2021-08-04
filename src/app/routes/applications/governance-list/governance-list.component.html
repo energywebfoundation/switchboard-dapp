@@ -1,6 +1,6 @@
 <!-- Filter Sub Organization -->
 <div class="d-flex align-items-center flex-wrap mb-2" *ngIf="listType === ListType.ORG && orgHierarchy?.length">
-  <div class="d-flex align-items-center my-1" *ngIf="(orgHierarchy?.length - 1)">
+  <div class="d-flex align-items-center my-1" *ngIf="orgHierarchy?.length">
     <div class="filter-list-item">
       <a href="#" (click)="resetOrgList($event)"><span class="filter-link">ALL Organizations</span></a>
     </div>
