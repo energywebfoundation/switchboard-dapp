@@ -24,9 +24,10 @@ export const actionSelectors = (hostDebug: DebugElement) => {
 
   return {
     viewBtn: getElement('view-roles').nativeElement,
-    createBtn: getElement('create-role').nativeElement,
+    createRoleBtn: getElement('create-role').nativeElement,
     editBtn: getElement('edit').nativeElement,
     deleteBtn: getElement('delete').nativeElement,
+    copyEnrolmentUrl: getElement('copy-enrolment-url').nativeElement,
     getElement
   };
 };

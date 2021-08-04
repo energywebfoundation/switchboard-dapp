@@ -1,9 +1,9 @@
-<button mat-menu-item class="btn-color-primary" (click)="edit()">
+<button mat-menu-item class="btn-color-primary" data-qa-id="edit" (click)="edit()">
   <mat-icon class="btn-color-primary">edit</mat-icon>
   <span>Edit</span>
 </button>
 
-<button mat-menu-item class="btn-color-primary" appCopyToClipboard
+<button mat-menu-item class="btn-color-primary" data-qa-id="copy-enrolment-url" appCopyToClipboard
         [copyClipboard]="enrolmentUrl" message="Role Enrolment URL">
   <mat-icon class="btn-color-primary btn-action-3" svgIcon="copy-url-icon"></mat-icon>
   <span>Copy Role Enrolment URL</span>

@@ -106,11 +106,11 @@ describe('ApplicationActionsComponent', () => {
 
   describe('roleCreated', () => {
     it('should call ConfirmationDialogComponent with proper information', () => {
-      const {createBtn} = actionSelectors(hostDebug);
+      const {createRoleBtn} = actionSelectors(hostDebug);
       spyOn(component.roleCreated, 'emit');
 
       dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
-      createBtn.click();
+      createRoleBtn.click();
 
       expect(dialogSpy.open).toHaveBeenCalledWith(NewRoleComponent, jasmine.objectContaining({
         data: {
@@ -123,13 +123,13 @@ describe('ApplicationActionsComponent', () => {
     });
 
     it('should emit event when dialog returns true', () => {
-      const {createBtn} = actionSelectors(hostDebug);
-      shouldEmit(createBtn, component, dialogSpy, 'roleCreated');
+      const {createRoleBtn} = actionSelectors(hostDebug);
+      shouldEmit(createRoleBtn, component, dialogSpy, 'roleCreated');
     });
 
     it('should not emit event when dialog returns false', () => {
-      const {createBtn} = actionSelectors(hostDebug);
-      shouldNotEmit(createBtn, component, dialogSpy, 'roleCreated');
+      const {createRoleBtn} = actionSelectors(hostDebug);
+      shouldNotEmit(createRoleBtn, component, dialogSpy, 'roleCreated');
     });
 
   });
