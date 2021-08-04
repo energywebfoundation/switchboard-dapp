@@ -9,7 +9,6 @@ describe('OrganizationActionsComponent', () => {
   let fixture: ComponentFixture<OrganizationActionsComponent>;
   let hostDebug: DebugElement;
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
-  const element = {namespace: '', owner: ''};
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [OrganizationActionsComponent],
@@ -25,12 +24,34 @@ describe('OrganizationActionsComponent', () => {
     fixture = TestBed.createComponent(OrganizationActionsComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
-    component.element = {...element};
-    fixture.detectChanges();
   });
 
   it('should create', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  describe('stakingUrl', () => {
+    it('should check if staking url is undefined when passed element is undefined', () => {
+      component.element = undefined;
+      fixture.detectChanges();
+
+      expect(component.stakingUrl).toBeUndefined();
+    });
+
+    it('should check if staking url is undefined when passed element without namespace', () => {
+      component.element = {example: ''};
+      fixture.detectChanges();
+
+      expect(component.stakingUrl).toBeUndefined();
+    });
+
+    it('should generate stakingUrl when passing element with namespace', () => {
+      component.element = {namespace: 'test'};
+      fixture.detectChanges();
+
+      expect(component.stakingUrl).toContain('/staking?org=test');
+    });
   });
 
 });
