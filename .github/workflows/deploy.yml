@@ -56,6 +56,14 @@ jobs:
           npm install
           envsubst < src/environments/constants.template.ts > src/environments/constants.ts
 
+      - name: Run Lint
+        run: |
+          npm run lint
+
+      - name: Run Test
+        run: |
+          npm run test:headless
+
       - name: Prepare for master branch
         if: github.ref == 'refs/heads/master'
         run: |
@@ -69,10 +77,6 @@ jobs:
           cp src/environments/environment.dev.ts src/environments/environment.ts
           echo "Prod Env Disabled"
           npm run build
-
-      - name: Run Test
-        run: |
-          npm run test:headless
 
       - name: Deploy on develop branch
         if: github.ref == 'refs/heads/develop'
