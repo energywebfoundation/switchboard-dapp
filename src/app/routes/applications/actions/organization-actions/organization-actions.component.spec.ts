@@ -2,8 +2,26 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { OrganizationActionsComponent } from './organization-actions.component';
 import { MatDialog } from '@angular/material/dialog';
-import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { DebugElement, Directive, NO_ERRORS_SCHEMA, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { actionSelectors } from '../action-test.utils';
 
+@Directive({
+  selector: '[appIsFeatureEnabled]'
+})
+class FeatureToggleMockDirective implements OnInit {
+
+  private hasView = true;
+
+  constructor(private templateRef: TemplateRef<any>,
+              private vcr: ViewContainerRef) {
+  }
+
+  ngOnInit() {
+      this.vcr.createEmbeddedView(this.templateRef);
+      this.hasView = true;
+  }
+
+}
 describe('OrganizationActionsComponent', () => {
   let component: OrganizationActionsComponent;
   let fixture: ComponentFixture<OrganizationActionsComponent>;
@@ -11,7 +29,7 @@ describe('OrganizationActionsComponent', () => {
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [OrganizationActionsComponent],
+      declarations: [OrganizationActionsComponent, FeatureToggleMockDirective],
       providers: [
         {provide: MatDialog, useValue: dialogSpy}
       ],
@@ -51,6 +69,30 @@ describe('OrganizationActionsComponent', () => {
       fixture.detectChanges();
 
       expect(component.stakingUrl).toContain('/staking?org=test');
+    });
+  });
+
+  describe('isProvider', () => {
+    it('should check when an organization is a provider', () => {
+      component.organization = {
+        isProvider: true
+      };
+      fixture.detectChanges();
+      const {createStakingPoolBtn, copyStakingUrlBtn} = actionSelectors(hostDebug);
+
+      expect(createStakingPoolBtn).toBeUndefined();
+      expect(copyStakingUrlBtn).toBeTruthy();
+    });
+
+    it('should check when an organization is not a provider', () => {
+      component.organization = {
+        isProvider: false
+      };
+      fixture.detectChanges();
+      const {createStakingPoolBtn, copyStakingUrlBtn} = actionSelectors(hostDebug);
+
+      expect(createStakingPoolBtn).toBeTruthy();
+      expect(copyStakingUrlBtn).toBeUndefined();
     });
   });
 

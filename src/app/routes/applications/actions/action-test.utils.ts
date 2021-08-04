@@ -30,6 +30,8 @@ export const actionSelectors = (hostDebug: DebugElement) => {
     copyEnrolmentUrl: getElement('copy-enrolment-url')?.nativeElement,
     createSubOrgBtn: getElement('create-sub-org')?.nativeElement,
     viewAppsBtn: getElement('view-apps')?.nativeElement,
+    copyStakingUrlBtn: getElement('copy-staking-url')?.nativeElement,
+    createStakingPoolBtn: getElement('create-staking-pool')?.nativeElement,
     getElement
   };
 };
