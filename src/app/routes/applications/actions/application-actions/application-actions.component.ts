@@ -1,19 +1,22 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { NewRoleComponent } from '../../new-role/new-role.component';
 import { ViewType } from '../../new-organization/new-organization.component';
 import { ListType } from '../../../../shared/constants/shared-constants';
 import { MatDialog } from '@angular/material/dialog';
 import { NewApplicationComponent } from '../../new-application/new-application.component';
 import { ActionBaseAbstract } from '../action-base.abstract';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-application-actions',
   templateUrl: './application-actions.component.html',
-  styleUrls: ['./application-actions.component.scss']
+  styleUrls: ['./application-actions.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ApplicationActionsComponent extends ActionBaseAbstract {
   @Input() element;
   @Output() viewRoles = new EventEmitter();
+  @Output() roleCreated = new EventEmitter();
   @Output() deleteConfirmed = new EventEmitter();
   @Output() edited = new EventEmitter();
 
@@ -39,10 +42,10 @@ export class ApplicationActionsComponent extends ActionBaseAbstract {
     });
 
     dialogRef.afterClosed()
-      .subscribe(async (res: any) => {
-        if (res) {
-          this.viewRoles.emit(this.element);
-        }
+      .pipe(
+        filter(Boolean)
+      ).subscribe(() => {
+          this.roleCreated.emit();
       });
   }
 

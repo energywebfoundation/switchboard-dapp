@@ -155,6 +155,7 @@
               <app-application-actions *ngIf="listType === ListType.APP"
                                        [element]="element"
                                        (viewRoles)="viewRoles(ListType.APP, element)"
+                                       (roleCreated)="viewRoles(ListType.APP, element)"
                                        (edited)="edit()"
                                        (deleteConfirmed)="remove(listType, element)">
               </app-application-actions>
