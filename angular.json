@@ -143,10 +143,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "test:build:production"
+              "browserTarget": "ew-boilerplate-ui:build:production"
             },
             "development": {
-              "browserTarget": "test:build:development"
+              "browserTarget": "ew-boilerplate-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -190,10 +190,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["**/node_modules/**", "src/**/*.ts", "src/**/*.component.html"]
           }
         },
         "e2e": {
