@@ -23,7 +23,7 @@
   <span>Create Role</span>
 </button>
 
-<ng-container *ngIf="!element.isProvider">
+<ng-container *ngIf="!element?.isProvider">
   <button mat-menu-item class="btn-color-primary" data-qa-id="create-staking-pool" *appIsFeatureEnabled (click)="openStakingPool(element)">
     <mat-icon class="btn-color-primary btn-action-3" svgIcon="create-staking-icon"></mat-icon>
     <span>Create Staking Pool</span>
@@ -40,7 +40,7 @@
   <span>Transfer Ownership</span>
 </button>
 
-<ng-container *ngIf="!element.isProvider">
+<ng-container *ngIf="element?.isProvider">
   <button mat-menu-item class="btn-color-primary" *appIsFeatureEnabled appCopyToClipboard
           message="Staking URL" [copyClipboard]="stakingUrl">
     <mat-icon class="btn-color-primary btn-action-3" svgIcon="copy-url-icon"></mat-icon>
