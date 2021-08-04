@@ -143,10 +143,10 @@
             <ng-container *ngIf="element?.isOwnedByCurrentUser">
               <app-organization-actions *ngIf="listType === ListType.ORG"
                                         [element]="element"
-                                        (organizationCreated)="newSubOrg($event)"
+                                        (organizationCreated)="newSubOrg(element)"
                                         (viewApps)="viewApps(ListType.ORG, element)"
-                                        (viewRoles)="viewRoles(ListType.ORG, $event)"
-                                        (appCreated)="newApp($event)"
+                                        (viewRoles)="viewRoles(ListType.ORG, element)"
+                                        (appCreated)="newApp(element)"
                                         (edited)="edit()"
                                         (transferred)="transferOwnership()"
                                         (deleteConfirmed)="remove(listType, element)">
@@ -154,7 +154,7 @@
 
               <app-application-actions *ngIf="listType === ListType.APP"
                                        [element]="element"
-                                       (viewRoles)="viewRoles(ListType.APP, $event)"
+                                       (viewRoles)="viewRoles(ListType.APP, element)"
                                        (edited)="edit()"
                                        (deleteConfirmed)="remove(listType, element)">
               </app-application-actions>
