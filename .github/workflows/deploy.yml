@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ 'develop', 'master' ]
+    branches: [ 'develop', 'master', 'staging' ]
   pull_request:
     branches: [ 'develop', 'master' ]
 
@@ -82,6 +82,11 @@ jobs:
         if: github.ref == 'refs/heads/develop'
         run: |
           rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/develop
+
+      - name: Deploy on staging branch
+        if: github.ref == 'refs/heads/staging'
+        run: |
+          rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/staging
 
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
