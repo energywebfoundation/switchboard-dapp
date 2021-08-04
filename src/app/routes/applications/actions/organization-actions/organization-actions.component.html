@@ -1,50 +1,54 @@
-  <button mat-menu-item class="btn-color-primary" (click)="createSubOrganization()">
-    <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-organization-icon"></mat-icon>
-    <span>Create Sub-Organization</span>
-  </button>
+<button mat-menu-item class="btn-color-primary" (click)="createSubOrganization()">
+  <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-organization-icon"></mat-icon>
+  <span>Create Sub-Organization</span>
+</button>
 
-  <button mat-menu-item class="btn-color-primary" (click)="viewAppsHandler()">
-    <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-application-icon"></mat-icon>
-    <span>View Applications</span>
-  </button>
+<button mat-menu-item class="btn-color-primary" (click)="viewAppsHandler()">
+  <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-application-icon"></mat-icon>
+  <span>View Applications</span>
+</button>
 
-  <button mat-menu-item class="btn-color-primary" (click)="viewRolesHandler()">
-    <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-role-icon"></mat-icon>
-    <span>View Roles</span>
-  </button>
+<button mat-menu-item class="btn-color-primary" (click)="viewRolesHandler()">
+  <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-role-icon"></mat-icon>
+  <span>View Roles</span>
+</button>
 
-  <button mat-menu-item class="btn-color-primary" (click)="createApp()">
-    <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-application-icon"></mat-icon>
-    <span>Create Application</span>
-  </button>
+<button mat-menu-item class="btn-color-primary" (click)="createApp()">
+  <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-application-icon"></mat-icon>
+  <span>Create Application</span>
+</button>
 
-  <button mat-menu-item class="btn-color-primary" (click)="createRole()">
-    <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-role-icon"></mat-icon>
-    <span>Create Role</span>
-  </button>
+<button mat-menu-item class="btn-color-primary" (click)="createRole()">
+  <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-role-icon"></mat-icon>
+  <span>Create Role</span>
+</button>
 
+<ng-container *ngIf="!element.isProvider">
   <button mat-menu-item class="btn-color-primary" *appIsFeatureEnabled (click)="openStakingPool(element)">
     <mat-icon class="btn-color-primary btn-action-3" svgIcon="create-staking-icon"></mat-icon>
     <span>Create Staking Pool</span>
   </button>
+</ng-container>
 
-  <button mat-menu-item class="btn-color-primary" (click)="edit()">
-    <mat-icon class="btn-color-primary">edit</mat-icon>
-    <span>Edit</span>
-  </button>
+<button mat-menu-item class="btn-color-primary" (click)="edit()">
+  <mat-icon class="btn-color-primary">edit</mat-icon>
+  <span>Edit</span>
+</button>
 
-  <button mat-menu-item class="btn-color-primary" (click)="transferOwnership()">
-    <mat-icon class="btn-color-primary btn-action-1" svgIcon="transfer-ownership-icon"></mat-icon>
-    <span>Transfer Ownership</span>
-  </button>
+<button mat-menu-item class="btn-color-primary" (click)="transferOwnership()">
+  <mat-icon class="btn-color-primary btn-action-1" svgIcon="transfer-ownership-icon"></mat-icon>
+  <span>Transfer Ownership</span>
+</button>
 
+<ng-container *ngIf="!element.isProvider">
   <button mat-menu-item class="btn-color-primary" *appIsFeatureEnabled appCopyToClipboard
           message="Staking URL" [copyClipboard]="stakingUrl">
     <mat-icon class="btn-color-primary btn-action-3" svgIcon="copy-url-icon"></mat-icon>
     <span>Copy Staking URL</span>
   </button>
+</ng-container>
 
-  <button mat-menu-item class="btn-color-error" (click)="delete()">
-    <mat-icon class="btn-color-error">delete_outline</mat-icon>
-    <span>Delete</span>
-  </button>
+<button mat-menu-item class="btn-color-error" (click)="delete()">
+  <mat-icon class="btn-color-error">delete_outline</mat-icon>
+  <span>Delete</span>
+</button>
