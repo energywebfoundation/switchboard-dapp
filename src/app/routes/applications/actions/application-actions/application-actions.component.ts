@@ -4,7 +4,6 @@ import { ViewType } from '../../new-organization/new-organization.component';
 import { ListType } from '../../../../shared/constants/shared-constants';
 import { MatDialog } from '@angular/material/dialog';
 import { NewApplicationComponent } from '../../new-application/new-application.component';
-import { ConfirmationDialogComponent } from '../../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ActionBaseAbstract } from '../action-base.abstract';
 
 @Component({
@@ -12,10 +11,11 @@ import { ActionBaseAbstract } from '../action-base.abstract';
   templateUrl: './application-actions.component.html',
   styleUrls: ['./application-actions.component.scss']
 })
-export class ApplicationActionsComponent extends ActionBaseAbstract{
+export class ApplicationActionsComponent extends ActionBaseAbstract {
   @Input() element;
   @Output() viewRoles = new EventEmitter();
   @Output() deleteConfirmed = new EventEmitter();
+  @Output() edited = new EventEmitter();
 
   constructor(dialog: MatDialog) {
     super(dialog);
@@ -47,38 +47,16 @@ export class ApplicationActionsComponent extends ActionBaseAbstract{
   }
 
   edit() {
-    const dialogRef = this.dialog.open(NewApplicationComponent, {
-      width: '600px',
-      data: {
-        viewType: ViewType.UPDATE,
-        origData: this.element
-      },
-      maxWidth: '100%',
-      disableClose: true
+    this.showEditComponent(NewApplicationComponent, {
+      viewType: ViewType.UPDATE,
+      origData: this.element
     });
-
-    dialogRef.afterClosed()
-      .subscribe((res: any) => {
-        if (res) {
-          this.edited.emit();
-        }
-      });
   }
 
   delete() {
-    this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      maxHeight: '195px',
-      data: {
-        header: 'Remove Organization',
-        message: 'Do you wish to continue?'
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().subscribe((res: any) => {
-      if (res) {
-        this.deleteConfirmed.emit();
-      }
+    this.deleteDialog({
+      header: 'Remove Application',
+      message: 'Do you wish to continue?'
     });
   }
 

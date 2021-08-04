@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ViewType } from '../../new-organization/new-organization.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NewRoleComponent } from '../../new-role/new-role.component';
@@ -12,6 +12,8 @@ import { ActionBaseAbstract } from '../action-base.abstract';
 })
 export class RoleActionsComponent extends ActionBaseAbstract implements OnInit {
   @Input() element;
+  @Output() edited = new EventEmitter();
+  deleteConfirmed;
   enrolmentUrl: string;
 
   constructor(dialog: MatDialog) {
@@ -23,23 +25,11 @@ export class RoleActionsComponent extends ActionBaseAbstract implements OnInit {
   }
 
   edit() {
-    this.showEditComponent()
-    const dialogRef = this.dialog.open(NewRoleComponent, {
-      width: '600px',
-      data: {
+    this.showEditComponent(NewRoleComponent, {
         viewType: ViewType.UPDATE,
         origData: this.element
-      },
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed()
-      .subscribe((res: any) => {
-        if (res) {
-          this.edited.emit();
-        }
-      });
+      }
+    );
   }
 
   private generateEnrolmentUrl(): void {

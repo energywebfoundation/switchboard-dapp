@@ -6,7 +6,6 @@ import { NewRoleComponent } from '../../new-role/new-role.component';
 import { ListType } from '../../../../shared/constants/shared-constants';
 import { NewStakingPoolComponent } from '../../new-staking-pool/new-staking-pool.component';
 import { TransferOwnershipComponent } from '../../transfer-ownership/transfer-ownership.component';
-import { ConfirmationDialogComponent } from '../../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ActionBaseAbstract } from '../action-base.abstract';
 
 @Component({
@@ -22,6 +21,7 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
   @Output() appCreated = new EventEmitter();
   @Output() transferred = new EventEmitter();
   @Output() deleteConfirmed = new EventEmitter();
+  @Output() edited = new EventEmitter();
 
   stakingUrl: string;
 
@@ -101,7 +101,7 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
     });
 
     dialogRef.afterClosed()
-      .subscribe(async (res: any) => {
+      .subscribe((res: any) => {
         if (res) {
           this.viewRoles.emit(this.element);
         }
@@ -118,22 +118,10 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
   }
 
   edit() {
-    const dialogRef = this.dialog.open(NewOrganizationComponent, {
-      width: '600px',
-      data: {
-        viewType: ViewType.UPDATE,
-        origData: this.element
-      },
-      maxWidth: '100%',
-      disableClose: true
+    this.showEditComponent(NewOrganizationComponent, {
+      viewType: ViewType.UPDATE,
+      origData: this.element
     });
-
-    dialogRef.afterClosed()
-      .subscribe((res: any) => {
-        if (res) {
-          this.edited.emit();
-        }
-      });
   }
 
   transferOwnership(): void {
@@ -157,19 +145,9 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
   }
 
   delete() {
-    this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      maxHeight: '195px',
-      data: {
-        header: 'Remove Organization',
-        message: 'Do you wish to continue?'
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().subscribe((res: any) => {
-      if (res) {
-        this.deleteConfirmed.emit();
-      }
+    this.deleteDialog({
+      header: 'Remove Organization',
+      message: 'Do you wish to continue?'
     });
   }
 }

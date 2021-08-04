@@ -1,9 +1,11 @@
 import { MatDialog } from '@angular/material/dialog';
-import { EventEmitter, Output } from '@angular/core';
+import { EventEmitter, Optional } from '@angular/core';
 import { ComponentType } from '@angular/cdk/portal';
+import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 
 export abstract class ActionBaseAbstract {
-  @Output() edited = new EventEmitter();
+  abstract edited: EventEmitter<void>;
+  @Optional() abstract deleteConfirmed?: EventEmitter<void>;
 
   protected constructor(protected dialog: MatDialog) {
   }
@@ -20,6 +22,20 @@ export abstract class ActionBaseAbstract {
       .subscribe((res: any) => {
         if (res) {
           this.edited.emit();
+        }
+      });
+  }
+
+  protected deleteDialog(data: unknown) {
+      this.dialog.open(ConfirmationDialogComponent, {
+        width: '400px',
+        maxHeight: '195px',
+        data,
+        maxWidth: '100%',
+        disableClose: true
+      }).afterClosed().subscribe((res: any) => {
+        if (res) {
+          this.deleteConfirmed.emit();
         }
       });
   }
