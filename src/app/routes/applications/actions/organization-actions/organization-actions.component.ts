@@ -15,7 +15,7 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./organization-actions.component.scss']
 })
 export class OrganizationActionsComponent extends ActionBaseAbstract implements OnInit {
-  @Input() element;
+  @Input() organization;
   @Output() viewRoles = new EventEmitter();
   @Output() viewApps = new EventEmitter();
   @Output() organizationCreated = new EventEmitter();
@@ -35,11 +35,11 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
   }
 
   viewAppsHandler() {
-    this.viewApps.emit(this.element);
+    this.viewApps.emit(this.organization);
   }
 
   viewRolesHandler() {
-    this.viewRoles.emit(this.element);
+    this.viewRoles.emit(this.organization);
   }
 
   createSubOrganization() {
@@ -47,8 +47,8 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
       width: '600px',
       data: {
         viewType: ViewType.NEW,
-        parentOrg: JSON.parse(JSON.stringify(this.element)),
-        owner: this.element.owner
+        parentOrg: JSON.parse(JSON.stringify(this.organization)),
+        owner: this.organization.owner
       },
       maxWidth: '100%',
       disableClose: true
@@ -58,7 +58,7 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
       .pipe(
         filter(Boolean)
       )
-      .subscribe(() => this.organizationCreated.emit(this.element));
+      .subscribe(() => this.organizationCreated.emit(this.organization));
   }
 
   createApp() {
@@ -66,8 +66,8 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
       width: '600px',
       data: {
         viewType: ViewType.NEW,
-        organizationNamespace: this.element.namespace,
-        owner: this.element.owner
+        organizationNamespace: this.organization.namespace,
+        owner: this.organization.owner
       },
       maxWidth: '100%',
       disableClose: true
@@ -77,7 +77,7 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
       .pipe(
         filter(Boolean)
       )
-      .subscribe(() => this.appCreated.emit(this.element));
+      .subscribe(() => this.appCreated.emit(this.organization));
   }
 
   createRole() {
@@ -85,9 +85,9 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
       width: '600px',
       data: {
         viewType: ViewType.NEW,
-        namespace: this.element.namespace,
+        namespace: this.organization.namespace,
         listType: ListType.ORG,
-        owner: this.element.owner
+        owner: this.organization.owner
       },
       maxWidth: '100%',
       disableClose: true
@@ -97,7 +97,7 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
       .pipe(
         filter(Boolean)
       )
-      .subscribe(() => this.viewRoles.emit(this.element));
+      .subscribe(() => this.viewRoles.emit(this.organization));
   }
 
   openStakingPool(element: any) {
@@ -112,7 +112,7 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
   edit() {
     this.showEditComponent(NewOrganizationComponent, {
       viewType: ViewType.UPDATE,
-      origData: this.element
+      origData: this.organization
     });
   }
 
@@ -120,9 +120,9 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
     const dialogRef = this.dialog.open(TransferOwnershipComponent, {
       width: '600px',
       data: {
-        namespace: this.element.namespace,
+        namespace: this.organization.namespace,
         type: ListType.ORG,
-        owner: this.element.owner
+        owner: this.organization.owner
       },
       maxWidth: '100%',
       disableClose: true
@@ -132,7 +132,7 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
       .pipe(
         filter(Boolean)
       )
-      .subscribe(() => this.transferred.emit(this.element));
+      .subscribe(() => this.transferred.emit(this.organization));
   }
 
   delete() {
@@ -143,8 +143,8 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
   }
 
   private generateStakingUrl() {
-    if (this.element?.namespace) {
-      this.stakingUrl = `${location.origin}/staking?org=${this.element.namespace}`;
+    if (this.organization?.namespace) {
+      this.stakingUrl = `${location.origin}/staking?org=${this.organization.namespace}`;
     }
   }
 }

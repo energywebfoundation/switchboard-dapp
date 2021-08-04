@@ -142,7 +142,7 @@
 
             <ng-container *ngIf="element?.isOwnedByCurrentUser">
               <app-organization-actions *ngIf="listType === ListType.ORG"
-                                        [element]="element"
+                                        [organization]="element"
                                         (organizationCreated)="newSubOrg(element)"
                                         (viewApps)="viewApps(ListType.ORG, element)"
                                         (viewRoles)="viewRoles(ListType.ORG, element)"
