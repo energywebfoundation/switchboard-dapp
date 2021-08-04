@@ -28,6 +28,8 @@ export const actionSelectors = (hostDebug: DebugElement) => {
     editBtn: getElement('edit')?.nativeElement,
     deleteBtn: getElement('delete')?.nativeElement,
     copyEnrolmentUrl: getElement('copy-enrolment-url')?.nativeElement,
+    createSubOrgBtn: getElement('create-sub-org')?.nativeElement,
+    viewAppsBtn: getElement('view-apps')?.nativeElement,
     getElement
   };
 };

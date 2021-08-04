@@ -33,12 +33,6 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
     this.generateStakingUrl();
   }
 
-  generateStakingUrl() {
-    if (this.element) {
-      this.stakingUrl = `${location.origin}/staking?org=${this.element.namespace}`;
-    }
-  }
-
   viewAppsHandler() {
     this.viewApps.emit(this.element);
   }
@@ -149,5 +143,11 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
       header: 'Remove Organization',
       message: 'Do you wish to continue?'
     });
+  }
+
+  private generateStakingUrl() {
+    if (this.element) {
+      this.stakingUrl = `${location.origin}/staking?org=${this.element.namespace}`;
+    }
   }
 }
