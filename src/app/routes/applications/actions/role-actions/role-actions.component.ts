@@ -33,7 +33,7 @@ export class RoleActionsComponent extends ActionBaseAbstract implements OnInit {
   }
 
   private generateEnrolmentUrl(): void {
-    if (this.element) {
+    if (this.element?.definition?.roleType) {
       this.enrolmentUrl = this.constructEnrolmentUrl(this.element.definition.roleType, this.element);
     }
   }

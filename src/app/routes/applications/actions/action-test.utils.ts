@@ -23,11 +23,11 @@ export const actionSelectors = (hostDebug: DebugElement) => {
   const getElement = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
 
   return {
-    viewBtn: getElement('view-roles').nativeElement,
-    createRoleBtn: getElement('create-role').nativeElement,
-    editBtn: getElement('edit').nativeElement,
-    deleteBtn: getElement('delete').nativeElement,
-    copyEnrolmentUrl: getElement('copy-enrolment-url').nativeElement,
+    viewBtn: getElement('view-roles')?.nativeElement,
+    createRoleBtn: getElement('create-role')?.nativeElement,
+    editBtn: getElement('edit')?.nativeElement,
+    deleteBtn: getElement('delete')?.nativeElement,
+    copyEnrolmentUrl: getElement('copy-enrolment-url')?.nativeElement,
     getElement
   };
 };
