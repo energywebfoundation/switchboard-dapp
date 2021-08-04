@@ -7,6 +7,7 @@ import { ListType } from '../../../../shared/constants/shared-constants';
 import { NewStakingPoolComponent } from '../../new-staking-pool/new-staking-pool.component';
 import { TransferOwnershipComponent } from '../../transfer-ownership/transfer-ownership.component';
 import { ActionBaseAbstract } from '../action-base.abstract';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-organization-actions',
@@ -54,11 +55,10 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
     });
 
     dialogRef.afterClosed()
-      .subscribe((res: any) => {
-        if (res) {
-          this.organizationCreated.emit(this.element);
-        }
-      });
+      .pipe(
+        filter(Boolean)
+      )
+      .subscribe(() => this.organizationCreated.emit(this.element));
   }
 
   createApp() {
@@ -74,11 +74,10 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
     });
 
     dialogRef.afterClosed()
-      .subscribe(async (res: any) => {
-        if (res) {
-          this.appCreated.emit(this.element);
-        }
-      });
+      .pipe(
+        filter(Boolean)
+      )
+      .subscribe(() => this.appCreated.emit(this.element));
   }
 
   createRole() {
@@ -95,11 +94,10 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
     });
 
     dialogRef.afterClosed()
-      .subscribe((res: any) => {
-        if (res) {
-          this.viewRoles.emit(this.element);
-        }
-      });
+      .pipe(
+        filter(Boolean)
+      )
+      .subscribe(() => this.viewRoles.emit(this.element));
   }
 
   openStakingPool(element: any) {
@@ -131,11 +129,10 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
     });
 
     dialogRef.afterClosed()
-      .subscribe(async result => {
-        if (result) {
-          this.transferred.emit(this.element);
-        }
-      });
+      .pipe(
+        filter(Boolean)
+      )
+      .subscribe(() => this.transferred.emit(this.element));
   }
 
   delete() {
@@ -146,7 +143,7 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
   }
 
   private generateStakingUrl() {
-    if (this.element) {
+    if (this.element?.namespace) {
       this.stakingUrl = `${location.origin}/staking?org=${this.element.namespace}`;
     }
   }
