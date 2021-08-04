@@ -3,13 +3,13 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ApplicationActionsComponent } from './application-actions.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { NewApplicationComponent } from '../../new-application/new-application.component';
 import { ViewType } from '../../new-organization/new-organization.component';
 import { ConfirmationDialogComponent } from '../../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { NewRoleComponent } from '../../new-role/new-role.component';
 import { ListType } from '../../../../shared/constants/shared-constants';
+import { actionSelectors, shouldEmit, shouldNotEmit } from '../action-test.utils';
 
 describe('ApplicationActionsComponent', () => {
   let component: ApplicationActionsComponent;
@@ -41,7 +41,7 @@ describe('ApplicationActionsComponent', () => {
   });
 
   it('should emit viewRoles event when clicking on button', () => {
-    const {viewBtn} = selectors(hostDebug);
+    const {viewBtn} = actionSelectors(hostDebug);
     spyOn(component.viewRoles, 'emit');
 
     viewBtn.click();
@@ -51,7 +51,7 @@ describe('ApplicationActionsComponent', () => {
 
   describe('edited event', () => {
     it('should call ConfirmationDialogComponent with proper information', () => {
-      const {editBtn} = selectors(hostDebug);
+      const {editBtn} = actionSelectors(hostDebug);
       spyOn(component.edited, 'emit');
 
       dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
@@ -65,12 +65,12 @@ describe('ApplicationActionsComponent', () => {
       }));
     });
     it('should emit when dialog returns true', () => {
-      const {editBtn} = selectors(hostDebug);
+      const {editBtn} = actionSelectors(hostDebug);
       shouldEmit(editBtn, component, dialogSpy, 'edited');
     });
 
     it('should not emit when dialog returns false', () => {
-      const {editBtn} = selectors(hostDebug);
+      const {editBtn} = actionSelectors(hostDebug);
       shouldNotEmit(editBtn, component, dialogSpy, 'edited');
     });
 
@@ -78,7 +78,7 @@ describe('ApplicationActionsComponent', () => {
 
   describe('deleteConfirmed', () => {
     it('should call ConfirmationDialogComponent with proper information', () => {
-      const {deleteBtn} = selectors(hostDebug);
+      const {deleteBtn} = actionSelectors(hostDebug);
       spyOn(component.deleteConfirmed, 'emit');
 
       dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
@@ -93,12 +93,12 @@ describe('ApplicationActionsComponent', () => {
     });
 
     it('should emit event when dialog returns true', () => {
-      const {deleteBtn} = selectors(hostDebug);
+      const {deleteBtn} = actionSelectors(hostDebug);
       shouldEmit(deleteBtn, component, dialogSpy, 'deleteConfirmed');
     });
 
     it('should not emit event when dialog returns false', () => {
-      const {deleteBtn} = selectors(hostDebug);
+      const {deleteBtn} = actionSelectors(hostDebug);
       shouldNotEmit(deleteBtn, component, dialogSpy, 'deleteConfirmed');
     });
 
@@ -106,11 +106,11 @@ describe('ApplicationActionsComponent', () => {
 
   describe('roleCreated', () => {
     it('should call ConfirmationDialogComponent with proper information', () => {
-      const {createRoleBtn} = selectors(hostDebug);
+      const {createBtn} = actionSelectors(hostDebug);
       spyOn(component.roleCreated, 'emit');
 
       dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
-      createRoleBtn.click();
+      createBtn.click();
 
       expect(dialogSpy.open).toHaveBeenCalledWith(NewRoleComponent, jasmine.objectContaining({
         data: {
@@ -123,43 +123,16 @@ describe('ApplicationActionsComponent', () => {
     });
 
     it('should emit event when dialog returns true', () => {
-      const {createRoleBtn} = selectors(hostDebug);
-      shouldEmit(createRoleBtn, component, dialogSpy, 'roleCreated');
+      const {createBtn} = actionSelectors(hostDebug);
+      shouldEmit(createBtn, component, dialogSpy, 'roleCreated');
     });
 
     it('should not emit event when dialog returns false', () => {
-      const {createRoleBtn} = selectors(hostDebug);
-      shouldNotEmit(createRoleBtn, component, dialogSpy, 'roleCreated');
+      const {createBtn} = actionSelectors(hostDebug);
+      shouldNotEmit(createBtn, component, dialogSpy, 'roleCreated');
     });
 
   });
 
 });
 
-const shouldEmit = (button, component, dialogSpy, prop) => {
-  spyOn(component[prop], 'emit');
-
-  dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
-  button.click();
-
-  expect(component[prop].emit).toHaveBeenCalled();
-}
-const shouldNotEmit = (button, component, dialogSpy, prop) => {
-  spyOn(component[prop], 'emit');
-
-  dialogSpy.open.and.returnValue({afterClosed: () => of(false)});
-  button.click();
-
-  expect(component[prop].emit).not.toHaveBeenCalled();
-}
-const selectors = (hostDebug: DebugElement) => {
-  const getElement = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
-
-  return {
-    viewBtn: getElement('view-roles').nativeElement,
-    createRoleBtn: getElement('create-role').nativeElement,
-    editBtn: getElement('edit').nativeElement,
-    deleteBtn: getElement('delete').nativeElement,
-    getElement
-  };
-};
