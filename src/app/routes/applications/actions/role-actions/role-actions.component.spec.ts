@@ -29,7 +29,7 @@ describe('RoleActionsComponent', () => {
     fixture = TestBed.createComponent(RoleActionsComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
-    component.element = {...element};
+    component.role = {...element};
     fixture.detectChanges();
   });
 
@@ -74,7 +74,7 @@ describe('RoleActionsComponent', () => {
     });
 
     it('should check when element have proper construction', () => {
-      component.element = {
+      component.role = {
         name: 'role2',
         namespace: 'role2.roles.test.iam.ewc',
         definition: {

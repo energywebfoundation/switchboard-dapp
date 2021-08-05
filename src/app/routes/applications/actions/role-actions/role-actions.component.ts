@@ -11,7 +11,7 @@ import { ActionBaseAbstract } from '../action-base.abstract';
   styleUrls: ['./role-actions.component.scss']
 })
 export class RoleActionsComponent extends ActionBaseAbstract implements OnInit {
-  @Input() element;
+  @Input() role;
   @Output() edited = new EventEmitter();
   deleteConfirmed;
   enrolmentUrl: string;
@@ -27,14 +27,14 @@ export class RoleActionsComponent extends ActionBaseAbstract implements OnInit {
   edit() {
     this.showEditComponent(NewRoleComponent, {
         viewType: ViewType.UPDATE,
-        origData: this.element
+        origData: this.role
       }
     );
   }
 
   private generateEnrolmentUrl(): void {
-    if (this.element?.definition?.roleType) {
-      this.enrolmentUrl = this.constructEnrolmentUrl(this.element.definition.roleType, this.element);
+    if (this.role?.definition?.roleType) {
+      this.enrolmentUrl = this.constructEnrolmentUrl(this.role.definition.roleType, this.role);
     }
   }
 

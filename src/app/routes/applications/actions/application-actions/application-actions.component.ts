@@ -14,7 +14,7 @@ import { filter } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ApplicationActionsComponent extends ActionBaseAbstract {
-  @Input() element;
+  @Input() application;
   @Output() viewRoles = new EventEmitter();
   @Output() roleCreated = new EventEmitter();
   @Output() deleteConfirmed = new EventEmitter();
@@ -25,7 +25,7 @@ export class ApplicationActionsComponent extends ActionBaseAbstract {
   }
 
   viewRolesHandler() {
-    this.viewRoles.emit(this.element);
+    this.viewRoles.emit(this.application);
   }
 
   createRole() {
@@ -33,9 +33,9 @@ export class ApplicationActionsComponent extends ActionBaseAbstract {
       width: '600px',
       data: {
         viewType: ViewType.NEW,
-        namespace: this.element.namespace,
+        namespace: this.application.namespace,
         listType: ListType.APP,
-        owner: this.element.owner
+        owner: this.application.owner
       },
       maxWidth: '100%',
       disableClose: true
@@ -52,7 +52,7 @@ export class ApplicationActionsComponent extends ActionBaseAbstract {
   edit() {
     this.showEditComponent(NewApplicationComponent, {
       viewType: ViewType.UPDATE,
-      origData: this.element
+      origData: this.application
     });
   }
 

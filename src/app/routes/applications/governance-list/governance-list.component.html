@@ -154,7 +154,7 @@
               </app-organization-actions>
 
               <app-application-actions *ngIf="listType === ListType.APP"
-                                       [element]="element"
+                                       [application]="element"
                                        (viewRoles)="viewRoles(ListType.APP, element)"
                                        (roleCreated)="viewRoles(ListType.APP, element)"
                                        (edited)="edit()"
@@ -162,7 +162,7 @@
               </app-application-actions>
 
               <app-role-actions *ngIf="listType === ListType.ROLE"
-                                [element]="element"
+                                [role]="element"
                                 (edited)="edit()">
               </app-role-actions>
 

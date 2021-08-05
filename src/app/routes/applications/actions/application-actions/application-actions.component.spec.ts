@@ -32,7 +32,7 @@ describe('ApplicationActionsComponent', () => {
     fixture = TestBed.createComponent(ApplicationActionsComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
-    component.element = {...element};
+    component.application = {...element};
     fixture.detectChanges();
   });
 
