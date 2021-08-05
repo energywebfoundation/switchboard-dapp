@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ 'develop', 'master' ]
+    branches: [ 'develop', 'master', 'staging', 'DOI-887_migrate_switchboard_to_GH']
   pull_request:
     branches: [ 'develop', 'master' ]
 
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: cancel-previous
     env:
-      SB_APP_DIR: $HOME/work/switchboad-dapp/switchboad-dapp
+      SB_APP_DIR: /home/travis/switchboard-dapp
     steps:
       - uses: actions/checkout@v2
         with:
@@ -44,17 +44,18 @@ jobs:
             ${{ runner.os }}-node-
             ${{ runner.os }}-
 
-      - name: Setup AWS Host machine
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
       - name: Install npm packages
         run: |
           npm install
           envsubst < src/environments/constants.template.ts > src/environments/constants.ts
+
+      - name: Run Lint
+        run: |
+          npm run lint
+
+      - name: Run Test
+        run: |
+          npm run test:headless
 
       - name: Prepare for master branch
         if: github.ref == 'refs/heads/master'
@@ -70,19 +71,38 @@ jobs:
           echo "Prod Env Disabled"
           npm run build
 
-      - name: Run Test
-        run: |
-          npm run test:headless
-
       - name: Deploy on develop branch
-        if: github.ref == 'refs/heads/develop'
-        run: |
-          rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/develop
+        if: github.ref == 'refs/heads/DOI-887_migrate_switchboard_to_GH'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SB_WEB_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            rsync  -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/develop
+
+      - name: Deploy on staging branch
+        if: github.ref == 'refs/heads/staging'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SB_WEB_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/staging
 
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
-        run: |
-          rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/master
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SB_WEB_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/master
 
       - name: Sentry Release Staging
         uses: getsentry/action-release@v1.0.0
@@ -90,7 +110,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        if: github.ref != 'refs/heads/master'
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/staging'
         with:
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
 
