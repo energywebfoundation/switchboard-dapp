@@ -9,30 +9,25 @@ import * as StakeActions from './stake.actions';
 import { catchError, delay, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { utils } from 'ethers';
-import { ENSNamespaceTypes, Stake, StakeStatus, StakingPool, StakingPoolService } from 'iam-client-lib';
+import { Stake, StakeStatus } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
-import { ActivatedRoute } from '@angular/router';
-import * as authSelectors from '../auth/auth.selectors';
 import * as stakeSelectors from './stake.selectors';
 import { ToastrService } from 'ngx-toastr';
 import { WithdrawComponent } from '../../routes/ewt-patron/withdraw/withdraw.component';
 import { IOrganizationDefinition } from '@energyweb/iam-contracts';
+import { StakingService } from '../../shared/services/staking/staking.service';
 
 const {formatEther, parseEther} = utils;
 
 @Injectable()
 export class StakeEffects {
-  private stakingPoolService: StakingPoolService;
-  private pool: StakingPool;
-
   initStakingPoolService$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.initStakingPool),
       switchMap(() =>
-        from(StakingPoolService.init(this.iamService.iam.getSigner()))
+        from(this.stakingService.init())
           .pipe(
-            mergeMap((stakingPoolServ) => {
-              this.stakingPoolService = stakingPoolServ;
+            mergeMap(() => {
               return [StakeActions.initPool(), StakeActions.getAccountBalance()];
             })
           )
@@ -46,69 +41,28 @@ export class StakeEffects {
       withLatestFrom(this.store.select(stakeSelectors.getOrganization)),
       filter(([, org]) => Boolean(org)),
       switchMap(([, organization]) =>
-        from(this.stakingPoolService.getPool(organization))
-          .pipe(
-            mergeMap((pool: StakingPool) => {
-              if (!pool) {
-                this.toastr.error(`Organization ${organization} do not exist as a provider.`);
-              }
-              this.pool = pool;
-              return [StakeActions.getStake(), StakeActions.getOrganizationDetails()];
-            })
-          )
+        this.createPool(organization)
       )
     )
   );
-
-  // invalidUrl = createEffect(() =>
-  //     this.actions$.pipe(
-  //       ofType(StakeActions.initStakingPoolSuccess),
-  //       switchMap(() =>
-  //         this.activatedRoute.queryParams.pipe(
-  //           map((params: { org: string }) => params?.org),
-  //           filter(v => !v),
-  //           map(() => {
-  //             swal({
-  //               title: 'Stake',
-  //               text: 'URL is invalid. \n Url should contain org name. \n For example: ?org=example.iam.ewc',
-  //               icon: 'error',
-  //               buttons: {},
-  //               closeOnClickOutside: false
-  //             });
-  //           })
-  //         )
-  //       )
-  //     ),
-  //   {dispatch: false}
-  // );
-
 
   setOrganization$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.setOrganization),
-      filter(() => Boolean(this.pool)),
+      filter(() => Boolean(this.stakingService.getPool())),
       switchMap(({organization}) =>
-        from(this.stakingPoolService.getPool(organization))
-          .pipe(
-            mergeMap((pool: StakingPool) => {
-              if (!pool) {
-                this.toastr.error(`Organization ${organization} do not exist as a provider.`);
-              }
-              this.pool = pool;
-              return [StakeActions.getStake()];
-            })
-          )
+        this.createPool(organization)
       )
     )
   );
 
-  getStake = createEffect(() =>
+  getStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.getStake),
       switchMap(() =>
-        from(this.iamService.iam.getSigner().getAddress())
+        from(this.iamService.getAddress())
           .pipe(
-            switchMap((address) => from(this.pool.getStake(address))
+            switchMap((address) => from(this.stakingService.getPool().getStake(address))
               .pipe(
                 filter<Stake>(Boolean),
                 mergeMap((stake) => {
@@ -137,41 +91,33 @@ export class StakeEffects {
   putStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.putStake),
-      delay(1000), // todo: remove workaround with actions.
       withLatestFrom(
-        this.store.select(authSelectors.isUserLoggedIn),
-        this.store.select(stakeSelectors.getBalance),
         this.store.select(stakeSelectors.isStakingDisabled)
       ),
-      filter(([, loggedIn]) => {
-        if (!loggedIn) {
-          this.toastr.error('You can not stake when you are not logged in!');
-        }
-        return loggedIn;
-      }),
-      filter(([, , , isStakeDisabled]) => {
+      filter(([, isStakeDisabled]) => {
         if (isStakeDisabled) {
           this.toastr.error('You can not stake to this provider because you already staked to it!');
         }
         return !isStakeDisabled;
       }),
-      tap(() => this.loadingService.show()),
-      switchMap(([{amount}, , balance]) => {
-          const amountLesserThanBalance = parseInt(amount, 10) <= parseInt(balance, 10);
-          if (!amountLesserThanBalance) {
-            this.toastr.error('You try to stake higher amount of tokens that your account have. Will be used your balance instead');
-          }
+      tap(() => this.loadingService.show('Putting your stake')),
+      switchMap(([{amount}]) => {
 
-          return from(this.pool.putStake(amountLesserThanBalance ? parseEther(amount) : parseEther(balance)))
+          return from(this.stakingService.putStake(parseEther(amount)))
             .pipe(
-              mergeMap(() => {
+              map(() => {
                 this.dialog.open(StakeSuccessComponent, {
                   width: '400px',
                   maxWidth: '100%',
                   disableClose: true,
                   backdropClass: 'backdrop-shadow'
                 });
-                return [StakeActions.getAccountBalance(), StakeActions.checkReward(), StakeActions.getStake()];
+                return StakeActions.getStake();
+              }),
+              catchError(err => {
+                console.error(err);
+                this.toastr.error(err.message);
+                return of(StakeActions.putStakeFailure({err: err.message}));
               }),
               finalize(() => this.loadingService.hide())
             );
@@ -184,7 +130,7 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.getWithdrawalDelay),
       switchMap(() =>
-        from(this.pool.withdrawalDelay())
+        from(this.stakingService.getPool().withdrawalDelay())
           .pipe(
             map(withdrawalDelay => () => delay(withdrawalDelay as any)),
             map(() => StakeActions.withdrawalDelayExpired()
@@ -216,7 +162,7 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.withdrawRequest),
       switchMap(() =>
-        from(this.pool.requestWithdraw())
+        from(this.stakingService.getPool().requestWithdraw())
           .pipe(
             map(() => {
               return StakeActions.getWithdrawalDelay();
@@ -237,7 +183,7 @@ export class StakeEffects {
       ofType(StakeActions.withdrawReward),
       tap(() => this.loadingService.show('Withdrawing your reward...')),
       switchMap(() =>
-        from(this.pool.withdraw()).pipe(
+        from(this.stakingService.getPool().withdraw()).pipe(
           mergeMap(() => {
             this.dialog.closeAll();
             return [StakeActions.withdrawRewardSuccess(), StakeActions.getStake()];
@@ -259,7 +205,7 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.checkReward),
       switchMap(() =>
-        from(this.pool.checkReward()).pipe(
+        from(this.stakingService.getPool().checkReward()).pipe(
           map((reward) => StakeActions.checkRewardSuccess({reward: formatEther(reward as any)})),
           catchError(err => {
             console.error(err);
@@ -273,16 +219,12 @@ export class StakeEffects {
   getAccountBalance$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.getAccountBalance),
-      switchMap(() => from(this.iamService.iam.getSigner().getAddress())
-        .pipe(
-          switchMap((address: string) =>
-            from(this.iamService.iam.getSigner().provider.getBalance(address))
-              .pipe(
-                map((balance) => formatEther(balance)),
-                map(balance => StakeActions.getAccountSuccess({balance}))
-              )
+      switchMap(() =>
+        from(this.iamService.getBalance())
+          .pipe(
+            map((balance) => formatEther(balance)),
+            map(balance => StakeActions.getAccountSuccess({balance}))
           )
-        )
       )
     )
   );
@@ -291,10 +233,7 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.getOrganizationDetails),
       withLatestFrom(this.store.select(stakeSelectors.getOrganization)),
-      switchMap(([, organization]) => from(this.iamService.iam.getDefinition({
-          type: ENSNamespaceTypes.Organization,
-          namespace: organization
-        })).pipe(
+      switchMap(([, organization]) => from(this.iamService.getDefinition(organization)).pipe(
         map((definition: IOrganizationDefinition) => StakeActions.getOrganizationDetailsSuccess({orgDetails: definition})),
         catchError(err => {
           console.error(err);
@@ -310,7 +249,7 @@ export class StakeEffects {
       ofType(StakeActions.launchStakingPool),
       tap(() => this.loadingService.show()),
       switchMap(({pool}) =>
-        from(this.stakingPoolService.launchStakingPool(pool))
+        from(this.stakingService.getStakingPoolService().launchStakingPool(pool))
           .pipe(
             map(() => {
               this.toastr.success(`You successfully created a staking pool for ${pool.org}`);
@@ -332,17 +271,29 @@ export class StakeEffects {
     () =>
       this.actions$.pipe(
         ofType(StakeActions.getAllServices),
-        switchMap(() => from(this.stakingPoolService.allServices()).pipe(map((service) => console.log(service))))
+        switchMap(() => from(this.stakingService.getStakingPoolService().allServices()).pipe(map((service) => console.log(service))))
       ), {dispatch: false}
   );
 
   constructor(private actions$: Actions,
               private store: Store<StakeState>,
               private iamService: IamService,
-              private activatedRoute: ActivatedRoute,
               private loadingService: LoadingService,
               private toastr: ToastrService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private stakingService: StakingService) {
   }
 
+  private createPool(organization) {
+    return from(this.stakingService.createPool(organization))
+      .pipe(
+        mergeMap((pool) => {
+          if (!pool) {
+            this.toastr.error(`Organization ${organization} do not exist as a provider.`);
+            return [StakeActions.getOrganizationDetails()];
+          }
+          return [StakeActions.getStake(), StakeActions.getOrganizationDetails()];
+        })
+      );
+  }
 }

@@ -2,7 +2,6 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { StakeState, USER_FEATURE_KEY } from './stake.reducer';
 import { Stake, StakeStatus } from 'iam-client-lib';
 import { utils } from 'ethers';
-import * as authSelectors from '../auth/auth.selectors';
 
 const {formatEther} = utils;
 
@@ -40,10 +39,7 @@ export const getStake = createSelector(
 
 export const isStakingDisabled = createSelector(
   getStake,
-  authSelectors.isUserLoggedIn,
-  (state: Stake, loggedIn) => {
-    return (state?.status === StakeStatus.STAKING || state?.status === StakeStatus.WITHDRAWING) && loggedIn;
-  }
+  (state: Stake) => state?.status === StakeStatus.STAKING || state?.status === StakeStatus.WITHDRAWING
 );
 
 export const isWithdrawDisabled = createSelector(

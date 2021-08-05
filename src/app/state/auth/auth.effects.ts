@@ -4,7 +4,7 @@ import { IamService } from '../../shared/services/iam.service';
 import { Store } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
-import { catchError, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { IAM, WalletProvider } from 'iam-client-lib';
 import { from, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -38,12 +38,12 @@ export class AuthEffects {
           walletProvider: provider,
           reinitializeMetamask: provider === WalletProvider.MetaMask
         }, navigateOnTimeout)).pipe(
-          mergeMap((loggedIn) => {
+          map((loggedIn) => {
             if (loggedIn) {
               this.dialog.closeAll();
-              return [AuthActions.loginSuccess()];
+              return AuthActions.loginSuccess();
             }
-            return [AuthActions.loginFailure()];
+            return AuthActions.loginFailure();
           }),
           catchError((err) => {
             console.log(err);
