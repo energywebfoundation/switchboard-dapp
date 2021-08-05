@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { ENSNamespaceTypes, IOrganization } from 'iam-client-lib';
 import { Subject } from 'rxjs';
 
 import { ListType } from 'src/app/shared/constants/shared-constants';
@@ -14,6 +14,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { StakingService } from '../../../shared/services/staking/staking.service';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -60,7 +61,8 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
               private iamService: IamService,
               private dialog: MatDialog,
               private fb: FormBuilder,
-              private toastr: SwitchboardToastrService) {
+              private toastr: SwitchboardToastrService,
+              private stakingService: StakingService) {
   }
 
   async ngOnInit() {
@@ -122,8 +124,11 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     });
 
     if (this.listType === ListType.ORG) {
+      let services = await this.stakingService.getStakingPoolService().allServices();
+      const servicesNames = services.map((service) => service.org);
+      const listWithProvidersInfo = (orgList as IOrganization[]).map((org: IOrganization) => ({...org, isProvider: servicesNames.includes(org.namespace)}))
       // Retrieve only main orgs
-      orgList = this._getMainOrgs(orgList);
+      orgList = this._getMainOrgs(listWithProvidersInfo);
     }
     this.origDatasource = orgList;
 
