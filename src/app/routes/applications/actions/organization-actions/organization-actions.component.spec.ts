@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 import { NewOrganizationComponent, ViewType } from '../../new-organization/new-organization.component';
 import { NewRoleComponent } from '../../new-role/new-role.component';
 import { ListType } from '../../../../shared/constants/shared-constants';
+import { ConfirmationDialogComponent } from '../../../widgets/confirmation-dialog/confirmation-dialog.component';
 
 @Directive({
   selector: '[appIsFeatureEnabled]'
@@ -135,6 +136,23 @@ describe('OrganizationActionsComponent', () => {
         namespace: element.namespace,
         listType: ListType.ORG,
         owner: element.owner
+      }
+    }));
+  });
+
+  it('should call ConfirmationDialogComponent with proper information', () => {
+    component.organization = {};
+    fixture.detectChanges();
+    const {deleteBtn} = actionSelectors(hostDebug);
+    spyOn(component.deleteConfirmed, 'emit');
+
+    dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
+    deleteBtn.click();
+
+    expect(dialogSpy.open).toHaveBeenCalledWith(ConfirmationDialogComponent, jasmine.objectContaining({
+      data: {
+        header: 'Remove Organization',
+        message: 'Do you wish to continue?'
       }
     }));
   });
