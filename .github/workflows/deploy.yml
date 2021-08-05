@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: cancel-previous
     env:
-      SB_APP_DIR: /home/travis/switchboard-dapp
+      SB_APP_DIR: /home/ubuntu/switchboard-dapp
     steps:
       - uses: actions/checkout@v2
         with:
