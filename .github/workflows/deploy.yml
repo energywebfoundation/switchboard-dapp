@@ -75,7 +75,7 @@ jobs:
         if: github.ref == 'refs/heads/DOI-887_migrate_switchboard_to_GH'
         uses: burnett01/rsync-deployments@5.0
         with:
-          switches: -e
+          switches: -r
           path: dist/*
           remote_path: ${{ env.SB_APP_DIR }}/develop
           remote_host: ${{ secrets.SB_WEB_HOST }}
