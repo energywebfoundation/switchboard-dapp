@@ -139,34 +139,31 @@
               <span>View Details</span>
             </button>
 
+            <app-organization-actions *ngIf="listType === ListType.ORG"
+                                      [organization]="element"
+                                      (organizationCreated)="newSubOrg(element)"
+                                      (viewApps)="viewApps(ListType.ORG, element)"
+                                      (viewRoles)="viewRoles(ListType.ORG, element)"
+                                      (appCreated)="newApp(element)"
+                                      (roleCreated)="viewRoles(ListType.ORG, element)"
+                                      (edited)="edit()"
+                                      (transferred)="transferOwnership()"
+                                      (deleteConfirmed)="remove(listType, element)">
+            </app-organization-actions>
 
-            <ng-container *ngIf="element?.isOwnedByCurrentUser">
-              <app-organization-actions *ngIf="listType === ListType.ORG"
-                                        [organization]="element"
-                                        (organizationCreated)="newSubOrg(element)"
-                                        (viewApps)="viewApps(ListType.ORG, element)"
-                                        (viewRoles)="viewRoles(ListType.ORG, element)"
-                                        (appCreated)="newApp(element)"
-                                        (roleCreated)="viewRoles(ListType.ORG, element)"
-                                        (edited)="edit()"
-                                        (transferred)="transferOwnership()"
-                                        (deleteConfirmed)="remove(listType, element)">
-              </app-organization-actions>
+            <app-application-actions *ngIf="listType === ListType.APP"
+                                     [application]="element"
+                                     (viewRoles)="viewRoles(ListType.APP, element)"
+                                     (roleCreated)="viewRoles(ListType.APP, element)"
+                                     (edited)="edit()"
+                                     (deleteConfirmed)="remove(listType, element)">
+            </app-application-actions>
 
-              <app-application-actions *ngIf="listType === ListType.APP"
-                                       [application]="element"
-                                       (viewRoles)="viewRoles(ListType.APP, element)"
-                                       (roleCreated)="viewRoles(ListType.APP, element)"
-                                       (edited)="edit()"
-                                       (deleteConfirmed)="remove(listType, element)">
-              </app-application-actions>
+            <app-role-actions *ngIf="listType === ListType.ROLE"
+                              [role]="element"
+                              (edited)="edit()">
+            </app-role-actions>
 
-              <app-role-actions *ngIf="listType === ListType.ROLE"
-                                [role]="element"
-                                (edited)="edit()">
-              </app-role-actions>
-
-            </ng-container>
           </mat-menu>
         </div>
       </td>

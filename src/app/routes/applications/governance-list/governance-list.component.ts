@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
-import { ENSNamespaceTypes, IApp, IOrganization, IRole } from 'iam-client-lib';
+import { ENSNamespaceTypes } from 'iam-client-lib';
 import { Subject } from 'rxjs';
 
 import { ListType } from 'src/app/shared/constants/shared-constants';
@@ -115,19 +115,11 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     }
     this.loadingService.show();
 
-    const $getOrgList = await this.iamService.iam.getENSTypesByOwner({
+    let orgList = await this.iamService.iam.getENSTypesByOwner({
       type: this.ensType,
       owner: this.iamService.accountAddress,
       excludeSubOrgs: false
     });
-
-    type Domain = IRole & IOrganization & IApp;
-
-    let orgList = await Promise.all(
-      ($getOrgList as Domain[]).map(async (org) => {
-        const isOwnedByCurrentUser = await this.iamService.iam.isOwner({domain: org.namespace});
-        return {...org, isOwnedByCurrentUser};
-      }));
 
     if (this.listType === ListType.ORG) {
       // Retrieve only main orgs
