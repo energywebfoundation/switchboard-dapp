@@ -126,7 +126,10 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     if (this.listType === ListType.ORG) {
       let services = await this.stakingService.getStakingPoolService().allServices();
       const servicesNames = services.map((service) => service.org);
-      const listWithProvidersInfo = (orgList as IOrganization[]).map((org: IOrganization) => ({...org, isProvider: servicesNames.includes(org.namespace)}))
+      const listWithProvidersInfo = (orgList as IOrganization[]).map((org: IOrganization) => ({
+        ...org,
+        isProvider: servicesNames.includes(org.namespace)
+      }));
       // Retrieve only main orgs
       orgList = this._getMainOrgs(listWithProvidersInfo);
     }
