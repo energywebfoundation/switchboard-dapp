@@ -272,9 +272,10 @@ export class StakeEffects {
     () =>
       this.actions$.pipe(
         ofType(StakeActions.getAllServices),
+        tap(() => this.loadingService.show('Loading list of providers')),
         switchMap(() => this.stakingService.allServices()
           .pipe(
-            map((service) => console.log(service))
+            map((services) => StakeActions.getAllServicesSuccess({services}))
           )
         )
       ), {dispatch: false}

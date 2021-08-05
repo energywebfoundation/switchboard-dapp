@@ -2,6 +2,7 @@ import { Action, createReducer, on } from '@ngrx/store';
 import * as StakeActions from './stake.actions';
 import { Stake } from 'iam-client-lib';
 import { IOrganizationDefinition } from '@energyweb/iam-contracts';
+import { Service } from 'iam-client-lib/dist/src/staking';
 
 export const USER_FEATURE_KEY = 'stake';
 
@@ -14,6 +15,7 @@ export interface StakeState {
   userStake: Stake;
   withdrawing: boolean;
   organizationDetails: IOrganizationDefinition;
+  services: Service[];
 }
 
 export const initialState: StakeState = {
@@ -24,7 +26,8 @@ export const initialState: StakeState = {
   organization: '',
   userStake: null,
   withdrawing: false,
-  organizationDetails: null
+  organizationDetails: null,
+  services: []
 };
 
 const stakeReducer = createReducer(
@@ -45,7 +48,8 @@ const stakeReducer = createReducer(
   on(StakeActions.withdrawRequest, (state) => ({...state, withdrawing: true})),
   on(StakeActions.withdrawalDelayExpired, (state) => ({...state, withdrawing: false})),
   on(StakeActions.getOrganizationDetailsSuccess, (state, {orgDetails}) => ({...state, organizationDetails: orgDetails})),
-  on(StakeActions.withdrawRewardSuccess, (state) => ({...state, reward: '0'}))
+  on(StakeActions.withdrawRewardSuccess, (state) => ({...state, reward: '0'})),
+  on(StakeActions.getAllServicesSuccess, (state, {services}) => ({...state, services}))
 );
 
 export function reducer(state: StakeState | undefined, action: Action) {
