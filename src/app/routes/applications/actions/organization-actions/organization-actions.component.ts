@@ -20,6 +20,7 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
   @Output() viewApps = new EventEmitter();
   @Output() organizationCreated = new EventEmitter();
   @Output() appCreated = new EventEmitter();
+  @Output() roleCreated = new EventEmitter();
   @Output() transferred = new EventEmitter();
   @Output() deleteConfirmed = new EventEmitter();
   @Output() edited = new EventEmitter();
@@ -97,7 +98,7 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
       .pipe(
         filter(Boolean)
       )
-      .subscribe(() => this.viewRoles.emit(this.organization));
+      .subscribe(() => this.roleCreated.emit(this.organization));
   }
 
   openStakingPool(element: any) {

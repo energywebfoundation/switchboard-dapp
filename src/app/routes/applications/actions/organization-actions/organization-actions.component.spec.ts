@@ -4,6 +4,10 @@ import { OrganizationActionsComponent } from './organization-actions.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DebugElement, Directive, NO_ERRORS_SCHEMA, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { actionSelectors } from '../action-test.utils';
+import { of } from 'rxjs';
+import { NewOrganizationComponent, ViewType } from '../../new-organization/new-organization.component';
+import { NewRoleComponent } from '../../new-role/new-role.component';
+import { ListType } from '../../../../shared/constants/shared-constants';
 
 @Directive({
   selector: '[appIsFeatureEnabled]'
@@ -17,11 +21,12 @@ class FeatureToggleMockDirective implements OnInit {
   }
 
   ngOnInit() {
-      this.vcr.createEmbeddedView(this.templateRef);
-      this.hasView = true;
+    this.vcr.createEmbeddedView(this.templateRef);
+    this.hasView = true;
   }
 
 }
+
 describe('OrganizationActionsComponent', () => {
   let component: OrganizationActionsComponent;
   let fixture: ComponentFixture<OrganizationActionsComponent>;
@@ -96,4 +101,41 @@ describe('OrganizationActionsComponent', () => {
     });
   });
 
+  it('should call ConfirmationDialogComponent with proper information', () => {
+    const element = {namespace: '', owner: ''};
+    component.organization = element;
+    fixture.detectChanges();
+    const {editBtn} = actionSelectors(hostDebug);
+    spyOn(component.edited, 'emit');
+
+    dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
+    editBtn.click();
+
+    expect(dialogSpy.open).toHaveBeenCalledWith(NewOrganizationComponent, jasmine.objectContaining({
+      data: {
+        viewType: ViewType.UPDATE,
+        origData: element
+      }
+    }));
+  });
+
+  it('should call NewRoleComponent with proper information', () => {
+    const element = {namespace: '', owner: ''};
+    component.organization = element;
+    fixture.detectChanges();
+    const {createRoleBtn} = actionSelectors(hostDebug);
+    spyOn(component.roleCreated, 'emit');
+
+    dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
+    createRoleBtn.click();
+
+    expect(dialogSpy.open).toHaveBeenCalledWith(NewRoleComponent, jasmine.objectContaining({
+      data: {
+        viewType: ViewType.NEW,
+        namespace: element.namespace,
+        listType: ListType.ORG,
+        owner: element.owner
+      }
+    }));
+  });
 });

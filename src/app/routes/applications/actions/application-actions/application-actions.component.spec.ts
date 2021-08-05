@@ -50,7 +50,7 @@ describe('ApplicationActionsComponent', () => {
   });
 
   describe('edited event', () => {
-    it('should call ConfirmationDialogComponent with proper information', () => {
+    it('should call NewApplicationComponent with proper information', () => {
       const {editBtn} = actionSelectors(hostDebug);
       spyOn(component.edited, 'emit');
 
@@ -105,7 +105,7 @@ describe('ApplicationActionsComponent', () => {
   });
 
   describe('roleCreated', () => {
-    it('should call ConfirmationDialogComponent with proper information', () => {
+    it('should call NewRoleComponent with proper information', () => {
       const {createRoleBtn} = actionSelectors(hostDebug);
       spyOn(component.roleCreated, 'emit');
 
