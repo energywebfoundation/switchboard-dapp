@@ -110,9 +110,9 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-          ignore_missing: true
         if: github.ref == 'refs/heads/DOI-887_migrate_switchboard_to_GH' || github.ref == 'refs/heads/staging'
         with:
+          ignore_missing: true
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
 
       - name: Sentry Release Prod
