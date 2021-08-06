@@ -72,7 +72,7 @@ jobs:
           npm run build
 
       - name: Deploy on develop branch
-        if: github.ref == 'refs/heads/DOI-887_migrate_switchboard_to_GH'
+        if: github.ref == 'refs/heads/develop'
         uses: burnett01/rsync-deployments@5.0
         with:
           switches: -r
