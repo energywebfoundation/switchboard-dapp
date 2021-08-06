@@ -1,3 +1,3 @@
 export interface IDialogData {
-    assetDiD?: string;
+  assetDiD?: string;
 }

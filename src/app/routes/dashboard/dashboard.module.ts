@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule, Routes } from '@angular/router';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
 import { DashboardComponent } from './dashboard.component';
 import { WidgetsModule } from '../widgets/widgets.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -24,35 +24,35 @@ import { CardComponent } from './card/card.component';
 
 
 const routes: Routes = [
-    { path: '', component: DashboardComponent }
+  {path: '', component: DashboardComponent}
 ];
 
 
-
 @NgModule({
-    imports: [
-        SharedModule,
-        RouterModule.forChild(routes),
-        MatTabsModule,
-        MatButtonModule,
-        MatPaginatorModule,
-        MatSelectModule,
-        MatIconModule,
-        MatTooltipModule,
-        MatFormFieldModule,
-        MatCheckboxModule,
-        MatStepperModule,
-        MatInputModule,
-        MatTableModule,
-        MatDialogModule,
-        MatAutocompleteModule,
-        MatDatepickerModule,
-        WidgetsModule,
-        NgxSpinnerModule,
-        ProfileModule
-    ],
-    entryComponents: [],
+  imports: [
+    SharedModule,
+    RouterModule.forChild(routes),
+    MatTabsModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    MatSelectModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatStepperModule,
+    MatInputModule,
+    MatTableModule,
+    MatDialogModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    WidgetsModule,
+    NgxSpinnerModule,
+    ProfileModule
+  ],
+  entryComponents: [],
 
-    declarations: [DashboardComponent, UserInfoComponent, CardComponent]
+  declarations: [DashboardComponent, UserInfoComponent, CardComponent]
 })
-export class DashboardModule { }
+export class DashboardModule {
+}

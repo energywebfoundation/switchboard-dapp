@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RequestClaimComponent } from './request-claim.component';
 
@@ -6,12 +6,12 @@ xdescribe('RequestClaimComponent', () => {
   let component: RequestClaimComponent;
   let fixture: ComponentFixture<RequestClaimComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ RequestClaimComponent ]
+      declarations: [RequestClaimComponent]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RequestClaimComponent);

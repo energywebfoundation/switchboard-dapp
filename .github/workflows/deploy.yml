@@ -104,7 +104,7 @@ jobs:
           remote_user: ${{ secrets.GH_SWITCHBOARD_USERNAME }}
           remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
 
-      - name: Sentry Release Develop & Staging
+      - name: Sentry Release Staging
         uses: getsentry/action-release@v1.0.0
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}

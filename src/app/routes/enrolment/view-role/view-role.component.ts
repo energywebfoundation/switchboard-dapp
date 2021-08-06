@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-view-role',
@@ -19,5 +18,5 @@ export interface RolesFields {
 }
 
 const FIELD_DATA: RolesFields[] = [
-  { type: 'Date', label: 'My Label', validation: 'maxLength:30' },
+  {type: 'Date', label: 'My Label', validation: 'maxLength:30'},
 ];

@@ -8,9 +8,9 @@ xdescribe('AssetOwnershipHistoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AssetOwnershipHistoryComponent ]
+      declarations: [AssetOwnershipHistoryComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

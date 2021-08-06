@@ -7,23 +7,24 @@ import { filter } from 'rxjs/operators';
 })
 export class FieldValidationService {
 
-  constructor() { }
+  constructor() {
+  }
 
   /**
    * Checks if the number range is valid.
-   * 
+   *
    * @param { Number } from lower value
    * @param { Number } to higher value
-   * 
+   *
    * @returns { Boolean } true if valid; false otherwise
    */
-  numberRangeValid(from: number | undefined, to: number | undefined) : boolean {
+  numberRangeValid(from: number | undefined, to: number | undefined): boolean {
     let retVal = true;
 
-    if (from !== undefined && 
-      to !== undefined && 
+    if (from !== undefined &&
+      to !== undefined &&
       from > to) {
-        retVal = false;
+      retVal = false;
     }
 
     return retVal;
@@ -36,7 +37,14 @@ export class FieldValidationService {
         .subscribe(v => to.setValue(v));
 
       to.valueChanges
-        .pipe(filter(v => (from.value !== undefined && from.value !== null && to.value !== undefined && to.value !== null) && to.value && v < from.value))
+        .pipe(filter(v => (
+          from.value !== undefined &&
+          from.value !== null &&
+          to.value !== undefined &&
+          to.value !== null) &&
+          to.value &&
+          v < from.value)
+        )
         .subscribe(v => from.setValue(v));
     }
   }

@@ -32,8 +32,8 @@ describe('TypeAlgorithmPipe', () => {
   });
 
   it('extend algorithms enum and check if displays without /', () => {
-    (KeyTypesEnum as any).Test  = 'test';
+    (KeyTypesEnum as any).Test = 'test';
     const text = (KeyTypesEnum as any).Test;
     expect(pipe.transform(text)).toBe('Test');
-  })
+  });
 });

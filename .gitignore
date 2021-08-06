@@ -5,3 +5,4 @@ dist
 lerna.json
 yarn.lock
 coverage
+tslint-to-eslint-config.log

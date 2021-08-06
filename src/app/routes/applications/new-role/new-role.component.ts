@@ -6,9 +6,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { debounceTime, delay, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { ListType } from 'src/app/shared/constants/shared-constants';
-import { FieldValidationService } from 'src/app/shared/services/field-validation.service';
-import { IamService } from 'src/app/shared/services/iam.service';
+import { ListType } from '../../../shared/constants/shared-constants';
+import { FieldValidationService } from '../../../shared/services/field-validation.service';
+import { IamService } from '../../../shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
@@ -28,9 +28,9 @@ export const RoleType = {
 };
 
 const RoleTypeList = [{
-    label: 'Organization',
-    value: RoleType.ORG
-  },
+  label: 'Organization',
+  value: RoleType.ORG
+},
   {
     label: 'Application',
     value: RoleType.APP
@@ -55,19 +55,21 @@ export interface ISmartSearch {
 })
 export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   private stepper: MatStepper;
+
   @ViewChild('stepper') set content(content: MatStepper) {
     if (content) {
       this.stepper = content;
     }
   }
+
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger;
 
-  IssuerType    = {
+  IssuerType = {
     DID: 'DID',
     Role: 'Role'
   };
 
-  public roleForm     = this.fb.group({
+  public roleForm = this.fb.group({
     roleType: [null, Validators.required],
     parentNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
     roleName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256), isAlphanumericValidator]],
@@ -79,37 +81,24 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         roleName: '',
         did: this.fb.array([])
       }),
-      enrolmentPreconditions: [[{ type: PreconditionTypes.Role, conditions: []}]]
+      enrolmentPreconditions: [[{type: PreconditionTypes.Role, conditions: []}]]
     })
   });
-  public issuerGroup  = this.fb.group({
+  public issuerGroup = this.fb.group({
     newIssuer: ['', this.iamService.isValidDid]
   });
 
-  roleNotFoundValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const notFound = typeof control.value !== 'string';
-      return !notFound ? {roleNotFound: {value: control.value}} : null;
-    };
-  }
-  roleExistValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const valueConditions: string[] = this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions;
-      const exists = valueConditions.includes(control.value.namespace);
-      return exists ? {roleExist: {value: control.value}} : null;
-    };
-  }
-  public roleControl  =  this.fb.control('');
-  public restrictionRoleControl  =  this.fb.control('', [Validators.required, this.roleNotFoundValidator(), this.roleExistValidator()]);
-  public environment  = environment;
-  public isChecking   = false;
-  public RoleType     = RoleType;
+  public roleControl = this.fb.control('');
+  public restrictionRoleControl = this.fb.control('', [Validators.required, this.roleNotFoundValidator(), this.roleExistValidator()]);
+  public environment = environment;
+  public isChecking = false;
+  public RoleType = RoleType;
   public RoleTypeList = RoleTypeList;
-  public ENSPrefixes  = ENSNamespaceTypes;
-  public issuerList   : string[] = [this.iamService.iam.getDid()];
+  public ENSPrefixes = ENSNamespaceTypes;
+  public issuerList: string[] = [this.iamService.iam.getDid()];
 
   // Fields
-  fieldsForm          = this.fb.group({
+  fieldsForm = this.fb.group({
     fieldType: ['', Validators.required],
     label: ['', Validators.required],
     validation: this.fb.group({
@@ -133,12 +122,12 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       maxDate: undefined
     })
   });
-  isAutolistLoading   = false;
-  hasSearchResult     = true;
+  isAutolistLoading = false;
+  hasSearchResult = true;
   displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
-  displayedColumns    : string[] = [...this.displayedColumnsView, 'actions'];
-  dataSource          = new MatTableDataSource([]);
-  rolenamespaceList   : Observable<any[]>;
+  displayedColumns: string[] = [...this.displayedColumnsView, 'actions'];
+  dataSource = new MatTableDataSource([]);
+  rolenamespaceList: Observable<any[]>;
 
   public ViewType = ViewType;
   viewType: string = ViewType.NEW;
@@ -150,7 +139,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   private _retryCount = 0;
   private _currentIdx = 0;
   private _requests = {};
-  private _onSearchKeywordInput$ : any;
+  private _onSearchKeywordInput$: any;
   private subscription$ = new Subject();
 
   constructor(private fb: FormBuilder,
@@ -163,6 +152,21 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
+  roleNotFoundValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const notFound = typeof control.value !== 'string';
+      return !notFound ? {roleNotFound: {value: control.value}} : null;
+    };
+  }
+
+  roleExistValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const valueConditions: string[] = this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions;
+      const exists = valueConditions.includes(control.value.namespace);
+      return exists ? {roleExist: {value: control.value}} : null;
+    };
+  }
+
   async ngAfterViewInit() {
     await this.confirmParentNamespace();
   }
@@ -172,9 +176,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this._induceRanges();
 
     this.rolenamespaceList = this.roleControl.valueChanges.pipe(
-        debounceTime(1200),
-        startWith(''),
-        switchMap(async (value) => await this._searchRoleNamespace(value))
+      debounceTime(1200),
+      startWith(''),
+      switchMap(async (value) => await this._searchRoleNamespace(value))
     );
 
     this._init(this.data);
@@ -192,8 +196,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.viewType === ViewType.UPDATE && data.origData) {
         this.origData = data.origData;
         this.TOASTR_HEADER = 'Update Role';
-      }
-      else if (this.viewType === ViewType.NEW && data.namespace) {
+      } else if (this.viewType === ViewType.NEW && data.namespace) {
         const tmp = {
           parentNamespace: data.namespace,
           roleType: undefined
@@ -201,8 +204,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (data.listType === ListType.ORG) {
           tmp.roleType = RoleType.ORG;
-        }
-        else if (data.listType === ListType.APP) {
+        } else if (data.listType === ListType.APP) {
           tmp.roleType = RoleType.APP;
         }
 
@@ -259,7 +261,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _incrementVersion(version: string | number) {
-    if (typeof(version) === 'string') {
+    if (typeof (version) === 'string') {
       return parseInt(version.split('.')[0], 10) + 1;
     }
     return version + 1;
@@ -269,7 +271,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     const retVal = [];
 
     if (preconditionList) {
-      for (let precondition of preconditionList) {
+      for (const precondition of preconditionList) {
         if (precondition.conditions) {
           retVal.push(precondition);
         }
@@ -281,7 +283,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _initDates() {
     if (this.dataSource.data) {
-      for (let data of this.dataSource.data) {
+      for (const data of this.dataSource.data) {
         if (data.fieldType === 'date') {
           if (data.maxDate) {
             data.maxDate = new Date(data.maxDate);
@@ -299,20 +301,20 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     const maxLength = this.fieldsForm.get('validation').get('maxLength');
 
     minLength.valueChanges
-        .pipe(takeUntil(this.subscription$))
-        .subscribe(data => {
-          if (data) {
-            minLength.setValue(parseInt(data), {emitEvent: false});
-          }
-        });
+      .pipe(takeUntil(this.subscription$))
+      .subscribe(data => {
+        if (data) {
+          minLength.setValue(parseInt(data), {emitEvent: false});
+        }
+      });
 
     maxLength.valueChanges
-        .pipe(takeUntil(this.subscription$))
-        .subscribe(data => {
-          if (data) {
-            maxLength.setValue(parseInt(data), {emitEvent: false});
-          }
-        });
+      .pipe(takeUntil(this.subscription$))
+      .subscribe(data => {
+        if (data) {
+          maxLength.setValue(parseInt(data), {emitEvent: false});
+        }
+      });
   }
 
   private _induceRanges() {
@@ -386,8 +388,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!exists) {
       this.issuerList.push(newIssuerDid);
       this.issuerGroup.get('newIssuer').reset();
-    }
-    else {
+    } else {
       this.toastr.error('Item exists.', 'Issuer DID');
     }
   }
@@ -425,14 +426,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async proceedSettingIssuer() {
     of(null)
-    .pipe(
+      .pipe(
         take(1),
         delay(1)
-    )
-    .subscribe(() => {
-      this.isChecking = true;
-      this.spinner.show();
-    });
+      )
+      .subscribe(() => {
+        this.isChecking = true;
+        this.spinner.show();
+      });
 
     if (this.roleForm.value.roleName) {
       let allowToProceed = true;
@@ -462,13 +463,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
             allowToProceed = false;
           } else {
             of(null)
-                .pipe(
-                    take(1),
-                    delay(1)
-                )
-                .subscribe(() => {
-                  this.spinner.show();
-                });
+              .pipe(
+                take(1),
+                delay(1)
+              )
+              .subscribe(() => {
+                this.spinner.show();
+              });
           }
         }
       }
@@ -480,8 +481,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stepper.selected.completed = true;
         this.stepper.next();
       }
-    }
-    else {
+    } else {
       this.toastr.error('Form is invalid.', this.TOASTR_HEADER);
     }
 
@@ -508,13 +508,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       let allowToProceed = true;
       if (this.IssuerType.Role === issuerType) {
         of(null)
-            .pipe(
-                take(1),
-                delay(1)
-            )
-            .subscribe(() => {
-              this.spinner.show();
-            });
+          .pipe(
+            take(1),
+            delay(1)
+          )
+          .subscribe(() => {
+            this.spinner.show();
+          });
 
         // Check if rolename exists or valid
         const exists = await this.iamService.iam.checkExistenceOfDomain({
@@ -524,8 +524,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!exists || !roleFormValue.data.issuer.roleName.includes(`.${ENSNamespaceTypes.Roles}.`)) {
           this.toastr.error('Issuer Role Namespace does not exist or is invalid.', this.TOASTR_HEADER);
           allowToProceed = false;
-        }
-        else {
+        } else {
           // Check if there are approved users to issue the claim
           const did = await this.iamService.iam.getRoleDIDs({
             namespace: roleFormValue.data.issuer.roleName
@@ -566,14 +565,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.roleForm.value.parentNamespace) {
       try {
         of(null)
-            .pipe(
-                take(1),
-                delay(1)
-            )
-            .subscribe(() => {
-              this.isChecking = true;
-              this.spinner.show();
-            });
+          .pipe(
+            take(1),
+            delay(1)
+          )
+          .subscribe(() => {
+            this.isChecking = true;
+            this.spinner.show();
+          });
 
         // Check if namespace exists
         let exists = await this.iamService.iam.checkExistenceOfDomain({
@@ -596,34 +595,29 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
               this.toastr.error('You are not authorized to create a role under this namespace.', this.TOASTR_HEADER);
               this.dialog.closeAll();
             }
-          }
-          else {
+          } else {
             this.toastr.error('Role subdomain in this namespace does not exist.', this.TOASTR_HEADER);
             this.dialog.closeAll();
           }
-        }
-        else {
+        } else {
           this.toastr.error('Namespace does not exist.', this.TOASTR_HEADER);
           this.dialog.closeAll();
         }
-      }
-      catch (e) {
+      } catch (e) {
         this.toastr.error(e.message, 'System Error');
         this.dialog.closeAll();
-      }
-      finally {
+      } finally {
         this.isChecking = false;
         this.spinner.hide();
       }
-    }
-    else {
+    } else {
       this.toastr.error('Parent Namespace is missing.', this.TOASTR_HEADER);
       this.dialog.closeAll();
     }
   }
 
   async confirmRole(skipNextStep?: boolean) {
-    const req = JSON.parse(JSON.stringify({ ...this.roleForm.value, returnSteps: true }));
+    const req = JSON.parse(JSON.stringify({...this.roleForm.value, returnSteps: true}));
 
     req.namespace = `${this.ENSPrefixes.Roles}.${req.parentNamespace}`;
     delete req.parentNamespace;
@@ -647,8 +641,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.viewType === ViewType.UPDATE) {
       this.proceedUpdateStep(req, skipNextStep);
-    }
-    else {
+    } else {
       this.proceedCreateSteps(req);
     }
   }
@@ -679,8 +672,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         // Process
         await this.next(requestIdx);
       }
-    }
-    else if (this._requests['0']) {
+    } else if (this._requests['0']) {
       // Move to Complete Step
       this.stepper.selected.completed = true;
       this.stepper.next();
@@ -689,7 +681,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private async proceedCreateSteps(req: any) {
     const returnSteps = this.data.owner === this.iamService.iam.address;
-    req = { ...req, returnSteps };
+    req = {...req, returnSteps};
     try {
       const call = this.iamService.iam.createRole(req);
       // Retrieve the steps to create an organization
@@ -704,8 +696,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // Process
       await this.next(0);
-    }
-    catch (e) {
+    } catch (e) {
       console.error('New Role Error', e);
       this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
     }
@@ -729,13 +720,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
           this.stepper.selected.completed = true;
           this.stepper.next();
         }
-      }
-      catch (e) {
+      } catch (e) {
         console.error('New Role Error', e);
         this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
       }
-    }
-    else {
+    } else {
       delete this._requests[`${this._retryCount++}`];
       await this.confirmRole(true);
     }
@@ -774,8 +763,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stepper.selected.completed = true;
         this.stepper.next();
       }
-    }
-    catch (e) {
+    } catch (e) {
       console.error('Update Role Error', e);
       this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
     }
@@ -800,13 +788,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       if (await this.confirm('There are unsaved changes.', true)) {
         this.dialogRef.close(false);
       }
-    }
-    else {
+    } else {
       if (isSuccess) {
         if (this.origData) {
           this.toastr.success('Role is successfully updated.', this.TOASTR_HEADER);
-        }
-        else {
+        } else {
           this.toastr.success('Role is successfully created.', this.TOASTR_HEADER);
         }
       }
@@ -861,7 +847,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     // Make sure that enrolmentPreconditions field exists
     let enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions');
     if (!enrolmentPreconditions || !enrolmentPreconditions.value || !enrolmentPreconditions.value.length) {
-      this.roleForm.get('data').get('enrolmentPreconditions').setValue([{ type: PreconditionTypes.Role, conditions: []}]);
+      this.roleForm.get('data').get('enrolmentPreconditions').setValue([{
+        type: PreconditionTypes.Role,
+        conditions: []
+      }]);
       enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions');
     }
 
@@ -874,8 +863,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     // Check if item is already added
     if (conditions.includes(event.option.value.namespace)) {
       this.toastr.warning('Role already exists in the list.');
-    }
-    else {
+    } else {
       conditions.push(event.option.value.namespace);
       this.clearSearchTxt();
     }

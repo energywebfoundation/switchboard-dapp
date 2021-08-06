@@ -4,7 +4,7 @@ import { Subject, timer } from 'rxjs';
 import { mapTo, scan, startWith, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from 'src/app/routes/widgets/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '../../../routes/widgets/confirmation-dialog/confirmation-dialog.component';
 
 
 @Directive({
@@ -17,8 +17,13 @@ export class RetryBtnDirective implements OnDestroy {
   @Output()
   appRetryBtn = new EventEmitter<void>();
 
-  @HostListener('click', ['$event']) onClick($event){
-    let confirm$ = this.dialog.open(ConfirmationDialogComponent, {
+  count = -1;
+
+  private _counter;
+  private _destroy;
+
+  @HostListener('click', ['$event']) onClick($event) {
+    const confirm$ = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
       maxHeight: '195px',
       data: {
@@ -37,11 +42,6 @@ export class RetryBtnDirective implements OnDestroy {
     });
   }
 
-  count = -1;
-
-  private _counter;
-  private _destroy;
-
   constructor(private elementRef: ElementRef, private dialog: MatDialog) {
     this._start();
   }
@@ -51,30 +51,29 @@ export class RetryBtnDirective implements OnDestroy {
     this._counter = new Subject();
     this._destroy = new Subject();
 
-    let counter$ = this._counter.pipe(
+    const counter$ = this._counter.pipe(
       switchMap((endValue: number) => {
         return timer(0, 1000).pipe(
           mapTo(1),
           startWith(endValue),
           scan((accumulator: number, currentValue: number) => accumulator - 1),
           takeWhile(this._notZero(this.count))
-        )
+        );
       }),
       takeUntil(this._destroy)
     )
-    .subscribe((newCount: number) => {
-      this.count = newCount;
+      .subscribe((newCount: number) => {
+        this.count = newCount;
 
-      if (this.count === 0) {
-        this.elementRef.nativeElement.innerText = `Retry`;
-        this.isDisabled = false;
-        counter$.unsubscribe();
-        this._initiateDestroy();
-      }
-      else {
-        this.elementRef.nativeElement.innerText = `Retry (${this.count})`;
-      }
-    });
+        if (this.count === 0) {
+          this.elementRef.nativeElement.innerText = `Retry`;
+          this.isDisabled = false;
+          counter$.unsubscribe();
+          this._initiateDestroy();
+        } else {
+          this.elementRef.nativeElement.innerText = `Retry (${this.count})`;
+        }
+      });
 
     this._counter.next(environment.trxRetry);
   }

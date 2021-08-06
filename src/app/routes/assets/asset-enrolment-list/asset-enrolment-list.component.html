@@ -45,7 +45,7 @@
         <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0">
           <!-- <div class="filter-label mr-1">Group by:</div> -->
           <mat-form-field appearance="outline" floatPlaceholder="never"
-            class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+                          class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
             <mat-select [formControl]="enrolmentDropdown" (selectionChange)="updateEnrolmentList($event)">
               <mat-option [value]="dropdownValue.all">All</mat-option>
               <mat-option [value]="dropdownValue.pending">Pending</mat-option>
@@ -62,7 +62,7 @@
           </mat-form-field>
         </div>
       </div>
-      <app-enrolment-list [list-type]="'asset'"
+      <app-enrolment-list [listType]="'asset'"
                           [subject]="subject"
                           #enrolmentList
                           [namespaceFilterControl]="namespaceControlIssuer">

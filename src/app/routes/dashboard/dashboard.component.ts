@@ -1,12 +1,12 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { IamService } from 'src/app/shared/services/iam.service';
+import { IamService } from '../../shared/services/iam.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { LoadingService } from '../../shared/services/loading.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { WalletProvider } from 'iam-client-lib';
-import { LoadingCount } from 'src/app/shared/constants/shared-constants';
+import { LoadingCount } from '../../shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import { UserClaimState } from '../../state/user-claim/user.reducer';
@@ -44,7 +44,7 @@ export class DashboardComponent implements AfterViewInit {
     });
     this.filteredOptions = this.searchForm.get('searchTxt').valueChanges.pipe(
       debounceTime(1200),
-      startWith(undefined),
+      startWith(''),
       switchMap(async (value) => await this._filterOrgsAndApps(value))
     );
   }
@@ -71,7 +71,7 @@ export class DashboardComponent implements AfterViewInit {
       await this._setupUser();
       // Redirect to actual screen
       if (returnUrl) {
-        let timeout$ = setTimeout(() => {
+        const timeout$ = setTimeout(() => {
           this.loadingService.hide();
           this.route.navigateByUrl(returnUrl);
           clearTimeout(timeout$);
@@ -108,11 +108,9 @@ export class DashboardComponent implements AfterViewInit {
           });
         }
       }
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
-    }
-    finally {
+    } finally {
       this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.DOWN);
     }
 
@@ -126,7 +124,7 @@ export class DashboardComponent implements AfterViewInit {
   search(namespace?: string) {
     if (!this.isAutolistLoading.value) {
       this.route.navigate(['search-result'], {
-        queryParams: { keyword: this.searchTxtFieldValue, namespace: namespace }
+        queryParams: {keyword: this.searchTxtFieldValue, namespace}
       });
     }
   }

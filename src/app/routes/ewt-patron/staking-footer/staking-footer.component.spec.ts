@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClaimRewardComponent } from './claim-reward.component';
+import { StakingFooterComponent } from './staking-footer.component';
 
-describe('ClaimRewardComponent', () => {
-  let component: ClaimRewardComponent;
-  let fixture: ComponentFixture<ClaimRewardComponent>;
+describe('StakingFooterComponent', () => {
+  let component: StakingFooterComponent;
+  let fixture: ComponentFixture<StakingFooterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ClaimRewardComponent ]
+      declarations: [ StakingFooterComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ClaimRewardComponent);
+    fixture = TestBed.createComponent(StakingFooterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

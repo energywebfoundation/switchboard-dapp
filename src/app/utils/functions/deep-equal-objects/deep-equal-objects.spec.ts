@@ -23,5 +23,5 @@ describe('compare-form-with-defaults function', () => {
 
   it('should return true, when properties in objects are the same objects', () => {
     expect(deepEqualObjects({value: {value: 1}}, {value: {value: 1}})).toEqual(true);
-  })
+  });
 });

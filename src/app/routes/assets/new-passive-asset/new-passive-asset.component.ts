@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { CancelButton } from 'src/app/layout/loading/loading.component';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { Component } from '@angular/core';
+import { CancelButton } from '../../../layout/loading/loading.component';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
@@ -10,33 +10,28 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
   templateUrl: './new-passive-asset.component.html',
   styleUrls: ['./new-passive-asset.component.scss']
 })
-export class NewPassiveAssetComponent implements OnInit {
+export class NewPassiveAssetComponent {
 
   private TOASTR_HEADER = 'Register Single Asset';
 
   constructor(public dialogRef: MatDialogRef<NewPassiveAssetComponent>,
-    private loadingService: LoadingService,
-    private toastr: SwitchboardToastrService,
-    private iamService: IamService) { }
-
-  ngOnInit(): void {
-
+              private loadingService: LoadingService,
+              private toastr: SwitchboardToastrService,
+              private iamService: IamService) {
   }
 
   async registerAsset() {
     let success = false;
     try {
       this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
-      let assetAddress = await this.iamService.iam.registerAsset();
+      const assetAddress = await this.iamService.iam.registerAsset();
       this.toastr.success('New asset is successfully registered.', this.TOASTR_HEADER);
       success = true;
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
-      this.toastr.error(e.message || 'Could not register asset at this time. Please contact system administrator', 
+      this.toastr.error(e.message || 'Could not register asset at this time. Please contact system administrator',
         this.TOASTR_HEADER);
-    }
-    finally {
+    } finally {
       this.loadingService.hide();
       this.closeDialog(success);
     }

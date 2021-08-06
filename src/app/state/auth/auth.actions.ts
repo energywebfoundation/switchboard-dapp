@@ -1,6 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Stake, WalletProvider } from 'iam-client-lib';
-import { LoginOptions } from '../../shared/services/iam.service';
+import { WalletProvider } from 'iam-client-lib';
 
 export const init = createAction(
   '[AUTH] Initialize Possible Options To Log In'
@@ -8,12 +7,7 @@ export const init = createAction(
 
 export const login = createAction(
   '[AUTH] Login User With Provider',
-  props<{provider: WalletProvider}>()
-);
-
-export const loginAndStake = createAction(
-  '[AUTH] Login And Stake',
-  props<{ amount: string, provider: WalletProvider }>()
+  props<{ provider: WalletProvider, navigateOnTimeout?: boolean }>()
 );
 
 export const loginSuccess = createAction(
@@ -25,11 +19,6 @@ export const loginFailure = createAction(
 
 export const logout = createAction(
   '[AUTH] Logout'
-);
-
-export const setAuth = createAction(
-  '[AUTH] Setting User Authorization',
-  props<{ loggedIn: boolean }>()
 );
 
 export const getMetamaskOptions = createAction(

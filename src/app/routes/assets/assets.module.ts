@@ -4,7 +4,7 @@ import { AssetsComponent } from './assets.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
 import { GovernanceDetailsModule } from '../applications/governance-view/governance-details/governance-details.module';
 import { NgMatSearchBarModule } from 'ng-mat-search-bar';
 import { NewAssetTypeComponent } from './new-asset-type/new-asset-type.component';
@@ -29,8 +29,8 @@ import { TypeAlgorithmPipe } from './pipes/type-algorithm.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
 const routes: Routes = [
-  { path: '', component: AssetsComponent },
-  { path: 'enrolment/:subject', component: AssetEnrolmentListComponent }
+  {path: '', component: AssetsComponent},
+  {path: 'enrolment/:subject', component: AssetEnrolmentListComponent}
 ];
 
 
@@ -68,7 +68,13 @@ const routes: Routes = [
     NgMatSearchBarModule,
     ClipboardModule
   ],
-  entryComponents: [NewAssetTypeComponent, NewPassiveAssetComponent, AssetOwnershipHistoryComponent, EditAssetDialogComponent, VerificationMethodComponent]
+  entryComponents: [
+    NewAssetTypeComponent,
+    NewPassiveAssetComponent,
+    AssetOwnershipHistoryComponent,
+    EditAssetDialogComponent,
+    VerificationMethodComponent
+  ]
 })
 export class AssetsModule {
 }

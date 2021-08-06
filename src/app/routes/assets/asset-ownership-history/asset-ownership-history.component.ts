@@ -3,8 +3,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 import { sortByEmittedDate } from '../utils/sort/sort-by-emitted-date';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 

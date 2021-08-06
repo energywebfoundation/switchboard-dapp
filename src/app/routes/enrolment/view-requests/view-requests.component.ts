@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CancelButton } from 'src/app/layout/loading/loading.component';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { CancelButton } from '../../../layout/loading/loading.component';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { NotificationService } from '../../../shared/services/notification.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { Store } from '@ngrx/store';
@@ -38,12 +38,12 @@ export class ViewRequestsComponent implements OnInit {
     this.claim = this.data.claimData;
 
     if (this.claim && this.claim.token) {
-      const decoded = await this.iamService.iam.decodeJWTToken({
+      const decoded: any = await this.iamService.iam.decodeJWTToken({
         token: this.claim.token
       });
 
-      if (decoded['claimData'] && decoded['claimData']['fields']) {
-        this.fields = decoded['claimData']['fields'];
+      if (decoded.claimData && decoded.claimData.fields) {
+        this.fields = decoded.claimData.fields;
       }
     }
   }
@@ -65,9 +65,9 @@ export class ViewRequestsComponent implements OnInit {
       this.notifService.decreasePendingApprovalCount();
       this.toastr.success('Request is approved.', TOASTR_HEADER);
       this.dialogRef.close(true);
-    }    catch (e) {
+    } catch (e) {
       this.toastr.error(e, TOASTR_HEADER);
-    }    finally {
+    } finally {
       this.loadingService.hide();
     }
   }

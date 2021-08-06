@@ -9,7 +9,9 @@ import { Router } from '@angular/router';
 export class TopBarComponent {
   @Input() provider: string;
   @Input() providerLogo: string;
-  constructor(private router: Router) { }
+
+  constructor(private router: Router) {
+  }
 
   providersList() {
     this.router.navigate(['stake']);

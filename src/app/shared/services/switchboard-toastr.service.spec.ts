@@ -7,18 +7,18 @@ import { BehaviorSubject } from 'rxjs';
 describe('SwitchboardToastrService', () => {
   let service: SwitchboardToastrService;
   const toastrSpyObj = jasmine.createSpyObj('ToastrService',
-      [
-        'success',
-        'show',
-        'error',
-        'info',
-        'warning',
-      ]
+    [
+      'success',
+      'show',
+      'error',
+      'info',
+      'warning',
+    ]
   );
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: ToastrService, useValue: toastrSpyObj }]
+      providers: [{provide: ToastrService, useValue: toastrSpyObj}]
     });
     service = TestBed.inject(SwitchboardToastrService);
 

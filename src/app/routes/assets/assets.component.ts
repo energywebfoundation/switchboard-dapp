@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AssetListType } from 'src/app/shared/constants/shared-constants';
-import { UrlParamService } from 'src/app/shared/services/url-param.service';
+import { AssetListType } from '../../shared/constants/shared-constants';
+import { UrlParamService } from '../../shared/services/url-param.service';
 import { AssetListComponent, RESET_LIST } from './asset-list/asset-list.component';
 import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,21 +12,18 @@ import { MatTabGroup } from '@angular/material/tabs';
   templateUrl: './assets.component.html',
   styleUrls: ['./assets.component.scss']
 })
-export class AssetsComponent implements OnInit, AfterViewInit {
+export class AssetsComponent implements AfterViewInit {
   @ViewChild('assetsTabGroup') assetsTabGroup: MatTabGroup;
-  @ViewChild('listMyAssets' ) listMyAssets: AssetListComponent;
+  @ViewChild('listMyAssets') listMyAssets: AssetListComponent;
   @ViewChild('listOfferedAssets') listOfferedAssets: AssetListComponent;
   @ViewChild('listPreviousAssets') listPreviousAssets: AssetListComponent;
 
   AssetListType = AssetListType;
 
   constructor(private dialog: MatDialog,
-    private urlParamService: UrlParamService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute) { }
-
-  ngOnInit(): void {
-
+              private urlParamService: UrlParamService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngAfterViewInit(): void {
@@ -35,32 +32,27 @@ export class AssetsComponent implements OnInit, AfterViewInit {
         if (queryParams.notif) {
           if (queryParams.notif === 'assetsOfferedToMe') {
             this.initDefault(1);
-          }
-          else {
+          } else {
             this.initDefault();
           }
-        }
-        else if (queryParams.selectedTab) {
+        } else if (queryParams.selectedTab) {
           if (queryParams.selectedTab) {
             this.initDefault(queryParams.selectedTab);
-          }
-          else {
+          } else {
             this.initDefault();
           }
-        }
-        else {
+        } else {
           this.initDefault();
         }
-      }
-      else {
+      } else {
         this.initDefault();
       }
     });
-   }
+  }
 
   registerAsset() {
     const dialogRef = this.dialog.open(NewPassiveAssetComponent, {
-      width: '600px',data:{},
+      width: '600px', data: {},
       maxWidth: '100%',
       disableClose: true
     });
@@ -101,6 +93,4 @@ export class AssetsComponent implements OnInit, AfterViewInit {
       this.assetsTabGroup.selectedIndex = index || 0;
     }
   }
-
-
 }

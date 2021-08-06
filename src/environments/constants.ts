@@ -6,4 +6,4 @@ export const constants = {
   SENTRY_DNS: '',
   SENTRY_RELEASE: '',
   SENTRY_ENVIRONMENT: '',
-}
+};

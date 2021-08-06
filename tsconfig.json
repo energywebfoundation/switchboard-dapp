@@ -17,6 +17,11 @@
     "typeRoots": ["node_modules/@types"],
     "inlineSources": true,
     "sourceRoot": "/",
-    "lib": ["es2018", "dom"]
+    "lib": ["es2018", "dom"],
+    "allowSyntheticDefaultImports": true
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
 }

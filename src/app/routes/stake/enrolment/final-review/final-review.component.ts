@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-final-review',
   templateUrl: './final-review.component.html',
   styleUrls: ['./final-review.component.scss']
 })
-export class FinalReviewComponent implements OnInit {
+export class FinalReviewComponent {
   terms = [
     {text: 'Minimum Patron commitment (#of months, minimum and maximum)'},
     {text: 'Patron revenue share (% of total EWT earned by Provider)'},
@@ -22,11 +21,9 @@ export class FinalReviewComponent implements OnInit {
     }
   ];
 
-  constructor(private dialogRef: MatDialogRef<FinalReviewComponent>) {
+  constructor() {
   }
 
-  ngOnInit(): void {
+  acceptContract() {
   }
-
-  acceptContract() {}
 }

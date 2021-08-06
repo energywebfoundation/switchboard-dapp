@@ -25,11 +25,11 @@ describe('VerificationMethodComponent', () => {
     TestBed.configureTestingModule({
       declarations: [VerificationMethodComponent, TypeAlgorithmPipe, DidFormatMinifierPipe],
       providers: [
-        { provide: MAT_DIALOG_DATA, useValue: { id: 1 } },
+        {provide: MAT_DIALOG_DATA, useValue: {id: 1}},
         {
           provide: MatDialogRef, useValue: matDialogRefSpy
         },
-        { provide: VerificationService, useValue: verificationServiceSpy },
+        {provide: VerificationService, useValue: verificationServiceSpy},
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -58,7 +58,7 @@ describe('VerificationMethodComponent', () => {
   });
 
   it('should set values when list have at least 6 elements', () => {
-    const list = [{ type: '' }, { type: '' }, { type: '' }, { type: '' }, { type: '' }, { type: '' }];
+    const list = [{type: ''}, {type: ''}, {type: ''}, {type: ''}, {type: ''}, {type: ''}];
     setUp(list);
     expect(component.verificationsAmount).toBe(list.length);
     expect(component.dataSource.length).toBe(5);

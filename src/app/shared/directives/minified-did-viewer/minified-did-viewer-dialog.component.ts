@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -6,12 +6,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   templateUrl: './minified-did-viewer-dialog.component.html',
   styleUrls: ['./minified-did-viewer-dialog.component.scss']
 })
-export class MinifiedDidViewerDialogComponent implements OnInit {
+export class MinifiedDidViewerDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<MinifiedDidViewerDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
-
-  ngOnInit(): void {
+              @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   closeDialog() {

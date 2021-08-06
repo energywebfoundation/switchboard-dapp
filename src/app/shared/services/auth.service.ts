@@ -1,74 +1,74 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class AuthService {
-    
-    // public roles: Array<string>;
-    constructor(private http: HttpClient) {
-    }
 
-    /**
-     * Returns the current user
-     */
-    public currentUser(): any {
-        return JSON.parse(localStorage.getItem('currentUser'));
-    }
+  // public roles: Array<string>;
+  constructor(private http: HttpClient) {
+  }
 
-    
-    /**
-     * Logout the user
-     */
-    public logout() {
-        const promise = new Promise(function (resolve, reject) {
-            try {
-                localStorage.removeItem('currentUser');
-                localStorage.removeItem('EW-DID-CONFIG');
-                resolve();
-            } catch (e) {
-                reject();
-            }
-        }.bind(this));
-        return promise;
-    }
+  /**
+   * Returns the current user
+   */
+  public currentUser(): any {
+    return JSON.parse(localStorage.getItem('currentUser'));
+  }
 
-    public getUserId(): string {
-        return JSON.parse(localStorage.getItem('currentUser')).id;
-    }
 
-    public getDID(): string {
-        return "";
-    }
+  /**
+   * Logout the user
+   */
+  public logout() {
+    const promise = new Promise((resolve, reject) => {
+      try {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('EW-DID-CONFIG');
+        resolve();
+      } catch (e) {
+        reject();
+      }
+    });
+    return promise;
+  }
 
-    public getRoles(): Array<string>{
-        return [JSON.parse(localStorage.getItem('currentUser')).organizationType];
-    }
+  public getUserId(): string {
+    return JSON.parse(localStorage.getItem('currentUser')).id;
+  }
 
-    public isOwner(): boolean{
-        return JSON.parse(localStorage.getItem('currentUser')).organizationType == "Asset-owner";
-    }
+  public getDID(): string {
+    return '';
+  }
 
-    public isDSO(): boolean{
-        return JSON.parse(localStorage.getItem('currentUser')).organizationType == "DSO";
-    }
+  public getRoles(): Array<string> {
+    return [JSON.parse(localStorage.getItem('currentUser')).organizationType];
+  }
 
-    public isTSO(): boolean{
-        return JSON.parse(localStorage.getItem('currentUser')).organizationType == "TSO";
-    }
+  public isOwner(): boolean {
+    return JSON.parse(localStorage.getItem('currentUser')).organizationType === 'Asset-owner';
+  }
 
-    public setUser(user: any) {
-        const promise = new Promise(function (resolve, reject) {
-            try {
-                // console.log(JSON.parse(user).organizationType);
-                // this.roles = [JSON.parse(user).organizationType];
-                localStorage.setItem('currentUser', user);
-                resolve();
-            } catch (e) {
-                reject();
-            }
-        }.bind(this));
-        return promise;
-    }
+  public isDSO(): boolean {
+    return JSON.parse(localStorage.getItem('currentUser')).organizationType === 'DSO';
+  }
+
+  public isTSO(): boolean {
+    return JSON.parse(localStorage.getItem('currentUser')).organizationType === 'TSO';
+  }
+
+  public setUser(user: any) {
+    const promise = new Promise((resolve, reject) => {
+      try {
+        // console.log(JSON.parse(user).organizationType);
+        // this.roles = [JSON.parse(user).organizationType];
+        localStorage.setItem('currentUser', user);
+        resolve();
+      } catch (e) {
+        reject();
+      }
+    });
+    return promise;
+  }
 
 
 }

@@ -3,7 +3,6 @@ import { AuthGuard } from '../shared/services/auth.guard';
 import { LogOutComponent } from './profile/logout/logout.component';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 import { FeatureToggleGuard } from '../shared/feature-toggle/feature-toggle.guard';
-import { EwtPatronComponent } from './ewt-patron/ewt-patron/ewt-patron.component';
 import { NgModule } from '@angular/core';
 import { NoPreloading, RouterModule } from '@angular/router';
 
@@ -26,7 +25,11 @@ export const routes = [
         path: 'search-result',
         loadChildren: () => import('./search-result/search-result.module').then(m => m.SearchResultModule)
       },
-      {path: 'stake', canActivate: [FeatureToggleGuard], loadChildren: () => import('./stake/stake.module').then(m => m.StakeModule)}
+      {
+        path: 'stake',
+        canActivate: [FeatureToggleGuard],
+        loadChildren: () => import('./stake/stake.module').then(m => m.StakeModule)
+      }
     ]
   },
   {
@@ -35,7 +38,7 @@ export const routes = [
   },
   {
     path: 'staking',
-    component: EwtPatronComponent
+    loadChildren: () => import('./ewt-patron/ewt-patron.module').then(m => m.EwtPatronModule)
   },
   {
     path: 'welcome',
@@ -53,7 +56,8 @@ export const routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload',
+    RouterModule.forRoot(routes, {
+      onSameUrlNavigation: 'reload',
       relativeLinkResolution: 'legacy',
       useHash: false,
       preloadingStrategy: NoPreloading
@@ -61,4 +65,5 @@ export const routes = [
   ],
   exports: [RouterModule]
 })
-export class RoutingModule{}
+export class RoutingModule {
+}

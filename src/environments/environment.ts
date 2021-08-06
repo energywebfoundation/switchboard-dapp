@@ -5,7 +5,7 @@ import { constants } from './constants';
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,  
+  production: false,
   cacheServerUrl: 'https://identitycache-dev.energyweb.org/',
   natsServerUrl: 'https://identityevents-dev.energyweb.org/',
   kmsServerUrl: undefined,
@@ -16,7 +16,7 @@ export const environment = {
     chainId: 73799
   },
   featureVisible: true,
-  ...constants  
+  ...constants
 };
 
 /*

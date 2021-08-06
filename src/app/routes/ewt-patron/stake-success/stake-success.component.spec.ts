@@ -8,9 +8,9 @@ describe('StakeSuccessComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StakeSuccessComponent ]
+      declarations: [StakeSuccessComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

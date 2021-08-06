@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
-import { ListType } from 'src/app/shared/constants/shared-constants';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { ListType } from '../../../../shared/constants/shared-constants';
+import { IamService } from '../../../../shared/services/iam.service';
+import { LoadingService } from '../../../../shared/services/loading.service';
 import { RoleType } from '../../new-role/new-role.component';
 import { GovernanceViewComponent } from '../governance-view.component';
 
@@ -13,9 +13,12 @@ import { GovernanceViewComponent } from '../governance-view.component';
   styleUrls: ['./governance-details.component.scss']
 })
 export class GovernanceDetailsComponent implements OnInit {
-  @Input('data') origData: any;
-  @Input('is-embedded') isEmbedded: boolean;
-  @Input('requestedClaims') requestedClaims: any[];
+  @Input() set origData(value: any) {
+    this.setData(value);
+  }
+
+  @Input() isEmbedded: boolean;
+  @Input() requestedClaims: any[];
 
   data: any;
 
@@ -31,11 +34,13 @@ export class GovernanceDetailsComponent implements OnInit {
 
   preconditions = {};
   PreconditionTypes = PreconditionTypes;
+  panelOpenState = false;
 
   constructor(
     private iamService: IamService,
     private loadingService: LoadingService,
-    private dialog: MatDialog) {}
+    private dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     this.data = this.origData;
@@ -71,7 +76,7 @@ export class GovernanceDetailsComponent implements OnInit {
   private _initFields() {
     if (this.formData.definition.fields) {
       // Init Fields
-      for (let data of this.formData.definition.fields) {
+      for (const data of this.formData.definition.fields) {
         if (data.fieldType === 'date') {
           if (data.maxDate) {
             data.maxDate = new Date(data.maxDate);
@@ -85,7 +90,7 @@ export class GovernanceDetailsComponent implements OnInit {
 
     if (this.formData.definition.enrolmentPreconditions) {
       // Init Preconditions
-      for (let precondition of this.formData.definition.enrolmentPreconditions) {
+      for (const precondition of this.formData.definition.enrolmentPreconditions) {
         if (precondition.conditions) {
           this.preconditions[precondition.type] = precondition.conditions;
         }
@@ -113,7 +118,7 @@ export class GovernanceDetailsComponent implements OnInit {
     });
     if (this.roleList && this.roleList.length) {
       this.roleList.forEach((item: any) => {
-        item['isEnrolled'] = this._isEnrolledNamespace(item.namespace);
+        item.isEnrolled = this._isEnrolledNamespace(item.namespace);
       });
     }
 
@@ -136,7 +141,7 @@ export class GovernanceDetailsComponent implements OnInit {
     const dialogRef = this.dialog.open(GovernanceViewComponent, {
       width: '600px',
       data: {
-        type: type,
+        type,
         definition: data
       },
       maxWidth: '100%',
@@ -145,15 +150,15 @@ export class GovernanceDetailsComponent implements OnInit {
   }
 
   getQueryParams(listType: string, roleDefinition: any) {
-    let name = roleDefinition.name;
-    let arr = roleDefinition.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
+    const name = roleDefinition.name;
+    const arr = roleDefinition.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
     let namespace = '';
 
     if (arr.length > 1) {
       namespace = arr[1];
     }
 
-    let retVal = {
+    const retVal = {
       roleName: name,
       stayLoggedIn: true
     };

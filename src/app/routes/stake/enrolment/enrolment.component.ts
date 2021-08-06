@@ -16,24 +16,25 @@ export class EnrolmentComponent implements OnInit {
 
   summaryList = [
 
-      {
-        title: 'Patron revenue share',
-        value: '2222.2222 EWT'
-      },
-      {
-        title: 'Commitment Term',
-        value: '2 Years'
-      }, {
-        title: 'Stake Amount',
-        value: '100 EWT'
-      },
+    {
+      title: 'Patron revenue share',
+      value: '2222.2222 EWT'
+    },
+    {
+      title: 'Commitment Term',
+      value: '2 Years'
+    }, {
+      title: 'Stake Amount',
+      value: '100 EWT'
+    },
   ];
 
   stakeAmountGroup: FormGroup;
   commitmentGroup: FormGroup;
 
   constructor(private fb: FormBuilder,
-              private dialog: MatDialog) {}
+              private dialog: MatDialog) {
+  }
 
   ngOnInit() {
     this.stakeAmountGroup = this.fb.group({

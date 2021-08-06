@@ -1,9 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { StakeState } from '../../../state/stake/stake.reducer';
 import { Store } from '@ngrx/store';
 import * as StakeActions from '../../../state/stake/stake.actions';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { interval } from 'rxjs';
 import * as stakeSelectors from '../../../state/stake/stake.selectors';
 
 @Component({

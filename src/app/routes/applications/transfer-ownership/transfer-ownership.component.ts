@@ -1,14 +1,14 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ConfigService } from 'src/app/shared/services/config.service';
-import { ExpiredRequestError } from 'src/app/shared/errors/errors';
-import { IamRequestService } from 'src/app/shared/services/iam-request.service';
-import { IamService } from 'src/app/shared/services/iam.service';
+import { ConfigService } from '../../../shared/services/config.service';
+import { ExpiredRequestError } from '../../../shared/errors/errors';
+import { IamRequestService } from '../../../shared/services/iam-request.service';
+import { IamService } from '../../../shared/services/iam.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { NewApplicationComponent } from '../new-application/new-application.component';
-import { CancelButton } from 'src/app/layout/loading/loading.component';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { CancelButton } from '../../../layout/loading/loading.component';
+import { LoadingService } from '../../../shared/services/loading.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -34,22 +34,23 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
 
 
   private stepper: MatStepper;
+
   @ViewChild('stepper') set content(content: MatStepper) {
-    if(content) { // initially setter gets called with undefined
-        this.stepper = content;
+    if (content) { // initially setter gets called with undefined
+      this.stepper = content;
     }
   }
 
-  namespace       = '';
-  assetDid        = '';
-  type            : string;
+  namespace = '';
+  assetDid = '';
+  type: string;
 
   newOwnerModifiedAddress = new FormControl('');
   newOwnerAddress = new FormControl('');
   prefixDropDown = new FormControl('did:ethr:');
 
-  public mySteps           = [];
-  isProcessing             = false;
+  public mySteps = [];
+  isProcessing = false;
 
   private _currentIdx = 0;
 
@@ -57,27 +58,26 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   DIDPattern = `^did:ethr:[a-z0-9]+:(${this.ethAddrPattern})$`;
 
   constructor(private iamService: IamService,
-    private toastr: SwitchboardToastrService,
-    private spinner: NgxSpinnerService,
-    private iamRequestService: IamRequestService,
-    private loadingService: LoadingService,
-    private changeDetector : ChangeDetectorRef,
-    public dialogRef: MatDialogRef<NewApplicationComponent>,
-    public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-      private configService: ConfigService) {
-      this.namespace = this.data.namespace;
-      this.type = this.data.type;
-      this.assetDid = this.data.assetDid;
-    }
+              private toastr: SwitchboardToastrService,
+              private spinner: NgxSpinnerService,
+              private iamRequestService: IamRequestService,
+              private loadingService: LoadingService,
+              private changeDetector: ChangeDetectorRef,
+              public dialogRef: MatDialogRef<NewApplicationComponent>,
+              public dialog: MatDialog,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private configService: ConfigService) {
+    this.namespace = this.data.namespace;
+    this.type = this.data.type;
+    this.assetDid = this.data.assetDid;
+  }
 
   ngOnInit() {
     if (this.namespace) {
       this.newOwnerAddress.setValidators(Validators.compose([Validators.required,
         Validators.maxLength(256),
         this.iamService.isValidEthAddress]));
-    }
-    else {
+    } else {
       this.newOwnerAddress.setValidators(Validators.compose([Validators.required,
         Validators.maxLength(256),
         this.iamService.isValidDid]));
@@ -99,15 +99,16 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
 
   private checkModAddressChanges(): void {
     this.newOwnerModifiedAddress.valueChanges
-        .pipe(takeUntil(this.destroy$),
-            distinctUntilChanged((prev, curr) => prev === curr))
-        .subscribe((result) => {
-          this.changeNewOwnerAddressValue(result);
-        });
+      .pipe(takeUntil(this.destroy$),
+        distinctUntilChanged((prev, curr) => prev === curr))
+      .subscribe((result) => {
+        this.changeNewOwnerAddressValue(result);
+      });
   }
 
   changeNewOwnerAddressValue(result: string): void {
-    // TODO      temporary removal of logic with different types DID until DIDs can own ENS namespaces. See https://energyweb.atlassian.net/browse/SWTCH-790
+    // TODO temporary removal of logic with different types DID until DIDs can own ENS namespaces.
+    //  See https://energyweb.atlassian.net/browse/SWTCH-790
     // if (result.match(this.ethAddrPattern) && !result.match(this.DIDPattern)) {
     //   this.isShowingDIDDropDown = true;
     //   this.newOwnerAddress.patchValue(this.prefixDropDown.value + result);
@@ -117,9 +118,9 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
     // }
     // TODO end!
 
-      result.replace(this.prefixDropDown.value, '');
-      this.isShowingDIDDropDown = false;
-      this.newOwnerAddress.patchValue(result);
+    result.replace(this.prefixDropDown.value, '');
+    this.isShowingDIDDropDown = false;
+    this.newOwnerAddress.patchValue(result);
   }
 
   private async confirm(confirmationMsg: string, showDiscardButton?: boolean) {
@@ -141,8 +142,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
       if (await this.confirm('There are unsaved changes. Do you wish to continue?', true)) {
         this.dialogRef.close(false);
       }
-    }
-    else {
+    } else {
       if (isSuccess) {
         this.toastr.success('Transfer ownership completed.', TOASTR_HEADER);
       }
@@ -156,11 +156,9 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
     } else if (this.newOwnerAddress.valid) {
       if (this.namespace) {
         await this._transferOrgAppRole();
-      }
-      else if (this.assetDid) {
+      } else if (this.assetDid) {
         await this._transferAsset();
-      }
-      else {
+      } else {
         this.toastr.error('Invalid action.', TOASTR_HEADER);
       }
     }
@@ -170,7 +168,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
     if (await this.confirm('You will no longer be the owner of this namespace. Do you wish to continue?')) {
       this.spinner.show();
       const returnSteps = this.iamService.iam.address === this.data.owner ? true : false;
-      let req = {
+      const req = {
         namespace: this.namespace,
         newOwner: this.newOwnerAddress.value,
         returnSteps
@@ -192,9 +190,9 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
         this.mySteps = returnSteps ?
           await call :
           [{
-            info: "Confirm transaction in your safe wallet",
+            info: 'Confirm transaction in your safe wallet',
             next: async () => await call
-          }]
+          }];
 
         this.newOwnerAddress.disable();
         this.isProcessing = true;
@@ -203,14 +201,12 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
 
         // Proceed
         this.proceedSteps(0);
-      }
-      catch (e) {
+      } catch (e) {
         console.error(e);
         this.spinner.hide();
         this.toastr.error(e.message || 'Please contact system administrator.', TOASTR_HEADER);
       }
-    }
-    else {
+    } else {
       this.dialogRef.close(false);
     }
   }
@@ -225,16 +221,13 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
           offerTo: this.newOwnerAddress.value
         });
         this.dialogRef.close(true);
-      }
-      catch (e) {
+      } catch (e) {
         console.error(e);
         this.toastr.error(e.message || 'Please contact system administrator.', TOASTR_HEADER);
-      }
-      finally {
+      } finally {
         this.loadingService.hide();
       }
-    }
-    else {
+    } else {
       this.dialogRef.close(false);
     }
   }
@@ -244,11 +237,11 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   }
 
   private async proceedSteps(startIndex: number) {
-    let steps = this.mySteps;
+    const steps = this.mySteps;
     if (steps) {
       for (let index = startIndex; index < steps.length; index++) {
         this._currentIdx = index;
-        let step = steps[index];
+        const step = steps[index];
 
         // Process the next step
         try {
@@ -258,15 +251,14 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
           // Move to Complete Step
           this.stepper.selected.completed = true;
           this.stepper.next();
-        }
-        catch (e) {
+        } catch (e) {
           if (!(e instanceof ExpiredRequestError)) {
             console.error('Transfer Ownership Error', e);
             this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
           }
           break;
         }
-      };
+      }
     }
   }
 }

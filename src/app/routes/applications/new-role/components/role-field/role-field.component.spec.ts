@@ -174,7 +174,7 @@ describe('RoleFieldComponent', () => {
   });
 
   it('should be run back', () => {
-    const { back } = getSelectors(hostDebug);
+    const {back} = getSelectors(hostDebug);
     spyOn(component.back, 'emit');
     back.nativeElement.click();
     fixture.detectChanges();

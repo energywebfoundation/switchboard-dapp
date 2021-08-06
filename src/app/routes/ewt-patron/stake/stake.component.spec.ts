@@ -6,11 +6,11 @@ xdescribe('StakeComponent', () => {
   let component: StakeComponent;
   let fixture: ComponentFixture<StakeComponent>;
 
-  beforeEach(waitForAsync( () => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StakeComponent ]
+      declarations: [StakeComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -12,8 +12,8 @@ describe('MinifiedDidViewerDialogComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [MinifiedDidViewerDialogComponent],
       providers: [
-        { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: MatDialogRef, useValue: {} }
+        {provide: MAT_DIALOG_DATA, useValue: {}},
+        {provide: MatDialogRef, useValue: {}}
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

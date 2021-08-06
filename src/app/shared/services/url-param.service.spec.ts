@@ -7,7 +7,7 @@ describe('UrlParamService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.get(UrlParamService);
+    service = TestBed.inject(UrlParamService);
   });
 
   it('should be created', () => {

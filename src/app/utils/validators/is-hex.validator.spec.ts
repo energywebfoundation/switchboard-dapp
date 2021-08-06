@@ -13,7 +13,7 @@ describe('tests for isHexValidator', () => {
   });
 
   it('should return true when value do not start with 0x', () => {
-    expect(isHexValidator(new FormControl('a' + hexWithoutBeginning66))).toEqual({ isHexInvalid: true });
+    expect(isHexValidator(new FormControl('a' + hexWithoutBeginning66))).toEqual({isHexInvalid: true});
   });
 
   it('should return false when value start with 0x and is followed by 66 characters', () => {
@@ -21,7 +21,7 @@ describe('tests for isHexValidator', () => {
   });
 
   it('should return true when value contain less than 66 characters followed by 0x', () => {
-    expect(isHexValidator(new FormControl('0x' + '123'))).toEqual({ isHexInvalid: true });
+    expect(isHexValidator(new FormControl('0x' + '123'))).toEqual({isHexInvalid: true});
   });
 
   it('should return false when value start with 0x and is followed by 130 characters', () => {
@@ -29,14 +29,14 @@ describe('tests for isHexValidator', () => {
   });
 
   it('should return true when value start with 0x and is followed by 67 characters', () => {
-    expect(isHexValidator(new FormControl('0x1' + hexWithoutBeginning66))).toEqual({ isHexInvalid: true });
+    expect(isHexValidator(new FormControl('0x1' + hexWithoutBeginning66))).toEqual({isHexInvalid: true});
   });
 
   it('should return true when value start with 0x and is followed by 131 characters', () => {
-    expect(isHexValidator(new FormControl('0x1' + hexWithoutBeginning130))).toEqual({ isHexInvalid: true });
+    expect(isHexValidator(new FormControl('0x1' + hexWithoutBeginning130))).toEqual({isHexInvalid: true});
   });
 
   it('should return true when value start with different value but is followed by proper hex', () => {
-    expect(isHexValidator(new FormControl('Abc0x' + hexWithoutBeginning66))).toEqual({ isHexInvalid: true });
+    expect(isHexValidator(new FormControl('Abc0x' + hexWithoutBeginning66))).toEqual({isHexInvalid: true});
   });
 });

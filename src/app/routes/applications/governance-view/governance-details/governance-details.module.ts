@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { SharedModule } from '../../../../shared/shared.module';
 import { GovernanceDetailsComponent } from './governance-details.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -17,4 +17,5 @@ import { MatInputModule } from '@angular/material/input';
     GovernanceDetailsComponent
   ]
 })
-export class GovernanceDetailsModule { }
+export class GovernanceDetailsModule {
+}

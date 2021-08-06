@@ -59,13 +59,16 @@
         </div>
         <div class="col-lg-12 mt-2" *ngIf="!fields?.length">
           <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
-            <mat-icon>info</mat-icon><span class="f-14">Role did not require any field for enrolment request.</span>
+            <mat-icon>info</mat-icon>
+            <span class="f-14">Role did not require any field for enrolment request.</span>
           </div>
         </div>
-        <div class="col-lg-12 mt-2" *ngIf="claim?.registrationTypes?.length === 2 && (userDid$ | async) !== claim.requester && !claim.isAccepted">
+        <div class="col-lg-12 mt-2"
+             *ngIf="claim?.registrationTypes?.length === 2 && (userDid$ | async) !== claim.requester && !claim.isAccepted">
 
           <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
-            <mat-icon>info</mat-icon><span class="f-14">Two signatures are required in the event that both off-chain and on-chain credentials are requested.</span>
+            <mat-icon>info</mat-icon>
+            <span class="f-14">Two signatures are required in the event that both off-chain and on-chain credentials are requested.</span>
           </div>
         </div>
       </div>
@@ -74,6 +77,7 @@
   <div mat-dialog-actions *ngIf="listType === 'issuer' && !claim?.isAccepted && !claim?.isRejected">
     <button mat-raised-button class="btn btn-primary w-100 mx-3" type="submit" (click)="approve()">Approve</button>
     <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit"
-      (click)="reject()">Reject</button>
+            (click)="reject()">Reject
+    </button>
   </div>
 </div>

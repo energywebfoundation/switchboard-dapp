@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SearchResultComponent } from './search-result.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -7,7 +7,7 @@ import { LoadingService } from '../../shared/services/loading.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IamService } from '../../shared/services/iam.service';
 import { of } from 'rxjs';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 const loadingServiceSpy = jasmine.createSpyObj(['show', 'hide']);
 
@@ -16,7 +16,7 @@ describe('SearchResultComponent', () => {
   let fixture: ComponentFixture<SearchResultComponent>;
 
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [SearchResultComponent],
       imports: [ReactiveFormsModule,
@@ -32,12 +32,12 @@ describe('SearchResultComponent', () => {
         {
           provide: LoadingService, useValue: loadingServiceSpy
         },
-        { provide: IamService, useValue: {} },
+        {provide: IamService, useValue: {}},
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchResultComponent);

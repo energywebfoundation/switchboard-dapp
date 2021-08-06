@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-stake',
   templateUrl: './stake.component.html',
   styleUrls: ['./stake.component.scss']
 })
-export class StakeComponent implements OnInit {
+export class StakeComponent {
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor() {
   }
 
 }

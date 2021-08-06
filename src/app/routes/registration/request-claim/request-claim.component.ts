@@ -1,17 +1,16 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Asset, ENSNamespaceTypes, IRoleDefinition, PreconditionTypes, RegistrationTypes } from 'iam-client-lib';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
-import { ConnectToWalletDialogComponent } from '../connect-to-wallet-dialog/connect-to-wallet-dialog.component';
+import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-dialog.component';
 import { SubjectElements, ViewColorsSetter } from '../models/view-colors-setter';
 import swal from 'sweetalert';
-import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
 import { EnrolmentField, EnrolmentSubmission } from '../enrolment-form/enrolment-form.component';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
@@ -29,7 +28,7 @@ const SwalButtons = {
 
 interface FormClaim extends Claim {
   isSynced?: boolean;
-  claimTypeVersion?: string;
+  claimTypeVersion: string;
 }
 
 enum RolePreconditionType {

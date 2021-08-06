@@ -13,13 +13,14 @@ import { PercentButtonsComponent } from './percent-buttons/percent-buttons.compo
 import { DividerComponent } from './divider/divider.component';
 import { StakeSuccessComponent } from './stake-success/stake-success.component';
 import { WithdrawComponent } from './withdraw/withdraw.component';
-import { ClaimRewardComponent } from './claim-reward/claim-reward.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SharedModule } from '../../shared/shared.module';
 import { LayoutModule } from '../../layout/layout.module';
 import { LastDigitsPipe } from './pipes/last-digits.pipe';
-import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-to-wallet.module';
+import { StakingHeaderComponent } from './staking-header/staking-header.component';
+import { StakingFooterComponent } from './staking-footer/staking-footer.component';
 
 
 @NgModule({
@@ -30,9 +31,9 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
     DividerComponent,
     StakeSuccessComponent,
     WithdrawComponent,
-    ClaimRewardComponent,
     LastDigitsPipe,
-    LoginDialogComponent
+    StakingHeaderComponent,
+    StakingFooterComponent,
   ],
   imports: [
     CommonModule,
@@ -47,6 +48,7 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
     MatProgressBarModule,
     SharedModule,
     LayoutModule,
+    ConnectToWalletModule
   ],
 
 })
