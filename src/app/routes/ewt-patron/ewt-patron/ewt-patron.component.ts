@@ -9,6 +9,7 @@ import * as StakeActions from '../../../state/stake/stake.actions';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import swal from 'sweetalert';
+import { IamService } from '../../../shared/services/iam.service';
 
 @Component({
   selector: 'app-ewt-patron',
@@ -24,7 +25,8 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<StakeState>,
               private dialog: MatDialog,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private iamService: IamService) {
   }
 
   ngOnDestroy(): void {
@@ -32,9 +34,12 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+
     this.setOrganization();
-    this.openLoginDialog();
+    if (!await this.iamService.hasSessionRetrieved()) {
+      this.openLoginDialog();
+    }
   }
 
 

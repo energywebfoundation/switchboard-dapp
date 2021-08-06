@@ -18,26 +18,6 @@ export class StakeListComponent {
       activeServices: '1',
       numberOfNodes: '1',
       isAcceptingPatrons: true
-    },
-    {
-      organization: 'Startup Co',
-      organizationImage: 'startup-co-single.svg',
-      providerDate: 'Sept, 2020',
-      stakeAmount: '23.444',
-      stakeRating: '50',
-      activeServices: '1',
-      numberOfNodes: '1',
-      isAcceptingPatrons: true
-    },
-    {
-      organization: 'Startup Co',
-      organizationImage: 'startup-co-single2.svg',
-      providerDate: 'Sept, 2020',
-      stakeAmount: '32.434',
-      stakeRating: '75',
-      activeServices: '0',
-      numberOfNodes: '2',
-      isAcceptingPatrons: true
     }
   ];
 
@@ -45,6 +25,6 @@ export class StakeListComponent {
   }
 
   goToDetails() {
-    this.router.navigate(['stake', 1]);
+    this.router.navigateByUrl('/staking?org=energyweb.iam.ewc');
   }
 }

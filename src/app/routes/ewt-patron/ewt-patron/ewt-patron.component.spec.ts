@@ -17,7 +17,8 @@ describe('EwtPatronComponent', () => {
   let component: EwtPatronComponent;
   let fixture: ComponentFixture<EwtPatronComponent>;
   let store: MockStore<StakeState>;
-  const iamSpy = jasmine.createSpyObj('iam', ['login', 'disconnect', 'clearWaitSignatureTimer', 'waitForSignature']);
+  const iamServiceSpy = jasmine.createSpyObj('IamService', ['hasSessionRetrieved']);
+  const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll', 'open']);
   const mockActivatedRoute = {queryParams: of({org: 'org'})};
   const setUp = (options?: {
     balance?: string;
@@ -42,12 +43,9 @@ describe('EwtPatronComponent', () => {
     TestBed.configureTestingModule({
       declarations: [EwtPatronComponent, LastDigitsPipe],
       providers: [
-        {provide: IamService, useValue: {iam: iamSpy}},
+        {provide: IamService, useValue: iamServiceSpy},
         {
-          provide: MatDialog, useValue: {
-            open: () => {
-            }
-          }
+          provide: MatDialog, useValue: dialogSpy
         },
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
         provideMockStore()
@@ -75,5 +73,21 @@ describe('EwtPatronComponent', () => {
     fixture.detectChanges();
 
     expect(dispatchSpy).toHaveBeenCalledWith(StakeActions.setOrganization({organization: 'org'}));
+  });
+
+  it('should open a login dialog when not possible to retrieve session', () => {
+    iamServiceSpy.hasSessionRetrieved.and.returnValue(Promise.resolve(false));
+    setUp();
+    component.ngOnInit().then(() => {
+      expect(dialogSpy.open).toHaveBeenCalled()
+    });
+  });
+
+  it('should not open a login dialog when not possible to retrieve session', () => {
+    iamServiceSpy.hasSessionRetrieved.and.returnValue(Promise.resolve(true));
+    setUp();
+    component.ngOnInit().then(() => {
+      expect(dialogSpy.open).not.toHaveBeenCalled()
+    });
   });
 });

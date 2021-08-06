@@ -21,6 +21,7 @@ import { ToastrService } from 'ngx-toastr';
 import { getDid, getUserProfile } from '../../state/user-claim/user.selectors';
 import { take } from 'rxjs/operators';
 import * as StakeActions from '../../state/stake/stake.actions';
+import * as AuthActions from '../../state/auth/auth.actions';
 import { from } from 'rxjs';
 
 const LS_WALLETCONNECT = 'walletconnect';
@@ -96,6 +97,20 @@ export class IamService {
     }
   }
 
+  async hasSessionRetrieved(): Promise<boolean> {
+    if (!this.iam.isSessionActive()) {
+      return false;
+    }
+
+    this.loadingService.show();
+    await this.login();
+    this.clearWaitSignatureTimer();
+
+    // Setup User Data
+    await this.setupUser();
+    return true;
+  }
+
   /**
    * Login via IAM and retrieve basic user info
    */
@@ -127,6 +142,7 @@ export class IamService {
           });
           // TODO: remove it when login method will be fully handled by store and call it after login.
           this.store.dispatch(StakeActions.initStakingPool());
+          this.store.dispatch(AuthActions.loginSuccess());
           retVal = true;
         }
       } catch (e) {
@@ -205,7 +221,7 @@ export class IamService {
     return from(this.iam.getDefinition({
       type: ENSNamespaceTypes.Organization,
       namespace: organization
-    }))
+    }));
   }
 
   async getAddress() {
