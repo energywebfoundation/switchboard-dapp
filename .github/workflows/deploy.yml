@@ -112,8 +112,8 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         if: github.ref == 'refs/heads/DOI-887_migrate_switchboard_to_GH' || github.ref == 'refs/heads/staging'
         with:
-          ignore_missing: true
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
+        ignore_missing: true
 
       - name: Sentry Release Prod
         uses: getsentry/action-release@v1.0.0
