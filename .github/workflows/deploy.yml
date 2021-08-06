@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ 'develop', 'master', 'staging', 'DOI-887_migrate_switchboard_to_GH' ]
+    branches: [ 'develop', 'master', 'staging' ]
   pull_request:
     branches: [ 'develop', 'master' ]
 
@@ -49,13 +49,13 @@ jobs:
           npm install
           envsubst < src/environments/constants.template.ts > src/environments/constants.ts
 
-      # - name: Run Lint
-      #   run: |
-      #     npm run lint
+      - name: Run Lint
+        run: |
+          npm run lint
 
-      # - name: Run Test
-      #   run: |
-      #     npm run test:headless
+      - name: Run Test
+        run: |
+          npm run test:headless
 
       - name: Prepare for master branch
         if: github.ref == 'refs/heads/master'
@@ -104,14 +104,13 @@ jobs:
           remote_user: ${{ secrets.GH_SWITCHBOARD_USERNAME }}
           remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
 
-      - name: Sentry Release Staging
+      - name: Sentry Release Develop & Staging
         uses: getsentry/action-release@v1.0.0
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-          ignore_missing: true
-        if: github.ref == 'refs/heads/DOI-887_migrate_switchboard_to_GH' || github.ref == 'refs/heads/staging'
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/staging'
         with:
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
 
