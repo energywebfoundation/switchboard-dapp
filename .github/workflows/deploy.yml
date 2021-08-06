@@ -110,7 +110,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        if: github.ref == 'refs/heads/DOI-887_migrate_switchboard_to_GH' || github.ref == 'refs/heads/staging'
+        if: github.ref == 'refs/heads/DOI-887_migrate_switchboard_to_GH'
         with:
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
 
