@@ -111,6 +111,7 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           ignore_missing: true
+          ignore_empty: true
         if: github.ref == 'refs/heads/fix-sentry' || github.ref == 'refs/heads/staging'
         with:
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
