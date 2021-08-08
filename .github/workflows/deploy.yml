@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ 'develop', 'master', 'staging' ]
+    branches: [ 'develop', 'master', 'staging', 'fix-sentry' ]
   pull_request:
     branches: [ 'develop', 'master' ]
 
