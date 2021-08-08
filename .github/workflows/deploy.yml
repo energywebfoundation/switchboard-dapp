@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ 'develop', 'master', 'staging', 'fix-sentry' ]
+    branches: [ 'develop', 'master', 'staging' ]
   pull_request:
     branches: [ 'develop', 'master' ]
 
@@ -48,14 +48,14 @@ jobs:
         run: |
           npm install
           envsubst < src/environments/constants.template.ts > src/environments/constants.ts
-#
-#      - name: Run Lint
-#        run: |
-#          npm run lint
-#
-#      - name: Run Test
-#        run: |
-#          npm run test:headless
+
+      - name: Run Lint
+        run: |
+          npm run lint
+
+      - name: Run Test
+        run: |
+          npm run test:headless
 
       - name: Prepare for master branch
         if: github.ref == 'refs/heads/master'
@@ -110,7 +110,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        if: github.ref == 'refs/heads/fix-sentry' || github.ref == 'refs/heads/staging'
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/staging'
         with:
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
           ignore_missing: true
