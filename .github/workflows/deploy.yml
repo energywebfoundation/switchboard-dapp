@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: cancel-previous
     env:
-      SB_APP_DIR: $HOME/work/switchboad-dapp/switchboad-dapp
+      SB_APP_DIR: /home/travis/switchboard-dapp
     steps:
       - uses: actions/checkout@v2
         with:
@@ -43,13 +43,6 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-node-
             ${{ runner.os }}-
-
-      - name: Setup AWS Host machine
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Install npm packages
         run: |
@@ -80,18 +73,36 @@ jobs:
 
       - name: Deploy on develop branch
         if: github.ref == 'refs/heads/develop'
-        run: |
-          rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/develop
+        uses: burnett01/rsync-deployments@5.0
+        with:
+          switches: -r
+          path: dist/*
+          remote_path: ${{ env.SB_APP_DIR }}/develop
+          remote_host: ${{ secrets.SB_WEB_HOST }}
+          remote_user: ${{ secrets.GH_SWITCHBOARD_USERNAME }}
+          remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
 
       - name: Deploy on staging branch
         if: github.ref == 'refs/heads/staging'
-        run: |
-          rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/staging
+        uses: burnett01/rsync-deployments@5.0
+        with:
+          switches: -r
+          path: dist/*
+          remote_path: ${{ env.SB_APP_DIR }}/staging
+          remote_host: ${{ secrets.SB_WEB_HOST }}
+          remote_user: ${{ secrets.GH_SWITCHBOARD_USERNAME }}
+          remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
 
       - name: Deploy on master branch
         if: github.ref == 'refs/heads/master'
-        run: |
-          rsync -e "ssh -o StrictHostKeyChecking=no" -r dist/* ${{ secrets.SB_WEB_HOST }}:${{ env.SB_APP_DIR }}/master
+        uses: burnett01/rsync-deployments@5.0
+        with:
+          switches: -r
+          path: dist/*
+          remote_path: ${{ env.SB_APP_DIR }}/master
+          remote_host: ${{ secrets.SB_WEB_HOST }}
+          remote_user: ${{ secrets.GH_SWITCHBOARD_USERNAME }}
+          remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
 
       - name: Sentry Release Staging
         uses: getsentry/action-release@v1.0.0
