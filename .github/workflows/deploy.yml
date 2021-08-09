@@ -110,10 +110,10 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-          ignore_missing: true
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/staging'
         with:
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
+          ignore_missing: true
 
       - name: Sentry Release Prod
         uses: getsentry/action-release@v1.0.0
