@@ -233,13 +233,15 @@ export class StakeEffects {
   getOrganizationDetails$ = createEffect(() =>
     this.actions$.pipe(
       ofType(StakeActions.getOrganizationDetails),
+      tap(() => this.loadingService.show('Getting Organization details')),
       withLatestFrom(this.store.select(stakeSelectors.getOrganization)),
       switchMap(([, organization]) => from(this.iamService.getDefinition(organization)).pipe(
           map((definition: IOrganizationDefinition) => StakeActions.getOrganizationDetailsSuccess({orgDetails: definition})),
           catchError(err => {
             console.error(err);
             return of(StakeActions.getOrganizationDetailsFailure({err}));
-          })
+          }),
+          finalize(() => this.loadingService.hide())
         )
       )
     )
