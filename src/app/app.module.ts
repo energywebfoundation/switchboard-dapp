@@ -31,6 +31,7 @@ import { rootReducer } from './state/root.reducer';
 import { FEAT_TOGGLE_TOKEN, getEnv } from './shared/feature-toggle/feature-toggle.token';
 import { StakeEffects } from './state/stake/stake.effects';
 import { AuthEffects } from './state/auth/auth.effects';
+import { NgxEditorModule } from 'ngx-editor';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -81,6 +82,7 @@ if (environment.SENTRY_DNS) {
     StoreModule.forRoot(rootReducer, {}),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
     EffectsModule.forRoot([UserEffects, StakeEffects, AuthEffects]),
+    NgxEditorModule
   ],
   providers,
   bootstrap: [AppComponent],

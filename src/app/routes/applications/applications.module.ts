@@ -26,6 +26,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { NewStakingPoolComponent } from './new-staking-pool/new-staking-pool.component';
 import { RoleFieldComponent } from './new-role/components/role-field/role-field.component';
+import { NgxEditorModule } from 'ngx-editor';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -62,7 +63,8 @@ const routes: Routes = [
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    NgMatSearchBarModule
+    NgMatSearchBarModule,
+    NgxEditorModule
   ],
   entryComponents: [
     NewOrganizationComponent,
