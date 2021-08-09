@@ -62,7 +62,7 @@ export class EnrolmentComponent implements AfterViewInit {
             this.initDefault();
           }
         } else if (queryParams.selectedTab) {
-          if (queryParams.selectedTab === 1) {
+          if (queryParams.selectedTab === '1') {
             this.initDefaultMyEnrolments();
           } else {
             this.initDefault();
