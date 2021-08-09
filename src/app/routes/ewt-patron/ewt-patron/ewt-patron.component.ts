@@ -37,7 +37,7 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
   async ngOnInit() {
 
     this.setOrganization();
-    if (!await this.iamService.hasSessionRetrieved()) {
+    if ((await this.iamService.hasSessionRetrieved()) === false) {
       this.openLoginDialog();
     }
   }

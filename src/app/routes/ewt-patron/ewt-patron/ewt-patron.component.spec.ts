@@ -23,13 +23,11 @@ describe('EwtPatronComponent', () => {
     balance?: string;
     reward?: number;
     performance?: number;
-    loggedIn?: boolean;
   }) => {
     const opt = {
       balance: '0',
       reward: 10,
       performance: 100,
-      loggedIn: true,
       ...options
     };
     store.overrideSelector(stakeSelectors.getBalance, opt.balance);
@@ -71,21 +69,5 @@ describe('EwtPatronComponent', () => {
     fixture.detectChanges();
 
     expect(dispatchSpy).toHaveBeenCalledWith(StakeActions.setOrganization({organization: 'org'}));
-  });
-
-  it('should open a login dialog when not possible to retrieve session', () => {
-    iamServiceSpy.hasSessionRetrieved.and.returnValue(Promise.resolve(false));
-    setUp();
-    component.ngOnInit().then(() => {
-      expect(dialogSpy.open).toHaveBeenCalled()
-    });
-  });
-
-  it('should not open a login dialog when not possible to retrieve session', () => {
-    iamServiceSpy.hasSessionRetrieved.and.returnValue(Promise.resolve(true));
-    setUp();
-    component.ngOnInit().then(() => {
-      expect(dialogSpy.open).not.toHaveBeenCalled()
-    });
   });
 });
