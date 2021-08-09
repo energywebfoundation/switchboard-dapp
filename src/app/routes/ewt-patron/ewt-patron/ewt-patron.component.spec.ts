@@ -10,7 +10,6 @@ import { LastDigitsPipe } from '../pipes/last-digits.pipe';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { IamService } from '../../../shared/services/iam.service';
-import * as authSelectors from '../../../state/auth/auth.selectors';
 import * as StakeActions from '../../../state/stake/stake.actions';
 
 describe('EwtPatronComponent', () => {
@@ -36,7 +35,6 @@ describe('EwtPatronComponent', () => {
     store.overrideSelector(stakeSelectors.getBalance, opt.balance);
     store.overrideSelector(stakeSelectors.getAnnualReward, opt.reward);
     store.overrideSelector(stakeSelectors.getPerformance, opt.performance);
-    store.overrideSelector(authSelectors.isUserLoggedIn, opt.loggedIn);
   };
 
   beforeEach(waitForAsync(() => {
