@@ -2,23 +2,22 @@ import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { from, of, ReplaySubject } from 'rxjs';
 
-import { PoolEffects } from './stake.effects';
+import { PoolEffects } from './pool.effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { LoadingService } from '../../shared/services/loading.service';
 import { IamService } from '../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { ToastrService } from 'ngx-toastr';
-import { StakeState } from './stake.reducer';
-import * as StakeActions from './stake.actions';
+import * as PoolActions from './pool.actions';
 import { skip, take } from 'rxjs/operators';
-import * as stakeSelectors from './stake.selectors';
+import * as poolSelectors from './pool.selectors';
 import { utils } from 'ethers';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import { StakingPoolFacade } from '../../shared/services/pool/staking-pool-facade';
 
 const {formatEther, parseEther} = utils;
-describe('StakeEffects', () => {
+describe('PoolEffects', () => {
 
   const iamServiceSpy = jasmine.createSpyObj('IamService', ['getDefinition', 'getBalance', 'getAddress']);
   const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
@@ -28,7 +27,7 @@ describe('StakeEffects', () => {
   const stakingPoolFacadeSpy = jasmine.createSpyObj('StakingPoolFacade', ['putStake', 'isPoolDefined']);
   let actions$: ReplaySubject<any>;
   let effects: PoolEffects;
-  let store: MockStore<StakeState>;
+  let store: MockStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -49,26 +48,6 @@ describe('StakeEffects', () => {
     effects = TestBed.inject(PoolEffects);
   });
 
-  describe('initStakingPoolService$', () => {
-
-    beforeEach(() => {
-      actions$ = new ReplaySubject(1);
-    });
-
-    it('should return initPool action and getAccountBalance action', waitForAsync(() => {
-      actions$.next(StakeActions.initStakingPool());
-      stakingService.init.and.returnValue(of(true));
-
-      effects.initStakingPoolService$.pipe(take(1)).subscribe(resultAction => {
-        expect(resultAction).toEqual(StakeActions.initPool());
-      });
-
-      effects.initStakingPoolService$.pipe(skip(1)).subscribe(resultAction => {
-        expect(resultAction).toEqual(StakeActions.getAccountBalance());
-      });
-    }));
-  });
-
   describe('initPool$', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
@@ -76,21 +55,21 @@ describe('StakeEffects', () => {
 
     it('should create a pool and call actions for getting stake and organization', waitForAsync(() => {
       stakingService.createPool.and.returnValue(of(true));
-      store.overrideSelector(stakeSelectors.getOrganization, 'org');
-      actions$.next(StakeActions.initPool());
+      store.overrideSelector(poolSelectors.getOrganization, 'org');
+      actions$.next(PoolActions.initPool());
 
       effects.initPool$.pipe(take(1)).subscribe(resultAction => {
-        expect(resultAction).toEqual(StakeActions.getStake());
+        expect(resultAction).toEqual(PoolActions.getStake());
       });
       effects.initPool$.pipe(skip(1)).subscribe(resultAction => {
-        expect(resultAction).toEqual(StakeActions.getOrganizationDetails());
+        expect(resultAction).toEqual(PoolActions.getOrganizationDetails());
       });
     }));
 
     it('should not create a pool when getting empty organization', waitForAsync(() => {
       stakingService.createPool.and.returnValue(of(true));
-      store.overrideSelector(stakeSelectors.getOrganization, '');
-      actions$.next(StakeActions.initPool());
+      store.overrideSelector(poolSelectors.getOrganization, '');
+      actions$.next(PoolActions.initPool());
 
       effects.initPool$.subscribe(resultAction => {
         expect(resultAction).toEqual(null);
@@ -99,12 +78,12 @@ describe('StakeEffects', () => {
 
     it('should not create a pool when getting an organization which is not a provider', () => {
       stakingService.createPool.and.returnValue(of(false));
-      store.overrideSelector(stakeSelectors.getOrganization, 'org');
-      actions$.next(StakeActions.initPool());
+      store.overrideSelector(poolSelectors.getOrganization, 'org');
+      actions$.next(PoolActions.initPool());
 
       effects.initPool$.subscribe(resultAction => {
         expect(toastrSpy.error).toHaveBeenCalled();
-        expect(resultAction).toEqual(StakeActions.getOrganizationDetails());
+        expect(resultAction).toEqual(PoolActions.getOrganizationDetails());
       });
 
     });
@@ -116,21 +95,21 @@ describe('StakeEffects', () => {
     });
 
     it('should put a stake and refresh data', () => {
-      actions$.next(StakeActions.putStake({amount: '5'}));
-      store.overrideSelector(stakeSelectors.isStakingDisabled, false);
+      actions$.next(PoolActions.putStake({amount: '5'}));
+      store.overrideSelector(poolSelectors.isStakingDisabled, false);
 
       stakingPoolFacadeSpy.putStake.and.returnValue(of());
 
       effects.putStake$.subscribe(resultAction => {
         expect(dialogSpy.open).toHaveBeenCalled();
         expect(stakingPoolFacadeSpy.putStake).toHaveBeenCalledWith(parseEther('5'));
-        expect(resultAction).toEqual(StakeActions.getStake());
+        expect(resultAction).toEqual(PoolActions.getStake());
       });
     });
 
     it('should not put a stake when staking is disabled', waitForAsync(() => {
-      actions$.next(StakeActions.putStake({amount: '5'}));
-      store.overrideSelector(stakeSelectors.isStakingDisabled, true);
+      actions$.next(PoolActions.putStake({amount: '5'}));
+      store.overrideSelector(poolSelectors.isStakingDisabled, true);
 
       stakingPoolFacadeSpy.putStake.and.returnValue(of());
 
@@ -142,14 +121,14 @@ describe('StakeEffects', () => {
     }));
 
     it('should return failure action when putStake throws an error', () => {
-      actions$.next(StakeActions.putStake({amount: '5'}));
-      store.overrideSelector(stakeSelectors.isStakingDisabled, false);
+      actions$.next(PoolActions.putStake({amount: '5'}));
+      store.overrideSelector(poolSelectors.isStakingDisabled, false);
 
       stakingPoolFacadeSpy.putStake.and.returnValue(from(Promise.reject({message: 'message'})));
 
       effects.putStake$.subscribe(resultAction => {
         expect(toastrSpy.error).toHaveBeenCalledWith('message');
-        expect(resultAction).toEqual(StakeActions.putStakeFailure({err: 'message'}));
+        expect(resultAction).toEqual(PoolActions.putStakeFailure({err: 'message'}));
       });
     });
   });

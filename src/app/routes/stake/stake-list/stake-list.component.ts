@@ -1,30 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as StakeActions from '../../../state/stake/stake.actions';
+import * as stakeSelectors from '../../../state/stake/stake.selectors';
 
 @Component({
   selector: 'app-stake-list',
   templateUrl: './stake-list.component.html',
   styleUrls: ['./stake-list.component.scss']
 })
-export class StakeListComponent {
-
-  mockData = [
-    {
-      organization: 'Energy Web Foundation',
-      organizationImage: 'ew-flex-single-logo.png',
-      providerDate: 'April, 2017',
-      stakeAmount: '2222.2222',
-      stakeRating: '97',
-      activeServices: '1',
-      numberOfNodes: '1',
-      isAcceptingPatrons: true
-    }
-  ];
-
-  constructor(private router: Router) {
+export class StakeListComponent implements OnInit {
+  providersList$ = this.store.select(stakeSelectors.getProviders);
+  constructor(private router: Router, private store: Store) {
   }
 
-  goToDetails() {
-    this.router.navigateByUrl('/staking?org=energyweb.iam.ewc');
+  ngOnInit() {
+    this.store.dispatch(StakeActions.getAllServices());
+  }
+
+  goToDetails(org: string): void {
+    window.open(`/staking?org=${org}`);
   }
 }

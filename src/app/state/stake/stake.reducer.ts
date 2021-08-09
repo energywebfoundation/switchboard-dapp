@@ -1,20 +1,20 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as StakeActions from './stake.actions';
-import { Service } from 'iam-client-lib/dist/src/staking';
+import { Provider } from './models/provider.interface';
 
 export const USER_FEATURE_KEY = 'stake';
 
 export interface StakeState {
-  services: Service[];
+  providers: Provider[];
 }
 
 export const initialState: StakeState = {
-  services: []
+  providers: []
 };
 
 const stakeReducer = createReducer(
   initialState,
-  on(StakeActions.getAllServicesSuccess, (state, {services}) => ({...state, services}))
+  on(StakeActions.getAllServicesSuccess, (state, {providers}) => ({...state, providers}))
 );
 
 export function reducer(state: StakeState | undefined, action: Action) {

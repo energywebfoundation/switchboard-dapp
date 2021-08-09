@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { IStakingPool } from '../../routes/applications/new-staking-pool/staking-pool.service';
-import { Service } from 'iam-client-lib/dist/src/staking';
+import { Provider } from './models/provider.interface';
 
 export const initStakingPool = createAction('[Stake] Initialize Staking Pool Service');
 export const initStakingPoolSuccess = createAction('[Stake] Initialize Staking Pool Service Success');
@@ -16,5 +16,5 @@ export const getAllServices = createAction(
 
 export const getAllServicesSuccess = createAction(
   '[Stake] Get All Services Success',
-  props<{services: Service[]}>()
+  props<{providers: Provider[]}>()
 );

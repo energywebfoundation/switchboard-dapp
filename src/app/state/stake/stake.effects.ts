@@ -7,10 +7,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { StakeState } from './stake.reducer';
 import * as StakeActions from './stake.actions';
 import { catchError, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { combineLatest, from } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import * as PoolActions from '../pool/pool.actions';
+import { Provider } from './models/provider.interface';
 
 
 @Injectable()
@@ -57,12 +58,24 @@ export class StakeEffects {
       this.actions$.pipe(
         ofType(StakeActions.getAllServices),
         tap(() => this.loadingService.show('Loading list of providers')),
-        switchMap(() => this.stakingService.allServices()
-          .pipe(
-            map((services) => StakeActions.getAllServicesSuccess({services}))
-          )
-        )
-      ), {dispatch: false}
+        switchMap(() => {
+          return combineLatest([
+              this.stakingService.allServices(),
+              from(this.iamService.iam.getENSTypesBySearchPhrase({types: ['Org'], search: 'iam.ewc'}))
+            ]
+          ).pipe(
+            map(([services, organizations]) => services.map((service) => {
+                const org = organizations.find((org) => org.namespace === service.org);
+                if (org) {
+                  return {...org, ...service} as Provider;
+                }
+              })
+            ),
+            map((providers: Provider[]) => StakeActions.getAllServicesSuccess({providers})),
+            finalize(() => this.loadingService.hide())
+          );
+        }),
+      )
   );
 
   constructor(private actions$: Actions,

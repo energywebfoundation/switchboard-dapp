@@ -1,4 +1,4 @@
-import { initialState, reducer } from './stake.reducer';
+import { initialState, reducer } from './pool.reducer';
 
 xdescribe('Stake Reducer', () => {
 
