@@ -64,14 +64,14 @@ describe('OrganizationActionsComponent', () => {
     });
 
     it('should check if staking url is undefined when passed element without namespace', () => {
-      component.organization = {example: ''};
+      component.organization = {example: ''} as any;
       fixture.detectChanges();
 
       expect(component.stakingUrl).toBeUndefined();
     });
 
     it('should generate stakingUrl when passing element with namespace', () => {
-      component.organization = {namespace: 'test'};
+      component.organization = {namespace: 'test'} as any;
       fixture.detectChanges();
 
       expect(component.stakingUrl).toContain('/staking?org=test');
@@ -82,7 +82,7 @@ describe('OrganizationActionsComponent', () => {
     it('should check when an organization is a provider', () => {
       component.organization = {
         isProvider: true
-      };
+      } as any;
       fixture.detectChanges();
       const {createStakingPoolBtn, copyStakingUrlBtn} = actionSelectors(hostDebug);
 
@@ -93,7 +93,7 @@ describe('OrganizationActionsComponent', () => {
     it('should check when an organization is not a provider', () => {
       component.organization = {
         isProvider: false
-      };
+      } as any;
       fixture.detectChanges();
       const {createStakingPoolBtn, copyStakingUrlBtn} = actionSelectors(hostDebug);
 
@@ -103,7 +103,7 @@ describe('OrganizationActionsComponent', () => {
   });
 
   it('should call ConfirmationDialogComponent with proper information', () => {
-    const element = {namespace: '', owner: ''};
+    const element = {namespace: '', owner: ''} as any;
     component.organization = element;
     fixture.detectChanges();
     const {editBtn} = actionSelectors(hostDebug);
@@ -121,7 +121,7 @@ describe('OrganizationActionsComponent', () => {
   });
 
   it('should call NewRoleComponent with proper information', () => {
-    const element = {namespace: '', owner: ''};
+    const element = {namespace: '', owner: ''} as any;
     component.organization = element;
     fixture.detectChanges();
     const {createRoleBtn} = actionSelectors(hostDebug);
@@ -141,7 +141,7 @@ describe('OrganizationActionsComponent', () => {
   });
 
   it('should call ConfirmationDialogComponent with proper information', () => {
-    component.organization = {};
+    component.organization = {} as any;
     fixture.detectChanges();
     const {deleteBtn} = actionSelectors(hostDebug);
     spyOn(component.deleteConfirmed, 'emit');
