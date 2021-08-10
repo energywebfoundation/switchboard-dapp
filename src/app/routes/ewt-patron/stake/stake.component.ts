@@ -5,8 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { tap } from 'rxjs/operators';
 import { PercentButtonsComponent } from '../percent-buttons/percent-buttons.component';
 import { Store } from '@ngrx/store';
-import * as stakeSelectors from '../../../state/stake/stake.selectors';
-import * as StakeActions from '../../../state/stake/stake.actions';
+import * as poolSelectors from '../../../state/pool/pool.selectors';
+import * as PoolActions from '../../../state/pool/pool.actions';
 
 @Component({
   selector: 'app-stake',
@@ -17,11 +17,11 @@ export class StakeComponent {
   inputFocused: boolean;
   tokenAmount: number;
   amountToStake = new FormControl('', [Validators.min(0), Validators.required]);
-  balance$ = this.store.select(stakeSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
-  earnedReward$ = this.store.select(stakeSelectors.getReward);
-  stakeAmount$ = this.store.select(stakeSelectors.getStakeAmount);
-  isWithdrawDisabled$ = this.store.select(stakeSelectors.isWithdrawDisabled);
-  isStakingDisabled$ = this.store.select(stakeSelectors.isStakingDisabled);
+  balance$ = this.store.select(poolSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
+  earnedReward$ = this.store.select(poolSelectors.getReward);
+  stakeAmount$ = this.store.select(poolSelectors.getStakeAmount);
+  isWithdrawDisabled$ = this.store.select(poolSelectors.isWithdrawDisabled);
+  isStakingDisabled$ = this.store.select(poolSelectors.isStakingDisabled);
 
   @ViewChild('percentButtons') percentButtons: PercentButtonsComponent;
 
@@ -49,7 +49,7 @@ export class StakeComponent {
   }
 
   private putStake() {
-    this.store.dispatch(StakeActions.putStake({amount: this.amountToStake.value.toString()}));
+    this.store.dispatch(PoolActions.putStake({amount: this.amountToStake.value.toString()}));
   }
 
   stake() {
@@ -58,7 +58,7 @@ export class StakeComponent {
   }
 
   withdraw() {
-    this.store.dispatch(StakeActions.withdrawRequest());
+    this.store.dispatch(PoolActions.withdrawRequest());
   }
 
 }

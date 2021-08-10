@@ -2,9 +2,9 @@
   <mat-card-header class="card-header">
     <div>
       <mat-card-title class="color-white-flat">{{organization}}</mat-card-title>
-      <mat-card-subtitle class="text-subtitle">Provider Since {{providerDate}}</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="providerDate" class="text-subtitle">Provider Since {{providerDate}}</mat-card-subtitle>
     </div>
-    <img src="/assets/img/{{organizationImage}}" class="card-header-image img-fluid" alt="card header"/>
+    <img [src]="logoUrl ? logoUrl : '../assets/img/no-organization-image.png'" class="card-header-image img-fluid" alt="card header"/>
   </mat-card-header>
 
   <mat-card-content>

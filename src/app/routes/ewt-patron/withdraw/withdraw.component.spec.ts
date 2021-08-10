@@ -3,13 +3,12 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { WithdrawComponent } from './withdraw.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { StakeState } from '../../../state/stake/stake.reducer';
-import * as stakeSelectors from '../../../state/stake/stake.selectors';
+import * as poolSelectors from '../../../state/pool/pool.selectors';
 
 describe('WithdrawComponent', () => {
   let component: WithdrawComponent;
   let fixture: ComponentFixture<WithdrawComponent>;
-  let store: MockStore<StakeState>;
+  let store: MockStore;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -24,7 +23,7 @@ describe('WithdrawComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(WithdrawComponent);
     component = fixture.componentInstance;
-    store.overrideSelector(stakeSelectors.isWithdrawingDelayFinished, false);
+    store.overrideSelector(poolSelectors.isWithdrawingDelayFinished, false);
     fixture.detectChanges();
   });
 

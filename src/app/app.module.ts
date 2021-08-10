@@ -1,12 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
-import {
-  NgModule,
-  APP_INITIALIZER,
-  ErrorHandler,
-  Provider,
-} from '@angular/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { APP_INITIALIZER, ErrorHandler, NgModule, Provider, } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
@@ -31,6 +26,7 @@ import { rootReducer } from './state/root.reducer';
 import { FEAT_TOGGLE_TOKEN, getEnv } from './shared/feature-toggle/feature-toggle.token';
 import { StakeEffects } from './state/stake/stake.effects';
 import { AuthEffects } from './state/auth/auth.effects';
+import { PoolEffects } from './state/pool/pool.effects';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -80,7 +76,7 @@ if (environment.SENTRY_DNS) {
     }),
     StoreModule.forRoot(rootReducer, {}),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
-    EffectsModule.forRoot([UserEffects, StakeEffects, AuthEffects]),
+    EffectsModule.forRoot([UserEffects, StakeEffects, AuthEffects, PoolEffects]),
   ],
   providers,
   bootstrap: [AppComponent],

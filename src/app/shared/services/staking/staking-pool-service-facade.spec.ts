@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
+import { StakingPoolServiceFacade } from './staking-pool-service-facade';
 
-import { StakingService } from './staking.service';
 
 xdescribe('StakingService', () => {
-  let service: StakingService;
+  let service: StakingPoolServiceFacade;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(StakingService);
+    service = TestBed.inject(StakingPoolServiceFacade);
   });
 
   it('should be created', () => {
