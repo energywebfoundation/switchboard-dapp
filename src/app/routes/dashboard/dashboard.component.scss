@@ -1,0 +1,22 @@
+::ng-deep {
+.md-search {
+    &.mat-form-field-appearance-outline .mat-form-field-outline {
+      background: #231F32 !important;
+      color: transparent;
+    }
+  }
+  
+  .md-search.mat-form-field {
+    .mat-input-element {
+      color: #FFF;
+    }
+  }
+  
+  .md-search.mat-form-field-appearance-outline .mat-form-field-outline {
+    background: #1C1726;
+    color: transparent;
+  }
+  .md-search.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: #33CBCB;
+  }
+}

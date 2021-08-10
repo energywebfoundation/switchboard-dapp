@@ -54,6 +54,27 @@ body {
     height: auto;
     min-height: 100%;
     overflow-x: hidden;
+    background-color: #130E21;
+    background-image: url("../../../../assets/img/staking/staking-gradient-background.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+
+    &::after {
+        content: " ";
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        position: absolute;
+        background-image: url("../../../../assets/img/staking/staking-lines-background.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+      }
+
     &.ng-leave {
         display: none;
     }
@@ -105,8 +126,8 @@ body {
         position: relative;
         height: 100%;
         margin-left: 0; // overflow: hidden;
-        z-index: $z-index-main-section;
-        background-color: $content-bg;
+        // z-index: $z-index-main-section;
+        // background-color: $content-bg;
         // margin-bottom: $footer-hg !important; // ensure a space for the footer
     } // Page Footer
     .footer-container {
@@ -770,7 +791,7 @@ _:-ms-lang(x),
 
 .img-dashboard {
     width: auto;
-    height: 70px;
+    height: 90px;
 }
 
 .welcome-footer {

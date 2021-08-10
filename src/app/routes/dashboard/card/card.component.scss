@@ -1,0 +1,38 @@
+.card-icon {
+    background: #050608;
+    border-radius: 32px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.14);
+    cursor: pointer;
+    position: relative;
+    top: 0;
+    transition: top ease 0.5s;
+    
+    &:hover {
+      background: #A567FF;
+      top: -5px; 
+      box-shadow: rgba(0,0,0,0.1) 0px 20px 20px 0px;
+    }
+
+    span {
+        font-family: Rajdhani, sans-serif;
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.15px !important;
+        color: #FFF !important;
+    }
+  }
+
+  .card-icon-disabled {
+    background: rgba(5, 6, 8, 0.3);
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.14);
+    border-radius: 32px;
+    position: relative;
+    top: 0;
+
+    span {
+        font-family: Rajdhani, sans-serif;
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        color: #FFF !important;
+    }
+  }

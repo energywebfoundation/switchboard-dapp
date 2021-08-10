@@ -5,3 +5,11 @@
 ::ng-deep .walletconnect-modal__close__wrapper {
   background: transparent !important;
 }
+
+.wrapper-welcome {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+}
