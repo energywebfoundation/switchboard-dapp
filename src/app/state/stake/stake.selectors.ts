@@ -6,5 +6,5 @@ export const getStakeState = createFeatureSelector<StakeState>(USER_FEATURE_KEY)
 
 export const getProviders = createSelector(
   getStakeState,
-  (state) => state.providers
+  (state) => state?.providers
 );
