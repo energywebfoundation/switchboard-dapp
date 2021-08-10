@@ -1,4 +1,7 @@
 export const deepEqualObjects = (defaultObject, objectToCompare): boolean => {
+  if (!defaultObject || !objectToCompare) {
+    return false;
+  }
   const defaultKeys = Object.keys(defaultObject);
   const comparedObjectKeys = Object.keys(objectToCompare);
 
