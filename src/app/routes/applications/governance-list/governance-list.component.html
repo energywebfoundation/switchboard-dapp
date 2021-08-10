@@ -134,88 +134,36 @@
             <mat-icon class="btn-color-primary">more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item class="btn-color-primary" (click)="view(listType, element)">
+            <button mat-menu-item class="btn-color-primary" (click)="viewDetails(listType, element)">
               <mat-icon class="btn-color-primary">preview</mat-icon>
               <span>View Details</span>
             </button>
 
-            <ng-container *ngIf="element?.isOwnedByCurrentUser">
-              <!-- Create Sub-Organization -->
-              <button mat-menu-item class="btn-color-primary" (click)="newSubOrg(element, DRILL_DOWN_SUBORG)"
-                      *ngIf="listType === ListType.ORG">
-                <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-organization-icon"></mat-icon>
-                <span>Create Sub-Organization</span>
-              </button>
+            <app-organization-actions *ngIf="listType === ListType.ORG"
+                                      [organization]="element"
+                                      (organizationCreated)="newSubOrg(element)"
+                                      (viewApps)="viewApps(ListType.ORG, element)"
+                                      (viewRoles)="viewRoles(ListType.ORG, element)"
+                                      (appCreated)="newApp(element)"
+                                      (roleCreated)="viewRoles(ListType.ORG, element)"
+                                      (edited)="edit()"
+                                      (transferred)="transferOwnership()"
+                                      (deleteConfirmed)="remove(listType, element)">
+            </app-organization-actions>
 
-              <!-- View Applications -->
-              <button mat-menu-item class="btn-color-primary" (click)="viewApps(listType, element)"
-                      *ngIf="listType === ListType.ORG">
-                <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-application-icon"></mat-icon>
-                <span>View Applications</span>
-              </button>
+            <app-application-actions *ngIf="listType === ListType.APP"
+                                     [application]="element"
+                                     (viewRoles)="viewRoles(ListType.APP, element)"
+                                     (roleCreated)="viewRoles(ListType.APP, element)"
+                                     (edited)="edit()"
+                                     (deleteConfirmed)="remove(listType, element)">
+            </app-application-actions>
 
-              <!-- View Roles -->
-              <!-- To disable menu item (action button), add disabled to button -->
-              <button mat-menu-item class="btn-color-primary" (click)="viewRoles(listType, element)"
-                      *ngIf="listType !== ListType.ROLE">
-                <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-role-icon"></mat-icon>
-                <span>View Roles</span>
-              </button>
+            <app-role-actions *ngIf="listType === ListType.ROLE"
+                              [role]="element"
+                              (edited)="edit()">
+            </app-role-actions>
 
-              <!-- Create New Application -->
-              <button mat-menu-item class="btn-color-primary" (click)="newApp(element)"
-                      *ngIf="listType === ListType.ORG">
-                <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-application-icon"></mat-icon>
-                <span>Create Application</span>
-              </button>
-
-              <!-- Create New Role -->
-              <!-- To disable menu item (action button), add disabled to button -->
-              <button mat-menu-item class="btn-color-primary" (click)="newRole(listType, element)"
-                      *ngIf="listType !== ListType.ROLE">
-                <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-role-icon"></mat-icon>
-                <span>Create Role</span>
-              </button>
-
-              <!-- Create Staking Pool -->
-              <button mat-menu-item class="btn-color-primary" *appIsFeatureEnabled (click)="openStakingPool(element)">
-                <mat-icon class="btn-color-primary btn-action-3" svgIcon="create-staking-icon"></mat-icon>
-                <span>Create Staking Pool</span>
-              </button>
-
-              <!-- Edit Details -->
-              <button mat-menu-item class="btn-color-primary" (click)="edit(listType, element)">
-                <mat-icon class="btn-color-primary">edit</mat-icon>
-                <span>Edit</span>
-              </button>
-
-              <!-- Copy Role to Clipboard -->
-              <button mat-menu-item class="btn-color-primary" *ngIf="listType === ListType.ROLE"
-                      (click)="copyToClipboard(element?.definition?.roleType, element)">
-                <mat-icon class="btn-color-primary btn-action-3" svgIcon="copy-url-icon"></mat-icon>
-                <span>Copy Role Enrolment URL</span>
-              </button>
-
-              <!-- Transfer Ownership -->
-              <button mat-menu-item class="btn-color-primary" (click)="transferOwnership(listType, element)"
-                      *ngIf="listType === ListType.ORG">
-                <mat-icon class="btn-color-primary btn-action-1" svgIcon="transfer-ownership-icon"></mat-icon>
-                <span>Transfer Ownership</span>
-              </button>
-
-              <!-- Copy Staking URL -->
-              <button mat-menu-item class="btn-color-primary" *appIsFeatureEnabled>
-                <mat-icon class="btn-color-primary btn-action-3" svgIcon="copy-url-icon"></mat-icon>
-                <span>Copy Staking URL</span>
-              </button>
-
-              <!-- Remove -->
-              <button mat-menu-item class="btn-color-error" (click)="remove(listType, element)"
-                      *ngIf="listType === ListType.ORG || listType === ListType.APP">
-                <mat-icon class="btn-color-error">delete_outline</mat-icon>
-                <span>Delete</span>
-              </button>
-            </ng-container>
           </mat-menu>
         </div>
       </td>

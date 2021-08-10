@@ -1,26 +1,20 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
-import { ENSNamespaceTypes, IApp, IOrganization, IRole } from 'iam-client-lib';
+import { ENSNamespaceTypes, IOrganization } from 'iam-client-lib';
 import { Subject } from 'rxjs';
 
-import { ListType } from '../../../shared/constants/shared-constants';
-import { ConfigService } from '../../../shared/services/config.service';
-import { IamService } from '../../../shared/services/iam.service';
-import { LoadingService } from '../../../shared/services/loading.service';
-import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
+import { ListType } from 'src/app/shared/constants/shared-constants';
+import { IamService } from 'src/app/shared/services/iam.service';
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
-import { NewApplicationComponent } from '../new-application/new-application.component';
-import { NewOrganizationComponent, ViewType } from '../new-organization/new-organization.component';
-import { NewRoleComponent, RoleType } from '../new-role/new-role.component';
+import { RoleType } from '../new-role/new-role.component';
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
-import { TransferOwnershipComponent } from '../transfer-ownership/transfer-ownership.component';
-import { takeUntil } from 'rxjs/operators';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { NewStakingPoolComponent } from '../new-staking-pool/new-staking-pool.component';
+import { StakingService } from '../../../shared/services/staking/staking.service';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -58,7 +52,6 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
   orgHierarchy = [];
 
-  DRILL_DOWN_SUBORG = true;
   currentUserEthAddress = this.iamService.accountAddress;
 
   private _isSubOrgCreated = false;
@@ -69,7 +62,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
               private fb: FormBuilder,
               private toastr: SwitchboardToastrService,
-              private configService: ConfigService) {
+              private stakingService: StakingService) {
   }
 
   async ngOnInit() {
@@ -124,23 +117,21 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     }
     this.loadingService.show();
 
-    const $getOrgList = await this.iamService.iam.getENSTypesByOwner({
+    let orgList = await this.iamService.iam.getENSTypesByOwner({
       type: this.ensType,
       owner: this.iamService.accountAddress,
       excludeSubOrgs: false
     });
 
-    type Domain = IRole & IOrganization & IApp;
-
-    let orgList = await Promise.all(
-      ($getOrgList as Domain[]).map(async (org) => {
-        const isOwnedByCurrentUser = await this.iamService.iam.isOwner({domain: org.namespace});
-        return {...org, isOwnedByCurrentUser};
-      }));
-
     if (this.listType === ListType.ORG) {
+      let services = await this.stakingService.getStakingPoolService().allServices();
+      const servicesNames = services.map((service) => service.org);
+      const listWithProvidersInfo = (orgList as IOrganization[]).map((org: IOrganization) => ({
+        ...org,
+        isProvider: servicesNames.includes(org.namespace)
+      }));
       // Retrieve only main orgs
-      orgList = this._getMainOrgs(orgList);
+      orgList = this._getMainOrgs(listWithProvidersInfo);
     }
     this.origDatasource = orgList;
 
@@ -197,8 +188,8 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     return list;
   }
 
-  view(type: string, data: any) {
-    const dialogRef = this.dialog.open(GovernanceViewComponent, {
+  viewDetails(type: string, data: any) {
+    this.dialog.open(GovernanceViewComponent, {
       width: '600px', data: {
         type,
         definition: data
@@ -243,192 +234,66 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     });
   }
 
-  edit(type: string, data: any) {
-    let component;
-
-    switch (type) {
-      case ListType.ORG:
-        component = NewOrganizationComponent;
-        break;
-      case ListType.APP:
-        component = NewApplicationComponent;
-        break;
-      case ListType.ROLE:
-        component = NewRoleComponent;
-        break;
-    }
-
-    if (component) {
-      const dialogRef = this.dialog.open(component, {
-        width: '600px',
-        data: {
-          viewType: ViewType.UPDATE,
-          origData: data
-        },
-        maxWidth: '100%',
-        disableClose: true
-      });
-
-      dialogRef.afterClosed()
-        .pipe(takeUntil(this.subscription$))
-        .subscribe(async (res: any) => {
-          if (res) {
-            if (this.orgHierarchy.length) {
-              await this.viewSubOrgs(this.orgHierarchy.pop());
-            } else {
-              await this.getList();
-            }
-          }
-        });
+  async edit() {
+    if (this.orgHierarchy.length) {
+      await this.viewSubOrgs(this.orgHierarchy.pop());
+    } else {
+      await this.getList();
     }
   }
 
-  transferOwnership(type: any, data: any) {
-    const dialogRef = this.dialog.open(TransferOwnershipComponent, {
-      width: '600px',
-      data: {
-        namespace: data.namespace,
-        type,
-        owner: data.owner
-      },
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed()
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(async result => {
-
-        if (result) {
-          if (this.orgHierarchy.length) {
-            const currentOrg = this.orgHierarchy.pop();
-            if (this.dataSource.data.length === 1) {
-              await this.viewSubOrgs(this.orgHierarchy.pop());
-            } else {
-              await this.viewSubOrgs(currentOrg);
-            }
-          } else {
-            await this.getList();
-          }
-        }
-      });
-  }
-
-  private constructEnrolmentUrl(listType: string, roleDefinition: any) {
-    const name = roleDefinition.name;
-    const arr = roleDefinition.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
-    let namespace = '';
-
-    if (arr.length > 1) {
-      namespace = arr[1];
+  async transferOwnership() {
+    if (this.orgHierarchy.length) {
+      const currentOrg = this.orgHierarchy.pop();
+      if (this.dataSource.data.length === 1) {
+        await this.viewSubOrgs(this.orgHierarchy.pop());
+      } else {
+        await this.viewSubOrgs(currentOrg);
+      }
+    } else {
+      await this.getList();
     }
-
-    return `${location.origin}/enrol?${listType}=${namespace}&roleName=${name}`;
-  }
-
-  copyToClipboard(listType: string, roleDefinition: any) {
-    const listener = (e: ClipboardEvent) => {
-      const clipboard = e.clipboardData || window['clipboardData'];
-      clipboard.setData('text', this.constructEnrolmentUrl(listType, roleDefinition));
-      e.preventDefault();
-    };
-
-    document.addEventListener('copy', listener, false);
-    document.execCommand('copy');
-    document.removeEventListener('copy', listener, false);
-
-    this.toastr.success('Role Enrolment URL is copied to clipboard.');
   }
 
   async remove(listType: string, roleDefinition: any) {
-    // Make sure that user confirms the removal of this namespace
-    const isConfirmed = this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      maxHeight: '195px',
-      data: {
-        header: 'Remove ' + (listType === ListType.APP ? 'Application' : 'Organization'),
-        message: 'Do you wish to continue?'
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().toPromise();
+    // Get Removal Steps
+    const steps = await this.getRemovalSteps(listType, roleDefinition);
 
-    if (await isConfirmed) {
-      // Get Removal Steps
-      const steps = await this.getRemovalSteps(listType, roleDefinition);
+    if (steps) {
+      // Launch Remove Org / App Dialog
+      const isRemoved = this.dialog.open(RemoveOrgAppComponent, {
+        width: '600px', data: {
+          namespace: roleDefinition.namespace,
+          listType,
+          steps
+        },
+        maxWidth: '100%',
+        disableClose: true
+      }).afterClosed().toPromise();
 
-      if (steps) {
-        // Launch Remove Org / App Dialog
-        const isRemoved = this.dialog.open(RemoveOrgAppComponent, {
-          width: '600px', data: {
-            namespace: roleDefinition.namespace,
-            listType,
-            steps
-          },
-          maxWidth: '100%',
-          disableClose: true
-        }).afterClosed().toPromise();
-
-        // Refresh the list after successful removal
-        if (await isRemoved) {
-          if (this.orgHierarchy.length) {
-            const currentOrg = this.orgHierarchy.pop();
-            if (this.dataSource.data.length === 1) {
-              await this.viewSubOrgs(this.orgHierarchy.pop());
-            } else {
-              await this.viewSubOrgs(currentOrg);
-            }
+      // Refresh the list after successful removal
+      if (await isRemoved) {
+        if (this.orgHierarchy.length) {
+          const currentOrg = this.orgHierarchy.pop();
+          if (this.dataSource.data.length === 1) {
+            await this.viewSubOrgs(this.orgHierarchy.pop());
           } else {
-            await this.getList();
+            await this.viewSubOrgs(currentOrg);
           }
+        } else {
+          await this.getList();
         }
       }
+
     }
   }
 
   async newApp(parentOrg: any) {
-    const dialogRef = this.dialog.open(NewApplicationComponent, {
-      width: '600px',
-      data: {
-        viewType: ViewType.NEW,
-        organizationNamespace: parentOrg.namespace,
-        owner: parentOrg.owner
-      },
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed()
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(async (res: any) => {
-        if (res) {
-          // Redirect to Application List
-          this.viewApps(ListType.ORG, parentOrg);
-        }
-      });
+    this.viewApps(ListType.ORG, parentOrg);
   }
 
   async newRole(listType: string, roleDefinition: any) {
-    const dialogRef = this.dialog.open(NewRoleComponent, {
-      width: '600px',
-      data: {
-        viewType: ViewType.NEW,
-        namespace: roleDefinition.namespace,
-        listType,
-        owner: roleDefinition.owner
-      },
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed()
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(async (res: any) => {
-        if (res) {
-          // Redirect to Role List
-          this.viewRoles(listType, roleDefinition);
-        }
-      });
+    this.viewRoles(listType, roleDefinition);
   }
 
   private async getRemovalSteps(listType: string, roleDefinition: any) {
@@ -509,29 +374,8 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     this.dataSource.data = JSON.parse(JSON.stringify(this.origDatasource));
   }
 
-  newSubOrg(parentOrg: any, displayMode?: boolean) {
-    const dialogRef = this.dialog.open(NewOrganizationComponent, {
-      width: '600px',
-      data: {
-        viewType: ViewType.NEW,
-        parentOrg: JSON.parse(JSON.stringify(parentOrg)),
-        owner: parentOrg.owner
-      },
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed()
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(async (res: any) => {
-        if (res) {
-          this._isSubOrgCreated = true;
-
-          // Refresh Screen
-          const currentOrg = displayMode === this.DRILL_DOWN_SUBORG ? parentOrg : this.orgHierarchy.pop();
-          await this.viewSubOrgs(currentOrg, ALLOW_NO_SUBORG);
-        }
-      });
+  async newSubOrg(parentOrg: any) {
+    await this.viewSubOrgs(parentOrg, ALLOW_NO_SUBORG);
   }
 
   async viewSubOrgs(element: any, allowNoSubOrg?: boolean) {
@@ -597,14 +441,5 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     }
 
     return retVal;
-  }
-
-  openStakingPool(element: any) {
-    this.dialog.open(NewStakingPoolComponent, {
-      data: element,
-      width: '600px',
-      maxWidth: '100%',
-      disableClose: true
-    });
   }
 }
