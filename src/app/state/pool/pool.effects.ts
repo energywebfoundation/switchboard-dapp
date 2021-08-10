@@ -43,6 +43,40 @@ export class PoolEffects {
     )
   );
 
+  stakeIsInWithdrawingStatus$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.getStakeSuccess),
+      map(({stake}) => stake.status),
+      filter((status: StakeStatus) => status === StakeStatus.WITHDRAWING),
+      mergeMap(() => [
+        PoolActions.getAccountBalance(),
+        PoolActions.checkReward(),
+        PoolActions.displayConfirmationDialog()
+      ])
+    )
+  );
+
+  stakeIsInStakingStatus$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.getStakeSuccess),
+      map(({stake}) => stake.status),
+      filter((status: StakeStatus) => status === StakeStatus.STAKING),
+      mergeMap(() => [
+        PoolActions.getAccountBalance(),
+        PoolActions.checkReward(),
+      ])
+    )
+  );
+
+  stakeIsInNonStakingStatus$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.getStakeSuccess),
+      map(({stake}) => stake.status),
+      filter((status: StakeStatus) => status === StakeStatus.NONSTAKING),
+      map(() => PoolActions.getAccountBalance())
+    )
+  );
+
   getStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PoolActions.getStake),
@@ -52,22 +86,7 @@ export class PoolEffects {
             switchMap((address) => this.stakingPoolFacade.getStake(address)
               .pipe(
                 filter<Stake>(Boolean),
-                mergeMap((stake) => {
-                    const actions = [PoolActions.getStakeSuccess({stake}), PoolActions.getAccountBalance()];
-                    if (stake.status === StakeStatus.STAKING) {
-                      return [...actions, PoolActions.checkReward()];
-                    }
-                    if (stake.status === StakeStatus.WITHDRAWING) {
-                      return [
-                        ...actions,
-                        PoolActions.checkReward(),
-                        PoolActions.withdrawRewardSuccess(),
-                        PoolActions.displayConfirmationDialog()
-                      ];
-                    }
-                    return actions;
-                  }
-                )
+                map((stake) => PoolActions.getStakeSuccess({stake}))
               )
             )
           )

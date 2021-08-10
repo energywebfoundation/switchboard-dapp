@@ -1,7 +1,7 @@
 import * as poolSelectors from './pool.selectors';
 import { StakeStatus } from 'iam-client-lib';
 
-describe('Stake Selectors', () => {
+describe('Pool Selectors', () => {
 
   describe('getBalance', () => {
     it('should return undefined when passing empty state object', () => {
