@@ -14,7 +14,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { StakingService } from '../../../shared/services/staking/staking.service';
+import { StakingPoolServiceFacade } from '../../../shared/services/staking/staking-pool-service-facade';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -62,7 +62,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
               private fb: FormBuilder,
               private toastr: SwitchboardToastrService,
-              private stakingService: StakingService) {
+              private stakingService: StakingPoolServiceFacade) {
   }
 
   async ngOnInit() {
@@ -124,7 +124,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     });
 
     if (this.listType === ListType.ORG) {
-      let services = await this.stakingService.getStakingPoolService().allServices();
+      let services = await this.stakingService.allServices().toPromise();
       const servicesNames = services.map((service) => service.org);
       const listWithProvidersInfo = (orgList as IOrganization[]).map((org: IOrganization) => ({
         ...org,
