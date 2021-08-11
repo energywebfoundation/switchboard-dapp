@@ -9,14 +9,14 @@ import * as poolSelectors from '../../../state/pool/pool.selectors';
 import { LastDigitsPipe } from '../pipes/last-digits.pipe';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { IamService } from '../../../shared/services/iam.service';
 import * as PoolActions from '../../../state/pool/pool.actions';
+import { LoginService } from '../../../shared/services/login/login.service';
 
 describe('EwtPatronComponent', () => {
   let component: EwtPatronComponent;
   let fixture: ComponentFixture<EwtPatronComponent>;
   let store: MockStore<StakeState>;
-  const iamServiceSpy = jasmine.createSpyObj('IamService', ['hasSessionRetrieved']);
+  const loginServiceSpy = jasmine.createSpyObj('LoginService', ['hasSessionRetrieved']);
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll', 'open']);
   const mockActivatedRoute = {queryParams: of({org: 'org'})};
   const setUp = (options?: {
@@ -39,7 +39,7 @@ describe('EwtPatronComponent', () => {
     TestBed.configureTestingModule({
       declarations: [EwtPatronComponent, LastDigitsPipe],
       providers: [
-        {provide: IamService, useValue: iamServiceSpy},
+        {provide: LoginService, useValue: loginServiceSpy},
         {
           provide: MatDialog, useValue: dialogSpy
         },

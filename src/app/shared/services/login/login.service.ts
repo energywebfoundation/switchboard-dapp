@@ -42,8 +42,12 @@ export class LoginService {
               private toastr: ToastrService) {
   }
 
+  isSessionActive() {
+    return this.iamService.iam.isSessionActive();
+  }
+
   async hasSessionRetrieved(): Promise<boolean> {
-    if (!this.iamService.iam.isSessionActive()) {
+    if (!this.isSessionActive()) {
       return false;
     }
 

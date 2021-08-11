@@ -8,7 +8,7 @@ import * as PoolActions from '../../../state/pool/pool.actions';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import swal from 'sweetalert';
-import { IamService } from '../../../shared/services/iam.service';
+import { LoginService } from '../../../shared/services/login/login.service';
 
 @Component({
   selector: 'app-ewt-patron',
@@ -25,7 +25,7 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
   constructor(private store: Store,
               private dialog: MatDialog,
               private activatedRoute: ActivatedRoute,
-              private iamService: IamService) {
+              private loginService: LoginService) {
   }
 
   ngOnDestroy(): void {
@@ -35,7 +35,7 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.setOrganization();
-    if ((await this.iamService.hasSessionRetrieved()) === false) {
+    if ((await this.loginService.hasSessionRetrieved()) === false) {
       this.openLoginDialog();
     }
   }

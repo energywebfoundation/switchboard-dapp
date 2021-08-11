@@ -10,6 +10,7 @@ import { LoadingCount } from '../../shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import { UserClaimState } from '../../state/user-claim/user.reducer';
+import { LoginService } from '../../shared/services/login/login.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,7 +37,8 @@ export class DashboardComponent implements AfterViewInit {
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService,
     private fb: FormBuilder,
-    private store: Store<UserClaimState>
+    private store: Store<UserClaimState>,
+    private loginService: LoginService
   ) {
     // Init Search
     this.searchForm = fb.group({
@@ -55,8 +57,8 @@ export class DashboardComponent implements AfterViewInit {
       this.loadingService.show();
 
       // Check Login
-      if (this.iamService.iam.isSessionActive()) {
-        await this.iamService.login();
+      if (this.loginService.isSessionActive()) {
+        await this.loginService.login();
 
         // Check if returnUrl is available or just redirect to dashboard
         if (queryParams && queryParams.returnUrl) {
@@ -84,7 +86,7 @@ export class DashboardComponent implements AfterViewInit {
 
   private async _setupUser() {
     // Setup User Data
-    await this.iamService.setupUser();
+    await this.loginService.setupUser();
   }
 
   private async _filterOrgsAndApps(keyword: any): Promise<any[]> {
