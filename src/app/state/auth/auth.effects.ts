@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { IamService } from '../../shared/services/iam.service';
 import { Store } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
@@ -8,6 +7,7 @@ import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { IAM, WalletProvider } from 'iam-client-lib';
 import { from, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { LoginService } from '../../shared/services/login/login.service';
 
 @Injectable()
 export class AuthEffects {
@@ -32,9 +32,9 @@ export class AuthEffects {
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.login),
-      tap(({provider, navigateOnTimeout}) => this.iamService.waitForSignature(provider, true, navigateOnTimeout)),
+      tap(({provider, navigateOnTimeout}) => this.loginService.waitForSignature(provider, true, navigateOnTimeout)),
       switchMap(({provider, navigateOnTimeout}) =>
-        from(this.iamService.login({
+        from(this.loginService.login({
           walletProvider: provider,
           reinitializeMetamask: provider === WalletProvider.MetaMask
         }, navigateOnTimeout)).pipe(
@@ -49,7 +49,7 @@ export class AuthEffects {
             console.log(err);
             return of(AuthActions.loginFailure());
           }),
-          finalize(() => this.iamService.clearWaitSignatureTimer())
+          finalize(() => this.loginService.clearWaitSignatureTimer())
         )
       )
     )
@@ -59,7 +59,7 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.logout),
       map(() => {
-        this.iamService.disconnect();
+        this.loginService.disconnect();
         location.reload();
       })
     ), {dispatch: false}
@@ -67,7 +67,7 @@ export class AuthEffects {
 
   constructor(private actions$: Actions,
               private store: Store<AuthState>,
-              private iamService: IamService,
+              private loginService: LoginService,
               private dialog: MatDialog) {
   }
 

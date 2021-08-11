@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IAM, WalletProvider } from 'iam-client-lib';
-import { IamService, VOLTA_CHAIN_ID } from '../../shared/services/iam.service';
+import { VOLTA_CHAIN_ID } from '../../shared/services/iam.service';
+import { LoginService } from '../../shared/services/login/login.service';
 
 const { version } = require('../../../../package.json')
 
@@ -19,7 +20,7 @@ export class WelcomeComponent implements OnInit {
 
   constructor(private route: Router,
               private activeRoute: ActivatedRoute,
-              private iamService: IamService) {
+              private loginService: LoginService) {
   }
 
   async ngOnInit() {
@@ -30,7 +31,7 @@ export class WelcomeComponent implements OnInit {
     });
 
     // Immediately navigate to dashboard if user is currently logged-in to walletconnect
-    if (this.iamService.iam.isSessionActive()) {
+    if (this.loginService.isSessionActive()) {
       this.route.navigate(['dashboard']);
     }
 
@@ -55,9 +56,9 @@ export class WelcomeComponent implements OnInit {
   }
 
   private async connectToWallet(walletProvider: WalletProvider) {
-    this.iamService.waitForSignature(walletProvider, true);
-    const isLoggedIn = await this.iamService.login({walletProvider});
-    this.iamService.clearWaitSignatureTimer();
+    this.loginService.waitForSignature(walletProvider, true);
+    const isLoggedIn = await this.loginService.login({walletProvider});
+    this.loginService.clearWaitSignatureTimer();
     if (isLoggedIn) {
       // Check deep link
       let queryParams;
@@ -78,9 +79,9 @@ export class WelcomeComponent implements OnInit {
   async connectToMetamask() {
     // Proceed with Login Process
     const walletProvider = WalletProvider.MetaMask;
-    this.iamService.waitForSignature(walletProvider, true);
-    const isLoggedIn = await this.iamService.login({walletProvider, reinitializeMetamask: true});
-    this.iamService.clearWaitSignatureTimer();
+    this.loginService.waitForSignature(walletProvider, true);
+    const isLoggedIn = await this.loginService.login({walletProvider, reinitializeMetamask: true});
+    this.loginService.clearWaitSignatureTimer();
 
     if (isLoggedIn) {
       // Check deep link
@@ -100,6 +101,6 @@ export class WelcomeComponent implements OnInit {
   }
 
   private async cleanMe() {
-    this.iamService.logout();
+    this.loginService.logout();
   }
 }

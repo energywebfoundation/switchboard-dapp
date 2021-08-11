@@ -1,4 +1,4 @@
-import { NavigationEnd, Router } from '@angular/router';
+import { Event, NavigationEnd, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -18,6 +18,7 @@ import * as userSelectors from '../../state/user-claim/user.selectors';
 import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../state/user-claim/user.reducer';
 import { SwitchboardToastr, SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
+import { LoginService } from '../../shared/services/login/login.service';
 
 @Component({
   selector: 'app-header',
@@ -76,7 +77,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private toastr: SwitchboardToastrService,
               private notifService: NotificationService,
               public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer,
-              private store: Store<UserClaimState>) {
+              private store: Store<UserClaimState>,
+              private loginService: LoginService) {
     // show only a few items on demo
     this.menuItems = menu.getMenu().slice(0, 4); // for horizontal layout
 
@@ -86,18 +88,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     this.router.events
-      .pipe(takeUntil(this._subscription$))
+      .pipe(
+        filter((event: Event) => event instanceof NavigationEnd),
+        takeUntil(this._subscription$)
+      )
       .subscribe((event: any) => {
-        if (event instanceof NavigationEnd) {
-          this.iamService.setDeepLink(event.url);
-          this.isNavMenuVisible = true;
-          if (event.url === '/dashboard') {
-            this.isNavMenuVisible = false;
-          }
-
-          const pathArr = event.url.split('/');
-          this.currentNav = pathArr[1];
+        this.loginService.setDeepLink(event.url);
+        this.isNavMenuVisible = true;
+        if (event.url === '/dashboard') {
+          this.isNavMenuVisible = false;
         }
+
+        const pathArr = event.url.split('/');
+        this.currentNav = pathArr[1];
       });
   }
 
@@ -389,7 +392,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.clearSwitchboardToaster();
-    this.iamService.logoutAndRefresh();
+    this.loginService.logoutAndRefresh();
   }
 
   clearSwitchboardToaster(): void {

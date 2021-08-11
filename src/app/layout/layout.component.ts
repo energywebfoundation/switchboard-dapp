@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserIdleService } from 'angular-user-idle';
-import { IamService } from '../shared/services/iam.service';
+import { LoginService } from '../shared/services/login/login.service';
 
 const SWAL = require('sweetalert');
 
@@ -11,7 +11,7 @@ const SWAL = require('sweetalert');
 })
 export class LayoutComponent implements OnInit {
 
-  constructor(private userIdle: UserIdleService, private iamService: IamService) {
+  constructor(private userIdle: UserIdleService, private loginService: LoginService) {
   }
 
   ngOnInit() {
@@ -41,6 +41,6 @@ export class LayoutComponent implements OnInit {
   }
 
   private _logout() {
-    this.iamService.logoutAndRefresh(true);
+    this.loginService.logoutAndRefresh(true);
   }
 }
