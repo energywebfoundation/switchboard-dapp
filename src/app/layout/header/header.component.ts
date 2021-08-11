@@ -157,7 +157,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.store.select(userSelectors.getUserProfile)
       .pipe(takeUntil(this._subscription$))
       .subscribe(() => {
-        if (this.iamService.accountAddress) {
+        if (this.loginService.accountAddress) {
           this._initNotificationsAndTasks();
         } else {
           this.isLoadingNotif = false;

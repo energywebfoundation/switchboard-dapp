@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { StakingPoolServiceFacade } from '../../../shared/services/staking/staking-pool-service-facade';
+import { LoginService } from '../../../shared/services/login/login.service';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -52,8 +53,6 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
   orgHierarchy = [];
 
-  currentUserEthAddress = this.iamService.accountAddress;
-
   private _isSubOrgCreated = false;
   private subscription$ = new Subject();
 
@@ -62,7 +61,8 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
               private fb: FormBuilder,
               private toastr: SwitchboardToastrService,
-              private stakingService: StakingPoolServiceFacade) {
+              private stakingService: StakingPoolServiceFacade,
+              private loginService: LoginService) {
   }
 
   async ngOnInit() {
@@ -119,7 +119,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
     let orgList = await this.iamService.iam.getENSTypesByOwner({
       type: this.ensType,
-      owner: this.iamService.accountAddress,
+      owner: this.loginService.accountAddress,
       excludeSubOrgs: false
     });
 

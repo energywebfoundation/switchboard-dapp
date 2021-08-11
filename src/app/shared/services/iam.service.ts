@@ -16,15 +16,7 @@ import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
 import { from } from 'rxjs';
 
-const LS_WALLETCONNECT = 'walletconnect';
-const LS_KEY_CONNECTED = 'connected';
 const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
-
-const SWAL = require('sweetalert');
-
-const EVENT_ACCOUNT_CHANGED = 'EVENT_ACCOUNT_CHANGED';
-const EVENT_NETWORK_CHANGED = 'EVENT_NETWORK_CHANGED';
-const EVENT_DISCONNECTED = 'EVENT_DISCONNECTED';
 
 const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
 const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
@@ -48,6 +40,7 @@ export enum LoginType {
 })
 export class IamService {
   private _iam: IAM;
+  public accountAddress = undefined;
 
   constructor(private loadingService: LoadingService,
               configService: ConfigService) {
