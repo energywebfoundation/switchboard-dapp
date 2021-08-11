@@ -97,6 +97,14 @@ export class IamService {
     return await this.iam.getSigner().provider.getBalance(await this.getAddress());
   }
 
+  async getENSTypesByOwner(ensType: ENSNamespaceTypes) {
+    return await this.iam.getENSTypesByOwner({
+      type: ensType,
+      owner: await this.iam.getSigner().getAddress(),
+      excludeSubOrgs: false
+    });
+  }
+
   /**
    * @deprecated
    * Use isAlphaNumericOnly function from utils/functions instead.
