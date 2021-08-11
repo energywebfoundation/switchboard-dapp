@@ -155,13 +155,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     this.store.select(userSelectors.getUserProfile)
-      .pipe(takeUntil(this._subscription$))
+      .pipe(
+        filter(Boolean),
+        takeUntil(this._subscription$)
+      )
       .subscribe(() => {
-        if (this.loginService.accountAddress) {
-          this._initNotificationsAndTasks();
-        } else {
-          this.isLoadingNotif = false;
-        }
+        this._initNotificationsAndTasks();
       });
   }
 
