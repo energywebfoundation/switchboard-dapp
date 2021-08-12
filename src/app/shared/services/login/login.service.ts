@@ -24,7 +24,8 @@ export enum Wallet_Provider_Events {
   NetworkChanged = 'EVENT_NETWORK_CHANGED',
   Disconnected = 'EVENT_DISCONNECTED'
 }
-
+const LOGIN_ERRORS = new Map()
+  .set('Cannot destructure property', 'Please check if you are connected to correct network.')
 
 @Injectable({
   providedIn: 'root'
@@ -95,8 +96,7 @@ export class LoginService {
           retVal = true;
         }
       } catch (e) {
-        console.error(e);
-        this.toastr.error(e.message);
+        this.handleLoginErrors(e);
       }
     } else {
       // The account address is set so it means the user is current loggedin
@@ -104,6 +104,13 @@ export class LoginService {
     }
 
     return retVal;
+  }
+
+  handleLoginErrors(e) {
+    console.error(e);
+
+    const message = LOGIN_ERRORS.has(e.message) ? LOGIN_ERRORS.get(e.message) : e.message;
+    this.toastr.error(message);
   }
 
   private async isUserPresent(): Promise<boolean> {
