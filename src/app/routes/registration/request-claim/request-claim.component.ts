@@ -276,7 +276,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   logout() {
-    this.loginService.logoutAndRefresh();
+    this.loginService.logout();
   }
 
   selectAsset() {

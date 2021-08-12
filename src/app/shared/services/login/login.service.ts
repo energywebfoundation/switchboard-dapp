@@ -96,7 +96,7 @@ export class LoginService {
         }
       } catch (e) {
         console.error(e);
-        this.toastr.error('Could not login, please try again later');
+        this.toastr.error(e.message);
       }
     } else {
       // The account address is set so it means the user is current loggedin
@@ -131,7 +131,7 @@ export class LoginService {
     this.iamService.iam.closeConnection();
     this.store.dispatch(userClaimsActions.clearUserClaim());
 
-    saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
+    // saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
 
     // Clean up loader.
     this.loadingService.hide();
@@ -149,10 +149,6 @@ export class LoginService {
 
   logoutAndRefresh(saveDeepLink?: boolean) {
     this.logout(saveDeepLink);
-    const $navigate = setTimeout(() => {
-      clearTimeout($navigate);
-      location.reload();
-    }, 100);
   }
 
   private saveDeepLink(): void {
@@ -216,10 +212,9 @@ export class LoginService {
     const result = await SWAL(config);
     if (result) {
       if (navigateOnTimeout) {
-        this.logoutAndRefresh();
+        this.logout();
       } else {
         this.disconnect();
-        location.reload();
       }
     }
   }
@@ -254,10 +249,9 @@ export class LoginService {
     const result = await SWAL(config);
     if (result) {
       if (redirectOnAccountChange) {
-        this.logoutAndRefresh();
+        this.logout();
       } else {
         this.disconnect();
-        location.reload();
       }
     }
   }

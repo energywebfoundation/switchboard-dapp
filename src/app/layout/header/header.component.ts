@@ -392,7 +392,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.clearSwitchboardToaster();
-    this.loginService.logoutAndRefresh();
+    this.loginService.logout();
   }
 
   clearSwitchboardToaster(): void {

@@ -41,6 +41,6 @@ export class LayoutComponent implements OnInit {
   }
 
   private _logout() {
-    this.loginService.logoutAndRefresh(true);
+    this.loginService.logout(true);
   }
 }
