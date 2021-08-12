@@ -12,7 +12,7 @@ import { GovernanceViewComponent } from '../governance-view.component';
   templateUrl: './governance-details.component.html',
   styleUrls: ['./governance-details.component.scss']
 })
-export class GovernanceDetailsComponent implements OnInit {
+export class GovernanceDetailsComponent {
   @Input() set origData(value: any) {
     this.setData(value);
   }
@@ -40,11 +40,6 @@ export class GovernanceDetailsComponent implements OnInit {
     private iamService: IamService,
     private loadingService: LoadingService,
     private dialog: MatDialog) {
-  }
-
-  ngOnInit(): void {
-    this.data = this.origData;
-    this.setData(this.data);
   }
 
   public async setData(data: any) {
