@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';
 import { LoadingService } from '../../shared/services/loading.service';
+import * as userActions from '../user-claim/user.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -91,10 +92,8 @@ export class AuthEffects {
   userSuccessfullyLoggedIn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginSuccess),
-      switchMap(() => {
-        return from(this.loginService.setupUser())
-      })
-    ), {dispatch: false}
+      map(() => userActions.setUpUser())
+    )
   );
 
   logout$ = createEffect(() =>
@@ -112,14 +111,18 @@ export class AuthEffects {
       ofType(AuthActions.reinitializeAuth),
       tap(() => this.loadingService.show()),
       filter(() => this.loginService.isSessionActive()),
-      switchMap(() => {
-        console.log('reinitializing');
-        return from(this.loginService.login())
+      switchMap(({redirectUrl}) =>
+        from(this.loginService.login())
           .pipe(
             map(() => AuthActions.loginSuccess()),
-            finalize(() => this.loadingService.hide())
-            );
-      })
+            finalize(() => {
+              this.loadingService.hide();
+              if (redirectUrl) {
+                this.router.navigateByUrl(redirectUrl);
+              }
+            })
+          )
+      )
     )
   );
 
@@ -128,8 +131,9 @@ export class AuthEffects {
       ofType(AuthActions.reinitializeAuth),
       filter(() => !this.loginService.isSessionActive()),
       map(({redirectUrl}) => {
-        console.log('not possible, should redirect');
-        this.router.navigateByUrl(redirectUrl);
+        if (redirectUrl) {
+          this.router.navigate(['welcome']);
+        }
       })
     ), {dispatch: false}
   );

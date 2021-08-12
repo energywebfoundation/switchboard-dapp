@@ -24,7 +24,7 @@ export const loginFailure = createAction(
 
 export const reinitializeAuth = createAction(
   '[AUTH] Reinitialize Logged User',
-  props<{redirectUrl: string}>()
+  props<{redirectUrl?: string}>()
 )
 
 export const logout = createAction(

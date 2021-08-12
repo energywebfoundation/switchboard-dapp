@@ -3,6 +3,8 @@ import { ClaimData } from 'iam-client-lib/dist/src/cacheServerClient/cacheServer
 import { IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
 import { Profile } from 'iam-client-lib';
 
+export const setUpUser = createAction('[User] Set Up User Data')
+
 export const loadUserClaims = createAction('[User] Load User Claims');
 export const setProfile = createAction(
   '[User] Set Profile',

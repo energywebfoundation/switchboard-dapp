@@ -89,6 +89,10 @@ export class IamService {
     }));
   }
 
+  getDidDocument() {
+    return from(this.iam.getDidDocument())
+  }
+
   async getAddress() {
     return await this.iam.getSigner().getAddress();
   }

@@ -57,8 +57,6 @@ export class LoginService {
     await this.login();
     this.clearWaitSignatureTimer();
 
-    // Setup User Data
-    await this.setupUser();
     return true;
   }
 
