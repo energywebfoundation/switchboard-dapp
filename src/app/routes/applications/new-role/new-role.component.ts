@@ -168,6 +168,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async ngAfterViewInit() {
+    await this.confirmParentNamespace();
   }
 
   ngOnInit() {
