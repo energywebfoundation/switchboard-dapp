@@ -49,6 +49,10 @@ export class WelcomeComponent implements OnInit {
   connectToMetamask() {
     this.login(WalletProvider.MetaMask);
   }
+  
+  async connectToEKC() {
+    await this.connectToWallet(WalletProvider.EKC);
+  }
 
   private login(provider: WalletProvider) {
     this.store.dispatch(AuthActions.welcomeLogin({provider, returnUrl: this._returnUrl}));
