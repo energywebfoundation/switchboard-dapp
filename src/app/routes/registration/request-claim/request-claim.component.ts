@@ -454,9 +454,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       await this.loginService.login();
       this.loginService.clearWaitSignatureTimer();
 
-      // Setup User Data
-      await this.loginService.setupUser();
-
       // Set Loggedin Flag to true
       this.isLoggedIn = true;
     } else {

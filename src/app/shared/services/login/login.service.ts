@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
 import * as StakeActions from '../../../state/stake/stake.actions';
 import * as AuthActions from '../../../state/auth/auth.actions';
-import { getDid } from '../../../state/user-claim/user.selectors';
 import { take } from 'rxjs/operators';
 import * as userClaimsActions from '../../../state/user-claim/user.actions';
 import { LoadingService } from '../loading.service';
@@ -114,20 +113,6 @@ export class LoginService {
 
   private async isUserPresent(): Promise<boolean> {
     return Boolean(await this.store.select(isUserLoggedIn).pipe(take(1)).toPromise());
-  }
-
-  async setupUser() {
-    if (await this.isUserSetUp()) {
-      return;
-    }
-
-    const didDocument = await this.iamService.iam.getDidDocument();
-    this.store.dispatch(userClaimsActions.setDidDocument({didDocument}));
-    this.store.dispatch(userClaimsActions.loadUserClaims());
-  }
-
-  private async isUserSetUp(): Promise<boolean> {
-    return Boolean(await this.store.select(getDid).pipe(take(1)).toPromise());
   }
 
   /**
