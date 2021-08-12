@@ -9,8 +9,7 @@ import { WalletProvider } from 'iam-client-lib';
 import { LoadingCount } from '../../shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import * as userSelectors from '../../state/user-claim/user.selectors';
-import { UserClaimState } from '../../state/user-claim/user.reducer';
-import { LoginService } from '../../shared/services/login/login.service';
+import * as AuthActions from '../../state/auth/auth.actions';
 
 @Component({
   selector: 'app-dashboard',
@@ -37,9 +36,7 @@ export class DashboardComponent implements AfterViewInit {
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService,
     private fb: FormBuilder,
-    private store: Store<UserClaimState>,
-    private loginService: LoginService
-  ) {
+    private store: Store) {
     // Init Search
     this.searchForm = fb.group({
       searchTxt: new FormControl('')
@@ -53,40 +50,12 @@ export class DashboardComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
-      let returnUrl;
-      this.loadingService.show();
-
-      // Check Login
-      if (this.loginService.isSessionActive()) {
-        await this.loginService.login();
-
-        // Check if returnUrl is available or just redirect to dashboard
-        if (queryParams && queryParams.returnUrl) {
-          returnUrl = queryParams.returnUrl;
-        }
-      } else {
-        // Redirect to login screen if user  is not yet logged-in
-        returnUrl = '/welcome';
+      let redirectUrl: string;
+      if (queryParams && queryParams.returnUrl) {
+        redirectUrl = queryParams.returnUrl;
       }
-
-      // Setup User Data
-      await this._setupUser();
-      // Redirect to actual screen
-      if (returnUrl) {
-        const timeout$ = setTimeout(() => {
-          this.loadingService.hide();
-          this.route.navigateByUrl(returnUrl);
-          clearTimeout(timeout$);
-        }, 30);
-      } else {
-        this.loadingService.hide();
-      }
+      this.store.dispatch(AuthActions.reinitializeAuth({redirectUrl}))
     });
-  }
-
-  private async _setupUser() {
-    // Setup User Data
-    await this.loginService.setupUser();
   }
 
   private async _filterOrgsAndApps(keyword: any): Promise<any[]> {
