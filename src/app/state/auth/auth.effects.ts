@@ -57,6 +57,37 @@ export class AuthEffects {
     )
   );
 
+  welcomePageLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.welcomeLogin),
+      tap(({provider}) => this.loginService.waitForSignature(provider, true)),
+      switchMap(({provider, returnUrl}) =>
+        from(this.loginService.login({
+          walletProvider: provider,
+          reinitializeMetamask: provider === WalletProvider.MetaMask
+        })).pipe(
+          map((loggedIn) => {
+            if (loggedIn) {
+              return AuthActions.loginSuccess();
+            }
+            return AuthActions.loginFailure();
+          }),
+          catchError((err) => {
+            console.log(err);
+            return of(AuthActions.loginFailure());
+          }),
+          finalize(() => {
+            this.loginService.clearWaitSignatureTimer();
+            this.router.navigateByUrl('/dashboard', {
+              state: {data: {fresh: true}},
+              queryParams: {returnUrl}
+            });
+          })
+        )
+      )
+    )
+  );
+
   userSuccessfullyLoggedIn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginSuccess),

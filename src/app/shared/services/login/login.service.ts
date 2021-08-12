@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
 import * as StakeActions from '../../../state/stake/stake.actions';
 import * as AuthActions from '../../../state/auth/auth.actions';
-import { getDid, getUserProfile } from '../../../state/user-claim/user.selectors';
+import { getDid } from '../../../state/user-claim/user.selectors';
 import { take } from 'rxjs/operators';
 import * as userClaimsActions from '../../../state/user-claim/user.actions';
 import { LoadingService } from '../loading.service';
@@ -11,6 +11,7 @@ import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import { ToastrService } from 'ngx-toastr';
 import { WalletProvider } from 'iam-client-lib';
 import SWAL from 'sweetalert';
+import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 
 export interface LoginOptions {
   walletProvider?: WalletProvider;
@@ -114,7 +115,7 @@ export class LoginService {
   }
 
   private async isUserPresent(): Promise<boolean> {
-    return Boolean(await this.store.select(getUserProfile).pipe(take(1)).toPromise());
+    return Boolean(await this.store.select(isUserLoggedIn).pipe(take(1)).toPromise());
   }
 
   async setupUser() {

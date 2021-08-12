@@ -10,6 +10,11 @@ export const login = createAction(
   props<{ provider: WalletProvider, navigateOnTimeout?: boolean }>()
 );
 
+export const welcomeLogin = createAction(
+  '[AUTH][Welcome Page] Login User With Provider',
+  props<{ provider: WalletProvider, returnUrl: string }>()
+);
+
 export const loginSuccess = createAction(
   '[AUTH] User Login Success'
 );
