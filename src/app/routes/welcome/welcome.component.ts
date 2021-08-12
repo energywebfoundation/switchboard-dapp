@@ -3,8 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IAM, WalletProvider } from 'iam-client-lib';
 import { VOLTA_CHAIN_ID } from '../../shared/services/iam.service';
 import { LoginService } from '../../shared/services/login/login.service';
+import { filter } from 'rxjs/operators';
 
-const { version } = require('../../../../package.json')
+const {version} = require('../../../../package.json');
 
 @Component({
   selector: 'app-welcome',
@@ -24,11 +25,12 @@ export class WelcomeComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.activeRoute.queryParams.subscribe((queryParams: any) => {
-      if (queryParams && queryParams.returnUrl) {
+    this.activeRoute.queryParams.pipe(
+      filter((queryParams) => queryParams && queryParams.returnUrl)
+    )
+      .subscribe((queryParams: any) => {
         this._returnUrl = queryParams.returnUrl;
-      }
-    });
+      });
 
     // Immediately navigate to dashboard if user is currently logged-in to walletconnect
     if (this.loginService.isSessionActive()) {
