@@ -1,6 +1,18 @@
 import { deepEqualObjects } from './deep-equal-objects';
 
 describe('compare-form-with-defaults function', () => {
+  it('should return false when first object is undefined', () => {
+    expect(deepEqualObjects(undefined, {})).toEqual(false);
+  });
+
+  it('should return false when second object is undefined', () => {
+    expect(deepEqualObjects({}, undefined)).toEqual(false);
+  });
+
+  it('should return false when both objects are undefined', () => {
+    expect(deepEqualObjects({}, undefined)).toEqual(false);
+  });
+
   it('should check empty objects', () => {
     expect(deepEqualObjects({}, {})).toEqual(true);
   });

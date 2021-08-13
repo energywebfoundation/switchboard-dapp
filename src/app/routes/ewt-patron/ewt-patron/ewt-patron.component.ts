@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { StakeState } from '../../../state/stake/stake.reducer';
 import { Store } from '@ngrx/store';
-import * as stakeSelectors from '../../../state/stake/stake.selectors';
+import * as poolSelectors from '../../../state/pool/pool.selectors';
 import { MatDialog } from '@angular/material/dialog';
 import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { map, takeUntil } from 'rxjs/operators';
-import * as StakeActions from '../../../state/stake/stake.actions';
+import * as PoolActions from '../../../state/pool/pool.actions';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import swal from 'sweetalert';
+import { IamService } from '../../../shared/services/iam.service';
 
 @Component({
   selector: 'app-ewt-patron',
@@ -16,15 +16,16 @@ import swal from 'sweetalert';
   styleUrls: ['./ewt-patron.component.scss']
 })
 export class EwtPatronComponent implements OnInit, OnDestroy {
-  balance$ = this.store.select(stakeSelectors.getBalance);
-  performance$ = this.store.select(stakeSelectors.getPerformance);
-  annualReward$ = this.store.select(stakeSelectors.getAnnualReward);
-  details$ = this.store.select(stakeSelectors.getOrganizationDetails);
+  balance$ = this.store.select(poolSelectors.getBalance);
+  performance$ = this.store.select(poolSelectors.getPerformance);
+  annualReward$ = this.store.select(poolSelectors.getAnnualReward);
+  details$ = this.store.select(poolSelectors.getOrganizationDetails);
   destroy$ = new Subject<void>();
 
-  constructor(private store: Store<StakeState>,
+  constructor(private store: Store,
               private dialog: MatDialog,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private iamService: IamService) {
   }
 
   ngOnDestroy(): void {
@@ -32,11 +33,12 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.setOrganization();
-    this.openLoginDialog();
+    if ((await this.iamService.hasSessionRetrieved()) === false) {
+      this.openLoginDialog();
+    }
   }
-
 
   private openLoginDialog(): void {
     this.dialog.open(ConnectToWalletDialogComponent, {
@@ -59,7 +61,7 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
       )
       .subscribe((organization) => {
         if (organization) {
-          this.store.dispatch(StakeActions.setOrganization({organization}));
+          this.store.dispatch(PoolActions.setOrganization({organization}));
         } else {
           swal({
             title: 'Stake',

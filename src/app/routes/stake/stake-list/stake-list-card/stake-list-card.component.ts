@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class StakeListCardComponent {
   @Input() organization: string;
-  @Input() organizationImage: string;
+  @Input() logoUrl: string;
   @Input() providerDate: string;
   @Input() stakeAmount: number;
   @Input() stakeRating = 0;
