@@ -152,21 +152,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
-  roleNotFoundValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const notFound = typeof control.value !== 'string';
-      return !notFound ? {roleNotFound: {value: control.value}} : null;
-    };
-  }
-
-  roleExistValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const valueConditions: string[] = this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions;
-      const exists = valueConditions.includes(control.value.namespace);
-      return exists ? {roleExist: {value: control.value}} : null;
-    };
-  }
-
   async ngAfterViewInit() {
     await this.confirmParentNamespace();
   }
