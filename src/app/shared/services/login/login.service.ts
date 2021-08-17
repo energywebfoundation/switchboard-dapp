@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
 import * as StakeActions from '../../../state/stake/stake.actions';
-import * as AuthActions from '../../../state/auth/auth.actions';
 import * as userClaimsActions from '../../../state/user-claim/user.actions';
 import { LoadingService } from '../loading.service';
 import { Store } from '@ngrx/store';
@@ -76,7 +75,6 @@ export class LoginService {
         });
         // TODO: remove it when login method will be fully handled by store and call it after login.
         this.store.dispatch(StakeActions.initStakingPool());
-        this.store.dispatch(AuthActions.loginSuccess());
         retVal = true;
       }
     } catch (e) {
