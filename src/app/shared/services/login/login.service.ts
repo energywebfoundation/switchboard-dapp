@@ -29,8 +29,6 @@ const LOGIN_ERRORS = new Map()
   providedIn: 'root'
 })
 export class LoginService {
-  public accountAddress = undefined;
-
   private _throwTimeoutError = false;
   private _timer = undefined;
   private _deepLink = '';
@@ -55,10 +53,6 @@ export class LoginService {
     try {
       const {did, connected, userClosedModal} = await this.iamService.iam.initializeConnection(loginOptions);
       if (did && connected && !userClosedModal) {
-        // Setup Account Address
-        const signer = this.iamService.iam.getSigner();
-        this.accountAddress = await signer.getAddress();
-
         this.setListeners(redirectOnAccountChange);
 
         // TODO: remove it when login method will be fully handled by store and call it after login.

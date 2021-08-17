@@ -40,7 +40,6 @@ export enum LoginType {
 })
 export class IamService {
   private _iam: IAM;
-  public accountAddress = undefined;
 
   constructor(private loadingService: LoadingService,
               configService: ConfigService) {
