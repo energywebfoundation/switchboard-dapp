@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WalletProvider } from 'iam-client-lib';
-import { LoginService } from '../../shared/services/login/login.service';
 import { filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import * as authSelectors from '../../state/auth/auth.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
+import { IamService } from '../../shared/services/iam.service';
 
 const {version} = require('../../../../package.json');
 
@@ -24,7 +24,7 @@ export class WelcomeComponent implements OnInit {
   constructor(private route: Router,
               private activeRoute: ActivatedRoute,
               private store: Store,
-              private loginService: LoginService) {
+              private iamService: IamService) {
   }
 
   async ngOnInit() {
@@ -36,7 +36,7 @@ export class WelcomeComponent implements OnInit {
       });
 
     // Immediately navigate to dashboard if user is currently logged-in to walletconnect
-    if (this.loginService.isSessionActive()) {
+    if (this.iamService.isSessionActive()) {
       this.route.navigate(['dashboard']);
     }
   }
