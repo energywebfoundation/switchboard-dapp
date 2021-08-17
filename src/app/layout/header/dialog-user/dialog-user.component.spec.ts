@@ -106,7 +106,7 @@ describe('DialogUserComponent', () => {
     fixture.detectChanges();
     const matError = hostDebug.query(By.css('mat-error')).nativeElement;
 
-    expect(matError.textContent).toContain('Required');
+    expect(matError.textContent).toContain('Maximum allowed date is');
   });
 });
 
