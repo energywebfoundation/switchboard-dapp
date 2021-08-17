@@ -106,6 +106,15 @@ export class AuthEffects {
     ), {dispatch: false}
   );
 
+  logoutWithRedirectUrl$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.logout),
+      map(() => {
+        this.loginService.logout(true);
+      })
+    ), {dispatch: false}
+  );
+
   reinitializeLoggedUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.reinitializeAuth),

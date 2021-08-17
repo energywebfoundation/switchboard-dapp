@@ -31,6 +31,10 @@ export const logout = createAction(
   '[AUTH] Logout'
 );
 
+export const logoutWithRedirectUrl = createAction(
+  '[AUTH] Logout With Redirect URL'
+)
+
 export const getMetamaskOptions = createAction(
   '[AUTH] Get Metamask Login Options'
 );
