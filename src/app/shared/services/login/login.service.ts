@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
 import * as StakeActions from '../../../state/stake/stake.actions';
 import * as AuthActions from '../../../state/auth/auth.actions';
-import { take } from 'rxjs/operators';
 import * as userClaimsActions from '../../../state/user-claim/user.actions';
 import { LoadingService } from '../loading.service';
 import { Store } from '@ngrx/store';
@@ -10,7 +9,6 @@ import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import { ToastrService } from 'ngx-toastr';
 import { WalletProvider } from 'iam-client-lib';
 import SWAL from 'sweetalert';
-import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 
 export interface LoginOptions {
   walletProvider?: WalletProvider;
@@ -24,8 +22,9 @@ export enum Wallet_Provider_Events {
   NetworkChanged = 'EVENT_NETWORK_CHANGED',
   Disconnected = 'EVENT_DISCONNECTED'
 }
+
 const LOGIN_ERRORS = new Map()
-  .set('Cannot destructure property', 'Please check if you are connected to correct network.')
+  .set('Cannot destructure property', 'Please check if you are connected to correct network.');
 
 @Injectable({
   providedIn: 'root'
@@ -53,40 +52,35 @@ export class LoginService {
   async login(loginOptions?: LoginOptions, redirectOnAccountChange: boolean = true): Promise<boolean> {
     let retVal = false;
 
-    // Check if account address exists
-    if (!(await this.isUserPresent())) {
-      try {
-        const {did, connected, userClosedModal} = await this.iamService.iam.initializeConnection(loginOptions);
-        if (did && connected && !userClosedModal) {
-          // Setup Account Address
-          const signer = this.iamService.iam.getSigner();
-          this.accountAddress = await signer.getAddress();
+    // TODO: check if any check here is needed.
+    try {
+      const {did, connected, userClosedModal} = await this.iamService.iam.initializeConnection(loginOptions);
+      if (did && connected && !userClosedModal) {
+        // Setup Account Address
+        const signer = this.iamService.iam.getSigner();
+        this.accountAddress = await signer.getAddress();
 
-          // Listen to Account Change
-          this.iamService.iam.on('accountChanged', () => {
-            this._displayAccountAndNetworkChanges(Wallet_Provider_Events.AccountChanged, redirectOnAccountChange);
-          });
+        // Listen to Account Change
+        this.iamService.iam.on('accountChanged', () => {
+          this._displayAccountAndNetworkChanges(Wallet_Provider_Events.AccountChanged, redirectOnAccountChange);
+        });
 
-          // Listen to Network Change
-          this.iamService.iam.on('networkChanged', () => {
-            this._displayAccountAndNetworkChanges(Wallet_Provider_Events.NetworkChanged, redirectOnAccountChange);
-          });
+        // Listen to Network Change
+        this.iamService.iam.on('networkChanged', () => {
+          this._displayAccountAndNetworkChanges(Wallet_Provider_Events.NetworkChanged, redirectOnAccountChange);
+        });
 
-          // Listen to Disconnection
-          this.iamService.iam.on('disconnected', () => {
-            this._displayAccountAndNetworkChanges(Wallet_Provider_Events.Disconnected, redirectOnAccountChange);
-          });
-          // TODO: remove it when login method will be fully handled by store and call it after login.
-          this.store.dispatch(StakeActions.initStakingPool());
-          this.store.dispatch(AuthActions.loginSuccess());
-          retVal = true;
-        }
-      } catch (e) {
-        this.handleLoginErrors(e);
+        // Listen to Disconnection
+        this.iamService.iam.on('disconnected', () => {
+          this._displayAccountAndNetworkChanges(Wallet_Provider_Events.Disconnected, redirectOnAccountChange);
+        });
+        // TODO: remove it when login method will be fully handled by store and call it after login.
+        this.store.dispatch(StakeActions.initStakingPool());
+        this.store.dispatch(AuthActions.loginSuccess());
+        retVal = true;
       }
-    } else {
-      // The account address is set so it means the user is current loggedin
-      retVal = true;
+    } catch (e) {
+      this.handleLoginErrors(e);
     }
 
     return retVal;
@@ -97,10 +91,6 @@ export class LoginService {
 
     const message = LOGIN_ERRORS.has(e.message) ? LOGIN_ERRORS.get(e.message) : e.message;
     this.toastr.error(message);
-  }
-
-  private async isUserPresent(): Promise<boolean> {
-    return Boolean(await this.store.select(isUserLoggedIn).pipe(take(1)).toPromise());
   }
 
   /**
