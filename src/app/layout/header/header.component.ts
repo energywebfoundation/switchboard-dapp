@@ -94,12 +94,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
       )
       .subscribe((event: any) => {
         this.loginService.setDeepLink(event.url);
-        this.isNavMenuVisible = true;
-        if (event.url === '/dashboard') {
-          this.isNavMenuVisible = false;
-        }
+
+        this.isNavMenuVisible = event.url !== '/dashboard';
 
         const pathArr = event.url.split('/');
+
+        // TODO: use routerLinkActive instead
         this.currentNav = pathArr[1];
       });
   }
