@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as poolSelectors from '../../../state/pool/pool.selectors';
-import { MatDialog } from '@angular/material/dialog';
 import { map, takeUntil } from 'rxjs/operators';
 import * as PoolActions from '../../../state/pool/pool.actions';
 import { ActivatedRoute } from '@angular/router';
@@ -23,7 +22,6 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
 
   constructor(private store: Store,
-              private dialog: MatDialog,
               private activatedRoute: ActivatedRoute,
               private iamService: IamService) {
   }
