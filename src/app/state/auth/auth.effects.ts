@@ -34,7 +34,7 @@ export class AuthEffects {
 
   login$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AuthActions.login),
+      ofType(AuthActions.loginViaDialog),
       tap(({provider, navigateOnTimeout}) => this.loginService.waitForSignature(provider, true, navigateOnTimeout)),
       switchMap(({provider, navigateOnTimeout}) =>
         from(this.loginService.login({
@@ -99,8 +99,8 @@ export class AuthEffects {
   logout$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.logout),
-      map(() => {
-        this.loginService.disconnect();
+      map(async () => {
+        await this.loginService.disconnect();
         location.reload();
       })
     ), {dispatch: false}

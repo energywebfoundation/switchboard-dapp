@@ -27,6 +27,6 @@ export class ConnectToWalletDialogComponent {
   }
 
   private login(provider: WalletProvider) {
-    this.store.dispatch(AuthActions.login({provider, navigateOnTimeout: this.data.navigateOnTimeout}));
+    this.store.dispatch(AuthActions.loginViaDialog({provider, navigateOnTimeout: this.data.navigateOnTimeout}));
   }
 }

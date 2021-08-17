@@ -60,7 +60,7 @@ describe('AuthEffects', () => {
     });
 
     it('should close dialog and return login success action when login was successful', (done) => {
-      actions$.next(AuthActions.login({provider: WalletProvider.MetaMask}));
+      actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
       loginServiceSpy.login.and.returnValue(Promise.resolve(true));
 
       effects.login$.pipe(
@@ -80,7 +80,7 @@ describe('AuthEffects', () => {
     });
 
     it('should do not close dialog and return login failure action on login failure', (done) => {
-      actions$.next(AuthActions.login({provider: WalletProvider.MetaMask}));
+      actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
       loginServiceSpy.login.and.returnValue(Promise.resolve(false));
 
       effects.login$.pipe(
@@ -95,7 +95,7 @@ describe('AuthEffects', () => {
     });
 
     it('should do not close dialog and return login failure action when login throws error', (done) => {
-      actions$.next(AuthActions.login({provider: WalletProvider.MetaMask}));
+      actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
       loginServiceSpy.login.and.returnValue(Promise.reject());
 
       effects.login$
@@ -107,7 +107,7 @@ describe('AuthEffects', () => {
     });
 
     it('should call waitForSignature with metamask and not navigate on timeout option', (done) => {
-      actions$.next(AuthActions.login({provider: WalletProvider.MetaMask, navigateOnTimeout: false}));
+      actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask, navigateOnTimeout: false}));
       loginServiceSpy.login.and.returnValue(Promise.resolve(true));
 
       effects.login$

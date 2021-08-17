@@ -5,8 +5,8 @@ export const init = createAction(
   '[AUTH] Initialize Possible Options To Log In'
 );
 
-export const login = createAction(
-  '[AUTH] Login User With Provider',
+export const loginViaDialog = createAction(
+  '[AUTH] Login User With Provider via Dialog',
   props<{ provider: WalletProvider, navigateOnTimeout?: boolean }>()
 );
 
@@ -30,6 +30,10 @@ export const reinitializeAuth = createAction(
 export const logout = createAction(
   '[AUTH] Logout'
 );
+
+export const retryLogin = createAction(
+  '[AUTH] Retry To Login'
+)
 
 export const logoutWithRedirectUrl = createAction(
   '[AUTH] Logout With Redirect URL'

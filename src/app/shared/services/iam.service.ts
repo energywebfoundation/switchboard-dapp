@@ -82,6 +82,10 @@ export class IamService {
     return this._iam;
   }
 
+  isSessionActive() {
+    return this.iam.isSessionActive();
+  }
+
   getDefinition(organization: string) {
     return from(this.iam.getDefinition({
       type: ENSNamespaceTypes.Organization,

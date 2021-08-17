@@ -13,7 +13,8 @@ import { SubjectElements, ViewColorsSetter } from '../models/view-colors-setter'
 import swal from 'sweetalert';
 import { EnrolmentField, EnrolmentSubmission } from '../enrolment-form/enrolment-form.component';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { LoginService } from '../../../shared/services/login/login.service';
+import { Store } from '@ngrx/store';
+import { logout, reinitializeAuth } from '../../../state/auth/auth.actions';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -86,14 +87,14 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
               private toastr: SwitchboardToastrService,
               public dialog: MatDialog,
               private loadingService: LoadingService,
-              private loginService: LoginService) {
+              private store: Store) {
   }
 
   @HostListener('window:beforeunload', ['$event'])
   public onPageUnload() {
     if (this.isLoggedIn && !this.stayLoggedIn) {
       // Always logout if user refreshes this screen or closes this tab
-      this.loginService.logout();
+      this.store.dispatch(logout())
     }
   }
 
@@ -276,7 +277,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   logout() {
-    this.loginService.logout();
+    this.store.dispatch(logout())
   }
 
   selectAsset() {
@@ -373,8 +374,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         default:
           if (this.callbackUrl && !this.stayLoggedIn) {
             // Logout
-            this.loginService.logout();
-
+            this.store.dispatch(logout())
             // Redirect to Callback URL
             location.href = this.callbackUrl;
           } else if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
@@ -449,11 +449,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private async initLoginUser() {
     // Check Login
-    if (this.loginService.isSessionActive()) {
-      this.loadingService.show();
-      await this.loginService.login();
-      this.loginService.clearWaitSignatureTimer();
-
+    console.log(this.iamService.isSessionActive());
+    debugger;
+    if (this.iamService.isSessionActive()) {
+      this.store.dispatch(reinitializeAuth({}));
       // Set Loggedin Flag to true
       this.isLoggedIn = true;
     } else {
@@ -462,9 +461,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       await this.dialog.open(ConnectToWalletDialogComponent, {
         width: '434px',
         panelClass: 'connect-to-wallet',
-        data: {
-          appName: ''
-        },
         maxWidth: '100%',
         disableClose: true
       }).afterClosed().toPromise();
