@@ -118,8 +118,8 @@ export class AuthEffects {
   reinitializeLoggedUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.reinitializeAuth),
-      tap(() => this.loadingService.show()),
       filter(() => this.loginService.isSessionActive()),
+      tap(() => this.loadingService.show()),
       switchMap(({redirectUrl}) =>
         from(this.loginService.login())
           .pipe(
