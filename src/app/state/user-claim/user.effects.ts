@@ -73,12 +73,14 @@ export class UserEffects {
   setUpUserData$ = createEffect(() =>
     this.actions$.pipe(
       ofType(userActions.setUpUser),
+      tap(() => this.loadingService.show()),
       switchMap(() => this.iamService.getDidDocument()
         .pipe(
           mergeMap((didDocument) => [
             userClaimsActions.setDidDocument({didDocument}),
             userClaimsActions.loadUserClaims()
-          ])
+          ]),
+          finalize(() => this.loadingService.hide())
         )
       )
     )
