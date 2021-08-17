@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
-import * as StakeActions from '../../../state/stake/stake.actions';
 import * as userClaimsActions from '../../../state/user-claim/user.actions';
 import { LoadingService } from '../loading.service';
 import { Store } from '@ngrx/store';
@@ -54,9 +53,6 @@ export class LoginService {
       const {did, connected, userClosedModal} = await this.iamService.iam.initializeConnection(loginOptions);
       if (did && connected && !userClosedModal) {
         this.setListeners(redirectOnAccountChange);
-
-        // TODO: remove it when login method will be fully handled by store and call it after login.
-        this.store.dispatch(StakeActions.initStakingPool());
         retVal = true;
       }
     } catch (e) {

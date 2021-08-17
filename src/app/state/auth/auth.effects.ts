@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
-import { catchError, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, filter, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { IAM, WalletProvider } from 'iam-client-lib';
 import { from, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { LoadingService } from '../../shared/services/loading.service';
 import * as userActions from '../user-claim/user.actions';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
+import * as StakeActions from '../stake/stake.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -111,7 +112,10 @@ export class AuthEffects {
   userSuccessfullyLoggedIn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginSuccess),
-      map(() => userActions.setUpUser())
+      mergeMap(() => [
+        userActions.setUpUser(),
+        StakeActions.initStakingPool()
+      ])
     )
   );
 
