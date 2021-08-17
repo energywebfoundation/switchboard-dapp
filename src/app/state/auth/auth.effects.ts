@@ -11,6 +11,7 @@ import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';
 import { LoadingService } from '../../shared/services/loading.service';
 import * as userActions from '../user-claim/user.actions';
+import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 
 @Injectable()
 export class AuthEffects {
@@ -56,6 +57,24 @@ export class AuthEffects {
         )
       )
     )
+  );
+
+  openLoginDialog$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.openLoginDialog),
+      map(() => {
+        this.dialog.open(ConnectToWalletDialogComponent, {
+          width: '434px',
+          panelClass: 'connect-to-wallet',
+          backdropClass: 'backdrop-hide-content',
+          data: {
+            navigateOnTimeout: false
+          },
+          maxWidth: '100%',
+          disableClose: true
+        });
+      })
+    ), {dispatch: false}
   );
 
   welcomePageLogin$ = createEffect(() =>

@@ -15,6 +15,10 @@ export const welcomeLogin = createAction(
   props<{ provider: WalletProvider, returnUrl: string }>()
 );
 
+export const openLoginDialog = createAction(
+  '[AUTH] Open Login Dialog'
+)
+
 export const loginSuccess = createAction(
   '[AUTH] User Login Success'
 );
