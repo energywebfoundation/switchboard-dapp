@@ -47,18 +47,6 @@ export class LoginService {
     return this.iamService.iam.isSessionActive();
   }
 
-  async hasSessionRetrieved(): Promise<boolean> {
-    if (!this.isSessionActive()) {
-      return false;
-    }
-
-    this.loadingService.show();
-    await this.login();
-    this.clearWaitSignatureTimer();
-
-    return true;
-  }
-
   /**
    * Login via IAM and retrieve basic user info
    */
