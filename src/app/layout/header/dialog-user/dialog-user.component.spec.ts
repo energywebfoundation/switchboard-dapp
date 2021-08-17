@@ -123,5 +123,5 @@ const selectors = (hostDebug: DebugElement) => {
 
 const todayDate = () => {
   const date = new Date(Date.now());
-  return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+  return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
 };
