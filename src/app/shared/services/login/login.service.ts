@@ -59,20 +59,8 @@ export class LoginService {
         const signer = this.iamService.iam.getSigner();
         this.accountAddress = await signer.getAddress();
 
-        // Listen to Account Change
-        this.iamService.iam.on('accountChanged', () => {
-          this._displayAccountAndNetworkChanges(Wallet_Provider_Events.AccountChanged, redirectOnAccountChange);
-        });
+        this.setListeners(redirectOnAccountChange);
 
-        // Listen to Network Change
-        this.iamService.iam.on('networkChanged', () => {
-          this._displayAccountAndNetworkChanges(Wallet_Provider_Events.NetworkChanged, redirectOnAccountChange);
-        });
-
-        // Listen to Disconnection
-        this.iamService.iam.on('disconnected', () => {
-          this._displayAccountAndNetworkChanges(Wallet_Provider_Events.Disconnected, redirectOnAccountChange);
-        });
         // TODO: remove it when login method will be fully handled by store and call it after login.
         this.store.dispatch(StakeActions.initStakingPool());
         retVal = true;
@@ -84,11 +72,28 @@ export class LoginService {
     return retVal;
   }
 
-  handleLoginErrors(e) {
+  private handleLoginErrors(e) {
     console.error(e);
 
     const message = LOGIN_ERRORS.has(e.message) ? LOGIN_ERRORS.get(e.message) : e.message;
     this.toastr.error(message);
+  }
+
+  setListeners(redirectOnAccountChange: boolean) {
+    // Listen to Account Change
+    this.iamService.iam.on('accountChanged', () => {
+      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.AccountChanged, redirectOnAccountChange);
+    });
+
+    // Listen to Network Change
+    this.iamService.iam.on('networkChanged', () => {
+      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.NetworkChanged, redirectOnAccountChange);
+    });
+
+    // Listen to Disconnection
+    this.iamService.iam.on('disconnected', () => {
+      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.Disconnected, redirectOnAccountChange);
+    });
   }
 
   /**
