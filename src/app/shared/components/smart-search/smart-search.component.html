@@ -21,7 +21,7 @@
       <button mat-icon-button (click)="search()" class="searchButton">
         <mat-icon>search</mat-icon>
       </button>
-      <button *ngIf="searchType === 'restrictions'" mat-icon-button (click)="addRole()">
+      <button *ngIf="searchType === 'restrictions'" [disabled]="!searchText.value.namespace" mat-icon-button (click)="addRole()">
         <mat-icon>add</mat-icon>
       </button>
       <button *ngIf="searchType !== 'restrictions'" mat-icon-button (click)="clearSearchTxt()">

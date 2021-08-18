@@ -1,3 +1,10 @@
 .searchButton {
   margin-right: .3rem;
 }
+
+:host ::ng-deep {
+
+  .mat-button-disabled {
+    background-color: grey !important;
+  }
+}
