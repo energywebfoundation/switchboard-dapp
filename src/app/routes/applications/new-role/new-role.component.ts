@@ -387,7 +387,16 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addRestriction(event: ISmartSearch) {
     if (event.searchType === 'restrictions') {
-      this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions.push(event.role.namespace);
+      const enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions').value;
+
+      if (enrolmentPreconditions.length) {
+        enrolmentPreconditions[0].conditions.push(event.role.namespace);
+      } else {
+        this.roleForm.get('data').patchValue({
+          enrolmentPreconditions: [{type: PreconditionTypes.Role, conditions: [event.role.namespace]}]
+        })
+      }
+
       this.restrictionRoleControl.setErrors(null);
     }
   }
