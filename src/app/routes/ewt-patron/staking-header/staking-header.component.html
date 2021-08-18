@@ -1,6 +1,11 @@
 <div class="header-wrapper d-flex flex-grow-1 justify-content-end">
   <ng-container *ngIf="(loggedIn$ | async)">
-    <div class="btn-user-info" [matMenuTriggerFor]="menu">
+    <button mat-raised-button data-qa-id="logout" class="connect-btn color-white text-uppercase mr-2"
+            (click)="logOut()">Disconnect Wallet
+    </button>
+
+    <!-- TO DO, Task SWTCH-1176 -->
+    <!-- <div class="btn-user-info" [matMenuTriggerFor]="menu">
       <div class="d-flex align-items-center ml-3 ml-md-0 flex-row">
         <div class="d-none d-md-flex flex-column align-items-end ml-2 mr-2">
           <div class="account-title"> Account Name </div>
@@ -14,8 +19,6 @@
       <div class="d-flex justify-content-center flex-column py-2 px-3">
         <div class="d-flex justify-content-between mb-2">
           <div class="network"><mat-icon class="color-success mr-1">circle</mat-icon>Volta Network</div>
-          <!-- for disable -->
-          <!-- <div class="network"><mat-icon class="color-disabled mr-1">circle</mat-icon>Disconnected</div> -->
           <div class="wallet"><img src="../assets/img/icons/metamask-logo.svg" width="28"/></div>
         </div>
         <div>
@@ -35,6 +38,6 @@
             (click)="logOut()">Disconnect from Metamask
         </button>
       </div>
-    </mat-menu>
+    </mat-menu> -->
   </ng-container>
 </div>
