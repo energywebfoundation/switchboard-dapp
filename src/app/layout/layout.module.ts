@@ -2,12 +2,9 @@ import { NgModule } from '@angular/core';
 import { UserIdleModule } from 'angular-user-idle';
 
 import { LayoutComponent } from './layout.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderComponent } from './header/header.component';
 import { NavsearchComponent } from './header/navsearch/navsearch.component';
 import { OffsidebarComponent } from './offsidebar/offsidebar.component';
-import { UserblockComponent } from './sidebar/userblock/userblock.component';
-import { UserblockService } from './sidebar/userblock/userblock.service';
 import { FooterComponent } from './footer/footer.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatMenuModule } from '@angular/material/menu';
@@ -28,13 +25,9 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     ClipboardModule,
     UserIdleModule.forRoot({idle: environment.userIdle, timeout: environment.userIdle})
   ],
-  providers: [
-    UserblockService
-  ],
+  providers: [],
   declarations: [
     LayoutComponent,
-    SidebarComponent,
-    UserblockComponent,
     HeaderComponent,
     NavsearchComponent,
     OffsidebarComponent,
@@ -45,8 +38,6 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
   entryComponents: [DialogUserComponent],
   exports: [
     LayoutComponent,
-    SidebarComponent,
-    UserblockComponent,
     HeaderComponent,
     NavsearchComponent,
     OffsidebarComponent,

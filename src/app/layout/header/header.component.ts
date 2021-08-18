@@ -6,7 +6,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
 import { AssetHistoryEventType, ENSNamespaceTypes } from 'iam-client-lib';
 
-import { UserblockService } from '../sidebar/userblock/userblock.service';
 import { SettingsService } from '../../core/settings/settings.service';
 import { MenuService } from '../../core/menu/menu.service';
 import { Identicon } from '../../shared/directives/identicon/identicon';
@@ -76,7 +75,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private router: Router,
               private toastr: SwitchboardToastrService,
               private notifService: NotificationService,
-              public userblockService: UserblockService,
               public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer,
               private store: Store<UserClaimState>) {
     // show only a few items on demo
@@ -361,11 +359,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       'data:image/svg+xml; utf8,'
       + encodeURI(new Identicon(Md5.hashStr(userDid), {size: 128, format: 'svg'}).toString(true))
     ));
-  }
-
-  toggleUserBlock(event) {
-    event.preventDefault();
-    this.userblockService.toggleVisibility();
   }
 
   openNavSearch(event) {

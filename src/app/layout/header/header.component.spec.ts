@@ -5,7 +5,6 @@ import { MenuService } from '../../core/menu/menu.service';
 import { IamService } from '../../shared/services/iam.service';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../shared/services/notification.service';
-import { UserblockService } from '../sidebar/userblock/userblock.service';
 import { SettingsService } from '../../core/settings/settings.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -26,7 +25,6 @@ xdescribe('HeaderComponent', () => {
         {provide: Router, useValue: {}},
         {provide: SwitchboardToastrService, useValue: {}},
         {provide: NotificationService, useValue: {}},
-        {provide: UserblockService, useValue: {}},
         {provide: SettingsService, useValue: {}},
         {provide: MatDialog, useValue: {}},
         {provide: DomSanitizer, useValue: {}},
