@@ -24,7 +24,6 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 import { ColorsService } from './colors/colors.service';
 import { ScrollableDirective } from './directives/scrollable/scrollable.directive';
-import { JAllowByDirective } from './directives/j-allow-by.directive';
 import { PreventPasteDirective } from './directives/prevent-paste.directive';
 import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
 import { DidFormatMinifierPipe } from './pipes/did-format-minifier.pipe';
@@ -135,7 +134,6 @@ const MATERIAL_MODULES = [
   ],
   declarations: [
     ScrollableDirective,
-    JAllowByDirective,
     PreventPasteDirective,
     RetryBtnDirective,
     DidFormatMinifierPipe,
@@ -171,7 +169,6 @@ const MATERIAL_MODULES = [
     PopoverModule,
     TypeaheadModule,
     ScrollableDirective,
-    JAllowByDirective,
     PreventPasteDirective,
     RetryBtnDirective,
     MinifiedDidViewerDirective,
