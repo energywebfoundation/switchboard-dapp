@@ -34,7 +34,7 @@ export class AuthEffects {
     )
   );
 
-  login$ = createEffect(() =>
+  loginViaDialog$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginViaDialog),
       tap(({provider, navigateOnTimeout}) => this.loginService.waitForSignature(provider, true, navigateOnTimeout)),

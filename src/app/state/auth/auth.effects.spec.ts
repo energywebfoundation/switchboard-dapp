@@ -57,7 +57,7 @@ describe('AuthEffects', () => {
     });
   });
 
-  describe('login$', () => {
+  describe('loginViaDialog$', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
     });
@@ -66,7 +66,7 @@ describe('AuthEffects', () => {
       actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
       loginServiceSpy.login.and.returnValue(Promise.resolve(true));
 
-      effects.login$.pipe(
+      effects.loginViaDialog$.pipe(
         finalize(() => expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled())
       )
         .subscribe(resultAction => {
@@ -86,7 +86,7 @@ describe('AuthEffects', () => {
       actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
       loginServiceSpy.login.and.returnValue(Promise.resolve(false));
 
-      effects.login$.pipe(
+      effects.loginViaDialog$.pipe(
         finalize(() => expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled())
       )
         .subscribe(resultAction => {
@@ -101,7 +101,7 @@ describe('AuthEffects', () => {
       actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
       loginServiceSpy.login.and.returnValue(Promise.reject());
 
-      effects.login$
+      effects.loginViaDialog$
         .subscribe(resultAction => {
           expect(resultAction).toEqual(AuthActions.loginFailure());
 
@@ -113,7 +113,7 @@ describe('AuthEffects', () => {
       actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask, navigateOnTimeout: false}));
       loginServiceSpy.login.and.returnValue(Promise.resolve(true));
 
-      effects.login$
+      effects.loginViaDialog$
         .subscribe(() => {
           expect(loginServiceSpy.waitForSignature).toHaveBeenCalledWith(WalletProvider.MetaMask, true, false);
           done();
