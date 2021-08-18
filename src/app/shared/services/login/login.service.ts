@@ -39,7 +39,7 @@ export class LoginService {
   }
 
   isSessionActive() {
-    return this.iamService.iam.isSessionActive();
+    return this.iamService.isSessionActive();
   }
 
   /**
@@ -50,7 +50,7 @@ export class LoginService {
 
     // TODO: check if any check here is needed.
     try {
-      const {did, connected, userClosedModal} = await this.iamService.iam.initializeConnection(loginOptions);
+      const {did, connected, userClosedModal} = await this.iamService.initializeConnection(loginOptions);
       if (did && connected && !userClosedModal) {
         this.setListeners(redirectOnAccountChange);
         retVal = true;
@@ -64,7 +64,6 @@ export class LoginService {
 
   private handleLoginErrors(e) {
     console.error(e);
-
     const message = LOGIN_ERRORS.has(e.message) ? LOGIN_ERRORS.get(e.message) : e.message;
     this.toastr.error(message);
   }
@@ -99,10 +98,11 @@ export class LoginService {
     this.loadingService.hide();
   }
 
-  async disconnect() {
-    await this.iamService.iam.closeConnection();
+  disconnect() {
+    this.iamService.iam.closeConnection();
     this.store.dispatch(userClaimsActions.clearUserClaim());
     this.loadingService.hide();
+    location.reload();
   }
 
   setDeepLink(deepLink: any) {
@@ -143,7 +143,7 @@ export class LoginService {
     }, timeoutInMinutes * 60000);
   }
 
-  public clearWaitSignatureTimer(throwError?: boolean) {
+  public clearWaitSignatureTimer() {
     clearTimeout(this._timer);
     this._timer = undefined;
     this.loadingService.hide();

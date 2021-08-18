@@ -449,8 +449,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private async initLoginUser() {
     // Check Login
-    console.log(this.iamService.isSessionActive());
-    debugger;
     if (this.iamService.isSessionActive()) {
       this.store.dispatch(reinitializeAuth({}));
       // Set Loggedin Flag to true

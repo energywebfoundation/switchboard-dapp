@@ -81,6 +81,10 @@ export class IamService {
     return this._iam;
   }
 
+  initializeConnection(loginOptions) {
+    return this.iam.initializeConnection(loginOptions);
+  }
+
   isSessionActive() {
     return this.iam.isSessionActive();
   }

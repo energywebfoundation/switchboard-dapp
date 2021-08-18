@@ -19,6 +19,7 @@ import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../state/user-claim/user.reducer';
 import { SwitchboardToastr, SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import { LoginService } from '../../shared/services/login/login.service';
+import { logoutWithRedirectUrl } from '../../state/auth/auth.actions';
 
 @Component({
   selector: 'app-header',
@@ -391,7 +392,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.clearSwitchboardToaster();
-    this.loginService.logout();
+    this.store.dispatch(logoutWithRedirectUrl())
   }
 
   clearSwitchboardToaster(): void {
