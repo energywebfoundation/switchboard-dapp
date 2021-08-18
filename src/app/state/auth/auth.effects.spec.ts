@@ -12,11 +12,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';
+import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 
 describe('AuthEffects', () => {
 
   const loginServiceSpy = jasmine.createSpyObj('LoginService', ['waitForSignature', 'clearWaitSignatureTimer', 'login', 'disconnect']);
-  const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll']);
+  const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll', 'open']);
   const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
   let actions$: ReplaySubject<any>;
   let effects: AuthEffects;
@@ -120,5 +121,28 @@ describe('AuthEffects', () => {
         });
     });
 
+  });
+
+  describe('openLoginDialog$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should open dialog when calling openLoginDialog action', () => {
+      actions$.next(AuthActions.openLoginDialog());
+
+      effects.openLoginDialog$.subscribe();
+
+      expect(dialogSpy.open).toHaveBeenCalledWith(ConnectToWalletDialogComponent, jasmine.objectContaining({
+        width: '434px',
+        panelClass: 'connect-to-wallet',
+        backdropClass: 'backdrop-hide-content',
+        data: {
+          navigateOnTimeout: false
+        },
+        maxWidth: '100%',
+        disableClose: true
+      }));
+    });
   });
 });
