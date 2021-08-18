@@ -11,11 +11,13 @@ import { IAM, WalletProvider } from 'iam-client-lib';
 import { MatDialog } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 import { LoginService } from '../../shared/services/login/login.service';
+import { Router } from '@angular/router';
 
 describe('AuthEffects', () => {
 
   const loginServiceSpy = jasmine.createSpyObj('LoginService', ['waitForSignature', 'clearWaitSignatureTimer', 'login', 'disconnect']);
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll']);
+  const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
   let actions$: ReplaySubject<any>;
   let effects: AuthEffects;
   let store: MockStore<AuthState>;
@@ -26,6 +28,7 @@ describe('AuthEffects', () => {
         AuthEffects,
         {provide: LoginService, useValue: loginServiceSpy},
         {provide: MatDialog, useValue: dialogSpy},
+        {provide: Router, useValue: routerSpy},
         provideMockStore(),
         provideMockActions(() => actions$),
       ],
