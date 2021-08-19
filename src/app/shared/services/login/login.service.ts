@@ -13,7 +13,7 @@ export interface LoginOptions {
   walletProvider?: WalletProvider;
   reinitializeMetamask?: boolean;
   initCacheServer?: boolean;
-  initDID?: boolean;
+  createDocument?: boolean;
 }
 
 export enum Wallet_Provider_Events {
