@@ -21,8 +21,13 @@ export enum Wallet_Provider_Events {
   Disconnected = 'EVENT_DISCONNECTED'
 }
 
-const LOGIN_ERRORS = new Map()
-  .set('Cannot destructure property', 'Please check if you are connected to correct network.');
+const LOGIN_ERRORS = [
+  {key: 'Cannot destructure property', value: 'Please check if you are connected to correct network.'},
+  {
+    key: 'Request of type \'wallet_requestPermissions\'',
+    value: 'Please check if you do not have pending notifications in your wallet'
+  }
+];
 
 @Injectable({
   providedIn: 'root'
@@ -64,7 +69,8 @@ export class LoginService {
 
   private handleLoginErrors(e) {
     console.error(e);
-    const message = LOGIN_ERRORS.has(e.message) ? LOGIN_ERRORS.get(e.message) : e.message;
+    const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key));
+    const message = loginError.length > 0 ? loginError[0].value : e.message;
     this.toastr.error(message);
   }
 
