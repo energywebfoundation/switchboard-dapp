@@ -7,6 +7,7 @@ import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import { ToastrService } from 'ngx-toastr';
 import { WalletProvider } from 'iam-client-lib';
 import SWAL from 'sweetalert';
+import { from } from 'rxjs';
 
 export interface LoginOptions {
   walletProvider?: WalletProvider;
@@ -21,11 +22,18 @@ export enum Wallet_Provider_Events {
   Disconnected = 'EVENT_DISCONNECTED'
 }
 
-const LOGIN_ERRORS = [
-  {key: 'Cannot destructure property', value: 'Please check if you are connected to correct network.'},
+interface LoginError {
+  key: string;
+  value: string;
+  type: 'swal' | 'toastr'
+}
+
+const LOGIN_ERRORS: LoginError[] = [
+  {key: 'Cannot destructure property', value: 'Please check if you are connected to correct network.', type: 'swal'},
   {
     key: 'Request of type \'wallet_requestPermissions\'',
-    value: 'Please check if you do not have pending notifications in your wallet'
+    value: 'Please check if you do not have pending notifications in your wallet',
+    type: 'toastr'
   }
 ];
 
@@ -69,9 +77,27 @@ export class LoginService {
 
   private handleLoginErrors(e) {
     console.error(e);
-    const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key));
-    const message = loginError.length > 0 ? loginError[0].value : e.message;
-    this.toastr.error(message);
+    const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key))[0];
+    if(loginError.type === 'swal') {
+      this.displayLoginErrorWithSwal(loginError.value);
+    } else {
+      const message = loginError ? loginError.value : e.message;
+      this.toastr.error(message);
+    }
+
+  }
+
+  displayLoginErrorWithSwal(message: string) {
+    const config = {
+      title: 'Wrong Network',
+      text: `${message}`,
+      icon: 'error',
+      button: 'Proceed',
+      closeOnClickOutside: false
+    };
+
+
+    from(SWAL(config)).subscribe(() => this.logout())
   }
 
   setListeners(redirectOnAccountChange: boolean) {
