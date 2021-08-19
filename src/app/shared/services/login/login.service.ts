@@ -75,47 +75,6 @@ export class LoginService {
     return retVal;
   }
 
-  private handleLoginErrors(e) {
-    console.error(e);
-    const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key))[0];
-    if (loginError?.type === 'swal') {
-      this.displayLoginErrorWithSwal(loginError.value);
-    } else {
-      const message = loginError ? loginError.value : e.message;
-      this.toastr.error(message);
-    }
-
-  }
-
-  displayLoginErrorWithSwal(message: string) {
-    const config = {
-      title: 'Wrong Network',
-      text: `${message}`,
-      icon: 'error',
-      button: 'Proceed',
-      closeOnClickOutside: false
-    };
-
-    from(SWAL(config)).subscribe(() => this.logout());
-  }
-
-  setListeners(redirectOnAccountChange: boolean) {
-    // Listen to Account Change
-    this.iamService.iam.on('accountChanged', () => {
-      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.AccountChanged, redirectOnAccountChange);
-    });
-
-    // Listen to Network Change
-    this.iamService.iam.on('networkChanged', () => {
-      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.NetworkChanged, redirectOnAccountChange);
-    });
-
-    // Listen to Disconnection
-    this.iamService.iam.on('disconnected', () => {
-      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.Disconnected, redirectOnAccountChange);
-    });
-  }
-
   /**
    * Disconnect from IAM
    */
@@ -138,10 +97,6 @@ export class LoginService {
 
   setDeepLink(deepLink: any) {
     this._deepLink = deepLink;
-  }
-
-  private saveDeepLink(): void {
-    location.href = location.origin + '/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
   }
 
   public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean, navigateOnTimeout: boolean = true) {
@@ -183,6 +138,51 @@ export class LoginService {
       throw new Error('Wallet Signature Timeout');
       this._throwTimeoutError = false;
     }
+  }
+
+  private handleLoginErrors(e) {
+    console.error(e);
+    const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key))[0];
+    if (loginError?.type === 'swal') {
+      this.displayLoginErrorWithSwal(loginError.value);
+    } else {
+      const message = loginError ? loginError.value : e.message;
+      this.toastr.error(message);
+    }
+
+  }
+
+  private displayLoginErrorWithSwal(message: string) {
+    const config = {
+      title: 'Wrong Network',
+      text: `${message}`,
+      icon: 'error',
+      button: 'Proceed',
+      closeOnClickOutside: false
+    };
+
+    from(SWAL(config)).subscribe(() => this.logout());
+  }
+
+  private setListeners(redirectOnAccountChange: boolean) {
+    // Listen to Account Change
+    this.iamService.iam.on('accountChanged', () => {
+      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.AccountChanged, redirectOnAccountChange);
+    });
+
+    // Listen to Network Change
+    this.iamService.iam.on('networkChanged', () => {
+      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.NetworkChanged, redirectOnAccountChange);
+    });
+
+    // Listen to Disconnection
+    this.iamService.iam.on('disconnected', () => {
+      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.Disconnected, redirectOnAccountChange);
+    });
+  }
+
+  private saveDeepLink(): void {
+    location.href = location.origin + '/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
   }
 
   private async _displayTimeout(isConnectAndSign?: boolean, navigateOnTimeout?: boolean) {
