@@ -89,6 +89,7 @@ export class AuthEffects {
         })).pipe(
           map((loggedIn) => {
             if (loggedIn) {
+              this.router.navigateByUrl(`/${returnUrl}`);
               return AuthActions.loginSuccess();
             }
             return AuthActions.loginFailure();
@@ -99,10 +100,6 @@ export class AuthEffects {
           }),
           finalize(() => {
             this.loginService.clearWaitSignatureTimer();
-            this.router.navigateByUrl('/dashboard', {
-              state: {data: {fresh: true}},
-              queryParams: {returnUrl}
-            });
           })
         )
       )

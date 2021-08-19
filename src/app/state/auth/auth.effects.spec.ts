@@ -145,4 +145,65 @@ describe('AuthEffects', () => {
       }));
     });
   });
+
+  describe('welcomePageLogin$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should successfully login', (done) => {
+      actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: ''}));
+      loginServiceSpy.login.and.returnValue(Promise.resolve(true));
+
+      effects.welcomePageLogin$
+        .pipe(
+          finalize(() => {
+            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled();
+            expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/dashboard', jasmine.objectContaining({}));
+          })
+        )
+        .subscribe(resultAction => {
+          expect(loginServiceSpy.login).toHaveBeenCalledWith({
+            walletProvider: WalletProvider.MetaMask,
+            reinitializeMetamask: true
+          });
+          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
+          expect(resultAction).toEqual(AuthActions.loginSuccess());
+          done();
+        });
+    });
+
+    it('should navigate to a url that is sent in action', (done) => {
+      actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: 'returnUrl'}));
+      loginServiceSpy.login.and.returnValue(Promise.resolve(true));
+
+      effects.welcomePageLogin$
+        .pipe(
+          finalize(() => {
+            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled();
+          })
+        )
+        .subscribe(resultAction => {
+          expect(loginServiceSpy.login).toHaveBeenCalledWith({
+            walletProvider: WalletProvider.MetaMask,
+            reinitializeMetamask: true
+          });
+          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
+          expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/returnUrl');
+          expect(resultAction).toEqual(AuthActions.loginSuccess());
+          done();
+        });
+    });
+
+    it('should return failure action when login fails', (done) => {
+      actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: ''}));
+      loginServiceSpy.login.and.returnValue(Promise.resolve(false));
+
+      effects.welcomePageLogin$
+        .subscribe(resultAction => {
+          expect(resultAction).toEqual(AuthActions.loginFailure());
+          done();
+        });
+    });
+  });
 });
