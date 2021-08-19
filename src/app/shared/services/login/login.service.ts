@@ -78,7 +78,7 @@ export class LoginService {
   private handleLoginErrors(e) {
     console.error(e);
     const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key))[0];
-    if (loginError.type === 'swal') {
+    if (loginError?.type === 'swal') {
       this.displayLoginErrorWithSwal(loginError.value);
     } else {
       const message = loginError ? loginError.value : e.message;
