@@ -7,8 +7,9 @@ import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import { ToastrService } from 'ngx-toastr';
 import { WalletProvider } from 'iam-client-lib';
 import SWAL from 'sweetalert';
-import { from } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
+import { catchError, map } from 'rxjs/operators';
 
 export interface LoginOptions {
   walletProvider?: WalletProvider;
@@ -62,22 +63,19 @@ export class LoginService {
   /**
    * Login via IAM and retrieve basic user info
    */
-  async login(loginOptions?: LoginOptions, redirectOnAccountChange: boolean = true): Promise<boolean> {
-    let retVal = false;
-
-    // TODO: check if any check here is needed.
-    try {
-      const {did, connected, userClosedModal} = await this.iamService.initializeConnection(loginOptions);
-      if (did && connected && !userClosedModal) {
-        const callback = redirectOnAccountChange ? this.logout : this.disconnect;
-        this.iamListenerService.setListeners(callback.bind(this))
-        retVal = true;
-      }
-    } catch (e) {
-      this.handleLoginErrors(e);
-    }
-
-    return retVal;
+  login(loginOptions?: LoginOptions, redirectOnAccountChange: boolean = true): Observable<boolean> {
+    return this.iamService.initializeConnection(loginOptions)
+      .pipe(
+        map(({did, connected, userClosedModal}) => {
+          const loginSuccessful = did && connected && !userClosedModal;
+          if (loginSuccessful) {
+            const callback = redirectOnAccountChange ? this.logout : this.disconnect;
+            this.iamListenerService.setListeners(callback.bind(this))
+          }
+          return Boolean(loginSuccessful);
+        }),
+        catchError(err => this.handleLoginErrors(err))
+      )
   }
 
   /**
@@ -154,7 +152,7 @@ export class LoginService {
       const message = loginError ? loginError.value : e.message;
       this.toastr.error(message);
     }
-
+    return of(false);
   }
 
   private displayLoginErrorWithSwal(message: string) {

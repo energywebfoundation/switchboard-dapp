@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoadingService } from '../loading.service';
 import { IamService } from '../iam.service';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
-import { from } from 'rxjs';
+import { from, of } from 'rxjs';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -39,7 +39,7 @@ describe('LoginService', () => {
   });
 
   it('should return true when login is successful', waitForAsync(() => {
-    iamServiceSpy.initializeConnection.and.returnValue(Promise.resolve({
+    iamServiceSpy.initializeConnection.and.returnValue(of({
       did: '0x',
       connected: true,
       userClosedModal: false
@@ -51,7 +51,7 @@ describe('LoginService', () => {
   }));
 
   it('should return false when did is null', waitForAsync(() => {
-    iamServiceSpy.initializeConnection.and.returnValue(Promise.resolve({connected: true, userClosedModal: false}));
+    iamServiceSpy.initializeConnection.and.returnValue(of({connected: true, userClosedModal: false}));
     from(service.login()).subscribe((result) => {
       expect(result).toBe(false);
     });

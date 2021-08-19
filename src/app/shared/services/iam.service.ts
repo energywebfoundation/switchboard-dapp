@@ -70,7 +70,7 @@ export class IamService {
   }
 
   initializeConnection(loginOptions: LoginOptions) {
-    return this.iam.initializeConnection(loginOptions);
+    return from(this.iam.initializeConnection(loginOptions));
   }
 
   isSessionActive() {
