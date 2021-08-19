@@ -7,14 +7,14 @@ import {
   SafeIam,
   setCacheClientOptions,
   setChainConfig,
-  setMessagingOptions,
-  WalletProvider
+  setMessagingOptions
 } from 'iam-client-lib';
 import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
 import { from } from 'rxjs';
+import { LoginOptions } from './login/login.service';
 
 const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
 
@@ -22,18 +22,6 @@ const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
 const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
 
 export const VOLTA_CHAIN_ID = 73799;
-
-export interface LoginOptions {
-  walletProvider?: WalletProvider;
-  reinitializeMetamask?: boolean;
-  initCacheServer?: boolean;
-  initDID?: boolean;
-}
-
-export enum LoginType {
-  LOCAL = 'local',
-  REMOTE = 'remote'
-}
 
 @Injectable({
   providedIn: 'root'
@@ -81,7 +69,7 @@ export class IamService {
     return this._iam;
   }
 
-  initializeConnection(loginOptions) {
+  initializeConnection(loginOptions: LoginOptions) {
     return this.iam.initializeConnection(loginOptions);
   }
 
