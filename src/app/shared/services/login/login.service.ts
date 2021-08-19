@@ -24,7 +24,7 @@ interface LoginError {
   type: 'swal' | 'toastr';
 }
 
-const LOGIN_ERRORS: LoginError[] = [
+export const LOGIN_ERRORS: LoginError[] = [
   {key: 'Cannot destructure property', value: 'Please check if you are connected to correct network.', type: 'swal'},
   {
     key: 'Request of type \'wallet_requestPermissions\'',

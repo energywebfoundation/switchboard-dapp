@@ -6,7 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { LoadingService } from '../loading.service';
 import { IamService } from '../iam.service';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
-import { from, of } from 'rxjs';
+import { from, of, throwError } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -52,9 +53,24 @@ describe('LoginService', () => {
 
   it('should return false when did is null', waitForAsync(() => {
     iamServiceSpy.initializeConnection.and.returnValue(of({connected: true, userClosedModal: false}));
-    from(service.login()).subscribe((result) => {
+    service.login().pipe(take(1)).subscribe((result) => {
       expect(result).toBe(false);
     });
-
   }));
+
+  it('should display random error with toastr', waitForAsync(() => {
+    iamServiceSpy.initializeConnection.and.returnValue(throwError({message: 'Sample Error'}));
+    service.login().pipe(take(1)).subscribe((result) => {
+      expect(result).toBe(false);
+      expect(toastrySpy.error).toHaveBeenCalledWith('Sample Error');
+    });
+  }));
+
+  it('should display error with toastr about pending notifications', () => {
+    iamServiceSpy.initializeConnection.and.returnValue(throwError({message: 'Request of type \'wallet_requestPermissions\''}));
+    service.login().pipe(take(1)).subscribe((result) => {
+      expect(result).toBe(false);
+      expect(toastrySpy.error).toHaveBeenCalledWith('Please check if you do not have pending notifications in your wallet');
+    });
+  });
 });
