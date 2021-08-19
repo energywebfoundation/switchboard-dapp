@@ -8,18 +8,13 @@ import { ToastrService } from 'ngx-toastr';
 import { WalletProvider } from 'iam-client-lib';
 import SWAL from 'sweetalert';
 import { from } from 'rxjs';
+import { IamListenerService } from '../iam-listener/iam-listener.service';
 
 export interface LoginOptions {
   walletProvider?: WalletProvider;
   reinitializeMetamask?: boolean;
   initCacheServer?: boolean;
   createDocument?: boolean;
-}
-
-export enum Wallet_Provider_Events {
-  AccountChanged = 'EVENT_ACCOUNT_CHANGED',
-  NetworkChanged = 'EVENT_NETWORK_CHANGED',
-  Disconnected = 'EVENT_DISCONNECTED'
 }
 
 interface LoginError {
@@ -48,11 +43,20 @@ export class LoginService {
   constructor(private loadingService: LoadingService,
               private iamService: IamService,
               private store: Store<UserClaimState>,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private iamListenerService: IamListenerService) {
   }
 
   isSessionActive() {
     return this.iamService.isSessionActive();
+  }
+
+  callback(redirectOnAccountChange) {
+    if (redirectOnAccountChange) {
+      this.logout();
+    } else {
+      this.disconnect();
+    }
   }
 
   /**
@@ -65,7 +69,8 @@ export class LoginService {
     try {
       const {did, connected, userClosedModal} = await this.iamService.initializeConnection(loginOptions);
       if (did && connected && !userClosedModal) {
-        this.setListeners(redirectOnAccountChange);
+        const callback = redirectOnAccountChange ? this.logout : this.disconnect;
+        this.iamListenerService.setListeners(callback.bind(this))
         retVal = true;
       }
     } catch (e) {
@@ -164,23 +169,6 @@ export class LoginService {
     from(SWAL(config)).subscribe(() => this.logout());
   }
 
-  private setListeners(redirectOnAccountChange: boolean) {
-    // Listen to Account Change
-    this.iamService.iam.on('accountChanged', () => {
-      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.AccountChanged, redirectOnAccountChange);
-    });
-
-    // Listen to Network Change
-    this.iamService.iam.on('networkChanged', () => {
-      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.NetworkChanged, redirectOnAccountChange);
-    });
-
-    // Listen to Disconnection
-    this.iamService.iam.on('disconnected', () => {
-      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.Disconnected, redirectOnAccountChange);
-    });
-  }
-
   private saveDeepLink(): void {
     location.href = location.origin + '/welcome?returnUrl=' + encodeURIComponent(this._deepLink);
   }
@@ -205,47 +193,6 @@ export class LoginService {
       } else {
         this.disconnect();
       }
-    }
-  }
-
-  private async _displayAccountAndNetworkChanges(changeType: Wallet_Provider_Events, redirectOnAccountChange: boolean): Promise<void> {
-    const {message, title} = this.getSwalConfigInfo(changeType);
-
-    const config = {
-      title,
-      text: `${message} Please login again.`,
-      icon: 'warning',
-      button: 'Proceed',
-      closeOnClickOutside: false
-    };
-
-    const result = await SWAL(config);
-    if (result) {
-      if (redirectOnAccountChange) {
-        this.logout();
-      } else {
-        this.disconnect();
-      }
-    }
-  }
-
-  private getSwalConfigInfo(type: Wallet_Provider_Events) {
-    switch (type) {
-      case Wallet_Provider_Events.AccountChanged:
-        return {
-          title: 'Account Changed',
-          message: 'Account is changed.'
-        };
-      case Wallet_Provider_Events.NetworkChanged:
-        return {
-          title: 'Network Changed',
-          message: 'Network is changed.'
-        };
-      case Wallet_Provider_Events.Disconnected:
-        return {
-          title: 'Disconnected',
-          message: 'You are disconnected from your wallet.'
-        };
     }
   }
 }
