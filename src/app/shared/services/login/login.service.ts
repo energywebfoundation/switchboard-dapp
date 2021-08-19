@@ -25,7 +25,7 @@ export enum Wallet_Provider_Events {
 interface LoginError {
   key: string;
   value: string;
-  type: 'swal' | 'toastr'
+  type: 'swal' | 'toastr';
 }
 
 const LOGIN_ERRORS: LoginError[] = [
@@ -78,7 +78,7 @@ export class LoginService {
   private handleLoginErrors(e) {
     console.error(e);
     const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key))[0];
-    if(loginError.type === 'swal') {
+    if (loginError.type === 'swal') {
       this.displayLoginErrorWithSwal(loginError.value);
     } else {
       const message = loginError ? loginError.value : e.message;
@@ -96,8 +96,7 @@ export class LoginService {
       closeOnClickOutside: false
     };
 
-
-    from(SWAL(config)).subscribe(() => this.logout())
+    from(SWAL(config)).subscribe(() => this.logout());
   }
 
   setListeners(redirectOnAccountChange: boolean) {
@@ -209,24 +208,8 @@ export class LoginService {
     }
   }
 
-  private async _displayAccountAndNetworkChanges(changeType: string, redirectOnAccountChange: boolean) {
-    let message: string;
-    let title: string;
-
-    switch (changeType) {
-      case Wallet_Provider_Events.AccountChanged:
-        title = 'Account Changed';
-        message = 'Account is changed.';
-        break;
-      case Wallet_Provider_Events.NetworkChanged:
-        title = 'Network Changed';
-        message = 'Network is changed.';
-        break;
-      case Wallet_Provider_Events.Disconnected:
-        title = 'Disconnected';
-        message = 'You are disconnected from your wallet.';
-        break;
-    }
+  private async _displayAccountAndNetworkChanges(changeType: Wallet_Provider_Events, redirectOnAccountChange: boolean): Promise<void> {
+    const {message, title} = this.getSwalConfigInfo(changeType);
 
     const config = {
       title,
@@ -243,6 +226,26 @@ export class LoginService {
       } else {
         this.disconnect();
       }
+    }
+  }
+
+  private getSwalConfigInfo(type: Wallet_Provider_Events) {
+    switch (type) {
+      case Wallet_Provider_Events.AccountChanged:
+        return {
+          title: 'Account Changed',
+          message: 'Account is changed.'
+        };
+      case Wallet_Provider_Events.NetworkChanged:
+        return {
+          title: 'Network Changed',
+          message: 'Network is changed.'
+        };
+      case Wallet_Provider_Events.Disconnected:
+        return {
+          title: 'Disconnected',
+          message: 'You are disconnected from your wallet.'
+        };
     }
   }
 }
