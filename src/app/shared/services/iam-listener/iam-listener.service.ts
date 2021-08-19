@@ -5,10 +5,10 @@ import { from } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 
-export enum Wallet_Provider_Events {
-  AccountChanged = 'EVENT_ACCOUNT_CHANGED',
-  NetworkChanged = 'EVENT_NETWORK_CHANGED',
-  Disconnected = 'EVENT_DISCONNECTED'
+export enum ProviderEventsEnum {
+  AccountChanged = 'accountChanged',
+  NetworkChanged = 'networkChanged',
+  Disconnected = 'disconnected'
 }
 
 @Injectable({
@@ -20,23 +20,20 @@ export class IamListenerService {
   }
 
   setListeners(callback: () => void) {
-    // Listen to Account Change
-    this.iamService.iam.on('accountChanged', () => {
-      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.AccountChanged, callback);
+    this.iamService.iam.on(ProviderEventsEnum.AccountChanged, () => {
+      this._displayAccountAndNetworkChanges(ProviderEventsEnum.AccountChanged, callback);
     });
 
-    // Listen to Network Change
-    this.iamService.iam.on('networkChanged', () => {
-      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.NetworkChanged, callback);
+    this.iamService.iam.on(ProviderEventsEnum.NetworkChanged, () => {
+      this._displayAccountAndNetworkChanges(ProviderEventsEnum.NetworkChanged, callback);
     });
 
-    // Listen to Disconnection
-    this.iamService.iam.on('disconnected', () => {
-      this._displayAccountAndNetworkChanges(Wallet_Provider_Events.Disconnected, callback);
+    this.iamService.iam.on(ProviderEventsEnum.Disconnected, () => {
+      this._displayAccountAndNetworkChanges(ProviderEventsEnum.Disconnected, callback);
     });
   }
 
-  private _displayAccountAndNetworkChanges(changeType: Wallet_Provider_Events, callback: () => void): void {
+  private _displayAccountAndNetworkChanges(changeType: ProviderEventsEnum, callback: () => void): void {
     const {message, title} = this.getSwalConfigInfo(changeType);
 
     const config = {
@@ -52,19 +49,19 @@ export class IamListenerService {
     });
   }
 
-  private getSwalConfigInfo(type: Wallet_Provider_Events) {
+  private getSwalConfigInfo(type: ProviderEventsEnum) {
     switch (type) {
-      case Wallet_Provider_Events.AccountChanged:
+      case ProviderEventsEnum.AccountChanged:
         return {
           title: 'Account Changed',
           message: 'Account is changed.'
         };
-      case Wallet_Provider_Events.NetworkChanged:
+      case ProviderEventsEnum.NetworkChanged:
         return {
           title: 'Network Changed',
           message: 'Network is changed.'
         };
-      case Wallet_Provider_Events.Disconnected:
+      case ProviderEventsEnum.Disconnected:
         return {
           title: 'Disconnected',
           message: 'You are disconnected from your wallet.'
