@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ReplaySubject } from 'rxjs';
+import { of, ReplaySubject, throwError } from 'rxjs';
 
 import { provideMockActions } from '@ngrx/effects/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -65,7 +65,7 @@ describe('AuthEffects', () => {
 
     it('should close dialog and return login success action when login was successful', (done) => {
       actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
-      loginServiceSpy.login.and.returnValue(Promise.resolve(true));
+      loginServiceSpy.login.and.returnValue(of(true));
 
       effects.loginViaDialog$.pipe(
         finalize(() => expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled())
@@ -85,7 +85,7 @@ describe('AuthEffects', () => {
 
     it('should do not close dialog and return login failure action on login failure', (done) => {
       actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
-      loginServiceSpy.login.and.returnValue(Promise.resolve(false));
+      loginServiceSpy.login.and.returnValue(of(false));
 
       effects.loginViaDialog$.pipe(
         finalize(() => expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled())
@@ -100,7 +100,7 @@ describe('AuthEffects', () => {
 
     it('should do not close dialog and return login failure action when login throws error', (done) => {
       actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
-      loginServiceSpy.login.and.returnValue(Promise.reject());
+      loginServiceSpy.login.and.returnValue(throwError(''));
 
       effects.loginViaDialog$
         .subscribe(resultAction => {
@@ -112,7 +112,7 @@ describe('AuthEffects', () => {
 
     it('should call waitForSignature with metamask and not navigate on timeout option', (done) => {
       actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask, navigateOnTimeout: false}));
-      loginServiceSpy.login.and.returnValue(Promise.resolve(true));
+      loginServiceSpy.login.and.returnValue(of(true));
 
       effects.loginViaDialog$
         .subscribe(() => {
@@ -153,7 +153,7 @@ describe('AuthEffects', () => {
 
     it('should successfully login', (done) => {
       actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: ''}));
-      loginServiceSpy.login.and.returnValue(Promise.resolve(true));
+      loginServiceSpy.login.and.returnValue(of(true));
 
       effects.welcomePageLogin$
         .pipe(
@@ -175,7 +175,7 @@ describe('AuthEffects', () => {
 
     it('should navigate to a url that is sent in action', (done) => {
       actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: 'returnUrl'}));
-      loginServiceSpy.login.and.returnValue(Promise.resolve(true));
+      loginServiceSpy.login.and.returnValue(of(true));
 
       effects.welcomePageLogin$
         .pipe(
@@ -197,7 +197,7 @@ describe('AuthEffects', () => {
 
     it('should return failure action when login fails', (done) => {
       actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: ''}));
-      loginServiceSpy.login.and.returnValue(Promise.resolve(false));
+      loginServiceSpy.login.and.returnValue(of(false));
 
       effects.welcomePageLogin$
         .subscribe(resultAction => {

@@ -39,10 +39,10 @@ export class AuthEffects {
       ofType(AuthActions.loginViaDialog),
       tap(({provider, navigateOnTimeout}) => this.loginService.waitForSignature(provider, true, navigateOnTimeout)),
       switchMap(({provider, navigateOnTimeout}) =>
-        from(this.loginService.login({
+        this.loginService.login({
           walletProvider: provider,
           reinitializeMetamask: provider === WalletProvider.MetaMask
-        }, navigateOnTimeout)).pipe(
+        }, navigateOnTimeout).pipe(
           map((loggedIn) => {
             if (loggedIn) {
               this.dialog.closeAll();
@@ -83,10 +83,10 @@ export class AuthEffects {
       ofType(AuthActions.welcomeLogin),
       tap(({provider}) => this.loginService.waitForSignature(provider, true)),
       switchMap(({provider, returnUrl}) =>
-        from(this.loginService.login({
+        this.loginService.login({
           walletProvider: provider,
           reinitializeMetamask: provider === WalletProvider.MetaMask
-        })).pipe(
+        }).pipe(
           map((loggedIn) => {
             if (loggedIn) {
               this.router.navigateByUrl(`/${returnUrl}`);
@@ -140,7 +140,7 @@ export class AuthEffects {
       filter(() => this.loginService.isSessionActive()),
       tap(() => this.loadingService.show()),
       switchMap(({redirectUrl}) =>
-        from(this.loginService.login())
+        this.loginService.login()
           .pipe(
             map(() => AuthActions.loginSuccess()),
             finalize(() => {
