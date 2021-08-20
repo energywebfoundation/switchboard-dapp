@@ -84,14 +84,10 @@ export class LoginService {
     this.iamService.closeConnection();
 
     saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
-
-    // Clean up loader.
-    this.loadingService.hide();
   }
 
   disconnect() {
     this.iamService.closeConnection();
-    this.loadingService.hide();
     location.reload();
   }
 
