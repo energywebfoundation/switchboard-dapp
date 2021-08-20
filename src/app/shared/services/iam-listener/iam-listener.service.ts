@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
-import SWAL from 'sweetalert';
-import { from } from 'rxjs';
-import { take } from 'rxjs/operators';
-
 
 export enum ProviderEventsEnum {
   AccountChanged = 'accountChanged',
@@ -19,7 +15,7 @@ export class IamListenerService {
   constructor(private iamService: IamService) {
   }
 
-  setListeners(callback: () => void) {
+  setListeners(callback: (config) => void) {
     this.iamService.iam.on(ProviderEventsEnum.AccountChanged, () => {
       this._displayAccountAndNetworkChanges(ProviderEventsEnum.AccountChanged, callback);
     });
@@ -33,7 +29,7 @@ export class IamListenerService {
     });
   }
 
-  private _displayAccountAndNetworkChanges(changeType: ProviderEventsEnum, callback: () => void): void {
+  private _displayAccountAndNetworkChanges(changeType: ProviderEventsEnum, callback: (config) => void): void {
     const {message, title} = this.getSwalConfigInfo(changeType);
 
     const config = {
@@ -43,10 +39,8 @@ export class IamListenerService {
       button: 'Proceed',
       closeOnClickOutside: false
     };
+    callback(config);
 
-    from(SWAL(config)).pipe(take(1)).subscribe(() => {
-      callback();
-    });
   }
 
   private getSwalConfigInfo(type: ProviderEventsEnum) {

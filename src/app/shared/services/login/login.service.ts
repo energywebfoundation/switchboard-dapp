@@ -8,7 +8,7 @@ import { WalletProvider } from 'iam-client-lib';
 import SWAL from 'sweetalert';
 import { from, Observable, of } from 'rxjs';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, filter, map, take } from 'rxjs/operators';
 
 export interface LoginOptions {
   walletProvider?: WalletProvider;
@@ -54,14 +54,13 @@ export class LoginService {
   /**
    * Login via IAM and retrieve basic user info
    */
-  login(loginOptions?: LoginOptions, redirectOnAccountChange: boolean = true): Observable<boolean> {
+  login(loginOptions?: LoginOptions, redirectOnChange: boolean = true): Observable<boolean> {
     return this.iamService.initializeConnection(loginOptions)
       .pipe(
         map(({did, connected, userClosedModal}) => {
           const loginSuccessful = did && connected && !userClosedModal;
           if (loginSuccessful) {
-            const callback = redirectOnAccountChange ? this.logout : this.disconnect;
-            this.iamListenerService.setListeners(callback.bind(this));
+            this.iamListenerService.setListeners((config) => this.openSwal(config, redirectOnChange));
           }
           return Boolean(loginSuccessful);
         }),
@@ -128,6 +127,17 @@ export class LoginService {
     }
   }
 
+  private openSwal(config, navigateOnTimeout: boolean) {
+    from(SWAL(config))
+      .pipe(
+        take(1),
+        filter(Boolean)
+      )
+      .subscribe(() =>
+        navigateOnTimeout ? this.logout() : this.disconnect()
+      );
+  }
+
   private handleLoginErrors(e) {
     console.error(e);
     const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key))[0];
@@ -169,13 +179,6 @@ export class LoginService {
       closeOnClickOutside: false
     };
 
-    const result = await SWAL(config);
-    if (result) {
-      if (navigateOnTimeout) {
-        this.logout();
-      } else {
-        this.disconnect();
-      }
-    }
+    this.openSwal(config, navigateOnTimeout);
   }
 }
