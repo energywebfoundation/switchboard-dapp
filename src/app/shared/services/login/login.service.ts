@@ -159,7 +159,7 @@ export class LoginService {
       closeOnClickOutside: false
     };
 
-    from(SWAL(config)).subscribe(() => this.logout());
+    this.openSwal(config, true);
   }
 
   private saveDeepLink(): void {
