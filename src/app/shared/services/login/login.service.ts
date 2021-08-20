@@ -82,7 +82,7 @@ export class LoginService {
    * Disconnect from IAM
    */
   logout(saveDeepLink?: boolean) {
-    this.iamService.iam.closeConnection();
+    this.iamService.closeConnection();
     this.store.dispatch(userClaimsActions.clearUserClaim());
 
     saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
@@ -92,7 +92,7 @@ export class LoginService {
   }
 
   disconnect() {
-    this.iamService.iam.closeConnection();
+    this.iamService.closeConnection();
     this.store.dispatch(userClaimsActions.clearUserClaim());
     this.loadingService.hide();
     location.reload();
