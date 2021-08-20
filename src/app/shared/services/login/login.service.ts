@@ -51,14 +51,6 @@ export class LoginService {
     return this.iamService.isSessionActive();
   }
 
-  callback(redirectOnAccountChange) {
-    if (redirectOnAccountChange) {
-      this.logout();
-    } else {
-      this.disconnect();
-    }
-  }
-
   /**
    * Login via IAM and retrieve basic user info
    */
@@ -69,12 +61,12 @@ export class LoginService {
           const loginSuccessful = did && connected && !userClosedModal;
           if (loginSuccessful) {
             const callback = redirectOnAccountChange ? this.logout : this.disconnect;
-            this.iamListenerService.setListeners(callback.bind(this))
+            this.iamListenerService.setListeners(callback.bind(this));
           }
           return Boolean(loginSuccessful);
         }),
         catchError(err => this.handleLoginErrors(err))
-      )
+      );
   }
 
   /**
@@ -131,8 +123,8 @@ export class LoginService {
     this.loadingService.hide();
 
     if (this._throwTimeoutError) {
-      throw new Error('Wallet Signature Timeout');
       this._throwTimeoutError = false;
+      throw new Error('Wallet Signature Timeout');
     }
   }
 
