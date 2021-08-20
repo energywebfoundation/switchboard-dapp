@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
-import * as userClaimsActions from '../../../state/user-claim/user.actions';
 import { LoadingService } from '../loading.service';
 import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
@@ -83,7 +82,6 @@ export class LoginService {
    */
   logout(saveDeepLink?: boolean) {
     this.iamService.closeConnection();
-    this.store.dispatch(userClaimsActions.clearUserClaim());
 
     saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
 
@@ -93,7 +91,6 @@ export class LoginService {
 
   disconnect() {
     this.iamService.closeConnection();
-    this.store.dispatch(userClaimsActions.clearUserClaim());
     this.loadingService.hide();
     location.reload();
   }
