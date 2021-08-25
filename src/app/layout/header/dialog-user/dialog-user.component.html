@@ -27,7 +27,7 @@
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="profileForm.get('birthdate').hasError('required')">Date of birth is
-              <strong>Required</strong>
+              <strong>required</strong>
             </mat-error>
             <mat-error *ngIf="profileForm.get('birthdate')?.hasError('matDatepickerMax')">
               Maximum allowed date is <strong>{{ maxDate | date}}</strong>
