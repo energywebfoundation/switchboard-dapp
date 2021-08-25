@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ReplaySubject } from 'rxjs';
+import { of, ReplaySubject, throwError } from 'rxjs';
 
 import { provideMockActions } from '@ngrx/effects/testing';
-import { IamService } from '../../shared/services/iam.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { AuthState } from './auth.reducer';
 import { AuthEffects } from './auth.effects';
@@ -11,11 +10,15 @@ import * as AuthActions from './auth.actions';
 import { IAM, WalletProvider } from 'iam-client-lib';
 import { MatDialog } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
+import { LoginService } from '../../shared/services/login/login.service';
+import { Router } from '@angular/router';
+import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 
 describe('AuthEffects', () => {
 
-  const iamServiceSpy = jasmine.createSpyObj('IamService', ['waitForSignature', 'clearWaitSignatureTimer', 'login', 'disconnect']);
-  const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll']);
+  const loginServiceSpy = jasmine.createSpyObj('LoginService', ['waitForSignature', 'clearWaitSignatureTimer', 'login', 'disconnect']);
+  const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll', 'open']);
+  const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
   let actions$: ReplaySubject<any>;
   let effects: AuthEffects;
   let store: MockStore<AuthState>;
@@ -24,8 +27,9 @@ describe('AuthEffects', () => {
     TestBed.configureTestingModule({
       providers: [
         AuthEffects,
-        {provide: IamService, useValue: iamServiceSpy},
+        {provide: LoginService, useValue: loginServiceSpy},
         {provide: MatDialog, useValue: dialogSpy},
+        {provide: Router, useValue: routerSpy},
         provideMockStore(),
         provideMockActions(() => actions$),
       ],
@@ -54,24 +58,24 @@ describe('AuthEffects', () => {
     });
   });
 
-  describe('login$', () => {
+  describe('loginViaDialog$', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
     });
 
     it('should close dialog and return login success action when login was successful', (done) => {
-      actions$.next(AuthActions.login({provider: WalletProvider.MetaMask}));
-      iamServiceSpy.login.and.returnValue(Promise.resolve(true));
+      actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
+      loginServiceSpy.login.and.returnValue(of(true));
 
-      effects.login$.pipe(
-        finalize(() => expect(iamServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled())
+      effects.loginViaDialog$.pipe(
+        finalize(() => expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled())
       )
         .subscribe(resultAction => {
-          expect(iamServiceSpy.login).toHaveBeenCalledWith({
+          expect(loginServiceSpy.login).toHaveBeenCalledWith({
             walletProvider: WalletProvider.MetaMask,
             reinitializeMetamask: true
           }, undefined);
-          expect(iamServiceSpy.waitForSignature).toHaveBeenCalled();
+          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
           expect(resultAction).toEqual(AuthActions.loginSuccess());
           expect(dialogSpy.closeAll).toHaveBeenCalled();
 
@@ -80,14 +84,14 @@ describe('AuthEffects', () => {
     });
 
     it('should do not close dialog and return login failure action on login failure', (done) => {
-      actions$.next(AuthActions.login({provider: WalletProvider.MetaMask}));
-      iamServiceSpy.login.and.returnValue(Promise.resolve(false));
+      actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
+      loginServiceSpy.login.and.returnValue(of(false));
 
-      effects.login$.pipe(
-        finalize(() => expect(iamServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled())
+      effects.loginViaDialog$.pipe(
+        finalize(() => expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled())
       )
         .subscribe(resultAction => {
-          expect(iamServiceSpy.waitForSignature).toHaveBeenCalled();
+          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
           expect(resultAction).toEqual(AuthActions.loginFailure());
 
           done();
@@ -95,10 +99,10 @@ describe('AuthEffects', () => {
     });
 
     it('should do not close dialog and return login failure action when login throws error', (done) => {
-      actions$.next(AuthActions.login({provider: WalletProvider.MetaMask}));
-      iamServiceSpy.login.and.returnValue(Promise.reject());
+      actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
+      loginServiceSpy.login.and.returnValue(throwError(''));
 
-      effects.login$
+      effects.loginViaDialog$
         .subscribe(resultAction => {
           expect(resultAction).toEqual(AuthActions.loginFailure());
 
@@ -107,15 +111,99 @@ describe('AuthEffects', () => {
     });
 
     it('should call waitForSignature with metamask and not navigate on timeout option', (done) => {
-      actions$.next(AuthActions.login({provider: WalletProvider.MetaMask, navigateOnTimeout: false}));
-      iamServiceSpy.login.and.returnValue(Promise.resolve(true));
+      actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask, navigateOnTimeout: false}));
+      loginServiceSpy.login.and.returnValue(of(true));
 
-      effects.login$
+      effects.loginViaDialog$
         .subscribe(() => {
-          expect(iamServiceSpy.waitForSignature).toHaveBeenCalledWith(WalletProvider.MetaMask, true, false);
+          expect(loginServiceSpy.waitForSignature).toHaveBeenCalledWith(WalletProvider.MetaMask, true, false);
           done();
         });
     });
 
+  });
+
+  describe('openLoginDialog$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should open dialog when calling openLoginDialog action', () => {
+      actions$.next(AuthActions.openLoginDialog());
+
+      effects.openLoginDialog$.subscribe();
+
+      expect(dialogSpy.open).toHaveBeenCalledWith(ConnectToWalletDialogComponent, jasmine.objectContaining({
+        width: '434px',
+        panelClass: 'connect-to-wallet',
+        backdropClass: 'backdrop-hide-content',
+        data: {
+          navigateOnTimeout: false
+        },
+        maxWidth: '100%',
+        disableClose: true
+      }));
+    });
+  });
+
+  describe('welcomePageLogin$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should successfully login', (done) => {
+      actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: ''}));
+      loginServiceSpy.login.and.returnValue(of(true));
+
+      effects.welcomePageLogin$
+        .pipe(
+          finalize(() => {
+            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled();
+            expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/dashboard', jasmine.objectContaining({}));
+          })
+        )
+        .subscribe(resultAction => {
+          expect(loginServiceSpy.login).toHaveBeenCalledWith({
+            walletProvider: WalletProvider.MetaMask,
+            reinitializeMetamask: true
+          });
+          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
+          expect(resultAction).toEqual(AuthActions.loginSuccess());
+          done();
+        });
+    });
+
+    it('should navigate to a url that is sent in action', (done) => {
+      actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: 'returnUrl'}));
+      loginServiceSpy.login.and.returnValue(of(true));
+
+      effects.welcomePageLogin$
+        .pipe(
+          finalize(() => {
+            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled();
+          })
+        )
+        .subscribe(resultAction => {
+          expect(loginServiceSpy.login).toHaveBeenCalledWith({
+            walletProvider: WalletProvider.MetaMask,
+            reinitializeMetamask: true
+          });
+          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
+          expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/returnUrl');
+          expect(resultAction).toEqual(AuthActions.loginSuccess());
+          done();
+        });
+    });
+
+    it('should return failure action when login fails', (done) => {
+      actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: ''}));
+      loginServiceSpy.login.and.returnValue(of(false));
+
+      effects.welcomePageLogin$
+        .subscribe(resultAction => {
+          expect(resultAction).toEqual(AuthActions.loginFailure());
+          done();
+        });
+    });
   });
 });

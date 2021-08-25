@@ -22,7 +22,7 @@ export const initialState: AuthState = {
 const authReducer = createReducer(
   initialState,
   on(AuthActions.loginSuccess, (state) => ({...state, loggedIn: true})),
-  on(AuthActions.logout, (state) => ({...state, loggedIn: false})),
+  on(AuthActions.logout, AuthActions.logoutWithRedirectUrl, (state) => ({...state, loggedIn: false})),
   on(AuthActions.setMetamaskLoginOptions, (state, {present, chainId}) => ({
       ...state, metamask: {present, chainId}
     })

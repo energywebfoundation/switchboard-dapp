@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserIdleService } from 'angular-user-idle';
-import { IamService } from '../shared/services/iam.service';
-
-const SWAL = require('sweetalert');
+import { Store } from '@ngrx/store';
+import { logoutWithRedirectUrl } from '../state/auth/auth.actions';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-layout',
@@ -11,7 +11,7 @@ const SWAL = require('sweetalert');
 })
 export class LayoutComponent implements OnInit {
 
-  constructor(private userIdle: UserIdleService, private iamService: IamService) {
+  constructor(private userIdle: UserIdleService, private store: Store) {
   }
 
   ngOnInit() {
@@ -34,13 +34,9 @@ export class LayoutComponent implements OnInit {
       closeOnClickOutside: false
     };
 
-    const result = await SWAL(config);
+    const result = await swal(config);
     if (result) {
-      this._logout();
+      this.store.dispatch(logoutWithRedirectUrl())
     }
-  }
-
-  private _logout() {
-    this.iamService.logoutAndRefresh(true);
   }
 }

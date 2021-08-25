@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as userActions from './user.actions';
+import * as userClaimsActions from './user.actions';
 import { IamService } from '../../shared/services/iam.service';
-import { catchError, finalize, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { mapClaimsProfile } from '../../routes/assets/operators/map-claims-profile';
 import { Profile } from 'iam-client-lib';
@@ -68,6 +69,22 @@ export class UserEffects {
           )
       )
     ));
+
+  setUpUserData$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(userActions.setUpUser),
+      tap(() => this.loadingService.show()),
+      switchMap(() => this.iamService.getDidDocument()
+        .pipe(
+          mergeMap((didDocument) => [
+            userClaimsActions.setDidDocument({didDocument}),
+            userClaimsActions.loadUserClaims()
+          ]),
+          finalize(() => this.loadingService.hide())
+        )
+      )
+    )
+  );
 
   private mergeProfiles(oldProfile: Partial<Profile>, newProfile: Partial<Profile>): Partial<Profile> {
     return {

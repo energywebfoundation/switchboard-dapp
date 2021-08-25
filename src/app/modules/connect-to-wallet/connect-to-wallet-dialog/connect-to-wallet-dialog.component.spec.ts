@@ -75,7 +75,7 @@ describe('ConnectToWalletDialogComponent', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     metamaskBtn.nativeElement.click();
 
-    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.login({
+    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.loginViaDialog({
       provider: WalletProvider.MetaMask,
       navigateOnTimeout: true
     }));
@@ -87,7 +87,7 @@ describe('ConnectToWalletDialogComponent', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     mobileWalletBtn.nativeElement.click();
 
-    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.login({
+    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.loginViaDialog({
       provider: WalletProvider.WalletConnect,
       navigateOnTimeout: true
     }));

@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as poolSelectors from '../../../state/pool/pool.selectors';
-import { MatDialog } from '@angular/material/dialog';
-import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { map, takeUntil } from 'rxjs/operators';
 import * as PoolActions from '../../../state/pool/pool.actions';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import swal from 'sweetalert';
 import { IamService } from '../../../shared/services/iam.service';
+import * as AuthActions from '../../../state/auth/auth.actions';
 
 @Component({
   selector: 'app-ewt-patron',
@@ -23,7 +22,6 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
 
   constructor(private store: Store,
-              private dialog: MatDialog,
               private activatedRoute: ActivatedRoute,
               private iamService: IamService) {
   }
@@ -35,22 +33,15 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.setOrganization();
-    if ((await this.iamService.hasSessionRetrieved()) === false) {
-      this.openLoginDialog();
-    }
+    this.login();
   }
 
-  private openLoginDialog(): void {
-    this.dialog.open(ConnectToWalletDialogComponent, {
-      width: '434px',
-      panelClass: 'connect-to-wallet',
-      backdropClass: 'backdrop-hide-content',
-      data: {
-        navigateOnTimeout: false
-      },
-      maxWidth: '100%',
-      disableClose: true
-    });
+  private login() {
+    if (this.iamService.isSessionActive()) {
+      this.store.dispatch(AuthActions.reinitializeAuth({}));
+    } else {
+      this.store.dispatch(AuthActions.openLoginDialog());
+    }
   }
 
   private setOrganization(): void {

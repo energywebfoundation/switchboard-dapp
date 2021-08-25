@@ -15,7 +15,7 @@ export class ConnectToWalletDialogComponent {
   disableMetamaskButton$ = this.store.select(authSelectors.isMetamaskDisabled);
   isMetamaskExtensionAvailable$ = this.store.select(authSelectors.isMetamaskPresent);
 
-  constructor(private store: Store, @Inject(MAT_DIALOG_DATA) public data: { navigateOnTimeout: boolean } = {navigateOnTimeout: true}) {
+  constructor(private store: Store, @Inject(MAT_DIALOG_DATA) public data: { navigateOnTimeout: boolean }) {
   }
 
   connectToWalletConnect() {
@@ -27,6 +27,6 @@ export class ConnectToWalletDialogComponent {
   }
 
   private login(provider: WalletProvider) {
-    this.store.dispatch(AuthActions.login({provider, navigateOnTimeout: this.data.navigateOnTimeout}));
+    this.store.dispatch(AuthActions.loginViaDialog({provider, navigateOnTimeout: this.data?.navigateOnTimeout ?? true}));
   }
 }

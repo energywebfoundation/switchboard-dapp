@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IAM, WalletProvider } from 'iam-client-lib';
-import { IamService, VOLTA_CHAIN_ID } from '../../shared/services/iam.service';
+import { WalletProvider } from 'iam-client-lib';
+import { filter } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import * as authSelectors from '../../state/auth/auth.selectors';
+import * as AuthActions from '../../state/auth/auth.actions';
+import { IamService } from '../../shared/services/iam.service';
 
-const { version } = require('../../../../package.json')
+const {version} = require('../../../../package.json');
 
 @Component({
   selector: 'app-welcome',
@@ -11,95 +15,41 @@ const { version } = require('../../../../package.json')
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
-  isMetamaskExtensionAvailable = false;
-  disableMetamaskButton = false;
+  disableMetamaskButton$ = this.store.select(authSelectors.isMetamaskDisabled);
+  isMetamaskExtensionAvailable$ = this.store.select(authSelectors.isMetamaskPresent);
   version: string = version;
 
   private _returnUrl;
 
   constructor(private route: Router,
               private activeRoute: ActivatedRoute,
+              private store: Store,
               private iamService: IamService) {
   }
 
   async ngOnInit() {
-    this.activeRoute.queryParams.subscribe((queryParams: any) => {
-      if (queryParams && queryParams.returnUrl) {
+    this.activeRoute.queryParams.pipe(
+      filter((queryParams) => queryParams && queryParams.returnUrl)
+    )
+      .subscribe((queryParams: any) => {
         this._returnUrl = queryParams.returnUrl;
-      }
-    });
+      });
 
     // Immediately navigate to dashboard if user is currently logged-in to walletconnect
-    if (this.iamService.iam.isSessionActive()) {
+    if (this.iamService.isSessionActive()) {
       this.route.navigate(['dashboard']);
     }
-
-    // Check metamask availability
-    const {isMetamaskPresent, chainId} = await IAM.isMetamaskExtensionPresent();
-    if (isMetamaskPresent) {
-      this.isMetamaskExtensionAvailable = true;
-
-      if (chainId && parseInt(`${chainId}`, 16) !== VOLTA_CHAIN_ID) {
-        this.disableMetamaskButton = true;
-      }
-    }
   }
 
-  async connectToEwKeyManager() {
-    return;
-    await this.connectToWallet(WalletProvider.EwKeyManager);
+  connectToWalletConnect() {
+    this.login(WalletProvider.WalletConnect);
   }
 
-  async connectToWalletConnect() {
-    await this.connectToWallet(WalletProvider.WalletConnect);
+  connectToMetamask() {
+    this.login(WalletProvider.MetaMask);
   }
 
-  private async connectToWallet(walletProvider: WalletProvider) {
-    this.iamService.waitForSignature(walletProvider, true);
-    const isLoggedIn = await this.iamService.login({walletProvider});
-    this.iamService.clearWaitSignatureTimer();
-    if (isLoggedIn) {
-      // Check deep link
-      let queryParams;
-      if (this._returnUrl) {
-        queryParams = {returnUrl: this._returnUrl};
-      }
-
-      // Navigate to dashboard to initalize user data
-      this.route.navigate(['dashboard'], {
-        state: {data: {fresh: true}},
-        queryParams
-      });
-    } else {
-      await this.cleanMe();
-    }
-  }
-
-  async connectToMetamask() {
-    // Proceed with Login Process
-    const walletProvider = WalletProvider.MetaMask;
-    this.iamService.waitForSignature(walletProvider, true);
-    const isLoggedIn = await this.iamService.login({walletProvider, reinitializeMetamask: true});
-    this.iamService.clearWaitSignatureTimer();
-
-    if (isLoggedIn) {
-      // Check deep link
-      let queryParams;
-      if (this._returnUrl) {
-        queryParams = {returnUrl: this._returnUrl};
-      }
-
-      // Navigate to dashboard to initalize user data
-      this.route.navigate(['dashboard'], {
-        state: {data: {fresh: true}},
-        queryParams
-      });
-    } else {
-      await this.cleanMe();
-    }
-  }
-
-  private async cleanMe() {
-    this.iamService.logout();
+  private login(provider: WalletProvider) {
+    this.store.dispatch(AuthActions.welcomeLogin({provider, returnUrl: this._returnUrl}));
   }
 }

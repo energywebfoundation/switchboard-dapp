@@ -12,6 +12,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { isValidJsonFormatValidator } from '../../../utils/validators/json-format/is-valid-json-format.validator';
+import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 
 @Component({
   selector: 'app-new-application',
@@ -111,7 +112,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   }
 
   alphaNumericOnly(event: any) {
-    return this.iamService.isAlphaNumericOnly(event);
+    return isAlphaNumericOnly(event);
   }
 
   async confirmOrgNamespace() {

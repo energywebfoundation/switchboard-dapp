@@ -52,8 +52,6 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
   orgHierarchy = [];
 
-  currentUserEthAddress = this.iamService.accountAddress;
-
   private _isSubOrgCreated = false;
   private subscription$ = new Subject();
 
@@ -117,11 +115,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     }
     this.loadingService.show();
 
-    let orgList = await this.iamService.iam.getENSTypesByOwner({
-      type: this.ensType,
-      owner: this.iamService.accountAddress,
-      excludeSubOrgs: false
-    });
+    let orgList = await this.iamService.getENSTypesByOwner(this.ensType);
 
     if (this.listType === ListType.ORG) {
       let services = await this.stakingService.allServices().toPromise();
