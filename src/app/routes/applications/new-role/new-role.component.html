@@ -41,6 +41,7 @@
                       alphanumeric characters.
                     </mat-error>
                   </mat-form-field>
+                    <mat-error *ngIf="isExistsRoleName">This name already exists. Please try another</mat-error>
                 </div>
                 <div *ngIf="roleForm.get('roleName').value"
                      class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mx-3 mt-2 mb-3 w-100">

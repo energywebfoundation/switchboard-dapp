@@ -89,7 +89,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   });
 
   public roleControl = this.fb.control('');
-  public restrictionRoleControl = this.fb.control('', [Validators.required, this.roleNotFoundValidator(), this.roleExistValidator()]);
+  public restrictionRoleControl = this.fb.control('');
   public environment = environment;
   public isChecking = false;
   public RoleType = RoleType;
@@ -128,7 +128,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = [...this.displayedColumnsView, 'actions'];
   dataSource = new MatTableDataSource([]);
   rolenamespaceList: Observable<any[]>;
-
+  isExistsRoleName = false;
   public ViewType = ViewType;
   viewType: string = ViewType.NEW;
   origData: any;
@@ -150,21 +150,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
               public dialogRef: MatDialogRef<NewRoleComponent>,
               public dialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) public data: any) {
-  }
-
-  roleNotFoundValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const notFound = typeof control.value !== 'string';
-      return !notFound ? {roleNotFound: {value: control.value}} : null;
-    };
-  }
-
-  roleExistValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const valueConditions: string[] = this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions;
-      const exists = valueConditions.includes(control.value.namespace);
-      return exists ? {roleExist: {value: control.value}} : null;
-    };
   }
 
   async ngAfterViewInit() {
@@ -342,6 +327,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   alphaNumericOnly(event: any, includeDot?: boolean) {
+    this.isExistsRoleName = false;
     return isAlphaNumericOnly(event, includeDot);
   }
 
@@ -401,7 +387,16 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addRestriction(event: ISmartSearch) {
     if (event.searchType === 'restrictions') {
-      this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions.push(event.role.namespace);
+      const enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions').value;
+
+      if (enrolmentPreconditions.length) {
+        enrolmentPreconditions[0].conditions.push(event.role.namespace);
+      } else {
+        this.roleForm.get('data').patchValue({
+          enrolmentPreconditions: [{type: PreconditionTypes.Role, conditions: [event.role.namespace]}]
+        })
+      }
+
       this.restrictionRoleControl.setErrors(null);
     }
   }
@@ -457,20 +452,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
           this.toastr.error('Role namespace already exists. You have no access rights to it.', this.TOASTR_HEADER);
         } else {
           this.spinner.hide();
-
-          // Prompt if user wants to overwrite this namespace
-          if (!await this.confirm('Role namespace already exists. Do you wish to continue?')) {
-            allowToProceed = false;
-          } else {
-            of(null)
-              .pipe(
-                take(1),
-                delay(1)
-              )
-              .subscribe(() => {
-                this.spinner.show();
-              });
-          }
+          allowToProceed = false;
+          this.isExistsRoleName = true;
         }
       }
 
