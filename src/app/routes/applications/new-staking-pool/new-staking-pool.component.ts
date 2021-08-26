@@ -28,7 +28,8 @@ export class NewStakingPoolComponent implements OnInit, OnDestroy {
       end: ['', [Validators.required]]
     }),
     patronRoles: [[]],
-    principal: ['', [Validators.required, Validators.min(100)]]
+    principal: ['', [Validators.required, Validators.min(100)]],
+    terms: [null]
   });
 
   rolesOptions: IRoleOption[];
@@ -81,7 +82,8 @@ export class NewStakingPoolComponent implements OnInit, OnDestroy {
       patronRewardPortion: rawValues.revenue,
       minStakingPeriod: this.getTimeInSeconds(),
       patronRoles: rawValues.patronRoles,
-      principal: parseEther(rawValues.principal.toString())
+      principal: parseEther(rawValues.principal.toString()),
+      terms: rawValues.terms
     };
   }
 
