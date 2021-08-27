@@ -1,10 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { IStakingPool, StakingPoolService } from './staking-pool.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as StakeActions from '../../../state/stake/stake.actions';
 import { utils } from 'ethers';
+import { Editor, Toolbar } from 'ngx-editor';
 
 interface IRoleOption {
   namespace: string;
@@ -17,8 +18,8 @@ const {parseEther} = utils;
   templateUrl: './new-staking-pool.component.html',
   styleUrls: ['./new-staking-pool.component.scss']
 })
-export class NewStakingPoolComponent implements OnInit {
-
+export class NewStakingPoolComponent implements OnInit, OnDestroy {
+  editor: Editor;
   form: FormGroup = this.fb.group({
     patrons: 'Yes',
     revenue: ['', [Validators.required, Validators.min(0), Validators.max(1000)]],
@@ -27,10 +28,17 @@ export class NewStakingPoolComponent implements OnInit {
       end: ['', [Validators.required]]
     }),
     patronRoles: [[]],
-    principal: ['', [Validators.required, Validators.min(100)]]
+    principal: ['', [Validators.required, Validators.min(100)]],
+    terms: [null]
   });
 
   rolesOptions: IRoleOption[];
+
+  toolbar: Toolbar = [
+    ["bullet_list"],
+    ["link"],
+
+  ];
 
   constructor(private stakingPoolService: StakingPoolService,
               private fb: FormBuilder,
@@ -40,6 +48,11 @@ export class NewStakingPoolComponent implements OnInit {
 
   ngOnInit() {
     this.getRolesList();
+    this.editor = new Editor();
+  }
+
+  ngOnDestroy(): void {
+    this.editor.destroy();
   }
 
   getRangeControlError(control: string, error: string): boolean {
@@ -69,7 +82,8 @@ export class NewStakingPoolComponent implements OnInit {
       patronRewardPortion: rawValues.revenue,
       minStakingPeriod: this.getTimeInSeconds(),
       patronRoles: rawValues.patronRoles,
-      principal: parseEther(rawValues.principal.toString())
+      principal: parseEther(rawValues.principal.toString()),
+      terms: rawValues.terms
     };
   }
 

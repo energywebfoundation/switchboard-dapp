@@ -17,6 +17,7 @@ import { utils } from 'ethers';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import { launchStakingPool } from '../../../state/stake/stake.actions';
+import { NgxEditorModule } from 'ngx-editor';
 
 const {parseEther} = utils;
 
@@ -44,7 +45,8 @@ describe('NewStakingPoolComponent', () => {
         NoopAnimationsModule,
         MatInputModule,
         MatRadioModule,
-        MatSelectModule
+        MatSelectModule,
+        NgxEditorModule
       ],
       providers: [
         {provide: MAT_DIALOG_DATA, useValue: {namespace}},
@@ -104,7 +106,8 @@ describe('NewStakingPoolComponent', () => {
           minStakingPeriod: 604800,
           patronRewardPortion: revenueAmount,
           patronRoles: [],
-          principal: parseEther('105')
+          principal: parseEther('105'),
+          terms: null
         }
       }));
   });

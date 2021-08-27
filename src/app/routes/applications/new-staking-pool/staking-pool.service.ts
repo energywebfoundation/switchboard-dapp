@@ -15,6 +15,7 @@ export interface IStakingPool {
   patronRewardPortion: number;
   principal: utils.BigNumber;
   patronRoles: string[];
+  terms?: string[];
 }
 
 @Injectable({

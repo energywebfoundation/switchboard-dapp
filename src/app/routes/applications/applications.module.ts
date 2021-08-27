@@ -29,6 +29,7 @@ import { RoleFieldComponent } from './new-role/components/role-field/role-field.
 import { OrganizationActionsComponent } from './actions/organization-actions/organization-actions.component';
 import { ApplicationActionsComponent } from './actions/application-actions/application-actions.component';
 import { RoleActionsComponent } from './actions/role-actions/role-actions.component';
+import { NgxEditorModule } from 'ngx-editor';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -68,7 +69,8 @@ const routes: Routes = [
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    NgMatSearchBarModule
+    NgMatSearchBarModule,
+    NgxEditorModule
   ],
   entryComponents: [
     NewOrganizationComponent,

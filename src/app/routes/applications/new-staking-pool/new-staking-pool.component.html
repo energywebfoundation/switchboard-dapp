@@ -114,10 +114,10 @@
               help_outline
             </mat-icon>
           </div>
-          <mat-form-field appearance="outline">
-                        <textarea class="textarea-staking" matInput placeholder="Terms and Condition" rows="6"
-                                  matTextareaAutosize></textarea>
-          </mat-form-field>
+          <div class="editor">
+            <ngx-editor formControlName="terms" [editor]="editor" placeholder="Terms and Condition"></ngx-editor>
+            <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+          </div>
         </div>
       </div>
     </form>
