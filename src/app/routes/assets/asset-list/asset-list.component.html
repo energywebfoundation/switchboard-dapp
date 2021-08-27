@@ -7,7 +7,7 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element" data-label="">
         <div class="d-flex justify-content-center justify-content-md-start">
-          <img class="img-logo-list" src="../assets/img/assets-icons/solar-energy.svg"/>
+          <img class="img-logo-list" [src]="element.icon ? element.icon : defaultLogo"/>
         </div>
       </td>
     </ng-container>

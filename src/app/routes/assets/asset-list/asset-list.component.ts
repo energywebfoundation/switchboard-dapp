@@ -45,6 +45,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<AssetList> = new MatTableDataSource([]);
   displayedColumns: string[] = ['logo', 'createdDate', 'name', 'id'];
 
+  defaultLogo = '../assets/img/assets-icons/solar-energy.svg';
+
   private _iamSubscriptionId: number;
 
   constructor(private toastr: SwitchboardToastrService,
