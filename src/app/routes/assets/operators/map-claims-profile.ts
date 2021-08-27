@@ -12,7 +12,7 @@ export function mapClaimsProfile() {
           return isPrevNewerClaim ? prev : next;
         }, {iat: 0}) as IServiceEndpoint & ClaimData;
 
-        return claimWithProfile.profile;
+        return claimWithProfile.profile || {};
       })
     );
   };
