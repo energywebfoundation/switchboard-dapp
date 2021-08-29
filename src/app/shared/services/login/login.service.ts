@@ -64,7 +64,7 @@ export class LoginService {
           }
           return Boolean(loginSuccessful);
         }),
-        catchError(err => this.handleLoginErrors(err))
+        catchError(err => this.handleLoginErrors(err, redirectOnChange))
       );
   }
 
@@ -128,7 +128,12 @@ export class LoginService {
   }
 
   private openSwal(config, navigateOnTimeout: boolean) {
-    from(SWAL(config))
+    from(SWAL({
+      icon: 'error',
+      button: 'Proceed',
+      closeOnClickOutside: false,
+      ...config
+    }))
       .pipe(
         take(1),
         filter(Boolean)
@@ -138,11 +143,19 @@ export class LoginService {
       );
   }
 
-  private handleLoginErrors(e) {
+  private handleLoginErrors(e, navigateOnTimeout) {
     console.error(e);
+    console.log(e);
+    debugger;
     const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key))[0];
     if (loginError?.type === 'swal') {
-      this.displayLoginErrorWithSwal(loginError.value);
+      this.displayLoginErrorWithSwal(loginError.value, navigateOnTimeout);
+    } else if (e.message === 'Request failed with status code 401') {
+      const config = {
+        title: 'Session Expired',
+        text: 'Please proceed to login again',
+      };
+      this.openSwal(config, navigateOnTimeout);
     } else {
       const message = loginError ? loginError.value : e.message;
       this.toastr.error(message);
@@ -150,16 +163,13 @@ export class LoginService {
     return of(false);
   }
 
-  private displayLoginErrorWithSwal(message: string) {
+  private displayLoginErrorWithSwal(message: string, navigateOnTimeout: boolean) {
     const config = {
       title: 'Wrong Network',
       text: `${message}`,
-      icon: 'error',
-      button: 'Proceed',
-      closeOnClickOutside: false
     };
 
-    this.openSwal(config, true);
+    this.openSwal(config, navigateOnTimeout);
   }
 
   private saveDeepLink(): void {

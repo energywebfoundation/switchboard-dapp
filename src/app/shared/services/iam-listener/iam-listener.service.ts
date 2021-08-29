@@ -40,7 +40,6 @@ export class IamListenerService {
       closeOnClickOutside: false
     };
     callback(config);
-
   }
 
   private getSwalConfigInfo(type: ProviderEventsEnum) {
