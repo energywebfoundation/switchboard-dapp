@@ -159,6 +159,7 @@ export class LoginService {
         text: 'Please proceed to login again',
       };
       this.openSwal(config, navigateOnTimeout);
+      this.loadingService.hide();
     } else {
       const message = loginError ? loginError.value : e.message;
       this.toastr.error(message);
