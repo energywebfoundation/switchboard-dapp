@@ -143,6 +143,10 @@ export class LoginService {
       );
   }
 
+  /**
+   *  Handles non descriptive errors from iam-client-lib and cache server.
+   *  TODO: think about better implementation/approach.
+   */
   private handleLoginErrors(e, navigateOnTimeout) {
     console.error(e);
     const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key))[0];
