@@ -74,24 +74,24 @@ describe('UserEffects', () => {
       actions$ = new ReplaySubject(1);
     });
 
-    it('should return undefined profile when passing empty list', (done) => {
+    it('should return empty object as a profile when passing empty list', (done) => {
       const claims = [];
       actions$.next(userActions.loadUserClaimsSuccess({userClaims: claims}));
 
       effects.getUserProfile$.subscribe(resultAction => {
-        expect(resultAction).toEqual(userActions.setProfile({profile: undefined}));
+        expect(resultAction).toEqual(userActions.setProfile({profile: {}}));
         done();
       });
     });
 
-    it('should return undefined profile when claim do not have profile', (done) => {
+    it('should return empty object as a  profile when claim do not have profile', (done) => {
       const claims = [{
         iat: 1612522971162,
       }];
       actions$.next(userActions.loadUserClaimsSuccess({userClaims: claims} as any));
 
       effects.getUserProfile$.subscribe(resultAction => {
-        expect(resultAction).toEqual(userActions.setProfile({profile: undefined}));
+        expect(resultAction).toEqual(userActions.setProfile({profile: {}}));
         done();
       });
     });
