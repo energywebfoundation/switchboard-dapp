@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FinalReviewComponent } from './final-review.component';
 import { MatDialogRef } from '@angular/material/dialog';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('FinalReviewComponent', () => {
   let component: FinalReviewComponent;
@@ -17,7 +18,8 @@ describe('FinalReviewComponent', () => {
             }
           }
         }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });

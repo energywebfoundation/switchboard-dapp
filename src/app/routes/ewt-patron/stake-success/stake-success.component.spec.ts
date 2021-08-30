@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StakeSuccessComponent } from './stake-success.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StakeSuccessComponent', () => {
   let component: StakeSuccessComponent;
@@ -8,7 +9,8 @@ describe('StakeSuccessComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StakeSuccessComponent]
+      declarations: [StakeSuccessComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });
