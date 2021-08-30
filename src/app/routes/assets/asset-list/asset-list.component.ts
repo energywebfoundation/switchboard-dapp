@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { mapClaimsProfile } from '../operators/map-claims-profile';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 
 export const RESET_LIST = true;
 
@@ -29,6 +30,7 @@ const HEADER_REJECT_OWNERSHIP = 'Reject Offered Asset';
 export interface AssetList extends Asset {
   hasEnrolments: boolean;
 }
+
 
 @Component({
   selector: 'app-asset-list',
@@ -45,7 +47,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<AssetList> = new MatTableDataSource([]);
   displayedColumns: string[] = ['logo', 'createdDate', 'name', 'id'];
 
-  defaultLogo = '../assets/img/assets-icons/solar-energy.svg';
+  defaultLogo = ASSET_DEFAULT_LOGO;
 
   private _iamSubscriptionId: number;
 
