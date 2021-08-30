@@ -145,12 +145,15 @@ export class LoginService {
 
   private handleLoginErrors(e, navigateOnTimeout) {
     console.error(e);
-    console.log(e);
-    debugger;
     const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key))[0];
     if (loginError?.type === 'swal') {
-      this.displayLoginErrorWithSwal(loginError.value, navigateOnTimeout);
-    } else if (e.message === 'Request failed with status code 401') {
+      const config = {
+        title: 'Wrong Network',
+        text: `${loginError.value}`,
+      };
+
+      this.openSwal(config, navigateOnTimeout);
+    } else if (e.message === 'Request failed with status code 401' || e.message === 'Request failed with status code 500') {
       const config = {
         title: 'Session Expired',
         text: 'Please proceed to login again',
@@ -161,15 +164,6 @@ export class LoginService {
       this.toastr.error(message);
     }
     return of(false);
-  }
-
-  private displayLoginErrorWithSwal(message: string, navigateOnTimeout: boolean) {
-    const config = {
-      title: 'Wrong Network',
-      text: `${message}`,
-    };
-
-    this.openSwal(config, navigateOnTimeout);
   }
 
   private saveDeepLink(): void {
