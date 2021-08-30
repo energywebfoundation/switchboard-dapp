@@ -10,14 +10,14 @@ describe('MapClaimsProfile', () => {
     }));
   });
 
-  it('should return undefined when there is no object with profile property.', () => {
+  it('should return empty object when there is no object with profile property.', () => {
     scheduler.run(({cold, expectObservable}) => {
       const source$ = cold('-a-|', {a: [] as any});
       const expected$ = '-z-|';
 
       const result$ = source$.pipe(mapClaimsProfile());
 
-      expectObservable(result$).toBe(expected$, {z: undefined});
+      expectObservable(result$).toBe(expected$, {z: {}});
     });
   });
 
