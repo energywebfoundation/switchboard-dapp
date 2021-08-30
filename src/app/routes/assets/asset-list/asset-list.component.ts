@@ -275,7 +275,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
   private mapEnrolments() {
     return (source: Observable<Asset[]>) => {
       return source.pipe(
-        filter(assets => assets.length > 0),
+        filter(assets => assets?.length > 0),
         switchMap((assets: Asset[]) => from(this.iamService.iam.getClaimsBySubjects(this.getAssetsIds(assets)))
           .pipe(
             map((claims) => claims.map(claim => claim.subject)),
