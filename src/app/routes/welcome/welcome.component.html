@@ -30,7 +30,7 @@
               USE MOBILE WALLET
             </button>
           </div>
-          <div class="my-3 pb-1">
+          <!-- <div class="my-3 pb-1">
             <button
                 mat-raised-button
                 disabled
@@ -42,7 +42,7 @@
                   src="assets/img/icons/key-manager-icon.svg"/>
               USE EW KEY MANAGER
             </button>
-          </div>
+          </div> -->
           <div class="my-3" *ngIf="isMetamaskExtensionAvailable$ | async">
             <button mat-raised-button (click)="connectToMetamask()"
                     data-qa-id="metamask"
