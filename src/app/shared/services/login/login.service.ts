@@ -9,6 +9,7 @@ import SWAL from 'sweetalert';
 import { from, Observable, of } from 'rxjs';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
 import { catchError, filter, map, take } from 'rxjs/operators';
+import { swalLoginError } from './helpers/swal-login-error-handler';
 
 export interface LoginOptions {
   walletProvider?: WalletProvider;
@@ -19,16 +20,13 @@ export interface LoginOptions {
 
 interface LoginError {
   key: string;
-  value: string;
-  type: 'swal' | 'toastr';
+  message: string;
 }
 
-export const LOGIN_ERRORS: LoginError[] = [
-  {key: 'Cannot destructure property', value: 'Please check if you are connected to correct network.', type: 'swal'},
+export const LOGIN_TOASTR_UNDERSTANDABLE_ERRORS: LoginError[] = [
   {
     key: 'Request of type \'wallet_requestPermissions\'',
-    value: 'Please check if you do not have pending notifications in your wallet',
-    type: 'toastr'
+    message: 'Please check if you do not have pending notifications in your wallet',
   }
 ];
 
@@ -64,7 +62,7 @@ export class LoginService {
           }
           return Boolean(loginSuccessful);
         }),
-        catchError(err => this.handleLoginErrors(err))
+        catchError(err => this.handleLoginErrors(err, redirectOnChange))
       );
   }
 
@@ -128,7 +126,12 @@ export class LoginService {
   }
 
   private openSwal(config, navigateOnTimeout: boolean) {
-    from(SWAL(config))
+    from(SWAL({
+      icon: 'error',
+      button: 'Proceed',
+      closeOnClickOutside: false,
+      ...config
+    }))
       .pipe(
         take(1),
         filter(Boolean)
@@ -138,28 +141,21 @@ export class LoginService {
       );
   }
 
-  private handleLoginErrors(e) {
+  /**
+   *  Handles non descriptive errors from iam-client-lib and cache server.
+   */
+  private handleLoginErrors(e, navigateOnTimeout) {
     console.error(e);
-    const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key))[0];
-    if (loginError?.type === 'swal') {
-      this.displayLoginErrorWithSwal(loginError.value);
+    const swalConfig = swalLoginError(e.message);
+    if (swalConfig) {
+      // in some cases is displayed loader.
+      this.loadingService.hide();
+      this.openSwal(swalConfig, navigateOnTimeout);
     } else {
-      const message = loginError ? loginError.value : e.message;
-      this.toastr.error(message);
+      const loginError = LOGIN_TOASTR_UNDERSTANDABLE_ERRORS.filter(error => e.message.includes(error.key))[0];
+      this.toastr.error(loginError ? loginError.message : e.message);
     }
     return of(false);
-  }
-
-  private displayLoginErrorWithSwal(message: string) {
-    const config = {
-      title: 'Wrong Network',
-      text: `${message}`,
-      icon: 'error',
-      button: 'Proceed',
-      closeOnClickOutside: false
-    };
-
-    this.openSwal(config, true);
   }
 
   private saveDeepLink(): void {
@@ -182,3 +178,5 @@ export class LoginService {
     this.openSwal(config, navigateOnTimeout);
   }
 }
+
+
