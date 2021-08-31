@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { forkJoin, from, Observable, Subject } from 'rxjs';
+import { filter, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { EnrolmentListComponent } from '../../enrolment/enrolment-list/enrolment-list.component';
 import { UrlService } from '../../../shared/services/url-service/url.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { Asset } from 'iam-client-lib';
 import { AssetProfile } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
+import { mapClaimsProfile } from '../operators/map-claims-profile';
 
 @Component({
   selector: 'app-asset-enrolment-list',
@@ -44,12 +45,34 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.asset$ = this.activatedRoute.params
-      .pipe(
-        map( params => params.subject),
-        switchMap((subject: string) => this.iamService.iam.getAssetById({id: subject})),
-        tap((asset) => console.log(asset))
-      )
+    this.asset$ = this.getAssetsWithClaims();
+  }
+
+  private getAssetsWithClaims() {
+    return forkJoin([
+        from(
+          this.iamService.iam.getUserClaims()).pipe(
+          mapClaimsProfile(),
+        ),
+      this.activatedRoute.params
+        .pipe(
+          map( params => params.subject),
+          filter(Boolean),
+          take(1),
+          switchMap((subject: string) => this.iamService.iam.getAssetById({id: subject})),
+          map((asset) => asset)
+        )
+      ]
+    ).pipe(
+      map(([profile, asset]) => this.addClaimData(profile, asset)),
+    );
+  }
+
+  private addClaimData(profile, asset) {
+    return {
+      ...asset,
+      ...(profile && profile.assetProfiles && profile.assetProfiles[asset.id]),
+    };
   }
 
   updateEnrolmentList(e: any) {
