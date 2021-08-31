@@ -23,7 +23,7 @@ interface LoginError {
   message: string;
 }
 
-export const LOGIN_TOASTR_READABLE_ERRORS: LoginError[] = [
+export const LOGIN_TOASTR_UNDERSTANDABLE_ERRORS: LoginError[] = [
   {
     key: 'Request of type \'wallet_requestPermissions\'',
     message: 'Please check if you do not have pending notifications in your wallet',
@@ -152,7 +152,7 @@ export class LoginService {
       this.loadingService.hide();
       this.openSwal(swalConfig, navigateOnTimeout);
     } else {
-      const loginError = LOGIN_TOASTR_READABLE_ERRORS.filter(error => e.message.includes(error.key))[0];
+      const loginError = LOGIN_TOASTR_UNDERSTANDABLE_ERRORS.filter(error => e.message.includes(error.key))[0];
       this.toastr.error(loginError ? loginError.message : e.message);
     }
     return of(false);
