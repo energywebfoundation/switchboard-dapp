@@ -146,11 +146,11 @@ export class LoginService {
    */
   private handleLoginErrors(e, navigateOnTimeout) {
     console.error(e);
-    const config = swalLoginError(e.message);
-    if (config) {
+    const swalConfig = swalLoginError(e.message);
+    if (swalConfig) {
       // in some cases is displayed loader.
       this.loadingService.hide();
-      this.openSwal(config, navigateOnTimeout);
+      this.openSwal(swalConfig, navigateOnTimeout);
     } else {
       const loginError = LOGIN_TOASTR_READABLE_ERRORS.filter(error => e.message.includes(error.key))[0];
       this.toastr.error(loginError ? loginError.message : e.message);
