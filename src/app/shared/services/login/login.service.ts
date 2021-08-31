@@ -19,16 +19,13 @@ export interface LoginOptions {
 
 interface LoginError {
   key: string;
-  value: string;
-  type: 'swal' | 'toastr';
+  message: string;
 }
 
-export const LOGIN_ERRORS: LoginError[] = [
-  {key: 'Cannot destructure property', value: 'Please check if you are connected to correct network.', type: 'swal'},
+export const LOGIN_TOASTR_READABLE_ERRORS: LoginError[] = [
   {
     key: 'Request of type \'wallet_requestPermissions\'',
-    value: 'Please check if you do not have pending notifications in your wallet',
-    type: 'toastr'
+    message: 'Please check if you do not have pending notifications in your wallet',
   }
 ];
 
@@ -145,28 +142,17 @@ export class LoginService {
 
   /**
    *  Handles non descriptive errors from iam-client-lib and cache server.
-   *  TODO: think about better implementation/approach.
    */
   private handleLoginErrors(e, navigateOnTimeout) {
     console.error(e);
-    const loginError = LOGIN_ERRORS.filter(error => e.message.includes(error.key))[0];
-    if (loginError?.type === 'swal') {
-      const config = {
-        title: 'Wrong Network',
-        text: `${loginError.value}`,
-      };
-
-      this.openSwal(config, navigateOnTimeout);
-    } else if (e.message === 'Request failed with status code 401' || e.message === 'Request failed with status code 500') {
-      const config = {
-        title: 'Session Expired',
-        text: 'Please proceed to login again',
-      };
-      this.openSwal(config, navigateOnTimeout);
+    const config = swalError(e.message);
+    if (config) {
+      // in some cases there is displayed loader.
       this.loadingService.hide();
+      this.openSwal(config, navigateOnTimeout);
     } else {
-      const message = loginError ? loginError.value : e.message;
-      this.toastr.error(message);
+      const loginError = LOGIN_TOASTR_READABLE_ERRORS.filter(error => e.message.includes(error.key))[0];
+      this.toastr.error(loginError ? loginError.message : e.message);
     }
     return of(false);
   }
@@ -191,3 +177,29 @@ export class LoginService {
     this.openSwal(config, navigateOnTimeout);
   }
 }
+
+const swalError = (message: string): { title: string; text: string; } => {
+  if (message === 'Cannot destructure property') {
+    return {
+      title: 'Wrong Network',
+      text: `Please check if you are connected to correct network.`,
+    };
+  }
+  if (message === 'Request failed with status code 401') {
+    return {
+      title: 'Session Expired',
+      text: 'Please proceed to login again',
+    };
+  }
+
+  // cache-server is returning 500 when old jwt (pubKey in local storage) is sent.
+  // It seems therefore that cache-server is sending 500 when getting an invalid token.
+  if (message === 'Request failed with status code 500') {
+    return {
+      title: 'Session Expired',
+      text: 'Please proceed to login again',
+    };
+  }
+
+  return null;
+};
