@@ -9,6 +9,7 @@ import SWAL from 'sweetalert';
 import { from, Observable, of } from 'rxjs';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
 import { catchError, filter, map, take } from 'rxjs/operators';
+import { swalLoginError } from './helpers/swal-login-error-handler';
 
 export interface LoginOptions {
   walletProvider?: WalletProvider;
@@ -145,9 +146,9 @@ export class LoginService {
    */
   private handleLoginErrors(e, navigateOnTimeout) {
     console.error(e);
-    const config = swalError(e.message);
+    const config = swalLoginError(e.message);
     if (config) {
-      // in some cases there is displayed loader.
+      // in some cases is displayed loader.
       this.loadingService.hide();
       this.openSwal(config, navigateOnTimeout);
     } else {
@@ -178,28 +179,4 @@ export class LoginService {
   }
 }
 
-const swalError = (message: string): { title: string; text: string; } => {
-  if (message === 'Cannot destructure property') {
-    return {
-      title: 'Wrong Network',
-      text: `Please check if you are connected to correct network.`,
-    };
-  }
-  if (message === 'Request failed with status code 401') {
-    return {
-      title: 'Session Expired',
-      text: 'Please proceed to login again',
-    };
-  }
 
-  // cache-server is returning 500 when old jwt (pubKey in local storage) is sent.
-  // It seems therefore that cache-server is sending 500 when getting an invalid token.
-  if (message === 'Request failed with status code 500') {
-    return {
-      title: 'Session Expired',
-      text: 'Please proceed to login again',
-    };
-  }
-
-  return null;
-};
