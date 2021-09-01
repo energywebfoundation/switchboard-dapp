@@ -5,15 +5,18 @@ export const USER_FEATURE_KEY = 'asset-details';
 
 export interface AssetDetailsState {
   asset: any;
+  error: string;
 }
 
 export const initialState: AssetDetailsState = {
-  asset: null
+  asset: null,
+  error: null
 };
 
 const assetDetailsReducer = createReducer(
   initialState,
   on(AssetDetailsActions.getDetailsSuccess, (state, {asset}) => ({...state, asset})),
+  on(AssetDetailsActions.getDetailsFailure, (state, {error}) => ({...state, error}))
 );
 
 export function reducer(state: AssetDetailsState | undefined, action: Action) {

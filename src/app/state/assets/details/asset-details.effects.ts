@@ -14,10 +14,7 @@ export class AssetDetailsEffects {
       ofType(AssetDetailsActions.getDetails),
       switchMap(({assetId}) =>
         this.iamService.getAssetById(assetId).pipe(
-          map(asset => {
-            console.log(asset);
-            return AssetDetailsActions.getDetailsSuccess({asset});
-          }),
+          map(asset => AssetDetailsActions.getDetailsSuccess({asset})),
           catchError(e => {
             console.error(e);
             return of(AssetDetailsActions.getDetailsFailure({error: e.message}));
