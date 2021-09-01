@@ -13,8 +13,9 @@ import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
-import { from } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
+import { finalize } from 'rxjs/operators';
 
 const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
 
@@ -70,7 +71,7 @@ export class IamService {
   }
 
   getAssetById(id) {
-    return from(this.iam.getAssetById({id}));
+    return this.observableWrapper(this.iam.getAssetById({id}), {message: 'Getting selected asset data...'});
   }
 
   closeConnection() {
@@ -93,7 +94,7 @@ export class IamService {
   }
 
   getDidDocument() {
-    return from(this.iam.getDidDocument())
+    return from(this.iam.getDidDocument());
   }
 
   async getAddress() {
@@ -170,5 +171,13 @@ export class IamService {
     }
 
     return retVal;
+  }
+
+  private observableWrapper<T>(source: Promise<T> | Observable<T>,
+                               loaderConfig?: { message?: string | string[]; cancelable?: boolean }) {
+    this.loadingService.show(loaderConfig.message, !!loaderConfig.cancelable);
+    return from(source).pipe(
+      finalize(() => this.loadingService.hide())
+    );
   }
 }
