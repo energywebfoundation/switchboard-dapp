@@ -1,0 +1,3 @@
+describe('Asset Details Selectors', () => {
+
+});

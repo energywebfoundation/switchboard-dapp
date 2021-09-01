@@ -1,15 +1,14 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin, from, Observable, Subject } from 'rxjs';
-import { filter, map, switchMap, take, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { EnrolmentListComponent } from '../../enrolment/enrolment-list/enrolment-list.component';
 import { UrlService } from '../../../shared/services/url-service/url.service';
-import { IamService } from '../../../shared/services/iam.service';
-import { Asset } from 'iam-client-lib';
-import { AssetProfile } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
-import { mapClaimsProfile } from '../operators/map-claims-profile';
+import { Store } from '@ngrx/store';
+import * as AssetDetailsActions from '../../../state/assets/details/asset-details.actions';
+import { getAssetDetails } from '../../../state/assets/details/asset-details.selectors';
 
 @Component({
   selector: 'app-asset-enrolment-list',
@@ -30,13 +29,13 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
     approved: 'true',
     rejected: 'rejected'
   };
-  asset$: Observable<Asset & AssetProfile>;
+  asset$ = this.store.select(getAssetDetails);
 
   private subscription$ = new Subject();
 
   constructor(private activatedRoute: ActivatedRoute,
               private urlService: UrlService,
-              private iamService: IamService) {
+              private store: Store) {
   }
 
   ngOnDestroy(): void {
@@ -45,34 +44,16 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.asset$ = this.getAssetsWithClaims();
+    this.getAssetsWithClaims();
   }
 
   private getAssetsWithClaims() {
-    return forkJoin([
-        from(
-          this.iamService.iam.getUserClaims()).pipe(
-          mapClaimsProfile(),
-        ),
-      this.activatedRoute.params
-        .pipe(
-          map( params => params.subject),
-          filter(Boolean),
-          take(1),
-          switchMap((subject: string) => this.iamService.iam.getAssetById({id: subject})),
-          map((asset) => asset)
-        )
-      ]
-    ).pipe(
-      map(([profile, asset]) => this.addClaimData(profile, asset)),
-    );
-  }
-
-  private addClaimData(profile, asset) {
-    return {
-      ...asset,
-      ...(profile && profile.assetProfiles && profile.assetProfiles[asset.id]),
-    };
+    this.activatedRoute.params
+      .pipe(
+        map(params => params.subject),
+        filter<string>(Boolean),
+        take(1)
+      ).subscribe((assetId) => this.store.dispatch(AssetDetailsActions.getDetails({assetId})));
   }
 
   updateEnrolmentList(e: any) {

@@ -27,6 +27,7 @@ import { FEAT_TOGGLE_TOKEN, getEnv } from './shared/feature-toggle/feature-toggl
 import { StakeEffects } from './state/stake/stake.effects';
 import { AuthEffects } from './state/auth/auth.effects';
 import { PoolEffects } from './state/pool/pool.effects';
+import { AssetDetailsEffects } from './state/assets/details/asset-details.effects';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -76,7 +77,7 @@ if (environment.SENTRY_DNS) {
     }),
     StoreModule.forRoot(rootReducer, {}),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
-    EffectsModule.forRoot([UserEffects, StakeEffects, AuthEffects, PoolEffects])
+    EffectsModule.forRoot([UserEffects, StakeEffects, AuthEffects, PoolEffects, AssetDetailsEffects])
   ],
   providers,
   bootstrap: [AppComponent],

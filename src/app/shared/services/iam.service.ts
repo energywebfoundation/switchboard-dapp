@@ -69,6 +69,10 @@ export class IamService {
     return this._iam;
   }
 
+  getAssetById(id) {
+    return from(this.iam.getAssetById({id}));
+  }
+
   closeConnection() {
     this.iam.closeConnection();
   }
