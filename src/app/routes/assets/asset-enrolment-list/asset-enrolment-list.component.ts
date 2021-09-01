@@ -7,8 +7,7 @@ import { EnrolmentListComponent } from '../../enrolment/enrolment-list/enrolment
 import { UrlService } from '../../../shared/services/url-service/url.service';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 import { Store } from '@ngrx/store';
-import * as AssetDetailsActions from '../../../state/assets/details/asset-details.actions';
-import { getAssetDetails } from '../../../state/assets/details/asset-details.selectors';
+import { AssetDetailsActions, AssetDetailsSelectors } from '@state';
 
 @Component({
   selector: 'app-asset-enrolment-list',
@@ -29,7 +28,7 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
     approved: 'true',
     rejected: 'rejected'
   };
-  asset$ = this.store.select(getAssetDetails);
+  asset$ = this.store.select(AssetDetailsSelectors.getAssetDetails);
 
   private subscription$ = new Subject();
 
