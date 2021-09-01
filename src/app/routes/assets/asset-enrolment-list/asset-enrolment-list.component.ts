@@ -52,7 +52,10 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
         map(params => params.subject),
         filter<string>(Boolean),
         take(1)
-      ).subscribe((assetId) => this.store.dispatch(AssetDetailsActions.getDetails({assetId})));
+      ).subscribe((assetId) => {
+      this.subject = assetId;
+      this.store.dispatch(AssetDetailsActions.getDetails({assetId}));
+    });
   }
 
   updateEnrolmentList(e: any) {
