@@ -15,6 +15,8 @@ import { EnrolmentField, EnrolmentSubmission } from '../enrolment-form/enrolment
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { Store } from '@ngrx/store';
 import { logout, reinitializeAuth } from '../../../state/auth/auth.actions';
+import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
+import { filter, take } from 'rxjs/operators';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -452,7 +454,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     if (this.iamService.isSessionActive()) {
       this.store.dispatch(reinitializeAuth({}));
       // Set Loggedin Flag to true
-      this.isLoggedIn = true;
+      this.isLoggedIn = await this.store.select(isUserLoggedIn).pipe(
+        filter<boolean>(Boolean),
+        take(1)
+      ).toPromise();
     } else {
       this.loadingService.hide();
       // Launch Login Dialog
