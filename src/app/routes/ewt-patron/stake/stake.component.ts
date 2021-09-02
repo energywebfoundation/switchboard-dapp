@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 
 import { tap } from 'rxjs/operators';
 import { PercentButtonsComponent } from '../percent-buttons/percent-buttons.component';
@@ -25,7 +24,7 @@ export class StakeComponent {
 
   @ViewChild('percentButtons') percentButtons: PercentButtonsComponent;
 
-  constructor(private dialog: MatDialog, private store: Store) {
+  constructor(private store: Store) {
   }
 
   clear(e) {
@@ -45,7 +44,7 @@ export class StakeComponent {
   }
 
   calcStakeAmount(percent: number) {
-    this.amountToStake.setValue(Math.floor(this.tokenAmount * percent) / 100);
+    this.amountToStake.setValue((this.tokenAmount * percent) / 100);
   }
 
   private putStake() {
