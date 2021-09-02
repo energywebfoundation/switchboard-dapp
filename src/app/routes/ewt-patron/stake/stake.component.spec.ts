@@ -1,13 +1,14 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { StakeComponent } from './stake.component';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { LastDigitsPipe } from '../pipes/last-digits.pipe';
 
 describe('StakeComponent', () => {
   let component: StakeComponent;
   let fixture: ComponentFixture<StakeComponent>;
+  let store: MockStore;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -32,6 +33,8 @@ describe('StakeComponent', () => {
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
+
+    store = TestBed.inject(MockStore);
   }));
 
   beforeEach(() => {
