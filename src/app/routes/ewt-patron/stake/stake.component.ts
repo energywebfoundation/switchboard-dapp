@@ -45,7 +45,7 @@ export class StakeComponent {
   }
 
   calcStakeAmount(percent: number) {
-    this.amountToStake.setValue(Math.floor(this.tokenAmount * percent / 100));
+    this.amountToStake.setValue(Math.floor(this.tokenAmount * percent) / 100);
   }
 
   private putStake() {
