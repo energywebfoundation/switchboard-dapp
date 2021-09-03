@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StakingPool } from 'iam-client-lib';
-import { utils } from 'ethers';
+import { BigNumber } from 'ethers';
 import { TransactionSpeed } from 'iam-client-lib/dist/src/staking';
 import { from } from 'rxjs';
 
@@ -18,7 +18,7 @@ export class StakingPoolFacade {
     this.pool = pool;
   }
 
-  putStake(stake: utils.BigNumber | number, transactionSpeed?: TransactionSpeed) {
+  putStake(stake: BigNumber | number, transactionSpeed?: TransactionSpeed) {
     return from(this.pool.putStake(stake, transactionSpeed));
   }
 

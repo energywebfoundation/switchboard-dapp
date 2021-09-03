@@ -49,7 +49,7 @@
     "core-js": "2.5.4",
     "fullcalendar": "3.9.0",
     "hammerjs": "^2.0.8",
-    "iam-client-lib": "^3.0.0-alpha.41",
+    "iam-client-lib": "^3.0.0-alpha.44",
     "modernizr": "3.7.1",
     "moment": "2.22.2",
     "ng-mat-search-bar": "^10.0.0-beta.3",
