@@ -5,15 +5,15 @@ import { LoadingService } from '../../../shared/services/loading.service';
 import { from } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
-import { utils } from 'ethers';
+import { BigNumber } from 'ethers';
 import { ENSNamespaceTypes } from 'iam-client-lib';
 
 
 export interface IStakingPool {
   org: string;
-  minStakingPeriod: number | utils.BigNumber;
+  minStakingPeriod: number | BigNumber;
   patronRewardPortion: number;
-  principal: utils.BigNumber;
+  principal: BigNumber;
   patronRoles: string[];
   terms?: string[];
 }

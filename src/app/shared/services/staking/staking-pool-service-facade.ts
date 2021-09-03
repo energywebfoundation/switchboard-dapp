@@ -3,7 +3,7 @@ import { StakingPoolService } from 'iam-client-lib';
 import { IamService } from '../iam.service';
 import { StakingPoolFacade } from '../pool/staking-pool-facade';
 import { from } from 'rxjs';
-import { utils } from 'ethers';
+import { BigNumber } from 'ethers';
 
 @Injectable({
   providedIn: 'root'
@@ -31,10 +31,10 @@ export class StakingPoolServiceFacade {
 
   launchStakingPool(pool: {
     org: string;
-    minStakingPeriod: number | utils.BigNumber;
+    minStakingPeriod: number | BigNumber;
     patronRewardPortion: number;
     patronRoles: string[];
-    principal: utils.BigNumber;
+    principal: BigNumber;
   }) {
     return from(this.stakingPoolService.launchStakingPool(pool));
   }
