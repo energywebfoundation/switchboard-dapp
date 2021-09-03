@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 import { GovernanceDetailsModule } from '../applications/governance-view/governance-details/governance-details.module';
-import { NgMatSearchBarModule } from 'ng-mat-search-bar';
 import { NewAssetTypeComponent } from './new-asset-type/new-asset-type.component';
 import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
 import { AssetListComponent } from './asset-list/asset-list.component';
@@ -65,7 +64,6 @@ const routes: Routes = [
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    NgMatSearchBarModule,
     ClipboardModule
   ],
   entryComponents: [
