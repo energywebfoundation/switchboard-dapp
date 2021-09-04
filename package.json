@@ -52,7 +52,6 @@
     "iam-client-lib": "^3.0.0-alpha.41",
     "modernizr": "3.7.1",
     "moment": "2.22.2",
-    "ng-mat-search-bar": "^10.0.0-beta.3",
     "ng2-charts": "^2.4.2",
     "ngx-bootstrap": "4.2.0",
     "ngx-editor": "9.0.2",

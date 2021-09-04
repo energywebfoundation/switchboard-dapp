@@ -14,7 +14,6 @@ import { GovernanceViewComponent } from './governance-view/governance-view.compo
 import { TransferOwnershipComponent } from './transfer-ownership/transfer-ownership.component';
 import { RemoveOrgAppComponent } from './remove-org-app/remove-org-app.component';
 import { GovernanceDetailsModule } from './governance-view/governance-details/governance-details.module';
-import { NgMatSearchBarModule } from 'ng-mat-search-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -69,7 +68,6 @@ const routes: Routes = [
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    NgMatSearchBarModule,
     NgxEditorModule
   ],
   entryComponents: [
