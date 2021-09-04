@@ -13,7 +13,7 @@
             </button>
             <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
                     *ngIf="listOrg?.orgHierarchy?.length"
-                    (click)="listOrg?.newSubOrg(listOrg?.orgHierarchy[listOrg?.orgHierarchy?.length - 1])">Create
+                    (click)="listOrg?.createSubOrg(listOrg?.orgHierarchy[listOrg?.orgHierarchy?.length - 1])">Create
               Sub-Organization
             </button>
           </div>

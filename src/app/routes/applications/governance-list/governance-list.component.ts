@@ -15,6 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { StakingPoolServiceFacade } from '../../../shared/services/staking/staking-pool-service-facade';
+import { NewOrganizationComponent, ViewType } from '../new-organization/new-organization.component';
+import { takeUntil } from 'rxjs/operators';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -368,7 +370,32 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     this.dataSource.data = JSON.parse(JSON.stringify(this.origDatasource));
   }
 
+  createSubOrg(parentOrg: any) {
+    const dialogRef = this.dialog.open(NewOrganizationComponent, {
+      width: '600px',
+      data: {
+        viewType: ViewType.NEW,
+        parentOrg: JSON.parse(JSON.stringify(parentOrg)),
+        owner: parentOrg.owner
+      },
+      maxWidth: '100%',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.subscription$))
+      .subscribe(async (res: any) => {
+        if (res) {
+          this._isSubOrgCreated = true;
+
+          // Refresh Screen
+          await this.viewSubOrgs(parentOrg, ALLOW_NO_SUBORG);
+        }
+      });
+  }
+
   async newSubOrg(parentOrg: any) {
+    this._isSubOrgCreated = true;
     await this.viewSubOrgs(parentOrg, ALLOW_NO_SUBORG);
   }
 
