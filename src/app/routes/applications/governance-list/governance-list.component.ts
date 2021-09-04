@@ -16,7 +16,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { StakingPoolServiceFacade } from '../../../shared/services/staking/staking-pool-service-facade';
 import { NewOrganizationComponent, ViewType } from '../new-organization/new-organization.component';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
@@ -383,15 +383,10 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed()
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(async (res: any) => {
-        if (res) {
-          this._isSubOrgCreated = true;
-
-          // Refresh Screen
-          await this.viewSubOrgs(parentOrg, ALLOW_NO_SUBORG);
-        }
-      });
+      .pipe(
+        filter(Boolean),
+        takeUntil(this.subscription$))
+      .subscribe(async () => await this.newSubOrg(parentOrg));
   }
 
   async newSubOrg(parentOrg: any) {
