@@ -18,6 +18,10 @@ import * as StakeSelectors from './stake/stake.selectors';
 import * as UserClaimActions from './user-claim/user.actions';
 import * as UserClaimSelectors from './user-claim/user.selectors';
 
+// === Organization ===
+import * as OrganizationActions from './organization/organization.actions';
+import * as OrganizationSelectors from './organization/organization.selectors';
+
 export * from './store-root.module';
 export {
   AssetDetailsActions,
@@ -33,5 +37,8 @@ export {
   StakeSelectors,
 
   UserClaimActions,
-  UserClaimSelectors
+  UserClaimSelectors,
+
+  OrganizationActions,
+  OrganizationSelectors
 };

@@ -12,6 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
+import { OrganizationActions } from '@state';
 
 @Component({
   selector: 'app-applications',
@@ -91,7 +92,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   createSubOrg(parentOrg) {
-    this.store.dispatch(createSubOrganization());
+    this.store.dispatch(OrganizationActions.createSub({org: parentOrg}));
   }
 
   async ngOnInit() {
