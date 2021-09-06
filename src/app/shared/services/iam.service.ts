@@ -71,7 +71,7 @@ export class IamService {
   }
 
   getAssetById(id) {
-    return this.observableWrapper(this.iam.getAssetById({id}), {message: 'Getting selected asset data...'});
+    return this.wrapWithLoadingService(this.iam.getAssetById({id}), {message: 'Getting selected asset data...'});
   }
 
   closeConnection() {
@@ -173,8 +173,8 @@ export class IamService {
     return retVal;
   }
 
-  private observableWrapper<T>(source: Promise<T> | Observable<T>,
-                               loaderConfig?: { message?: string | string[]; cancelable?: boolean }) {
+  private wrapWithLoadingService<T>(source: Promise<T> | Observable<T>,
+                                    loaderConfig?: { message?: string | string[]; cancelable?: boolean }) {
     this.loadingService.show(loaderConfig.message, !!loaderConfig.cancelable);
     return from(source).pipe(
       finalize(() => this.loadingService.hide())
