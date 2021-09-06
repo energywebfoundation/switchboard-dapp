@@ -2,9 +2,12 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { EnrolmentListComponent } from '../../enrolment/enrolment-list/enrolment-list.component';
 import { UrlService } from '../../../shared/services/url-service/url.service';
+import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
+import { Store } from '@ngrx/store';
+import { AssetDetailsActions, AssetDetailsSelectors } from '@state';
 
 @Component({
   selector: 'app-asset-enrolment-list',
@@ -17,6 +20,7 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   enrolmentDropdown = new FormControl('none');
   subject: string;
   namespaceControlIssuer = new FormControl(undefined);
+  defaultLogo = ASSET_DEFAULT_LOGO;
 
   public dropdownValue = {
     all: 'none',
@@ -24,11 +28,13 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
     approved: 'true',
     rejected: 'rejected'
   };
+  asset$ = this.store.select(AssetDetailsSelectors.getAssetDetails);
 
   private subscription$ = new Subject();
 
   constructor(private activatedRoute: ActivatedRoute,
-              private urlService: UrlService) {
+              private urlService: UrlService,
+              private store: Store) {
   }
 
   ngOnDestroy(): void {
@@ -37,11 +43,19 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getAssetsWithClaims();
+  }
+
+  private getAssetsWithClaims() {
     this.activatedRoute.params
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(params => {
-        this.subject = params.subject;
-      });
+      .pipe(
+        map(params => params.subject),
+        filter<string>(Boolean),
+        take(1)
+      ).subscribe((assetId) => {
+      this.subject = assetId;
+      this.store.dispatch(AssetDetailsActions.getDetails({assetId}));
+    });
   }
 
   updateEnrolmentList(e: any) {

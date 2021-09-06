@@ -7,5 +7,5 @@ export const rootReducer = {
   [userClaim.USER_FEATURE_KEY]: userClaim.reducer,
   [stake.USER_FEATURE_KEY]: stake.reducer,
   [auth.USER_FEATURE_KEY]: auth.reducer,
-  [pool.USER_FEATURE_KEY]: pool.reducer
+  [pool.USER_FEATURE_KEY]: pool.reducer,
 };

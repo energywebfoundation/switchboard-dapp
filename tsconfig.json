@@ -14,11 +14,21 @@
     "importHelpers": true,
     "skipLibCheck": true,
     "target": "es2015",
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "inlineSources": true,
     "sourceRoot": "/",
-    "lib": ["es2018", "dom"],
-    "allowSyntheticDefaultImports": true
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@state": [
+        "src/app/state/index"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
