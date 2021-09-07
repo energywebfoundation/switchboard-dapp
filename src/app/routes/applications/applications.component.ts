@@ -87,7 +87,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
         // console.log('The dialog was closed');
 
         if (result) {
-          this.listOrg.getList(undefined, true);
+          this.listOrg.getList(true);
         }
       });
   }

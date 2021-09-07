@@ -15,7 +15,7 @@ import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
 import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
-import { finalize } from 'rxjs/operators';
+import { finalize, switchMap } from 'rxjs/operators';
 
 const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
 
@@ -70,6 +70,12 @@ export class IamService {
     return this._iam;
   }
 
+  getOrgHistory(namespace: string) {
+    return this.wrapWithLoadingService(this.iam.getOrgHierarchy({
+      namespace
+    }));
+  }
+
   getAssetById(id) {
     return this.wrapWithLoadingService(this.iam.getAssetById({id}), {message: 'Getting selected asset data...'});
   }
@@ -103,6 +109,14 @@ export class IamService {
 
   async getBalance() {
     return await this.iam.getSigner().provider.getBalance(await this.getAddress());
+  }
+
+  getENSTypesByOwner$(ensType: ENSNamespaceTypes) {
+    return from(this.iam.getSigner().getAddress()).pipe(switchMap((owner) => from(this.iam.getENSTypesByOwner({
+      type: ensType,
+      owner,
+      excludeSubOrgs: false
+    }))));
   }
 
   async getENSTypesByOwner(ensType: ENSNamespaceTypes) {
@@ -174,10 +188,16 @@ export class IamService {
   }
 
   private wrapWithLoadingService<T>(source: Promise<T> | Observable<T>,
-                                    loaderConfig?: { message?: string | string[]; cancelable?: boolean }) {
-    this.loadingService.show(loaderConfig.message, !!loaderConfig.cancelable);
+                                    loaderConfig?: { message: string | string[]; cancelable?: boolean }) {
+    if (loaderConfig) {
+      this.loadingService.show(loaderConfig?.message, !!loaderConfig.cancelable);
+    }
     return from(source).pipe(
-      finalize(() => this.loadingService.hide())
+      finalize(() => {
+        if (loaderConfig) {
+          this.loadingService.hide();
+        }
+      })
     );
   }
 }

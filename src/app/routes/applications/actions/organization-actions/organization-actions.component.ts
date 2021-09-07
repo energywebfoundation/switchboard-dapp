@@ -15,7 +15,7 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./organization-actions.component.scss']
 })
 export class OrganizationActionsComponent extends ActionBaseAbstract implements OnInit {
-  @Input() organization: {isProvider: boolean, namespace: string; owner: string};
+  @Input() organization: { isProvider: boolean, namespace: string; owner: string };
   @Output() viewRoles = new EventEmitter();
   @Output() viewApps = new EventEmitter();
   @Output() organizationCreated = new EventEmitter();
@@ -44,22 +44,7 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
   }
 
   createSubOrganization() {
-    const dialogRef = this.dialog.open(NewOrganizationComponent, {
-      width: '600px',
-      data: {
-        viewType: ViewType.NEW,
-        parentOrg: JSON.parse(JSON.stringify(this.organization)),
-        owner: this.organization.owner
-      },
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed()
-      .pipe(
-        filter(Boolean)
-      )
-      .subscribe(() => this.organizationCreated.emit(this.organization));
+    this.organizationCreated.emit(this.organization);
   }
 
   createApp() {

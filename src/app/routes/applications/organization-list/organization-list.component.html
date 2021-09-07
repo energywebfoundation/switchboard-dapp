@@ -1,30 +1,32 @@
 <!-- Filter Sub Organization -->
-<div class="d-flex align-items-center flex-wrap mb-2" *ngIf="orgHierarchy?.length">
-  <div class="d-flex align-items-center my-1">
-    <div class="filter-list-item">
-      <a href="#" (click)="resetOrgList($event)"><span class="filter-link">ALL Organizations</span></a>
-    </div>
-    <mat-icon class="color-white opacity-50">chevron_right</mat-icon>
-  </div>
-  <ng-container *ngFor="let orgItem of orgHierarchy; let i = index;">
-    <div class="d-flex align-items-center my-1" *ngIf="i !== (orgHierarchy?.length - 1)">
+<ng-container *ngIf="organizationHierarchy$ | async as organizationHierarchy">
+  <div class="d-flex align-items-center flex-wrap mb-2" *ngIf="organizationHierarchy?.length">
+    <div class="d-flex align-items-center my-1">
       <div class="filter-list-item">
-        <img class="img-logo-list-sm mr-2" *ngIf="!orgItem?.definition?.logoUrl"
-             src="../assets/img/no-organization-image.png"/>
-        <img class="img-logo-list-sm mr-2" *ngIf="orgItem?.definition?.logoUrl" [src]="orgItem?.definition?.logoUrl"/>
-        <a href="#" (click)="resetOrgList($event, i)"><span
-            class="filter-link">{{ orgItem?.definition?.orgName }}</span></a>
+        <a href="#" (click)="cleanUpHierarchy($event)"><span class="filter-link">ALL Organizations</span></a>
       </div>
       <mat-icon class="color-white opacity-50">chevron_right</mat-icon>
     </div>
-    <div class="d-flex align-items-center my-1" *ngIf="i === (orgHierarchy?.length - 1)">
-      <img class="img-logo-list-sm mr-2" *ngIf="!orgItem?.definition?.logoUrl"
-           src="../assets/img/no-organization-image.png"/>
-      <img class="img-logo-list-sm mr-2" *ngIf="orgItem?.definition?.logoUrl" [src]="orgItem?.definition?.logoUrl"/>
-      <span class="filter-link color-white opacity-50">{{ orgItem?.definition?.orgName }}</span>
-    </div>
-  </ng-container>
-</div>
+    <ng-container *ngFor="let orgItem of organizationHierarchy; let i = index;">
+      <div class="d-flex align-items-center my-1" *ngIf="i !== (organizationHierarchy?.length - 1)">
+        <div class="filter-list-item">
+          <img class="img-logo-list-sm mr-2" *ngIf="!orgItem?.definition?.logoUrl"
+               src="../assets/img/no-organization-image.png"/>
+          <img class="img-logo-list-sm mr-2" *ngIf="orgItem?.definition?.logoUrl" [src]="orgItem?.definition?.logoUrl"/>
+          <a href="#" (click)="resetOrgList($event, orgItem)"><span
+              class="filter-link">{{ orgItem?.definition?.orgName }}</span></a>
+        </div>
+        <mat-icon class="color-white opacity-50">chevron_right</mat-icon>
+      </div>
+      <div class="d-flex align-items-center my-1" *ngIf="i === (organizationHierarchy?.length - 1)">
+        <img class="img-logo-list-sm mr-2" *ngIf="!orgItem?.definition?.logoUrl"
+             src="../assets/img/no-organization-image.png"/>
+        <img class="img-logo-list-sm mr-2" *ngIf="orgItem?.definition?.logoUrl" [src]="orgItem?.definition?.logoUrl"/>
+        <span class="filter-link color-white opacity-50">{{ orgItem?.definition?.orgName }}</span>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
 
 <!-- START TABLE -->
 <div class="card card-default mb-3 pb-3">
@@ -86,7 +88,7 @@
                                       (organizationCreated)="newSubOrg(element)"
                                       (viewApps)="viewApps(element)"
                                       (viewRoles)="viewRoles(element)"
-                                      (appCreated)="newApp(element)"
+                                      (appCreated)="viewApps(element)"
                                       (roleCreated)="viewRoles(element)"
                                       (edited)="edit()"
                                       (transferred)="transferOwnership()"
