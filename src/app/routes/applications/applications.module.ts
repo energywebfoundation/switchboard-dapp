@@ -29,6 +29,7 @@ import { OrganizationActionsComponent } from './actions/organization-actions/org
 import { ApplicationActionsComponent } from './actions/application-actions/application-actions.component';
 import { RoleActionsComponent } from './actions/role-actions/role-actions.component';
 import { NgxEditorModule } from 'ngx-editor';
+import { OrganizationListComponent } from './organization-list/organization-list.component';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -49,7 +50,8 @@ const routes: Routes = [
     RoleFieldComponent,
     OrganizationActionsComponent,
     ApplicationActionsComponent,
-    RoleActionsComponent
+    RoleActionsComponent,
+    OrganizationListComponent
   ],
   imports: [
     CommonModule,

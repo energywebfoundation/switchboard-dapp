@@ -18,8 +18,7 @@
             </button>
           </div>
         </div>
-        <app-governance-list listType="org" #listOrg [isFilterShown]="showFilter.org"
-                             (updateFilter)="updateFilter($event)"></app-governance-list>
+        <app-organization-list #listOrg (updateFilter)="updateFilter($event)"></app-organization-list>
       </div>
     </div>
   </mat-tab>

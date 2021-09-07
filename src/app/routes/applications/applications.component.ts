@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 import { OrganizationActions } from '@state';
+import { OrganizationListComponent } from './organization-list/organization-list.component';
 
 @Component({
   selector: 'app-applications',
@@ -21,7 +22,7 @@ import { OrganizationActions } from '@state';
 })
 export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('governanceTabGroup') governanceTabGroup: MatTabGroup;
-  @ViewChild('listOrg') listOrg: GovernanceListComponent;
+  @ViewChild('listOrg') listOrg: OrganizationListComponent;
   @ViewChild('listApp') listApp: GovernanceListComponent;
   @ViewChild('listRole') listRole: GovernanceListComponent;
 

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
-import { ENSNamespaceTypes, IOrganization } from 'iam-client-lib';
+import { ENSNamespaceTypes } from 'iam-client-lib';
 import { Subject } from 'rxjs';
 
 import { ListType } from 'src/app/shared/constants/shared-constants';
@@ -14,16 +14,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { StakingPoolServiceFacade } from '../../../shared/services/staking/staking-pool-service-facade';
-import { NewOrganizationComponent, ViewType } from '../new-organization/new-organization.component';
-import { filter, takeUntil } from 'rxjs/operators';
 
-const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const AppColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
-
-const ALLOW_NO_SUBORG = true;
-const MAX_TOOLTIP_SUBORG_ITEMS = 5;
 
 @Component({
   selector: 'app-governance-list',
@@ -52,26 +45,17 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     role: ''
   });
 
-  orgHierarchy = [];
-
-  private _isSubOrgCreated = false;
   private subscription$ = new Subject();
 
   constructor(private loadingService: LoadingService,
               private iamService: IamService,
               private dialog: MatDialog,
               private fb: FormBuilder,
-              private toastr: SwitchboardToastrService,
-              private stakingService: StakingPoolServiceFacade) {
+              private toastr: SwitchboardToastrService) {
   }
 
   async ngOnInit() {
     switch (this.listType) {
-      case ListType.ORG:
-        this.displayedColumns = OrgColumns;
-        this.listTypeLabel = 'Organization';
-        this.ensType = ENSNamespaceTypes.Organization;
-        break;
       case ListType.APP:
         this.displayedColumns = AppColumns;
         this.listTypeLabel = 'Application';
@@ -89,8 +73,6 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
       if (property === 'name') {
 
         switch (this.listType) {
-          case ListType.ORG:
-            return item.definition.orgName.toLowerCase();
           case ListType.APP:
             return item.definition.appName.toLowerCase();
           case ListType.ROLE:
@@ -112,23 +94,9 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
   }
 
   public async getList(filterOptions?: any, resetList?: boolean) {
-    if (this.orgHierarchy.length && !resetList) {
-      return;
-    }
     this.loadingService.show();
 
-    let orgList = await this.iamService.getENSTypesByOwner(this.ensType);
-
-    if (this.listType === ListType.ORG) {
-      let services = await this.stakingService.allServices().toPromise();
-      const servicesNames = services.map((service) => service.org);
-      const listWithProvidersInfo = (orgList as IOrganization[]).map((org: IOrganization) => ({
-        ...org,
-        isProvider: servicesNames.includes(org.namespace)
-      }));
-      // Retrieve only main orgs
-      orgList = this._getMainOrgs(listWithProvidersInfo);
-    }
+    const orgList = await this.iamService.getENSTypesByOwner(this.ensType);
     this.origDatasource = orgList;
 
     // Setup Filter
@@ -143,47 +111,6 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
-  private _getMainOrgs($getOrgList: any[]) {
-    const list = [];
-    const subList = [];
-
-    // Separate Parent & Child Orgs
-    $getOrgList.forEach((item: any) => {
-      const namespaceArr = item.namespace.split('.');
-      if (namespaceArr.length === 3) {
-        list.push(item);
-      } else {
-        if (!subList[namespaceArr.length - 4]) {
-          subList[namespaceArr.length - 4] = [];
-        }
-        subList[namespaceArr.length - 4].push(item);
-      }
-    });
-
-    // Remove Unnecessary Sub-Orgs from Main List
-    if (list.length || subList.length) {
-      for (let i = 0; i < subList.length; i++) {
-        const arr = subList[i];
-        if (arr && arr.length) {
-          for (const subOrg of arr) {
-            let exists = false;
-            for (const mainOrg of list) {
-              if (subOrg.namespace && subOrg.namespace.includes(mainOrg.namespace)) {
-                exists = true;
-                break;
-              }
-            }
-            if (!exists) {
-              list.push(subOrg);
-            }
-          }
-        }
-      }
-    }
-
-    return list;
-  }
-
   viewDetails(type: string, data: any) {
     this.dialog.open(GovernanceViewComponent, {
       width: '600px', data: {
@@ -195,28 +122,17 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     });
   }
 
-  viewApps(type: string, data: any) {
-    this.updateFilter.emit({
-      listType: ListType.APP,
-      organization: data.namespace.split('.iam.ewc')[0]
-    });
-  }
-
   viewRoles(type: string, data: any) {
     let org;
     let app;
 
-    if (type === ListType.ORG) {
-      org = data.namespace.split('.iam.ewc')[0];
-    } else {
-      let arr = data.namespace.split('.iam.ewc');
-      arr = arr[0].split(ENSNamespaceTypes.Roles);
-      arr = arr[arr.length - 1].split(ENSNamespaceTypes.Application);
-      org = arr[arr.length - 1];
+    let arr = data.namespace.split('.iam.ewc');
+    arr = arr[0].split(ENSNamespaceTypes.Roles);
+    arr = arr[arr.length - 1].split(ENSNamespaceTypes.Application);
+    org = arr[arr.length - 1];
 
-      if (org.indexOf('.') === 0) {
-        org = (org as string).substr(1);
-      }
+    if (org.indexOf('.') === 0) {
+      org = (org as string).substr(1);
     }
 
     if (type === ListType.APP) {
@@ -231,24 +147,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
   }
 
   async edit() {
-    if (this.orgHierarchy.length) {
-      await this.viewSubOrgs(this.orgHierarchy.pop());
-    } else {
-      await this.getList();
-    }
-  }
-
-  async transferOwnership() {
-    if (this.orgHierarchy.length) {
-      const currentOrg = this.orgHierarchy.pop();
-      if (this.dataSource.data.length === 1) {
-        await this.viewSubOrgs(this.orgHierarchy.pop());
-      } else {
-        await this.viewSubOrgs(currentOrg);
-      }
-    } else {
-      await this.getList();
-    }
+    await this.getList();
   }
 
   async remove(listType: string, roleDefinition: any) {
@@ -269,23 +168,10 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
 
       // Refresh the list after successful removal
       if (await isRemoved) {
-        if (this.orgHierarchy.length) {
-          const currentOrg = this.orgHierarchy.pop();
-          if (this.dataSource.data.length === 1) {
-            await this.viewSubOrgs(this.orgHierarchy.pop());
-          } else {
-            await this.viewSubOrgs(currentOrg);
-          }
-        } else {
-          await this.getList();
-        }
+        await this.getList();
       }
 
     }
-  }
-
-  async newApp(parentOrg: any) {
-    this.viewApps(ListType.ORG, parentOrg);
   }
 
   async newRole(listType: string, roleDefinition: any) {
@@ -295,15 +181,10 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
   private async getRemovalSteps(listType: string, roleDefinition: any) {
     this.loadingService.show();
     const returnSteps = this.iamService.iam.address === roleDefinition.owner;
-    const call = listType === ListType.ORG ?
-      this.iamService.iam.deleteOrganization({
-        namespace: roleDefinition.namespace,
-        returnSteps
-      }) :
-      this.iamService.iam.deleteApplication({
-        namespace: roleDefinition.namespace,
-        returnSteps
-      });
+    const call = this.iamService.iam.deleteApplication({
+      namespace: roleDefinition.namespace,
+      returnSteps
+    });
     try {
       return returnSteps ?
         await call :
@@ -368,94 +249,5 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     });
 
     this.dataSource.data = JSON.parse(JSON.stringify(this.origDatasource));
-  }
-
-  createSubOrg(parentOrg: any) {
-    const dialogRef = this.dialog.open(NewOrganizationComponent, {
-      width: '600px',
-      data: {
-        viewType: ViewType.NEW,
-        parentOrg: JSON.parse(JSON.stringify(parentOrg)),
-        owner: parentOrg.owner
-      },
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed()
-      .pipe(
-        filter(Boolean),
-        takeUntil(this.subscription$))
-      .subscribe(async () => await this.newSubOrg(parentOrg));
-  }
-
-  async newSubOrg(parentOrg: any) {
-    this._isSubOrgCreated = true;
-    await this.viewSubOrgs(parentOrg, ALLOW_NO_SUBORG);
-  }
-
-  async viewSubOrgs(element: any, allowNoSubOrg?: boolean) {
-    if (element && ((element.subOrgs && element.subOrgs.length) || allowNoSubOrg)) {
-      this.loadingService.show();
-      try {
-        const $getSubOrgs = await this.iamService.iam.getOrgHierarchy({
-          namespace: element.namespace
-        });
-
-        if ($getSubOrgs.subOrgs && $getSubOrgs.subOrgs.length) {
-          this.dataSource.data = JSON.parse(JSON.stringify($getSubOrgs.subOrgs));
-          this.orgHierarchy.push(element);
-        } else {
-          this.toastr.warning('Sub-Organization List is empty.', 'Sub-Organization');
-        }
-      } catch (e) {
-        console.error(e);
-        this.toastr.error('An error has occured while retrieving the list.', 'Sub-Organization');
-      } finally {
-        this.loadingService.hide();
-      }
-    }
-  }
-
-  async resetOrgList(e: any, idx?: number) {
-    e.preventDefault();
-
-    if (idx === undefined) {
-      if (this._isSubOrgCreated) {
-        this._isSubOrgCreated = false;
-        this.orgHierarchy.length = 0;
-        await this.getList(this.defaultFilterOptions, true);
-      } else {
-        this.dataSource.data = JSON.parse(JSON.stringify(this.origDatasource));
-        this.orgHierarchy.length = 0;
-      }
-    } else {
-      const element = this.orgHierarchy[idx];
-      this.orgHierarchy.length = idx;
-      await this.viewSubOrgs(element);
-    }
-  }
-
-  getTooltip(element: any) {
-    let retVal = '';
-
-    if (element.subOrgs && element.subOrgs.length) {
-      let count = 0;
-      if (element.subOrgs.length > 1) {
-        retVal = 'Sub-Organizations \n';
-      } else {
-        retVal = 'Sub-Organization \n';
-      }
-
-      while (count < MAX_TOOLTIP_SUBORG_ITEMS && count < element.subOrgs.length) {
-        retVal += `\n${element.subOrgs[count++].namespace}`;
-      }
-
-      if (element.subOrgs.length > MAX_TOOLTIP_SUBORG_ITEMS) {
-        retVal += `\n\n ... +${element.subOrgs.length - MAX_TOOLTIP_SUBORG_ITEMS} More`;
-      }
-    }
-
-    return retVal;
   }
 }
