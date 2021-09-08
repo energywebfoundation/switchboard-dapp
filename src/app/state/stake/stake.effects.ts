@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import * as PoolActions from '../pool/pool.actions';
 import { Provider } from './models/provider.interface';
-import { mapToProviders } from '../../operators/map-providers/map-to-providers';
+import { filterProviders } from '../../operators/map-providers/filter-providers';
 
 
 @Injectable()
@@ -65,7 +65,7 @@ export class StakeEffects {
               from(this.iamService.iam.getENSTypesBySearchPhrase({types: ['Org'], search: 'iam.ewc'}))
             ]
           ).pipe(
-            mapToProviders(),
+            filterProviders(),
             map((providers: Provider[]) => StakeActions.getAllServicesSuccess({providers})),
             finalize(() => this.loadingService.hide())
           );
