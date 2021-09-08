@@ -6,7 +6,6 @@ import { LoadingService } from '../../../shared/services/loading.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { StakingPoolServiceFacade } from '../../../shared/services/staking/staking-pool-service-facade';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { filter, takeUntil, tap } from 'rxjs/operators';
@@ -43,7 +42,6 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
               private iamService: IamService,
               private dialog: MatDialog,
               private toastr: SwitchboardToastrService,
-              private stakingService: StakingPoolServiceFacade,
               private store: Store) {
   }
 
