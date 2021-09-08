@@ -70,6 +70,7 @@ export class IamService {
     return this._iam;
   }
 
+
   getOrgHistory(namespace: string) {
     return this.wrapWithLoadingService(this.iam.getOrgHierarchy({
       namespace
@@ -187,17 +188,11 @@ export class IamService {
     return retVal;
   }
 
-  private wrapWithLoadingService<T>(source: Promise<T> | Observable<T>,
-                                    loaderConfig?: { message: string | string[]; cancelable?: boolean }) {
-    if (loaderConfig) {
-      this.loadingService.show(loaderConfig?.message, !!loaderConfig.cancelable);
-    }
+  public wrapWithLoadingService<T>(source: Promise<T> | Observable<T>,
+                                   loaderConfig?: { message: string | string[]; cancelable?: boolean }) {
+    this.loadingService.show(loaderConfig?.message || '', !!loaderConfig?.cancelable);
     return from(source).pipe(
-      finalize(() => {
-        if (loaderConfig) {
-          this.loadingService.hide();
-        }
-      })
+      finalize(() => this.loadingService.hide())
     );
   }
 }

@@ -9,6 +9,11 @@ export const getListSuccess = createAction(
   props<{ list: any }>()
 );
 
+export const getListFailure = createAction(
+  '[ORG] Get Organization List Failure',
+  props<{ error: string }>()
+);
+
 export const setHistory = createAction(
   '[ORG] Set Organization History',
   props<{ element: any }>()
@@ -17,6 +22,11 @@ export const setHistory = createAction(
 export const setHistorySuccess = createAction(
   '[ORG] Set Organization History Success',
   props<{ history: any[], element: any }>()
+);
+
+export const setHistoryFailure = createAction(
+  '[ORG] Set Organization History Failure',
+  props<{ error: string }>()
 );
 
 export const createSub = createAction(
