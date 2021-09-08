@@ -21,9 +21,11 @@ export class OrganizationEffects {
     this.actions$.pipe(
       ofType(OrganizationActions.getList),
       switchMap(() => this.orgService.getOrganizationList()),
-      map((list) => {
-        console.log(list);
-        return OrganizationActions.getListSuccess({list});
+      map((list) => OrganizationActions.getListSuccess({list})),
+      catchError((err) => {
+        console.error(err);
+        this.toastr.error('Something went wrong while getting list of organizations', 'Organization');
+        return of(OrganizationActions.getListFailure({error: err.message}));
       })
     )
   );
