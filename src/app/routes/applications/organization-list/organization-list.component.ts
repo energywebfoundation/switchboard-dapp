@@ -33,7 +33,6 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
   listType = ListType.ORG;
 
   dataSource = new MatTableDataSource([]);
-  origDatasource = [];
   displayedColumns: string[];
 
   organizationHierarchy$ = this.store.select(OrganizationSelectors.getHierarchy).pipe(tap((hierarchy) => this.orgHierarchy = [...hierarchy]));
@@ -73,7 +72,6 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
       takeUntil(this.subscription$)
     ).subscribe((list) => {
       this.dataSource.data = list;
-      this.origDatasource = list;
     });
   }
 
