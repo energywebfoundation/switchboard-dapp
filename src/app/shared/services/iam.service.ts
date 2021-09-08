@@ -113,12 +113,12 @@ export class IamService {
     return await this.iam.getSigner().provider.getBalance(await this.getAddress());
   }
 
-  getENSTypesByOwner$(ensType: ENSNamespaceTypes) {
+  getOrganizationsByOwner() {
     return from(this.iam.getSigner().getAddress())
       .pipe(
         switchMap((owner) =>
           from(this.iam.getENSTypesByOwner({
-              type: ensType,
+              type: ENSNamespaceTypes.Organization,
               owner,
               excludeSubOrgs: false
             })
