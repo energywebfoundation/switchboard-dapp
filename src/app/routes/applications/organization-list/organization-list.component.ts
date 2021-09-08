@@ -16,7 +16,6 @@ import { OrganizationActions, OrganizationSelectors } from '@state';
 
 const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 
-const ALLOW_NO_SUBORG = true;
 const MAX_TOOLTIP_SUBORG_ITEMS = 5;
 
 
