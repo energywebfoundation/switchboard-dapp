@@ -9,7 +9,6 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { StakingPoolServiceFacade } from '../../../shared/services/staking/staking-pool-service-facade';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
-import { NewOrganizationComponent, ViewType } from '../new-organization/new-organization.component';
 import { filter, takeUntil, tap } from 'rxjs/operators';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
@@ -195,25 +194,6 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     }
   }
 
-  createSubOrg(parentOrg: any) {
-    const dialogRef = this.dialog.open(NewOrganizationComponent, {
-      width: '600px',
-      data: {
-        viewType: ViewType.NEW,
-        parentOrg: JSON.parse(JSON.stringify(parentOrg)),
-        owner: parentOrg.owner
-      },
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed()
-      .pipe(
-        filter(Boolean),
-        takeUntil(this.subscription$))
-      .subscribe(async () => await this.newSubOrg(parentOrg));
-  }
-
   async newSubOrg(parentOrg: any) {
     this.store.dispatch(OrganizationActions.createSub({org: parentOrg}));
   }
@@ -229,7 +209,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     this.store.dispatch(OrganizationActions.cleanHierarchy());
   }
 
-  resetOrgList(e: any, element) {
+  goToInHierarchy(e: any, element) {
     e.preventDefault();
     this.store.dispatch(OrganizationActions.setHistory({element}));
   }

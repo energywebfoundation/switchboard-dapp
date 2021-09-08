@@ -13,7 +13,7 @@
           <img class="img-logo-list-sm mr-2" *ngIf="!orgItem?.definition?.logoUrl"
                src="../assets/img/no-organization-image.png"/>
           <img class="img-logo-list-sm mr-2" *ngIf="orgItem?.definition?.logoUrl" [src]="orgItem?.definition?.logoUrl"/>
-          <a href="#" (click)="resetOrgList($event, orgItem)"><span
+          <a href="#" (click)="goToInHierarchy($event, orgItem)"><span
               class="filter-link">{{ orgItem?.definition?.orgName }}</span></a>
         </div>
         <mat-icon class="color-white opacity-50">chevron_right</mat-icon>
