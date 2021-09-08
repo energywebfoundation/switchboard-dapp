@@ -16,7 +16,7 @@ import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
 import { forkJoin, from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
-import { finalize, switchMap } from 'rxjs/operators';
+import { finalize, map, switchMap } from 'rxjs/operators';
 
 const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
 
@@ -124,10 +124,15 @@ export class IamService {
             })
           ).pipe(switchMap((providers) => {
             return forkJoin(
-              (providers as IOrganization[]).map(async (org) => {
-                const isOwnedByCurrentUser = await this.iam.isOwner({domain: org.namespace});
-                return {...org, isOwnedByCurrentUser};
-              }));
+              (providers as IOrganization[]).map((org) =>
+                from(this.iam.isOwner({domain: org.namespace})).pipe(
+                  map(isOwnedByCurrentUser => ({
+                      ...org,
+                      isOwnedByCurrentUser
+                    })
+                  )
+                )
+              ));
           }))
         )
       );
