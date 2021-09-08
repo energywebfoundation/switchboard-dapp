@@ -21,7 +21,10 @@ export class OrganizationEffects {
     this.actions$.pipe(
       ofType(OrganizationActions.getList),
       switchMap(() => this.orgService.getOrganizationList()),
-      map((list) => OrganizationActions.getListSuccess({list}))
+      map((list) => {
+        console.log(list);
+        return OrganizationActions.getListSuccess({list});
+      })
     )
   );
 

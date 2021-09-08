@@ -93,11 +93,10 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
     this.subscription$.complete();
   }
 
-  public async getList(filterOptions?: any, resetList?: boolean) {
+  public async getList(filterOptions?: any) {
     this.loadingService.show();
 
-    const orgList = await this.iamService.getENSTypesByOwner(this.ensType);
-    this.origDatasource = orgList;
+    this.origDatasource = await this.iamService.getENSTypesByOwner(this.ensType);
 
     // Setup Filter
     if (filterOptions) {

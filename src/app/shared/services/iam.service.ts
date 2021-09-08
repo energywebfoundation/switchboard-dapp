@@ -3,6 +3,7 @@ import { AbstractControl } from '@angular/forms';
 import {
   ENSNamespaceTypes,
   IAM,
+  IOrganization,
   MessagingMethod,
   SafeIam,
   setCacheClientOptions,
@@ -13,7 +14,7 @@ import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
-import { from, Observable } from 'rxjs';
+import { forkJoin, from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
 import { finalize, switchMap } from 'rxjs/operators';
 
@@ -113,11 +114,23 @@ export class IamService {
   }
 
   getENSTypesByOwner$(ensType: ENSNamespaceTypes) {
-    return from(this.iam.getSigner().getAddress()).pipe(switchMap((owner) => from(this.iam.getENSTypesByOwner({
-      type: ensType,
-      owner,
-      excludeSubOrgs: false
-    }))));
+    return from(this.iam.getSigner().getAddress())
+      .pipe(
+        switchMap((owner) =>
+          from(this.iam.getENSTypesByOwner({
+              type: ensType,
+              owner,
+              excludeSubOrgs: false
+            })
+          ).pipe(switchMap((providers) => {
+            return forkJoin(
+              (providers as IOrganization[]).map(async (org) => {
+                const isOwnedByCurrentUser = await this.iam.isOwner({domain: org.namespace});
+                return {...org, isOwnedByCurrentUser};
+              }));
+          }))
+        )
+      );
   }
 
   async getENSTypesByOwner(ensType: ENSNamespaceTypes) {

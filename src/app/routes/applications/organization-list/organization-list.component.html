@@ -84,7 +84,7 @@
               <span>View Details</span>
             </button>
 
-            <app-organization-actions [organization]="element"
+            <app-organization-actions *ngIf="element.isOwnedByCurrentUser" [organization]="element"
                                       (organizationCreated)="newSubOrg(element)"
                                       (viewApps)="viewApps(element)"
                                       (viewRoles)="viewRoles(element)"
