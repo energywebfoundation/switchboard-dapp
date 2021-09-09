@@ -9,13 +9,15 @@
             <!-- <button (click)="toggleFilter(ListType.ORG)" class="btn mat-stroked-filter-button btn-small mb-3 mb-lg-0 mr-2">Filter
             </button> -->
             <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
-                    *ngIf="!listOrg?.orgHierarchy?.length" (click)="openNewOrgComponent()">Create Organization
+                    *ngIf="(hierarchyLength$ | async) === 0; else subOrg" (click)="openNewOrgComponent()">Create
+              Organization
             </button>
-            <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
-                    *ngIf="listOrg?.orgHierarchy?.length"
-                    (click)="createSubOrg(listOrg?.orgHierarchy[listOrg?.orgHierarchy?.length - 1])">Create
-              Sub-Organization
-            </button>
+            <ng-template #subOrg>
+              <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
+                      (click)="createSubOrg()">Create
+                Sub-Organization
+              </button>
+            </ng-template>
           </div>
         </div>
         <app-organization-list #listOrg (updateFilter)="updateFilter($event)"></app-organization-list>

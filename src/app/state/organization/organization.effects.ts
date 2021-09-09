@@ -13,7 +13,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import { truthy } from '../../operators/truthy/truthy';
 import { OrganizationService } from './services/organization.service';
-import { getLastHierarchyOrg } from './organization.selectors';
+import { getHierarchy, getLastHierarchyOrg } from './organization.selectors';
+import { OrganizationSelectors } from '@state';
 
 @Injectable()
 export class OrganizationEffects {
@@ -52,15 +53,25 @@ export class OrganizationEffects {
     )
   );
 
-  createSubOrganization$ = createEffect(() => {
-      let organization;
+  createSubOrganizationForParent$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrganizationActions.createSubForParent),
+      withLatestFrom(
+        this.store.select(OrganizationSelectors.getLastHierarchyOrg)
+      ),
+      map(([, org]) => OrganizationActions.createSub({org}))
+    )
+  );
 
-      return this.actions$.pipe(
-        ofType(OrganizationActions.createSub),
-        map(({org}) => {
-          organization = org;
-          return this.dialog.open(NewOrganizationComponent, {
-            width: '600px',
+  createSubOrganization$ = createEffect(() => {
+    let organization;
+
+    return this.actions$.pipe(
+      ofType(OrganizationActions.createSub),
+      map(({org}) => {
+        organization = org;
+        return this.dialog.open(NewOrganizationComponent, {
+          width: '600px',
             data: {
               viewType: ViewType.NEW,
               parentOrg: JSON.parse(JSON.stringify(org)),
@@ -78,14 +89,30 @@ export class OrganizationEffects {
     }
   );
 
-  updateSelectedOrganization$ = createEffect(() =>
+  updateSelectedOrganizationAfterEdit$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(OrganizationActions.updateSelectedOrg),
+      ofType(OrganizationActions.updateSelectedOrgAfterEdit),
       withLatestFrom(
         this.store.select(getLastHierarchyOrg)
       ),
       map(([, lastOrg]) => {
         if (lastOrg) {
+          return OrganizationActions.setHistory({element: lastOrg});
+        }
+        return OrganizationActions.getList();
+      })
+    )
+  );
+
+  updateSelectedOrganizationAfterTransfer$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrganizationActions.updateSelectedOrgAfterTransfer, OrganizationActions.updateSelectedOrgAfterRemoval),
+      withLatestFrom(
+        this.store.select(getLastHierarchyOrg),
+        this.store.select(getHierarchy)
+      ),
+      map(([, lastOrg, hierarchy]) => {
+        if (hierarchy.length) {
           return OrganizationActions.setHistory({element: lastOrg});
         }
         return OrganizationActions.getList();

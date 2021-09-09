@@ -114,20 +114,11 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
   }
 
   edit() {
-    this.store.dispatch(OrganizationActions.updateSelectedOrg());
+    this.store.dispatch(OrganizationActions.updateSelectedOrgAfterEdit());
   }
 
   transferOwnership() {
-    if (this.orgHierarchy.length) {
-      const currentOrg = this.orgHierarchy.pop();
-      if (this.dataSource.data.length === 1) {
-        this.viewSubOrgs(this.orgHierarchy.pop());
-      } else {
-        this.viewSubOrgs(currentOrg);
-      }
-    } else {
-      this.getList();
-    }
+    this.store.dispatch(OrganizationActions.updateSelectedOrgAfterTransfer());
   }
 
   async remove(listType: string, roleDefinition: any) {
@@ -148,16 +139,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
 
       // Refresh the list after successful removal
       if (await isRemoved) {
-        if (this.orgHierarchy.length) {
-          const currentOrg = this.orgHierarchy.pop();
-          if (this.dataSource.data.length === 1) {
-            this.viewSubOrgs(this.orgHierarchy.pop());
-          } else {
-            this.viewSubOrgs(currentOrg);
-          }
-        } else {
-          this.getList();
-        }
+        this.store.dispatch(OrganizationActions.updateSelectedOrgAfterRemoval());
       }
 
     }

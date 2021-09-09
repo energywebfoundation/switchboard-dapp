@@ -12,7 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
-import { OrganizationActions } from '@state';
+import { OrganizationActions, OrganizationSelectors } from '@state';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 
 @Component({
@@ -25,6 +25,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('listOrg') listOrg: OrganizationListComponent;
   @ViewChild('listApp') listApp: GovernanceListComponent;
   @ViewChild('listRole') listRole: GovernanceListComponent;
+
+  hierarchyLength$ = this.store.select(OrganizationSelectors.getHierarchyLength);
 
   isAppShown = false;
   isRoleShown = false;
@@ -92,8 +94,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  createSubOrg(parentOrg) {
-    this.store.dispatch(OrganizationActions.createSub({org: parentOrg}));
+  createSubOrg() {
+    this.store.dispatch(OrganizationActions.createSubForParent());
   }
 
   async ngOnInit() {

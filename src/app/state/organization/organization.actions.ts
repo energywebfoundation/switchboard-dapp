@@ -34,10 +34,22 @@ export const createSub = createAction(
   props<{ org: any }>()
 );
 
+export const createSubForParent = createAction(
+  '[ORG] Create Sub Organization For Parent',
+);
+
 export const cleanHierarchy = createAction(
   '[ORG] Clean Hierarchy List',
 );
 
-export const updateSelectedOrg = createAction(
-  '[ORG] Update Selected Organization'
+export const updateSelectedOrgAfterEdit = createAction(
+  '[ORG] Update Selected Organization History After Edit'
+);
+
+export const updateSelectedOrgAfterTransfer = createAction(
+  '[ORG] Update Selected Organization History After Transfer'
+);
+
+export const updateSelectedOrgAfterRemoval = createAction(
+  '[ORG] Update Selected Organization History After Removal'
 );
