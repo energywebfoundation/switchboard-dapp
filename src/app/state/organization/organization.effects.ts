@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { IamService } from '../../shared/services/iam.service';
 import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import * as OrganizationActions from './organization.actions';
 import { Observable, of } from 'rxjs';
@@ -122,7 +121,6 @@ export class OrganizationEffects {
 
   constructor(private actions$: Actions,
               private store: Store,
-              private iamService: IamService,
               private orgService: OrganizationService,
               private dialog: MatDialog,
               private toastr: SwitchboardToastrService
