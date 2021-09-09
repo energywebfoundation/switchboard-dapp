@@ -3,7 +3,6 @@ import { AbstractControl } from '@angular/forms';
 import {
   ENSNamespaceTypes,
   IAM,
-  IOrganization,
   MessagingMethod,
   SafeIam,
   setCacheClientOptions,
@@ -14,9 +13,9 @@ import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
-import { forkJoin, from, Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
-import { finalize, map, switchMap } from 'rxjs/operators';
+import { finalize, switchMap } from 'rxjs/operators';
 
 const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
 
@@ -113,6 +112,10 @@ export class IamService {
     return await this.iam.getSigner().provider.getBalance(await this.getAddress());
   }
 
+  isOwner(namespace: string) {
+    return from(this.iam.isOwner({domain: namespace}));
+  }
+
   getOrganizationsByOwner() {
     return from(this.iam.getSigner().getAddress())
       .pipe(
@@ -122,18 +125,7 @@ export class IamService {
               owner,
               excludeSubOrgs: false
             })
-          ).pipe(switchMap((providers) => {
-            return forkJoin(
-              (providers as IOrganization[]).map((org) =>
-                from(this.iam.isOwner({domain: org.namespace})).pipe(
-                  map(isOwnedByCurrentUser => ({
-                      ...org,
-                      isOwnedByCurrentUser
-                    })
-                  )
-                )
-              ));
-          }))
+          )
         )
       );
   }

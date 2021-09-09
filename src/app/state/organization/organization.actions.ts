@@ -38,7 +38,6 @@ export const cleanHierarchy = createAction(
   '[ORG] Clean Hierarchy List',
 );
 
-export const backToInHierarchy = createAction(
-  '[ORG] Back To Organization In Hierarchy',
-  props<{ id: number }>()
+export const updateSelectedOrg = createAction(
+  '[ORG] Update Selected Organization'
 );

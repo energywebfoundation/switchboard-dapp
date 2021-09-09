@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { IamService } from '../../shared/services/iam.service';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import * as OrganizationActions from './organization.actions';
 import { Observable, of } from 'rxjs';
 import {
@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import { truthy } from '../../operators/truthy/truthy';
 import { OrganizationService } from './services/organization.service';
+import { getLastHierarchyOrg } from './organization.selectors';
 
 @Injectable()
 export class OrganizationEffects {
@@ -33,7 +34,7 @@ export class OrganizationEffects {
   updateHistory$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrganizationActions.setHistory),
-      switchMap(({element}) => this.iamService.getOrgHistory(element.namespace).pipe(
+      switchMap(({element}) => this.orgService.getHistory(element.namespace).pipe(
         map((org) => {
           if (org.subOrgs && org.subOrgs.length) {
             return OrganizationActions.setHistorySuccess({history: org.subOrgs, element: org});
@@ -75,6 +76,21 @@ export class OrganizationEffects {
         )
       );
     }
+  );
+
+  updateSelectedOrganization$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrganizationActions.updateSelectedOrg),
+      withLatestFrom(
+        this.store.select(getLastHierarchyOrg)
+      ),
+      map(([, lastOrg]) => {
+        if (lastOrg) {
+          return OrganizationActions.setHistory({element: lastOrg});
+        }
+        return OrganizationActions.getList();
+      })
+    )
   );
 
   constructor(private actions$: Actions,

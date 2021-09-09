@@ -12,3 +12,8 @@ export const getHierarchy = createSelector(
   getOrganizationState,
   (state) => state.hierarchy
 );
+
+export const getLastHierarchyOrg = createSelector(
+  getHierarchy,
+  (state) => state[state.length - 1]
+);

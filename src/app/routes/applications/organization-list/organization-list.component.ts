@@ -45,7 +45,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
               private store: Store) {
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.setupDatatable();
     this.setList();
     this.getList();
@@ -113,24 +113,20 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     });
   }
 
-  async edit() {
-    if (this.orgHierarchy.length) {
-      await this.viewSubOrgs(this.orgHierarchy.pop());
-    } else {
-      await this.getList();
-    }
+  edit() {
+    this.store.dispatch(OrganizationActions.updateSelectedOrg());
   }
 
-  async transferOwnership() {
+  transferOwnership() {
     if (this.orgHierarchy.length) {
       const currentOrg = this.orgHierarchy.pop();
       if (this.dataSource.data.length === 1) {
-        await this.viewSubOrgs(this.orgHierarchy.pop());
+        this.viewSubOrgs(this.orgHierarchy.pop());
       } else {
-        await this.viewSubOrgs(currentOrg);
+        this.viewSubOrgs(currentOrg);
       }
     } else {
-      await this.getList();
+      this.getList();
     }
   }
 
@@ -155,12 +151,12 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
         if (this.orgHierarchy.length) {
           const currentOrg = this.orgHierarchy.pop();
           if (this.dataSource.data.length === 1) {
-            await this.viewSubOrgs(this.orgHierarchy.pop());
+            this.viewSubOrgs(this.orgHierarchy.pop());
           } else {
-            await this.viewSubOrgs(currentOrg);
+            this.viewSubOrgs(currentOrg);
           }
         } else {
-          await this.getList();
+          this.getList();
         }
       }
 
@@ -193,8 +189,8 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     this.store.dispatch(OrganizationActions.createSub({org: parentOrg}));
   }
 
-  async viewSubOrgs(element: any, allowNoSubOrg?: boolean) {
-    if (element && ((element.subOrgs && element.subOrgs.length) || allowNoSubOrg)) {
+  viewSubOrgs(element: any) {
+    if (element && ((element.subOrgs && element.subOrgs.length))) {
       this.store.dispatch(OrganizationActions.setHistory({element}));
     }
   }
