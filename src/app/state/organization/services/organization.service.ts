@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { StakingPoolServiceFacade } from '../../../shared/services/staking/staking-pool-service-facade';
 import { IamService } from '../../../shared/services/iam.service';
-import { forkJoin, from } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { IOrganization } from 'iam-client-lib';
 import { map, switchMap } from 'rxjs/operators';
+import { OrganizationProvider } from '../models/organization-provider.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class OrganizationService {
       this.iamService.getOrganizationsByOwner().pipe(
         switchMap(organizations => this.isOrganizationOwner(organizations))),
       this.stakingService.allServices()
-    ]))
+    ])
       .pipe(
         map(([organizations, providers]) => {
           const servicesNames = providers.map((service) => service.org);
@@ -28,13 +29,13 @@ export class OrganizationService {
             isProvider: servicesNames.includes(org.namespace)
           }));
         }),
-      );
+      ));
   }
 
-  getHistory(namespace: string) {
+  getHistory(namespace: string): Observable<OrganizationProvider> {
     return this.iamService.wrapWithLoadingService(this.iamService.getOrgHistory(namespace)
       .pipe(
-        switchMap(async (organization: IOrganization) => {
+        switchMap(async (organization: OrganizationProvider) => {
           return {...organization, subOrgs: await this.isOrganizationOwner(organization.subOrgs).toPromise()};
         })
       ));
@@ -46,8 +47,8 @@ export class OrganizationService {
    */
   private isOrganizationOwner(organizations) {
     return forkJoin(
-      (organizations as IOrganization[]).map((org) =>
-        from(this.iamService.isOwner(org.namespace)).pipe(
+      (organizations as OrganizationProvider[]).map((org) =>
+        this.iamService.isOwner(org.namespace).pipe(
           map(isOwnedByCurrentUser => ({
               ...org,
               isOwnedByCurrentUser

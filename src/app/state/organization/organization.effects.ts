@@ -12,8 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import { truthy } from '../../operators/truthy/truthy';
 import { OrganizationService } from './services/organization.service';
-import { getHierarchy, getLastHierarchyOrg } from './organization.selectors';
-import { OrganizationSelectors } from '@state';
+import * as OrganizationSelectors from './organization.selectors';
+import { OrganizationProvider } from './models/organization-provider.interface';
 
 @Injectable()
 export class OrganizationEffects {
@@ -22,7 +22,7 @@ export class OrganizationEffects {
     this.actions$.pipe(
       ofType(OrganizationActions.getList),
       switchMap(() => this.orgService.getOrganizationList()),
-      map((list) => OrganizationActions.getListSuccess({list})),
+      map((list: OrganizationProvider[]) => OrganizationActions.getListSuccess({list})),
       catchError((err) => {
         console.error(err);
         this.toastr.error('Something went wrong while getting list of organizations', 'Organization');
@@ -37,7 +37,10 @@ export class OrganizationEffects {
       switchMap(({element}) => this.orgService.getHistory(element.namespace).pipe(
         map((org) => {
           if (org.subOrgs && org.subOrgs.length) {
-            return OrganizationActions.setHistorySuccess({history: org.subOrgs, element: org});
+            return OrganizationActions.setHistorySuccess({
+              history: org.subOrgs as OrganizationProvider[],
+              element: org as OrganizationProvider
+            });
           } else {
             this.toastr.warning('Sub-Organization List is empty.', 'Sub-Organization');
             return OrganizationActions.setHistorySuccess({history: [], element: null});
@@ -92,7 +95,7 @@ export class OrganizationEffects {
     this.actions$.pipe(
       ofType(OrganizationActions.updateSelectedOrgAfterEdit),
       withLatestFrom(
-        this.store.select(getLastHierarchyOrg)
+        this.store.select(OrganizationSelectors.getLastHierarchyOrg)
       ),
       map(([, lastOrg]) => {
         if (lastOrg) {
@@ -107,11 +110,11 @@ export class OrganizationEffects {
     this.actions$.pipe(
       ofType(OrganizationActions.updateSelectedOrgAfterTransfer, OrganizationActions.updateSelectedOrgAfterRemoval),
       withLatestFrom(
-        this.store.select(getLastHierarchyOrg),
-        this.store.select(getHierarchy)
+        this.store.select(OrganizationSelectors.getLastHierarchyOrg),
+        this.store.select(OrganizationSelectors.getHierarchyLength)
       ),
-      map(([, lastOrg, hierarchy]) => {
-        if (hierarchy.length) {
+      map(([, lastOrg, hierarchyLength]) => {
+        if (hierarchyLength) {
           return OrganizationActions.setHistory({element: lastOrg});
         }
         return OrganizationActions.getList();

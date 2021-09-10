@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { OrganizationProvider } from './models/organization-provider.interface';
 
 export const getList = createAction(
   '[ORG] Get Organization List'
@@ -6,7 +7,7 @@ export const getList = createAction(
 
 export const getListSuccess = createAction(
   '[ORG] Get Organization List Success',
-  props<{ list: any }>()
+  props<{ list: OrganizationProvider[] }>()
 );
 
 export const getListFailure = createAction(
@@ -16,12 +17,12 @@ export const getListFailure = createAction(
 
 export const setHistory = createAction(
   '[ORG] Set Organization History',
-  props<{ element: any }>()
+  props<{ element: OrganizationProvider }>()
 );
 
 export const setHistorySuccess = createAction(
   '[ORG] Set Organization History Success',
-  props<{ history: any[], element: any }>()
+  props<{ history: OrganizationProvider[], element: OrganizationProvider }>()
 );
 
 export const setHistoryFailure = createAction(
@@ -31,7 +32,7 @@ export const setHistoryFailure = createAction(
 
 export const createSub = createAction(
   '[ORG] Create Sub Organization',
-  props<{ org: any }>()
+  props<{ org: OrganizationProvider }>()
 );
 
 export const createSubForParent = createAction(

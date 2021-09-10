@@ -1,6 +1,6 @@
-import { IOrganization } from 'iam-client-lib';
+import { OrganizationProvider } from '../models/organization-provider.interface';
 
-export const getOrgHierarchy = (hierarchy: IOrganization[], org: IOrganization) => {
+export const getOrgHierarchy = (hierarchy: OrganizationProvider[], org: OrganizationProvider) => {
   if (!org) {
     return hierarchy;
   }
