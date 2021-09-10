@@ -28,8 +28,6 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  listType = ListType.ORG;
-
   dataSource = new MatTableDataSource([]);
   displayedColumns: string[];
 
@@ -121,7 +119,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     this.store.dispatch(OrganizationActions.updateSelectedOrgAfterTransfer());
   }
 
-  async remove(listType: string, roleDefinition: any) {
+  async remove(roleDefinition: any) {
     // Get Removal Steps
     const steps = await this.getRemovalSteps(roleDefinition);
 
@@ -130,7 +128,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
       const isRemoved = this.dialog.open(RemoveOrgAppComponent, {
         width: '600px', data: {
           namespace: roleDefinition.namespace,
-          listType,
+          listType: ListType.ORG,
           steps
         },
         maxWidth: '100%',
@@ -161,7 +159,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
         }];
     } catch (e) {
       console.error(e);
-      this.toastr.error(e, 'Delete ' + (this.listType === ListType.ORG ? 'Organization' : 'Application'));
+      this.toastr.error(e, 'Delete Organization');
     } finally {
       this.loadingService.hide();
     }
