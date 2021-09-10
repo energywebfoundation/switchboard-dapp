@@ -61,31 +61,6 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     this.store.dispatch(OrganizationActions.getList());
   }
 
-  private setList(): void {
-    this.store.select(OrganizationSelectors.getList).pipe(
-      filter((list) => list.length > 0),
-      takeUntil(this.subscription$)
-    ).subscribe((list) => {
-      this.dataSource.data = list;
-    });
-  }
-
-  private setupDatatable(): void {
-    this.displayedColumns = OrgColumns;
-
-    this.dataSource.sort = this.sort;
-    this.dataSource.sortingDataAccessor = (item, property) => {
-      if (property === 'name') {
-        return item.definition.orgName.toLowerCase();
-      } else if (property === 'type') {
-        return item.definition.roleType;
-      } else {
-        return item[property];
-      }
-    };
-  }
-
-
   viewDetails(data: any) {
     this.dialog.open(GovernanceViewComponent, {
       width: '600px', data: {
@@ -143,29 +118,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async getRemovalSteps(roleDefinition: any) {
-    this.loadingService.show();
-    const returnSteps = this.iamService.iam.address === roleDefinition.owner;
-    const call = this.iamService.iam.deleteOrganization({
-      namespace: roleDefinition.namespace,
-      returnSteps
-    });
-    try {
-      return returnSteps ?
-        await call :
-        [{
-          info: 'Confirm removal in your safe wallet',
-          next: async () => await call
-        }];
-    } catch (e) {
-      console.error(e);
-      this.toastr.error(e, 'Delete Organization');
-    } finally {
-      this.loadingService.hide();
-    }
-  }
-
-  async newSubOrg(parentOrg: any) {
+  newSubOrg(parentOrg: any) {
     this.store.dispatch(OrganizationActions.createSub({org: parentOrg}));
   }
 
@@ -206,5 +159,51 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
     }
 
     return retVal;
+  }
+
+  private setList(): void {
+    this.store.select(OrganizationSelectors.getList).pipe(
+      filter((list) => list.length > 0),
+      takeUntil(this.subscription$)
+    ).subscribe((list) => {
+      this.dataSource.data = list;
+    });
+  }
+
+  private setupDatatable(): void {
+    this.displayedColumns = OrgColumns;
+
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      if (property === 'name') {
+        return item.definition.orgName.toLowerCase();
+      } else if (property === 'type') {
+        return item.definition.roleType;
+      } else {
+        return item[property];
+      }
+    };
+  }
+
+  private async getRemovalSteps(roleDefinition: any) {
+    this.loadingService.show();
+    const returnSteps = this.iamService.iam.address === roleDefinition.owner;
+    const call = this.iamService.iam.deleteOrganization({
+      namespace: roleDefinition.namespace,
+      returnSteps
+    });
+    try {
+      return returnSteps ?
+        await call :
+        [{
+          info: 'Confirm removal in your safe wallet',
+          next: async () => await call
+        }];
+    } catch (e) {
+      console.error(e);
+      this.toastr.error(e, 'Delete Organization');
+    } finally {
+      this.loadingService.hide();
+    }
   }
 }

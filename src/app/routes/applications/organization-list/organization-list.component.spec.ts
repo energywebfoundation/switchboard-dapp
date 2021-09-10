@@ -13,6 +13,7 @@ describe('OrganizationListComponent', () => {
   let component: OrganizationListComponent;
   let fixture: ComponentFixture<OrganizationListComponent>;
   let store: MockStore;
+  let dispatchSpy;
 
   const setUp = (list = [], hierarchy = [],) => {
     store.overrideSelector(OrganizationSelectors.getHierarchy, hierarchy);
@@ -35,6 +36,8 @@ describe('OrganizationListComponent', () => {
       .compileComponents();
 
     store = TestBed.inject(MockStore);
+    dispatchSpy = spyOn(store, 'dispatch');
+
   }));
 
   beforeEach(() => {
@@ -48,7 +51,6 @@ describe('OrganizationListComponent', () => {
   });
 
   it('should set list to table datasource', () => {
-    const dispatchSpy = spyOn(store, 'dispatch');
 
     setUp([{}]);
     expect(dispatchSpy).toHaveBeenCalledWith(OrganizationActions.getList());
@@ -82,8 +84,24 @@ describe('OrganizationListComponent', () => {
           {namespace: 'foo6'}
         ]
       }))
-        .toContain('Sub-Organizationslkn,m  \n\nfoo1\nfoo2\nfoo3\nfoo4\nfoo5\n\n ... +1 More');
+        .toContain('Sub-Organizations \n\nfoo1\nfoo2\nfoo3\nfoo4\nfoo5\n\n ... +1 More');
     });
   });
 
+  it('should dispatch action for creating sub organization', () => {
+    setUp();
+    const org: any = {namespace: 'foo'};
+    component.newSubOrg(org);
+    expect(dispatchSpy).toHaveBeenCalledWith(OrganizationActions.createSub({org}));
+  });
+
+  it('should dispatch action for updating selected organization after edit', () => {
+    component.edit();
+    expect(dispatchSpy).toHaveBeenCalledWith(OrganizationActions.updateSelectedOrgAfterEdit());
+  });
+
+  it('should dispatch action for updating selected organization after transferring organization', () => {
+    component.transferOwnership();
+    expect(dispatchSpy).toHaveBeenCalledWith(OrganizationActions.updateSelectedOrgAfterTransfer());
+  });
 });
