@@ -70,6 +70,16 @@ export class IamService {
     return this._iam;
   }
 
+  get address() {
+    return this.iam.address;
+  }
+
+  deleteOrganization(namespace: string, returnSteps: boolean) {
+    return this.iam.deleteOrganization({
+      namespace: namespace,
+      returnSteps
+    });
+  }
 
   getOrgHistory(namespace: string) {
     return this.wrapWithLoadingService(this.iam.getOrgHierarchy({

@@ -187,11 +187,11 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
 
   private async getRemovalSteps(roleDefinition: any) {
     this.loadingService.show();
-    const returnSteps = this.iamService.iam.address === roleDefinition.owner;
-    const call = this.iamService.iam.deleteOrganization({
-      namespace: roleDefinition.namespace,
+    const returnSteps = this.iamService.address === roleDefinition.owner;
+    const call = this.iamService.deleteOrganization(
+      roleDefinition.namespace,
       returnSteps
-    });
+    );
     try {
       return returnSteps ?
         await call :
