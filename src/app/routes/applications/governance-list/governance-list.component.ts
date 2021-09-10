@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import { ENSNamespaceTypes } from 'iam-client-lib';
@@ -23,7 +23,7 @@ const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
   templateUrl: './governance-list.component.html',
   styleUrls: ['./governance-list.component.scss']
 })
-export class GovernanceListComponent implements OnInit, OnDestroy {
+export class GovernanceListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() listType: string;
   @Input() isFilterShown: boolean;
   @Input() defaultFilterOptions: any;
@@ -68,6 +68,10 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
         break;
     }
 
+    await this.getList(this.defaultFilterOptions);
+  }
+
+  ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = (item, property) => {
       if (property === 'name') {
@@ -84,8 +88,6 @@ export class GovernanceListComponent implements OnInit, OnDestroy {
         return item[property];
       }
     };
-
-    await this.getList(this.defaultFilterOptions);
   }
 
   ngOnDestroy(): void {
