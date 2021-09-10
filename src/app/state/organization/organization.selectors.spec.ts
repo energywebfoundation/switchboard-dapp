@@ -1,4 +1,4 @@
-import { getLastHierarchyOrg } from './organization.selectors';
+import { getHierarchyLength, getLastHierarchyOrg } from './organization.selectors';
 
 describe('Organization Selectors', () => {
   describe('getLastHierarchyOrg', () => {
@@ -8,6 +8,12 @@ describe('Organization Selectors', () => {
 
     it('should return last element from the list', () => {
       expect(getLastHierarchyOrg.projector([1, 2, 3])).toEqual(3 as any);
+    });
+  });
+
+  describe('getHierarchyLength', () => {
+    it('should return length of empty array', () => {
+      expect(getHierarchyLength.projector([])).toEqual(0);
     });
   });
 });
