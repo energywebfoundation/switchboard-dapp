@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
@@ -13,23 +13,20 @@ import { ListType } from 'src/app/shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import { OrganizationActions, OrganizationSelectors } from '@state';
 
-const OrgColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
-
 const MAX_TOOLTIP_SUBORG_ITEMS = 5;
-
 
 @Component({
   selector: 'app-organization-list',
   templateUrl: './organization-list.component.html',
   styleUrls: ['./organization-list.component.scss']
 })
-export class OrganizationListComponent implements OnInit, OnDestroy {
+export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() updateFilter = new EventEmitter<any>();
 
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource = new MatTableDataSource([]);
-  displayedColumns: string[];
+  displayedColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 
   organizationHierarchy$ = this.store.select(OrganizationSelectors.getHierarchy).pipe(tap((hierarchy) => this.orgHierarchy = [...hierarchy]));
   orgHierarchy = [];
@@ -44,9 +41,12 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.setupDatatable();
     this.setList();
     this.getList();
+  }
+
+  ngAfterViewInit() {
+    this.setupDatatable();
   }
 
   ngOnDestroy(): void {
@@ -171,8 +171,6 @@ export class OrganizationListComponent implements OnInit, OnDestroy {
   }
 
   private setupDatatable(): void {
-    this.displayedColumns = OrgColumns;
-
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = (item, property) => {
       if (property === 'name') {
