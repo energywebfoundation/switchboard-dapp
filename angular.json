@@ -34,19 +34,18 @@
               "src/manifest.webmanifest",
               "src/manifest.json"
             ],
-            "extractCss": true,
             "styles": [
               "src/app/core/preloader/preloader.scss",
               "src/styles.scss",
               {
                 "input": "src/app/shared/styles/themes/theme-a.scss",
                 "bundleName": "theme-a",
-                "inject": false
+                "inject": true
               },
               {
                 "input": "src/app/shared/styles/themes/theme-b.scss",
                 "bundleName": "theme-b",
-                "inject": false
+                "inject": true
               }
             ],
             "scripts": [
@@ -72,7 +71,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -102,7 +100,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
