@@ -1,6 +1,5 @@
 import { LayoutComponent } from '../layout/layout.component';
 import { AuthGuard } from '../shared/services/auth.guard';
-import { LogOutComponent } from './profile/logout/logout.component';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 import { FeatureToggleGuard } from '../shared/feature-toggle/feature-toggle.guard';
 import { NgModule } from '@angular/core';
@@ -14,7 +13,6 @@ export const routes = [
     children: [
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       {path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)},
-      {path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)},
       {
         path: 'governance',
         loadChildren: () => import('./applications/applications.module').then(m => m.ApplicationsModule)
@@ -46,8 +44,6 @@ export const routes = [
       {path: '', loadChildren: () => import('./welcome/welcome.module').then(m => m.WelcomeModule)}
     ]
   },
-
-  {path: 'logout', component: LogOutComponent},
 
   // Not found
   {path: '**', redirectTo: 'dashboard'}

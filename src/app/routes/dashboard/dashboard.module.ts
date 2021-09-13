@@ -6,7 +6,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { DashboardComponent } from './dashboard.component';
 import { WidgetsModule } from '../widgets/widgets.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { ProfileModule } from '../profile/profile.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -48,7 +47,6 @@ const routes: Routes = [
     MatDatepickerModule,
     WidgetsModule,
     NgxSpinnerModule,
-    ProfileModule
   ],
   entryComponents: [],
 
