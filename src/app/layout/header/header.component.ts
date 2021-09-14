@@ -2,13 +2,9 @@ import { Event, NavigationEnd, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Md5 } from 'ts-md5/dist/md5';
 import { AssetHistoryEventType, ENSNamespaceTypes } from 'iam-client-lib';
 
 import { SettingsService } from '../../core/settings/settings.service';
-import { MenuService } from '../../core/menu/menu.service';
-import { Identicon } from '../../shared/directives/identicon/identicon';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { IamService } from '../../shared/services/iam.service';
 import { NotificationService } from '../../shared/services/notification.service';
@@ -28,14 +24,9 @@ import { logoutWithRedirectUrl } from '../../state/auth/auth.actions';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  navCollapsed = true; // for horizontal layout
-  menuItems = []; // for horizontal layout
-
   currentUserDid = 'did:ewc:';
   currentUserRole = '';
-  currentTheme: any;
 
-  isNavSearchVisible: boolean;
   isNavMenuVisible = true;
 
   currentNav = '';
@@ -71,18 +62,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   @ViewChild('fsbutton', {static: true}) fsbutton;  // the fullscreen button
 
-  constructor(public menu: MenuService,
-              // private authenticationService: AuthService,
-              private iamService: IamService,
+  constructor(private iamService: IamService,
               private router: Router,
               private toastr: SwitchboardToastrService,
               private notifService: NotificationService,
-              public settings: SettingsService, public dialog: MatDialog, private sanitizer: DomSanitizer,
+              public settings: SettingsService, public dialog: MatDialog,
               private store: Store<UserClaimState>,
               private loginService: LoginService) {
-    // show only a few items on demo
-    this.menuItems = menu.getMenu().slice(0, 4); // for horizontal layout
-
     if (localStorage.getItem('currentUser')) {
       this.currentUserDid = JSON.parse(localStorage.getItem('currentUser')).did;
       this.currentUserRole = JSON.parse(localStorage.getItem('currentUser')).organizationType;
@@ -148,8 +134,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.isNavSearchVisible = false;
-
     const ua = window.navigator.userAgent;
     if (ua.indexOf('MSIE ') > 0 || !!ua.match(/Trident.*rv\:11\./)) { // Not supported under IE
       this.fsbutton.nativeElement.style.display = 'none';
@@ -334,7 +318,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private async _initApprovedClaimsForAssetSyncCount() {
-    // TODO:
     this.tasks.pendingAssetSyncCount = 0;
     if (this.tasks.pendingAssetSyncCount < 0) {
       this.tasks.pendingAssetSyncCount = 0;
@@ -356,38 +339,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  getUserIdenticon() {
-    const userDid = this.currentUserDid ? this.currentUserDid : 'ewc:did:governingbody';
-    return this.sanitizer.bypassSecurityTrustResourceUrl((
-      'data:image/svg+xml; utf8,'
-      + encodeURI(new Identicon(Md5.hashStr(userDid), {size: 128, format: 'svg'}).toString(true))
-    ));
-  }
-
-  openNavSearch(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.setNavSearchVisible(true);
-  }
-
-  setNavSearchVisible(stat: boolean) {
-    this.isNavSearchVisible = stat;
-  }
-
-  getNavSearchVisible() {
-    return this.isNavSearchVisible;
-  }
-
-  toggleOffsidebar() {
-    this.settings.toggleLayoutSetting('offsidebarOpen');
-  }
-
   toggleCollapsedSideabar() {
     this.settings.toggleLayoutSetting('isCollapsed');
-  }
-
-  isCollapsedText() {
-    return this.settings.getLayoutSetting('isCollapsedText');
   }
 
   logout() {
