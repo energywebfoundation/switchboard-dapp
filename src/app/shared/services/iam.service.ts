@@ -166,17 +166,6 @@ export class IamService {
     );
   }
 
-  isValidEthAddress(ethAddressCtrl: AbstractControl): { [key: string]: boolean } | null {
-    let retVal = null;
-    const ethAddress = ethAddressCtrl.value;
-
-    if (ethAddress && !RegExp(ethAddrPattern).test(ethAddress.trim())) {
-      retVal = {invalidEthAddress: true};
-    }
-
-    return retVal;
-  }
-
   isValidDid(didCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
     const did = didCtrl.value;
