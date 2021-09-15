@@ -9,7 +9,7 @@ const LONG_HEX = 132;
 // 0x + 40
 const ETHEREUM_ADDRESS = 42;
 
-export function isHexValidator(possibleLengths: number[]): ValidatorFn {
+export const isHexValidator = (possibleLengths: number[]): ValidatorFn => {
   return (control: AbstractControl) => {
     if (!control.value) {
       return null;
@@ -24,14 +24,14 @@ export function isHexValidator(possibleLengths: number[]): ValidatorFn {
   };
 };
 
-export function isPublicKeyValidValidator() {
+export const isPublicKeyValidValidator = () => {
   return isHexValidator([SHORT_HEX, LONG_HEX]);
-}
+};
 
-export function isEthrAddressValidator() {
+export const isEthrAddressValidator = () => {
   return isHexValidator([ETHEREUM_ADDRESS]);
-}
+};
 
 const isValidLength = (control: number, possibleLengths: number[]): boolean => {
   return possibleLengths.map(v => v === control).some(v => v === true);
-}
+};
