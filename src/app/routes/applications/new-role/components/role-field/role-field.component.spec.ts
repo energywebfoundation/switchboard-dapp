@@ -157,7 +157,7 @@ describe('RoleFieldComponent', () => {
       selectFieldTypeAndLabel(1, 'Edit Label');
 
       component.updateData.subscribe(value => {
-        component.dataSource.data = [...value];
+        component.dataSource.data = [...value as any];
         fixture.detectChanges();
       });
 
@@ -195,7 +195,7 @@ describe('RoleFieldComponent', () => {
 
     component.updateDataSource(data);
 
-    expect(component.updateData.emit).toHaveBeenCalledWith(data);
+    expect(component.updateData.emit).toHaveBeenCalledWith(data as any);
   });
 
   it('should be run moveDown', () => {
@@ -247,7 +247,7 @@ describe('RoleFieldComponent', () => {
   function editFieldAdded() {
 
     component.updateData.subscribe(value => {
-      component.dataSource.data = [...value];
+      component.dataSource.data = [...value as any];
       fixture.detectChanges();
     });
 
