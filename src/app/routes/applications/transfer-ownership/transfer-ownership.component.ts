@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ExpiredRequestError } from '../../../shared/errors/errors';
 import { IamRequestService } from '../../../shared/services/iam-request.service';
 import { IamService } from '../../../shared/services/iam.service';
@@ -53,7 +52,6 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
 
   constructor(private iamService: IamService,
               private toastr: SwitchboardToastrService,
-              private spinner: NgxSpinnerService,
               private iamRequestService: IamRequestService,
               private loadingService: LoadingService,
               private changeDetector: ChangeDetectorRef,
@@ -116,7 +114,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
 
   private async _transferOrgAppRole() {
     if (await this.confirm('You will no longer be the owner of this namespace. Do you wish to continue?')) {
-      this.spinner.show();
+      this.loadingService.show();
       const returnSteps = this.iamService.iam.address === this.data.owner ? true : false;
       const req = {
         namespace: this.namespace,
@@ -147,13 +145,13 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
         this.newOwnerAddress.disable();
         this.isProcessing = true;
         this.changeDetector.detectChanges();
-        this.spinner.hide();
+        this.loadingService.hide();
 
         // Proceed
         this.proceedSteps(0);
       } catch (e) {
         console.error(e);
-        this.spinner.hide();
+        this.loadingService.hide();
         this.toastr.error(e.message || 'Please contact system administrator.', TOASTR_HEADER);
       }
     } else {
