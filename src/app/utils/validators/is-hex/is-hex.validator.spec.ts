@@ -1,4 +1,4 @@
-import { isEthrAddressValid, isPublicKeyValidValidator } from './is-hex.validator';
+import { isEthrAddressValidator, isPublicKeyValidValidator } from './is-hex.validator';
 import { FormControl, ValidatorFn } from '@angular/forms';
 
 describe('tessts for isHexValidator', () => {
@@ -47,11 +47,11 @@ describe('tessts for isHexValidator', () => {
 
   describe('tests for isEthrAddressValid', () => {
     it('should return error when passing wrong ethereum address', () => {
-      expect(getFormErrors('0x' + '123', isEthrAddressValid)).toEqual({isHexInvalid: true});
+      expect(getFormErrors('0x' + '123', isEthrAddressValidator)).toEqual({isHexInvalid: true});
     });
 
     it('should pass when passing valid ethereum address', () => {
-      expect(getFormErrors('0x' + '1111111111222222222233333333334444444444', isEthrAddressValid)).toEqual(null);
+      expect(getFormErrors('0x' + '1111111111222222222233333333334444444444', isEthrAddressValidator)).toEqual(null);
     });
   });
 });

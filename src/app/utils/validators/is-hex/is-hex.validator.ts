@@ -26,7 +26,7 @@ export function isPublicKeyValidValidator() {
   return isHexValidator([SHORT_HEX, LONG_HEX]);
 }
 
-export function isEthrAddressValid() {
+export function isEthrAddressValidator() {
   return isHexValidator([42]);
 }
 
