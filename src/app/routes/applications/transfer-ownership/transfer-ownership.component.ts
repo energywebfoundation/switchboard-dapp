@@ -10,7 +10,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatStepper } from '@angular/material/stepper';
 import { Subject } from 'rxjs';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { isEthrAddressValidator } from '../../../utils/validators/is-hex/is-hex.validator';
+import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 
 const TOASTR_HEADER = 'Transfer Ownership';
 
@@ -43,7 +43,7 @@ export class TransferOwnershipComponent implements OnDestroy {
   newOwnerModifiedAddress = new FormControl('');
   newOwnerAddress = new FormControl('', [Validators.required,
     Validators.maxLength(256),
-    isEthrAddressValidator()]);
+    HexValidators.isEthAddressValidator()]);
 
   public mySteps = [];
   isProcessing = false;
