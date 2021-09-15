@@ -55,8 +55,6 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
 
   private _currentIdx = 0;
 
-  ethAddrPattern = '^0x[A-Fa-f0-9]{40}';
-
   constructor(private iamService: IamService,
               private toastr: SwitchboardToastrService,
               private spinner: NgxSpinnerService,
