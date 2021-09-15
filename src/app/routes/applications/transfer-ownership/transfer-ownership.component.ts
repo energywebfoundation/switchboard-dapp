@@ -10,7 +10,6 @@ import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
@@ -29,8 +28,6 @@ const ListType = {
 })
 export class TransferOwnershipComponent implements OnInit, OnDestroy {
   destroy$ = new Subject();
-  isShowingDIDDropDown = false;
-
 
   private stepper: MatStepper;
 
@@ -48,7 +45,6 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   newOwnerAddress = new FormControl('', [Validators.required,
     Validators.maxLength(256),
     this.iamService.isValidEthAddress]);
-  prefixDropDown = new FormControl('did:ethr:');
 
   public mySteps = [];
   isProcessing = false;
@@ -70,34 +66,11 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.setValidatorsToModAddress();
-    this.checkModAddressChanges();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  private setValidatorsToModAddress(): void {
-    this.newOwnerModifiedAddress.setValidators(Validators.compose([Validators.required,
-      Validators.maxLength(256),
-      this.iamService.isValidEthAddress]));
-  }
-
-  private checkModAddressChanges(): void {
-    this.newOwnerModifiedAddress.valueChanges
-      .pipe(takeUntil(this.destroy$),
-        distinctUntilChanged((prev, curr) => prev === curr))
-      .subscribe((result) => {
-        this.changeNewOwnerAddressValue(result);
-      });
-  }
-
-  changeNewOwnerAddressValue(result: string): void {
-    result.replace(this.prefixDropDown.value, '');
-    this.isShowingDIDDropDown = false;
-    this.newOwnerAddress.patchValue(result);
   }
 
   private async confirm(confirmationMsg: string, showDiscardButton?: boolean) {
