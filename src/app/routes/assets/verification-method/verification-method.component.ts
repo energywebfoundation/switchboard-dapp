@@ -87,7 +87,7 @@ export class VerificationMethodComponent implements OnInit {
     this.publicKeys = publicKeys;
     this.verificationsAmount = publicKeys.length;
     this.setDataSource();
-    this.publicKey.setValidators([Validators.required, HexValidators.isPublicKeyValidValidator, listContainsValidator(this.dataSource, 'publicKeyHex')]);
+    this.publicKey.setValidators([Validators.required, HexValidators.isPublicKeyValid, listContainsValidator(this.dataSource, 'publicKeyHex')]);
   }
 
   private setDataSource(): void {

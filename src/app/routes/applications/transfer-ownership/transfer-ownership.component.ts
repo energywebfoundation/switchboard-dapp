@@ -43,7 +43,7 @@ export class TransferOwnershipComponent implements OnDestroy {
   newOwnerModifiedAddress = new FormControl('');
   newOwnerAddress = new FormControl('', [Validators.required,
     Validators.maxLength(256),
-    HexValidators.isEthAddressValidator()]);
+    HexValidators.isEthAddress()]);
 
   public mySteps = [];
   isProcessing = false;

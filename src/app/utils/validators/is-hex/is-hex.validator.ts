@@ -10,7 +10,7 @@ const LONG_HEX = 132;
 const ETHEREUM_ADDRESS = 42;
 
 export class HexValidators {
-  static isHexValidator(possibleLengths: number[]): ValidatorFn {
+  static isHex(possibleLengths: number[]): ValidatorFn {
     return (control: AbstractControl) => {
       if (!control.value) {
         return null;
@@ -25,12 +25,12 @@ export class HexValidators {
     };
   };
 
-  static isPublicKeyValidValidator() {
-    return this.isHexValidator([SHORT_HEX, LONG_HEX]);
+  static isPublicKeyValid() {
+    return this.isHex([SHORT_HEX, LONG_HEX]);
   };
 
-  static isEthAddressValidator() {
-    return this.isHexValidator([ETHEREUM_ADDRESS]);
+  static isEthAddress() {
+    return this.isHex([ETHEREUM_ADDRESS]);
   };
 }
 
