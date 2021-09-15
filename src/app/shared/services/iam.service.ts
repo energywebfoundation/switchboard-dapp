@@ -177,26 +177,6 @@ export class IamService {
     return retVal;
   }
 
-  /**
-   * @deprecated
-   * Use isValidJsonFormat function from utils/validators/json-format instead.
-   * @param jsonFormatCtrl
-   */
-  isValidJsonFormat(jsonFormatCtrl: AbstractControl): { [key: string]: boolean } | null {
-    let retVal = null;
-    const jsonStr = jsonFormatCtrl.value;
-
-    if (jsonStr && jsonStr.trim()) {
-      try {
-        JSON.parse(jsonStr);
-      } catch (e) {
-        retVal = {invalidJsonFormat: true};
-      }
-    }
-
-    return retVal;
-  }
-
   public wrapWithLoadingService<T>(source: Promise<T> | Observable<T>,
                                    loaderConfig?: { message: string | string[]; cancelable?: boolean }) {
     this.loadingService.show(loaderConfig?.message || '', !!loaderConfig?.cancelable);
