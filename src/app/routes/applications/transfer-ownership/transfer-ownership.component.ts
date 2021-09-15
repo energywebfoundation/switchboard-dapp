@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ConfigService } from '../../../shared/services/config.service';
 import { ExpiredRequestError } from '../../../shared/errors/errors';
 import { IamRequestService } from '../../../shared/services/iam-request.service';
 import { IamService } from '../../../shared/services/iam.service';
@@ -46,7 +45,9 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   type: string;
 
   newOwnerModifiedAddress = new FormControl('');
-  newOwnerAddress = new FormControl('');
+  newOwnerAddress = new FormControl('', [Validators.required,
+    Validators.maxLength(256),
+    this.iamService.isValidEthAddress]);
   prefixDropDown = new FormControl('did:ethr:');
 
   public mySteps = [];
@@ -55,7 +56,6 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   private _currentIdx = 0;
 
   ethAddrPattern = '^0x[A-Fa-f0-9]{40}';
-  DIDPattern = `^did:ethr:[a-z0-9]+:(${this.ethAddrPattern})$`;
 
   constructor(private iamService: IamService,
               private toastr: SwitchboardToastrService,
@@ -65,23 +65,13 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
               private changeDetector: ChangeDetectorRef,
               public dialogRef: MatDialogRef<NewApplicationComponent>,
               public dialog: MatDialog,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              private configService: ConfigService) {
+              @Inject(MAT_DIALOG_DATA) public data: any) {
     this.namespace = this.data.namespace;
     this.type = this.data.type;
     this.assetDid = this.data.assetDid;
   }
 
   ngOnInit() {
-    if (this.namespace) {
-      this.newOwnerAddress.setValidators(Validators.compose([Validators.required,
-        Validators.maxLength(256),
-        this.iamService.isValidEthAddress]));
-    } else {
-      this.newOwnerAddress.setValidators(Validators.compose([Validators.required,
-        Validators.maxLength(256),
-        this.iamService.isValidDid]));
-    }
     this.setValidatorsToModAddress();
     this.checkModAddressChanges();
   }
@@ -107,17 +97,6 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   }
 
   changeNewOwnerAddressValue(result: string): void {
-    // TODO temporary removal of logic with different types DID until DIDs can own ENS namespaces.
-    //  See https://energyweb.atlassian.net/browse/SWTCH-790
-    // if (result.match(this.ethAddrPattern) && !result.match(this.DIDPattern)) {
-    //   this.isShowingDIDDropDown = true;
-    //   this.newOwnerAddress.patchValue(this.prefixDropDown.value + result);
-    // } else {
-    //   this.isShowingDIDDropDown = false;
-    //   this.newOwnerAddress.patchValue(result);
-    // }
-    // TODO end!
-
     result.replace(this.prefixDropDown.value, '');
     this.isShowingDIDDropDown = false;
     this.newOwnerAddress.patchValue(result);
