@@ -4,7 +4,7 @@ import { VerificationService } from './verification.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { KeyTypesEnum } from '../models/keyTypesEnum';
-import { isHexValidator } from '../../../utils/validators/is-hex.validator';
+import { isPublicKeyValidValidator } from '../../../utils/validators/is-hex/is-hex.validator';
 import { listContainsValidator } from '../../../utils/validators/list-contains.validator';
 
 export interface PublicKey {
@@ -87,7 +87,7 @@ export class VerificationMethodComponent implements OnInit {
     this.publicKeys = publicKeys;
     this.verificationsAmount = publicKeys.length;
     this.setDataSource();
-    this.publicKey.setValidators([Validators.required, isHexValidator, listContainsValidator(this.dataSource, 'publicKeyHex')]);
+    this.publicKey.setValidators([Validators.required, isPublicKeyValidValidator, listContainsValidator(this.dataSource, 'publicKeyHex')]);
   }
 
   private setDataSource(): void {

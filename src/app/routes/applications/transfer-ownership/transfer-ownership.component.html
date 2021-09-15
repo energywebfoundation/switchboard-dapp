@@ -29,7 +29,7 @@
                    required maxlength="256"/>
             <mat-error *ngIf="newOwnerAddress?.errors?.required">New Owner Address is
               <strong>required</strong></mat-error>
-            <mat-error *ngIf="newOwnerAddress?.errors?.invalidEthAddress">ETH Address format is invalid
+            <mat-error *ngIf="newOwnerAddress?.errors?.isHexInvalid">ETH Address format is invalid
             </mat-error>
           </mat-form-field>
         </div>
