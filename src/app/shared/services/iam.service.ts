@@ -15,7 +15,7 @@ import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
 import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
-import { finalize } from 'rxjs/operators';
+import { finalize, switchMap } from 'rxjs/operators';
 
 const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
 
@@ -70,6 +70,23 @@ export class IamService {
     return this._iam;
   }
 
+  get address() {
+    return this.iam.address;
+  }
+
+  deleteOrganization(namespace: string, returnSteps: boolean) {
+    return this.iam.deleteOrganization({
+      namespace: namespace,
+      returnSteps
+    });
+  }
+
+  getOrgHistory(namespace: string) {
+    return this.wrapWithLoadingService(this.iam.getOrgHierarchy({
+      namespace
+    }));
+  }
+
   getAssetById(id) {
     return this.wrapWithLoadingService(this.iam.getAssetById({id}), {message: 'Getting selected asset data...'});
   }
@@ -103,6 +120,24 @@ export class IamService {
 
   async getBalance() {
     return await this.iam.getSigner().provider.getBalance(await this.getAddress());
+  }
+
+  isOwner(namespace: string) {
+    return from(this.iam.isOwner({domain: namespace}));
+  }
+
+  getOrganizationsByOwner() {
+    return from(this.iam.getSigner().getAddress())
+      .pipe(
+        switchMap((owner) =>
+          from(this.iam.getENSTypesByOwner({
+              type: ENSNamespaceTypes.Organization,
+              owner,
+              excludeSubOrgs: false
+            })
+          )
+        )
+      );
   }
 
   async getENSTypesByOwner(ensType: ENSNamespaceTypes) {
@@ -173,9 +208,9 @@ export class IamService {
     return retVal;
   }
 
-  private wrapWithLoadingService<T>(source: Promise<T> | Observable<T>,
-                                    loaderConfig?: { message?: string | string[]; cancelable?: boolean }) {
-    this.loadingService.show(loaderConfig.message, !!loaderConfig.cancelable);
+  public wrapWithLoadingService<T>(source: Promise<T> | Observable<T>,
+                                   loaderConfig?: { message: string | string[]; cancelable?: boolean }) {
+    this.loadingService.show(loaderConfig?.message || '', !!loaderConfig?.cancelable);
     return from(source).pipe(
       finalize(() => this.loadingService.hide())
     );

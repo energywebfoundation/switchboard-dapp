@@ -1,7 +1,7 @@
 import { TestScheduler } from 'rxjs/testing';
-import { mapToProviders } from './map-to-providers';
+import { filterProviders } from './filter-providers';
 
-describe('MapToProviders', () => {
+describe('FilterProviders', () => {
   let scheduler: TestScheduler;
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('MapToProviders', () => {
       const source$ = cold('-a-|', {a: [[], []] as any});
       const expected$ = '-z-|';
 
-      const result$ = source$.pipe(mapToProviders());
+      const result$ = source$.pipe(filterProviders());
 
       expectObservable(result$).toBe(expected$, {z: []});
     });
@@ -26,7 +26,7 @@ describe('MapToProviders', () => {
       const source$ = cold('-a-|', {a: [[], [{}, {}]] as any});
       const expected$ = '-z-|';
 
-      const result$ = source$.pipe(mapToProviders());
+      const result$ = source$.pipe(filterProviders());
 
       expectObservable(result$).toBe(expected$, {z: []});
     });
@@ -40,7 +40,7 @@ describe('MapToProviders', () => {
       });
       const expected$ = '-z-|';
 
-      const result$ = source$.pipe(mapToProviders());
+      const result$ = source$.pipe(filterProviders());
 
       expectObservable(result$).toBe(expected$, {z: [{namespace: 'iam.ewc', org: 'iam.ewc', name: 'iam'}]});
     });

@@ -12,7 +12,7 @@
     "build-prod": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=prod",
     "build": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=dev",
     "postinstall": "node patch.js",
-    "test": "ng test",
+    "test": "ng test --code-coverage",
     "test:headless": "ng test --karma-config=karma-headless.conf.js",
     "lint": "ng lint",
     "modernizr": "modernizr -c modernizr-config.json -d src/modernizr.js",

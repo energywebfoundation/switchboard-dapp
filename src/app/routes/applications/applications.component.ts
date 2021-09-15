@@ -4,8 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
-import { NewApplicationComponent } from './new-application/new-application.component';
-import { NewRoleComponent } from './new-role/new-role.component';
 import { GovernanceListComponent } from './governance-list/governance-list.component';
 import { ListType } from '../../shared/constants/shared-constants';
 import { IamService } from '../../shared/services/iam.service';
@@ -13,6 +11,9 @@ import { UrlParamService } from '../../shared/services/url-param.service';
 import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
+import { Store } from '@ngrx/store';
+import { OrganizationActions, OrganizationSelectors } from '@state';
+import { OrganizationListComponent } from './organization-list/organization-list.component';
 
 @Component({
   selector: 'app-applications',
@@ -21,9 +22,11 @@ import { MatTabGroup } from '@angular/material/tabs';
 })
 export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('governanceTabGroup') governanceTabGroup: MatTabGroup;
-  @ViewChild('listOrg') listOrg: GovernanceListComponent;
+  @ViewChild('listOrg') listOrg: OrganizationListComponent;
   @ViewChild('listApp') listApp: GovernanceListComponent;
   @ViewChild('listRole') listRole: GovernanceListComponent;
+
+  hierarchyLength$ = this.store.select(OrganizationSelectors.getHierarchyLength);
 
   isAppShown = false;
   isRoleShown = false;
@@ -48,7 +51,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
               private iamService: IamService,
               private urlParamService: UrlParamService,
               private router: Router,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private store: Store) {
   }
 
   ngAfterViewInit(): void {
@@ -85,45 +89,13 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
         // console.log('The dialog was closed');
 
         if (result) {
-          this.listOrg.getList(undefined, true);
+          this.listOrg.getList(true);
         }
       });
   }
 
-  openNewAppComponent(): void {
-    const dialogRef = this.dialog.open(NewApplicationComponent, {
-      width: '600px',
-      data: {},
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed()
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(result => {
-        // console.log('The dialog was closed');
-        if (result) {
-          this.listApp.getList();
-        }
-      });
-  }
-
-  openNewRoleComponent(): void {
-    const dialogRef = this.dialog.open(NewRoleComponent, {
-      width: '600px',
-      data: {},
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed()
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(result => {
-        // console.log('The dialog was closed');
-        if (result) {
-          this.listRole.getList();
-        }
-      });
+  createSubOrg() {
+    this.store.dispatch(OrganizationActions.createSubForParent());
   }
 
   async ngOnInit() {
