@@ -6,6 +6,8 @@ const hexRegex = new RegExp('^(0x)([0-9a-fA-F])');
 const SHORT_HEX = 68;
 // 0x + 130
 const LONG_HEX = 132;
+// 0x + 40
+const ETHEREUM_ADDRESS = 42;
 
 export function isHexValidator(possibleLengths: number[]): ValidatorFn {
   return (control: AbstractControl) => {
@@ -27,7 +29,7 @@ export function isPublicKeyValidValidator() {
 }
 
 export function isEthrAddressValidator() {
-  return isHexValidator([42]);
+  return isHexValidator([ETHEREUM_ADDRESS]);
 }
 
 const isValidLength = (control: number, possibleLengths: number[]): boolean => {
