@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ExpiredRequestError } from '../../../shared/errors/errors';
 import { IamRequestService } from '../../../shared/services/iam-request.service';
@@ -25,7 +25,7 @@ const ListType = {
   templateUrl: './transfer-ownership.component.html',
   styleUrls: ['./transfer-ownership.component.scss']
 })
-export class TransferOwnershipComponent implements OnInit, OnDestroy {
+export class TransferOwnershipComponent implements OnDestroy {
   destroy$ = new Subject();
 
   private stepper: MatStepper;
@@ -61,10 +61,6 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
     this.namespace = this.data.namespace;
     this.type = this.data.type;
     this.assetDid = this.data.assetDid;
-  }
-
-  ngOnInit() {
-    console.log(this.newOwnerAddress);
   }
 
   ngOnDestroy(): void {
