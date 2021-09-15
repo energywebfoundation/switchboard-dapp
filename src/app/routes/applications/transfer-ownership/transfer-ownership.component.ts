@@ -4,7 +4,6 @@ import { ExpiredRequestError } from '../../../shared/errors/errors';
 import { IamRequestService } from '../../../shared/services/iam-request.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
-import { NewApplicationComponent } from '../new-application/new-application.component';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -55,7 +54,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
               private iamRequestService: IamRequestService,
               private loadingService: LoadingService,
               private changeDetector: ChangeDetectorRef,
-              public dialogRef: MatDialogRef<NewApplicationComponent>,
+              public dialogRef: MatDialogRef<TransferOwnershipComponent>,
               public dialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) public data: any) {
     this.namespace = this.data.namespace;
