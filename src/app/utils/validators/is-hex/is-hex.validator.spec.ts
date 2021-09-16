@@ -1,7 +1,7 @@
 import { HexValidators } from './is-hex.validator';
 import { FormControl, ValidatorFn } from '@angular/forms';
 
-describe('tessts for isHexValidator', () => {
+describe('tests for isHexValidator', () => {
   describe('tests for isPublicKeyValidValidator', () => {
     const hexWithoutBeginning66 = 'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffff123456';
     const hexWithoutBeginning130 = 'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffff123456aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffff1234';

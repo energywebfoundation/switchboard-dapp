@@ -26,11 +26,11 @@ export class HexValidators {
   };
 
   static isPublicKeyValid() {
-    return this.isHex([SHORT_HEX, LONG_HEX]);
+    return HexValidators.isHex([SHORT_HEX, LONG_HEX]);
   };
 
   static isEthAddress() {
-    return this.isHex([ETHEREUM_ADDRESS]);
+    return HexValidators.isHex([ETHEREUM_ADDRESS]);
   };
 }
 
