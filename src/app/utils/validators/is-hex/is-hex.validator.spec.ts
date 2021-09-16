@@ -2,9 +2,14 @@ import { HexValidators } from './is-hex.validator';
 import { FormControl, ValidatorFn } from '@angular/forms';
 
 describe('tests for isHexValidator', () => {
+
+  const stringWithLength = (length): string => {
+    return new Array(length + 1).join('a');
+  };
+
   describe('tests for isPublicKeyValidValidator', () => {
-    const hexWithoutBeginning66 = 'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffff123456';
-    const hexWithoutBeginning130 = 'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffff123456aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffff1234';
+    const hexWithoutBeginning66 = stringWithLength(66);
+    const hexWithoutBeginning130 = stringWithLength(130);
     it('should return null when passing undefined', () => {
       expect(getFormErrors(undefined, HexValidators.isPublicKeyValid)).toEqual(null);
     });
@@ -51,7 +56,7 @@ describe('tests for isHexValidator', () => {
     });
 
     it('should pass when passing valid ethereum address', () => {
-      expect(getFormErrors('0x' + '1111111111222222222233333333334444444444', HexValidators.isEthAddress)).toEqual(null);
+      expect(getFormErrors('0x' + stringWithLength(40), HexValidators.isEthAddress)).toEqual(null);
     });
   });
 });
