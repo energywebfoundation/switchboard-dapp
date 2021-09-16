@@ -13,6 +13,7 @@ import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-
 import * as PoolActions from '../pool/pool.actions';
 import { Provider } from './models/provider.interface';
 import { filterProviders } from '../../operators/map-providers/filter-providers';
+import { LayoutActions } from '@state';
 
 
 @Injectable()
@@ -24,7 +25,7 @@ export class StakeEffects {
         from(this.stakingService.init())
           .pipe(
             mergeMap(() => {
-              return [PoolActions.initPool(), PoolActions.getAccountBalance()];
+              return [PoolActions.initPool(), PoolActions.getAccountBalance(), LayoutActions.redirect()];
             })
           )
       )

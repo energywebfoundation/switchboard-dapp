@@ -10,6 +10,7 @@ import { AuthEffects } from './auth/auth.effects';
 import { StakeEffects } from './stake/stake.effects';
 import { environment } from 'src/environments/environment';
 import { OrganizationStoreSliceModule } from './organization/organization-store-slice.module';
+import { LayoutStoreSliceModule } from './layout/layout-store-slice.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { OrganizationStoreSliceModule } from './organization/organization-store-
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
     EffectsModule.forRoot([UserEffects, StakeEffects, AuthEffects, PoolEffects]),
     AssetsStoreSliceModule,
-    OrganizationStoreSliceModule
+    OrganizationStoreSliceModule,
+    LayoutStoreSliceModule
   ],
 })
 export class StoreRootModule {

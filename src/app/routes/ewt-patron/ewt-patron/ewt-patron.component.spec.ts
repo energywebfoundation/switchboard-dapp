@@ -74,7 +74,7 @@ describe('EwtPatronComponent', () => {
     fixture.detectChanges();
 
     component.ngOnInit();
-    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.reinitializeAuth({}));
+    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.reinitializeAuthForPatron());
   });
 
   it('should dispatch action to open login dialog', () => {

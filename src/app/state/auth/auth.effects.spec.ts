@@ -13,10 +13,11 @@ import { finalize } from 'rxjs/operators';
 import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
+import * as AuthSelectors from './auth.selectors';
 
 describe('AuthEffects', () => {
 
-  const loginServiceSpy = jasmine.createSpyObj('LoginService', ['waitForSignature', 'clearWaitSignatureTimer', 'login', 'disconnect']);
+  const loginServiceSpy = jasmine.createSpyObj('LoginService', ['waitForSignature', 'clearWaitSignatureTimer', 'login', 'disconnect', 'isSessionActive']);
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll', 'open']);
   const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
   let actions$: ReplaySubject<any>;
@@ -204,6 +205,36 @@ describe('AuthEffects', () => {
           expect(resultAction).toEqual(AuthActions.loginFailure());
           done();
         });
+    });
+  });
+
+  describe('reinitializeLoggedUser$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should return failure action when reinitialization fails', (done) => {
+      actions$.next(AuthActions.reinitializeAuth());
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+      store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
+      loginServiceSpy.login.and.returnValue(of(false));
+
+      effects.reinitializeLoggedUser$.subscribe(resultAction => {
+        expect(resultAction).toEqual(AuthActions.loginFailure());
+        done();
+      });
+    });
+
+    it('should return success action when reinitialization completes successfully', (done) => {
+      actions$.next(AuthActions.reinitializeAuth());
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+      store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
+      loginServiceSpy.login.and.returnValue(of(true));
+
+      effects.reinitializeLoggedUser$.subscribe(resultAction => {
+        expect(resultAction).toEqual(AuthActions.loginSuccess());
+        done();
+      });
     });
   });
 });

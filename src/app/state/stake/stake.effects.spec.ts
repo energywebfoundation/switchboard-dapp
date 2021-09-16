@@ -13,11 +13,10 @@ import { StakeState } from './stake.reducer';
 import * as StakeActions from './stake.actions';
 import * as PoolActions from '../pool/pool.actions';
 import { skip, take } from 'rxjs/operators';
-import { utils } from 'ethers';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import { StakingPoolFacade } from '../../shared/services/pool/staking-pool-facade';
+import { LayoutActions } from '@state';
 
-const {formatEther, parseEther} = utils;
 describe('StakeEffects', () => {
 
   const iamServiceSpy = jasmine.createSpyObj('IamService', ['getDefinition', 'getBalance', 'getAddress']);
@@ -63,8 +62,12 @@ describe('StakeEffects', () => {
         expect(resultAction).toEqual(PoolActions.initPool());
       });
 
-      effects.initStakingPoolService$.pipe(skip(1)).subscribe(resultAction => {
+      effects.initStakingPoolService$.pipe(skip(1), take(1)).subscribe(resultAction => {
         expect(resultAction).toEqual(PoolActions.getAccountBalance());
+      });
+
+      effects.initStakingPoolService$.pipe(skip(2), take(1)).subscribe(resultAction => {
+        expect(resultAction).toEqual(LayoutActions.redirect());
       });
     }));
   });
