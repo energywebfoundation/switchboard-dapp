@@ -15,7 +15,7 @@ import * as PoolActions from '../pool/pool.actions';
 import { skip, take } from 'rxjs/operators';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import { StakingPoolFacade } from '../../shared/services/pool/staking-pool-facade';
-import { LayoutActions } from '@state';
+import * as LayoutActions from '../layout/layout.actions';
 
 describe('StakeEffects', () => {
 

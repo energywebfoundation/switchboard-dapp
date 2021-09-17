@@ -13,7 +13,7 @@ import { LoadingService } from '../../shared/services/loading.service';
 import * as userActions from '../user-claim/user.actions';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import * as StakeActions from '../stake/stake.actions';
-import { AuthSelectors } from '@state';
+import * as AuthSelectors from './auth.selectors';
 
 @Injectable()
 export class AuthEffects {
