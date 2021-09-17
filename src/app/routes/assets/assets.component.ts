@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AssetListType } from '../../shared/constants/shared-constants';
 import { UrlParamService } from '../../shared/services/url-param.service';
-import { AssetListComponent, RESET_LIST } from './asset-list/asset-list.component';
+import { AssetListComponent } from './asset-list/asset-list.component';
 import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
@@ -59,7 +59,7 @@ export class AssetsComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.listMyAssets.getAssetList(RESET_LIST);
+        this.listMyAssets.getAssetList();
       }
     });
   }
@@ -72,13 +72,13 @@ export class AssetsComponent implements AfterViewInit {
 
     switch (i.index) {
       case 0:
-        this.listMyAssets.getAssetList(RESET_LIST);
+        this.listMyAssets.getAssetList();
         break;
       case 1:
-        this.listOfferedAssets.getAssetList(RESET_LIST);
+        this.listOfferedAssets.getAssetList();
         break;
       case 2:
-        this.listPreviousAssets.getAssetList(RESET_LIST);
+        this.listPreviousAssets.getAssetList();
         break;
       default:
     }
