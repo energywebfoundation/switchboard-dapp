@@ -84,7 +84,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
 
     // Initialize List
     if (this.listType === AssetListType.MY_ASSETS) {
-      await this.getAssetList(RESET_LIST);
+      this.getAssetList();
     }
 
     // Initialize Sorting
@@ -102,10 +102,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     };
   }
 
-  async getAssetList(resetList?: boolean) {
-    if (!resetList) {
-      return;
-    }
+  getAssetList() {
     this.loadingService.show();
     this.subscribeTo(this.assetListFactory());
   }
@@ -133,7 +130,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     }).afterClosed().subscribe((res: any) => {
       if (res) {
         this.toastr.success('Asset is offered successfully.', HEADER_TRANSFER_OWNERSHIP);
-        this.getAssetList(RESET_LIST);
+        this.getAssetList();
       }
       dialogRef.unsubscribe();
     });
@@ -147,7 +144,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
           assetDID: data.id
         });
         this.toastr.success('Offered ownership is cancelled successfully.', HEADER_CANCEL_OWNERSHIP);
-        await this.getAssetList(RESET_LIST);
+        this.getAssetList();
       } catch (e) {
         console.error(e);
         this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_CANCEL_OWNERSHIP);
@@ -184,7 +181,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
           assetDID: data.id
         });
         this.toastr.success('You have rejected an offered asset successfully.', HEADER_REJECT_OWNERSHIP);
-        await this.getAssetList(RESET_LIST);
+        this.getAssetList();
         this.notifService.decreaseAssetsOfferedToMeCount();
       } catch (e) {
         console.error(e);
@@ -279,7 +276,6 @@ export class AssetListComponent implements OnInit, OnDestroy {
   private mapEnrolments() {
     return (source: Observable<Asset[]>) => {
       return source.pipe(
-        filter(assets => assets?.length > 0),
         switchMap((assets: Asset[]) => from(this.iamService.iam.getClaimsBySubjects(this.getAssetsIds(assets)))
           .pipe(
             map((claims) => claims.map(claim => claim.subject)),
@@ -308,7 +304,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
           message.type === AssetHistoryEventType.ASSET_OFFER_REJECTED)) ||
       (this.listType === AssetListType.PREV_OWNED_ASSETS && message.type === AssetHistoryEventType.ASSET_TRANSFERRED)
     )) {
-      this.getAssetList(RESET_LIST);
+      this.getAssetList();
     }
   }
 
