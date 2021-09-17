@@ -102,7 +102,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     };
   }
 
-  async getAssetList(resetList?: boolean) {
+  getAssetList(resetList?: boolean) {
     if (!resetList) {
       return;
     }
@@ -184,7 +184,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
           assetDID: data.id
         });
         this.toastr.success('You have rejected an offered asset successfully.', HEADER_REJECT_OWNERSHIP);
-        await this.getAssetList(RESET_LIST);
+        this.getAssetList(RESET_LIST);
         this.notifService.decreaseAssetsOfferedToMeCount();
       } catch (e) {
         console.error(e);
@@ -279,7 +279,6 @@ export class AssetListComponent implements OnInit, OnDestroy {
   private mapEnrolments() {
     return (source: Observable<Asset[]>) => {
       return source.pipe(
-        filter(assets => assets?.length > 0),
         switchMap((assets: Asset[]) => from(this.iamService.iam.getClaimsBySubjects(this.getAssetsIds(assets)))
           .pipe(
             map((claims) => claims.map(claim => claim.subject)),
