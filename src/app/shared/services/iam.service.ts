@@ -166,43 +166,12 @@ export class IamService {
     );
   }
 
-  isValidEthAddress(ethAddressCtrl: AbstractControl): { [key: string]: boolean } | null {
-    let retVal = null;
-    const ethAddress = ethAddressCtrl.value;
-
-    if (ethAddress && !RegExp(ethAddrPattern).test(ethAddress.trim())) {
-      retVal = {invalidEthAddress: true};
-    }
-
-    return retVal;
-  }
-
   isValidDid(didCtrl: AbstractControl): { [key: string]: boolean } | null {
     let retVal = null;
     const did = didCtrl.value;
 
     if (did && !RegExp(DIDPattern).test(did.trim())) {
       retVal = {invalidDid: true};
-    }
-
-    return retVal;
-  }
-
-  /**
-   * @deprecated
-   * Use isValidJsonFormat function from utils/validators/json-format instead.
-   * @param jsonFormatCtrl
-   */
-  isValidJsonFormat(jsonFormatCtrl: AbstractControl): { [key: string]: boolean } | null {
-    let retVal = null;
-    const jsonStr = jsonFormatCtrl.value;
-
-    if (jsonStr && jsonStr.trim()) {
-      try {
-        JSON.parse(jsonStr);
-      } catch (e) {
-        retVal = {invalidJsonFormat: true};
-      }
     }
 
     return retVal;

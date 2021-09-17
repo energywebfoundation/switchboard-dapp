@@ -1,19 +1,16 @@
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ConfigService } from '../../../shared/services/config.service';
 import { ExpiredRequestError } from '../../../shared/errors/errors';
 import { IamRequestService } from '../../../shared/services/iam-request.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
-import { NewApplicationComponent } from '../new-application/new-application.component';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 
 const TOASTR_HEADER = 'Transfer Ownership';
 
@@ -28,10 +25,8 @@ const ListType = {
   templateUrl: './transfer-ownership.component.html',
   styleUrls: ['./transfer-ownership.component.scss']
 })
-export class TransferOwnershipComponent implements OnInit, OnDestroy {
+export class TransferOwnershipComponent implements OnDestroy {
   destroy$ = new Subject();
-  isShowingDIDDropDown = false;
-
 
   private stepper: MatStepper;
 
@@ -46,81 +41,31 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   type: string;
 
   newOwnerModifiedAddress = new FormControl('');
-  newOwnerAddress = new FormControl('');
-  prefixDropDown = new FormControl('did:ethr:');
+  newOwnerAddress = new FormControl('', [Validators.required,
+    Validators.maxLength(256),
+    HexValidators.isEthAddress()]);
 
   public mySteps = [];
   isProcessing = false;
 
   private _currentIdx = 0;
 
-  ethAddrPattern = '^0x[A-Fa-f0-9]{40}';
-  DIDPattern = `^did:ethr:[a-z0-9]+:(${this.ethAddrPattern})$`;
-
   constructor(private iamService: IamService,
               private toastr: SwitchboardToastrService,
-              private spinner: NgxSpinnerService,
               private iamRequestService: IamRequestService,
               private loadingService: LoadingService,
               private changeDetector: ChangeDetectorRef,
-              public dialogRef: MatDialogRef<NewApplicationComponent>,
+              public dialogRef: MatDialogRef<TransferOwnershipComponent>,
               public dialog: MatDialog,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              private configService: ConfigService) {
+              @Inject(MAT_DIALOG_DATA) public data: any) {
     this.namespace = this.data.namespace;
     this.type = this.data.type;
     this.assetDid = this.data.assetDid;
   }
 
-  ngOnInit() {
-    if (this.namespace) {
-      this.newOwnerAddress.setValidators(Validators.compose([Validators.required,
-        Validators.maxLength(256),
-        this.iamService.isValidEthAddress]));
-    } else {
-      this.newOwnerAddress.setValidators(Validators.compose([Validators.required,
-        Validators.maxLength(256),
-        this.iamService.isValidDid]));
-    }
-    this.setValidatorsToModAddress();
-    this.checkModAddressChanges();
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  private setValidatorsToModAddress(): void {
-    this.newOwnerModifiedAddress.setValidators(Validators.compose([Validators.required,
-      Validators.maxLength(256),
-      this.iamService.isValidEthAddress]));
-  }
-
-  private checkModAddressChanges(): void {
-    this.newOwnerModifiedAddress.valueChanges
-      .pipe(takeUntil(this.destroy$),
-        distinctUntilChanged((prev, curr) => prev === curr))
-      .subscribe((result) => {
-        this.changeNewOwnerAddressValue(result);
-      });
-  }
-
-  changeNewOwnerAddressValue(result: string): void {
-    // TODO temporary removal of logic with different types DID until DIDs can own ENS namespaces.
-    //  See https://energyweb.atlassian.net/browse/SWTCH-790
-    // if (result.match(this.ethAddrPattern) && !result.match(this.DIDPattern)) {
-    //   this.isShowingDIDDropDown = true;
-    //   this.newOwnerAddress.patchValue(this.prefixDropDown.value + result);
-    // } else {
-    //   this.isShowingDIDDropDown = false;
-    //   this.newOwnerAddress.patchValue(result);
-    // }
-    // TODO end!
-
-    result.replace(this.prefixDropDown.value, '');
-    this.isShowingDIDDropDown = false;
-    this.newOwnerAddress.patchValue(result);
   }
 
   private async confirm(confirmationMsg: string, showDiscardButton?: boolean) {
@@ -166,7 +111,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
 
   private async _transferOrgAppRole() {
     if (await this.confirm('You will no longer be the owner of this namespace. Do you wish to continue?')) {
-      this.spinner.show();
+      this.loadingService.show();
       const returnSteps = this.iamService.iam.address === this.data.owner ? true : false;
       const req = {
         namespace: this.namespace,
@@ -197,13 +142,13 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
         this.newOwnerAddress.disable();
         this.isProcessing = true;
         this.changeDetector.detectChanges();
-        this.spinner.hide();
+        this.loadingService.hide();
 
         // Proceed
         this.proceedSteps(0);
       } catch (e) {
         console.error(e);
-        this.spinner.hide();
+        this.loadingService.hide();
         this.toastr.error(e.message || 'Please contact system administrator.', TOASTR_HEADER);
       }
     } else {
