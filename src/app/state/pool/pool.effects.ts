@@ -244,7 +244,7 @@ export class PoolEffects {
           map((definition: IOrganizationDefinition) => PoolActions.getOrganizationDetailsSuccess({orgDetails: definition})),
           catchError(err => {
             console.error(err);
-            return of(PoolActions.getOrganizationDetailsFailure({err}));
+            return of(PoolActions.getOrganizationDetailsFailure({err: err.message}));
           }),
           finalize(() => this.loadingService.hide())
         )

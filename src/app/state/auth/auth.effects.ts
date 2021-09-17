@@ -142,7 +142,12 @@ export class AuthEffects {
       switchMap(({redirectUrl}) =>
         this.loginService.login()
           .pipe(
-            map(() => AuthActions.loginSuccess()),
+            map((loggedIn) => {
+              if (loggedIn) {
+                return AuthActions.loginSuccess();
+              }
+              return AuthActions.loginFailure();
+            }),
             finalize(() => {
               this.loadingService.hide();
               if (redirectUrl) {
