@@ -4,10 +4,10 @@ import { OrganizationService } from './organization.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { StakingPoolServiceFacade } from '../../../shared/services/staking/staking-pool-service-facade';
 import { of } from 'rxjs';
+import { iamServiceSpy } from '@tests';
 
 describe('OrganizationService', () => {
   let service: OrganizationService;
-  const iamServiceSpy = jasmine.createSpyObj('IamService', ['getOrganizationsByOwner', 'isOwner', 'wrapWithLoadingService', 'getOrgHistory']);
   const stakingServiceSpy = jasmine.createSpyObj('StakingPoolServiceFacade', ['allServices']);
   beforeEach(() => {
     TestBed.configureTestingModule({

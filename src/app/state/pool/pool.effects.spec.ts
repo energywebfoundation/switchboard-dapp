@@ -15,14 +15,11 @@ import * as poolSelectors from './pool.selectors';
 import { utils } from 'ethers';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import { StakingPoolFacade } from '../../shared/services/pool/staking-pool-facade';
+import { dialogSpy, iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
 
 const {formatEther, parseEther} = utils;
 describe('PoolEffects', () => {
 
-  const iamServiceSpy = jasmine.createSpyObj('IamService', ['getDefinition', 'getBalance', 'getAddress']);
-  const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
-  const toastrSpy = jasmine.createSpyObj('ToastrService', ['success', 'error']);
-  const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll', 'open']);
   const stakingService = jasmine.createSpyObj('StakingPoolServiceFacade', ['init', 'createPool', 'putStake']);
   const stakingPoolFacadeSpy = jasmine.createSpyObj('StakingPoolFacade', ['putStake', 'isPoolDefined']);
   let actions$: ReplaySubject<any>;

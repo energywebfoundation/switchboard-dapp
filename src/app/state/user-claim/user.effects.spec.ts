@@ -13,13 +13,11 @@ import { UserClaimState } from './user.reducer';
 import * as userSelectors from './user.selectors';
 import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { dialogSpy, loadingServiceSpy, toastrSpy } from '@tests';
 
 describe('UserEffects', () => {
 
   const iamSpy = jasmine.createSpyObj('iam', ['getUserClaims', 'createSelfSignedClaim']);
-  const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
-  const toastrSpy = jasmine.createSpyObj('ToastrService', ['success']);
-  const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll']);
   let actions$: ReplaySubject<any>;
   let effects: UserEffects;
   let store: MockStore<UserClaimState>;
