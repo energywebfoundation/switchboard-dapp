@@ -16,6 +16,7 @@ import { ConfigService } from './config.service';
 import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
 import { finalize, switchMap } from 'rxjs/operators';
+import { ClaimData } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 
 const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
 
@@ -76,6 +77,17 @@ export class IamService {
 
   registerAsset() {
     return from(this.iam.registerAsset());
+  }
+
+  getUserClaims(did?: string) {
+    return from(this.iam.getUserClaims({did}));
+  }
+
+  createSelfSignedClaim({data, subject}: {
+    data: ClaimData;
+    subject?: string;
+  }) {
+    return from(this.iam.createSelfSignedClaim({data, subject}));
   }
 
   deleteOrganization(namespace: string, returnSteps: boolean) {
