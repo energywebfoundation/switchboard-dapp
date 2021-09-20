@@ -1,0 +1,2 @@
+describe('Layout Reducer', () => {
+});

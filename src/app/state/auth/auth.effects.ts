@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
@@ -13,6 +13,7 @@ import { LoadingService } from '../../shared/services/loading.service';
 import * as userActions from '../user-claim/user.actions';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import * as StakeActions from '../stake/stake.actions';
+import * as AuthSelectors from './auth.selectors';
 
 @Injectable()
 export class AuthEffects {
@@ -136,10 +137,12 @@ export class AuthEffects {
 
   reinitializeLoggedUser$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AuthActions.reinitializeAuth),
+      ofType(AuthActions.reinitializeAuth, AuthActions.reinitializeAuthForPatron, AuthActions.reinitializeAuthForEnrol),
       filter(() => this.loginService.isSessionActive()),
+      concatLatestFrom(() => this.store.select(AuthSelectors.isUserLoggedIn)),
+      filter(([, isLoggedIn]) => !isLoggedIn),
       tap(() => this.loadingService.show()),
-      switchMap(({redirectUrl}) =>
+      switchMap(() =>
         this.loginService.login()
           .pipe(
             map((loggedIn) => {
@@ -148,11 +151,12 @@ export class AuthEffects {
               }
               return AuthActions.loginFailure();
             }),
+            catchError((err => {
+              console.log(err);
+              return of(AuthActions.loginFailure());
+            })),
             finalize(() => {
               this.loadingService.hide();
-              if (redirectUrl) {
-                this.router.navigateByUrl(redirectUrl);
-              }
             })
           )
       )
@@ -163,10 +167,8 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.reinitializeAuth),
       filter(() => !this.loginService.isSessionActive()),
-      map(({redirectUrl}) => {
-        if (redirectUrl) {
-          this.router.navigate(['welcome']);
-        }
+      map(() => {
+        this.router.navigate(['welcome']);
       })
     ), {dispatch: false}
   );

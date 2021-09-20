@@ -14,9 +14,10 @@ import swal from 'sweetalert';
 import { EnrolmentField, EnrolmentSubmission } from '../enrolment-form/enrolment-form.component';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { Store } from '@ngrx/store';
-import { logout, reinitializeAuth } from '../../../state/auth/auth.actions';
+import { logout } from '../../../state/auth/auth.actions';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 import { filter, take } from 'rxjs/operators';
+import { AuthActions } from '@state';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -452,7 +453,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   private async initLoginUser() {
     // Check Login
     if (this.iamService.isSessionActive()) {
-      this.store.dispatch(reinitializeAuth({}));
+      this.store.dispatch(AuthActions.reinitializeAuthForEnrol());
       // Set Loggedin Flag to true
       this.isLoggedIn = await this.store.select(isUserLoggedIn).pipe(
         filter<boolean>(Boolean),

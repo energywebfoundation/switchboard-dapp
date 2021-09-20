@@ -4,12 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from '../../shared/services/loading.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { debounceTime, startWith, switchMap } from 'rxjs/operators';
+import { debounceTime, filter, map, startWith, switchMap, take } from 'rxjs/operators';
 import { WalletProvider } from 'iam-client-lib';
 import { LoadingCount } from '../../shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
+import { LayoutActions } from '@state';
 
 @Component({
   selector: 'app-dashboard',
@@ -49,13 +50,15 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
-      let redirectUrl: string;
-      if (queryParams && queryParams.returnUrl) {
-        redirectUrl = queryParams.returnUrl;
-      }
-      this.store.dispatch(AuthActions.reinitializeAuth({redirectUrl}))
+    this.activeRoute.queryParams.pipe(
+      filter((queryParams) => queryParams?.returnUrl),
+      map((params) => params.returnUrl),
+      take(1),
+    ).subscribe((redirectUrl) => {
+      this.store.dispatch(LayoutActions.setRedirectUrl({url: redirectUrl}));
     });
+
+    this.store.dispatch(AuthActions.reinitializeAuth());
   }
 
   private async _filterOrgsAndApps(keyword: any): Promise<any[]> {

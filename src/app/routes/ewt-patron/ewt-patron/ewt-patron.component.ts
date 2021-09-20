@@ -38,7 +38,7 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
 
   private login() {
     if (this.iamService.isSessionActive()) {
-      this.store.dispatch(AuthActions.reinitializeAuth({}));
+      this.store.dispatch(AuthActions.reinitializeAuthForPatron());
     } else {
       this.store.dispatch(AuthActions.openLoginDialog());
     }

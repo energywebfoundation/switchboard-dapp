@@ -22,6 +22,11 @@ import * as UserClaimSelectors from './user-claim/user.selectors';
 import * as OrganizationActions from './organization/organization.actions';
 import * as OrganizationSelectors from './organization/organization.selectors';
 
+// === Layout ===
+import * as LayoutActions from './layout/layout.actions';
+import * as LayoutSelectors from './layout/layout.selectors';
+
+
 export * from './store-root.module';
 export {
   AssetDetailsActions,
@@ -40,5 +45,8 @@ export {
   UserClaimSelectors,
 
   OrganizationActions,
-  OrganizationSelectors
+  OrganizationSelectors,
+
+  LayoutActions,
+  LayoutSelectors
 };
