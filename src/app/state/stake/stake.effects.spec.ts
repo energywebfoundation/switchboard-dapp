@@ -54,7 +54,7 @@ describe('StakeEffects', () => {
       actions$ = new ReplaySubject(1);
     });
 
-    it('should return initPool action and getAccountBalance action', waitForAsync(() => {
+    it('should return initPool action, getAccountBalance action and redirect action', waitForAsync(() => {
       actions$.next(StakeActions.initStakingPool());
       stakingService.init.and.returnValue(of(true));
 
