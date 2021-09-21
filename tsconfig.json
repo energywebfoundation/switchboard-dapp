@@ -27,6 +27,9 @@
     "paths": {
       "@state": [
         "src/app/state/index"
+      ],
+      "@operators": [
+        "src/app/operators/index"
       ]
     }
   },

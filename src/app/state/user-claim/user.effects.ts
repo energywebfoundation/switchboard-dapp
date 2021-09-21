@@ -5,7 +5,7 @@ import * as userClaimsActions from './user.actions';
 import { IamService } from '../../shared/services/iam.service';
 import { catchError, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
-import { mapClaimsProfile } from '../../routes/assets/operators/map-claims-profile';
+import { mapClaimsProfile } from '@operators';
 import { Profile } from 'iam-client-lib';
 import { LoadingService } from '../../shared/services/loading.service';
 import { CancelButton } from '../../layout/loading/loading.component';

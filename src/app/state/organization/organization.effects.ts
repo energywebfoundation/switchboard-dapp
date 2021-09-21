@@ -10,7 +10,7 @@ import {
 } from '../../routes/applications/new-organization/new-organization.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
-import { truthy } from '../../operators/truthy/truthy';
+import { truthy } from '@operators';
 import { OrganizationService } from './services/organization.service';
 import * as OrganizationSelectors from './organization.selectors';
 import { OrganizationProvider } from './models/organization-provider.interface';

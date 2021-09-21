@@ -16,7 +16,7 @@ import { VerificationMethodComponent } from '../verification-method/verification
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { mapClaimsProfile } from '../operators/map-claims-profile';
+import { mapClaimsProfile } from '@operators';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 
