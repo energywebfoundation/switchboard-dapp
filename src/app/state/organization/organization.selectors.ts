@@ -22,3 +22,8 @@ export const getHierarchyLength = createSelector(
   getHierarchy,
   hierarchy => hierarchy.length
 );
+
+export const isSelectedOrgNotOwnedByUser = createSelector(
+  getLastHierarchyOrg,
+  (organization) => !organization.isOwnedByCurrentUser
+);
