@@ -31,6 +31,8 @@ import { NgxEditorModule } from 'ngx-editor';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 import { FieldsSummaryComponent } from './new-role/components/fields-summary/fields-summary.component';
 import { TransactionsCompleteComponent } from './transactions-complete/transactions-complete.component';
+import { RoleListComponent } from './role-list/role-list.component';
+import { ApplicationListComponent } from './application-list/application-list.component';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -53,6 +55,8 @@ const routes: Routes = [
     RoleActionsComponent,
     OrganizationListComponent,
     FieldsSummaryComponent,
+    RoleListComponent,
+    ApplicationListComponent,
     TransactionsCompleteComponent
   ],
   imports: [

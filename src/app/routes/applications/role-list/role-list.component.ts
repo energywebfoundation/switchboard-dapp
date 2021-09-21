@@ -1,27 +1,26 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-
-import { ENSNamespaceTypes } from 'iam-client-lib';
-import { Subject } from 'rxjs';
-
-import { ListType } from 'src/app/shared/constants/shared-constants';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
-import { GovernanceViewComponent } from '../governance-view/governance-view.component';
-import { RoleType } from '../new-role/new-role.component';
-import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { MatSort } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subject } from 'rxjs';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { IamService } from '../../../shared/services/iam.service';
+import { MatDialog } from '@angular/material/dialog';
+import { FormBuilder } from '@angular/forms';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { ENSNamespaceTypes } from 'iam-client-lib';
+import { GovernanceViewComponent } from '../governance-view/governance-view.component';
+import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
+import { ListType } from 'src/app/shared/constants/shared-constants';
+import { RoleType } from '../new-role/new-role.component';
 
+const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
 
 @Component({
-  selector: 'app-governance-list',
-  templateUrl: './governance-list.component.html',
-  styleUrls: ['./governance-list.component.scss']
+  selector: 'app-role-list',
+  templateUrl: './role-list.component.html',
+  styleUrls: ['./role-list.component.scss']
 })
-export class GovernanceListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() listType: string;
   @Input() isFilterShown: boolean;
   @Input() defaultFilterOptions: any;
@@ -53,18 +52,9 @@ export class GovernanceListComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async ngOnInit() {
-    switch (this.listType) {
-      case ListType.APP:
-        this.displayedColumns = AppColumns;
-        this.listTypeLabel = 'Application';
-        this.ensType = ENSNamespaceTypes.Application;
-        break;
-      case ListType.ROLE:
-        this.displayedColumns = RoleColumns;
-        this.listTypeLabel = 'Role';
-        this.ensType = ENSNamespaceTypes.Roles;
-        break;
-    }
+    this.displayedColumns = RoleColumns;
+    this.listTypeLabel = 'Role';
+    this.ensType = ENSNamespaceTypes.Roles;
 
     await this.getList(this.defaultFilterOptions);
   }
@@ -73,13 +63,7 @@ export class GovernanceListComponent implements OnInit, OnDestroy, AfterViewInit
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = (item, property) => {
       if (property === 'name') {
-
-        switch (this.listType) {
-          case ListType.APP:
-            return item.definition.appName.toLowerCase();
-          case ListType.ROLE:
-            return item.definition.roleName.toLowerCase();
-        }
+        return item.definition.roleName.toLowerCase();
       } else if (property === 'type') {
         return item.definition.roleType;
       } else {
@@ -132,10 +116,6 @@ export class GovernanceListComponent implements OnInit, OnDestroy, AfterViewInit
 
     if (org.indexOf('.') === 0) {
       org = (org as string).substr(1);
-    }
-
-    if (type === ListType.APP) {
-      app = data.namespace.split(`.${ENSNamespaceTypes.Application}.`)[0];
     }
 
     this.updateFilter.emit({
