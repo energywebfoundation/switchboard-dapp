@@ -12,9 +12,6 @@
     "src/test.ts",
     "src/polyfills.ts"
   ],
-  "exclude": [
-    "src/app/tests/**.ts"
-  ],
   "include": [
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
