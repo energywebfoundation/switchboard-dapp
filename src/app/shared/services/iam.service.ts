@@ -74,6 +74,10 @@ export class IamService {
     return this.iam.address;
   }
 
+  registerAsset() {
+    return from(this.iam.registerAsset());
+  }
+
   deleteOrganization(namespace: string, returnSteps: boolean) {
     return this.iam.deleteOrganization({
       namespace: namespace,
