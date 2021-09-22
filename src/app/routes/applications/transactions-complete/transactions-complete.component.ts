@@ -7,5 +7,5 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TransactionsCompleteComponent {
-  @Output() complete = new EventEmitter<void>();
+  @Output() completed = new EventEmitter<void>();
 }
