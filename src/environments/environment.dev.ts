@@ -2,7 +2,7 @@ import { constants } from './constants';
 
 export const environment = {
   production: false,
-  cacheServerUrl: 'https://identitycache-dev.energyweb.org/',
+  cacheServerUrl: 'https://identitycache-dev.energyweb.org/v1',
   natsServerUrl: 'https://identityevents-dev.energyweb.org/',
   kmsServerUrl: undefined,
   walletConnectOptions: {

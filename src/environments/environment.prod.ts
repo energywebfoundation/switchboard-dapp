@@ -2,7 +2,7 @@ import { constants } from './constants';
 
 export const environment = {
   production: true,
-  cacheServerUrl: 'https://volta-identitycache.energyweb.org/',
+  cacheServerUrl: 'https://volta-identitycache.energyweb.org/v1',
   natsServerUrl: 'https://volta-identityevents.energyweb.org/',
   kmsServerUrl: 'https://kms.energyweb.org/connect/new',
   walletConnectOptions: {
