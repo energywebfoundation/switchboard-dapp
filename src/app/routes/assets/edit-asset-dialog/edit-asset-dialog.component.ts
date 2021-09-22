@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Asset, AssetProfile, ClaimData, Profile } from 'iam-client-lib';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { CancelButton } from '../../../layout/loading/loading.component';
-import { mapClaimsProfile } from '../operators/map-claims-profile';
+import { mapClaimsProfile } from '@operators';
 
 const assetProfilesKey = 'assetProfiles';
 

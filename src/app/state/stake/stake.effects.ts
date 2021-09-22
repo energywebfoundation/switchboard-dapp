@@ -12,8 +12,8 @@ import { ToastrService } from 'ngx-toastr';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import * as PoolActions from '../pool/pool.actions';
 import { Provider } from './models/provider.interface';
-import { filterProviders } from '../../operators/map-providers/filter-providers';
 import * as LayoutActions from '../layout/layout.actions';
+import { filterProviders } from './operators/filter-providers/filter-providers';
 
 
 @Injectable()

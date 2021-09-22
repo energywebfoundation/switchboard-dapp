@@ -7,7 +7,7 @@ import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { CancelButton } from '../../../layout/loading/loading.component';
-import { retryWhenWithDelay } from '../operators/retry-when-with-delay';
+import { retryWhenWithDelay } from '@operators';
 
 @Injectable({
   providedIn: 'root'
