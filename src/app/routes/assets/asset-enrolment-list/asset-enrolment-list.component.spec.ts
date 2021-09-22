@@ -2,41 +2,12 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AssetEnrolmentListComponent } from './asset-enrolment-list.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { UrlService } from '../../../shared/services/url-service/url.service';
 import { AssetDetailsActions, AssetDetailsSelectors } from '@state';
 import { RouterTestingModule } from '@angular/router/testing';
-
-export class MockActivatedRoute {
-  private innerTestParams?: any;
-  private subject?: BehaviorSubject<any> = new BehaviorSubject(this.testParams);
-
-  params = this.subject.asObservable();
-  queryParams = this.subject.asObservable();
-
-  constructor(params?: Params) {
-    if (params) {
-      this.testParams = params;
-    } else {
-      this.testParams = {};
-    }
-  }
-
-  get testParams() {
-    return this.innerTestParams;
-  }
-
-  set testParams(params: {}) {
-    this.innerTestParams = params;
-    this.subject.next(params);
-  }
-
-  get snapshot() {
-    return {params: this.testParams, queryParams: this.testParams};
-  }
-}
+import { MockActivatedRoute } from '@tests';
 
 describe('AssetEnrolmentListComponent', () => {
   let component: AssetEnrolmentListComponent;

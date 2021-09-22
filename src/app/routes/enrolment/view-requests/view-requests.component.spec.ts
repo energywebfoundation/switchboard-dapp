@@ -8,16 +8,14 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { NotificationService } from '../../../shared/services/notification.service';
+import { dialogSpy, iamServiceSpy, loadingServiceSpy } from '@tests';
 
 describe('ViewRequestsComponent', () => {
   let component: ViewRequestsComponent;
   let fixture: ComponentFixture<ViewRequestsComponent>;
   const matDialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
-  const matDialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
-  const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
   const switchboardToastrServiceSpy = jasmine.createSpyObj('SwitchboardToastrService', ['error', 'success']);
   const notificationServiceSpy = jasmine.createSpyObj('NotificationService', ['decreasePendingApprovalCount']);
-  const iamServiceSpy = jasmine.createSpyObj('IamService', ['iam']);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -30,7 +28,7 @@ describe('ViewRequestsComponent', () => {
         {provide: SwitchboardToastrService, useValue: switchboardToastrServiceSpy},
         {provide: MAT_DIALOG_DATA, useValue: {listType: 1, claimData: 2}},
         {provide: MatDialogRef, useValue: matDialogRefSpy},
-        {provide: MatDialog, useValue: matDialogSpy},
+        {provide: MatDialog, useValue: dialogSpy},
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

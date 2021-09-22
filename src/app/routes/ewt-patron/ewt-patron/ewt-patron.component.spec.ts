@@ -4,20 +4,17 @@ import { EwtPatronComponent } from './ewt-patron.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { StakeState } from '../../../state/stake/stake.reducer';
-import * as poolSelectors from '../../../state/pool/pool.selectors';
 import { LastDigitsPipe } from '../pipes/last-digits.pipe';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
-import * as PoolActions from '../../../state/pool/pool.actions';
 import { IamService } from '../../../shared/services/iam.service';
-import * as AuthActions from '../../../state/auth/auth.actions';
+import { iamServiceSpy, MockActivatedRoute } from '@tests';
+import { AuthActions, PoolActions, PoolSelectors } from '@state';
 
 describe('EwtPatronComponent', () => {
   let component: EwtPatronComponent;
   let fixture: ComponentFixture<EwtPatronComponent>;
   let store: MockStore<StakeState>;
-  const iamServiceSpy = jasmine.createSpyObj('IamService', ['isSessionActive']);
-  const mockActivatedRoute = {queryParams: of({org: 'org'})};
+  const mockActivatedRoute = new MockActivatedRoute();
   const setUp = (options?: {
     balance?: string;
     reward?: number;
@@ -29,9 +26,9 @@ describe('EwtPatronComponent', () => {
       performance: 100,
       ...options
     };
-    store.overrideSelector(poolSelectors.getBalance, opt.balance);
-    store.overrideSelector(poolSelectors.getAnnualReward, opt.reward);
-    store.overrideSelector(poolSelectors.getPerformance, opt.performance);
+    store.overrideSelector(PoolSelectors.getBalance, opt.balance);
+    store.overrideSelector(PoolSelectors.getAnnualReward, opt.reward);
+    store.overrideSelector(PoolSelectors.getPerformance, opt.performance);
   };
 
   beforeEach(waitForAsync(() => {
@@ -61,6 +58,7 @@ describe('EwtPatronComponent', () => {
 
   it('should set an organization', () => {
     setUp();
+    mockActivatedRoute.testParams = {org: 'org'};
     const dispatchSpy = spyOn(store, 'dispatch');
     fixture.detectChanges();
 
@@ -69,6 +67,7 @@ describe('EwtPatronComponent', () => {
 
   it('should dispatch action to reinitialize login', () => {
     setUp();
+    mockActivatedRoute.testParams = {org: 'org'};
     const dispatchSpy = spyOn(store, 'dispatch');
     iamServiceSpy.isSessionActive.and.returnValue(true);
     fixture.detectChanges();
@@ -79,6 +78,7 @@ describe('EwtPatronComponent', () => {
 
   it('should dispatch action to open login dialog', () => {
     setUp();
+    mockActivatedRoute.testParams = {org: 'org'};
     const dispatchSpy = spyOn(store, 'dispatch');
     iamServiceSpy.isSessionActive.and.returnValue(false);
     fixture.detectChanges();

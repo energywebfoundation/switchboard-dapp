@@ -1,13 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as poolSelectors from '../../../state/pool/pool.selectors';
 import { map, takeUntil } from 'rxjs/operators';
-import * as PoolActions from '../../../state/pool/pool.actions';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import swal from 'sweetalert';
 import { IamService } from '../../../shared/services/iam.service';
-import * as AuthActions from '../../../state/auth/auth.actions';
+import { AuthActions, PoolActions, PoolSelectors } from '@state';
 
 @Component({
   selector: 'app-ewt-patron',
@@ -15,10 +13,10 @@ import * as AuthActions from '../../../state/auth/auth.actions';
   styleUrls: ['./ewt-patron.component.scss']
 })
 export class EwtPatronComponent implements OnInit, OnDestroy {
-  balance$ = this.store.select(poolSelectors.getBalance);
-  performance$ = this.store.select(poolSelectors.getPerformance);
-  annualReward$ = this.store.select(poolSelectors.getAnnualReward);
-  details$ = this.store.select(poolSelectors.getOrganizationDetails);
+  balance$ = this.store.select(PoolSelectors.getBalance);
+  performance$ = this.store.select(PoolSelectors.getPerformance);
+  annualReward$ = this.store.select(PoolSelectors.getAnnualReward);
+  details$ = this.store.select(PoolSelectors.getOrganizationDetails);
   destroy$ = new Subject<void>();
 
   constructor(private store: Store,

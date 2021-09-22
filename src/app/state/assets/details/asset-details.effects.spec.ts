@@ -7,10 +7,10 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { AssetDetailsEffects } from './asset-details.effects';
 import * as AssetDetailsActions from './asset-details.actions';
 import { IamService } from '../../../shared/services/iam.service';
+import { iamServiceSpy } from '@tests';
 
 describe('AssetDetailsEffects', () => {
 
-  const iamServiceSpy = jasmine.createSpyObj('IamService', ['getAssetById']);
   let actions$: ReplaySubject<any>;
   let effects: AssetDetailsEffects;
   let store: MockStore;

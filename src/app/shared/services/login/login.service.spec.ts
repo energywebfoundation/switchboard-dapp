@@ -8,12 +8,10 @@ import { IamService } from '../iam.service';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
 import { from, of, throwError } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
 
 describe('LoginService', () => {
   let service: LoginService;
-  const toastrySpy = jasmine.createSpyObj('ToastrService', ['error']);
-  const loadingSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
-  const iamServiceSpy = jasmine.createSpyObj('IamService', ['isSessionActive', 'initializeConnection']);
   const iamListenerServiceSpy = jasmine.createSpyObj('IamListenerService', ['setListeners']);
 
   beforeEach(() => {
@@ -21,8 +19,8 @@ describe('LoginService', () => {
     TestBed.configureTestingModule({
       providers: [
         provideMockStore(),
-        {provide: ToastrService, useValue: toastrySpy},
-        {provide: LoadingService, useValue: loadingSpy},
+        {provide: ToastrService, useValue: toastrSpy},
+        {provide: LoadingService, useValue: loadingServiceSpy},
         {provide: IamService, useValue: iamServiceSpy},
         {provide: IamListenerService, useValue: iamListenerServiceSpy}
       ]
@@ -62,7 +60,7 @@ describe('LoginService', () => {
     iamServiceSpy.initializeConnection.and.returnValue(throwError({message: 'Sample Error'}));
     service.login().pipe(take(1)).subscribe((result) => {
       expect(result).toBe(false);
-      expect(toastrySpy.error).toHaveBeenCalledWith('Sample Error');
+      expect(toastrSpy.error).toHaveBeenCalledWith('Sample Error');
     });
   }));
 
@@ -70,7 +68,7 @@ describe('LoginService', () => {
     iamServiceSpy.initializeConnection.and.returnValue(throwError({message: 'Request of type \'wallet_requestPermissions\''}));
     service.login().pipe(take(1)).subscribe((result) => {
       expect(result).toBe(false);
-      expect(toastrySpy.error).toHaveBeenCalledWith('Please check if you do not have pending notifications in your wallet');
+      expect(toastrSpy.error).toHaveBeenCalledWith('Please check if you do not have pending notifications in your wallet');
     });
   });
 });

@@ -2,31 +2,14 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { OrganizationActionsComponent } from './organization-actions.component';
 import { MatDialog } from '@angular/material/dialog';
-import { DebugElement, Directive, NO_ERRORS_SCHEMA, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { actionSelectors } from '../action-test.utils';
 import { of } from 'rxjs';
 import { NewOrganizationComponent, ViewType } from '../../new-organization/new-organization.component';
 import { NewRoleComponent } from '../../new-role/new-role.component';
 import { ListType } from '../../../../shared/constants/shared-constants';
 import { ConfirmationDialogComponent } from '../../../widgets/confirmation-dialog/confirmation-dialog.component';
-
-@Directive({
-  selector: '[appIsFeatureEnabled]'
-})
-class FeatureToggleMockDirective implements OnInit {
-
-  private hasView = true;
-
-  constructor(private templateRef: TemplateRef<any>,
-              private vcr: ViewContainerRef) {
-  }
-
-  ngOnInit() {
-    this.vcr.createEmbeddedView(this.templateRef);
-    this.hasView = true;
-  }
-
-}
+import { FeatureToggleMockDirective } from '@tests';
 
 describe('OrganizationActionsComponent', () => {
   let component: OrganizationActionsComponent;
