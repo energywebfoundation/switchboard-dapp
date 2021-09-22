@@ -1,0 +1,55 @@
+<div class="d-flex flex-column justify-content-start px-2">
+  <div class="d-flex align-items-center pb-3">
+    <mat-icon class="color-info pr-2"
+              data-qa-id="required">{{element?.required ? 'check_circle' : 'highlight_off'}}</mat-icon>
+    <div class="d-flex flex-column pl-2">
+      <h4 class="small font-weight-600 mb-1">LABEL</h4>
+      <span class="f-16" data-qa-id="label">{{element?.label}}</span>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!isBoolean"
+     class="d-flex flex-row justify-content-between bg-sub-row px-2 px-md-4 py-2 mb-2 mx-0 mx-md-2">
+  <ng-container *ngIf="isText">
+    <div class="text-left pt-1">
+      <h4 class="small font-weight-600 mb-1">MIN LENGTH</h4>
+      <span class="f-16" data-qa-id="min-length">{{element?.minLength || defaultValue}}</span>
+    </div>
+    <div class="text-center pt-1">
+      <h4 class="small font-weight-600 mb-1">MAX LENGTH</h4>
+      <span class="f-16" data-qa-id="max-length">{{element?.maxLength || defaultValue}}</span>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isNumber">
+    <div class="text-center pt-1">
+      <h4 class="small font-weight-600 mb-1">MIN VALUE</h4>
+      <span class="f-16" data-qa-id="min-value">{{ element?.minValue || defaultValue }}</span>
+    </div>
+    <div class="text-right pt-1">
+      <h4 class="small font-weight-600 mb-1">MAX VALUE</h4>
+      <span class="f-16" data-qa-id="max-value">{{ element?.maxValue || defaultValue }}</span>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isDate">
+    <div class="text-center pt-1">
+      <h4 class="small font-weight-600 mb-1">MIN DATE</h4>
+      <span class="f-16" data-qa-id="min-date">{{ (element?.minDate | date: 'M/d/yyyy') || defaultValue }}</span>
+    </div>
+    <div class="text-right pt-1">
+      <h4 class="small font-weight-600 mb-1">MAX DATE</h4>
+      <span class="f-16" data-qa-id="max-date">{{ (element?.maxDate | date: 'M/d/yyyy') || defaultValue }}</span>
+    </div>
+  </ng-container>
+</div>
+<div class="d-flex flex-row justify-content-between align-items-center mx-2">
+  <div class="d-flex align-items-center pt-2">
+    <div class="d-flex flex-column" *ngIf="isText">
+      <h4 class="small font-weight-600 mb-1">PATTERN</h4>
+      <span class="f-16" data-qa-id="pattern">{{element?.pattern || defaultValue}}</span>
+    </div>
+  </div>
+  <div>
+    <div class="bg-type" data-qa-id="field-type">{{element?.fieldType}}</div>
+  </div>
+</div>

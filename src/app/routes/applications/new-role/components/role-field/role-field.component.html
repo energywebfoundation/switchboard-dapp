@@ -3,7 +3,7 @@
     <div class="col-lg-12 mb-2">
       <div class="d-flex justify-content-between align-items-center mb-2">
         <span class="label color-white opacity-50 pl-3">Fields</span>
-        <button mat-icon-button
+        <button mat-icon-button *ngIf="!showFieldsForm"
                 (click)="showAddFieldForm()"
                 matTooltip="Add field"
                 data-qa-id="show-field">
@@ -161,59 +161,10 @@
                 </button>
               </div>
             </div>
-            <div class="d-flex flex-column justify-content-start px-2">
-              <div class="d-flex align-items-center pb-3">
-                <mat-icon class="color-info pr-2">{{element?.required ? 'check_circle' : 'highlight_off'}}</mat-icon>
-                <div class="d-flex flex-column pl-2">
-                  <h4 class="small font-weight-600 mb-1">LABEL</h4>
-                  <span class="f-16">{{element.label}}</span>
-                </div>
-              </div>
-            </div>
-            <div *ngIf="element.fieldType !== 'boolean'"
-                 class="d-flex flex-row justify-content-between bg-sub-row px-2 px-md-4 py-2 mb-2 mx-0 mx-md-2">
-              <ng-container *ngIf="element.fieldType === 'text'">
-                <div class="text-left pt-1">
-                  <h4 class="small font-weight-600 mb-1">MIN LENGTH</h4>
-                  <span class="f-16">{{element?.minLength || '--'}}</span>
-                </div>
-                <div class="text-center pt-1">
-                  <h4 class="small font-weight-600 mb-1">MAX LENGTH</h4>
-                  <span class="f-16">{{element?.maxLength || '--'}}</span>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="element.fieldType === 'number'">
-                <div class="text-center pt-1">
-                  <h4 class="small font-weight-600 mb-1">MIN VALUE</h4>
-                  <span class="f-16">{{ element?.minValue || '--' }}</span>
-                </div>
-                <div class="text-right pt-1">
-                  <h4 class="small font-weight-600 mb-1">MAX VALUE</h4>
-                  <span class="f-16">{{ element?.maxValue || '--' }}</span>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="element.fieldType === 'date'">
-                <div class="text-center pt-1">
-                  <h4 class="small font-weight-600 mb-1">MIN DATE</h4>
-                  <span class="f-16">{{ (element?.minDate | date: 'M/d/yyyy') || '--' }}</span>
-                </div>
-                <div class="text-right pt-1">
-                  <h4 class="small font-weight-600 mb-1">MAX DATE</h4>
-                  <span class="f-16">{{ (element?.maxDate | date: 'M/d/yyyy') || '--' }}</span>
-                </div>
-              </ng-container>
-            </div>
-            <div class="d-flex flex-row justify-content-between align-items-center mx-2">
-              <div class="d-flex align-items-center pt-2">
-                <div class="d-flex flex-column" *ngIf="element.fieldType === 'text'">
-                  <h4 class="small font-weight-600 mb-1">PATTERN</h4>
-                  <span class="f-16">{{element?.pattern || '--'}}</span>
-                </div>
-              </div>
-              <div>
-                <div class="bg-type">{{element.fieldType}}</div>
-              </div>
-            </div>
+            <app-fields-summary [element]="element">
+
+            </app-fields-summary>
+
           </div>
         </div>
 

@@ -16,11 +16,11 @@
           <form [formGroup]="roleForm">
             <ng-template matStepLabel>New Role</ng-template>
             <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
+                class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
               <mat-icon>info</mat-icon>
               <div class="d-flex flex-column">
                 <mat-label>{{ (roleForm.value.roleType === RoleType.ORG) ? 'Organization'
-                  : 'Application' }}</mat-label>
+                    : 'Application' }}</mat-label>
                 <div class="f-14">{{ roleForm.value.parentNamespace }}</div>
               </div>
             </div>
@@ -30,8 +30,8 @@
                   <mat-label class="ml-3 pl-1">Role Name</mat-label>
                   <mat-form-field class="mt-2 multi-errors" appearance="outline" floatPlaceholder="never">
                     <input matInput autocomplete="off" formControlName="roleName" appBlockPaste type="text"
-                      placeholder="Role Name" required oninput="this.value = this.value.toLowerCase()"
-                      (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256" />
+                           placeholder="Role Name" required oninput="this.value = this.value.toLowerCase()"
+                           (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256"/>
                     <mat-error *ngIf="controlHasError('roleName', 'required')">Role Name is <strong>required</strong>
                     </mat-error>
                     <mat-error *ngIf="controlHasError('roleName', 'minlength')">Role Name need to have at least 3
@@ -44,14 +44,14 @@
                   <mat-error *ngIf="isExistsRoleName">This name already exists. Please try another</mat-error>
                 </div>
                 <div *ngIf="roleForm.get('roleName').value"
-                  class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mx-3 mt-2 mb-3 w-100">
+                     class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mx-3 mt-2 mb-3 w-100">
                   <div>
                     <mat-icon>check_circle</mat-icon>
                   </div>
                   <div class="d-flex flex-column">
                     <mat-label>ENS Namespace</mat-label>
                     <div class="f-14">{{ roleForm?.value?.roleName + '.' + ENSPrefixes.Roles + '.' +
-                      roleForm?.value?.parentNamespace }}</div>
+                    roleForm?.value?.parentNamespace }}</div>
                   </div>
                 </div>
               </div>
@@ -59,7 +59,7 @@
             <div class="d-flex justify-content-end mb-2">
               <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
               <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking"
-                (click)="proceedSettingIssuer()">Next
+                      (click)="proceedSettingIssuer()">Next
               </button>
             </div>
           </form>
@@ -69,27 +69,27 @@
             <ng-template matStepLabel>Set Role Issuers</ng-template>
             <ng-container formGroupName="data">
               <div *ngIf="viewType === ViewType.UPDATE"
-                class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
+                   class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
                 <span class="pb-2">{{ roleName + '.' + ENSPrefixes.Roles + '.' +
-                  roleForm?.value?.parentNamespace }}</span>
+                roleForm?.value?.parentNamespace }}</span>
               </div>
               <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer">
                 <mat-label class="ml-3 pl-1">Issuer Type</mat-label>
                 <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                   <mat-select placeholder="Issuer Type" formControlName="issuerType"
-                    (selectionChange)="issuerTypeChanged($event)" required>
+                              (selectionChange)="issuerTypeChanged($event)" required>
                     <mat-option *ngFor="let issuerType of IssuerType | keyvalue" [value]="issuerType.value">
                       {{ issuerType.key }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
               <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer"
-                *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.DID">
+                   *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.DID">
                 <div>
                   <div class="label color-white ml-1 pl-2 pb-2">1 Issuer(s)</div>
                   <div
-                    class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3 w-100"
-                    *ngFor="let did of issuerList; let i = index">
+                      class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3 w-100"
+                      *ngFor="let did of issuerList; let i = index">
                     <div class="d-flex justify-content-between w-100">
                       <div class="d-flex justify-content-start align-items-center flex-nowrap">
                         <div class="pt-1">
@@ -99,7 +99,7 @@
                       </div>
                       <div class="d-flex align-items-center pr-2">
                         <button mat-icon-button matSuffix class="mat-primary icon-btn-small color-error"
-                          matTooltip="Remove" *ngIf="issuerList.length > 1" (click)="removeDid(i)">
+                                matTooltip="Remove" *ngIf="issuerList.length > 1" (click)="removeDid(i)">
                           <mat-icon>delete</mat-icon>
                         </button>
                       </div>
@@ -108,9 +108,9 @@
                   <div class="pt-2" [formGroup]="issuerGroup">
                     <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                       <input matInput placeholder="Add Issuer DID (Optional)" autocomplete="off"
-                        formControlName="newIssuer" minlength="3" maxlength="256">
+                             formControlName="newIssuer" minlength="3" maxlength="256">
                       <button matTooltip="Add Issuer" matSuffix mat-icon-button aria-label="Add" type="submit"
-                        (click)="addDid()" [disabled]="issuerGroup.invalid">
+                              (click)="addDid()" [disabled]="issuerGroup.invalid">
                         <mat-icon>add</mat-icon>
                       </button>
                       <mat-error *ngIf="issuerGroup?.controls?.newIssuer?.errors?.invalidDid">DID format is invalid
@@ -125,18 +125,18 @@
                 </div>
               </div>
               <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer"
-                *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.Role">
+                   *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.Role">
                 <div class="row mt-2">
                   <div class="col-lg-12">
                     <div
-                      class="ml-3 card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+                        class="ml-3 card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
                       <mat-icon>notifications_none</mat-icon>
                       <span class="pb-2">Issuer Role Namespace can be organization or application role.</span>
                     </div>
                     <mat-label class="ml-3 pl-1">Issuer Role Namespace</mat-label>
                     <app-smart-search
-                      [placeholderSearch]="'Example:' + 'issuerrole.' + ENSPrefixes.Roles + '.myorg.iam.ewc'"
-                      [searchText]="roleForm.get('roleName')" [fieldName]="'rolePage'">
+                        [placeholderSearch]="'Example:' + 'issuerrole.' + ENSPrefixes.Roles + '.myorg.iam.ewc'"
+                        [searchText]="roleForm.get('roleName')" [fieldName]="'rolePage'">
                     </app-smart-search>
                     <mat-error *ngIf="controlHasError('roleName', 'required')">Issuer Role Namespace is
                       <strong>required</strong>
@@ -156,7 +156,7 @@
               </button>
               <button mat-stroked-button class="btn btn-small mr-2" *ngIf="!origData" (click)="back()">Back</button>
               <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking"
-                (click)="proceedSettingRestriction()">Next
+                      (click)="proceedSettingRestriction()">Next
               </button>
             </div>
           </form>
@@ -166,7 +166,7 @@
           <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
             <div class="label color-white ml-1 pb-2">Role Precondition</div>
             <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
+                class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
               <mat-icon>info</mat-icon>
               <span class="pl-2 pb-2">Users must possess the roles as set in this Role
                 Precondition section before they can enrol to this role.</span>
@@ -177,12 +177,12 @@
               </div>
             </div>
             <div class="card-result mb-1"
-              *ngFor="let rolePrecondition of roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions; let i = index">
+                 *ngFor="let rolePrecondition of roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions; let i = index">
               <div class="d-flex justify-content-between flex-row flex-nowrap">
                 <div class="color-white break-word">{{ rolePrecondition }}</div>
                 <div class="d-inline-flex">
                   <button mat-icon-button matSuffix class="mat-primary icon-btn-small color-error" matTooltip="Remove"
-                    (click)="removePreconditionRole(i)">
+                          (click)="removePreconditionRole(i)">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>
@@ -191,15 +191,16 @@
             <div class="row mt-2">
               <div class="col-lg-12">
                 <app-smart-search [placeholderSearch]="'Search Role Namespace (Optional)'"
-                  [searchText]="restrictionRoleControl" [fieldName]="'rolePage'" searchType="restrictions"
-                  (searchTextEvent)="addRestriction($event)"></app-smart-search>
+                                  [searchText]="restrictionRoleControl" [fieldName]="'rolePage'"
+                                  searchType="restrictions"
+                                  (searchTextEvent)="addRestriction($event)"></app-smart-search>
               </div>
             </div>
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="back()">Back</button>
             <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking"
-              (click)="proceedAddingFields()">Next
+                    (click)="proceedAddingFields()">Next
             </button>
           </div>
         </mat-step>
@@ -209,8 +210,9 @@
             <ng-template matStepLabel>Set Fields</ng-template>
 
             <app-role-field [fieldsForm]="fieldsForm" [dataSource]="dataSource" [isChecking]="isChecking"
-              (cleanForm)="formResetHandler()" (updateData)="dataSourceChangeHandler($event)" (back)="back()"
-              (proceed)="proceedConfirmDetails()">
+                            (cleanForm)="formResetHandler()" (updateData)="dataSourceChangeHandler($event)"
+                            (back)="back()"
+                            (proceed)="proceedConfirmDetails()">
             </app-role-field>
 
           </form>
@@ -228,7 +230,7 @@
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Role Namespace</div>
               <span class="color-white mb-0">{{ roleForm?.value?.roleName + '.' + ENSPrefixes.Roles + '.' +
-                roleForm?.value?.parentNamespace }}</span>
+              roleForm?.value?.parentNamespace }}</span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
@@ -248,130 +250,25 @@
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Restrictions (Role Preconditions)</div>
               <div class="color-white mb-0"
-                *ngIf="!roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions?.length">None
+                   *ngIf="!roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions?.length">None
               </div>
               <div class="color-white mb-0"
-                *ngFor="let precondition of roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions">{{
-                precondition }}</div>
+                   *ngFor="let precondition of roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions">{{
+                  precondition }}</div>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left mt-3">
               <div class="label opacity-50 mb-2">Fields</div>
               <span class="color-white mb-0" *ngIf="!dataSource?.data?.length">None</span>
-              <table mat-table [dataSource]="dataSource" *ngIf="dataSource?.data?.length">
 
-                <ng-container matColumnDef="type">
-                  <th mat-header-cell *matHeaderCellDef> Type</th>
-                  <td mat-cell *matCellDef="let element" data-label="Type"> {{element.fieldType}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="label">
-                  <th mat-header-cell *matHeaderCellDef> Label</th>
-                  <td mat-cell *matCellDef="let element" data-label="Label"> {{element.label}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="required">
-                  <th mat-header-cell *matHeaderCellDef> Required</th>
-                  <td mat-cell *matCellDef="let element" data-label="Required"> {{ element?.required ? 'Yes' : 'No' }}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="minLength">
-                  <th mat-header-cell *matHeaderCellDef> Min Length</th>
-                  <td mat-cell *matCellDef="let element" data-label="Min Length"> {{element?.minLength}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="maxLength">
-                  <th mat-header-cell *matHeaderCellDef> Max Length</th>
-                  <td mat-cell *matCellDef="let element" data-label="Max Length"> {{element?.maxLength}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="pattern">
-                  <th mat-header-cell *matHeaderCellDef> Pattern</th>
-                  <td mat-cell *matCellDef="let element" data-label="Pattern"> {{element?.pattern}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="minValue">
-                  <th mat-header-cell *matHeaderCellDef> Min Value</th>
-                  <td mat-cell *matCellDef="let element" data-label="Min Value">
-                    {{ element.fieldType === 'date' ? (element?.minDate | date: 'M/d/yyyy') : element?.minValue }}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="maxValue">
-                  <th mat-header-cell *matHeaderCellDef> Max Value</th>
-                  <td mat-cell *matCellDef="let element" data-label="Max Value">
-                    {{ element.fieldType === 'date' ? (element?.maxDate | date: 'M/d/yyyy') : element?.maxValue }}
-                  </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumnsView"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumnsView;"></tr>
-              </table>
-
-              <!-- Start new field, To be implement -->
-
-              <!-- <div class="field-list">
-                <div class="field-list-item mt-3 mb-2 px-2 pb-3">
-                  <div class="d-flex flex-column justify-content-start px-2">
-                    <div class="d-flex align-items-center pt-4 pb-3">
-                      <mat-icon class="color-info pr-2">check_circle</mat-icon> -->
-                      <!-- <mat-icon class="color-info pr-2">highlight_off</mat-icon> -->
-                      <!-- <div class="d-flex flex-column pl-2">
-                        <h4 class="small font-weight-600 mb-1">LABEL</h4>
-                        <span class="f-16">Sample Label</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-row justify-content-between bg-sub-row px-2 px-md-4 py-2 mb-2 mx-0 mx-md-2"> -->
-                    <!-- If Type is TEXT -->
-
-                    <!-- <div class="text-left pt-1">
-                      <h4 class="small font-weight-600 mb-1">MIN LENGTH</h4>
-                      <span class="f-16">256</span>
-                    </div>
-                    <div class="text-center pt-1">
-                      <h4 class="small font-weight-600 mb-1">MAX LENGTH</h4>
-                      <span class="f-16">256</span>
-                    </div> -->
-
-                    <!-- If Type is Number -->
-
-                    <!-- <div class="text-center pt-1">
-                        <h4 class="small font-weight-600 mb-1">MIN VALUE</h4>
-                        <span class="f-16">256</span>
-                      </div>
-                      <div class="text-right pt-1">
-                        <h4 class="small font-weight-600 mb-1">MAX VALUE</h4>
-                        <span class="f-16">256</span>
-                      </div> -->
-
-                    <!-- If Type is Date -->
-
-                    <!-- <div class="text-center pt-1">
-                        <h4 class="small font-weight-600 mb-1">MIN DATE</h4>
-                        <span class="f-16">09/14/2021</span>
-                      </div>
-                      <div class="text-right pt-1">
-                        <h4 class="small font-weight-600 mb-1">MAX DATE</h4>
-                        <span class="f-16">09/18/2021</span>
-                      </div> 
-                  </div>
-                  <div class="d-flex flex-row justify-content-between align-items-center mx-2">
-                    <div class="d-flex align-items-center pt-2">
-                      <div class="d-flex flex-column">
-                        <h4 class="small font-weight-600 mb-1">PATTERN</h4>
-                        <span class="f-16">Sample Pattern 1</span>
-                      </div>
-                    </div>
-                    <div>
-                      <div class="bg-type">TEXT</div>
-                    </div>
-                  </div>
+              <ng-container *ngIf="dataSource.data.length">
+                <div class="field-list">
+                  <app-fields-summary *ngFor="let element of dataSource.data"
+                                      [element]="element"
+                                      class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block">
+                  </app-fields-summary>
                 </div>
-              </div> -->
-              <!-- End new field -->
-
+              </ng-container>
             </div>
           </div>
           <div>
@@ -385,12 +282,12 @@
           <mat-step #customStep [editable]="false" [completed]="false">
             <ng-template matStepLabel>{{ step.info }}</ng-template>
             <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+                class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon>info</mat-icon>
               <span class="pb-2">{{ step.info }}</span>
             </div>
             <div
-              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+                class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon>notifications_none</mat-icon>
               <span class="pb-2">Please confirm this transaction in your
                 connected Wallet.</span>
@@ -398,7 +295,7 @@
             <div class="d-flex justify-content-end mb-3">
               <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
               <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper?.selected === customStep"
-                (appRetryBtn)="retry()">Retry
+                      (appRetryBtn)="retry()">Retry
               </button>
             </div>
           </mat-step>
@@ -406,7 +303,7 @@
         <mat-step [completed]="false">
           <ng-template matStepLabel>Complete</ng-template>
           <div
-            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
             <mat-icon>notifications_none</mat-icon>
             <span class="pb-2">All transactions are completely processed.</span>
           </div>
