@@ -19,7 +19,7 @@
                 class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
               <mat-icon>info</mat-icon>
               <div class="d-flex flex-column">
-                <mat-label>ORGANIZATION</mat-label> 
+                <mat-label>ORGANIZATION</mat-label>
                 <div class="f-14">
                 {{ appForm.value.orgNamespace }}
                 </div>
@@ -194,16 +194,7 @@
         </ng-container>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Complete</ng-template>
-          <div
-              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon>
-            <span class="pb-2">All transactions are completely processed.</span>
-          </div>
-          <div>
-            <div class="d-flex justify-content-end mb-2">
-              <button mat-raised-button class="btn btn-small btn-primary" (click)="closeDialog(true)">Complete</button>
-            </div>
-          </div>
+          <app-transactions-complete (complete)="closeDialog(true)"></app-transactions-complete>
         </mat-step>
 
       </mat-vertical-stepper>
