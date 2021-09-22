@@ -14,6 +14,7 @@
             </button>
             <ng-template #subOrg>
               <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0"
+                      [disabled]="isSelectedOrgNotOwnedByUser$ | async"
                       (click)="createSubOrg()">Create
                 Sub-Organization
               </button>

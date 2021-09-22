@@ -27,6 +27,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('listRole') listRole: GovernanceListComponent;
 
   hierarchyLength$ = this.store.select(OrganizationSelectors.getHierarchyLength);
+  isSelectedOrgNotOwnedByUser$ = this.store.select(OrganizationSelectors.isSelectedOrgNotOwnedByUser);
 
   isAppShown = false;
   isRoleShown = false;
