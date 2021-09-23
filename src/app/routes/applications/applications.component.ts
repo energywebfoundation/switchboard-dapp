@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
-import { GovernanceListComponent } from './governance-list/governance-list.component';
 import { ListType } from '../../shared/constants/shared-constants';
 import { IamService } from '../../shared/services/iam.service';
 import { UrlParamService } from '../../shared/services/url-param.service';
@@ -14,6 +13,8 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 import { OrganizationActions, OrganizationSelectors } from '@state';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
+import { ApplicationListComponent } from './application-list/application-list.component';
+import { RoleListComponent } from './role-list/role-list.component';
 
 @Component({
   selector: 'app-applications',
@@ -23,8 +24,8 @@ import { OrganizationListComponent } from './organization-list/organization-list
 export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('governanceTabGroup') governanceTabGroup: MatTabGroup;
   @ViewChild('listOrg') listOrg: OrganizationListComponent;
-  @ViewChild('listApp') listApp: GovernanceListComponent;
-  @ViewChild('listRole') listRole: GovernanceListComponent;
+  @ViewChild('listApp') listApp: ApplicationListComponent;
+  @ViewChild('listRole') listRole: RoleListComponent;
 
   hierarchyLength$ = this.store.select(OrganizationSelectors.getHierarchyLength);
   isSelectedOrgNotOwnedByUser$ = this.store.select(OrganizationSelectors.isSelectedOrgNotOwnedByUser);
