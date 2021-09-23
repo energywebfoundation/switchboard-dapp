@@ -12,6 +12,7 @@ import { GovernanceViewComponent } from '../governance-view/governance-view.comp
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
+import { filterBy } from '../filter-by/filter-by';
 
 @Component({
   selector: 'app-application-list',
@@ -184,44 +185,15 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   filter() {
-    let tmpData = JSON.parse(JSON.stringify(this.origDatasource));
-
     // Trim Filters
     this.filterForm.get('organization').setValue(this.filterForm.value.organization.trim());
     this.filterForm.get('application').setValue(this.filterForm.value.application.trim());
     this.filterForm.get('role').setValue(this.filterForm.value.role.trim());
 
-    // Filter By Org
-    if (this.filterForm.value.organization) {
-      tmpData = tmpData.filter((item: any) => {
-        let arr = item.namespace.split('.iam.ewc');
-        arr = arr[0].split(ENSNamespaceTypes.Roles);
-        arr = arr[arr.length - 1].split(ENSNamespaceTypes.Application);
-
-        const org = arr[arr.length - 1];
-        return (org.toUpperCase().indexOf(this.filterForm.value.organization.toUpperCase()) >= 0);
-      });
-    }
-
-    // Filter By App
-    if (this.filterForm.value.application) {
-      tmpData = tmpData.filter((item: any) => {
-        let arr = item.namespace.split(`.${ENSNamespaceTypes.Application}.`);
-        arr = arr[0].split('.');
-        return (arr[arr.length - 1].toUpperCase().indexOf(this.filterForm.value.application.toUpperCase()) >= 0);
-      });
-    }
-
-    // Filter By Role
-    if (this.filterForm.value.role) {
-      tmpData = tmpData.filter((item: any) => {
-        let arr = item.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
-        arr = arr[0].split('.');
-        return (arr[arr.length - 1].toUpperCase().indexOf(this.filterForm.value.role.toUpperCase()) >= 0);
-      });
-    }
-
-    this.dataSource.data = tmpData;
+    this.dataSource.data = filterBy(JSON.parse(JSON.stringify(this.origDatasource)),
+      this.filterForm.value.organization,
+      this.filterForm.value.application,
+      this.filterForm.value.role);
   }
 
   resetFilter() {
