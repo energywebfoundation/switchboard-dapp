@@ -13,8 +13,6 @@ import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.componen
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
 
-const AppColumns: string[] =;
-
 @Component({
   selector: 'app-application-list',
   templateUrl: './application-list.component.html',
@@ -33,8 +31,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   dataSource = new MatTableDataSource([]);
   origDatasource = [];
   displayedColumns: string[];
-  listTypeLabel: string;
-  ensType: any;
 
   filterForm = this.fb.group({
     organization: '',

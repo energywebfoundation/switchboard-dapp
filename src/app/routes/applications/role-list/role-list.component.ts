@@ -33,8 +33,6 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   dataSource = new MatTableDataSource([]);
   origDatasource = [];
   displayedColumns: string[];
-  listTypeLabel: string;
-  ensType: any;
 
   filterForm = this.fb.group({
     organization: '',
@@ -53,8 +51,6 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async ngOnInit() {
     this.displayedColumns = RoleColumns;
-    this.listTypeLabel = 'Role';
-    this.ensType = ENSNamespaceTypes.Roles;
 
     await this.getList(this.defaultFilterOptions);
   }
@@ -80,7 +76,7 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   public async getList(filterOptions?: any) {
     this.loadingService.show();
 
-    this.origDatasource = await this.iamService.getENSTypesByOwner(this.ensType);
+    this.origDatasource = await this.iamService.getENSTypesByOwner(ENSNamespaceTypes.Roles);
 
     // Setup Filter
     if (filterOptions) {
