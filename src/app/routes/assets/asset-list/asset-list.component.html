@@ -51,7 +51,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         <ng-container> Asset DID</ng-container>
       </th>
-      <td mat-cell *matCellDef="let element" data-label="Asset DID">
+      <td mat-cell *matCellDef="let element" data-label="Asset DID" class="cursor-pointer">
         <div matTooltip="{{element.id}}" matTooltipClass="tooltip-full-width"
              [appMinifiedDidViewer]="element.id">{{ element.id | didFormatMinifier }}</div>
       </td>
