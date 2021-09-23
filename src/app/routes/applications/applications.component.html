@@ -45,9 +45,9 @@
           </div>
         </div>
         <ng-container *ngIf="isAppShown">
-          <app-governance-list listType="app" #listApp [isFilterShown]="showFilter.app"
-                               [defaultFilterOptions]="defaultFilterOptions.app" (updateFilter)="updateFilter($event)">
-          </app-governance-list>
+          <app-application-list listType="app" #listApp [isFilterShown]="showFilter.app"
+                                [defaultFilterOptions]="defaultFilterOptions.app" (updateFilter)="updateFilter($event)">
+          </app-application-list>
         </ng-container>
       </div>
     </div>
@@ -64,8 +64,8 @@
           </div>
         </div>
         <ng-container *ngIf="isRoleShown">
-          <app-governance-list listType="role" #listRole [isFilterShown]="showFilter.role"
-                               [defaultFilterOptions]="defaultFilterOptions.role"></app-governance-list>
+          <app-role-list listType="role" #listRole [isFilterShown]="showFilter.role"
+                         [defaultFilterOptions]="defaultFilterOptions.role"></app-role-list>
         </ng-container>
       </div>
     </div>

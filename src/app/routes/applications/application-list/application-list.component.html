@@ -75,26 +75,20 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef class="text-right"></th>
       <td mat-cell *matCellDef="let element">
-        <div class="d-flex justify-content-end">
-          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action button list">
-            <mat-icon class="btn-color-primary">more_vert</mat-icon>
+        <app-actions-menu>
+          <button mat-menu-item class="btn-color-primary" (click)="viewDetails(listType, element)">
+            <mat-icon class="btn-color-primary">preview</mat-icon>
+            <span>View Details</span>
           </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item class="btn-color-primary" (click)="viewDetails(listType, element)">
-              <mat-icon class="btn-color-primary">preview</mat-icon>
-              <span>View Details</span>
-            </button>
 
-            <app-application-actions *ngIf="listType === ListType.APP"
-                                     [application]="element"
-                                     (viewRoles)="viewRoles(ListType.APP, element)"
-                                     (roleCreated)="viewRoles(ListType.APP, element)"
-                                     (edited)="edit()"
-                                     (deleteConfirmed)="remove(listType, element)">
-            </app-application-actions>
-
-          </mat-menu>
-        </div>
+          <app-application-actions *ngIf="listType === ListType.APP"
+                                   [application]="element"
+                                   (viewRoles)="viewRoles(ListType.APP, element)"
+                                   (roleCreated)="viewRoles(ListType.APP, element)"
+                                   (edited)="edit()"
+                                   (deleteConfirmed)="remove(listType, element)">
+          </app-application-actions>
+        </app-actions-menu>
       </td>
     </ng-container>
 

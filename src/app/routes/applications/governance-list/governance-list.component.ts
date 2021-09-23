@@ -55,12 +55,10 @@ export class GovernanceListComponent implements OnInit, OnDestroy, AfterViewInit
   async ngOnInit() {
     switch (this.listType) {
       case ListType.APP:
-        this.displayedColumns = AppColumns;
         this.listTypeLabel = 'Application';
         this.ensType = ENSNamespaceTypes.Application;
         break;
       case ListType.ROLE:
-        this.displayedColumns = RoleColumns;
         this.listTypeLabel = 'Role';
         this.ensType = ENSNamespaceTypes.Roles;
         break;

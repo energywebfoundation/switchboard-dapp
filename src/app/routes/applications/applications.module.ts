@@ -33,6 +33,7 @@ import { FieldsSummaryComponent } from './new-role/components/fields-summary/fie
 import { TransactionsCompleteComponent } from './transactions-complete/transactions-complete.component';
 import { RoleListComponent } from './role-list/role-list.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
+import { ActionsMenuComponent } from './actions/actions-menu/actions-menu.component';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -57,6 +58,7 @@ const routes: Routes = [
     FieldsSummaryComponent,
     RoleListComponent,
     ApplicationListComponent,
+    ActionsMenuComponent,
     TransactionsCompleteComponent
   ],
   imports: [

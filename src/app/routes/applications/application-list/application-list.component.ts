@@ -49,7 +49,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
 
   async ngOnInit() {
     this.displayedColumns = ['logoUrl', 'name', 'namespace', 'actions'];
-    this.ensType = ENSNamespaceTypes.Application;
 
     await this.getList(this.defaultFilterOptions);
   }
