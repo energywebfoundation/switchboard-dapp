@@ -4,9 +4,10 @@ import { GovernanceDetailsComponent } from './governance-details.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
+import { GovernanceViewComponent } from '../governance-view.component';
 
 @NgModule({
-  declarations: [GovernanceDetailsComponent],
+  declarations: [GovernanceDetailsComponent, GovernanceViewComponent],
   imports: [
     SharedModule,
     MatCardModule,
@@ -14,7 +15,8 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule
   ],
   exports: [
-    GovernanceDetailsComponent
+    GovernanceDetailsComponent,
+    GovernanceViewComponent
   ]
 })
 export class GovernanceDetailsModule {
