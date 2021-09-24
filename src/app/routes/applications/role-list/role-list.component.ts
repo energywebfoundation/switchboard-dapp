@@ -102,26 +102,6 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  viewRoles(type: string, data: any) {
-    let org;
-    let app;
-
-    let arr = data.namespace.split('.iam.ewc');
-    arr = arr[0].split(ENSNamespaceTypes.Roles);
-    arr = arr[arr.length - 1].split(ENSNamespaceTypes.Application);
-    org = arr[arr.length - 1];
-
-    if (org.indexOf('.') === 0) {
-      org = (org as string).substr(1);
-    }
-
-    this.updateFilter.emit({
-      listType: ListType.ROLE,
-      organization: org,
-      application: app
-    });
-  }
-
   async edit() {
     await this.getList();
   }
@@ -148,10 +128,6 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
     }
-  }
-
-  async newRole(listType: string, roleDefinition: any) {
-    this.viewRoles(listType, roleDefinition);
   }
 
   private async getRemovalSteps(listType: string, roleDefinition: any) {
