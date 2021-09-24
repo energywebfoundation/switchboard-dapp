@@ -19,8 +19,8 @@ import * as UserClaimActions from './user-claim/user.actions';
 import * as UserClaimSelectors from './user-claim/user.selectors';
 
 // === Organization ===
-import * as OrganizationActions from './organization/organization.actions';
-import * as OrganizationSelectors from './organization/organization.selectors';
+import * as OrganizationActions from './governance/organization/organization.actions';
+import * as OrganizationSelectors from './governance/organization/organization.selectors';
 
 // === Layout ===
 import * as LayoutActions from './layout/layout.actions';

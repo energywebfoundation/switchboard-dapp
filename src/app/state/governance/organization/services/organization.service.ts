@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { StakingPoolServiceFacade } from '../../../shared/services/staking/staking-pool-service-facade';
-import { IamService } from '../../../shared/services/iam.service';
+import { StakingPoolServiceFacade } from '../../../../shared/services/staking/staking-pool-service-facade';
+import { IamService } from '../../../../shared/services/iam.service';
 import { forkJoin, Observable } from 'rxjs';
 import { IOrganization } from 'iam-client-lib';
 import { map, switchMap } from 'rxjs/operators';

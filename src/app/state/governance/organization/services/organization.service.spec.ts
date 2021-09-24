@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
 import { OrganizationService } from './organization.service';
-import { IamService } from '../../../shared/services/iam.service';
-import { StakingPoolServiceFacade } from '../../../shared/services/staking/staking-pool-service-facade';
+import { IamService } from '../../../../shared/services/iam.service';
+import { StakingPoolServiceFacade } from '../../../../shared/services/staking/staking-pool-service-facade';
 import { of } from 'rxjs';
 import { iamServiceSpy } from '@tests';
 

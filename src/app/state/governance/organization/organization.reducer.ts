@@ -7,7 +7,6 @@ import { OrganizationProvider } from './models/organization-provider.interface';
 export const USER_FEATURE_KEY = 'organization';
 
 
-
 export interface OrganizationState {
   list: OrganizationProvider[];
   history: OrganizationProvider[];

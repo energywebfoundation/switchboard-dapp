@@ -6,7 +6,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { OrganizationEffects } from './organization.effects';
 import { OrganizationService } from './services/organization.service';
-import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { MatDialog } from '@angular/material/dialog';
 import * as OrganizationActions from './organization.actions';
 import * as OrganizationSelectors from './organization.selectors';
