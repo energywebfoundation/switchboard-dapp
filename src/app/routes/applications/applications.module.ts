@@ -34,6 +34,7 @@ import { TransactionsCompleteComponent } from './transactions-complete/transacti
 import { RoleListComponent } from './role-list/role-list.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { ActionsMenuComponent } from './actions/actions-menu/actions-menu.component';
+import { FilterComponent } from './filter/filter.component';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -58,6 +59,8 @@ const routes: Routes = [
     FieldsSummaryComponent,
     RoleListComponent,
     ApplicationListComponent,
+    ActionsMenuComponent,
+    FilterComponent,
     ActionsMenuComponent,
     TransactionsCompleteComponent
   ],

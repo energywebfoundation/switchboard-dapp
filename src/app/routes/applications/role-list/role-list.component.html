@@ -1,11 +1,12 @@
 <!-- START: Filter-->
+<app-filter></app-filter>
 <form [formGroup]="filterForm">
   <div *ngIf="isFilterShown"
        class="card card-filter d-flex justify-content-end pt-2 pb-3 mb-1">
     <div class="row">
       <div class="col-md-3">
         <mat-label class="color-white ml-2 pl-1">Organization</mat-label>
-        <mat-form-field appearance="outline" floatPlaceholder="never"
+        <mat-form-field appearance="outline"
                         class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
           <input matInput autocomplete="off" formControlName="organization" type="text" placeholder="Organization"
                  maxlength="256" (input)="filter()"/>
@@ -13,7 +14,7 @@
       </div>
       <div class="col-md-3">
         <mat-label class="color-white ml-2 pl-1">Application</mat-label>
-        <mat-form-field appearance="outline" floatPlaceholder="never"
+        <mat-form-field appearance="outline"
                         class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
           <input matInput autocomplete="off" formControlName="application" type="text" placeholder="Application"
                  maxlength="256" (input)="filter()"/>
@@ -21,14 +22,14 @@
       </div>
       <div class="col-md-3" *ngIf="listType === ListType.ROLE">
         <mat-label class="color-white ml-2 pl-1">Role</mat-label>
-        <mat-form-field appearance="outline" floatPlaceholder="never"
+        <mat-form-field appearance="outline"
                         class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
           <input matInput autocomplete="off" formControlName="role" type="text" placeholder="Role" maxlength="256"
                  (input)="filter()"/>
         </mat-form-field>
       </div>
-      <div class="col-md-3" *ngIf="listType === ListType.APP"></div>
-      <div class="col-md-3 d-flex justify-content-center justify-content-lg-end align-items-end mb-1">
+      <div style="flex-grow: 2; max-width: initial;"
+           class="col-md-3 d-flex justify-content-center justify-content-lg-end align-items-end mb-1">
         <button mat-stroked-button class="btn btn-small mb-0 mt-2 mt-lg-0 mb-md-2 mb-lg-0" (click)="resetFilter()">Clear
           Filters
         </button>

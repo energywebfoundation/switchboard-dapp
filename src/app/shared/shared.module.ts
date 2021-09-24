@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -19,8 +19,7 @@ import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 
 import { ColorsService } from './colors/colors.service';
 import { ScrollableDirective } from './directives/scrollable/scrollable.directive';
@@ -66,6 +65,7 @@ import { SmartSearchComponent } from './components/smart-search/smart-search.com
 import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
 import { CopyToClipboardDirective } from './directives/copyToClipboard/copy-to-clipboard.directive';
 import { FeatureToggleDirective } from './feature-toggle/feature-toggle.directive';
+import { TableHeadingComponent } from './components/table-heading/table-heading.component';
 
 
 const MATERIAL_MODULES = [
@@ -143,7 +143,8 @@ const MATERIAL_MODULES = [
     SmartSearchComponent,
     ReplaceUnderscorePipe,
     CopyToClipboardDirective,
-    FeatureToggleDirective
+    FeatureToggleDirective,
+    TableHeadingComponent
   ],
   exports: [
     CommonModule,
@@ -178,7 +179,8 @@ const MATERIAL_MODULES = [
     SmartSearchComponent,
     ReplaceUnderscorePipe,
     CopyToClipboardDirective,
-    FeatureToggleDirective
+    FeatureToggleDirective,
+    TableHeadingComponent
   ],
   entryComponents: [MinifiedDidViewerDialogComponent]
 })
