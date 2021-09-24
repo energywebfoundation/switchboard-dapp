@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as ApplicationActions from './application.actions';
-import { filterBy } from '../../../routes/applications/filter-by/filter-by';
+import { filterBy } from '../utils/filter-by/filter-by';
 import { Filters } from './models/filters';
 import { IApp } from 'iam-client-lib';
 

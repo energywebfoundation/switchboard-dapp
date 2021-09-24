@@ -12,7 +12,7 @@ import { GovernanceViewComponent } from '../governance-view/governance-view.comp
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
-import { filterBy } from '../filter-by/filter-by';
+import { filterBy } from '../../../state/governance/utils/filter-by/filter-by';
 
 const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
 
