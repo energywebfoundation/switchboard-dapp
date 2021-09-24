@@ -26,6 +26,10 @@ import * as OrganizationSelectors from './governance/organization/organization.s
 import * as LayoutActions from './layout/layout.actions';
 import * as LayoutSelectors from './layout/layout.selectors';
 
+// === Application ===
+import * as ApplicationActions from './governance/application/application.actions';
+import * as ApplicationSelectors from './governance/application/application.selectors';
+
 
 export * from './store-root.module';
 export {
@@ -46,6 +50,8 @@ export {
 
   OrganizationActions,
   OrganizationSelectors,
+  ApplicationActions,
+  ApplicationSelectors,
 
   LayoutActions,
   LayoutSelectors
