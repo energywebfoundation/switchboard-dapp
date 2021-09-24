@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
-import { OrganizationActions, OrganizationSelectors } from '@state';
+import { ApplicationActions, OrganizationActions, OrganizationSelectors } from '@state';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { RoleListComponent } from './role-list/role-list.component';
@@ -155,6 +155,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       case ListType.APP:
         this.showFilter.app = true;
         tabIdx = 1;
+        this.store.dispatch(ApplicationActions.updateFilters({filters: filterOptions}));
         this.defaultFilterOptions.app = filterOptions;
         break;
       case ListType.ROLE:
