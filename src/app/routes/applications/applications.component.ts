@@ -155,7 +155,13 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       case ListType.APP:
         this.showFilter.app = true;
         tabIdx = 1;
-        this.store.dispatch(ApplicationActions.updateFilters({filters: filterOptions}));
+        this.store.dispatch(ApplicationActions.updateFilters({
+          filters: {
+            organization: filterOptions.organization,
+            application: '',
+            role: ''
+          }
+        }));
         this.defaultFilterOptions.app = filterOptions;
         break;
       case ListType.ROLE:

@@ -32,7 +32,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   ListType = ListType;
   RoleType = RoleType;
   dataSource = new MatTableDataSource([]);
-  origDatasource = [];
   displayedColumns: string[];
 
   filterForm = this.fb.group({
@@ -56,6 +55,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.getList();
     this.setData();
+    this.setFilters();
   }
 
   ngAfterViewInit() {
@@ -81,6 +81,14 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
       takeUntil(this.subscription$)
     ).subscribe((list) => {
       this.dataSource.data = list;
+    });
+  }
+
+  private setFilters() {
+    this.store.select(ApplicationSelectors.getFilters).pipe(
+      takeUntil(this.subscription$)
+    ).subscribe((filters) => {
+      this.filterForm.patchValue({...filters});
     });
   }
 

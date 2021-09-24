@@ -7,3 +7,8 @@ export const getFilteredList = createSelector(
   getApplicationState,
   (state) => state.filteredList
 );
+
+export const getFilters = createSelector(
+  getApplicationState,
+  (state) => state.filters
+);

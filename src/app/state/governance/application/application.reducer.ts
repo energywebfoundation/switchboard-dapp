@@ -33,7 +33,7 @@ const applicationReducer = createReducer(
 
   on(ApplicationActions.updateFilters, (state, {filters}) => ({
     ...state,
-    ...filters,
+    filters,
     filteredList: filterBy(state.list, filters.organization, filters.application, filters.role)
   })),
   on(ApplicationActions.clearFilters, (state) => ({
