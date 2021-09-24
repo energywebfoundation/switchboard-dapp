@@ -12,7 +12,9 @@ import { GovernanceViewComponent } from '../governance-view/governance-view.comp
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
-import { filterBy } from '../filter-by/filter-by';
+import { Store } from '@ngrx/store';
+import { ApplicationActions, ApplicationSelectors } from '@state';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-application-list',
@@ -45,26 +47,22 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
               private iamService: IamService,
               private dialog: MatDialog,
               private fb: FormBuilder,
-              private toastr: SwitchboardToastrService) {
+              private toastr: SwitchboardToastrService,
+              private store: Store) {
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.displayedColumns = ['logoUrl', 'name', 'namespace', 'actions'];
 
-    await this.getList(this.defaultFilterOptions);
+    this.getList();
+    this.setData();
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = (item, property) => {
       if (property === 'name') {
-
-        switch (this.listType) {
-          case ListType.APP:
-            return item.definition.appName.toLowerCase();
-          case ListType.ROLE:
-            return item.definition.roleName.toLowerCase();
-        }
+        return item.definition.appName.toLowerCase();
       } else if (property === 'type') {
         return item.definition.roleType;
       } else {
@@ -78,21 +76,16 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
     this.subscription$.complete();
   }
 
-  public async getList(filterOptions?: any) {
-    this.loadingService.show();
+  private setData() {
+    this.store.select(ApplicationSelectors.getFilteredList).pipe(
+      takeUntil(this.subscription$)
+    ).subscribe((list) => {
+      this.dataSource.data = list;
+    });
+  }
 
-    this.origDatasource = await this.iamService.getENSTypesByOwner(ENSNamespaceTypes.Application);
-
-    // Setup Filter
-    if (filterOptions) {
-      this.filterForm.patchValue({
-        organization: filterOptions.organization || '',
-        application: filterOptions.application || '',
-        role: ''
-      });
-    }
-    this.filter();
-    this.loadingService.hide();
+  public getList() {
+    this.store.dispatch(ApplicationActions.getList());
   }
 
   viewDetails(type: string, data: any) {
@@ -131,7 +124,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   async edit() {
-    await this.getList();
+    this.getList();
   }
 
   async remove(listType: string, roleDefinition: any) {
@@ -190,19 +183,16 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
     this.filterForm.get('application').setValue(this.filterForm.value.application.trim());
     this.filterForm.get('role').setValue(this.filterForm.value.role.trim());
 
-    this.dataSource.data = filterBy(JSON.parse(JSON.stringify(this.origDatasource)),
-      this.filterForm.value.organization,
-      this.filterForm.value.application,
-      this.filterForm.value.role);
+    this.store.dispatch(ApplicationActions.updateFilters({
+      filters: {
+        organization: this.filterForm.value.organization,
+        application: this.filterForm.value.application,
+        role: this.filterForm.value.role
+      }
+    }));
   }
 
   resetFilter() {
-    this.filterForm.patchValue({
-      organization: '',
-      application: '',
-      role: ''
-    });
-
-    this.dataSource.data = JSON.parse(JSON.stringify(this.origDatasource));
+    this.store.dispatch(ApplicationActions.clearFilters());
   }
 }

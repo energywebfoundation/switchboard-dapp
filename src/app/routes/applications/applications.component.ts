@@ -115,7 +115,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (i.index === 1) {
       // console.log('Showing App List');
       if (this.isAppShown) {
-        await this.listApp.getList(this.defaultFilterOptions.app);
+        this.listApp.getList();
         this.defaultFilterOptions.app = undefined;
       } else {
         this.isAppShown = true;
