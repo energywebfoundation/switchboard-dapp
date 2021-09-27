@@ -8,7 +8,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
-import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
 import { Store } from '@ngrx/store';
@@ -86,13 +85,12 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public getList() {
     this.store.dispatch(RoleActions.getList());
-
   }
 
-  viewDetails(type: string, data: any) {
+  viewDetails(data: any) {
     this.dialog.open(GovernanceViewComponent, {
       width: '600px', data: {
-        type,
+        type: ListType.ROLE,
         definition: data
       },
       maxWidth: '100%',
@@ -102,52 +100,6 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async edit() {
     this.getList();
-  }
-
-  async remove(listType: string, roleDefinition: any) {
-    // Get Removal Steps
-    const steps = await this.getRemovalSteps(listType, roleDefinition);
-
-    if (steps) {
-      // Launch Remove Org / App Dialog
-      const isRemoved = this.dialog.open(RemoveOrgAppComponent, {
-        width: '600px', data: {
-          namespace: roleDefinition.namespace,
-          listType,
-          steps
-        },
-        maxWidth: '100%',
-        disableClose: true
-      }).afterClosed().toPromise();
-
-      // Refresh the list after successful removal
-      if (await isRemoved) {
-        this.getList();
-      }
-
-    }
-  }
-
-  private async getRemovalSteps(listType: string, roleDefinition: any) {
-    this.loadingService.show();
-    const returnSteps = this.iamService.iam.address === roleDefinition.owner;
-    const call = this.iamService.iam.deleteApplication({
-      namespace: roleDefinition.namespace,
-      returnSteps
-    });
-    try {
-      return returnSteps ?
-        await call :
-        [{
-          info: 'Confirm removal in your safe wallet',
-          next: async () => await call
-        }];
-    } catch (e) {
-      console.error(e);
-      this.toastr.error(e, 'Delete ' + (this.listType === ListType.ORG ? 'Organization' : 'Application'));
-    } finally {
-      this.loadingService.hide();
-    }
   }
 
   filter() {
