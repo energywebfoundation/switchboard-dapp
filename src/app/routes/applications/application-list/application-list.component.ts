@@ -153,8 +153,4 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   filter(filters): void {
     this.store.dispatch(ApplicationActions.updateFilters({filters}));
   }
-
-  resetFilter() {
-    this.store.dispatch(ApplicationActions.clearFilters());
-  }
 }

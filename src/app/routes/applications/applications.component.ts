@@ -172,6 +172,6 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private cleanFilters(): void {
     this.store.dispatch(RoleActions.cleanUpFilters());
-    this.store.dispatch(ApplicationActions.clearFilters());
+    this.store.dispatch(ApplicationActions.cleanUpFilters());
   }
 }

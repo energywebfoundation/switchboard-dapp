@@ -7,7 +7,7 @@ import { LoadingService } from '../../../shared/services/loading.service';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { ApplicationSelectors } from '@state';
+import { ApplicationActions, ApplicationSelectors } from '@state';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ENSNamespaceTypes } from 'iam-client-lib';
@@ -73,4 +73,13 @@ describe('ApplicationListComponent', () => {
     });
 
   });
+
+  it('should dispatch updateFilters action when calling filter method', () => {
+    const dispatchSpy = spyOn(store, 'dispatch');
+    const filters = {organization: '123', application: 'test', role: ''};
+    component.filter(filters);
+
+    expect(dispatchSpy).toHaveBeenCalledWith(ApplicationActions.updateFilters({filters}));
+  });
+
 });
