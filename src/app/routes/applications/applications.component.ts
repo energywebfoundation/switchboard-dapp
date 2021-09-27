@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
-import { ApplicationActions, OrganizationActions, OrganizationSelectors } from '@state';
+import { ApplicationActions, OrganizationActions, OrganizationSelectors, RoleActions } from '@state';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { RoleListComponent } from './role-list/role-list.component';
@@ -68,6 +68,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription$.next();
     this.subscription$.complete();
+    this.cleanFilters();
   }
 
   openNewOrgComponent(): void {
@@ -116,15 +117,13 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       // console.log('Showing App List');
       if (this.isAppShown) {
         this.listApp.getList();
-        this.defaultFilterOptions.app = undefined;
       } else {
         this.isAppShown = true;
       }
     } else if (i.index === 2) {
       // console.log('Showing Role List');
       if (this.isRoleShown) {
-        await this.listRole.getList(this.defaultFilterOptions.role);
-        this.defaultFilterOptions.role = undefined;
+        this.listRole.getList();
       } else {
         this.isRoleShown = true;
       }
@@ -158,19 +157,29 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.dispatch(ApplicationActions.updateFilters({
           filters: {
             organization: filterOptions.organization,
-            application: '',
-            role: ''
+            application: filterOptions.application,
+            role: filterOptions.role
           }
         }));
-        this.defaultFilterOptions.app = filterOptions;
         break;
       case ListType.ROLE:
         this.showFilter.role = true;
         tabIdx = 2;
-        this.defaultFilterOptions.role = filterOptions;
+        this.store.dispatch(RoleActions.updateFilters({
+          filters: {
+            organization: filterOptions.organization,
+            application: filterOptions.application,
+            role: filterOptions.role
+          }
+        }));
         break;
     }
 
     this.governanceTabGroup.selectedIndex = tabIdx;
+  }
+
+  private cleanFilters(): void {
+    this.store.dispatch(RoleActions.clearFilters());
+    this.store.dispatch(ApplicationActions.clearFilters());
   }
 }

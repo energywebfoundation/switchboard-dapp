@@ -31,7 +31,7 @@
         </app-table-heading>
         <ng-container *ngIf="isAppShown">
           <app-application-list listType="app" #listApp [isFilterShown]="showFilter.app"
-                                [defaultFilterOptions]="defaultFilterOptions.app" (updateFilter)="updateFilter($event)">
+                                (updateFilter)="updateFilter($event)">
           </app-application-list>
         </ng-container>
       </div>
@@ -46,8 +46,7 @@
           </button>
         </app-table-heading>
         <ng-container *ngIf="isRoleShown">
-          <app-role-list listType="role" #listRole [isFilterShown]="showFilter.role"
-                         [defaultFilterOptions]="defaultFilterOptions.role"></app-role-list>
+          <app-role-list listType="role" #listRole [isFilterShown]="showFilter.role"></app-role-list>
         </ng-container>
       </div>
     </div>
