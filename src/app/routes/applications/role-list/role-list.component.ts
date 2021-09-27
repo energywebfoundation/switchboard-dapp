@@ -14,8 +14,6 @@ import { Store } from '@ngrx/store';
 import { RoleActions, RoleSelectors } from '@state';
 import { takeUntil } from 'rxjs/operators';
 
-const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
-
 @Component({
   selector: 'app-role-list',
   templateUrl: './role-list.component.html',
@@ -31,7 +29,7 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   ListType = ListType;
   RoleType = RoleType;
   dataSource = new MatTableDataSource([]);
-  displayedColumns: string[];
+  readonly displayedColumns = ['name', 'type', 'namespace', 'actions'];
 
   filterForm = this.fb.group({
     organization: '',
@@ -50,8 +48,6 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.displayedColumns = RoleColumns;
-
     this.setData();
     this.getList();
   }
