@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
@@ -17,8 +17,6 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./role-list.component.scss']
 })
 export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Input() isFilterShown: boolean;
-
   @ViewChild(MatSort) sort: MatSort;
 
   RoleType = RoleType;
@@ -26,6 +24,7 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly displayedColumns = ['name', 'type', 'namespace', 'actions'];
 
   filters$ = this.store.select(RoleSelectors.getFilters);
+  isFilterVisible$ = this.store.select(RoleSelectors.isFilterVisible);
 
   private subscription$ = new Subject();
 
@@ -69,7 +68,7 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscription$.complete();
   }
 
-  public getList() {
+  getList() {
     this.store.dispatch(RoleActions.getList());
   }
 

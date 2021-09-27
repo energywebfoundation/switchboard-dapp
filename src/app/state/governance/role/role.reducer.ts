@@ -10,12 +10,14 @@ export const USER_FEATURE_KEY = 'role';
 export interface RoleState {
   list: IRole[];
   filteredList: IRole[];
+  filterVisible: boolean;
   filters: Filters;
 }
 
 export const initialState: RoleState = {
   list: [],
   filteredList: [],
+  filterVisible: false,
   filters: {
     organization: '',
     application: '',
@@ -38,14 +40,25 @@ const roleReducer = createReducer(
   })),
   on(RoleActions.clearFilters, (state) => ({
     ...state,
-    filters: {
-      organization: '',
-      application: '',
-      role: ''
-    },
-    filteredList: state.list
+    ...clearFilters(state)
+  })),
+  on(RoleActions.toggleFilters, (state) => ({...state, filterVisible: !state.filterVisible})),
+  on(RoleActions.cleanUpFilters, (state) => ({
+    ...state,
+    ...clearFilters(state),
+    filterVisible: false
   }))
 );
+
+export const clearFilters = (state) => ({
+  filters: {
+    organization: '',
+    application: '',
+    role: ''
+  },
+  filteredList: state.list
+});
+
 
 export function reducer(state: RoleState | undefined, action: Action) {
   return roleReducer(state, action);

@@ -21,6 +21,14 @@ export const updateFilters = createAction(
   props<{ filters: Filters }>()
 );
 
+export const toggleFilters = createAction(
+  '[ROLE] Toggle Filters'
+);
+
 export const clearFilters = createAction(
   '[ROLE] Clear Filters',
+);
+
+export const cleanUpFilters = createAction(
+  '[ROLE] Clean Up Filters',
 );

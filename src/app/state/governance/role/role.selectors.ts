@@ -12,3 +12,8 @@ export const getFilters = createSelector(
   getRoleState,
   (state) => state.filters
 );
+
+export const isFilterVisible = createSelector(
+  getRoleState,
+  (state) => state.filterVisible
+);
