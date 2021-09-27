@@ -7,13 +7,14 @@ import { IamService } from '../../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { ENSNamespaceTypes } from 'iam-client-lib';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
 import { filterBy } from '../../../state/governance/utils/filter-by/filter-by';
 import { Store } from '@ngrx/store';
+import { RoleActions, RoleSelectors } from '@state';
+import { takeUntil } from 'rxjs/operators';
 
 const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
 
@@ -55,7 +56,16 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   async ngOnInit() {
     this.displayedColumns = RoleColumns;
 
-    await this.getList(this.defaultFilterOptions);
+    this.setData();
+    this.getList();
+  }
+
+  private setData(): void {
+    this.store.select(RoleSelectors.getFilteredList).pipe(
+      takeUntil(this.subscription$)
+    ).subscribe((list) => {
+      this.dataSource.data = list;
+    });
   }
 
   ngAfterViewInit() {
@@ -76,21 +86,9 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscription$.complete();
   }
 
-  public async getList(filterOptions?: any) {
-    this.loadingService.show();
+  public getList() {
+    this.store.dispatch(RoleActions.getList());
 
-    this.origDatasource = await this.iamService.getENSTypesByOwner(ENSNamespaceTypes.Roles);
-
-    // Setup Filter
-    if (filterOptions) {
-      this.filterForm.patchValue({
-        organization: filterOptions.organization || '',
-        application: filterOptions.application || '',
-        role: ''
-      });
-    }
-    this.filter();
-    this.loadingService.hide();
   }
 
   viewDetails(type: string, data: any) {
@@ -105,7 +103,7 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async edit() {
-    await this.getList();
+    this.getList();
   }
 
   async remove(listType: string, roleDefinition: any) {
@@ -126,7 +124,7 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
 
       // Refresh the list after successful removal
       if (await isRemoved) {
-        await this.getList();
+        this.getList();
       }
 
     }
