@@ -5,8 +5,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { dialogSpy } from '@tests';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { RoleSelectors } from '@state';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-xdescribe('RoleListComponent', () => {
+describe('RoleListComponent', () => {
   let component: RoleListComponent;
   let fixture: ComponentFixture<RoleListComponent>;
   let store: MockStore;
@@ -18,7 +20,8 @@ xdescribe('RoleListComponent', () => {
       providers: [
         {provide: MatDialog, useValue: dialogSpy},
         provideMockStore()
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
 
@@ -28,6 +31,9 @@ xdescribe('RoleListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleListComponent);
     component = fixture.componentInstance;
+    store.overrideSelector(RoleSelectors.getFilteredList, []);
+    store.overrideSelector(RoleSelectors.getFilters, {organization: '', application: '', role: ''});
+    store.overrideSelector(RoleSelectors.isFilterVisible, false);
     fixture.detectChanges();
   });
 
