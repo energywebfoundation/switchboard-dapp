@@ -2,11 +2,8 @@ import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Outpu
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
-import { LoadingService } from '../../../shared/services/loading.service';
-import { IamService } from '../../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
-import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
@@ -39,11 +36,8 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscription$ = new Subject();
 
-  constructor(private loadingService: LoadingService,
-              private iamService: IamService,
-              private dialog: MatDialog,
+  constructor(private dialog: MatDialog,
               private fb: FormBuilder,
-              private toastr: SwitchboardToastrService,
               private store: Store) {
   }
 
