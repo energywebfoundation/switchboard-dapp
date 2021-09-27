@@ -38,17 +38,16 @@
       <th mat-header-cell *matHeaderCellDef class="text-right"></th>
       <td mat-cell *matCellDef="let element">
         <app-actions-menu>
-          <button mat-menu-item class="btn-color-primary" (click)="viewDetails(listType, element)">
+          <button mat-menu-item class="btn-color-primary" (click)="viewDetails(element)">
             <mat-icon class="btn-color-primary">preview</mat-icon>
             <span>View Details</span>
           </button>
 
-          <app-application-actions *ngIf="listType === ListType.APP"
-                                   [application]="element"
-                                   (viewRoles)="viewRoles(ListType.APP, element)"
-                                   (roleCreated)="viewRoles(ListType.APP, element)"
+          <app-application-actions [application]="element"
+                                   (viewRoles)="viewRoles(element)"
+                                   (roleCreated)="viewRoles(element)"
                                    (edited)="edit()"
-                                   (deleteConfirmed)="remove(listType, element)">
+                                   (deleteConfirmed)="remove(element)">
           </app-application-actions>
         </app-actions-menu>
       </td>

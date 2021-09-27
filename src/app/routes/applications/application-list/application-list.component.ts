@@ -21,7 +21,6 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./application-list.component.scss']
 })
 export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Input() listType: string;
   @Input() isFilterShown: boolean;
   @Output() updateFilter = new EventEmitter<any>();
 
@@ -80,10 +79,10 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
     this.store.dispatch(ApplicationActions.getList());
   }
 
-  viewDetails(type: string, data: any) {
+  viewDetails(data: any) {
     this.dialog.open(GovernanceViewComponent, {
       width: '600px', data: {
-        type,
+        type: ListType.APP,
         definition: data
       },
       maxWidth: '100%',
@@ -91,7 +90,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
     });
   }
 
-  viewRoles(type: string, data: any) {
+  viewRoles(data: any) {
     let org;
     let app;
 
@@ -104,9 +103,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
       org = (org as string).substr(1);
     }
 
-    if (type === ListType.APP) {
-      app = data.namespace.split(`.${ENSNamespaceTypes.Application}.`)[0];
-    }
+    app = data.namespace.split(`.${ENSNamespaceTypes.Application}.`)[0];
 
     this.updateFilter.emit({
       listType: ListType.ROLE,
@@ -119,7 +116,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
     this.getList();
   }
 
-  async remove(listType: string, roleDefinition: any) {
+  async remove(roleDefinition: any) {
+    const listType = ListType.APP;
     // Get Removal Steps
     const steps = await this.getRemovalSteps(listType, roleDefinition);
 
@@ -143,10 +141,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-  async newRole(listType: string, roleDefinition: any) {
-    this.viewRoles(listType, roleDefinition);
-  }
-
   private async getRemovalSteps(listType: string, roleDefinition: any) {
     this.loadingService.show();
     const returnSteps = this.iamService.iam.address === roleDefinition.owner;
@@ -163,7 +157,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
         }];
     } catch (e) {
       console.error(e);
-      this.toastr.error(e, 'Delete ' + (this.listType === ListType.ORG ? 'Organization' : 'Application'));
+      this.toastr.error(e, 'Delete ' + (listType === ListType.ORG ? 'Organization' : 'Application'));
     } finally {
       this.loadingService.hide();
     }
