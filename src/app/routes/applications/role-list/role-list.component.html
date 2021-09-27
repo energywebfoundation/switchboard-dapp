@@ -57,8 +57,9 @@
         <ng-container> Role Type</ng-container>
       </th>
       <td mat-cell *matCellDef="let element" data-label="Role Type">
-        <ng-container *ngIf="element?.definition?.roleType === RoleType.APP"> Application</ng-container>
-        <ng-container *ngIf="element?.definition?.roleType === RoleType.CUSTOM"> Custom</ng-container>
+        <ng-container *ngIf="isOrgType(element)"> Organization</ng-container>
+        <ng-container *ngIf="isAppType(element)"> Application</ng-container>
+        <ng-container *ngIf="isCustomType(element)"> Custom</ng-container>
       </td>
     </ng-container>
 

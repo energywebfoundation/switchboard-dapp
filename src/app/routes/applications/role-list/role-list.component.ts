@@ -49,19 +49,23 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
               private store: Store) {
   }
 
-  async ngOnInit() {
+  ngOnInit(): void {
     this.displayedColumns = RoleColumns;
 
     this.setData();
     this.getList();
   }
 
-  private setData(): void {
-    this.store.select(RoleSelectors.getFilteredList).pipe(
-      takeUntil(this.subscription$)
-    ).subscribe((list) => {
-      this.dataSource.data = list;
-    });
+  isOrgType(element): boolean {
+    return element?.definition?.roleType === RoleType.ORG;
+  }
+
+  isAppType(element): boolean {
+    return element?.definition?.roleType === RoleType.APP;
+  }
+
+  isCustomType(element): boolean {
+    return element?.definition?.roleType === RoleType.CUSTOM;
   }
 
   ngAfterViewInit() {
@@ -97,7 +101,7 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  async edit() {
+  edit() {
     this.getList();
   }
 
@@ -118,5 +122,13 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   resetFilter() {
     this.store.dispatch(RoleActions.clearFilters());
+  }
+
+  private setData(): void {
+    this.store.select(RoleSelectors.getFilteredList).pipe(
+      takeUntil(this.subscription$)
+    ).subscribe((list) => {
+      this.dataSource.data = list;
+    });
   }
 }
