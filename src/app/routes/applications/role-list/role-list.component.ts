@@ -24,7 +24,6 @@ const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
 export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() listType: string;
   @Input() isFilterShown: boolean;
-  @Input() defaultFilterOptions: any;
   @Output() updateFilter = new EventEmitter<any>();
 
   @ViewChild(MatSort) sort: MatSort;
