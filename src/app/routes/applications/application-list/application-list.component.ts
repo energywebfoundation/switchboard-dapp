@@ -11,7 +11,6 @@ import { ENSNamespaceTypes } from 'iam-client-lib';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
-import { RoleType } from '../new-role/new-role.component';
 import { Store } from '@ngrx/store';
 import { ApplicationActions, ApplicationSelectors } from '@state';
 import { takeUntil } from 'rxjs/operators';
@@ -29,7 +28,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild(MatSort) sort: MatSort;
 
   ListType = ListType;
-  RoleType = RoleType;
   dataSource = new MatTableDataSource([]);
   displayedColumns: string[];
 
