@@ -2,10 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RoleListComponent } from './role-list.component';
 import { MatDialog } from '@angular/material/dialog';
-import { dialogSpy, iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
-import { LoadingService } from '../../../shared/services/loading.service';
-import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { IamService } from '../../../shared/services/iam.service';
+import { dialogSpy } from '@tests';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
@@ -20,9 +17,6 @@ xdescribe('RoleListComponent', () => {
       imports: [ReactiveFormsModule],
       providers: [
         {provide: MatDialog, useValue: dialogSpy},
-        {provide: LoadingService, useValue: loadingServiceSpy},
-        {provide: SwitchboardToastrService, useValue: toastrSpy},
-        {provide: IamService, useValue: iamServiceSpy},
         provideMockStore()
       ]
     })
