@@ -13,6 +13,7 @@ import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.componen
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
 import { filterBy } from '../../../state/governance/utils/filter-by/filter-by';
+import { Store } from '@ngrx/store';
 
 const RoleColumns: string[] = ['name', 'type', 'namespace', 'actions'];
 
@@ -47,7 +48,8 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
               private iamService: IamService,
               private dialog: MatDialog,
               private fb: FormBuilder,
-              private toastr: SwitchboardToastrService) {
+              private toastr: SwitchboardToastrService,
+              private store: Store) {
   }
 
   async ngOnInit() {
