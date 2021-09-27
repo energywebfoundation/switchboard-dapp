@@ -26,7 +26,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
 
   @ViewChild(MatSort) sort: MatSort;
 
-  ListType = ListType;
   dataSource = new MatTableDataSource([]);
   displayedColumns: string[];
 
