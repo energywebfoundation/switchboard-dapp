@@ -15,6 +15,7 @@ import { ApplicationActions, OrganizationActions, OrganizationSelectors, RoleAct
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { RoleListComponent } from './role-list/role-list.component';
+import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
 
 @Component({
   selector: 'app-applications',
@@ -107,7 +108,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  showMe(i: any) {
+  showMe(i: MatTabChangeEvent) {
     // Preserve Selected Tab
     this.urlParamService.updateQueryParams(this.router, this.activatedRoute, {
       selectedTab: i.index
