@@ -41,6 +41,7 @@ describe('ApplicationListComponent', () => {
     component = fixture.componentInstance;
     store.overrideSelector(ApplicationSelectors.getFilteredList, []);
     store.overrideSelector(ApplicationSelectors.getFilters, {organization: '', application: '', role: ''});
+    store.overrideSelector(ApplicationSelectors.isFilterVisible, false);
     fixture.detectChanges();
   });
 
