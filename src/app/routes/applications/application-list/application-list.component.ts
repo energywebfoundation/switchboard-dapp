@@ -88,18 +88,9 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   viewRoles(data: { namespace: string }) {
-    let org;
-
-    let arr = data.namespace.split('.iam.ewc');
-    arr = arr[0].split(ENSNamespaceTypes.Roles);
-    arr = arr[arr.length - 1].split(ENSNamespaceTypes.Application);
-    org = arr[arr.length - 1];
-
-    if (org.indexOf('.') === 0) {
-      org = (org as string).substr(1);
-    }
-
-    const app = data.namespace.split(`.${ENSNamespaceTypes.Application}.`)[0];
+    const [app, org] = data.namespace
+      .replace('.iam.ewc', '')
+      .split(`.${ENSNamespaceTypes.Application}.`);
 
     this.updateFilter.emit({
       listType: ListType.ROLE,
