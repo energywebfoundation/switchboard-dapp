@@ -107,7 +107,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  async showMe(i: any) {
+  showMe(i: any) {
     // Preserve Selected Tab
     this.urlParamService.updateQueryParams(this.router, this.activatedRoute, {
       selectedTab: i.index
