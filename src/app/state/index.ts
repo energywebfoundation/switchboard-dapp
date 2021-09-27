@@ -30,6 +30,10 @@ import * as LayoutSelectors from './layout/layout.selectors';
 import * as ApplicationActions from './governance/application/application.actions';
 import * as ApplicationSelectors from './governance/application/application.selectors';
 
+// === Role ===
+import * as RoleActions from './governance/role/role.actions';
+import * as RoleSelectors from './governance/role/role.selectors';
+
 
 export * from './store-root.module';
 export {
@@ -52,6 +56,8 @@ export {
   OrganizationSelectors,
   ApplicationActions,
   ApplicationSelectors,
+  RoleActions,
+  RoleSelectors,
 
   LayoutActions,
   LayoutSelectors
