@@ -19,7 +19,6 @@ import { takeUntil } from 'rxjs/operators';
 export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
-  RoleType = RoleType;
   dataSource = new MatTableDataSource([]);
   readonly displayedColumns = ['name', 'type', 'namespace', 'actions'];
 
