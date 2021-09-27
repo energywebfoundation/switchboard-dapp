@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
@@ -21,7 +21,6 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./application-list.component.scss']
 })
 export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Input() isFilterShown: boolean;
   @Output() updateFilter = new EventEmitter<any>();
 
   @ViewChild(MatSort) sort: MatSort;
@@ -30,6 +29,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   readonly displayedColumns = ['logoUrl', 'name', 'namespace', 'actions'];
 
   filters$ = this.store.select(ApplicationSelectors.getFilters);
+  isFilterVisible$ = this.store.select(ApplicationSelectors.isFilterVisible);
 
   private subscription$ = new Subject();
 

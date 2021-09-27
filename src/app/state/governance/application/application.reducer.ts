@@ -11,6 +11,7 @@ export interface ApplicationState {
   list: IApp[];
   filteredList: IApp[];
   filters: Filters;
+  filterVisible: boolean;
 }
 
 export const initialState: ApplicationState = {
@@ -20,7 +21,8 @@ export const initialState: ApplicationState = {
     organization: '',
     application: '',
     role: ''
-  }
+  },
+  filterVisible: false
 };
 
 const applicationReducer = createReducer(
@@ -38,14 +40,25 @@ const applicationReducer = createReducer(
   })),
   on(ApplicationActions.clearFilters, (state) => ({
     ...state,
-    filters: {
-      organization: '',
-      application: '',
-      role: ''
-    },
-    filteredList: state.list
+    ...clearFilters(state)
+  })),
+  on(ApplicationActions.toggleFilters, (state) => ({...state, filterVisible: !state.filterVisible})),
+  on(ApplicationActions.cleanUpFilters, (state) => ({
+    ...state,
+    ...clearFilters(state),
+    filterVisible: false
   }))
 );
+
+
+export const clearFilters = (state) => ({
+  filters: {
+    organization: '',
+    application: '',
+    role: ''
+  },
+  filteredList: state.list
+});
 
 export function reducer(state: ApplicationState | undefined, action: Action) {
   return applicationReducer(state, action);

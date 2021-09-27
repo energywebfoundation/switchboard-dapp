@@ -12,3 +12,8 @@ export const getFilters = createSelector(
   getApplicationState,
   (state) => state.filters
 );
+
+export const isFilterVisible = createSelector(
+  getApplicationState,
+  (state) => state.filterVisible
+);

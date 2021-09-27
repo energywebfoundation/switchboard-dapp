@@ -30,8 +30,7 @@
           </button>
         </app-table-heading>
         <ng-container *ngIf="isAppShown">
-          <app-application-list #listApp [isFilterShown]="showFilter.app"
-                                (updateFilter)="updateFilter($event)">
+          <app-application-list #listApp (updateFilter)="updateFilter($event)">
           </app-application-list>
         </ng-container>
       </div>

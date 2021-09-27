@@ -1,4 +1,5 @@
-<app-filter [isFilterShown]="isFilterShown" [filters]="filters$ | async" [showAppFilter]="true" [showOrgFilter]="true"
+<app-filter [isFilterShown]="isFilterVisible$ | async" [filters]="filters$ | async" [showAppFilter]="true"
+            [showOrgFilter]="true"
             (filtersChange)="filter($event)"></app-filter>
 <div class="card card-default mb-3 pb-3">
   <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDirection="asc">

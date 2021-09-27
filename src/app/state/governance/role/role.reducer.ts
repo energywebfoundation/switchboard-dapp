@@ -10,19 +10,20 @@ export const USER_FEATURE_KEY = 'role';
 export interface RoleState {
   list: IRole[];
   filteredList: IRole[];
-  filterVisible: boolean;
   filters: Filters;
+  filterVisible: boolean;
+
 }
 
 export const initialState: RoleState = {
   list: [],
   filteredList: [],
-  filterVisible: false,
   filters: {
     organization: '',
     application: '',
     role: ''
-  }
+  },
+  filterVisible: false,
 };
 
 const roleReducer = createReducer(
