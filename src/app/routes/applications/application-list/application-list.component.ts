@@ -31,11 +31,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   dataSource = new MatTableDataSource([]);
   displayedColumns: string[];
 
-  filterForm = this.fb.group({
-    organization: '',
-    application: '',
-    role: ''
-  });
+  filters$ = this.store.select(ApplicationSelectors.getFilters);
 
   private subscription$ = new Subject();
 
@@ -52,7 +48,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.getList();
     this.setData();
-    this.setFilters();
   }
 
   ngAfterViewInit() {
@@ -78,14 +73,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
       takeUntil(this.subscription$)
     ).subscribe((list) => {
       this.dataSource.data = list;
-    });
-  }
-
-  private setFilters() {
-    this.store.select(ApplicationSelectors.getFilters).pipe(
-      takeUntil(this.subscription$)
-    ).subscribe((filters) => {
-      this.filterForm.patchValue({...filters});
     });
   }
 
@@ -182,19 +169,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-  filter() {
-    // Trim Filters
-    this.filterForm.get('organization').setValue(this.filterForm.value.organization.trim());
-    this.filterForm.get('application').setValue(this.filterForm.value.application.trim());
-    this.filterForm.get('role').setValue(this.filterForm.value.role.trim());
-
-    this.store.dispatch(ApplicationActions.updateFilters({
-      filters: {
-        organization: this.filterForm.value.organization,
-        application: this.filterForm.value.application,
-        role: this.filterForm.value.role
-      }
-    }));
+  filter(filters): void {
+    this.store.dispatch(ApplicationActions.updateFilters({filters}));
   }
 
   resetFilter() {

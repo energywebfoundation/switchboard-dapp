@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
@@ -17,22 +17,15 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./role-list.component.scss']
 })
 export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Input() listType: string;
   @Input() isFilterShown: boolean;
-  @Output() updateFilter = new EventEmitter<any>();
 
   @ViewChild(MatSort) sort: MatSort;
 
-  ListType = ListType;
   RoleType = RoleType;
   dataSource = new MatTableDataSource([]);
   readonly displayedColumns = ['name', 'type', 'namespace', 'actions'];
 
-  filterForm = this.fb.group({
-    organization: '',
-    application: '',
-    role: ''
-  });
+  filters$ = this.store.select(RoleSelectors.getFilters);
 
   private subscription$ = new Subject();
 
@@ -91,26 +84,15 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  edit() {
+  edit(): void {
     this.getList();
   }
 
-  filter() {
-    // Trim Filters
-    this.filterForm.get('organization').setValue(this.filterForm.value.organization.trim());
-    this.filterForm.get('application').setValue(this.filterForm.value.application.trim());
-    this.filterForm.get('role').setValue(this.filterForm.value.role.trim());
-
-    this.store.dispatch(RoleActions.updateFilters({
-      filters: {
-        organization: this.filterForm.value.organization,
-        application: this.filterForm.value.application,
-        role: this.filterForm.value.role
-      }
-    }));
+  filter(filters): void {
+    this.store.dispatch(RoleActions.updateFilters({filters}));
   }
 
-  resetFilter() {
+  resetFilter(): void {
     this.store.dispatch(RoleActions.clearFilters());
   }
 
