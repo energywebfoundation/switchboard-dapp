@@ -27,7 +27,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource = new MatTableDataSource([]);
-  displayedColumns: string[];
+  readonly displayedColumns = ['logoUrl', 'name', 'namespace', 'actions'];
 
   filters$ = this.store.select(ApplicationSelectors.getFilters);
 
@@ -42,8 +42,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   ngOnInit() {
-    this.displayedColumns = ['logoUrl', 'name', 'namespace', 'actions'];
-
     this.getList();
     this.setData();
   }
