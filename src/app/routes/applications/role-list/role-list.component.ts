@@ -11,7 +11,6 @@ import { GovernanceViewComponent } from '../governance-view/governance-view.comp
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
-import { filterBy } from '../../../state/governance/utils/filter-by/filter-by';
 import { Store } from '@ngrx/store';
 import { RoleActions, RoleSelectors } from '@state';
 import { takeUntil } from 'rxjs/operators';
@@ -158,19 +157,16 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.filterForm.get('application').setValue(this.filterForm.value.application.trim());
     this.filterForm.get('role').setValue(this.filterForm.value.role.trim());
 
-    this.dataSource.data = filterBy(JSON.parse(JSON.stringify(this.origDatasource)),
-      this.filterForm.value.organization,
-      this.filterForm.value.application,
-      this.filterForm.value.role);
+    this.store.dispatch(RoleActions.updateFilters({
+      filters: {
+        organization: this.filterForm.value.organization,
+        application: this.filterForm.value.application,
+        role: this.filterForm.value.role
+      }
+    }));
   }
 
   resetFilter() {
-    this.filterForm.patchValue({
-      organization: '',
-      application: '',
-      role: ''
-    });
-
-    this.dataSource.data = JSON.parse(JSON.stringify(this.origDatasource));
+    this.store.dispatch(RoleActions.clearFilters());
   }
 }
