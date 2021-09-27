@@ -33,7 +33,6 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   ListType = ListType;
   RoleType = RoleType;
   dataSource = new MatTableDataSource([]);
-  origDatasource = [];
   displayedColumns: string[];
 
   filterForm = this.fb.group({
