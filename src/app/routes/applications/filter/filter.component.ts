@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Filters } from '../../../state/governance/models/filters';
 
@@ -13,7 +13,7 @@ export interface FilteredData {
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss']
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent {
   @Input() isFilterShown: boolean;
 
   @Input() set filters(data: Filters) {
@@ -37,9 +37,6 @@ export class FilterComponent implements OnInit {
   constructor(private fb: FormBuilder) {
   }
 
-  ngOnInit(): void {
-  }
-
   filter() {
     this.filterForm.get('organization').setValue(this.filterForm.value.organization.trim());
     this.filterForm.get('application').setValue(this.filterForm.value.application.trim());
@@ -56,7 +53,7 @@ export class FilterComponent implements OnInit {
     });
   }
 
-  getFilters() {
+  private getFilters() {
     return {
       organization: this.filterForm.value.organization,
       application: this.filterForm.value.application,

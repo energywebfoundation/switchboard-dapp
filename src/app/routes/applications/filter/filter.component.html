@@ -7,6 +7,7 @@
         <mat-form-field appearance="outline"
                         class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
           <input matInput autocomplete="off" formControlName="organization" type="text" placeholder="Organization"
+                 data-qa-id="filter-organization"
                  maxlength="256" (input)="filter()"/>
         </mat-form-field>
       </div>
@@ -15,6 +16,7 @@
         <mat-form-field appearance="outline"
                         class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
           <input matInput autocomplete="off" formControlName="application" type="text" placeholder="Application"
+                 data-qa-id="filter-application"
                  maxlength="256" (input)="filter()"/>
         </mat-form-field>
       </div>
@@ -23,12 +25,15 @@
         <mat-form-field appearance="outline"
                         class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
           <input matInput autocomplete="off" formControlName="role" type="text" placeholder="Role" maxlength="256"
+                 data-qa-id="filter-role"
                  (input)="filter()"/>
         </mat-form-field>
       </div>
-      <div style="flex-grow: 2; max-width: initial;"
-           class="col-md-3 d-flex justify-content-center justify-content-lg-end align-items-end mb-1">
-        <button mat-stroked-button class="btn btn-small mb-0 mt-2 mt-lg-0 mb-md-2 mb-lg-0" (click)="resetFilter()">Clear
+      <div style=""
+           class="col-md-3 d-flex justify-content-center justify-content-lg-end align-items-end mb-1 reset-btn">
+        <button mat-stroked-button class="btn btn-small mb-0 mt-2 mt-lg-0 mb-md-2 mb-lg-0"
+                data-qa-id="filter-reset"
+                (click)="resetFilter()">Clear
           Filters
         </button>
       </div>
