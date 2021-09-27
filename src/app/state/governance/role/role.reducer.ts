@@ -1,19 +1,19 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import * as ApplicationActions from './application.actions';
+import * as RoleActions from './role.actions';
 import { filterBy } from '../utils/filter-by/filter-by';
+import { IRole } from 'iam-client-lib';
 import { Filters } from '../models/filters';
-import { IApp } from 'iam-client-lib';
 
-export const USER_FEATURE_KEY = 'application';
+export const USER_FEATURE_KEY = 'role';
 
 
-export interface ApplicationState {
-  list: IApp[];
-  filteredList: IApp[];
+export interface RoleState {
+  list: IRole[];
+  filteredList: IRole[];
   filters: Filters;
 }
 
-export const initialState: ApplicationState = {
+export const initialState: RoleState = {
   list: [],
   filteredList: [],
   filters: {
@@ -23,20 +23,20 @@ export const initialState: ApplicationState = {
   }
 };
 
-const applicationReducer = createReducer(
+const roleReducer = createReducer(
   initialState,
-  on(ApplicationActions.getListSuccess, (state, {list}) => ({
+  on(RoleActions.getListSuccess, (state, {list}) => ({
     ...state,
     list,
     filteredList: filterBy(list, state.filters.organization, state.filters.application, state.filters.role)
   })),
 
-  on(ApplicationActions.updateFilters, (state, {filters}) => ({
+  on(RoleActions.updateFilters, (state, {filters}) => ({
     ...state,
     filters,
     filteredList: filterBy(state.list, filters.organization, filters.application, filters.role)
   })),
-  on(ApplicationActions.clearFilters, (state) => ({
+  on(RoleActions.clearFilters, (state) => ({
     ...state,
     filters: {
       organization: '',
@@ -47,6 +47,6 @@ const applicationReducer = createReducer(
   }))
 );
 
-export function reducer(state: ApplicationState | undefined, action: Action) {
-  return applicationReducer(state, action);
+export function reducer(state: RoleState | undefined, action: Action) {
+  return roleReducer(state, action);
 }

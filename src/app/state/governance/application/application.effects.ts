@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as ApplicationActions from './application.actions';
-import { MatDialog } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { ENSNamespaceTypes, IApp } from 'iam-client-lib';
@@ -29,7 +28,6 @@ export class ApplicationEffects {
 
   constructor(private actions$: Actions,
               private store: Store,
-              private dialog: MatDialog,
               private iamService: IamService,
               private toastr: SwitchboardToastrService
   ) {

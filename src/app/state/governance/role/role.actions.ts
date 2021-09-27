@@ -1,26 +1,26 @@
 import { createAction, props } from '@ngrx/store';
-import { Filters } from '../models/filters';
-import { IApp } from 'iam-client-lib';
+import { Filters } from './models/filters';
+import { IRole } from 'iam-client-lib';
 
 export const getList = createAction(
-  '[APP] Get Application List'
+  '[ROLE] Get Role List'
 );
 
 export const getListSuccess = createAction(
-  '[APP] Get Application List Success',
-  props<{ list: IApp[] }>()
+  '[ROLE] Get Role List Success',
+  props<{ list: IRole[] }>()
 );
 
 export const getListFailure = createAction(
-  '[APP] Get Application List Failure',
+  '[ROLE] Get Role List Failure',
   props<{ error: string }>()
 );
 
 export const updateFilters = createAction(
-  '[APP] Update Filters',
+  '[ROLE] Update Filters',
   props<{ filters: Filters }>()
 );
 
 export const clearFilters = createAction(
-  '[APP] Clear Filters',
+  '[ROLE] Clear Filters',
 );
