@@ -33,7 +33,6 @@ describe('Application reducer', () => {
       const {initialState} = fromReducer;
       const list = [
         {namespace: 'test.iam.ewc'},
-        {namespace: `testrole.${ENSNamespaceTypes.Roles}.ttt.iam.ewc`},
         {namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`},
       ] as IApp[];
 
@@ -62,7 +61,6 @@ describe('Application reducer', () => {
       const {initialState} = fromReducer;
       const list = [
         {namespace: 'test.iam.ewc'},
-        {namespace: `testrole.${ENSNamespaceTypes.Roles}.ttt.iam.ewc`},
         {namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`},
       ] as IApp[];
 
@@ -73,6 +71,45 @@ describe('Application reducer', () => {
 
       expect(state.filteredList).toEqual([{namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`}] as IApp[]);
       expect(state.filteredList.length).toBe(1);
+    });
+  });
+
+  describe('toggleFilters action', () => {
+    it('should toggle filterVisible property', () => {
+      const {initialState} = fromReducer;
+      const action = ApplicationActions.toggleFilters();
+      const state = fromReducer.reducer(initialState, action);
+
+      expect(state.filterVisible).toEqual(true);
+    });
+  });
+
+  describe('cleanUpFilters action', () => {
+    it('should clean filters as in initialState', () => {
+      const {initialState} = fromReducer;
+
+      const list = [
+        {namespace: 'test.iam.ewc'},
+        {namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`},
+      ];
+
+      const modifiedState = {
+        list,
+        filters: {
+          organization: 'abc',
+          application: 'test',
+          role: ''
+        },
+        filteredList: [{namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`}],
+        filterVisible: true
+      };
+
+      const action = ApplicationActions.cleanUpFilters();
+      const state = fromReducer.reducer(modifiedState as fromReducer.ApplicationState, action);
+
+      expect(state.filterVisible).toBeFalse();
+      expect(state.filters).toEqual(initialState.filters);
+      expect(state.filteredList).toEqual(list as IApp[]);
     });
   });
 });
