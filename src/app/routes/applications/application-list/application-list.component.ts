@@ -99,7 +99,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
     });
   }
 
-  async edit() {
+  edit() {
     this.getList();
   }
 

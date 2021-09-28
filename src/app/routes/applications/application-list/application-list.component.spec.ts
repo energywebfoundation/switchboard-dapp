@@ -17,7 +17,12 @@ describe('ApplicationListComponent', () => {
   let component: ApplicationListComponent;
   let fixture: ComponentFixture<ApplicationListComponent>;
   let store: MockStore;
-
+  const setup = () => {
+    store.overrideSelector(ApplicationSelectors.getFilteredList, []);
+    store.overrideSelector(ApplicationSelectors.getFilters, {organization: '', application: '', role: ''});
+    store.overrideSelector(ApplicationSelectors.isFilterVisible, false);
+    fixture.detectChanges();
+  };
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ApplicationListComponent],
@@ -39,19 +44,17 @@ describe('ApplicationListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ApplicationListComponent);
     component = fixture.componentInstance;
-    store.overrideSelector(ApplicationSelectors.getFilteredList, []);
-    store.overrideSelector(ApplicationSelectors.getFilters, {organization: '', application: '', role: ''});
-    store.overrideSelector(ApplicationSelectors.isFilterVisible, false);
-    fixture.detectChanges();
   });
 
   it('should create', () => {
+    setup();
     expect(component).toBeTruthy();
   });
 
   describe('tests for viewRoles method', () => {
     it('should emit event with not nested organization and application ', () => {
       const eventSpy = spyOn(component.updateFilter, 'emit');
+      setup();
       component.viewRoles({namespace: `testapp.${ENSNamespaceTypes.Application}.test.iam.ewc`});
 
       expect(eventSpy).toHaveBeenCalledWith({
@@ -63,6 +66,7 @@ describe('ApplicationListComponent', () => {
 
     it('should emit event with nested organization and application', () => {
       const eventSpy = spyOn(component.updateFilter, 'emit');
+      setup();
       component.viewRoles({namespace: `testapp.${ENSNamespaceTypes.Application}.suborg.test.iam.ewc`});
 
       expect(eventSpy).toHaveBeenCalledWith({
@@ -76,10 +80,18 @@ describe('ApplicationListComponent', () => {
 
   it('should dispatch updateFilters action when calling filter method', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
+    setup();
     const filters = {organization: '123', application: 'test', role: ''};
     component.filter(filters);
 
     expect(dispatchSpy).toHaveBeenCalledWith(ApplicationActions.updateFilters({filters}));
   });
 
+  it('should refresh list after successful edition', () => {
+    const dispatchSpy = spyOn(store, 'dispatch');
+    setup();
+    component.edit();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(ApplicationActions.getList());
+  });
 });
