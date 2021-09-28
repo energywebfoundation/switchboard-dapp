@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { RoleSelectors } from '@state';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { RoleType } from '../new-role/new-role.component';
 
 describe('RoleListComponent', () => {
   let component: RoleListComponent;
@@ -39,5 +40,21 @@ describe('RoleListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should return truthy for checking isOrgType and falsy for others', () => {
+    expect(component.isOrgType(RoleType.ORG)).toBeTrue();
+    expect(component.isAppType(RoleType.ORG)).toBeFalse();
+    expect(component.isCustomType(RoleType.ORG)).toBeFalse();
+  });
+  it('should return truthy for checking isAppType and falsy for others', () => {
+    expect(component.isOrgType(RoleType.APP)).toBeFalse();
+    expect(component.isAppType(RoleType.APP)).toBeTrue();
+    expect(component.isCustomType(RoleType.APP)).toBeFalse();
+  });
+  it('should return truthy for checking isCustomType and falsy for others', () => {
+    expect(component.isOrgType(RoleType.CUSTOM)).toBeFalse();
+    expect(component.isAppType(RoleType.CUSTOM)).toBeFalse();
+    expect(component.isCustomType(RoleType.CUSTOM)).toBeTrue();
   });
 });

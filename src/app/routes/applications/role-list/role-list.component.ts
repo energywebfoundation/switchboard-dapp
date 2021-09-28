@@ -37,16 +37,16 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getList();
   }
 
-  isOrgType(element): boolean {
-    return element?.definition?.roleType === RoleType.ORG;
+  isOrgType(type: string): boolean {
+    return type === RoleType.ORG;
   }
 
-  isAppType(element): boolean {
-    return element?.definition?.roleType === RoleType.APP;
+  isAppType(type: string): boolean {
+    return type === RoleType.APP;
   }
 
-  isCustomType(element): boolean {
-    return element?.definition?.roleType === RoleType.CUSTOM;
+  isCustomType(type: string): boolean {
+    return type === RoleType.CUSTOM;
   }
 
   ngAfterViewInit() {
