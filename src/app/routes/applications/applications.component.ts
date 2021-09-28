@@ -140,10 +140,10 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.showFilter.org = !this.showFilter.org;
         break;
       case ListType.APP:
-        this.showFilter.app = !this.showFilter.app;
+        this.store.dispatch(ApplicationActions.toggleFilters());
         break;
       case ListType.ROLE:
-        this.showFilter.role = !this.showFilter.role;
+        this.store.dispatch(RoleActions.toggleFilters());
         break;
     }
   }
@@ -152,18 +152,18 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     let tabIdx = 0;
     switch (filterOptions.listType) {
       case ListType.APP:
-        this.showFilter.app = true;
         tabIdx = 1;
         this.store.dispatch(ApplicationActions.updateFilters({
           filters: filterOptions
         }));
+        this.store.dispatch(ApplicationActions.showFilters());
         break;
       case ListType.ROLE:
-        this.showFilter.role = true;
         tabIdx = 2;
         this.store.dispatch(RoleActions.updateFilters({
           filters: filterOptions
         }));
+        this.store.dispatch(RoleActions.showFilters());
         break;
     }
 

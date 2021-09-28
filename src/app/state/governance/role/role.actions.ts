@@ -25,6 +25,10 @@ export const toggleFilters = createAction(
   '[ROLE] Toggle Filters'
 );
 
+export const showFilters = createAction(
+  '[ROLE] Show Filters'
+);
+
 export const cleanUpFilters = createAction(
   '[ROLE] Clean Up Filters',
 );

@@ -39,6 +39,7 @@ const applicationReducer = createReducer(
     filteredList: filterBy(state.list, filters.organization, filters.application, filters.role)
   })),
   on(ApplicationActions.toggleFilters, (state) => ({...state, filterVisible: !state.filterVisible})),
+  on(ApplicationActions.showFilters, (state) => ({...state, filterVisible: true})),
   on(ApplicationActions.cleanUpFilters, (state) => ({
     ...state,
     ...clearFilters(state),

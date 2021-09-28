@@ -40,6 +40,7 @@ const roleReducer = createReducer(
     filteredList: filterBy(state.list, filters.organization, filters.application, filters.role)
   })),
   on(RoleActions.toggleFilters, (state) => ({...state, filterVisible: !state.filterVisible})),
+  on(RoleActions.showFilters, (state) => ({...state, filterVisible: true})),
   on(RoleActions.cleanUpFilters, (state) => ({
     ...state,
     ...clearFilters(state),

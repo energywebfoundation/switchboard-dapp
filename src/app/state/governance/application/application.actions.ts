@@ -20,8 +20,13 @@ export const updateFilters = createAction(
   '[APP] Update Filters',
   props<{ filters: Filters }>()
 );
+
 export const toggleFilters = createAction(
   '[APP] Toggle Filters'
+);
+
+export const showFilters = createAction(
+  '[APP] Show Filters'
 );
 
 export const cleanUpFilters = createAction(
