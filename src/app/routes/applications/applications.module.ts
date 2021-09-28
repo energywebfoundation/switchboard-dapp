@@ -9,7 +9,6 @@ import { NewOrganizationComponent } from './new-organization/new-organization.co
 import { ViewOrganizationComponent } from './view-organization/view-organization.component';
 import { NewApplicationComponent } from './new-application/new-application.component';
 import { NewRoleComponent } from './new-role/new-role.component';
-import { GovernanceViewComponent } from './governance-view/governance-view.component';
 import { TransferOwnershipComponent } from './transfer-ownership/transfer-ownership.component';
 import { RemoveOrgAppComponent } from './remove-org-app/remove-org-app.component';
 import { GovernanceDetailsModule } from './governance-view/governance-details/governance-details.module';
@@ -47,7 +46,6 @@ const routes: Routes = [
     ViewOrganizationComponent,
     NewApplicationComponent,
     NewRoleComponent,
-    GovernanceViewComponent,
     TransferOwnershipComponent,
     RemoveOrgAppComponent,
     NewStakingPoolComponent,
