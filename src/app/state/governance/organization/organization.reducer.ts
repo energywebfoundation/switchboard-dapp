@@ -24,7 +24,7 @@ const organizationReducer = createReducer(
   on(getListSuccess, (state, {list}) => {
     return {
       ...state,
-      list,
+      list: [...list],
       history: getMainOrgs(list)
     };
   }),
