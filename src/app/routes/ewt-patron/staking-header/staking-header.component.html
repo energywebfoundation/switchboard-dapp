@@ -1,14 +1,9 @@
 <div class="header-wrapper d-flex flex-grow-1 justify-content-end">
   <ng-container *ngIf="(loggedIn$ | async)">
-    <button mat-raised-button data-qa-id="logout" class="connect-btn color-white text-uppercase mr-2"
-            (click)="logOut()">Disconnect Wallet
-    </button>
-
-    <!-- TO DO, Task SWTCH-1176 -->
-    <!-- <div class="btn-user-info" [matMenuTriggerFor]="menu">
+    <div class="btn-user-info" [matMenuTriggerFor]="menu">
       <div class="d-flex align-items-center ml-3 ml-md-0 flex-row">
         <div class="d-none d-md-flex flex-column align-items-end ml-2 mr-2">
-          <div class="account-title"> Account Name </div>
+          <div class="account-title"> Account Name</div>
         </div>
         <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="34"
              height="34" alt="Identity image">
@@ -28,16 +23,16 @@
             <div class="account-name">Account Name</div>
           </div>
           <div class="d-flex align-items-center justify-content-center did-wrapper mx-2 px-3"
-            matTooltip="Copy to clipboard">
+               matTooltip="Copy to clipboard">
             <div class="f-14">did:ethr:0x77Db...4f98</div>
             <mat-icon class="ml-2 color-white">content_copy</mat-icon>
           </div>
         </div>
         <app-divider></app-divider>
         <button mat-raised-button data-qa-id="logout" class="connect-btn color-white text-uppercase my-2"
-            (click)="logOut()">Disconnect from Metamask
+                (click)="logOut()">Disconnect from Metamask
         </button>
       </div>
-    </mat-menu> -->
+    </mat-menu>
   </ng-container>
 </div>
