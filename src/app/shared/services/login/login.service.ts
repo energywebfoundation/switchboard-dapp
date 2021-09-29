@@ -45,6 +45,10 @@ export class LoginService {
               private iamListenerService: IamListenerService) {
   }
 
+  walletProvider() {
+    return this.iamService.walletProvider;
+  }
+
   isSessionActive() {
     return this.iamService.isSessionActive();
   }
@@ -55,7 +59,8 @@ export class LoginService {
   login(loginOptions?: LoginOptions, redirectOnChange: boolean = true): Observable<boolean> {
     return this.iamService.initializeConnection(loginOptions)
       .pipe(
-        map(({did, connected, userClosedModal}) => {
+        map(({did, connected, userClosedModal, accountInfo}) => {
+          console.log(accountInfo);
           const loginSuccessful = did && connected && !userClosedModal;
           if (loginSuccessful) {
             this.iamListenerService.setListeners((config) => this.openSwal(config, redirectOnChange));

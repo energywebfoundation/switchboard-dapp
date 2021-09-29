@@ -75,6 +75,10 @@ export class IamService {
     return this.iam.address;
   }
 
+  get walletProvider() {
+    return this.iam.getProviderType();
+  }
+
   registerAsset() {
     return from(this.iam.registerAsset());
   }

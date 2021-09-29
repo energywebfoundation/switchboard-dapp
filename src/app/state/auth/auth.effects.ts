@@ -173,6 +173,12 @@ export class AuthEffects {
     ), {dispatch: false}
   );
 
+  setWalletProviderAfterLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.loginSuccess),
+      map(() => AuthActions.setProvider({walletProvider: this.loginService.walletProvider()}))
+    ));
+
   constructor(private actions$: Actions,
               private store: Store<AuthState>,
               private loginService: LoginService,

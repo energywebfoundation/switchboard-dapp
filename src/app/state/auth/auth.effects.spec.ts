@@ -17,7 +17,7 @@ import * as AuthSelectors from './auth.selectors';
 
 describe('AuthEffects', () => {
 
-  const loginServiceSpy = jasmine.createSpyObj('LoginService', ['waitForSignature', 'clearWaitSignatureTimer', 'login', 'disconnect', 'isSessionActive']);
+  const loginServiceSpy = jasmine.createSpyObj('LoginService', ['waitForSignature', 'clearWaitSignatureTimer', 'login', 'disconnect', 'isSessionActive', 'walletProvider']);
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll', 'open']);
   const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
   let actions$: ReplaySubject<any>;
@@ -237,4 +237,22 @@ describe('AuthEffects', () => {
       });
     });
   });
+
+  describe('setWalletProviderAfterLogin$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should return dispatch action for setting wallet provider', (done) => {
+      actions$.next(AuthActions.loginSuccess());
+      loginServiceSpy.walletProvider.and.returnValue(WalletProvider.WalletConnect);
+
+      effects.setWalletProviderAfterLogin$.subscribe(resultAction => {
+        expect(resultAction).toEqual(AuthActions.setProvider({walletProvider: WalletProvider.WalletConnect}));
+        done();
+      });
+    });
+  });
+
+
 });

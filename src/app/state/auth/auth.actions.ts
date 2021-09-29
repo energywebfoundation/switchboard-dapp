@@ -17,13 +17,18 @@ export const welcomeLogin = createAction(
 
 export const openLoginDialog = createAction(
   '[AUTH] Open Login Dialog'
-)
+);
 
 export const loginSuccess = createAction(
   '[AUTH] User Login Success'
 );
 export const loginFailure = createAction(
   '[AUTH] User Login Failure'
+);
+
+export const setProvider = createAction(
+  '[AUTH] Set Wallet Provider',
+  props<{ walletProvider: WalletProvider }>()
 );
 
 export const reinitializeAuth = createAction(
