@@ -66,7 +66,7 @@ describe('AuthEffects', () => {
 
     it('should close dialog and return login success action when login was successful', (done) => {
       actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
-      loginServiceSpy.login.and.returnValue(of(true));
+      loginServiceSpy.login.and.returnValue(of({success: true}));
 
       effects.loginViaDialog$.pipe(
         finalize(() => expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled())
@@ -113,7 +113,7 @@ describe('AuthEffects', () => {
 
     it('should call waitForSignature with metamask and not navigate on timeout option', (done) => {
       actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask, navigateOnTimeout: false}));
-      loginServiceSpy.login.and.returnValue(of(true));
+      loginServiceSpy.login.and.returnValue(of({success: true}));
 
       effects.loginViaDialog$
         .subscribe(() => {
@@ -154,7 +154,7 @@ describe('AuthEffects', () => {
 
     it('should successfully login', (done) => {
       actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: ''}));
-      loginServiceSpy.login.and.returnValue(of(true));
+      loginServiceSpy.login.and.returnValue(of({success: true}));
 
       effects.welcomePageLogin$
         .pipe(
@@ -176,7 +176,7 @@ describe('AuthEffects', () => {
 
     it('should navigate to a url that is sent in action', (done) => {
       actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: 'returnUrl'}));
-      loginServiceSpy.login.and.returnValue(of(true));
+      loginServiceSpy.login.and.returnValue(of({success: true}));
 
       effects.welcomePageLogin$
         .pipe(
@@ -229,7 +229,7 @@ describe('AuthEffects', () => {
       actions$.next(AuthActions.reinitializeAuth());
       loginServiceSpy.isSessionActive.and.returnValue(true);
       store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
-      loginServiceSpy.login.and.returnValue(of(true));
+      loginServiceSpy.login.and.returnValue(of({success: true}));
 
       effects.reinitializeLoggedUser$.subscribe(resultAction => {
         expect(resultAction).toEqual(AuthActions.loginSuccess());
