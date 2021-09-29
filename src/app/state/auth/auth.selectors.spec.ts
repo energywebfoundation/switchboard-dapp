@@ -1,4 +1,6 @@
 import * as authSelectors from './auth.selectors';
+import { getWalletProvider } from './auth.selectors';
+import { WalletProvider } from 'iam-client-lib';
 
 describe('Auth Selectors', () => {
 
@@ -33,6 +35,16 @@ describe('Auth Selectors', () => {
 
     it('should return true when user is logged in', () => {
       expect(authSelectors.isUserLoggedIn.projector({loggedIn: true})).toBeTruthy();
+    });
+  });
+
+  describe('getWalletProvider', () => {
+    it('should return undefined when wallet is not defined', () => {
+      expect(authSelectors.getWalletProvider.projector({walletProvider: undefined})).toBeUndefined();
+    });
+
+    it('should return defined wallet provider', () => {
+      expect(authSelectors.getWalletProvider.projector({walletProvider: WalletProvider.WalletConnect})).toBe(WalletProvider.WalletConnect);
     });
   });
 
