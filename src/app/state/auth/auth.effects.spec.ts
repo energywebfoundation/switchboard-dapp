@@ -65,8 +65,14 @@ describe('AuthEffects', () => {
     });
 
     it('should close dialog and return login success action when login was successful', (done) => {
+      const accountInfo = {
+        chainName: 'chainName',
+        chainId: 123,
+        account: 'account'
+      };
       actions$.next(AuthActions.loginViaDialog({provider: WalletProvider.MetaMask}));
-      loginServiceSpy.login.and.returnValue(of({success: true}));
+      loginServiceSpy.login.and.returnValue(of({success: true, accountInfo}));
+
 
       effects.loginViaDialog$.pipe(
         finalize(() => expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled())
@@ -77,7 +83,7 @@ describe('AuthEffects', () => {
             reinitializeMetamask: true
           }, undefined);
           expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(resultAction).toEqual(AuthActions.loginSuccess());
+          expect(resultAction).toEqual(AuthActions.loginSuccess({accountInfo}));
           expect(dialogSpy.closeAll).toHaveBeenCalled();
 
           done();
@@ -153,8 +159,13 @@ describe('AuthEffects', () => {
     });
 
     it('should successfully login', (done) => {
+      const accountInfo = {
+        chainName: 'chainName',
+        chainId: 123,
+        account: 'account'
+      };
       actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: ''}));
-      loginServiceSpy.login.and.returnValue(of({success: true}));
+      loginServiceSpy.login.and.returnValue(of({success: true, accountInfo}));
 
       effects.welcomePageLogin$
         .pipe(
@@ -169,14 +180,19 @@ describe('AuthEffects', () => {
             reinitializeMetamask: true
           });
           expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(resultAction).toEqual(AuthActions.loginSuccess());
+          expect(resultAction).toEqual(AuthActions.loginSuccess({accountInfo}));
           done();
         });
     });
 
     it('should navigate to a url that is sent in action', (done) => {
       actions$.next(AuthActions.welcomeLogin({provider: WalletProvider.MetaMask, returnUrl: 'returnUrl'}));
-      loginServiceSpy.login.and.returnValue(of({success: true}));
+      const accountInfo = {
+        chainName: 'chainName',
+        chainId: 123,
+        account: 'account'
+      };
+      loginServiceSpy.login.and.returnValue(of({success: true, accountInfo}));
 
       effects.welcomePageLogin$
         .pipe(
@@ -191,7 +207,7 @@ describe('AuthEffects', () => {
           });
           expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
           expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/returnUrl');
-          expect(resultAction).toEqual(AuthActions.loginSuccess());
+          expect(resultAction).toEqual(AuthActions.loginSuccess({accountInfo}));
           done();
         });
     });
@@ -227,12 +243,17 @@ describe('AuthEffects', () => {
 
     it('should return success action when reinitialization completes successfully', (done) => {
       actions$.next(AuthActions.reinitializeAuth());
+      const accountInfo = {
+        chainName: 'chainName',
+        chainId: 123,
+        account: 'account'
+      };
       loginServiceSpy.isSessionActive.and.returnValue(true);
       store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
-      loginServiceSpy.login.and.returnValue(of({success: true}));
+      loginServiceSpy.login.and.returnValue(of({success: true, accountInfo}));
 
       effects.reinitializeLoggedUser$.subscribe(resultAction => {
-        expect(resultAction).toEqual(AuthActions.loginSuccess());
+        expect(resultAction).toEqual(AuthActions.loginSuccess({accountInfo}));
         done();
       });
     });
@@ -244,7 +265,12 @@ describe('AuthEffects', () => {
     });
 
     it('should return dispatch action for setting wallet provider', (done) => {
-      actions$.next(AuthActions.loginSuccess());
+      const accountInfo = {
+        chainName: 'chainName',
+        chainId: 123,
+        account: 'account'
+      };
+      actions$.next(AuthActions.loginSuccess({accountInfo}));
       loginServiceSpy.walletProvider.and.returnValue(WalletProvider.WalletConnect);
 
       effects.setWalletProviderAfterLogin$.subscribe(resultAction => {

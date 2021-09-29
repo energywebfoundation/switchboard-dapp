@@ -25,4 +25,9 @@ export const getWalletProvider = createSelector(
   (state) => state.walletProvider
 );
 
+export const getAccountInfo = createSelector(
+  getAuthState,
+  (state) => state.accountInfo
+);
+
 

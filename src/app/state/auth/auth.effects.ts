@@ -44,10 +44,10 @@ export class AuthEffects {
           walletProvider: provider,
           reinitializeMetamask: provider === WalletProvider.MetaMask
         }, navigateOnTimeout).pipe(
-          map(({success}) => {
+          map(({success, accountInfo}) => {
             if (success) {
               this.dialog.closeAll();
-              return AuthActions.loginSuccess();
+              return AuthActions.loginSuccess({accountInfo});
             }
             return AuthActions.loginFailure();
           }),
@@ -88,10 +88,10 @@ export class AuthEffects {
           walletProvider: provider,
           reinitializeMetamask: provider === WalletProvider.MetaMask
         }).pipe(
-          map(({success}) => {
+          map(({success, accountInfo}) => {
             if (success) {
               this.router.navigateByUrl(`/${returnUrl}`);
-              return AuthActions.loginSuccess();
+              return AuthActions.loginSuccess({accountInfo});
             }
             return AuthActions.loginFailure();
           }),
@@ -145,9 +145,9 @@ export class AuthEffects {
       switchMap(() =>
         this.loginService.login()
           .pipe(
-            map(({success}) => {
+            map(({success, accountInfo}) => {
               if (success) {
-                return AuthActions.loginSuccess();
+                return AuthActions.loginSuccess({accountInfo});
               }
               return AuthActions.loginFailure();
             }),

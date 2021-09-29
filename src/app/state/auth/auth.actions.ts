@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { WalletProvider } from 'iam-client-lib';
+import { AccountInfo } from 'iam-client-lib/dist/src/iam';
 
 export const init = createAction(
   '[AUTH] Initialize Possible Options To Log In'
@@ -20,7 +21,8 @@ export const openLoginDialog = createAction(
 );
 
 export const loginSuccess = createAction(
-  '[AUTH] User Login Success'
+  '[AUTH] User Login Success',
+  props<{ accountInfo: AccountInfo }>()
 );
 export const loginFailure = createAction(
   '[AUTH] User Login Failure'
