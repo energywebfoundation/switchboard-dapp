@@ -7,16 +7,21 @@ import * as authSelectors from '../../../state/auth/auth.selectors';
 import { By } from '@angular/platform-browser';
 import * as AuthActions from '../../../state/auth/auth.actions';
 import { AuthSelectors, UserClaimSelectors } from '@state';
-import { WalletProvider } from 'iam-client-lib';
 import { MatMenuModule } from '@angular/material/menu';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { AccountInfo } from 'iam-client-lib/dist/src/iam';
 
 describe('StakingHeaderComponent', () => {
   let component: StakingHeaderComponent;
   let fixture: ComponentFixture<StakingHeaderComponent>;
   let hostDebug: DebugElement;
   let store: MockStore;
-
+  let setup = (data?: { isLoggedIn?: boolean, walletProvider?: any, accountInfo?: AccountInfo, userName?: string }) => {
+    store.overrideSelector(authSelectors.isUserLoggedIn, data?.isLoggedIn || true);
+    store.overrideSelector(AuthSelectors.getWalletProvider, data?.walletProvider);
+    store.overrideSelector(AuthSelectors.getAccountInfo, data?.accountInfo);
+    store.overrideSelector(UserClaimSelectors.getUserName, data?.userName);
+  };
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [StakingHeaderComponent],
@@ -38,10 +43,7 @@ describe('StakingHeaderComponent', () => {
   });
 
   it('should call logout action when clicking on logout button', () => {
-    store.overrideSelector(authSelectors.isUserLoggedIn, true);
-    store.overrideSelector(AuthSelectors.getWalletProvider, WalletProvider.WalletConnect);
-    store.overrideSelector(AuthSelectors.getAccountInfo, null);
-    store.overrideSelector(UserClaimSelectors.getUserName, 'Name');
+    setup();
     fixture.detectChanges();
     const dispatchSpy = spyOn(store, 'dispatch');
     const {menuTrigger} = selectors(hostDebug);
@@ -55,7 +57,7 @@ describe('StakingHeaderComponent', () => {
   });
 
   it('should not render logout button when user is not logged in', () => {
-    store.overrideSelector(authSelectors.isUserLoggedIn, false);
+    setup({isLoggedIn: false});
     fixture.detectChanges();
 
     const {logout} = selectors(hostDebug);
