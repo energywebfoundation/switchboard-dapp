@@ -1,18 +1,9 @@
 <div class="header-wrapper d-flex flex-grow-1 justify-content-end">
   <ng-container *ngIf="(loggedIn$ | async)">
     <ng-container *ngIf="(accountInfo$ | async) as info">
-      <div class="f-14">{{info.accountInfo.account | json}}</div>
-
       <div class="btn-user-info" [matMenuTriggerFor]="menu">
-        <div class="d-flex align-items-center ml-3 ml-md-0 flex-row">
-          <div class="d-none d-md-flex flex-column align-items-end ml-2 mr-2">
-            <div class="account-title">{{info?.userName}}</div>
-
-          </div>
-          <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="34"
-               height="34" alt="Identity image">
-          <mat-icon>arrow_drop_down</mat-icon>
-        </div>
+        <app-user-menu-trigger [userName]="info?.userName">
+        </app-user-menu-trigger>
       </div>
       <mat-menu #menu="matMenu" xPosition="before">
         <div class="d-flex justify-content-center flex-column py-2 px-3">

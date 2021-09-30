@@ -6,13 +6,15 @@ import { UserNameComponent } from './user-name/user-name.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CopyToClipboardModule } from '../../../shared/directives/copy-to-clipboard/copy-to-clipboard.module';
 import { DidFormatMinifierModule } from '../../../shared/pipes/did-format-minifier/did-format-minifier.module';
+import { UserMenuTriggerComponent } from './user-menu-trigger/user-menu-trigger.component';
 
 
 @NgModule({
   declarations: [
     ConnectedNetworkComponent,
     UserDidComponent,
-    UserNameComponent
+    UserNameComponent,
+    UserMenuTriggerComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +25,8 @@ import { DidFormatMinifierModule } from '../../../shared/pipes/did-format-minifi
   exports: [
     ConnectedNetworkComponent,
     UserDidComponent,
-    UserNameComponent
+    UserNameComponent,
+    UserMenuTriggerComponent
   ]
 })
 export class UserMenuModule {
