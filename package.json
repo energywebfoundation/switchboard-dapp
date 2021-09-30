@@ -18,7 +18,7 @@
     "modernizr": "modernizr -c modernizr-config.json -d src/modernizr.js",
     "webdriver-manager-update": "node ./node_modules/protractor/bin/webdriver-manager update",
     "e2e": "ng e2e",
-    "e2e:open": "ng run ew-boilerplate-ui:cypress-open"
+    "e2e:open": "ng run switchboard-dapp:cypress-open"
   },
   "dependencies": {
     "@angular/animations": "11.2.14",
