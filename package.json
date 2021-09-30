@@ -16,7 +16,6 @@
     "test:headless": "ng test --karma-config=karma-headless.conf.js",
     "lint": "ng lint",
     "modernizr": "modernizr -c modernizr-config.json -d src/modernizr.js",
-    "webdriver-manager-update": "node ./node_modules/protractor/bin/webdriver-manager update",
     "e2e": "ng e2e",
     "e2e:open": "ng run switchboard-dapp:cypress-open"
   },
