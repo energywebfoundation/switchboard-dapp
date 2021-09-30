@@ -16,7 +16,7 @@ const ICON_MAP = new Map()
 })
 export class ConnectedNetworkComponent implements OnInit {
   @Input() chainName: string;
-  @Input() wallet: string;
+  @Input() wallet: WalletProvider | string;
   walletIcon: string;
 
   ngOnInit(): void {
