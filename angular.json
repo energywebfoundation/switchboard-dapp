@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ew-boilerplate-ui": {
+    "switchboard-dapp": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -136,14 +136,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ew-boilerplate-ui:build"
+            "browserTarget": "switchboard-dapp:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ew-boilerplate-ui:build:production"
+              "browserTarget": "switchboard-dapp:build:production"
             },
             "development": {
-              "browserTarget": "ew-boilerplate-ui:build:development"
+              "browserTarget": "switchboard-dapp:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -151,7 +151,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ew-boilerplate-ui:build"
+            "browserTarget": "switchboard-dapp:build"
           }
         },
         "test": {
@@ -196,44 +196,44 @@
         "e2e": {
           "builder": "@briebug/cypress-schematic:cypress",
           "options": {
-            "devServerTarget": "ew-boilerplate-ui:serve",
+            "devServerTarget": "switchboard-dapp:serve",
             "watch": true,
             "headless": false
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ew-boilerplate-ui:serve:production"
+              "devServerTarget": "switchboard-dapp:serve:production"
             }
           }
         },
         "cypress-run": {
           "builder": "@briebug/cypress-schematic:cypress",
           "options": {
-            "devServerTarget": "ew-boilerplate-ui:serve"
+            "devServerTarget": "switchboard-dapp:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ew-boilerplate-ui:serve:production"
+              "devServerTarget": "switchboard-dapp:serve:production"
             }
           }
         },
         "cypress-open": {
           "builder": "@briebug/cypress-schematic:cypress",
           "options": {
-            "devServerTarget": "ew-boilerplate-ui:serve",
+            "devServerTarget": "switchboard-dapp:serve",
             "watch": true,
             "headless": false
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ew-boilerplate-ui:serve:production"
+              "devServerTarget": "switchboard-dapp:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "ew-boilerplate-ui",
+  "defaultProject": "switchboard-dapp",
   "cli": {
     "analytics": false
   }
