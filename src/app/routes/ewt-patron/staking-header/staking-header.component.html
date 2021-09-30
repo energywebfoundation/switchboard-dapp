@@ -16,24 +16,12 @@
       </div>
       <mat-menu #menu="matMenu" xPosition="before">
         <div class="d-flex justify-content-center flex-column py-2 px-3">
-          <div class="d-flex justify-content-between mb-2">
-            <div class="network">
-              <mat-icon class="color-success mr-1">circle</mat-icon>
-              {{info.accountInfo.chainName}}
-            </div>
-            <div class="wallet"><img [src]="getIcon(info.wallet)" width="28"/></div>
-          </div>
+          <app-connected-network [chainName]="info.accountInfo.chainName"
+                                 [wallet]="info.wallet">
+          </app-connected-network>
           <div>
-            <div class="d-flex flex-column align-items-center mt-3">
-              <img class="img-thumbnail rounded-circle mb-3" src="../assets/img/identity-image.png" width="48"
-                   height="44" alt="Identity image">
-              <div class="account-name">{{info?.userName}}</div>
-            </div>
-            <div class="d-flex align-items-center justify-content-center did-wrapper mx-2 px-3"
-                 appCopyToClipboard [copyClipboard]="info?.accountInfo?.account" message="User Did">
-              <div class="f-14">{{info?.accountInfo?.account | didFormatMinifier}}</div>
-              <mat-icon class="ml-2 color-white">content_copy</mat-icon>
-            </div>
+            <app-user-name [userName]="info?.userName"></app-user-name>
+            <app-user-did [did]="info?.accountInfo?.account"></app-user-did>
           </div>
           <app-divider></app-divider>
           <button mat-raised-button data-qa-id="logout" class="connect-btn color-white text-uppercase my-2"
