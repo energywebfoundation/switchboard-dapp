@@ -4,9 +4,7 @@ module.exports = {
     plugins: [
         new NodePolyfillPlugin({
             excludeAliases: [
-                "Buffer",
                 "console",
-                "process",
                 "assert",
                 "buffer",
                 "console",
@@ -15,7 +13,6 @@ module.exports = {
                 "events",
                 "path",
                 "punycode",
-                "process",
                 "querystring",
                 "_stream_duplex",
                 "_stream_passthrough",
