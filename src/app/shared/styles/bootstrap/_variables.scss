@@ -4,7 +4,7 @@
 // consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
 
 // Color system
-
+@use "sass:math";
 $white:    #fff !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #e9ecef !default;
@@ -295,7 +295,7 @@ $h4-font-size:                $font-size-base * 1.5 !default;
 $h5-font-size:                $font-size-base * 1.25 !default;
 $h6-font-size:                $font-size-base !default;
 
-$headings-margin-bottom:      $spacer / 2 !default;
+$headings-margin-bottom:      math.div($spacer, 2) !default;
 $headings-font-family:        null !default;
 $headings-font-weight:        500 !default;
 $headings-line-height:        1.2 !default;
@@ -490,7 +490,7 @@ $input-height-border:                   $input-border-width * 2 !default;
 
 $input-height-inner:                    calc(#{$input-line-height * 1em} + #{$input-padding-y * 2}) !default;
 $input-height-inner-half:               calc(#{$input-line-height * .5em} + #{$input-padding-y}) !default;
-$input-height-inner-quarter:            calc(#{$input-line-height * .25em} + #{$input-padding-y / 2}) !default;
+$input-height-inner-quarter:            calc(#{$input-line-height * .25em} + #{math.div($input-padding-y, 2)}) !default;
 
 $input-height:                          calc(#{$input-line-height * 1em} + #{$input-padding-y * 2} + #{$input-height-border}) !default;
 $input-height-sm:                       calc(#{$input-line-height-sm * 1em} + #{$input-btn-padding-y-sm * 2} + #{$input-height-border}) !default;
@@ -557,7 +557,7 @@ $custom-radio-indicator-border-radius:          50% !default;
 $custom-radio-indicator-icon-checked:           str-replace(url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='#{$custom-control-indicator-checked-color}'/%3e%3c/svg%3e"), "#", "%23") !default;
 
 $custom-switch-width:                           $custom-control-indicator-size * 1.75 !default;
-$custom-switch-indicator-border-radius:         $custom-control-indicator-size / 2 !default;
+$custom-switch-indicator-border-radius:         math.div($custom-control-indicator-size,2) !default;
 $custom-switch-indicator-size:                  calc(#{$custom-control-indicator-size} - #{$custom-control-indicator-border-width * 4}) !default;
 
 $custom-select-padding-y:           $input-padding-y !default;
