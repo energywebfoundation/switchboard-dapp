@@ -2,6 +2,8 @@ const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 module.exports = {
     plugins: [
-        new NodePolyfillPlugin()
+        new NodePolyfillPlugin({
+            excludeAliases: ['_stream_readable']
+        })
     ]
 }

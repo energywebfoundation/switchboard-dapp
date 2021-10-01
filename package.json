@@ -10,7 +10,7 @@
     "start": "ng serve",
     "start-dev": "ng build --watch",
     "build-prod": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --configuration production --aot -c=production",
-    "build": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --configuration production --aot -c=dev",
+    "build": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --configuration production --aot -c=development",
     "postinstall": "node patch.js",
     "test": "ng test --code-coverage",
     "test:headless": "ng test --karma-config=karma-headless.conf.js",
