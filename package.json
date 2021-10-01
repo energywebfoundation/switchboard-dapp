@@ -23,6 +23,7 @@
     "precy:run:ci": "echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p"
   },
   "dependencies": {
+    "@angular-builders/custom-webpack": "^12.1.3",
     "@angular/animations": "12.2.8",
     "@angular/cdk": "^11.2.13",
     "@angular/common": "12.2.8",
@@ -64,6 +65,7 @@
     "ngx-editor": "9.0.2",
     "ngx-spinner": "^11.0.2",
     "ngx-toastr": "13.2.1",
+    "node-polyfill-webpack-plugin": "^1.1.4",
     "popper.js": "1.14.3",
     "rxjs": "6.6.7",
     "simple-line-icons": "2.4.1",
