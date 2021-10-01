@@ -5,7 +5,6 @@ module.exports = {
         new NodePolyfillPlugin({
             excludeAliases: [
                 "console",
-                "assert",
                 "buffer",
                 "console",
                 "constants",
@@ -20,7 +19,7 @@ module.exports = {
                 "_stream_transform",
                 "_stream_writable",
                 "string_decoder",
-                "sys", "timers", "tty", "url", "util", "vm", "zlib"
+                "sys", "timers", "tty", "util", "vm", "zlib"
             ]
         })
     ]

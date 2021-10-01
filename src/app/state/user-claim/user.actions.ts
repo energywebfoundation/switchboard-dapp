@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { ClaimData } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
+import { ClaimData, Profile } from 'iam-client-lib';
 import { IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
-import { Profile } from 'iam-client-lib';
 
 export const setUpUser = createAction('[User] Set Up User Data')
 
