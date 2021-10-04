@@ -41,3 +41,17 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+declare namespace Cypress {
+  interface Chainable {
+    /**
+     * Custom command to select DOM element by data-qa-id attribute.
+     * @example cy.dataCy('greeting')
+     */
+    dataQaId(value: string): Chainable<Element>;
+  }
+}
+
+Cypress.Commands.add('dataQaId', (id: string) => {
+  return cy.get(`[data-qa-id=${id}]`);
+});

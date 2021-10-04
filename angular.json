@@ -226,7 +226,7 @@
           },
           "configurations": {
             "production": {
-              "devServerTarget": "switchboard-dapp:serve:production"
+              "devServerTarget": "switchboard-dapp:serve:development"
             }
           }
         }

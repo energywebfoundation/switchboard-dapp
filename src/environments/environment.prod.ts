@@ -12,5 +12,6 @@ export const environment = {
     chainId: 73799
   },
   featureVisible: false,
+  privateKey: '',
   ...constants
 };

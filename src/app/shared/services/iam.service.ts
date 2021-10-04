@@ -58,7 +58,7 @@ export class IamService {
 
     if (environment.privateKey) {
       connectionOptions = {
-        ...connectionOptions, privateKey: environment,
+        ...connectionOptions, privateKey: environment.privateKey,
         rpcUrl: walletConnectOptions.rpcUrl
       };
     }
