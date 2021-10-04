@@ -30,7 +30,7 @@ export class WelcomeComponent implements OnInit {
 
   async ngOnInit() {
     if (environment.privateKey) {
-      this.store.dispatch(AuthActions.reinitializeAuth());
+      this.login(WalletProvider.PrivateKey);
     }
     this.activeRoute.queryParams.pipe(
       filter((queryParams) => queryParams && queryParams.returnUrl)
