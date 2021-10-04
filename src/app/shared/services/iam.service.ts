@@ -56,11 +56,20 @@ export class IamService {
       };
     }
 
+    if (environment.privateKey) {
+      connectionOptions = {
+        ...connectionOptions, privateKey: environment,
+        rpcUrl: walletConnectOptions.rpcUrl
+      };
+    }
+
     // Initialize Data
     if (configService.safeInfo) {
       this._iam = new SafeIam(safeAppSdk, connectionOptions);
     } else {
-      this._iam = new IAM(connectionOptions);
+      this._iam = new IAM({
+        ...connectionOptions
+      });
     }
   }
 
