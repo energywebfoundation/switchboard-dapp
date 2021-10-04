@@ -3,12 +3,12 @@
   <nav class="navbar topnavbar" role="navigation">
     <!-- START navbar header-->
     <div class="navbar-header" id="navbarHeader">
-      <a routerLink="/dashboard">
+      <a routerLink="/dashboard" data-qa-id="logo">
         <img src="assets/img/logo-ew-switchboard.svg" class="logo-ew"/>
       </a>
     </div>
     <ul class="menu-top navbar-nav mx-auto flex-row align-items-center" *ngIf="isNavMenuVisible">
-      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('assets') }">
+      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('assets') }" data-qa-id="header-assets">
         <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/assets">
           <div class="icon-footer-center">
             <img src="../assets/img/icons/assets-icon.png" width="auto" height="21" alt="assets image">
@@ -16,7 +16,7 @@
           <h6 class="mb-0">Assets</h6>
         </a>
       </li>
-      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('governance') }">
+      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('governance') }" data-qa-id="header-governance">
         <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/governance">
           <div class="icon-footer-center">
             <img src="../assets/img/icons/governance-icon.png" width="auto" height="21" alt="Governance image">
@@ -32,7 +32,7 @@
               <h6 class="mb-0">Services</h6>
           </a>
       </li> -->
-      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('enrolment') }">
+      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('enrolment') }" data-qa-id="header-enrolment">
         <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/enrolment">
           <div class="icon-footer-center">
             <img src="../assets/img/icons/enrollment-icon.png" width="auto" height="21" alt="Enrolments image">
@@ -40,7 +40,8 @@
           <h6 class="mb-0">Enrolments</h6>
         </a>
       </li>
-      <li class="nav-item coming-soon" [ngClass]="{ 'active': currentNav.includes('applications') }">
+      <li class="nav-item coming-soon" [ngClass]="{ 'active': currentNav.includes('applications') }"
+          data-qa-id="header-applications">
         <a class="nav-link d-lg-block d-xl-block coming-soon link-footer">
           <div class="icon-footer-center">
             <img src="../assets/img/icons/applications-icon.png" width="auto" height="21" alt="Dashboard image">
@@ -48,7 +49,8 @@
           <h6 class="mb-0">Applications</h6>
         </a>
       </li>
-      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('stake') }">
+      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('stake') }"
+          data-qa-id="header-stake">
         <a class="nav-link d-lg-block d-xl-block link-footer" routerLink="stake">
           <div class="icon-footer-center">
             <img src="../assets/img/icons/stake-icon.svg" width="auto" height="21" alt="Stake EWT image">
