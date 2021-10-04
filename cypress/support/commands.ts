@@ -49,9 +49,20 @@ declare namespace Cypress {
      * @example cy.dataCy('greeting')
      */
     dataQaId(value: string): Chainable<Element>;
+
+    /**
+     * Navigates to main page and waits for login response.
+     */
+    login(): void;
   }
 }
 
 Cypress.Commands.add('dataQaId', (id: string) => {
   return cy.get(`[data-qa-id=${id}]`);
+});
+
+Cypress.Commands.add('login', () => {
+  cy.visit('/');
+  cy.intercept('**/v1/login').as('getLogin');
+  cy.wait('@getLogin');
 });
