@@ -14,7 +14,12 @@ declare namespace Cypress {
 }
 
 Cypress.Commands.add('visitAssets', () => {
+  cy.intercept({
+    method: 'GET',
+    url: '**/assets/owner/*'
+  }, {fixture: 'assets/owner-list.json'}).as('getOwnerAssets');
   cy.dataQaId('Assets').click();
+  cy.wait('@getOwnerAssets');
 });
 
 Cypress.Commands.add('registerAsset', () => {
