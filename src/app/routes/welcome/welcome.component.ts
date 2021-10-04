@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import * as authSelectors from '../../state/auth/auth.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
 import { IamService } from '../../shared/services/iam.service';
+import { environment } from '../../../environments/environment';
 
 const {version} = require('../../../../package.json');
 
@@ -28,6 +29,9 @@ export class WelcomeComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (environment.privateKey) {
+      this.store.dispatch(AuthActions.reinitializeAuth());
+    }
     this.activeRoute.queryParams.pipe(
       filter((queryParams) => queryParams && queryParams.returnUrl)
     )
