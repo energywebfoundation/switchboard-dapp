@@ -63,6 +63,6 @@ Cypress.Commands.add('dataQaId', (id: string) => {
 
 Cypress.Commands.add('login', () => {
   cy.visit('/');
-  cy.intercept('**/v1/login').as('getLogin');
-  cy.wait('@getLogin');
+  cy.intercept('**/login').as('getLogin');
+  cy.wait('@getLogin', {timeout: 30000});
 });

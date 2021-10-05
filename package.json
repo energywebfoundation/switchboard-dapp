@@ -18,7 +18,9 @@
     "modernizr": "modernizr -c modernizr-config.json -d src/modernizr.js",
     "e2e": "ng e2e",
     "cypress:open": "ng run switchboard-dapp:cypress-open",
-    "cypress:run": "ng run switchboard-dapp:cypress-run"
+    "cypress:run": "ng run switchboard-dapp:cypress-run",
+    "cy:run:ci": "npm run ng serve -- -c=testing ",
+    "precy:run:ci": "echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p"
   },
   "dependencies": {
     "@angular/animations": "11.2.14",
