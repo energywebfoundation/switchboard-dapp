@@ -130,6 +130,20 @@
                   "with": "src/environments/environment.dev.ts"
                 }
               ]
+            },
+            "testing": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                }
+              ]
             }
           }
         },
@@ -144,6 +158,9 @@
             },
             "development": {
               "browserTarget": "switchboard-dapp:build:development"
+            },
+            "testing": {
+              "browserTarget": "switchboard-dapp:build:testing"
             }
           },
           "defaultConfiguration": "development"
@@ -194,7 +211,7 @@
           }
         },
         "e2e": {
-          "builder": "@briebug/cypress-schematic:cypress",
+          "builder": "@cypress/schematic:cypress",
           "options": {
             "devServerTarget": "switchboard-dapp:serve",
             "watch": true,
@@ -207,26 +224,26 @@
           }
         },
         "cypress-run": {
-          "builder": "@briebug/cypress-schematic:cypress",
+          "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "switchboard-dapp:serve"
+            "devServerTarget": "switchboard-dapp:serve:testing"
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "switchboard-dapp:serve:production"
+            "testing": {
+              "devServerTarget": "switchboard-dapp:serve:testing"
             }
           }
         },
         "cypress-open": {
-          "builder": "@briebug/cypress-schematic:cypress",
+          "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "switchboard-dapp:serve",
+            "devServerTarget": "switchboard-dapp:serve:testing",
             "watch": true,
             "headless": false
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "switchboard-dapp:serve:development"
+            "testing": {
+              "devServerTarget": "switchboard-dapp:serve:testing"
             }
           }
         }
