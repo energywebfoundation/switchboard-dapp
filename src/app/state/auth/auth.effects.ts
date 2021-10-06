@@ -120,8 +120,8 @@ export class AuthEffects {
   logout$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.logout),
-      map(() => {
-        this.loginService.disconnect();
+      map(async () => {
+        await this.loginService.disconnect();
       })
     ), {dispatch: false}
   );
@@ -129,8 +129,8 @@ export class AuthEffects {
   logoutWithRedirectUrl$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.logoutWithRedirectUrl),
-      map(() => {
-        this.loginService.logout(true);
+      map(async () => {
+        await this.loginService.logout(true);
       })
     ), {dispatch: false}
   );
