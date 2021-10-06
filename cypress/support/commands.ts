@@ -56,6 +56,13 @@ declare namespace Cypress {
     login(): void;
 
     insertValue(id: string, value: string): Chainable<Element>;
+
+    matError(): Chainable<Element>;
+
+    /**
+     * Gets mat-error selector and compares displayed error with provided string.
+     */
+    validationError(text: string): Chainable<Element>;
   }
 }
 
@@ -65,10 +72,24 @@ Cypress.Commands.add('dataQaId', (id: string) => {
 
 Cypress.Commands.add('login', () => {
   cy.visit('/');
-  cy.intercept('**/login').as('getLogin');
+  cy.intercept('**/login', {
+    // body: {
+    //   'token': '123.123.123',
+    //   'refreshToken': '123.123.123'
+    // }
+  }).as('getLogin');
+  cy.intercept({method: 'GET', url: '**/DID/*'}, {fixture: 'did/cached-did.json'});
   cy.wait('@getLogin', {timeout: 30000});
 });
 
 Cypress.Commands.add('insertValue', (id: string, value: string) => {
   return cy.dataQaId(id).type(value, {force: true});
+});
+
+Cypress.Commands.add('matError', () => {
+  return cy.get('mat-error');
+});
+
+Cypress.Commands.add('validationError', (text: string) => {
+  return cy.matError().contains(text);
 });

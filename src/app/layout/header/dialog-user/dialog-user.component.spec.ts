@@ -114,9 +114,9 @@ const selectors = (hostDebug: DebugElement) => {
 
   return {
     submit: getElement('submit').nativeElement,
-    name: getElement('name').nativeElement,
-    birthdate: getElement('birthdate').nativeElement,
-    address: getElement('address').nativeElement,
+    name: getElement('dialog-input-name').nativeElement,
+    birthdate: getElement('dialog-input-birthdate').nativeElement,
+    address: getElement('dialog-input-address').nativeElement,
     getElement
   };
 };

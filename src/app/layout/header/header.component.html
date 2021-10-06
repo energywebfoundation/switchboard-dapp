@@ -185,7 +185,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <div class="cursor-pointer" [matMenuTriggerFor]="menu">
+        <div class="cursor-pointer" [matMenuTriggerFor]="menu" data-qa-id="user-menu">
           <app-user-menu-trigger [userName]="userName"></app-user-menu-trigger>
         </div>
       </li>
@@ -198,7 +198,8 @@
       <app-user-name [userName]="userName"></app-user-name>
       <app-user-did [did]="userDid$ | async"></app-user-did>
     </div>
-    <button class="color-link px-4 pb-2 border-bottom-1" mat-menu-item (click)="openDialogUser()">Update
+    <button class="color-link px-4 pb-2 border-bottom-1" mat-menu-item (click)="openDialogUser()"
+            data-qa-id="menu-update-identity">Update
       Identity
     </button>
     <button class="d-block d-md-none border-bottom-1 color-link px-4" mat-menu-item (click)="openDialogUser()"><a
