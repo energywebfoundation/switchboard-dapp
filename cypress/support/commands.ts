@@ -54,6 +54,8 @@ declare namespace Cypress {
      * Navigates to main page and waits for login response.
      */
     login(): void;
+
+    insertValue(id: string, value: string): Chainable<Element>;
   }
 }
 
@@ -65,4 +67,8 @@ Cypress.Commands.add('login', () => {
   cy.visit('/');
   cy.intercept('**/login').as('getLogin');
   cy.wait('@getLogin', {timeout: 30000});
+});
+
+Cypress.Commands.add('insertValue', (id: string, value: string) => {
+  return cy.dataQaId(id).type(value, {force: true});
 });
