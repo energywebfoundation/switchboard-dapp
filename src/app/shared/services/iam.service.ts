@@ -55,10 +55,11 @@ export class IamService {
         ewKeyManagerUrl: kmsServerUrl
       };
     }
-
-    if (environment.privateKey) {
+    const privateKey = window.localStorage.getItem('PrivateKey');
+    if (privateKey) {
       connectionOptions = {
-        ...connectionOptions, privateKey: environment.privateKey,
+        ...connectionOptions,
+        privateKey: privateKey,
         rpcUrl: walletConnectOptions.rpcUrl
       };
     }

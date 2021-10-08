@@ -12,6 +12,5 @@ export const environment = {
     chainId: 73799
   },
   featureVisible: true,
-  privateKey: '28571bc941b15e77960c148b8e0c5df05c2cecb43b899b2fb6eaf991f8eade5b',
   ...constants
 };
