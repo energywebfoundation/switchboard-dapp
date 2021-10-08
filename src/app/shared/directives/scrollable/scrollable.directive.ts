@@ -1,23 +1,24 @@
 import { OnInit, Directive, Input, ElementRef } from '@angular/core';
+
 declare var $: any;
 
 @Directive({
-    selector: 'scrollable'
+  selector: '[appScrollable]'
 })
 export class ScrollableDirective implements OnInit {
 
-    @Input() height: number;
-    defaultHeight = 250;
+  @Input() height: number;
+  defaultHeight = 250;
 
-    constructor(public element: ElementRef) { 
-        // console.log("jjjjjj");
-    }
+  constructor(public element: ElementRef) {
+    // console.log("jjjjjj");
+  }
 
-    ngOnInit() {
-        // console.log("jjjjj2j");
-        $(this.element.nativeElement).slimScroll({
-            height: (this.height || this.defaultHeight)
-        });
-    }
+  ngOnInit() {
+    // console.log("jjjjj2j");
+    $(this.element.nativeElement).slimScroll({
+      height: (this.height || this.defaultHeight)
+    });
+  }
 
 }

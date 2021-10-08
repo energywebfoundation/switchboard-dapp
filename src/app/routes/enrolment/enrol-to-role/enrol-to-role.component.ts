@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-enrol-to-role',
   templateUrl: './enrol-to-role.component.html',
   styleUrls: ['./enrol-to-role.component.scss']
 })
-export class EnrolToRoleComponent implements OnInit {
+export class EnrolToRoleComponent {
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
   }
 
 }

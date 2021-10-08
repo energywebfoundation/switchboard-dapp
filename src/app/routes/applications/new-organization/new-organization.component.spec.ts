@@ -1,17 +1,17 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NewOrganizationComponent } from './new-organization.component';
 
-describe('NewOrganizationComponent', () => {
+xdescribe('NewOrganizationComponent', () => {
   let component: NewOrganizationComponent;
   let fixture: ComponentFixture<NewOrganizationComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewOrganizationComponent ]
+      declarations: [NewOrganizationComponent]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NewOrganizationComponent);

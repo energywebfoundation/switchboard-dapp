@@ -1,15 +1,94 @@
 .mat-dialog-content {
-    padding: 0!important;
+  padding: 0 !important;
+}
+
+a:hover {
+  background-color: initial;
 }
 
 .border-bottom-1 {
-    border-bottom: 1px solid #3c3b4c;  
+  border-bottom: 1px solid #3c3b4c;
+}
+
+.header-notification-container {
+  padding: 5px;
+  background-color: #2a2a37;
 }
 
 ::ng-deep .mat-menu-content:not(:empty) {
-    padding: 0 !important;
+  padding: 0 !important;
 }
 
 .mt-2, .my-2 {
-    margin-top: 0.6rem !important;
+  margin-top: 0.6rem !important;
+}
+
+.topnavbar .navbar-nav > .nav-item > .nav-link.coming-soon {
+  color: #8B8A91;
+  cursor: auto;
+}
+
+.icon-footer-center {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  bottom: 15px;
+}
+
+.notification {
+  &-item {
+    padding: 10px 0;
+  }
+
+  &-icon {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    border-radius: 100%;
+  }
+}
+
+.header-notification {
+  background-color: #2a2937;
+}
+
+.link-footer img {
+  filter: saturate(1);
+
+  &:hover {
+    filter: hue-rotate(285deg);
+  }
+}
+
+.link-footer.coming-soon img {
+  filter: saturate(0);
+  opacity: 0.2;
+
+  &:hover {
+    filter: saturate(0);
+  }
+}
+
+.did-wrapper {
+  margin-top: 7px;
+  background-color: #1f1b2d;
+  padding: 8px 12px;
+  border-radius: 50px;
+  color: #FFF;
+  cursor: pointer;
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
+    padding-top: 2px;
+  }
+
+  &:hover {
+    mat-icon {
+      color: #33CBCB;
+    }
+  }
 }

@@ -2,15 +2,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AssetListComponent } from './asset-list.component';
 
-describe('AssetListComponent', () => {
+xdescribe('AssetListComponent', () => {
   let component: AssetListComponent;
   let fixture: ComponentFixture<AssetListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AssetListComponent ]
+      declarations: [AssetListComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

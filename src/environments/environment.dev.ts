@@ -1,8 +1,8 @@
 import { constants } from './constants';
 
 export const environment = {
-  production: false,  
-  cacheServerUrl: 'https://identitycache-dev.energyweb.org/',
+  production: false,
+  cacheServerUrl: 'https://identitycache-dev.energyweb.org/v1',
   natsServerUrl: 'https://identityevents-dev.energyweb.org/',
   kmsServerUrl: undefined,
   walletConnectOptions: {
@@ -11,5 +11,6 @@ export const environment = {
     rpcUrl: 'https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/',
     chainId: 73799
   },
-  ...constants  
+  featureVisible: true,
+  ...constants
 };

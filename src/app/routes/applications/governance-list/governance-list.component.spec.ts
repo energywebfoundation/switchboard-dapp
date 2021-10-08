@@ -1,17 +1,17 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovernanceListComponent } from './governance-list.component';
 
-describe('GovernanceListComponent', () => {
+xdescribe('GovernanceListComponent', () => {
   let component: GovernanceListComponent;
   let fixture: ComponentFixture<GovernanceListComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ GovernanceListComponent ]
+      declarations: [GovernanceListComponent]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GovernanceListComponent);

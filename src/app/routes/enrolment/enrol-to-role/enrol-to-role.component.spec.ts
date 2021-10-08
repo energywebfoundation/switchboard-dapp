@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnrolToRoleComponent } from './enrol-to-role.component';
 
@@ -6,12 +6,12 @@ describe('EnrolToRoleComponent', () => {
   let component: EnrolToRoleComponent;
   let fixture: ComponentFixture<EnrolToRoleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [ EnrolToRoleComponent ]
+      declarations: [EnrolToRoleComponent]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EnrolToRoleComponent);

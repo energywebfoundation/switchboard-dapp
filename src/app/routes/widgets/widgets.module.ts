@@ -1,14 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { MatButtonModule, MatPaginatorModule, MatIconModule, MatTooltipModule, MatInputModule, MatTableModule, MatDialogModule, MatFormFieldModule, MatDatepickerModule, MatTabsModule, MatSelectModule } from '@angular/material';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { MatNativeDatetimeModule, MatDatetimepickerModule } from '@mat-datetimepicker/core';
+import { SharedModule } from '../../shared/shared.module';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatetimepickerModule, MatNativeDatetimeModule } from '@mat-datetimepicker/core';
 
-const routes: Routes = [
-
-];
+const routes: Routes = [];
 
 @NgModule({
   declarations: [ConfirmationDialogComponent],
@@ -33,11 +41,8 @@ const routes: Routes = [
   ],
   entryComponents: [
     ConfirmationDialogComponent
-  ],
-
-  exports: [
-    RouterModule,
   ]
 })
-export class WidgetsModule { }
+export class WidgetsModule {
+}
 

@@ -3,9 +3,9 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { ListType, LoadingCount } from 'src/app/shared/constants/shared-constants';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { LoadingService } from 'src/app/shared/services/loading.service';
+import { ListType, LoadingCount } from '../../shared/constants/shared-constants';
+import { IamService } from '../../shared/services/iam.service';
+import { LoadingService } from '../../shared/services/loading.service';
 import { GovernanceDetailsComponent } from '../applications/governance-view/governance-details/governance-details.component';
 
 const FilterTypes = {
@@ -19,7 +19,7 @@ const FilterTypes = {
   styleUrls: ['./search-result.component.scss']
 })
 export class SearchResultComponent implements OnInit {
-  @ViewChild('detailView', undefined) detailView: GovernanceDetailsComponent;
+  @ViewChild('detailView') detailView: GovernanceDetailsComponent;
 
   FilterTypes = FilterTypes;
   screenWidth: number;
@@ -43,7 +43,8 @@ export class SearchResultComponent implements OnInit {
     private loadingService: LoadingService,
     private fb: FormBuilder,
     private iamService: IamService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this._initList();
@@ -77,10 +78,6 @@ export class SearchResultComponent implements OnInit {
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
       // Get requested claims
       try {
-        this.requestedClaims = await this.iamService.iam.getRequestedClaims({
-          did: this.iamService.iam.getDid()
-        });
-
         if (queryParams.keyword) {
           this.searchForm.get('searchTxt').setValue(queryParams.keyword);
         }
@@ -136,7 +133,7 @@ export class SearchResultComponent implements OnInit {
 
     try {
       if (keyword) {
-        let word = undefined;
+        let word;
         if (!keyword.trim && keyword.name) {
           word = keyword.name;
         } else {
@@ -151,11 +148,9 @@ export class SearchResultComponent implements OnInit {
           });
         }
       }
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
-    }
-    finally {
+    } finally {
       this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.DOWN);
     }
 
@@ -185,7 +180,7 @@ export class SearchResultComponent implements OnInit {
 
     // Scroll Up
     el.scrollIntoView(true);
-    let body = document.getElementsByTagName('app-header');
+    const body = document.getElementsByTagName('app-header');
     if (body.length) {
       body[0].scrollTop -= 78;
     }

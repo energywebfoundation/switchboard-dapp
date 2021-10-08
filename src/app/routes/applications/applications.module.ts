@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { MatCardModule, MatFormFieldModule, MatButtonModule, MatDividerModule, MatDialogModule, MatSelectModule, MatInputModule, MatProgressSpinnerModule, MatExpansionModule } from '@angular/material';
+import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { ApplicationsComponent } from './applications.component';
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
@@ -11,14 +10,29 @@ import { ViewOrganizationComponent } from './view-organization/view-organization
 import { NewApplicationComponent } from './new-application/new-application.component';
 import { NewRoleComponent } from './new-role/new-role.component';
 import { GovernanceListComponent } from './governance-list/governance-list.component';
-import { GovernanceViewComponent } from './governance-view/governance-view.component';
 import { TransferOwnershipComponent } from './transfer-ownership/transfer-ownership.component';
 import { RemoveOrgAppComponent } from './remove-org-app/remove-org-app.component';
 import { GovernanceDetailsModule } from './governance-view/governance-details/governance-details.module';
-import { NgMatSearchBarModule } from 'ng-mat-search-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatButtonModule } from '@angular/material/button';
+import { NewStakingPoolComponent } from './new-staking-pool/new-staking-pool.component';
+import { RoleFieldComponent } from './new-role/components/role-field/role-field.component';
+import { OrganizationActionsComponent } from './actions/organization-actions/organization-actions.component';
+import { ApplicationActionsComponent } from './actions/application-actions/application-actions.component';
+import { RoleActionsComponent } from './actions/role-actions/role-actions.component';
+import { NgxEditorModule } from 'ngx-editor';
+import { OrganizationListComponent } from './organization-list/organization-list.component';
+import { FieldsSummaryComponent } from './new-role/components/fields-summary/fields-summary.component';
 
 const routes: Routes = [
-  { path: '', component: ApplicationsComponent }
+  {path: '', component: ApplicationsComponent}
 ];
 
 @NgModule({
@@ -29,9 +43,16 @@ const routes: Routes = [
     NewApplicationComponent,
     NewRoleComponent,
     GovernanceListComponent,
-    GovernanceViewComponent,
     TransferOwnershipComponent,
-    RemoveOrgAppComponent],
+    RemoveOrgAppComponent,
+    NewStakingPoolComponent,
+    RoleFieldComponent,
+    OrganizationActionsComponent,
+    ApplicationActionsComponent,
+    RoleActionsComponent,
+    OrganizationListComponent,
+    FieldsSummaryComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -49,14 +70,14 @@ const routes: Routes = [
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    NgMatSearchBarModule
+    NgxEditorModule
   ],
   entryComponents: [
-    NewOrganizationComponent, 
-    NewApplicationComponent, 
-    NewRoleComponent, 
-    GovernanceViewComponent, 
+    NewOrganizationComponent,
+    NewApplicationComponent,
+    NewRoleComponent,
     TransferOwnershipComponent,
     RemoveOrgAppComponent]
 })
-export class ApplicationsModule { }
+export class ApplicationsModule {
+}

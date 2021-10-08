@@ -1,17 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SettingsService } from '../../core/settings/settings.service';
 
 @Component({
-    selector: '[app-footer]',
-    templateUrl: './footer.component.html',
-    styleUrls: ['./footer.component.scss']
+  selector: 'app-footer',
+  templateUrl: './footer.component.html',
+  styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
 
-    constructor(public settings: SettingsService) { }
-
-    ngOnInit() {
-
-    }
-
+  constructor(public settings: SettingsService) {
+  }
 }

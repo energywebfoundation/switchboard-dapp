@@ -1,0 +1,142 @@
+$editor-height: 100px;
+
+.mat-dialog-content {
+  padding: 0 0 !important;
+}
+
+::ng-deep {
+  .mat-radio-outer-circle {
+    border-color: #52446f !important;
+  }
+
+  .mat-radio-button.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #33CBCB !important;
+  }
+
+  .mat-radio-button .mat-radio-inner-circle, .mat-radio-button .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple), .mat-radio-button.mat-radio-checked .mat-radio-persistent-ripple, .mat-radio-button:active .mat-radio-persistent-ripple {
+    background-color: #33CBCB !important;
+  }
+
+  .mat-date-range-input-separator {
+    color: #b7bac9;
+  }
+
+  .mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+    color: #4f4d5b;
+  }
+
+  .mat-radio-outer-circle {
+    border-color: #4d4b59 !important;
+  }
+
+  textarea.textarea-staking.mat-input-element {
+    box-sizing: content-box !important;
+  }
+
+  .staking-date-picker.mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.5em 0.5em 1.1em 0.5em;
+  }
+
+  .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+    top: 1.5px;
+  }
+
+  .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+    background-color: transparent;
+  }
+
+  .editor {
+    border: 1px solid rgb(82, 67, 110);
+
+    &:focus-within {
+      border: 1px solid rgb(103, 58, 183);
+    }
+
+    .NgxEditor {
+      border: none;
+      border-radius: 0;
+      background: #1C1726;
+      color: white;
+      height: $editor-height;
+      overflow-y: scroll;
+
+      &__Popup {
+        button {
+          float: right;
+        }
+        &--FormGroup:nth-child(3) {
+          display: none;
+        }
+      }
+
+      &__Content {
+        min-height: $editor-height;
+      }
+
+      &__Placeholder::before {
+        color: #9080bb;
+        font-size: 16px;
+      }
+
+      ul {
+        padding-left: 15px;
+        list-style: inherit;
+      }
+
+      &__Popup {
+        right: 0;
+        color: white;
+        background: #1C1726;
+      }
+
+      &__MenuBar {
+        justify-content: flex-end;
+        border-radius: 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        color: white;
+        background: #1C1726;
+      }
+
+      &__MenuItem {
+        cursor: pointer;
+        background-color: #1C1726;
+
+        svg {
+          fill: #fff
+        }
+
+        &:hover {
+          background-color: #1C1726;
+
+          svg {
+            fill: #33CBCB
+          }
+        }
+
+        &.NgxEditor__MenuItem--Active {
+          background-color: #1C1726;
+
+          svg {
+            fill: #33CBCB
+          }
+        }
+
+      }
+    }
+
+    .CodeMirror {
+      border: 1px solid #eee;
+      height: auto;
+      margin-bottom: 0.7rem;
+
+
+      pre {
+        white-space: pre !important;
+      }
+    }
+  }
+}
+
+.mat-radio-button {
+  margin-left: 16px;
+}

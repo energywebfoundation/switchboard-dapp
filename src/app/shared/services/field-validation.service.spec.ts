@@ -6,11 +6,11 @@ describe('FieldValidationService', () => {
   let service: FieldValidationService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(FieldValidationService);
+    TestBed.configureTestingModule({providers: [FieldValidationService]});
   });
 
   it('should be created', () => {
+    service = TestBed.inject(FieldValidationService);
     expect(service).toBeTruthy();
   });
 });

@@ -1,29 +1,28 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations' // this is needed!
-import {
-  NgModule,
-  APP_INITIALIZER,
-  ErrorHandler,
-  Provider,
-} from '@angular/core'
-import { HttpClientModule, HttpClient } from '@angular/common/http'
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
-import { TranslateHttpLoader } from '@ngx-translate/http-loader'
-import { AppComponent } from './app.component'
-import { CoreModule } from './core/core.module'
-import { LayoutModule } from './layout/layout.module'
-import { SharedModule } from './shared/shared.module'
-import { RoutesModule } from './routes/routes.module'
-import { MatIconModule } from '@angular/material'
-import 'hammerjs'
-import { ToastrModule } from 'ngx-toastr'
-import { ServiceWorkerModule } from '@angular/service-worker'
-import { environment } from '../environments/environment'
-import { ConfigService } from './shared/services/config.service'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
+import { APP_INITIALIZER, ErrorHandler, NgModule, Provider, } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AppComponent } from './app.component';
+import { CoreModule } from './core/core.module';
+import { LayoutModule } from './layout/layout.module';
+import { SharedModule } from './shared/shared.module';
+import { RoutesModule } from './routes/routes.module';
+import { MatIconModule } from '@angular/material/icon';
+import 'hammerjs';
+import { ToastrModule } from 'ngx-toastr';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { ConfigService } from './shared/services/config.service';
 
-import * as Sentry from '@sentry/angular'
+import * as Sentry from '@sentry/angular';
+import { MenuService } from './core/menu/menu.service';
+import { menu } from './routes/menu';
+import { FEAT_TOGGLE_TOKEN, getEnv } from './shared/feature-toggle/feature-toggle.token';
+import { StoreRootModule } from './state/store-root.module';
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json')
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 const providers: Provider[] = [
@@ -35,7 +34,8 @@ const providers: Provider[] = [
       configService.loadConfigData(),
     multi: true,
   },
-]
+  {provide: FEAT_TOGGLE_TOKEN, useFactory: getEnv}
+];
 
 if (environment.SENTRY_DNS) {
   providers.push({
@@ -43,8 +43,9 @@ if (environment.SENTRY_DNS) {
     useValue: Sentry.createErrorHandler({
       showDialog: false,
     }),
-  })
+  });
 }
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -66,8 +67,13 @@ if (environment.SENTRY_DNS) {
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
+    StoreRootModule
   ],
   providers,
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(public menuService: MenuService) {
+    menuService.addMenu(menu);
+  }
+}

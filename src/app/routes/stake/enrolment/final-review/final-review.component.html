@@ -1,0 +1,24 @@
+<app-title mat-dialog-title class="d-flex align-items-center" logoUrl="../assets/img/icons/review-icon.svg"
+           title="Final Review">
+  <button mat-icon-button [mat-dialog-close]="true">
+    <mat-icon>close</mat-icon>
+  </button>
+</app-title>
+
+<div mat-dialog-content>
+  <p class="acceptance-info f-16 mb-4 pb-2">
+    Please review all the terms and conditions of the contract below.
+    <br><br>
+    Once you click the Accept the Contract and Stake button, the agreed amount of your EWT will be sent to the
+    staking contract. You will not be able to access the staked EWT until they are returned to you on [date from the
+    contract]
+    <br><br>
+    The stake with reward will be returned to the same address from which the stake was received.
+  </p>
+  <app-nested-list [list]="terms"></app-nested-list>
+</div>
+<div class="mat-dialog-actions d-flex justify-content-center">
+  <button mat-raised-button class="btn btn-primary w-100" (click)="acceptContract()">
+    Accept the contract and stake
+  </button>
+</div>

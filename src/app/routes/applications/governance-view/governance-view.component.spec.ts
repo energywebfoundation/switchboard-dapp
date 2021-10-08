@@ -1,17 +1,23 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovernanceViewComponent } from './governance-view.component';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('GovernanceViewComponent', () => {
   let component: GovernanceViewComponent;
   let fixture: ComponentFixture<GovernanceViewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ GovernanceViewComponent ]
+      declarations: [GovernanceViewComponent],
+      providers: [
+        {provide: MAT_DIALOG_DATA, useValue: {}}
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GovernanceViewComponent);

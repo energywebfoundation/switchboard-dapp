@@ -13,7 +13,7 @@
 // If modified or removed make sure to check the variable
 // shared with other components
 // -------------------------------------------------------------
-$aside-wd:                                170px;
+$aside-wd:                                200px;
 $aside-wd-collapsed:                      70px;
 $aside-wd-collapsed-text:                 90px;
 $aside-bg:                                #fff;
@@ -136,8 +136,12 @@ body {
 .content-wrapper {
     padding: 15px;
     width: 100%; // styling to visually wrap the component
+    max-width: 1402px;
     border-top: 1px solid rgba(0, 0, 0, .15);
     margin-top: -1px;
+    margin-bottom: 100px;
+    margin-left: auto;
+    margin-right: auto;
 
     .unwrap {
         margin: -15px; // expand over wrapper padding
@@ -251,7 +255,6 @@ body {
 
     ul.menu-top {
         background-color: rgb(21 17 31 / 95%);
-        padding: 15px 0;
         position: fixed;
         bottom: 0;
         display: flex !important;
@@ -433,8 +436,8 @@ body {
     }
 
     .bg-register {
-        background-position: right bottom !important;
-        background-size: auto 140px !important;
+        background-position: bottom bottom !important;
+        background-size: auto 100px !important;
         bottom: 83px !important;
     }
 
@@ -552,6 +555,10 @@ body {
         }
         .section-container {
             margin-top: $navbar-hg;
+
+            @include media-breakpoint-up(lg) {
+                margin-top: 80px;
+            }
         }
     }
 }
@@ -651,7 +658,6 @@ _:-ms-lang(x),
 
     ul.menu-top {
         background-color: rgb(21 17 31 / 95%);
-        padding: 15px 0;
         position: fixed;
         bottom: 0;
         display: flex !important;
@@ -692,7 +698,7 @@ _:-ms-lang(x),
         }
 
         img {
-            height: 52px;
+            height: 46px;
             width: auto;
         }
     }

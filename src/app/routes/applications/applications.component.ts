@@ -1,28 +1,37 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { NewOrganizationComponent } from './new-organization/new-organization.component';
-import { MatDialog, MatTabGroup } from '@angular/material';
-import { NewApplicationComponent } from './new-application/new-application.component';
-import { NewRoleComponent } from './new-role/new-role.component';
-import { GovernanceListComponent } from './governance-list/governance-list.component';
-import { ListType } from 'src/app/shared/constants/shared-constants';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { UrlParamService } from 'src/app/shared/services/url-param.service';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Subject } from 'rxjs';
+
+import { NewOrganizationComponent } from './new-organization/new-organization.component';
+import { GovernanceListComponent } from './governance-list/governance-list.component';
+import { ListType } from '../../shared/constants/shared-constants';
+import { IamService } from '../../shared/services/iam.service';
+import { UrlParamService } from '../../shared/services/url-param.service';
+import { takeUntil } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTabGroup } from '@angular/material/tabs';
+import { Store } from '@ngrx/store';
+import { OrganizationActions, OrganizationSelectors } from '@state';
+import { OrganizationListComponent } from './organization-list/organization-list.component';
 
 @Component({
   selector: 'app-applications',
   templateUrl: './applications.component.html',
   styleUrls: ['./applications.component.scss']
 })
-export class ApplicationsComponent implements OnInit, AfterViewInit {
-  @ViewChild("governanceTabGroup", { static: false }) governanceTabGroup: MatTabGroup;
-  @ViewChild('listOrg', undefined ) listOrg: GovernanceListComponent;
-  @ViewChild('listApp', undefined ) listApp: GovernanceListComponent;
-  @ViewChild('listRole', undefined ) listRole: GovernanceListComponent;
+export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('governanceTabGroup') governanceTabGroup: MatTabGroup;
+  @ViewChild('listOrg') listOrg: OrganizationListComponent;
+  @ViewChild('listApp') listApp: GovernanceListComponent;
+  @ViewChild('listRole') listRole: GovernanceListComponent;
+
+  hierarchyLength$ = this.store.select(OrganizationSelectors.getHierarchyLength);
+  isSelectedOrgNotOwnedByUser$ = this.store.select(OrganizationSelectors.isSelectedOrgNotOwnedByUser);
 
   isAppShown = false;
   isRoleShown = false;
-  isFilterShown: boolean = false;
+  isFilterShown = false;
   isIamEwcOwner = false;
 
   showFilter = {
@@ -37,64 +46,57 @@ export class ApplicationsComponent implements OnInit, AfterViewInit {
 
   ListType = ListType;
 
-  constructor(public dialog: MatDialog, 
-    private iamService: IamService, 
-    private urlParamService: UrlParamService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+  private subscription$ = new Subject();
+
+  constructor(public dialog: MatDialog,
+              private iamService: IamService,
+              private urlParamService: UrlParamService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private store: Store) {
+  }
 
   ngAfterViewInit(): void {
-   this.activatedRoute.queryParams.subscribe((params: any) => {
+    this.activatedRoute.queryParams.subscribe((params: any) => {
       if (params && params.selectedTab) {
         this.governanceTabGroup.selectedIndex = params.selectedTab;
       }
     }).unsubscribe();
   }
 
+  ngOnDestroy(): void {
+    this.subscription$.next();
+    this.subscription$.complete();
+  }
+
   openNewOrgComponent(): void {
+    if (!this.isIamEwcOwner) {
+      const namespace = 'orgcreator.apps.testorg.iam.ewc';
+      const roleName = 'orgowner';
+      this.router.navigate([`enrol`], {queryParams: {roleName, app: namespace, stayLoggedIn: true}});
+      return;
+    }
+
     const dialogRef = this.dialog.open(NewOrganizationComponent, {
-      width: '600px',data:{},
+      width: '600px',
+      data: {},
       maxWidth: '100%',
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog was closed');
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.subscription$))
+      .subscribe(result => {
+        // console.log('The dialog was closed');
 
-      if (result) {
-        this.listOrg.getList(undefined, true);
-      }
-    });
+        if (result) {
+          this.listOrg.getList(true);
+        }
+      });
   }
 
-  openNewAppComponent(): void {
-    const dialogRef = this.dialog.open(NewApplicationComponent, {
-      width: '600px',data:{},
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog was closed');
-      if (result) {
-        this.listApp.getList();
-      }
-    });
-  }
-
-  openNewRoleComponent(): void {
-    const dialogRef = this.dialog.open(NewRoleComponent, {
-      width: '600px',data:{},
-      maxWidth: '100%',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog was closed');
-      if (result) {
-        this.listRole.getList();
-      }
-    });
+  createSubOrg() {
+    this.store.dispatch(OrganizationActions.createSubForParent());
   }
 
   async ngOnInit() {
@@ -114,22 +116,18 @@ export class ApplicationsComponent implements OnInit, AfterViewInit {
       if (this.isAppShown) {
         await this.listApp.getList(this.defaultFilterOptions.app);
         this.defaultFilterOptions.app = undefined;
-      }
-      else {
+      } else {
         this.isAppShown = true;
       }
-    }
-    else if (i.index === 2) {
+    } else if (i.index === 2) {
       // console.log('Showing Role List');
       if (this.isRoleShown) {
         await this.listRole.getList(this.defaultFilterOptions.role);
         this.defaultFilterOptions.role = undefined;
-      }
-      else {
+      } else {
         this.isRoleShown = true;
       }
-    }
-    else if (i.index === 0) {
+    } else if (i.index === 0) {
       // console.log('Showing Org List');
       this.listOrg.getList();
     }

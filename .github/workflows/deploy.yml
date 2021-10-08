@@ -1,0 +1,127 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ 'develop', 'master', 'staging' ]
+  pull_request:
+    branches: [ 'develop', 'master' ]
+
+jobs:
+  cancel-previous:
+    name: 'Cancel Previous Runs'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: cancel-previous
+    env:
+      SB_APP_DIR: /home/travis/switchboard-dapp
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '10.22.0'
+          registry-url: https://registry.npmjs.org/
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-node-
+            ${{ runner.os }}-
+
+      - name: Install npm packages
+        run: |
+          npm install
+          envsubst < src/environments/constants.template.ts > src/environments/constants.ts
+
+      - name: Run Lint
+        run: |
+          npm run lint
+
+      - name: Run Test
+        run: |
+          npm run test:headless
+
+      - name: Prepare for master branch
+        if: github.ref == 'refs/heads/master'
+        run: |
+          cp src/environments/environment.prod.ts src/environments/environment.ts
+          echo "Prod Env Enabled"
+          npm run build-prod
+
+      - name: Prepare for non-master branch
+        if: github.ref != 'refs/heads/master'
+        run: |
+          cp src/environments/environment.dev.ts src/environments/environment.ts
+          echo "Prod Env Disabled"
+          npm run build
+
+      - name: Deploy on develop branch
+        if: github.ref == 'refs/heads/develop'
+        uses: burnett01/rsync-deployments@5.0
+        with:
+          switches: -r
+          path: dist/*
+          remote_path: ${{ env.SB_APP_DIR }}/develop
+          remote_host: ${{ secrets.SB_WEB_HOST }}
+          remote_user: ${{ secrets.GH_SWITCHBOARD_USERNAME }}
+          remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
+
+      - name: Deploy on staging branch
+        if: github.ref == 'refs/heads/staging'
+        uses: burnett01/rsync-deployments@5.0
+        with:
+          switches: -r
+          path: dist/*
+          remote_path: ${{ env.SB_APP_DIR }}/staging
+          remote_host: ${{ secrets.SB_WEB_HOST }}
+          remote_user: ${{ secrets.GH_SWITCHBOARD_USERNAME }}
+          remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
+
+      - name: Deploy on master branch
+        if: github.ref == 'refs/heads/master'
+        uses: burnett01/rsync-deployments@5.0
+        with:
+          switches: -r
+          path: dist/*
+          remote_path: ${{ env.SB_APP_DIR }}/master
+          remote_host: ${{ secrets.SB_WEB_HOST }}
+          remote_user: ${{ secrets.GH_SWITCHBOARD_USERNAME }}
+          remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
+
+      - name: Sentry Release Staging
+        uses: getsentry/action-release@v1.0.0
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/staging'
+        with:
+          environment: ${{ secrets.SENTRY_STAGING_ENV }}
+          ignore_missing: true
+
+      - name: Sentry Release Prod
+        uses: getsentry/action-release@v1.0.0
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        if: github.ref == 'refs/heads/master'
+        with:
+          environment: ${{ secrets.SENTRY_PROD_ENV }}
+

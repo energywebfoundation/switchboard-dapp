@@ -1,17 +1,19 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ViewOrganizationComponent } from './view-organization.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ViewOrganizationComponent', () => {
   let component: ViewOrganizationComponent;
   let fixture: ComponentFixture<ViewOrganizationComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewOrganizationComponent ]
+      declarations: [ViewOrganizationComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewOrganizationComponent);

@@ -1,11 +1,10 @@
 <div style="height: 100%; width: 100%">
   <ngx-spinner
-    bdColor="rgba(16, 14, 22, .9)"
-    size="medium"
-    color="#a567ff"
-    type="ball-spin-fade"
-    class="text-center"
-  >
+      bdColor="rgba(16, 14, 22, .9)"
+      size="medium"
+      color="#a567ff"
+      type="ball-spin-fade"
+      class="text-center">
     <p class="label-role mt-4" *ngIf='!msg && !msgList'>Loading...</p>
     <p class="label-role mt-4" *ngIf='msg'>{{ msg }}</p>
     <ng-container *ngIf='msgList'>
