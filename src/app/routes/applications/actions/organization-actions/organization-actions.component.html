@@ -24,7 +24,8 @@
 </button>
 
 <ng-container *ngIf="!organization?.isProvider">
-  <button mat-menu-item class="btn-color-primary" data-qa-id="create-staking-pool" *appIsFeatureEnabled (click)="openStakingPool(organization)">
+  <button mat-menu-item class="btn-color-primary" data-qa-id="create-staking-pool"
+          (click)="openStakingPool(organization)">
     <mat-icon class="btn-color-primary btn-action-3" svgIcon="create-staking-icon"></mat-icon>
     <span>Create Staking Pool</span>
   </button>
@@ -41,7 +42,7 @@
 </button>
 
 <ng-container *ngIf="organization?.isProvider">
-  <button mat-menu-item class="btn-color-primary" data-qa-id="copy-staking-url" *appIsFeatureEnabled appCopyToClipboard
+  <button mat-menu-item class="btn-color-primary" data-qa-id="copy-staking-url" appCopyToClipboard
           message="Staking URL" [copyClipboard]="stakingUrl">
     <mat-icon class="btn-color-primary btn-action-3" svgIcon="copy-url-icon"></mat-icon>
     <span>Copy Staking URL</span>
