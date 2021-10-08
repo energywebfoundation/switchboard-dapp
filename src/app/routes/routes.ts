@@ -1,7 +1,6 @@
 import { LayoutComponent } from '../layout/layout.component';
 import { AuthGuard } from '../shared/services/auth.guard';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
-import { FeatureToggleGuard } from '../shared/feature-toggle/feature-toggle.guard';
 import { NgModule } from '@angular/core';
 import { NoPreloading, RouterModule } from '@angular/router';
 
@@ -25,7 +24,6 @@ export const routes = [
       },
       {
         path: 'stake',
-        canActivate: [FeatureToggleGuard],
         loadChildren: () => import('./stake/stake.module').then(m => m.StakeModule)
       }
     ]
