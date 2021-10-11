@@ -45,12 +45,14 @@
   <div class="history-list-item mb-3 p-2">
     <mat-form-field appearance="outline">
       <input matInput [formControl]="publicKey" placeholder="Public Key"
+             data-qa-id="public-key"
              autocomplete="off">
       <mat-error *ngIf="publicKey.invalid">{{getPublicKeyErrorMsg()}} </mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline" floatPlaceholder="never">
-      <mat-select [formControl]="selectControl" placeholder="Select type">
-        <mat-option [value]="option[1]" *ngFor="let option of selectOptions">
+      <mat-select [formControl]="selectControl" placeholder="Select type" data-qa-id="select-type">
+        <mat-option [value]="option[1]" *ngFor="let option of selectOptions; let i = index"
+                    [attr.data-qa-id]="'select-option-'+i">
           <mat-icon class="color-info pr-2" [svgIcon]="option[0].toLowerCase()"></mat-icon>
           {{option[0]}}
         </mat-option>
@@ -59,7 +61,7 @@
     </mat-form-field>
     <div class="d-flex justify-content-end mb-2">
       <button mat-stroked-button class="btn btn-small mr-2" (click)="close()">Close</button>
-      <button mat-raised-button [disabled]="isFormDisabled" class="btn btn-small btn-primary"
+      <button mat-raised-button [disabled]="isFormDisabled" class="btn btn-small btn-primary" data-qa-id="add-method"
               (click)="add()">Add
       </button>
     </div>
