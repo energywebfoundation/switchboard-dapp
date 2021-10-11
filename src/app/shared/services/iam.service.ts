@@ -16,6 +16,7 @@ import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
 import { finalize, switchMap } from 'rxjs/operators';
 import { ClaimData } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
+import { truthy } from '@operators';
 
 const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
 
@@ -125,7 +126,7 @@ export class IamService {
   }
 
   closeConnection() {
-    return from(this.iam.closeConnection());
+    return from(this.iam.closeConnection()).pipe(truthy());
   }
 
   initializeConnection(loginOptions: LoginOptions) {
