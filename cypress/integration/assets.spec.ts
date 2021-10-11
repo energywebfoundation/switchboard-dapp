@@ -5,7 +5,7 @@ describe('Asset functionality', () => {
   });
   it('Should visit assets, register one and edit it\'s values', () => {
     cy.visitAssets();
-    // cy.registerAsset();
+    cy.registerAsset();
 
     cy.openEditAssetDialog(0);
 
