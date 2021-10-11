@@ -72,13 +72,8 @@ Cypress.Commands.add('dataQaId', (id: string) => {
 
 Cypress.Commands.add('login', () => {
   cy.visit('/');
-  cy.intercept('**/login', {
-    // body: {
-    //   'token': '123.123.123',
-    //   'refreshToken': '123.123.123'
-    // }
-  }).as('getLogin');
-  cy.intercept({method: 'GET', url: '**/DID/*'}, {fixture: 'did/cached-did.json'});
+  cy.intercept('**/login').as('getLogin');
+  // cy.intercept({method: 'GET', url: '**/DID/*'}, {fixture: 'did/cached-did.json'});
   cy.wait('@getLogin', {timeout: 30000});
 });
 
