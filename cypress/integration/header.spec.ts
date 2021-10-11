@@ -24,9 +24,8 @@ describe('Header view tests', () => {
   });
 
   it('should check user name validation', () => {
-    cy.getDialogUserName().clear().blur();
-    // cy.validationError('Name is required');
-
+    cy.getDialogUserName().click().clear().blur();
+    cy.validationError('Name is required');
   });
 
 });
