@@ -125,7 +125,7 @@ export class IamService {
   }
 
   closeConnection() {
-    this.iam.closeConnection();
+    return from(this.iam.closeConnection());
   }
 
   initializeConnection(loginOptions: LoginOptions) {

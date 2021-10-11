@@ -74,15 +74,16 @@ export class LoginService {
   /**
    * Disconnect from IAM
    */
-  async logout(saveDeepLink?: boolean) {
-    await this.iamService.closeConnection();
-
-    saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
+  logout(saveDeepLink?: boolean) {
+    this.iamService.closeConnection().subscribe(() => {
+      saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
+    });
   }
 
-  async disconnect() {
-    await this.iamService.closeConnection();
-    location.reload();
+  disconnect() {
+    this.iamService.closeConnection().subscribe(() => {
+      location.reload();
+    });
   }
 
   setDeepLink(deepLink: any) {
@@ -141,8 +142,8 @@ export class LoginService {
         take(1),
         filter(Boolean)
       )
-      .subscribe(async () =>
-        navigateOnTimeout ? await this.logout() : await this.disconnect()
+      .subscribe(() =>
+        navigateOnTimeout ? this.logout() : this.disconnect()
       );
   }
 

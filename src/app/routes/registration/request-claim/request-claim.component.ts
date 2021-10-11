@@ -97,7 +97,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public onPageUnload() {
     if (this.isLoggedIn && !this.stayLoggedIn) {
       // Always logout if user refreshes this screen or closes this tab
-      this.store.dispatch(logout())
+      this.store.dispatch(logout());
     }
   }
 
@@ -280,7 +280,8 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   logout() {
-    this.store.dispatch(logout())
+    this.isLoggedIn = false;
+    this.store.dispatch(logout());
   }
 
   selectAsset() {
