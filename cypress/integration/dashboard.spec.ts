@@ -1,15 +1,14 @@
-import { Endpoints } from '../support/endpoints/endpoints';
 
 describe('Dashboard view tests', () => {
   before(() => {
     cy.login();
-    cy.intercept({method: 'GET', url: Endpoints.assetsOfferedTo}, {body: {}}).as('offeredTo');
-    cy.intercept({method: 'GET', url: Endpoints.getIssuerClaim}, {body: {}}).as('issuerClaim');
+    cy.intercept({method: 'GET', url: '**/assets/offered_to/*'}, {body: {}}).as('offeredTo');
+    cy.intercept({method: 'GET', url: '**/claim/issuer/*'}, {body: {}}).as('issuerClaim');
     cy.intercept({
       method: 'GET',
-      url: Endpoints.getRequesterClaim
+      url: '**/claim/requester/*'
     }, {fixture: 'claims/requester-claims-basic.json'}).as('requesterClaim');
-    cy.intercept({method: 'GET', url: Endpoints.getCachedDidDoc}, {fixture: 'did/cached-did.json'}).as('cachedDidDoc');
+    cy.intercept({method: 'GET', url: '**/DID/*'}, {fixture: 'did/cached-did.json'}).as('cachedDidDoc');
   });
   it('should see user info in dashboard', () => {
     cy.wait('@cachedDidDoc');
