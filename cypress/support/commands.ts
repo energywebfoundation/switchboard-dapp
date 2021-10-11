@@ -80,7 +80,7 @@ Cypress.Commands.add('login', () => {
 
   cy.intercept('**/login').as('getLogin');
   // cy.intercept({method: 'GET', url: '**/DID/*'}, {fixture: 'did/cached-did.json'});
-  cy.wait('@getLogin', {timeout: 30000});
+  cy.wait('@getLogin', {timeout: 60000});
 });
 
 Cypress.Commands.add('insertValue', (id: string, value: string) => {
