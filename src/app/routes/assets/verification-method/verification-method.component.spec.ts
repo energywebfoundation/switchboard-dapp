@@ -12,10 +12,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { KeyTypesEnum } from '../models/keyTypesEnum';
 import { DidFormatMinifierModule } from '../../../shared/pipes/did-format-minifier/did-format-minifier.module';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 describe('VerificationMethodComponent', () => {
   let component: VerificationMethodComponent;
@@ -45,7 +45,7 @@ describe('VerificationMethodComponent', () => {
         MatFormFieldModule,
         NoopAnimationsModule,
         FormsModule,
-        MatIconModule,
+        MatIconTestingModule,
         MatPaginatorModule,
         DidFormatMinifierModule
       ],
