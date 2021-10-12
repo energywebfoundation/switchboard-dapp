@@ -52,6 +52,7 @@
     "iam-client-lib": "3.1.0",
     "modernizr": "3.7.1",
     "moment": "2.22.2",
+    "ng-qrcode": "4.3.0",
     "ng2-charts": "^2.4.2",
     "ngx-bootstrap": "4.2.0",
     "ngx-editor": "9.0.2",

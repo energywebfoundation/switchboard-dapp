@@ -26,6 +26,8 @@ import { HistoryElementComponent } from './asset-ownership-history/history-eleme
 import { HistoryPeriodComponent } from './asset-ownership-history/history-period/history-period.component';
 import { TypeAlgorithmPipe } from './pipes/type-algorithm.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { DidQrCodeComponent } from './did-qr-code/did-qr-code.component';
+import { QrCodeModule } from 'ng-qrcode';
 
 const routes: Routes = [
   {path: '', component: AssetsComponent},
@@ -45,7 +47,8 @@ const routes: Routes = [
     VerificationMethodComponent,
     HistoryElementComponent,
     HistoryPeriodComponent,
-    TypeAlgorithmPipe
+    TypeAlgorithmPipe,
+    DidQrCodeComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +67,8 @@ const routes: Routes = [
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    ClipboardModule
+    ClipboardModule,
+    QrCodeModule
   ],
   entryComponents: [
     NewAssetTypeComponent,
