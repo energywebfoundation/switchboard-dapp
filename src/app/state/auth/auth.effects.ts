@@ -44,10 +44,10 @@ export class AuthEffects {
           walletProvider: provider,
           reinitializeMetamask: provider === WalletProvider.MetaMask
         }, navigateOnTimeout).pipe(
-          map((loggedIn) => {
-            if (loggedIn) {
+          map(({success, accountInfo}) => {
+            if (success) {
               this.dialog.closeAll();
-              return AuthActions.loginSuccess();
+              return AuthActions.loginSuccess({accountInfo});
             }
             return AuthActions.loginFailure();
           }),
@@ -88,10 +88,10 @@ export class AuthEffects {
           walletProvider: provider,
           reinitializeMetamask: provider === WalletProvider.MetaMask
         }).pipe(
-          map((loggedIn) => {
-            if (loggedIn) {
+          map(({success, accountInfo}) => {
+            if (success) {
               this.router.navigateByUrl(`/${returnUrl}`);
-              return AuthActions.loginSuccess();
+              return AuthActions.loginSuccess({accountInfo});
             }
             return AuthActions.loginFailure();
           }),
@@ -145,9 +145,9 @@ export class AuthEffects {
       switchMap(() =>
         this.loginService.login()
           .pipe(
-            map((loggedIn) => {
-              if (loggedIn) {
-                return AuthActions.loginSuccess();
+            map(({success, accountInfo}) => {
+              if (success) {
+                return AuthActions.loginSuccess({accountInfo});
               }
               return AuthActions.loginFailure();
             }),
@@ -172,6 +172,12 @@ export class AuthEffects {
       })
     ), {dispatch: false}
   );
+
+  setWalletProviderAfterLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.loginSuccess),
+      map(() => AuthActions.setProvider({walletProvider: this.loginService.walletProvider()}))
+    ));
 
   constructor(private actions$: Actions,
               private store: Store<AuthState>,

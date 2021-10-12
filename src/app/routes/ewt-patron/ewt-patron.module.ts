@@ -21,6 +21,7 @@ import { LastDigitsPipe } from './pipes/last-digits.pipe';
 import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-to-wallet.module';
 import { StakingHeaderComponent } from './staking-header/staking-header.component';
 import { StakingFooterComponent } from './staking-footer/staking-footer.component';
+import { UserMenuModule } from '../../layout/components/user-menu/user-menu.module';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { StakingFooterComponent } from './staking-footer/staking-footer.componen
     MatProgressBarModule,
     SharedModule,
     LayoutModule,
-    ConnectToWalletModule
+    ConnectToWalletModule,
+    UserMenuModule
   ],
 
 })

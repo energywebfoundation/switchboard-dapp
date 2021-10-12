@@ -1,0 +1,16 @@
+.network {
+  line-height: 6px;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  border: 1px solid #544d6e;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  padding: 2px 10px 2px 8px;
+
+  mat-icon {
+    height: 12px;
+    width: 12px;
+    font-size: 12px;
+  }
+}

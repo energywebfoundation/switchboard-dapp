@@ -44,30 +44,30 @@ describe('LoginService', () => {
       userClosedModal: false
     }));
 
-    from(service.login()).subscribe((result) => {
-      expect(result).toBe(true);
+    from(service.login()).subscribe(({success}) => {
+      expect(success).toBe(true);
     });
   }));
 
   it('should return false when did is null', waitForAsync(() => {
     iamServiceSpy.initializeConnection.and.returnValue(of({connected: true, userClosedModal: false}));
-    service.login().pipe(take(1)).subscribe((result) => {
-      expect(result).toBe(false);
+    service.login().pipe(take(1)).subscribe(({success}) => {
+      expect(success).toBe(false);
     });
   }));
 
   it('should display random error with toastr', waitForAsync(() => {
     iamServiceSpy.initializeConnection.and.returnValue(throwError({message: 'Sample Error'}));
-    service.login().pipe(take(1)).subscribe((result) => {
-      expect(result).toBe(false);
+    service.login().pipe(take(1)).subscribe(({success}) => {
+      expect(success).toBe(false);
       expect(toastrSpy.error).toHaveBeenCalledWith('Sample Error');
     });
   }));
 
   it('should display error with toastr about pending notifications', () => {
     iamServiceSpy.initializeConnection.and.returnValue(throwError({message: 'Request of type \'wallet_requestPermissions\''}));
-    service.login().pipe(take(1)).subscribe((result) => {
-      expect(result).toBe(false);
+    service.login().pipe(take(1)).subscribe(({success}) => {
+      expect(success).toBe(false);
       expect(toastrSpy.error).toHaveBeenCalledWith('Please check if you do not have pending notifications in your wallet');
     });
   });

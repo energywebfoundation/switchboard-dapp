@@ -184,13 +184,7 @@
       </li>
       <li class="nav-item">
         <div class="cursor-pointer" [matMenuTriggerFor]="menu">
-          <div class="d-flex align-items-center ml-3 ml-md-0 flex-row">
-            <div class="d-none d-md-flex flex-column align-items-end ml-2 mr-2">
-              <div class="label-role"> {{ userName }} </div>
-            </div>
-            <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="34"
-                 height="34" alt="avatar">
-          </div>
+          <app-user-menu-trigger [userName]="userName"></app-user-menu-trigger>
         </div>
       </li>
     </ul>
@@ -199,19 +193,8 @@
   <!-- END Top Navbar-->
   <mat-menu #menu="matMenu" xPosition="before">
     <div class="border-bottom-1">
-      <div class="d-flex flex-column align-items-center m-3">
-        <img class="img-thumbnail rounded-circle mt-2 mb-3" src="../assets/img/identity-image.png" width="44"
-             height="44" alt="avatar">
-        <div class="label-role">{{ userName }}</div>
-      </div>
-      <ng-container *ngIf="(userDid$ | async) as did">
-        <div class="d-flex align-items-center opacity-50 text-truncate-middle did-wrapper mx-3 mb-3"
-             matTooltip="Copy to clipboard"
-             appCopyToClipboard [copyClipboard]="did" message="User Did">
-          <div class="f-14">{{did | didFormatMinifier}}</div>
-          <mat-icon class="ml-2">content_copy</mat-icon>
-        </div>
-      </ng-container>
+      <app-user-name [userName]="userName"></app-user-name>
+      <app-user-did [did]="userDid$ | async"></app-user-did>
     </div>
     <button class="color-link px-4 pb-2 border-bottom-1" mat-menu-item (click)="openDialogUser()">Update
       Identity

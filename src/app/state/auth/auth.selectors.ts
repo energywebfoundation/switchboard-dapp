@@ -20,4 +20,14 @@ export const isMetamaskDisabled = createSelector(
     metamask.chainId && parseInt(`${metamask.chainId}`, 16) !== VOLTA_CHAIN_ID
 );
 
+export const getWalletProvider = createSelector(
+  getAuthState,
+  (state) => state.walletProvider
+);
+
+export const getAccountInfo = createSelector(
+  getAuthState,
+  (state) => state.accountInfo
+);
+
 

@@ -10,6 +10,7 @@ import { from, Observable, of } from 'rxjs';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
 import { catchError, filter, map, take } from 'rxjs/operators';
 import { swalLoginError } from './helpers/swal-login-error-handler';
+import { AccountInfo } from 'iam-client-lib/dist/src/iam';
 
 export interface LoginOptions {
   walletProvider?: WalletProvider;
@@ -45,6 +46,10 @@ export class LoginService {
               private iamListenerService: IamListenerService) {
   }
 
+  walletProvider() {
+    return this.iamService.walletProvider;
+  }
+
   isSessionActive() {
     return this.iamService.isSessionActive();
   }
@@ -52,15 +57,15 @@ export class LoginService {
   /**
    * Login via IAM and retrieve basic user info
    */
-  login(loginOptions?: LoginOptions, redirectOnChange: boolean = true): Observable<boolean> {
+  login(loginOptions?: LoginOptions, redirectOnChange: boolean = true): Observable<{ success: boolean; accountInfo?: AccountInfo | undefined }> {
     return this.iamService.initializeConnection(loginOptions)
       .pipe(
-        map(({did, connected, userClosedModal}) => {
+        map(({did, connected, userClosedModal, accountInfo}) => {
           const loginSuccessful = did && connected && !userClosedModal;
           if (loginSuccessful) {
             this.iamListenerService.setListeners((config) => this.openSwal(config, redirectOnChange));
           }
-          return Boolean(loginSuccessful);
+          return {success: Boolean(loginSuccessful), accountInfo};
         }),
         catchError(err => this.handleLoginErrors(err, redirectOnChange))
       );
@@ -155,7 +160,7 @@ export class LoginService {
       const loginError = LOGIN_TOASTR_UNDERSTANDABLE_ERRORS.filter(error => e.message.includes(error.key))[0];
       this.toastr.error(loginError ? loginError.message : e.message);
     }
-    return of(false);
+    return of({success: false});
   }
 
   private saveDeepLink(): void {
