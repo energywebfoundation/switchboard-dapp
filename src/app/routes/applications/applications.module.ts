@@ -30,6 +30,7 @@ import { RoleActionsComponent } from './actions/role-actions/role-actions.compon
 import { NgxEditorModule } from 'ngx-editor';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 import { FieldsSummaryComponent } from './new-role/components/fields-summary/fields-summary.component';
+import { TransactionsCompleteComponent } from './transactions-complete/transactions-complete.component';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -51,7 +52,8 @@ const routes: Routes = [
     ApplicationActionsComponent,
     RoleActionsComponent,
     OrganizationListComponent,
-    FieldsSummaryComponent
+    FieldsSummaryComponent,
+    TransactionsCompleteComponent
   ],
   imports: [
     CommonModule,
