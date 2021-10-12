@@ -180,6 +180,7 @@ const MATERIAL_MODULES = [
     FeatureToggleDirective,
     CopyToClipboardModule,
     DidFormatMinifierModule,
+    TableHeadingComponent,
   ],
   entryComponents: [MinifiedDidViewerDialogComponent]
 })

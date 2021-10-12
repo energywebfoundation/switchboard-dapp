@@ -6,7 +6,6 @@ import { VerificationService } from './verification.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { TypeAlgorithmPipe } from '../pipes/type-algorithm.pipe';
-import { DidFormatMinifierPipe } from '../../../shared/pipes/did-format-minifier.pipe';
 import { By } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
