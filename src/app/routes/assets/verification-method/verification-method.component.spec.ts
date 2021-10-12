@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { VerificationMethodComponent } from './verification-method.component';
-import { DebugElement } from '@angular/core';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { VerificationService } from './verification.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
@@ -15,6 +15,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { KeyTypesEnum } from '../models/keyTypesEnum';
 
 describe('VerificationMethodComponent', () => {
   let component: VerificationMethodComponent;
@@ -45,6 +46,7 @@ describe('VerificationMethodComponent', () => {
         },
         {provide: VerificationService, useValue: verificationServiceSpy},
       ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));
@@ -72,7 +74,14 @@ describe('VerificationMethodComponent', () => {
   });
 
   it('should set values when list have at least 6 elements', () => {
-    const list = [{type: ''}, {type: ''}, {type: ''}, {type: ''}, {type: ''}, {type: ''}];
+    const list = [
+      {type: KeyTypesEnum.Ethereum},
+      {type: KeyTypesEnum.Ethereum},
+      {type: KeyTypesEnum.Ethereum},
+      {type: KeyTypesEnum.Ethereum},
+      {type: KeyTypesEnum.Ethereum},
+      {type: KeyTypesEnum.Ethereum}
+    ];
     setUp(list);
     expect(component.verificationsAmount).toBe(list.length);
     expect(component.dataSource.length).toBe(5);

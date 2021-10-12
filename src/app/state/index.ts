@@ -19,12 +19,20 @@ import * as UserClaimActions from './user-claim/user.actions';
 import * as UserClaimSelectors from './user-claim/user.selectors';
 
 // === Organization ===
-import * as OrganizationActions from './organization/organization.actions';
-import * as OrganizationSelectors from './organization/organization.selectors';
+import * as OrganizationActions from './governance/organization/organization.actions';
+import * as OrganizationSelectors from './governance/organization/organization.selectors';
 
 // === Layout ===
 import * as LayoutActions from './layout/layout.actions';
 import * as LayoutSelectors from './layout/layout.selectors';
+
+// === Application ===
+import * as ApplicationActions from './governance/application/application.actions';
+import * as ApplicationSelectors from './governance/application/application.selectors';
+
+// === Role ===
+import * as RoleActions from './governance/role/role.actions';
+import * as RoleSelectors from './governance/role/role.selectors';
 
 
 export * from './store-root.module';
@@ -46,6 +54,10 @@ export {
 
   OrganizationActions,
   OrganizationSelectors,
+  ApplicationActions,
+  ApplicationSelectors,
+  RoleActions,
+  RoleSelectors,
 
   LayoutActions,
   LayoutSelectors
