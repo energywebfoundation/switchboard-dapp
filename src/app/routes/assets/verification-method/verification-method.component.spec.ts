@@ -15,6 +15,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { KeyTypesEnum } from '../models/keyTypesEnum';
+import { DidFormatMinifierModule } from '../../../shared/pipes/did-format-minifier/did-format-minifier.module';
 
 describe('VerificationMethodComponent', () => {
   let component: VerificationMethodComponent;
@@ -36,8 +37,18 @@ describe('VerificationMethodComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [VerificationMethodComponent, TypeAlgorithmPipe, DidFormatMinifierPipe],
-      imports: [ReactiveFormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, NoopAnimationsModule, FormsModule, MatIconModule, MatPaginatorModule],
+      declarations: [VerificationMethodComponent, TypeAlgorithmPipe],
+      imports: [
+        ReactiveFormsModule,
+        MatInputModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        NoopAnimationsModule,
+        FormsModule,
+        MatIconModule,
+        MatPaginatorModule,
+        DidFormatMinifierModule
+      ],
       providers: [
         {provide: MAT_DIALOG_DATA, useValue: {id: 1}},
         {
