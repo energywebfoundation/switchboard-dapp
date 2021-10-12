@@ -5,6 +5,8 @@ declare namespace Cypress {
     getDialogBirthdate(): Chainable<Element>;
 
     getDialogAddress(): Chainable<Element>;
+
+    getDialogSubmitButton(): Chainable<Element>;
   }
 }
 
@@ -16,4 +18,8 @@ Cypress.Commands.add('getDialogBirthdate', () => {
 });
 Cypress.Commands.add('getDialogAddress', () => {
   return cy.dataQaId('dialog-input-address');
+});
+
+Cypress.Commands.add('getDialogSubmitButton', () => {
+  return cy.dataQaId('submit');
 });
