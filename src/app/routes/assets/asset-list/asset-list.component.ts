@@ -242,10 +242,9 @@ export class AssetListComponent implements OnInit, OnDestroy {
 
   generateQrCode(data: Asset) {
     this.dialog.open(DidQrCodeComponent, {
-      width: '600px',
+      width: '400px',
       data,
       maxWidth: '100%',
-      disableClose: true
     });
   }
 
