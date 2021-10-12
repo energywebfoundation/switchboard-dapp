@@ -152,8 +152,7 @@ export class IamService {
         switchMap((owner) =>
           from(this.iam.getENSTypesByOwner({
               type: ENSNamespaceTypes.Organization,
-              owner,
-              excludeSubOrgs: false
+              owner
             })
           )
         )
@@ -163,8 +162,7 @@ export class IamService {
   async getENSTypesByOwner(ensType: ENSNamespaceTypes) {
     return await this.iam.getENSTypesByOwner({
       type: ensType,
-      owner: await this.iam.getSigner().getAddress(),
-      excludeSubOrgs: false
+      owner: await this.iam.getSigner().getAddress()
     });
   }
 
