@@ -6,7 +6,7 @@ import { QrCodeScannerComponent } from '../components/qr-code-scanner.component'
   selector: '[appQrCodeScanner]'
 })
 export class QrCodeScannerDirective {
-  @Output() scannedValue = new EventEmitter();
+  @Output() scannedValue = new EventEmitter<{ did: string }>();
 
   constructor(private dialog: MatDialog) {
   }
@@ -17,7 +17,7 @@ export class QrCodeScannerDirective {
       width: '500px',
       maxHeight: '250px',
       maxWidth: '100%',
-    }).afterClosed().subscribe((value) => {
+    }).afterClosed().subscribe((value: { did: string }) => {
       this.scannedValue.emit(value);
     });
   }
