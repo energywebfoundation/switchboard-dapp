@@ -27,4 +27,11 @@ describe('QrCodeScannerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should close dialog with passed did', () => {
+    const did = 'did:ethr:example';
+    component.scanned({text: did});
+
+    expect(dialogSpy.close).toHaveBeenCalledWith({did});
+  });
 });

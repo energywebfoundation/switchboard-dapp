@@ -1,25 +1,38 @@
 import { QrCodeScannerDirective } from './qr-code-scanner.directive';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { QrCodeScannerComponent } from './qr-code-scanner.component';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { dialogSpy } from '@tests';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+
+@Component({
+  template: `
+    <div appQrCodeScanner>scanner</div>
+  `
+})
+class TestComponent {
+}
 
 describe('QrCodeScannerDirective', () => {
-  let component: QrCodeScannerComponent;
-  let fixture: ComponentFixture<QrCodeScannerComponent>;
+  let component: TestComponent;
+  let fixture: ComponentFixture<TestComponent>;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [QrCodeScannerDirective],
-      providers: [{provide: MatDialogRef, useValue: dialogSpy}],
+      declarations: [QrCodeScannerDirective, TestComponent],
+      providers: [{provide: MatDialog, useValue: dialogSpy}],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(QrCodeScannerComponent);
+    fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
+
+  it('should create component with directive', () => {
+    expect(component).toBeTruthy();
+  });
+
+
 });
