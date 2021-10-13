@@ -1,4 +1,4 @@
-import { userDialog } from '../support/elements/user-dialog/user.dialog';
+import { userDialog } from '../../support/elements/user-dialog/user.dialog';
 
 describe('Header view tests', () => {
   before(() => {
