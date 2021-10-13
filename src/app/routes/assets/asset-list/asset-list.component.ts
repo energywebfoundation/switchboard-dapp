@@ -19,6 +19,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { mapClaimsProfile } from '@operators';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
+import { DidQrCodeComponent } from '../did-qr-code/did-qr-code.component';
 
 export const RESET_LIST = true;
 
@@ -237,6 +238,14 @@ export class AssetListComponent implements OnInit, OnDestroy {
       tap(() => this.loadingService.show()),
       switchMap(() => this.assetListFactory())
     ));
+  }
+
+  generateQrCode(data: Asset) {
+    this.dialog.open(DidQrCodeComponent, {
+      width: '400px',
+      data,
+      maxWidth: '100%',
+    });
   }
 
   private getAssetsWithClaims() {
