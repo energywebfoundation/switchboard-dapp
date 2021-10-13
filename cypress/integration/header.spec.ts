@@ -43,6 +43,7 @@ describe('Header view tests', () => {
     cy.getDialogBirthdate().type('1/1/2018');
     cy.validationError('Maximum allowed date is');
     cy.getDialogSubmitButton().should('be.disabled');
+    cy.getDialogBirthdate().click().clear().blur();
 
     cy.getDialogBirthdate().type('1/1/2001');
     cy.getDialogSubmitButton().should('be.enabled');
