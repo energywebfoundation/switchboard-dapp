@@ -51,4 +51,13 @@ describe('Header view tests', () => {
     cy.getDialogBirthdate().click().clear().type(userDialog.dateOfBirth);
   });
 
+  it('should check address validation', () => {
+    cy.getDialogAddress().click().clear().blur();
+    cy.validationError('Address is required');
+    cy.getDialogSubmitButton().should('be.disabled');
+
+    cy.getDialogAddress().type('example address');
+    cy.getDialogSubmitButton().should('be.enabled');
+  });
+
 });
