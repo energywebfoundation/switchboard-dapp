@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { QrCodeScannerComponent } from './qr-code-scanner.component';
+import { QrCodeScannerComponent } from './components/qr-code-scanner.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { QrCodeScannerDirective } from './qr-code-scanner.directive';
+import { QrCodeScannerDirective } from './directives/qr-code-scanner.directive';
 
 
 @NgModule({

@@ -1,20 +1,23 @@
 import { QrCodeScannerDirective } from './qr-code-scanner.directive';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
-import { dialogSpy } from '@tests';
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { dialogSpy, getElement } from '@tests';
+import { Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { of } from 'rxjs';
 
 @Component({
   template: `
-    <div appQrCodeScanner>scanner</div>
+    <div data-qa-id="scanner" appQrCodeScanner (scannedValue)="scanned = true">scanner</div>
   `
 })
 class TestComponent {
+  scanned = false;
 }
 
 describe('QrCodeScannerDirective', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
+  let hostDebug: DebugElement;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [QrCodeScannerDirective, TestComponent],
@@ -27,6 +30,7 @@ describe('QrCodeScannerDirective', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
+    hostDebug = fixture.debugElement;
     fixture.detectChanges();
   });
 
@@ -34,5 +38,10 @@ describe('QrCodeScannerDirective', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should check if emits value', () => {
+    dialogSpy.open.and.returnValue({afterClosed: () => of({did: 'did'})});
+    getElement(hostDebug)('scanner').nativeElement.click();
 
+    expect(component.scanned).toBeTrue();
+  });
 });
