@@ -37,16 +37,16 @@ export class HexValidators {
   };
 
   static isDidValid() {
-
     return (control: AbstractControl) => {
-      let retVal = null;
-      const did = control.value;
-
-      if (did && !RegExp(DIDPattern).test(did.trim())) {
-        retVal = {invalidDid: true};
+      if (!control.value) {
+        return null;
       }
 
-      return retVal;
+      if (RegExp(DIDPattern).test(control.value.trim())) {
+        return null;
+      }
+
+      return {invalidDid: true};
     };
   }
 }
