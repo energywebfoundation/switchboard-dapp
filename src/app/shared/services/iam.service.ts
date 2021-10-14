@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
 import {
   ENSNamespaceTypes,
   IAM,
@@ -184,17 +183,6 @@ export class IamService {
       (charCode > 47 && charCode < 58) || // 0-9
       (includeDot && charCode === 46) // .
     );
-  }
-
-  isValidDid(didCtrl: AbstractControl): { [key: string]: boolean } | null {
-    let retVal = null;
-    const did = didCtrl.value;
-
-    if (did && !RegExp(DIDPattern).test(did.trim())) {
-      retVal = {invalidDid: true};
-    }
-
-    return retVal;
   }
 
   public wrapWithLoadingService<T>(source: Promise<T> | Observable<T>,
