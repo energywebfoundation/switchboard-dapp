@@ -56,6 +56,7 @@ export class WelcomeComponent implements OnInit {
 
   private tryToLoginWithPrivateKey() {
     if (window.localStorage.getItem('PrivateKey')) {
+      console.log('Found PrivateKey. Using to login.');
       this.login(WalletProvider.PrivateKey);
     }
   }
