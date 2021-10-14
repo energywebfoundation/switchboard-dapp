@@ -167,24 +167,6 @@ export class IamService {
     });
   }
 
-  /**
-   * @deprecated
-   * Use isAlphaNumericOnly function from utils/functions instead.
-   * @param event
-   * @param includeDot
-   */
-  isAlphaNumericOnly(event: any, includeDot?: boolean) {
-    const charCode = (event.which) ? event.which : event.keyCode;
-
-    // Check if key is alphanumeric key
-    return (
-      (charCode > 96 && charCode < 123) || // a-z
-      (charCode > 64 && charCode < 91) || // A-Z
-      (charCode > 47 && charCode < 58) || // 0-9
-      (includeDot && charCode === 46) // .
-    );
-  }
-
   public wrapWithLoadingService<T>(source: Promise<T> | Observable<T>,
                                    loaderConfig?: { message: string | string[]; cancelable?: boolean }) {
     this.loadingService.show(loaderConfig?.message || '', !!loaderConfig?.cancelable);
