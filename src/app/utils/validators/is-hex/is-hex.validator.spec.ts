@@ -77,7 +77,7 @@ describe('tests for isHexValidator', () => {
       });
     });
 
-    it('should return invalidDid when passed value do not have specified did type', () => {
+    it('should return invalidDid when passed value do not have specified did method', () => {
       expect(getFormErrors('did:' + stringWithLength(40), HexValidators.isDidValid)).toEqual({
         invalidDid: true
       });
