@@ -9,6 +9,9 @@ const LONG_HEX = 132;
 // 0x + 40
 const ETHEREUM_ADDRESS = 42;
 
+const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
+const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
+
 export class HexValidators {
   static isHex(possibleLengths: number[]): ValidatorFn {
     return (control: AbstractControl) => {
@@ -32,6 +35,20 @@ export class HexValidators {
   static isEthAddress() {
     return HexValidators.isHex([ETHEREUM_ADDRESS]);
   };
+
+  static isDidValid() {
+
+    return (didCtrl: AbstractControl) => {
+      let retVal = null;
+      const did = didCtrl.value;
+
+      if (did && !RegExp(DIDPattern).test(did.trim())) {
+        retVal = {invalidDid: true};
+      }
+
+      return retVal;
+    };
+  }
 }
 
 const isValidLength = (control: number, possibleLengths: number[]): boolean => {
