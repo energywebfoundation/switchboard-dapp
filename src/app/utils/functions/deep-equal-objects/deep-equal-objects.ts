@@ -29,5 +29,5 @@ const isObject = (object) => {
 };
 
 const isDate = (object) => {
-  return object instanceof Date; //&& Object.toString.call(object) === '[object Date]'
+  return Object.prototype.toString.call(object) === '[object Date]';
 };
