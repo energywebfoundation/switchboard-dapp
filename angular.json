@@ -130,20 +130,6 @@
                   "with": "src/environments/environment.dev.ts"
                 }
               ]
-            },
-            "testing": {
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.test.ts"
-                }
-              ]
             }
           }
         },
@@ -158,9 +144,6 @@
             },
             "development": {
               "browserTarget": "switchboard-dapp:build:development"
-            },
-            "testing": {
-              "browserTarget": "switchboard-dapp:build:testing"
             }
           },
           "defaultConfiguration": "development"
@@ -226,25 +209,15 @@
         "cypress-run": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "switchboard-dapp:serve:testing"
-          },
-          "configurations": {
-            "testing": {
-              "devServerTarget": "switchboard-dapp:serve:testing"
-            }
+            "devServerTarget": "switchboard-dapp:serve"
           }
         },
         "cypress-open": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "switchboard-dapp:serve:testing",
+            "devServerTarget": "switchboard-dapp:serve",
             "watch": true,
             "headless": false
-          },
-          "configurations": {
-            "testing": {
-              "devServerTarget": "switchboard-dapp:serve:testing"
-            }
           }
         }
       }
