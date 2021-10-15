@@ -54,12 +54,22 @@ export class IamService {
         ewKeyManagerUrl: kmsServerUrl
       };
     }
+    const privateKey = window.localStorage.getItem('PrivateKey');
+    if (privateKey) {
+      connectionOptions = {
+        ...connectionOptions,
+        privateKey: privateKey,
+        rpcUrl: walletConnectOptions.rpcUrl
+      };
+    }
 
     // Initialize Data
     if (configService.safeInfo) {
       this._iam = new SafeIam(safeAppSdk, connectionOptions);
     } else {
-      this._iam = new IAM(connectionOptions);
+      this._iam = new IAM({
+        ...connectionOptions
+      });
     }
   }
 

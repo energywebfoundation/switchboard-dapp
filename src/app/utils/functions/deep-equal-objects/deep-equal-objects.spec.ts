@@ -36,4 +36,12 @@ describe('compare-form-with-defaults function', () => {
   it('should return true, when properties in objects are the same objects', () => {
     expect(deepEqualObjects({value: {value: 1}}, {value: {value: 1}})).toEqual(true);
   });
+
+  it('should check if compared the same date returns true', () => {
+    expect(deepEqualObjects({value: new Date('6/7/1981')}, {value: new Date('6/7/1981')})).toEqual(true);
+  });
+
+  it('should check if compared different dates return false', () => {
+    expect(deepEqualObjects({value: new Date('6/7/1981')}, {value: new Date('1/1/2001')})).toEqual(false);
+  });
 });

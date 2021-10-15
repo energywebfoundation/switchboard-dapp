@@ -1,0 +1,28 @@
+{
+  "id": "did:ethr:0x5Ee6E622060Bf9132C7b8025838B465865bA9827",
+  "owner": "did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3",
+  "offeredTo": null,
+  "createdAt": "2021-10-04T19:47:00.000Z",
+  "updatedAt": "2021-10-04T19:47:00.000Z",
+  "document": {
+    "id": "did:ethr:0x5Ee6E622060Bf9132C7b8025838B465865bA9827",
+    "service": [],
+    "authentication": [
+      {
+        "type": "owner",
+        "validity": {
+          "hex": "0x1ffffffffffffe",
+          "type": "BigNumber"
+        },
+        "publicKey": "did:ethr:0x5Ee6E622060Bf9132C7b8025838B465865bA9827#owner"
+      }
+    ],
+    "created": null,
+    "delegates": null,
+    "proof": null,
+    "publicKey": [],
+    "updated": null,
+    "@context": "https://www.w3.org/ns/did/v1",
+    "logs": "{\"owner\":\"0x0000000000000000000000000000000000000000\",\"topBlock\":{\"type\":\"BigNumber\",\"hex\":\"0x00\"},\"authentication\":{},\"publicKey\":{},\"service\":{},\"attributes\":{}}"
+  }
+}

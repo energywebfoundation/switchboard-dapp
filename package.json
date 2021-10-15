@@ -16,8 +16,11 @@
     "test:headless": "ng test --karma-config=karma-headless.conf.js",
     "lint": "ng lint",
     "modernizr": "modernizr -c modernizr-config.json -d src/modernizr.js",
-    "webdriver-manager-update": "node ./node_modules/protractor/bin/webdriver-manager update",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "cypress:open": "ng run switchboard-dapp:cypress-open",
+    "cypress:run": "ng run switchboard-dapp:cypress-run --spec cypress/integration/ui/**/*.spec.ts",
+    "cy:run:ci": "npm run ng serve",
+    "precy:run:ci": "echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p"
   },
   "dependencies": {
     "@angular/animations": "11.2.14",
@@ -72,15 +75,16 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1102.14",
+    "@angular-devkit/core": "11.2.14",
     "@angular-eslint/builder": "1.2.0",
     "@angular-eslint/eslint-plugin": "12.3.1",
     "@angular-eslint/eslint-plugin-template": "1.2.0",
     "@angular-eslint/schematics": "1.2.0",
     "@angular-eslint/template-parser": "1.2.0",
-    "@angular-devkit/core": "11.2.14",
     "@angular/cli": "11.2.14",
     "@angular/compiler-cli": "11.2.14",
     "@angular/language-service": "11.2.14",
+    "@cypress/schematic": "^1.5.1",
     "@ngrx/schematics": "^10.1.2",
     "@types/codemirror": "0.0.67",
     "@types/jasmine": "~3.6.0",
@@ -89,6 +93,8 @@
     "@typescript-eslint/eslint-plugin": "4.28.2",
     "@typescript-eslint/parser": "4.28.2",
     "eslint": "^7.26.0",
+    "eslint-plugin-jsdoc": "30.7.6",
+    "eslint-plugin-prefer-arrow": "1.2.2",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.3.4",
@@ -101,13 +107,11 @@
     "karma-read-json": "1.1.0",
     "karma-typescript": "^5.2.0",
     "loaders.css": "0.1.2",
-    "protractor": "~7.0.0",
     "ts-node": "7.0.0",
     "typescript": "4.1.6",
     "webdriver-manager": "10.2.5",
     "webpack-bundle-analyzer": "^3.9.0",
-    "eslint-plugin-jsdoc": "30.7.6",
-    "eslint-plugin-prefer-arrow": "1.2.2"
+    "cypress": "8.5.0"
   },
   "eslintIgnore": [
     "node_modules/"

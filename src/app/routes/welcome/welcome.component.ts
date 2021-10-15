@@ -28,6 +28,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.tryToLoginWithPrivateKey();
     this.activeRoute.queryParams.pipe(
       filter((queryParams) => queryParams && queryParams.returnUrl)
     )
@@ -51,5 +52,12 @@ export class WelcomeComponent implements OnInit {
 
   private login(provider: WalletProvider) {
     this.store.dispatch(AuthActions.welcomeLogin({provider, returnUrl: this._returnUrl}));
+  }
+
+  private tryToLoginWithPrivateKey() {
+    if (window.localStorage.getItem('PrivateKey')) {
+      console.log('Found PrivateKey. Using to login.');
+      this.login(WalletProvider.PrivateKey);
+    }
   }
 }

@@ -5,9 +5,9 @@
     <!-- Logo -->
     <ng-container matColumnDef="logo">
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element" data-label="">
+      <td mat-cell *matCellDef="let element; let i = index" data-label="">
         <div class="d-flex justify-content-center justify-content-md-start">
-          <img class="img-logo-list" [src]="element.icon ? element.icon : defaultLogo"/>
+          <img class="img-logo-list" [src]="element.icon ? element.icon : defaultLogo" [attr.data-qa-id]="'logo-' + i"/>
         </div>
       </td>
     </ng-container>
@@ -17,11 +17,11 @@
         <ng-container *ngIf="listType !== AssetListType.OFFERED_ASSETS"> Created Date</ng-container>
         <ng-container *ngIf="listType === AssetListType.OFFERED_ASSETS"> Offered Date</ng-container>
       </th>
-      <td mat-cell *matCellDef="let element" data-label="Created Date">
-        <div *ngIf="listType !== AssetListType.OFFERED_ASSETS">
+      <td mat-cell *matCellDef="let element; let i = index" data-label="Created Date">
+        <div *ngIf="listType !== AssetListType.OFFERED_ASSETS" [attr.data-qa-id]="'create-date-' + i">
           {{ element.createdDate | date: 'MM/dd/yyyy HH:mm:ss' }}
         </div>
-        <div *ngIf="listType === AssetListType.OFFERED_ASSETS">
+        <div *ngIf="listType === AssetListType.OFFERED_ASSETS" [attr.data-qa-id]="'modified-date-' + i">
           {{ element.modifiedDate | date: 'MM/dd/yyyy HH:mm:ss' }}
         </div>
       </td>
@@ -32,13 +32,14 @@
       <th mat-header-cell class="d-flex align-items-center pt-1" *matHeaderCellDef mat-sort-header>Asset Name
         <mat-icon class="btn-color-disabled ml-2">visibility_off</mat-icon>
       </th>
-      <td mat-cell *matCellDef="let element" data-label="Name">
+      <td mat-cell *matCellDef="let element; let i = index" data-label="Name">
         <div class="d-flex flex-row align-items-center justify-content-between justify-content-lg-start">
-          <div class="text-blur">
+          <div class="text-blur" [attr.data-qa-id]="'name-' + i">
             {{element.name ? element.name : 'Asset Name'}}
           </div>
           <div>
             <button class="btn mat-stroked-table-button ml-0 mr-2 mr-md-0 ml-md-2"
+                    [attr.data-qa-id]="'enrolments-' + i"
                     *ngIf="element.hasEnrolments"
                     (click)="viewAssetEnrolments(element)">Enrolments
             </button>
@@ -51,8 +52,8 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         <ng-container> Asset DID</ng-container>
       </th>
-      <td mat-cell *matCellDef="let element" data-label="Asset DID" class="cursor-pointer">
-        <div matTooltip="{{element.id}}" matTooltipClass="tooltip-full-width"
+      <td mat-cell *matCellDef="let element; let i = index" data-label="Asset DID" class="cursor-pointer">
+        <div matTooltip="{{element.id}}" matTooltipClass="tooltip-full-width" [attr.data-qa-id]="'did-' + i"
              [appMinifiedDidViewer]="element.id">{{ element.id | didFormatMinifier }}</div>
       </td>
     </ng-container>
@@ -61,13 +62,15 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         <ng-container> Offered To</ng-container>
       </th>
-      <td mat-cell *matCellDef="let element" data-label="Offered To">
+      <td mat-cell *matCellDef="let element; let i = index" data-label="Offered To">
         <ng-container *ngIf="listType === AssetListType.MY_ASSETS">
           <div matTooltip="{{element.offeredTo}}" matTooltipClass="tooltip-full-width"
+               [attr.data-qa-id]="'offered-to-did-' + i"
                [appMinifiedDidViewer]="element.offeredTo">{{ (element.offeredTo | didFormatMinifier) || '-' }}</div>
         </ng-container>
         <ng-container *ngIf="listType === AssetListType.PREV_OWNED_ASSETS">
           <div matTooltip="{{element.owner}}" matTooltipClass="tooltip-full-width"
+               [attr.data-qa-id]="'owner-did-' + i"
                [appMinifiedDidViewer]="element.owner">{{ (element.owner | didFormatMinifier) || '-' }}</div>
         </ng-container>
       </td>
@@ -77,8 +80,9 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         <ng-container> Offered By</ng-container>
       </th>
-      <td mat-cell *matCellDef="let element" data-label="Offered By">
+      <td mat-cell *matCellDef="let element; let i = index" data-label="Offered By">
         <div matTooltip="{{element.owner}}" matTooltipClass="tooltip-full-width"
+             [attr.data-qa-id]="'offered-by' + i"
              [appMinifiedDidViewer]="element.owner">{{ (element.owner | didFormatMinifier) || '-' }}</div>
       </td>
     </ng-container>
@@ -117,20 +121,23 @@
     <!-- Action -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef class="text-right"></th>
-      <td mat-cell *matCellDef="let element">
+      <td mat-cell *matCellDef="let element; let i = index">
         <div class="d-flex justify-content-end">
-          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action button list">
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action button list"
+                  [attr.data-qa-id]="'menu-' + i">
             <mat-icon class="btn-color-primary">more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
             <ng-container>
               <!-- View Ownership History -->
-              <button mat-menu-item class="btn-color-primary" (click)="viewOwnershipHistory(element)">
+              <button mat-menu-item class="btn-color-primary" (click)="viewOwnershipHistory(element)"
+                      data-qa-id="history">
                 <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-application-icon"></mat-icon>
                 <span>View Ownership History</span>
               </button>
 
               <button mat-menu-item class="btn-color-primary" *ngIf="AssetListType.MY_ASSETS === listType"
+                      data-qa-id="verification-method"
                       (click)="viewVerificationMethod(element)">
                 <mat-icon class="btn-color-primary btn-action-3">verified</mat-icon>
                 <span>Verification Method</span>
@@ -139,6 +146,7 @@
               <ng-container *ngIf="listType === AssetListType.MY_ASSETS">
                 <!-- Offer Ownership -->
                 <button mat-menu-item class="btn-color-primary" *ngIf="!element?.offeredTo"
+                        data-qa-id="transfer-ownership"
                         (click)="transferOwnership(listType, element)">
                   <mat-icon class="btn-color-primary btn-action-1" svgIcon="transfer-ownership-icon"></mat-icon>
                   <span>Transfer Ownership</span>
@@ -146,6 +154,7 @@
 
                 <!-- Cancel Ownership Offer -->
                 <button mat-menu-item class="btn-color-error" *ngIf="element?.offeredTo"
+                        data-qa-id="cancel-transfer"
                         (click)="cancelAssetOffer(element)">
                   <mat-icon class="btn-color-error">delete_outline</mat-icon>
                   <span>Cancel Transfer of Ownership</span>
@@ -154,20 +163,23 @@
 
               <ng-container *ngIf="listType === AssetListType.OFFERED_ASSETS">
                 <!-- Accept Ownership Offer -->
-                <button mat-menu-item class="btn-color-primary" (click)="approveAssetOffer(element)">
+                <button mat-menu-item class="btn-color-primary" (click)="approveAssetOffer(element)"
+                        data-qa-id="accept-transfer">
                   <mat-icon class="btn-color-primary btn-action-3">thumb_up_alt</mat-icon>
                   <span>Accept</span>
                 </button>
 
                 <!-- Reject Ownership Offer -->
-                <button mat-menu-item class="btn-color-error" (click)="rejectAssetOffer(element)">
+                <button mat-menu-item class="btn-color-error" (click)="rejectAssetOffer(element)"
+                        data-qa-id="reject-offer">
                   <mat-icon class="btn-color-error">thumb_down_alt</mat-icon>
                   <span>Reject</span>
                 </button>
               </ng-container>
 
               <!-- Edit -->
-              <button mat-menu-item class="btn-color-primary" (click)="edit(element)">
+              <button mat-menu-item class="btn-color-primary" (click)="edit(element)"
+                      data-qa-id="edit">
                 <mat-icon class="btn-color-primary btn-action-3">create</mat-icon>
                 <span>Edit</span>
               </button>
