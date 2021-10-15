@@ -5,6 +5,8 @@
 //
 // Pure CSS Radial Progress Bar
 // Colors
+@use "sass:math";
+
 $bar-color : $primary;
 
 $radial-primary : $primary;
@@ -38,16 +40,16 @@ $progress-step: 5;
     >img {
         width: $size - $bar-size;
         height: $size - $bar-size;
-        margin-left: $bar-size / 2;
-        margin-top: $bar-size / 2;
+        margin-left: $bar-size * 0.5;
+        margin-top: $bar-size * 0.5;
         line-height: $size - $bar-size;
     }
 }
 
 @mixin radial-progress-variant($step, $color) {
-    $loops: round(100 / $step);
-    $increment: 360 / $loops;
-    $half: round($loops / 2);
+    $loops: round(math.div(100, $step));
+    $increment: math.div(360, $loops);
+    $half: round($loops * 0.5);
     @for $i from 0 through $loops {
         &.radial-bar-#{$i*$step} {
             @if $i < $half {

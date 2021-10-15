@@ -67,7 +67,7 @@ body {
             content: "Loading..."; // absolute positioned
             width: $width;
             height: $height;
-            margin: -($height/2) 0 0 -($width/2); // center text
+            margin: -($height*0.5) 0 0 -($width*0.5); // center text
             line-height: $height; // reset styles
             color: #000;
             opacity: 1;
