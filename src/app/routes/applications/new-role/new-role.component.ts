@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
-import { ENSNamespaceTypes, PreconditionTypes, IRole } from 'iam-client-lib';
+import { ENSNamespaceTypes, IRole, PreconditionTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { debounceTime, delay, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 
 import { ListType } from '../../../shared/constants/shared-constants';
 import { FieldValidationService } from '../../../shared/services/field-validation.service';
@@ -16,10 +16,10 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatStepper } from '@angular/material/stepper';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatTableDataSource } from '@angular/material/table';
-import { Observable, of } from 'rxjs';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
+import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 
 export const RoleType = {
   ORG: 'org',
@@ -85,7 +85,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   });
   public issuerGroup = this.fb.group({
-    newIssuer: ['', this.iamService.isValidDid]
+    newIssuer: ['', HexValidators.isDidValid()]
   });
 
   public roleControl = this.fb.control('');

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
 import {
   ENSNamespaceTypes,
   IAM,
@@ -166,35 +165,6 @@ export class IamService {
       owner: await this.iam.getSigner().getAddress(),
       excludeSubOrgs: false
     });
-  }
-
-  /**
-   * @deprecated
-   * Use isAlphaNumericOnly function from utils/functions instead.
-   * @param event
-   * @param includeDot
-   */
-  isAlphaNumericOnly(event: any, includeDot?: boolean) {
-    const charCode = (event.which) ? event.which : event.keyCode;
-
-    // Check if key is alphanumeric key
-    return (
-      (charCode > 96 && charCode < 123) || // a-z
-      (charCode > 64 && charCode < 91) || // A-Z
-      (charCode > 47 && charCode < 58) || // 0-9
-      (includeDot && charCode === 46) // .
-    );
-  }
-
-  isValidDid(didCtrl: AbstractControl): { [key: string]: boolean } | null {
-    let retVal = null;
-    const did = didCtrl.value;
-
-    if (did && !RegExp(DIDPattern).test(did.trim())) {
-      retVal = {invalidDid: true};
-    }
-
-    return retVal;
   }
 
   public wrapWithLoadingService<T>(source: Promise<T> | Observable<T>,
