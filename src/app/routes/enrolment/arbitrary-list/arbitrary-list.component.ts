@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-arbitrary-list',
@@ -6,10 +7,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./arbitrary-list.component.scss']
 })
 export class ArbitraryListComponent implements OnInit {
+  dataSource = new MatTableDataSource([]);
+  displayedColumns: string[];
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
+    this.displayedColumns = ['date', 'name', 'did', 'status'];
+  }
+
+  getList() {
+
   }
 
 }

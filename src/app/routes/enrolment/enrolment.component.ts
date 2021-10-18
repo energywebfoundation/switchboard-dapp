@@ -5,6 +5,9 @@ import { UrlParamService } from '../../shared/services/url-param.service';
 import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 import { MatTabGroup } from '@angular/material/tabs';
 import { NotificationService } from '../../shared/services/notification.service';
+import { MatDialog } from '@angular/material/dialog';
+import { NewArbitraryCredentialComponent } from './new-arbitrary-credential/new-arbitrary-credential.component';
+import { ArbitraryListComponent } from './arbitrary-list/arbitrary-list.component';
 
 @Component({
   selector: 'app-enrolment',
@@ -15,6 +18,7 @@ export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
   @ViewChild('issuerList') issuerList: EnrolmentListComponent;
   @ViewChild('enrolmentList') enrolmentList: EnrolmentListComponent;
+  @ViewChild('arbitraryList') arbitraryList: ArbitraryListComponent;
 
   issuerListAccepted = false;
   enrolmentListAccepted = undefined;
@@ -37,7 +41,8 @@ export class EnrolmentComponent implements AfterViewInit {
   constructor(private activeRoute: ActivatedRoute,
               private notificationService: NotificationService,
               private urlParamService: UrlParamService,
-              private router: Router) {
+              private router: Router,
+              private dialog: MatDialog) {
   }
 
   ngAfterViewInit(): void {
@@ -65,6 +70,9 @@ export class EnrolmentComponent implements AfterViewInit {
         } else if (queryParams.selectedTab) {
           if (queryParams.selectedTab === '1') {
             this.initDefaultMyEnrolments();
+          }
+          if (queryParams.selectedTab === '2') {
+            this.initDefault(2);
           } else {
             this.initDefault();
           }
@@ -91,6 +99,8 @@ export class EnrolmentComponent implements AfterViewInit {
       } else {
         this.isMyEnrolmentShown = true;
       }
+    } else if (i.index === 2) {
+      this.arbitraryList.getList();
     } else {
       this.issuerList.getList(this.enrolmentDropdown.value === 'rejected',
         this.issuerDropdown.value === 'true' ? true : this.issuerDropdown.value === 'false' ? false : undefined);
@@ -113,14 +123,22 @@ export class EnrolmentComponent implements AfterViewInit {
     this.searchByDid.setValue(value.did);
   }
 
-  private initDefault() {
+  createVC() {
+    this.dialog.open(NewArbitraryCredentialComponent, {
+      width: '600px',
+      maxWidth: '100%',
+      disableClose: true
+    });
+  }
+
+  private initDefault(index?: number) {
     if (!this._queryParamSelectedTabInit) {
       this.issuerListAccepted = false;
       this.asyncSetDropdownValue(this.dropdownValue.pending);
     }
 
     if (this.enrolmentTabGroup) {
-      this.enrolmentTabGroup.selectedIndex = 0;
+      this.enrolmentTabGroup.selectedIndex = index || 0;
     }
   }
 
