@@ -15,6 +15,6 @@ export class QrCodeScannerComponent {
     if (!result) {
       return;
     }
-    this.dialogRef.close({did: result.text});
+    this.dialogRef.close({value: result.text});
   }
 }
