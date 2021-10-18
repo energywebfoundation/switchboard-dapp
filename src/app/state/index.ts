@@ -34,6 +34,9 @@ import * as ApplicationSelectors from './governance/application/application.sele
 import * as RoleActions from './governance/role/role.actions';
 import * as RoleSelectors from './governance/role/role.selectors';
 
+// === Arbitrary ===
+import * as ArbitraryActions from './arbitrary/arbitrary.actions';
+import * as ArbitrarySelectors from './arbitrary/arbitrary.selectors';
 
 export * from './store-root.module';
 export {
@@ -60,5 +63,8 @@ export {
   RoleSelectors,
 
   LayoutActions,
-  LayoutSelectors
+  LayoutSelectors,
+
+  ArbitraryActions,
+  ArbitrarySelectors
 };

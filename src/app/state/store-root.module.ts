@@ -13,6 +13,7 @@ import { OrganizationStoreSliceModule } from './governance/organization/organiza
 import { LayoutStoreSliceModule } from './layout/layout-store-slice.module';
 import { ApplicationStoreSliceModule } from './governance/application/application-store-slice.module';
 import { RoleStoreSliceModule } from './governance/role/role-store-slice.module';
+import { ArbitraryStoreSliceModule } from './arbitrary/arbitrary-store-slice.module';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { RoleStoreSliceModule } from './governance/role/role-store-slice.module'
     OrganizationStoreSliceModule,
     LayoutStoreSliceModule,
     ApplicationStoreSliceModule,
-    RoleStoreSliceModule
+    RoleStoreSliceModule,
+    ArbitraryStoreSliceModule
   ],
 })
 export class StoreRootModule {
