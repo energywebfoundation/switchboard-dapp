@@ -143,7 +143,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
     this._shadowList = list;
     if (this.namespaceFilterControl) {
-      this._updateList(this.namespaceFilterControl.value);
+      this.updateListByNamespace(this.namespaceFilterControl.value);
     }
     this.loadingService.hide();
   }
@@ -287,7 +287,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
         takeUntil(this._subscription$)
       )
-      .subscribe(filterValue => this._updateList(filterValue));
+      .subscribe(value => this.updateListByNamespace(value));
   }
 
   private _checkDidControlChanges(): void {
@@ -299,17 +299,18 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
         takeUntil(this._subscription$)
       )
-      .subscribe(filterValue => {
-        if (filterValue) {
-          this.dataSource.data = this._shadowList.filter((item) => item.subject.includes(filterValue) || item.requester.includes(filterValue));
-        } else {
-
-          this.dataSource.data = this._shadowList;
-        }
-      });
+      .subscribe(value => this.updateListByDid(value));
   }
 
-  private _updateList(value): void {
+  private updateListByDid(value: string): void {
+    if (value) {
+      this.dataSource.data = this._shadowList.filter((item) => item.subject.includes(value) || item.requester.includes(value));
+    } else {
+      this.dataSource.data = this._shadowList;
+    }
+  }
+
+  private updateListByNamespace(value: string): void {
     if (value) {
       this.dataSource.data = this._shadowList.filter((item) => item.namespace.includes(value));
     } else {
