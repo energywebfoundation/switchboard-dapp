@@ -33,6 +33,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   @Input() rejected: boolean;
   @Input() subject: string;
   @Input() namespaceFilterControl!: FormControl;
+  @Input() didFilterControl!: FormControl;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -89,6 +90,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
     await this.getList(this.rejected, this.accepted);
     this._checkNamespaceControlChanges();
+    this._checkDidControlChanges();
   }
 
   async ngOnDestroy(): Promise<void> {
@@ -286,6 +288,25 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         takeUntil(this._subscription$)
       )
       .subscribe(filterValue => this._updateList(filterValue));
+  }
+
+  private _checkDidControlChanges(): void {
+    if (!this.didFilterControl) {
+      return;
+    }
+    this.didFilterControl.valueChanges
+      .pipe(
+        distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
+        takeUntil(this._subscription$)
+      )
+      .subscribe(filterValue => {
+        if (filterValue) {
+          this.dataSource.data = this._shadowList.filter((item) => item.subject.includes(filterValue) || item.requester.includes(filterValue));
+        } else {
+
+          this.dataSource.data = this._shadowList;
+        }
+      });
   }
 
   private _updateList(value): void {

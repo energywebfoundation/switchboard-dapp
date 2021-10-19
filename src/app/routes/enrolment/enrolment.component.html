@@ -28,12 +28,24 @@
                 <input matInput placeholder="Namespace" [formControl]="namespaceControlIssuer">
               </mat-form-field>
             </div>
+            <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
+              <mat-form-field appearance="outline" floatPlaceholder="never"
+                              class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
+                              matTooltip="Filter by did - it will search through Requestor DID and Asset Did">
+                <input matInput placeholder="Namespace" [formControl]="searchByDid">
+                <button matSuffix mat-icon-button class="qr-code" aria-label="Scan DID" appQrCodeScanner
+                        (scannedValue)="updateSearchByDidValue($event)">
+                  <mat-icon>qr_code_2</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
           </div>
           <app-enrolment-list
               [listType]="'issuer'"
               [accepted]="issuerListAccepted"
               #issuerList
               [namespaceFilterControl]="namespaceControlIssuer"
+              [didFilterControl]="searchByDid"
           ></app-enrolment-list>
         </div>
       </div>

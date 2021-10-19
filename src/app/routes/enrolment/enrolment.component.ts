@@ -23,6 +23,7 @@ export class EnrolmentComponent implements AfterViewInit {
   enrolmentDropdown = new FormControl('none');
   namespaceControlIssuer = new FormControl(undefined);
   namespaceControlMyEnrolments = new FormControl(undefined);
+  searchByDid = new FormControl(undefined);
   public dropdownValue = {
     all: 'none',
     pending: 'false',
@@ -97,17 +98,19 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   updateEnrolmentList(e: any) {
-    // console.log('enrolement list');
     const value = e.value;
     this.enrolmentList.getList(value === 'rejected',
       value === 'true' ? true : value === 'false' ? false : undefined);
   }
 
   updateIssuerList(e: any) {
-    // console.log('issuer list');
     const value = e.value;
     this.issuerList.getList(value === 'rejected',
       value === 'true' ? true : value === 'false' ? false : undefined);
+  }
+
+  updateSearchByDidValue(value) {
+    this.searchByDid.setValue(value.did);
   }
 
   private initDefault() {
