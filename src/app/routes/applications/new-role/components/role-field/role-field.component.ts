@@ -1,10 +1,6 @@
-import { Component, Input, EventEmitter, ChangeDetectorRef, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-const FIELD_TYPES = [
-  'text', 'number', 'date', 'boolean'
-];
 
 @Component({
   selector: 'app-role-field',
@@ -12,64 +8,42 @@ const FIELD_TYPES = [
   styleUrls: ['./role-field.component.scss']
 })
 export class RoleFieldComponent {
-
-  @Input() fieldsForm: FormGroup;
   @Input() dataSource: MatTableDataSource<any>;
   @Input() isChecking: boolean;
 
-  @Output() cleanForm = new EventEmitter<boolean>();
   @Output() updateData = new EventEmitter<MatTableDataSource<any>>();
-  @Output() back = new EventEmitter<void>();
-  @Output() proceed = new EventEmitter<void>();
 
   showFieldsForm = false;
-  isEditFieldForm = false;
   fieldIndex: number;
-  public FieldTypes = FIELD_TYPES;
-
-  constructor() {
-  }
+  fieldToEdit = null;
 
   showAddFieldForm() {
-    this.resetForm();
+    this.hideForm();
     this.showFieldsForm = true;
   }
 
-  addField() {
-    if (this.fieldsForm.valid) {
-      const data = [...this.dataSource.data, this._extractValidationObject(this.fieldsForm.value)];
-      this.updateDataSource(data);
-      this.resetForm();
-    }
+  addFieldHandler(fieldData) {
+    const data = [...this.dataSource.data, this._extractValidationObject(fieldData)];
+    this.updateDataSource(data);
+    this.hideForm();
   }
 
-  updateField() {
-    if (this.fieldsForm.valid) {
-      const data = this.dataSource.data.map((item, index) => {
-        if (this.fieldIndex === index) {
-          return this._extractValidationObject(this.fieldsForm.value);
-        }
-        return item;
-      });
-      this.updateDataSource(data);
-      this.resetForm();
-    }
+  updateFieldHandler(fieldData) {
+    const data = this.dataSource.data.map((item, index) => {
+      if (this.fieldIndex === index) {
+        return this._extractValidationObject(fieldData);
+      }
+      return item;
+    });
+    this.updateDataSource(data);
+    this.hideForm();
+    this.fieldToEdit = null;
   }
 
   editField(i: number) {
     this.fieldIndex = i;
-    const field = this.dataSource.data[i];
-    const fieldKeys = Object.keys(field);
-    const valueToPatch = {};
+    this.fieldToEdit = this.dataSource.data[i];
 
-    fieldKeys.map(fieldKey => {
-      this.fieldsForm.get(fieldKey)?.setValue(field[fieldKey]);
-      valueToPatch[fieldKey] = field[fieldKey];
-    });
-
-    this.fieldsForm.get('validation').patchValue(valueToPatch);
-
-    this.isEditFieldForm = true;
     this.showFieldsForm = true;
   }
 
@@ -101,20 +75,12 @@ export class RoleFieldComponent {
     this.updateDataSource([...list]);
   }
 
-  cancelAddField() {
-    this.resetForm();
+  canceledHandler() {
+    this.hideForm();
   }
 
   updateDataSource(data) {
     this.updateData.emit(data);
-  }
-
-  onBack() {
-    this.back.emit();
-  }
-
-  proceedConfirmDetails() {
-    this.proceed.emit();
   }
 
   private _extractValidationObject(value: any) {
@@ -136,7 +102,7 @@ export class RoleFieldComponent {
         maxDate
       } = value.validation;
 
-      switch (this.fieldsForm.value.fieldType) {
+      switch (value.fieldType) {
         case 'text':
           validation = {
             required,
@@ -176,9 +142,7 @@ export class RoleFieldComponent {
     return retVal;
   }
 
-  private resetForm() {
-    this.isEditFieldForm = false;
+  private hideForm() {
     this.showFieldsForm = false;
-    this.cleanForm.emit(true);
   }
 }

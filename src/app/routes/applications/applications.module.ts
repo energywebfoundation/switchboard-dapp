@@ -22,18 +22,17 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { NewStakingPoolComponent } from './new-staking-pool/new-staking-pool.component';
-import { RoleFieldComponent } from './new-role/components/role-field/role-field.component';
 import { OrganizationActionsComponent } from './actions/organization-actions/organization-actions.component';
 import { ApplicationActionsComponent } from './actions/application-actions/application-actions.component';
 import { RoleActionsComponent } from './actions/role-actions/role-actions.component';
 import { NgxEditorModule } from 'ngx-editor';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
-import { FieldsSummaryComponent } from './new-role/components/fields-summary/fields-summary.component';
 import { TransactionsCompleteComponent } from './transactions-complete/transactions-complete.component';
 import { RoleListComponent } from './role-list/role-list.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { ActionsMenuComponent } from './actions/actions-menu/actions-menu.component';
 import { FilterComponent } from './filter/filter.component';
+import { CreateFieldsModule } from './new-role/components/create-fields/create-fields.module';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -49,12 +48,10 @@ const routes: Routes = [
     TransferOwnershipComponent,
     RemoveOrgAppComponent,
     NewStakingPoolComponent,
-    RoleFieldComponent,
     OrganizationActionsComponent,
     ApplicationActionsComponent,
     RoleActionsComponent,
     OrganizationListComponent,
-    FieldsSummaryComponent,
     RoleListComponent,
     ApplicationListComponent,
     ActionsMenuComponent,
@@ -79,14 +76,16 @@ const routes: Routes = [
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    NgxEditorModule
+    NgxEditorModule,
+    CreateFieldsModule
   ],
   entryComponents: [
     NewOrganizationComponent,
     NewApplicationComponent,
     NewRoleComponent,
     TransferOwnershipComponent,
-    RemoveOrgAppComponent]
+    RemoveOrgAppComponent
+  ]
 })
 export class ApplicationsModule {
 }

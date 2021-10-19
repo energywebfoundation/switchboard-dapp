@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -48,34 +48,9 @@ describe('RoleFieldComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleFieldComponent);
 
-    const fb = new FormBuilder();
     const dataSource = new MatTableDataSource([]);
 
     component = fixture.componentInstance;
-    component.fieldsForm = fb.group({
-      fieldType: [''],
-      label: ['', Validators.required],
-      validation: fb.group({
-        required: undefined,
-        minLength: [undefined, {
-          validators: Validators.min(0),
-          updateOn: 'blur'
-        }],
-        maxLength: [undefined, {
-          validators: Validators.min(1),
-          updateOn: 'blur'
-        }],
-        pattern: undefined,
-        minValue: [undefined, {
-          updateOn: 'blur'
-        }],
-        maxValue: [undefined, {
-          updateOn: 'blur'
-        }],
-        minDate: undefined,
-        maxDate: undefined
-      })
-    });
     component.dataSource = dataSource;
     hostDebug = fixture.debugElement;
     host = hostDebug.nativeElement;
@@ -91,7 +66,7 @@ describe('RoleFieldComponent', () => {
     it('addField is invalid form', () => {
       component.fieldsForm.setErrors({incorrect: true});
       spyOn(component, 'updateDataSource');
-      component.addField();
+      component.addFieldHandler();
 
       expect(component.updateDataSource).not.toHaveBeenCalled();
     });

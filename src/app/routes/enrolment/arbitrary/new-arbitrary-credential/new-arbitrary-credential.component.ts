@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-new-arbitrary-credential',
@@ -10,7 +11,7 @@ import { IssuanceVcService } from '../services/issuance-vc.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewArbitraryCredentialComponent implements OnInit {
-
+  dataSource = new MatTableDataSource([]);
   form = this.fb.group({
     did: ['', [Validators.required, HexValidators.isDidValid()]],
     name: ['', [Validators.required]]
@@ -37,5 +38,9 @@ export class NewArbitraryCredentialComponent implements OnInit {
 
   create() {
     this.issuanceVcService.create(this.form.value);
+  }
+
+  dataSourceChangeHandler(data) {
+    this.dataSource.data = [...data];
   }
 }

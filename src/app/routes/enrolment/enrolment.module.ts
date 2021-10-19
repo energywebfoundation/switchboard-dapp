@@ -19,6 +19,7 @@ import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-
 import { KeyValueFormComponent } from './view-requests/components/key-value-form/key-value-form.component';
 import { KeyValueListComponent } from './view-requests/components/key-value-list/key-value-list.component';
 import { KeyValueComponent } from './view-requests/components/key-value/key-value.component';
+import { CreateFieldsModule } from '../applications/new-role/components/create-fields/create-fields.module';
 
 const routes: Routes = [
   {path: '', component: EnrolmentComponent}
@@ -48,7 +49,8 @@ const routes: Routes = [
     NgxSpinnerModule,
     MatDialogModule,
     MatInputModule,
-    QrCodeScannerModule
+    QrCodeScannerModule,
+    CreateFieldsModule
   ],
   entryComponents: [ViewRequestsComponent, ViewRoleComponent]
 })

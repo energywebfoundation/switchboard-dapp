@@ -1,13 +1,12 @@
-import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { ENSNamespaceTypes, IRole, PreconditionTypes } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { debounceTime, delay, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
-import { Observable, of, Subject } from 'rxjs';
+import { debounceTime, delay, startWith, switchMap, take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 import { ListType } from '../../../shared/constants/shared-constants';
-import { FieldValidationService } from '../../../shared/services/field-validation.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -53,7 +52,7 @@ export interface ISmartSearch {
   templateUrl: './new-role.component.html',
   styleUrls: ['./new-role.component.scss']
 })
-export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
+export class NewRoleComponent implements OnInit, AfterViewInit {
   private stepper: MatStepper;
 
   @ViewChild('stepper') set content(content: MatStepper) {
@@ -98,30 +97,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   public issuerList: string[] = [this.iamService.iam.getDid()];
 
   // Fields
-  fieldsForm = this.fb.group({
-    fieldType: ['', Validators.required],
-    label: ['', Validators.required],
-    validation: this.fb.group({
-      required: undefined,
-      minLength: [undefined, {
-        validators: Validators.min(0),
-        updateOn: 'blur'
-      }],
-      maxLength: [undefined, {
-        validators: Validators.min(1),
-        updateOn: 'blur'
-      }],
-      pattern: undefined,
-      minValue: [undefined, {
-        updateOn: 'blur'
-      }],
-      maxValue: [undefined, {
-        updateOn: 'blur'
-      }],
-      minDate: undefined,
-      maxDate: undefined
-    })
-  });
   isAutolistLoading = false;
   hasSearchResult = true;
   displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
@@ -140,13 +115,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   private _currentIdx = 0;
   private _requests = {};
   private _onSearchKeywordInput$: any;
-  private subscription$ = new Subject();
 
   constructor(private fb: FormBuilder,
               private iamService: IamService,
               private toastr: SwitchboardToastrService,
               private spinner: NgxSpinnerService,
-              private fieldValidationService: FieldValidationService,
               public dialogRef: MatDialogRef<NewRoleComponent>,
               public dialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -157,9 +130,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._induceInt();
-    this._induceRanges();
-
     this.rolenamespaceList = this.roleControl.valueChanges.pipe(
       debounceTime(1200),
       startWith(''),
@@ -169,10 +139,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     this._init(this.data);
   }
 
-  ngOnDestroy(): void {
-    this.subscription$.next();
-    this.subscription$.complete();
-  }
 
   private _init(data: any) {
     if (data && data.viewType) {
@@ -281,47 +247,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private _induceInt() {
-    const minLength = this.fieldsForm.get('validation').get('minLength');
-    const maxLength = this.fieldsForm.get('validation').get('maxLength');
-
-    minLength.valueChanges
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(data => {
-        if (data) {
-          minLength.setValue(parseInt(data), {emitEvent: false});
-        }
-      });
-
-    maxLength.valueChanges
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(data => {
-        if (data) {
-          maxLength.setValue(parseInt(data), {emitEvent: false});
-        }
-      });
-  }
-
-  private _induceRanges() {
-    // Min & Max Length Range
-    this.fieldValidationService.autoRangeControls(
-      this.fieldsForm.get('validation').get('minLength'),
-      this.fieldsForm.get('validation').get('maxLength')
-    );
-
-    // Min & Max Value Range
-    this.fieldValidationService.autoRangeControls(
-      this.fieldsForm.get('validation').get('minValue'),
-      this.fieldsForm.get('validation').get('maxValue')
-    );
-
-    // Min & Max Date Range
-    this.fieldValidationService.autoRangeControls(
-      this.fieldsForm.get('validation').get('minDate'),
-      this.fieldsForm.get('validation').get('maxDate')
-    );
-  }
-
   controlHasError(control: string, errorType: string) {
     return this.roleForm.get(control).hasError(errorType);
   }
@@ -412,7 +337,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   formResetHandler() {
-    this.fieldsForm.reset();
+    // this.fieldsForm.reset();
   }
 
   dataSourceChangeHandler(data) {
