@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-new-arbitrary-credential',
@@ -18,6 +19,7 @@ export class NewArbitraryCredentialComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder,
+              @Inject(MAT_DIALOG_DATA) public data: { did: string },
               private issuanceVcService: IssuanceVcService) {
   }
 
@@ -26,6 +28,7 @@ export class NewArbitraryCredentialComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setDid();
   }
 
   scannedValue(data: { value: string }) {
@@ -42,5 +45,11 @@ export class NewArbitraryCredentialComponent implements OnInit {
 
   dataSourceChangeHandler(data) {
     this.dataSource.data = [...data];
+  }
+
+  private setDid() {
+    if (this.data?.did) {
+      this.form.patchValue({did: this.data.did});
+    }
   }
 }

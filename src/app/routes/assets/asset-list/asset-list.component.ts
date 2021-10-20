@@ -20,6 +20,7 @@ import { mapClaimsProfile } from '@operators';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 import { DidQrCodeComponent } from '../did-qr-code/did-qr-code.component';
+import { NewArbitraryCredentialComponent } from '../../enrolment/arbitrary/new-arbitrary-credential/new-arbitrary-credential.component';
 import { FormControl } from '@angular/forms';
 
 export const RESET_LIST = true;
@@ -143,6 +144,18 @@ export class AssetListComponent implements OnInit, OnDestroy {
         this.getAssetList();
       }
       dialogRef.unsubscribe();
+    });
+  }
+
+  createVC(element) {
+    console.log(element);
+    this.dialog.open(NewArbitraryCredentialComponent, {
+      width: '600px',
+      data: {
+        did: element.id
+      },
+      maxWidth: '100%',
+      disableClose: true
     });
   }
 
