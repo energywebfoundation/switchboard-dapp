@@ -7,7 +7,6 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { NotificationService } from '../../shared/services/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewArbitraryCredentialComponent } from '../../modules/issue-vc/new-arbitrary-credential/new-arbitrary-credential.component';
-import { ArbitraryListComponent } from './arbitrary/arbitrary-list/arbitrary-list.component';
 
 @Component({
   selector: 'app-enrolment',
@@ -18,7 +17,6 @@ export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
   @ViewChild('issuerList') issuerList: EnrolmentListComponent;
   @ViewChild('enrolmentList') enrolmentList: EnrolmentListComponent;
-  @ViewChild('arbitraryList') arbitraryList: ArbitraryListComponent;
 
   issuerListAccepted = false;
   enrolmentListAccepted = undefined;
@@ -99,8 +97,6 @@ export class EnrolmentComponent implements AfterViewInit {
       } else {
         this.isMyEnrolmentShown = true;
       }
-    } else if (i.index === 2) {
-      this.arbitraryList.getList();
     } else {
       this.issuerList.getList(this.enrolmentDropdown.value === 'rejected',
         this.issuerDropdown.value === 'true' ? true : this.issuerDropdown.value === 'false' ? false : undefined);
