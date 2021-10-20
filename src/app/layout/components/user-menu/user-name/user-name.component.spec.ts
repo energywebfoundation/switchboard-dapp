@@ -30,7 +30,7 @@ describe('UserNameComponent', () => {
   it('should display user name value', () => {
     component.userName = 'user';
     fixture.detectChanges();
-    const user = getElement(hostDebug)('menu-user-name').nativeElement;
+    const user = getElement(hostDebug)('opened-menu-name').nativeElement;
     expect(user.innerText).toContain('user');
   });
 });

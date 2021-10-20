@@ -5,7 +5,7 @@
       color="#a567ff"
       type="ball-spin-fade"
       class="text-center">
-    <p class="label-role mt-4" *ngIf='!msg && !msgList'>Loading...</p>
+    <p class="label-role mt-4" *ngIf='!msg && !msgList' data-qa-id="loading">Loading...</p>
     <p class="label-role mt-4" *ngIf='msg'>{{ msg }}</p>
     <ng-container *ngIf='msgList'>
       <ng-container *ngFor="let message of msgList; let i = index;">
