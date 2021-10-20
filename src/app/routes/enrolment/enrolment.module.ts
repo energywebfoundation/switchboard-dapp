@@ -20,6 +20,7 @@ import { KeyValueFormComponent } from './view-requests/components/key-value-form
 import { KeyValueListComponent } from './view-requests/components/key-value-list/key-value-list.component';
 import { KeyValueComponent } from './view-requests/components/key-value/key-value.component';
 import { CreateFieldsModule } from '../applications/new-role/components/create-fields/create-fields.module';
+import { IssueVcModule } from '../../modules/issue-vc/issue-vc.module';
 
 const routes: Routes = [
   {path: '', component: EnrolmentComponent}
@@ -50,6 +51,7 @@ const routes: Routes = [
     MatDialogModule,
     MatInputModule,
     QrCodeScannerModule,
+    IssueVcModule,
     CreateFieldsModule
   ],
   entryComponents: [ViewRequestsComponent, ViewRoleComponent]
