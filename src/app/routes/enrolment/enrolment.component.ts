@@ -6,7 +6,7 @@ import { EnrolmentListComponent } from './enrolment-list/enrolment-list.componen
 import { MatTabGroup } from '@angular/material/tabs';
 import { NotificationService } from '../../shared/services/notification.service';
 import { MatDialog } from '@angular/material/dialog';
-import { NewArbitraryCredentialComponent } from './arbitrary/new-arbitrary-credential/new-arbitrary-credential.component';
+import { NewArbitraryCredentialComponent } from '../../modules/issue-vc/new-arbitrary-credential/new-arbitrary-credential.component';
 import { ArbitraryListComponent } from './arbitrary/arbitrary-list/arbitrary-list.component';
 
 @Component({

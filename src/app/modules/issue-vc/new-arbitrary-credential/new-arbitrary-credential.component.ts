@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { HexValidators } from '../../../../utils/validators/is-hex/is-hex.validator';
+import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';

@@ -20,8 +20,8 @@ import { mapClaimsProfile } from '@operators';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 import { DidQrCodeComponent } from '../did-qr-code/did-qr-code.component';
-import { NewArbitraryCredentialComponent } from '../../enrolment/arbitrary/new-arbitrary-credential/new-arbitrary-credential.component';
 import { FormControl } from '@angular/forms';
+import { NewArbitraryCredentialComponent } from '../../../modules/issue-vc/new-arbitrary-credential/new-arbitrary-credential.component';
 
 export const RESET_LIST = true;
 
