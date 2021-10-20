@@ -33,6 +33,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   @Input() rejected: boolean;
   @Input() subject: string;
   @Input() namespaceFilterControl!: FormControl;
+  @Input() didFilterControl!: FormControl;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -89,6 +90,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
     await this.getList(this.rejected, this.accepted);
     this._checkNamespaceControlChanges();
+    this._checkDidControlChanges();
   }
 
   async ngOnDestroy(): Promise<void> {
@@ -141,7 +143,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
     this._shadowList = list;
     if (this.namespaceFilterControl) {
-      this._updateList(this.namespaceFilterControl.value);
+      this.updateListByNamespace(this.namespaceFilterControl.value);
     }
     this.loadingService.hide();
   }
@@ -285,10 +287,30 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
         takeUntil(this._subscription$)
       )
-      .subscribe(filterValue => this._updateList(filterValue));
+      .subscribe(value => this.updateListByNamespace(value));
   }
 
-  private _updateList(value): void {
+  private _checkDidControlChanges(): void {
+    if (!this.didFilterControl) {
+      return;
+    }
+    this.didFilterControl.valueChanges
+      .pipe(
+        distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
+        takeUntil(this._subscription$)
+      )
+      .subscribe(value => this.updateListByDid(value));
+  }
+
+  private updateListByDid(value: string): void {
+    if (value) {
+      this.dataSource.data = this._shadowList.filter((item) => item.subject.includes(value) || item.requester.includes(value));
+    } else {
+      this.dataSource.data = this._shadowList;
+    }
+  }
+
+  private updateListByNamespace(value: string): void {
     if (value) {
       this.dataSource.data = this._shadowList.filter((item) => item.namespace.includes(value));
     } else {
