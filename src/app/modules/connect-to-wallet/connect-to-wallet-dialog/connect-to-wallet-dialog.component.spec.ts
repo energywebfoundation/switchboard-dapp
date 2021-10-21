@@ -5,9 +5,9 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import * as authSelectors from '../../../state/auth/auth.selectors';
 import * as AuthActions from '../../../state/auth/auth.actions';
-import { By } from '@angular/platform-browser';
 import { WalletProvider } from 'iam-client-lib';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { getElement } from '@tests';
 
 describe('ConnectToWalletDialogComponent', () => {
   let component: ConnectToWalletDialogComponent;
@@ -93,6 +93,18 @@ describe('ConnectToWalletDialogComponent', () => {
     }));
   });
 
+  it('should dispatch login action with Azure when clicking on Use Azure button', () => {
+    setup();
+    const {azureBtn} = selectors(hostDebug);
+    const dispatchSpy = spyOn(store, 'dispatch');
+    azureBtn.nativeElement.click();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.loginViaDialog({
+      provider: WalletProvider.EKC,
+      navigateOnTimeout: true
+    }));
+  });
+
   it('should not find metamask button when is not available', () => {
     setup({metamaskPresent: false});
     const {metamaskBtn} = selectors(hostDebug);
@@ -101,13 +113,12 @@ describe('ConnectToWalletDialogComponent', () => {
   });
 });
 const selectors = (hostDebug: DebugElement) => {
-  const getElement = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
 
   return {
-    metamaskBtn: getElement('metamask'),
-    noVolta: getElement('no-volta'),
-    mobileWalletBtn: getElement('mobile-wallet'),
-    ewKeyBtn: getElement('ew-key'),
-    getElement
+    metamaskBtn: getElement(hostDebug)('metamask'),
+    noVolta: getElement(hostDebug)('no-volta'),
+    mobileWalletBtn: getElement(hostDebug)('mobile-wallet'),
+    ewKeyBtn: getElement(hostDebug)('ew-key'),
+    azureBtn: getElement(hostDebug)('azure'),
   };
 };
