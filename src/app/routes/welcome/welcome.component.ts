@@ -26,9 +26,8 @@ export class WelcomeComponent implements OnInit {
 
   async ngOnInit() {
     this.tryToLoginWithPrivateKey();
-    this.activeRoute.queryParams.pipe(
-      filter((queryParams) => queryParams && queryParams.returnUrl)
-    )
+    this.activeRoute.queryParams
+      .pipe(filter((queryParams) => queryParams && queryParams.returnUrl))
       .subscribe((queryParams: any) => {
         this._returnUrl = queryParams.returnUrl;
       });
@@ -36,19 +35,7 @@ export class WelcomeComponent implements OnInit {
     this.store.dispatch(AuthActions.navigateWhenSessionActive());
   }
 
-  connectToWalletConnect() {
-    this.login(WalletProvider.WalletConnect);
-  }
-
-  connectToMetamask() {
-    this.login(WalletProvider.MetaMask);
-  }
-
-  connectToEKC() {
-    this.login(WalletProvider.EKC);
-  }
-
-  private login(provider: WalletProvider) {
+  login(provider: WalletProvider) {
     this.store.dispatch(AuthActions.welcomeLogin({provider, returnUrl: this._returnUrl}));
   }
 
