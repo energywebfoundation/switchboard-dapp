@@ -8,7 +8,7 @@ export class IssuanceVcService {
   constructor() {
   }
 
-  create(data) {
+  create(data, fields) {
 
   }
 }

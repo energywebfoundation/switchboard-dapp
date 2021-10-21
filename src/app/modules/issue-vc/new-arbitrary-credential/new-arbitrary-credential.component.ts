@@ -11,7 +11,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewArbitraryCredentialComponent implements OnInit {
-  dataSource = [];
+  fieldList = [];
   form = this.fb.group({
     did: ['', [Validators.required, HexValidators.isDidValid()]],
     name: ['', [Validators.required]],
@@ -23,6 +23,10 @@ export class NewArbitraryCredentialComponent implements OnInit {
               private issuanceVcService: IssuanceVcService) {
   }
 
+  ngOnInit(): void {
+    this.setDid();
+  }
+
   isDidPredefined(): boolean {
     return Boolean(this.data?.did);
   }
@@ -31,24 +35,23 @@ export class NewArbitraryCredentialComponent implements OnInit {
     return this.form.get(control);
   }
 
-  ngOnInit(): void {
-    this.setDid();
-  }
-
   scannedValue(data: { value: string }) {
     this.form.patchValue({did: data.value});
   }
 
   isFormDisabled() {
-    return this.form.valid;
+    return this.form.invalid;
   }
 
   create() {
-    this.issuanceVcService.create(this.form.value);
+    if (this.isFormDisabled()) {
+      return;
+    }
+    this.issuanceVcService.create(this.form.value, this.fieldList);
   }
 
-  dataSourceChangeHandler(data) {
-    this.dataSource = [...data];
+  fieldListChangeHandler(data) {
+    this.fieldList = [...data];
   }
 
   private setDid() {
