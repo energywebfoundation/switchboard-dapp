@@ -175,6 +175,14 @@ export class AuthEffects {
       map(() => AuthActions.setProvider({walletProvider: this.loginService.walletProvider()}))
     ));
 
+  navigateToDashboardWhenSessionIsActive$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.navigateWhenSessionActive),
+      filter(() => this.loginService.isSessionActive()),
+      map(() => this.router.navigate(['dashboard']))
+    ), {dispatch: false}
+  );
+
   constructor(private actions$: Actions,
               private store: Store<AuthState>,
               private loginService: LoginService,
