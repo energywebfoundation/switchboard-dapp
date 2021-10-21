@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
-import { MatTableDataSource } from '@angular/material/table';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -12,7 +11,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewArbitraryCredentialComponent implements OnInit {
-  dataSource = new MatTableDataSource([]);
+  dataSource = [];
   form = this.fb.group({
     did: ['', [Validators.required, HexValidators.isDidValid()]],
     name: ['', [Validators.required]],
@@ -49,7 +48,7 @@ export class NewArbitraryCredentialComponent implements OnInit {
   }
 
   dataSourceChangeHandler(data) {
-    this.dataSource.data = [...data];
+    this.dataSource = [...data];
   }
 
   private setDid() {
