@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { NewArbitraryCredentialComponent } from './new-arbitrary-credential.component';
+import { NewIssueVcComponent } from './new-issue-vc.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -25,15 +25,15 @@ export class MockDialogData {
 }
 
 describe('NewArbitraryCredentialComponent', () => {
-  let component: NewArbitraryCredentialComponent;
-  let fixture: ComponentFixture<NewArbitraryCredentialComponent>;
+  let component: NewIssueVcComponent;
+  let fixture: ComponentFixture<NewIssueVcComponent>;
   const issuanceVcServiceSpy = jasmine.createSpyObj('IssuanceVcService', ['create']);
   let mockDialogData;
   let hostDebug: DebugElement;
   beforeEach(waitForAsync(() => {
     mockDialogData = new MockDialogData();
     TestBed.configureTestingModule({
-      declarations: [NewArbitraryCredentialComponent],
+      declarations: [NewIssueVcComponent],
       imports: [
         ReactiveFormsModule,
         FormsModule,
@@ -54,7 +54,7 @@ describe('NewArbitraryCredentialComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NewArbitraryCredentialComponent);
+    fixture = TestBed.createComponent(NewIssueVcComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
   });

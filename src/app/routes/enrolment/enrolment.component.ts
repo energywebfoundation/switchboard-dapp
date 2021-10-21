@@ -6,7 +6,7 @@ import { EnrolmentListComponent } from './enrolment-list/enrolment-list.componen
 import { MatTabGroup } from '@angular/material/tabs';
 import { NotificationService } from '../../shared/services/notification.service';
 import { MatDialog } from '@angular/material/dialog';
-import { NewArbitraryCredentialComponent } from '../../modules/issue-vc/new-arbitrary-credential/new-arbitrary-credential.component';
+import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 
 @Component({
   selector: 'app-enrolment',
@@ -120,7 +120,7 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   createVC() {
-    this.dialog.open(NewArbitraryCredentialComponent, {
+    this.dialog.open(NewIssueVcComponent, {
       width: '600px',
       maxWidth: '100%',
       disableClose: true

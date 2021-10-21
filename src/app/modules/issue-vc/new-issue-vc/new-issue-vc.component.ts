@@ -5,12 +5,12 @@ import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-new-arbitrary-credential',
-  templateUrl: './new-arbitrary-credential.component.html',
-  styleUrls: ['./new-arbitrary-credential.component.scss'],
+  selector: 'app-new-issue-vc',
+  templateUrl: './new-issue-vc.component.html',
+  styleUrls: ['./new-issue-vc.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NewArbitraryCredentialComponent implements OnInit {
+export class NewIssueVcComponent implements OnInit {
   fieldList = [];
   form = this.fb.group({
     did: ['', [Validators.required, HexValidators.isDidValid()]],
