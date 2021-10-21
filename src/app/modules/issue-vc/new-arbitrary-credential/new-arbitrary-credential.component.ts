@@ -15,12 +15,17 @@ export class NewArbitraryCredentialComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   form = this.fb.group({
     did: ['', [Validators.required, HexValidators.isDidValid()]],
-    name: ['', [Validators.required]]
+    name: ['', [Validators.required]],
+    type: ['', [Validators.required]]
   });
 
   constructor(private fb: FormBuilder,
               @Inject(MAT_DIALOG_DATA) public data: { did: string },
               private issuanceVcService: IssuanceVcService) {
+  }
+
+  isDidPredefined(): boolean {
+    return Boolean(this.data?.did);
   }
 
   getControl(control: string) {
@@ -50,6 +55,7 @@ export class NewArbitraryCredentialComponent implements OnInit {
   private setDid() {
     if (this.data?.did) {
       this.form.patchValue({did: this.data.did});
+      this.form.get('did').disable();
     }
   }
 }
