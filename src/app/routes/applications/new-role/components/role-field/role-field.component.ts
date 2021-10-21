@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./role-field.component.scss']
 })
 export class RoleFieldComponent {
-  @Input() dataSource: MatTableDataSource<any>;
+  @Input() fieldsList: MatTableDataSource<any>;
   @Input() isChecking: boolean;
 
   @Output() updateData = new EventEmitter<MatTableDataSource<any>>();
@@ -23,13 +23,13 @@ export class RoleFieldComponent {
   }
 
   addFieldHandler(fieldData) {
-    const data = [...this.dataSource.data, this._extractValidationObject(fieldData)];
+    const data = [...this.fieldsList.data, this._extractValidationObject(fieldData)];
     this.updateDataSource(data);
     this.hideForm();
   }
 
   updateFieldHandler(fieldData) {
-    const data = this.dataSource.data.map((item, index) => {
+    const data = this.fieldsList.data.map((item, index) => {
       if (this.fieldIndex === index) {
         return this._extractValidationObject(fieldData);
       }
@@ -42,19 +42,19 @@ export class RoleFieldComponent {
 
   editField(i: number) {
     this.fieldIndex = i;
-    this.fieldToEdit = this.dataSource.data[i];
+    this.fieldToEdit = this.fieldsList.data[i];
 
     this.showFieldsForm = true;
   }
 
   deleteField(i: number) {
-    const list = this.dataSource.data;
+    const list = this.fieldsList.data;
     list.splice(i, 1);
     this.updateDataSource([...list]);
   }
 
   moveUp(i: number) {
-    const list = this.dataSource.data;
+    const list = this.fieldsList.data;
     const tmp = list[i - 1];
 
     // Switch
@@ -65,7 +65,7 @@ export class RoleFieldComponent {
   }
 
   moveDown(i: number) {
-    const list = this.dataSource.data;
+    const list = this.fieldsList.data;
     const tmp = list[i + 1];
 
     // Switch

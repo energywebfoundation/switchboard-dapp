@@ -51,7 +51,7 @@ describe('RoleFieldComponent', () => {
     const dataSource = new MatTableDataSource([]);
 
     component = fixture.componentInstance;
-    component.dataSource = dataSource;
+    component.fieldsList = dataSource;
     hostDebug = fixture.debugElement;
     host = hostDebug.nativeElement;
     fixture.detectChanges();
@@ -133,7 +133,7 @@ describe('RoleFieldComponent', () => {
       selectFieldTypeAndLabel(1, 'Edit Label');
 
       component.updateData.subscribe(value => {
-        component.dataSource.data = [...value as any];
+        component.fieldsList.data = [...value as any];
         fixture.detectChanges();
       });
 
@@ -141,7 +141,7 @@ describe('RoleFieldComponent', () => {
       updateField.nativeElement.click();
       fixture.detectChanges();
 
-      const field = component.dataSource.data;
+      const field = component.fieldsList.data;
       expect(field[0].fieldType).toBe('number');
       expect(field[0].label).toBe('Edit Label');
       expect(component.showFieldsForm).toBeFalsy();
@@ -175,7 +175,7 @@ describe('RoleFieldComponent', () => {
   });
 
   it('should be run moveDown', () => {
-    component.dataSource.data = [1, 2, 3];
+    component.fieldsList.data = [1, 2, 3];
     spyOn(component, 'updateDataSource');
 
     component.moveDown(1);
@@ -184,7 +184,7 @@ describe('RoleFieldComponent', () => {
   });
 
   it('should be run moveUp', () => {
-    component.dataSource.data = [1, 2, 3];
+    component.fieldsList.data = [1, 2, 3];
     const i = 1;
     spyOn(component, 'updateDataSource');
 
@@ -194,7 +194,7 @@ describe('RoleFieldComponent', () => {
   });
 
   it('should be run deleteField', () => {
-    component.dataSource.data = [1, 2, 3];
+    component.fieldsList.data = [1, 2, 3];
     const i = 1;
     spyOn(component, 'updateDataSource');
 
@@ -223,7 +223,7 @@ describe('RoleFieldComponent', () => {
   function editFieldAdded() {
 
     component.updateData.subscribe(value => {
-      component.dataSource.data = [...value as any];
+      component.fieldsList.data = [...value as any];
       fixture.detectChanges();
     });
 

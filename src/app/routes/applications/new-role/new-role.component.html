@@ -207,7 +207,7 @@
 
         <mat-step [completed]="false">
           <ng-template matStepLabel>Set Fields</ng-template>
-          <app-role-field [dataSource]="dataSource" [isChecking]="isChecking"
+          <app-role-field [fieldsList]="dataSource" [isChecking]="isChecking"
                           (updateData)="dataSourceChangeHandler($event)">
           </app-role-field>
           <div class="d-flex justify-content-end mb-2">
