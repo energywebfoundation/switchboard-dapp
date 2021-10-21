@@ -6,7 +6,7 @@
         <mat-form-field class="mt-2" appearance="outline">
           <mat-select placeholder="Type" formControlName="fieldType" required data-qa-id="field-type">
             <mat-option *ngFor="let fieldType of FieldTypes; let i = index;"
-                        [attr.data-qa-id]="'fieldTypeOption-' + i"
+                        [attr.data-qa-id]="fieldType"
                         [value]="fieldType">
               {{ fieldType | uppercase }}
             </mat-option>
@@ -35,7 +35,7 @@
       </div>
       <div class="px-0">
         <mat-checkbox class="pl-3 md-create" formControlName="required">
-          <span class="mb-3 d-inline-flex">Required</span>
+          <span class="mb-3 d-inline-flex" data-qa-id="field-required">Required</span>
         </mat-checkbox>
       </div>
 
@@ -44,6 +44,7 @@
           <mat-label class="ml-3 pl-1">Min Length</mat-label>
           <mat-form-field class="mt-2" appearance="outline">
             <input matInput type="number" min="0" placeholder="Min Length" autocomplete="off"
+                   data-qa-id="field-min-length"
                    formControlName="minLength">
             <mat-error>Min Length must be greater than or equal to 0.</mat-error>
           </mat-form-field>
@@ -52,6 +53,7 @@
           <mat-label class="ml-3 pl-1">Max Length</mat-label>
           <mat-form-field class="mt-2" appearance="outline">
             <input matInput type="number" min="1" placeholder="Max Length" autocomplete="off"
+                   data-qa-id="field-max-length"
                    formControlName="maxLength">
             <mat-error>Max Length must be greater than 0.</mat-error>
           </mat-form-field>
@@ -60,6 +62,7 @@
           <mat-label class="ml-3 pl-1">Pattern</mat-label>
           <mat-form-field class="mt-2" appearance="outline">
             <input matInput placeholder="Pattern" autocomplete="off" formControlName="pattern"
+                   data-qa-id="pattern"
                    maxlength="500">
           </mat-form-field>
         </div>
@@ -70,6 +73,7 @@
           <mat-label class="ml-3 pl-1">Min Value</mat-label>
           <mat-form-field class="mt-2" appearance="outline">
             <input matInput type="number" placeholder="Min Value" autocomplete="off"
+                   data-qa-id="field-min-value"
                    formControlName="minValue">
           </mat-form-field>
         </div>
@@ -77,6 +81,7 @@
           <mat-label class="ml-3 pl-1">Max Value</mat-label>
           <mat-form-field class="mt-2" appearance="outline">
             <input matInput type="number" placeholder="Max Value" autocomplete="off"
+                   data-qa-id="field-max-value"
                    formControlName="maxValue">
           </mat-form-field>
         </div>
@@ -87,18 +92,20 @@
           <mat-label class="ml-3 pl-1">Min Date</mat-label>
           <mat-form-field class="mt-2" appearance="outline">
             <input [matDatepicker]="pickerMin" matInput placeholder="Min Date" autocomplete="off"
-                   formControlName="minDate" disabled>
+                   data-qa-id="field-min-date"
+                   formControlName="minDate">
             <mat-datepicker-toggle matSuffix [for]="pickerMin"></mat-datepicker-toggle>
-            <mat-datepicker #pickerMin disabled="false"></mat-datepicker>
+            <mat-datepicker #pickerMin></mat-datepicker>
           </mat-form-field>
         </div>
         <div class="px-0">
           <mat-label class="ml-3 pl-1">Max Date</mat-label>
           <mat-form-field class="mt-2" appearance="outline">
             <input [matDatepicker]="pickerMax" matInput placeholder="Max Date" autocomplete="off"
-                   formControlName="maxDate" disabled>
+                   data-qa-id="field-min-date"
+                   formControlName="maxDate">
             <mat-datepicker-toggle matSuffix [for]="pickerMax"></mat-datepicker-toggle>
-            <mat-datepicker #pickerMax disabled="false"></mat-datepicker>
+            <mat-datepicker #pickerMax></mat-datepicker>
           </mat-form-field>
         </div>
       </ng-container>

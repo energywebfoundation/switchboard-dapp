@@ -87,15 +87,73 @@ export class FieldFormComponent implements OnInit {
     if (this.fieldsForm.invalid) {
       return;
     }
-
-    this.added.emit(this.fieldsForm.value);
+    this.added.emit(this._extractValidationObject(this.fieldsForm.value));
   }
 
   update() {
     if (this.fieldsForm.invalid) {
       return;
     }
-    this.updated.emit(this.fieldsForm.value);
+    this.updated.emit(this._extractValidationObject(this.fieldsForm.value));
+  }
+
+  private _extractValidationObject(value: any) {
+    let retVal: any = value;
+
+    if (value && value.fieldType) {
+      let validation;
+      const {
+        required,
+        minLength,
+        maxLength,
+        pattern,
+        minValue,
+        maxValue,
+      } = value.validation;
+
+      let {
+        minDate,
+        maxDate
+      } = value.validation;
+
+      switch (value.fieldType) {
+        case 'text':
+          validation = {
+            required,
+            minLength,
+            maxLength,
+            pattern
+          };
+          break;
+        case 'number':
+          validation = {
+            required,
+            minValue,
+            maxValue
+          };
+          break;
+        case 'date':
+          minDate = minDate; // this._getDate(minDate);
+          maxDate = maxDate; // this._getDate(maxDate);
+          validation = {
+            required,
+            minDate,
+            maxDate
+          };
+          break;
+        case 'boolean':
+          validation = {
+            required
+          };
+          break;
+        default:
+          validation = value.validation;
+      }
+      retVal = JSON.parse(JSON.stringify(Object.assign(retVal, validation)));
+      delete retVal.validation;
+    }
+
+    return retVal;
   }
 
   private updateForm() {

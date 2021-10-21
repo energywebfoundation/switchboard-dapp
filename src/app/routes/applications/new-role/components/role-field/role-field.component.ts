@@ -20,7 +20,7 @@ export class RoleFieldComponent {
   }
 
   addFieldHandler(fieldData) {
-    const data = [...this.fieldsList, this._extractValidationObject(fieldData)];
+    const data = [...this.fieldsList, fieldData];
     this.updateDataSource(data);
     this.hideForm();
   }
@@ -28,7 +28,7 @@ export class RoleFieldComponent {
   updateFieldHandler(fieldData) {
     const data = this.fieldsList.map((item, index) => {
       if (this.fieldIndex === index) {
-        return this._extractValidationObject(fieldData);
+        return fieldData;
       }
       return item;
     });
@@ -78,65 +78,6 @@ export class RoleFieldComponent {
 
   updateDataSource(data) {
     this.updateData.emit(data);
-  }
-
-  private _extractValidationObject(value: any) {
-    let retVal: any = value;
-
-    if (value && value.fieldType) {
-      let validation;
-      const {
-        required,
-        minLength,
-        maxLength,
-        pattern,
-        minValue,
-        maxValue,
-      } = value.validation;
-
-      let {
-        minDate,
-        maxDate
-      } = value.validation;
-
-      switch (value.fieldType) {
-        case 'text':
-          validation = {
-            required,
-            minLength,
-            maxLength,
-            pattern
-          };
-          break;
-        case 'number':
-          validation = {
-            required,
-            minValue,
-            maxValue
-          };
-          break;
-        case 'date':
-          minDate = minDate; // this._getDate(minDate);
-          maxDate = maxDate; // this._getDate(maxDate);
-          validation = {
-            required,
-            minDate,
-            maxDate
-          };
-          break;
-        case 'boolean':
-          validation = {
-            required
-          };
-          break;
-        default:
-          validation = value.validation;
-      }
-      retVal = JSON.parse(JSON.stringify(Object.assign(retVal, validation)));
-      delete retVal.validation;
-    }
-
-    return retVal;
   }
 
   private hideForm() {
