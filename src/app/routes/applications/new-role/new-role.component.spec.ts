@@ -73,17 +73,8 @@ describe('NewRoleComponent', () => {
     expect(component.issuerList).toEqual(['1']);
   });
 
-  it('should be run formResetHandler', () => {
-    spyOn(component.fieldsForm, 'reset');
-
-    component.formResetHandler();
-
-    expect(component.fieldsForm.reset).toHaveBeenCalled();
-  });
-
   it('should be run clearSearchTxt', () => {
     const testValue = 'roleForm';
-    const expectedResult = false;
     component.roleControl = fb.control({testValue});
 
     component.clearSearchTxt();
