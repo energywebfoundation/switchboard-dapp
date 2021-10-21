@@ -1,7 +1,7 @@
 import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { QrCodeScannerComponent } from '../components/qr-code-scanner.component';
-import { truthy } from '@operators';
+import { filter } from 'rxjs/operators';
 
 @Directive({
   selector: '[appQrCodeScanner]'
@@ -19,7 +19,9 @@ export class QrCodeScannerDirective {
       maxHeight: '250px',
       maxWidth: '100%',
     }).afterClosed()
-      .pipe(truthy())
+      .pipe(
+        filter(v => v?.value)
+      )
       .subscribe((data: { value: string }) => {
         this.scannedValue.emit(data);
       });
