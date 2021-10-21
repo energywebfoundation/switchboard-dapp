@@ -20,7 +20,7 @@ export class FieldFormComponent implements OnInit {
   @Output() updated = new EventEmitter();
   @Output() canceled = new EventEmitter();
 
-  isEditFieldForm;
+  editMode: boolean = false;
   FieldTypes = FIELD_TYPES;
   fieldsForm: FormGroup = this.fb.group({
     fieldType: ['', Validators.required],
@@ -133,8 +133,6 @@ export class FieldFormComponent implements OnInit {
           };
           break;
         case 'date':
-          minDate = minDate; // this._getDate(minDate);
-          maxDate = maxDate; // this._getDate(maxDate);
           validation = {
             required,
             minDate,
@@ -158,8 +156,7 @@ export class FieldFormComponent implements OnInit {
 
   private updateForm() {
     if (this.data) {
-      this.isEditFieldForm = true;
-      // TODO:: check if this is needed. Maybe patch is enough.
+      this.editMode = true;
       const fieldKeys = Object.keys(this.data);
       const valueToPatch = {};
       fieldKeys.map(fieldKey => {
@@ -168,7 +165,6 @@ export class FieldFormComponent implements OnInit {
       });
 
       this.fieldsForm.get('validation').patchValue(valueToPatch);
-      // this.fieldsForm.patchValue(this.data);
     }
   }
 

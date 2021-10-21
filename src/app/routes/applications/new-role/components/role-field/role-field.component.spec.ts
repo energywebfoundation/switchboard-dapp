@@ -208,10 +208,6 @@ describe('RoleFieldComponent', () => {
       fixture.detectChanges();
     });
 
-    const {addField} = getSelectors(hostDebug);
-    addField.nativeElement.click();
-    fixture.detectChanges();
-
     const {editField} = getSelectors(hostDebug);
     editField.nativeElement.click();
     fixture.detectChanges();
@@ -237,8 +233,8 @@ describe('RoleFieldComponent', () => {
 const getSelectors = (hostDebug: DebugElement) => {
   return {
     showField: hostDebug.query(By.css('[data-qa-id=show-field]')),
-    addField: hostDebug.query(By.css('[data-qa-id="add-field"]')),
-    updateField: hostDebug.query(By.css('[data-qa-id="update-field"]')),
+    addBtn: hostDebug.query(By.css('[data-qa-id="add-field"]')),
+    updateBtn: hostDebug.query(By.css('[data-qa-id="update-field"]')),
     fieldtypeSelect: hostDebug.query(By.css('[data-qa-id="field-type"]')),
     fieldtype: hostDebug.query(By.css('.mat-select-trigger')),
     fieldLabel: hostDebug.query(By.css('[data-qa-id="field-label"]')),
