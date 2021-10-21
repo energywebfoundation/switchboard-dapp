@@ -16,7 +16,6 @@ export class RoleFieldComponent {
   fieldToEdit = null;
 
   showAddFieldForm() {
-    this.hideForm();
     this.showFieldsForm = true;
   }
 
