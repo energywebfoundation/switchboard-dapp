@@ -51,7 +51,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   connectToEKC() {
-    this.login(WalletProvider.EKC)
+    this.login(WalletProvider.EKC);
   }
 
   private login(provider: WalletProvider) {

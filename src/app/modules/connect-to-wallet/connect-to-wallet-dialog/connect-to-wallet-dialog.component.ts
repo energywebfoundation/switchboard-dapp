@@ -26,7 +26,14 @@ export class ConnectToWalletDialogComponent {
     this.login(WalletProvider.MetaMask);
   }
 
+  connectToEKC() {
+    this.login(WalletProvider.EKC);
+  }
+
   private login(provider: WalletProvider) {
-    this.store.dispatch(AuthActions.loginViaDialog({provider, navigateOnTimeout: this.data?.navigateOnTimeout ?? true}));
+    this.store.dispatch(AuthActions.loginViaDialog({
+      provider,
+      navigateOnTimeout: this.data?.navigateOnTimeout ?? true
+    }));
   }
 }
