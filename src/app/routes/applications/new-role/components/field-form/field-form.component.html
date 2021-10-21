@@ -28,7 +28,7 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="card card-default d-flex shadow-none px-0" *ngIf="fieldsForm?.value?.fieldType"
+    <div class="card card-default d-flex shadow-none px-0" *ngIf="isFieldTypeDefined()"
          formGroupName="validation">
       <div class="pl-3 pb-2">
         <mat-label class="pl-1">Validation</mat-label>
@@ -39,7 +39,7 @@
         </mat-checkbox>
       </div>
 
-      <ng-container *ngIf="fieldsForm?.value?.fieldType === 'text'">
+      <ng-container *ngIf="isText">
         <div class="px-0">
           <mat-label class="ml-3 pl-1">Min Length</mat-label>
           <mat-form-field class="mt-2" appearance="outline">
@@ -65,7 +65,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="fieldsForm?.value?.fieldType === 'number'">
+      <ng-container *ngIf="isNumber">
         <div class="px-0">
           <mat-label class="ml-3 pl-1">Min Value</mat-label>
           <mat-form-field class="mt-2" appearance="outline">
@@ -82,7 +82,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="fieldsForm?.value?.fieldType === 'date'">
+      <ng-container *ngIf="isDate">
         <div class="px-0">
           <mat-label class="ml-3 pl-1">Min Date</mat-label>
           <mat-form-field class="mt-2" appearance="outline">
