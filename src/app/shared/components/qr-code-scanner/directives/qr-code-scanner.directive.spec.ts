@@ -39,7 +39,7 @@ describe('QrCodeScannerDirective', () => {
   });
 
   it('should check if emits value', () => {
-    dialogSpy.open.and.returnValue({afterClosed: () => of({did: 'did'})});
+    dialogSpy.open.and.returnValue({afterClosed: () => of({value: 'did'})});
     getElement(hostDebug)('scanner').nativeElement.click();
 
     expect(component.scanned).toBeTrue();
