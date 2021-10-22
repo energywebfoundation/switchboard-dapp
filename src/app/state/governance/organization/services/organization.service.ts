@@ -26,6 +26,8 @@ export class OrganizationService {
           const servicesNames = providers.map((service) => service.org);
           return (organizations as IOrganization[]).map((org: IOrganization) => ({
             ...org,
+            containsApps: org?.apps?.length > 0,
+            containsRoles: org?.roles?.length > 0,
             isProvider: servicesNames.includes(org.namespace)
           }));
         }),

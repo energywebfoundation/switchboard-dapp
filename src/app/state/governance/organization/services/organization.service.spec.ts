@@ -68,6 +68,34 @@ describe('OrganizationService', () => {
     }));
   });
 
+  it('should check if containsApp and containsRoles are set', (done) => {
+    const org = {namespace: 'test', apps: [{}], roles: [{}]};
+    iamServiceSpy.isOwner.and.returnValue(of(true));
+    iamServiceSpy.getOrganizationsByOwner.and.returnValue(of([org]));
+    stakingServiceSpy.allServices.and.returnValue(of([{org: 'test'}]));
+
+    service.getOrganizationList().subscribe((orgs) => {
+      expect(orgs.length).toEqual(1);
+      expect(orgs[0].containsRoles).toBeTruthy();
+      expect(orgs[0].containsApps).toBeTruthy();
+      done();
+    });
+  });
+
+  it('should check if containsApp and containsRoles are false when org do not have apps and roles', (done) => {
+    const org = {namespace: 'test'};
+    iamServiceSpy.isOwner.and.returnValue(of(true));
+    iamServiceSpy.getOrganizationsByOwner.and.returnValue(of([org]));
+    stakingServiceSpy.allServices.and.returnValue(of([{org: 'test'}]));
+
+    service.getOrganizationList().subscribe((orgs) => {
+      expect(orgs.length).toEqual(1);
+      expect(orgs[0].containsRoles).toBeFalse();
+      expect(orgs[0].containsApps).toBeFalse();
+      done();
+    });
+  });
+
   describe('getHistory', () => {
     it('should get history and check if suborgs belongs to current user', (done) => {
       iamServiceSpy.getOrgHistory.and.returnValue(of({namespace: 'test', subOrgs: [{isOwnedByCurrentUser: true}]}));
