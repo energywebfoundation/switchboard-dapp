@@ -1,7 +1,5 @@
 .did-wrapper {
   margin-top: 7px;
-  background-color: #231f32;
-  color: #a6a5ab;
   letter-spacing: 0.3px;
   border-radius: 12px;
   padding: 8px 12px;
@@ -12,11 +10,5 @@
     height: 18px;
     font-size: 14px;
     padding-top: 2px;
-  }
-
-  &:hover {
-    mat-icon {
-      color: #33CBCB;
-    }
   }
 }

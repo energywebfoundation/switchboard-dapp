@@ -10,11 +10,9 @@
 }
 
 th.mat-header-cell {
-    background-color: #12162e;
     font-family: 'Rajdhani', sans-serif;
     font-weight: 600 !important;
     font-size: 12px;
-    color: #FFFFFF !important;
     text-transform: uppercase;
     border-bottom-style: none !important;
 } 
@@ -23,9 +21,6 @@ th.mat-header-cell {
     letter-spacing: 1px;
 }
 
-.mat-header-cell, .mat-cell, .mat-footer-cell {
-    color: #FFF !important;
-}
 
 td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:last-of-type {
     padding-right: 10px !important;
@@ -44,14 +39,6 @@ tr.mat-header-row {
 
 tr.mat-row {
     border-bottom: 5px solid #13172f;
-}
-
-.mat-row:nth-child(odd){
-    background-color: #201E2B;
-}
-
-.mat-row:nth-child(even){
-    background-color: #1E1C29;
 }
 
 .mat-sort-header-button {

@@ -816,23 +816,3 @@ _:-ms-lang(x),
     background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #8D7DB6; 
-    border-radius: 10px;
-}
-
-::-moz-scrollbar-thumb {
-    background: #8D7DB6; 
-    border-radius: 10px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #33CBCB; 
-}
-
-::-moz-scrollbar-thumb:hover {
-    background: #33CBCB; 
-}

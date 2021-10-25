@@ -3,21 +3,23 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ThemesService {
 
-  readonly defaultTheme = 'B';
+  readonly defaultTheme = 'C';
   private styleTag: any;
 
   constructor() {
     this.createElement();
-    this.setTheme('B');
+    this.setTheme('C');
   }
 
-  setTheme(name: 'A' | 'B') {
+  setTheme(name: 'A' | 'B' | 'C') {
     switch (name) {
       case 'A':
         return this.injectStylesheet('theme-a.css');
       case 'B':
+        return this.injectStylesheet('theme-b.css');  
+      case 'C':
       default:
-        return this.injectStylesheet('theme-b.css');
+        return this.injectStylesheet('theme-c.css');
     }
   }
 

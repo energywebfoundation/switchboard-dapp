@@ -119,10 +119,6 @@ ul {
   width: 300px;
 }
 
-mat-drawer {
-  background-color: #242330 !important;
-}
-
 .mat-expansion-panel {
   background: #353540;
   color: #FFF;
@@ -169,8 +165,6 @@ mat-drawer {
 }
 
 .card-search-body {
-  background-color: #363443;
-  color: #FFF;
   border-radius: 5px;
 
   h4 {
@@ -246,8 +240,6 @@ mat-drawer {
   }
 
   .card-icon {
-    background: rgba(132,131,144,0.06);
-    border: 1px solid #232131;
     border-radius: 5px;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.14);
     cursor: pointer;
@@ -256,18 +248,13 @@ mat-drawer {
     transition: top ease 0.5s;
     
     &:hover {
-      background: #A567FF;
-      border: 1px solid #c6a0ff;
       top: -5px; 
       box-shadow: rgba(0,0,0,0.1) 0px 20px 20px 0px;
     }
   }
 
   .card-icon-disabled {
-    background: rgb(24 21 35);
-    border: 1px solid rgb(24 21 35);
     border-radius: 5px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
     position: relative;
     top: 0;
   }
@@ -281,7 +268,6 @@ mat-drawer {
   }
 
   .card-filter {
-    background-color: #302e3d;
     border-top-width: 0 !important; 
     border-color: transparent !important;
     box-shadow: 0 1px 8px 0 rgba(0,0,0,0.28);
@@ -292,7 +278,6 @@ mat-drawer {
     padding: 6px 20px 15px 20px;
 
     .color-white {
-      color: #FFF;
       font-size: 12px;
       font-weight: 500 !important;
       font-family: 'Source Sans Pro', sans-serif !important;
@@ -377,7 +362,6 @@ mat-drawer {
   }
 
   .color-white {
-    color: #FFF;
     font-weight: 500;
   }
 
@@ -386,7 +370,6 @@ mat-drawer {
   }
 
   .color-link {
-    color: #B6B2E1;
     font-weight: 600;
     font-family: 'Rajdhani', sans-serif;
   }
@@ -619,3 +602,4 @@ mat-drawer {
       margin-top: 30%;
     }
   }
+

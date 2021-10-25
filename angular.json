@@ -46,6 +46,11 @@
                 "input": "src/app/shared/styles/themes/theme-b.scss",
                 "bundleName": "theme-b",
                 "inject": true
+              },
+              {
+                "input": "src/app/shared/styles/themes/theme-c.scss",
+                "bundleName": "theme-c",
+                "inject": true
               }
             ],
             "scripts": [

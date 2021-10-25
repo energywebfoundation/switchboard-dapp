@@ -1,3 +1,5 @@
+// Stedin Theme
+
 // Bootstrap
 @import "../bootstrap/functions";
 @import "../bootstrap/variables";
@@ -5,21 +7,41 @@
 @import '../app/variables';
 @import '../app/material/colors';
 
+// VARIABLES
+
+// Cutoms Gray colors for theme
+$stedin-gray:           #4D4D4D;
+$stedin-gray-light:     #97999B;
+$stedin-gray-lighter:   #EAEAEA;
+$stedin-gray-ultralight:#F0F0F0;
+
+// Custom brand colors for theme
+$stedin-yellow:         #FFD100;
+$stedin-yellow-light:   #FFE053;
+
+$stedin-blue:           #62B5E5;
+$stedin-orange:         #FF9614;
+$stedin-violet:         #009688;
+$stedin-green:          #BFB800;
+$stedin-purple:         #BB76CF;
+$stedn-red:             #EB5764;  
+$white:                 #FFFFFF;  
+
 
 // LAYOUT
 
-$content-bg:                    #181423;
-$aside-bg:                      #181423;
+$content-bg:                    $stedin-gray-ultralight;
+$aside-bg:                      $stedin-gray-ultralight;
 
 // NAVBAR TOP
 
-$nav-top-bg:                     #181523;
+$nav-top-bg:                      $stedin-gray-light;
 $nav-top-bg-start:              $nav-top-bg;
 $nav-top-bg-end:                $nav-top-bg;
 $nav-header-bg:                 transparent;
 
-$nav-top-item:                  #fff;
-$nav-top-item-active:           darken(#FFF, 60%);
+$nav-top-item:                  $white;
+$nav-top-item-active:           darken($white, 60%);
 
 // SIDEBAR
 
@@ -41,7 +63,7 @@ $sidebar-label-color:             $sidebar-item-color;
 
 // OFFSIDEBAR
 
-$offsidebar-bg:           #fff;
+$offsidebar-bg:           $white;
 $offsidebar-border-color: greyscale(darken($offsidebar-bg, 20%));
 $offsidebar-color:        $body-color;
 
@@ -61,7 +83,7 @@ body, .wrapper .section-container {
    Component: top-navbar
  ========================================================================== */
 .topnavbar {
-    background-color: $nav-top-bg;
+    background-color: $stedin-gray-ultralight;
 
     @include media-breakpoint-up(lg) {
         border-bottom: 1px solid #ffffff08;
@@ -79,9 +101,9 @@ body, .wrapper .section-container {
 
     .navbar-nav > .nav-item > .nav-link,
     .navbar-nav > .nav-item.show > .nav-link {
-        color: #9080BA;
+        color: $stedin-gray;
         &:hover, &:focus {
-            color: $inverse;
+            color: $stedin-blue;
         }
     }
 
@@ -94,15 +116,15 @@ body, .wrapper .section-container {
         &,
         &:hover,
         &:focus {
-            color: #33CBCB;
+            color: $stedin-yellow;
             background-color: transparent;
         }
 
         @include media-breakpoint-up(lg) {
-            border-bottom: 1px solid #33cbcb;
+            border-bottom: 2px solid $stedin-yellow;
         }
         @include media-breakpoint-down(sm) {
-            border-top: 1px solid #33cbcb;
+            border-top: 1px solid $stedin-yellow;
         }
     }
 
@@ -112,11 +134,15 @@ body, .wrapper .section-container {
 }
 
 .header-notification-container,.list-group-item {
-    background-color: #2a2a37;
+    background-color: $white;
+}
+
+.list-group-item-action:hover {
+    background-color: $white;
 }
 
 .logo-wrapper {
-    background: url("/assets/img/ewflex-logo.svg") no-repeat;
+    background: url("/assets/img/stedin-log.png") no-repeat;
     margin: 0 auto;
     width: 110px;
     max-width: 100%;
@@ -177,7 +203,25 @@ body, .wrapper .section-container {
 }
 
 .mat-menu-panel {
-    background: #2A2837;
+    background: $white;
+}
+
+.account-title, .account-name {
+    color: $stedin-gray;
+}
+
+.did-wrapper {
+    background-color: #D6D6D6;
+    color: #4B4B4B;
+    &:hover {
+        mat-icon {
+          color: #4B4B4B;
+        }
+      }
+}
+
+ul.menu-top {
+    background-color: transparent;
 }
 
 .sidebar-subnav {
@@ -227,7 +271,7 @@ body, .wrapper .section-container {
 }
 
 .card-default {
-    background-color: #242230 !important;
+    background-color: $white !important;
 
     .card-header {
         background-color: #242230 !important;
@@ -235,45 +279,44 @@ body, .wrapper .section-container {
 }
 
 .card-icon {
-    background: rgba(132,131,144,0.06);
-    border: 1px solid #232131;
+    background: $white;
+    border: 1px solid transparent;
     &:hover {
-      background: #A567FF;
-      border: 1px solid #c6a0ff;
+      background: $stedin-yellow;
+      border: 1px solid transparent;
     }
-}
+  }
 
 .card-icon-disabled {
-    background: rgb(24 21 35);
-    border: 1px solid rgb(24 21 35);
+    background: $stedin-gray-lighter;
+    border: 1px solid transparent;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
 }
 
 .card-search-body {
-    background-color: #363443;
-    color: #FFF;
+    background-color: $white;
+    color: $stedin-gray;
 }
 
 mat-drawer {
-    background-color: #242330 !important;
+    background-color: $white !important;
 }
 
 .mat-expansion-panel {
-    background: #353540;
-    color: #FFF;
+    background: $white;
+    color: $stedin-gray;
 }
 
 .img-container {
-    background-color: #201F28 !important;
+    background-color: $white !important;
 }
 
 .card-filter {
-    background-color: #302e3d;
-
+    background-color: $white;
     .color-white {
-      color: #FFF;
+      color: #000000;
     }
-  }
+}
 
 .bg-register {
 background-image: url("/assets/img/bg-energy.svg");
@@ -288,12 +331,12 @@ background-image: url("/assets/img/bg-energy.svg");
  ========================================================================== */
 
  th.mat-header-cell {
-    background-color: #24222F !important;
-    color: #FFFFFF !important;
+    background-color: $white!important;
+    color: $stedin-gray !important;
 } 
 
 .mat-row:nth-child(odd){
-    background-color: #2A2833 important;
+    background-color: $white important;
 }
 
 tr.mat-row {
@@ -301,15 +344,15 @@ tr.mat-row {
 }
 
 .mat-row:nth-child(odd){
-    background-color: #201E2B;
+    background-color: #F8F8F8;
 }
 
 .mat-row:nth-child(even){
-    background-color: #1E1C29;
+    background-color: $white;
 }
 
 tr.mat-row {
-    border-bottom: 5px solid #13172f;
+    border-bottom: 5px solid $white;
 }
 
 /* ========================================================================
@@ -317,31 +360,23 @@ tr.mat-row {
  ========================================================================== */
 
 .mat-tab-labels {
-    background-color: #120e19;
+    background-color: #DEDEDE;
 }
 
 .mat-tab-label {
-    color: #9080BA;
+    color: $stedin-gray-light;
 }
 
 .mat-tab-group.mat-primary .mat-ink-bar {
-    background-color: #282239;
+    background-color: $white;
 }
 
 .mat-header-cell, .mat-cell, .mat-footer-cell {
-    color: #FFF !important;
+    color: $stedin-gray !important;
 }
 
 .mat-tab-label-active {
-    color: #FFFFFF;
-}
-
-.mat-row:nth-child(odd){
-    background-color: #201E2B;
-}
-
-.mat-row:nth-child(even){
-    background-color: #1E1C29;
+    color: $stedin-gray;
 }
 
 /* ========================================================================
@@ -353,13 +388,13 @@ tr.mat-row {
 }
 
 .mat-dialog-container {
-    background: #2A2837;
-    color: #FFFFFF;
+    background: $white;
+    color: $stedin-gray;
 }
 
 .mat-dialog-title {
-    color: #bcb1e0;
-    border-bottom: 1px solid #363546;
+    color: $stedin-gray;
+    border-bottom: 1px solid #DFDFDF;
 } 
 
 .mat-dialog-container .mat-icon-button {
@@ -371,44 +406,27 @@ tr.mat-row {
 }
 
 .image-wrapper {
-    border: 1px solid #353540;
+    border: 1px solid $stedin-gray-light;
 }
 
 .mat-divider {
-    border-top-color: #D8D8D8 !important;
+    border-top-color: #000000 !important;
     opacity: 0.1;
 }
 
 .mat-step-header .mat-step-label.mat-step-label-active {
-    color: #FFF;
+    color: $stedin-gray;
 }
 
 .header-notification-container {
-    background-color: #2a2a37;
+    background-color: $white;
 }
-
-.account-title, .account-name {
-    color: #FFF;
-}
-
-.did-wrapper {
-    background-color: #231f32;
-    color: #a6a5ab;
-
-    &:hover {
-      mat-icon {
-        color: #33CBCB;
-      }
-    }
-  }
-  
-  
 
 // Stepper
 
 .mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
-    border: 1px solid #a467ff !important;
-    color: #a467ff !important;
+    border: 1px solid $stedin-yellow !important;
+    color: $stedin-yellow !important;
 }
 
 .mat-step-header .mat-step-icon-state-edit {
@@ -416,29 +434,29 @@ tr.mat-row {
 }
 
 .mat-step-header .mat-step-icon-selected {
-    background-color: #a467ff!important;
-    border: 1px solid #a467ff !important;
-    color: #FFF !important;
+    background-color: $stedin-yellow!important;
+    border: 1px solid $stedin-yellow !important;
+    color: $stedin-gray !important;
 }
 
 .mat-step-header .mat-step-icon-state-edit {
-    background-color: #a467ff!important;
-    border: 1px solid #a467ff !important;
-    color: #FFF !important;
+    background-color: $stedin-yellow!important;
+    border: 1px solid $stedin-yellow !important;
+    color: $stedin-gray !important;
 }
 
 .mat-step-header .mat-step-icon {
-    border: 1px solid #9080BA;
+    border: 1px solid $stedin-gray;
     background-color: transparent;
-    color: #9080BA;
+    color: $stedin-gray;
 }
 
 .mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
-    color: #9080BA;
+    color: $stedin-gray;
 }
 
 .mat-stepper-vertical-line::before {
-    border-left-color: #9080BA;
+    border-left-color: $stedin-gray;
 }
 
 /* ========================================================================
@@ -455,83 +473,98 @@ tr.mat-row {
 
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
-    background: #1C1726;
-    color: #52436E;
+    background: $white;
+    color: $stedin-gray-light;
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: $stedin-gray;
 }
 
 .mat-input-element {
-    color: #FFF;
+    color: $white;
     font-size: 14px;
 }
 
-  .mat-form-field-outline {
-    background: #181522 !important;
-    color: #554675;
+.mat-form-field-outline {
+    background: $white !important;
+    color: $stedin-gray;
 }
 
 .mat-select-value {
-    color: #ffffff;
+    color: $stedin-gray;
 }
 
 .mat-select-arrow {
-    color: #4D4D4D;
+    color: $stedin-gray;
 }
-
-mat-label {
-    color: #FFF;
-}
-
-// Button
 
 .btn-primary {
-    background-color: #33CBCB;
+    background-color: $stedin-yellow;
+    color: $stedin-gray;
 
     &:hover {
-        background-color: #5bd6d6;
-    }
-}
-
-.btn-color-primary {
-    color: #33CBCB;
-}
-
-.mat-stroked-filter-button {
-    border-color: #33CBCB !important;
-    color: #33CBCB !important;
-
-    &:hover {
-        border-color: #33CBCB !important;
-        color: #33CBCB !important; 
+        background-color: $stedin-yellow;
+        color: $stedin-gray;
     }
 }
 
 .md-search.mat-form-field .mat-input-element {
-    color: #FFFFFF;
+    color: #000000;
+}
+
+mat-label {
+    color: $stedin-gray;
+}
+
+.border-bottom-1 {
+    border-bottom: 1px solid transparent;
+}
+
+.color-link {
+    color: $stedin-gray;
+}
+  
+
+// Button 
+
+.btn-color-primary {
+    color: $stedin-gray;
 }
 
 .mat-stroked-button {
-    border-color: #33CBCB !important;
-    color: #33CBCB !important;
+    border-color: $stedin-gray !important;
+    color: $stedin-gray !important;
     text-transform: uppercase;
 
     &:hover {
-        border-color: #33CBCB !important;
-        color: #33CBCB!important; 
-    }
-}
-
-.mat-stroked-table-button {
-    border-color: #8677ae !important;
-    color: #8677ae !important;
-
-    &:hover {
-        border-color: #33CBCB !important;
-        color: #33CBCB !important; 
+        border-color: #000000 !important;
+        color: #000000!important; 
     }
 }
 
 .btn-color-primary {
-    color: #33CBCB !important;
+    color: $stedin-gray !important;
+}
+
+.mat-stroked-filter-button {
+    border-color: $stedin-gray !important;
+    color: $stedin-gray !important;
+
+    &:hover {
+        border-color: $stedin-blue !important;
+        color: $stedin-blue !important; 
+    }
+}
+
+.mat-stroked-table-button {
+    border-color: $stedin-gray !important;
+    color: $stedin-gray !important;
+
+    &:hover {
+        border-color: $stedin-blue !important;
+        color: $stedin-blue !important; 
+    }
 }
 
 .btn-color-disabled {
@@ -539,100 +572,85 @@ mat-label {
 }
 
 .btn-color-error {
-    color: #C82E2E !important;
+    color: $stedn-red !important;
 }
 .btn-color-success {
-    color: #0FB544;
+    color: $stedin-green;
 }
 .btn-color-warn {
-    color: #FFA500;
-}
-
-.mat-raised-button[disabled] {
-    color: rgba(255, 255, 255, 0.3) !important;
-    background-color: rgb(33 29 47) !important;    
+    color: $stedin-orange;
 }
 
 .icon-color {
     color: #9080BA;
 }
 
-
 .sub-btn {
-    border: 1px solid #A567FF;
-    color: rgba(255, 255, 255, 1);
+    border: 1px solid $stedin-blue;
+    color: $stedin-gray;
 }
 
 .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
-    background-color: #33cbcb;
-    color: #FFF;
+    background-color: $stedin-yellow;
+    color: $stedin-gray;
 }
 
 .mat-select-placeholder {
-    color: #9080bb !important;
+    color: rgba(255,255,255,0.6) !important;
 }
 
 .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
-    color: #673ab7;
+    color: $stedin-gray;
 }
 
 .mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
-    background: rgba(0,0,0,.12);
+    background: rgba(255,255,255,.12);
 }
 
 // dashboard
 
 .color-white {
-    color: #FFFFFF;
+    color: $stedin-gray;
 }
   
 .mat-option:nth-child(odd) {
-    background: #383746;
+    background: $stedin-gray-light;;
 }
 
 .mat-option {
-    color: #FFF;
-    background: #343242;
+    color: $stedin-gray;
+    background: $white;
 }
 
 .mat-option:hover:not(.mat-option-disabled), .mat-option:focus:not(.mat-option-disabled) {
-    background: rgba(218,218,218,.08);
+    background: rgb(215,215,215);
 }
 
 .mat-option.mat-active {
-    color: #FFF;
-    background: #2A2837;
-}
+    color: #000000;
+    background: rgb(215,215,215);
+  }
   
-  .mat-autocomplete-panel {
-    background: #2A2837;
-}
+.mat-autocomplete-panel {
+    background: #f7f7f7;
+  }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #8D7DB6; 
+    background: #7E7E7E; 
     border-radius: 10px;
 }
 
 ::-moz-scrollbar-thumb {
-    background: #8D7DB6; 
+    background: #7E7E7E;
     border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #33CBCB; 
+    background: #646363; 
 }
 
 ::-moz-scrollbar-thumb:hover {
-    background: #33CBCB; 
+    background: #646363; 
 }
-
-.border-bottom-1 {
-    border-bottom: 1px solid #3c3b4c;
-}
-
-.color-link {
-    color: #B6B2E1;
-}
-  
