@@ -32,7 +32,8 @@
               "src/favicon.ico",
               "src/assets",
               "src/manifest.webmanifest",
-              "src/manifest.json"
+              "src/manifest.json",
+              "src/env.js"
             ],
             "styles": [
               "src/app/core/preloader/preloader.scss",
