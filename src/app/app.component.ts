@@ -6,6 +6,7 @@ import { SettingsService } from './core/settings/settings.service';
 import { UrlService } from './shared/services/url-service/url.service';
 import { Store } from '@ngrx/store';
 import * as AuthActions from './state/auth/auth.actions';
+import { EnvService } from './shared/services/env/env.service';
 
 @Component({
   selector: 'app-root',
@@ -58,7 +59,9 @@ export class AppComponent implements OnInit {
               private matIconRegistry: MatIconRegistry,
               private domSanitizer: DomSanitizer,
               private urlHistoryService: UrlService,
+              private env: EnvService,
               private store: Store) {
+    console.log(env.theme);
     this.matIconRegistry.addSvgIcon(
       'wallet-icon',
       this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/img/icons/wallet-icon.svg')

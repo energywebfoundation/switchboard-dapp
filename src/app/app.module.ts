@@ -20,6 +20,7 @@ import { MenuService } from './core/menu/menu.service';
 import { menu } from './routes/menu';
 import { FEAT_TOGGLE_TOKEN, getEnv } from './shared/feature-toggle/feature-toggle.token';
 import { StoreRootModule } from './state/store-root.module';
+import { EnvServiceProvider } from './shared/services/env/env.service.factory';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -34,7 +35,8 @@ const providers: Provider[] = [
       configService.loadConfigData(),
     multi: true,
   },
-  {provide: FEAT_TOGGLE_TOKEN, useFactory: getEnv}
+  {provide: FEAT_TOGGLE_TOKEN, useFactory: getEnv},
+  EnvServiceProvider
 ];
 
 if (environment.SENTRY_DNS) {
