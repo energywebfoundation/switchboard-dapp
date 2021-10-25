@@ -10,6 +10,21 @@
             Register Asset
           </button>
         </app-table-heading>
+        <div class="card card-default mb-3 pb-0">
+          <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
+            <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
+              <mat-form-field appearance="outline" floatPlaceholder="never"
+                              class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
+                              matTooltip="Filter by did - it will filter through Asset Did">
+                <input matInput placeholder="DID" [formControl]="searchByDid">
+                <app-scanner-button matSuffix class="" aria-label="Scan DID" appQrCodeScanner
+                                    (scannedValue)="updateSearchByDidValue($event)">
+                  <mat-icon>qr_code_2</mat-icon>
+                </app-scanner-button>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
         <app-asset-list #listMyAssets [listType]="AssetListType.MY_ASSETS"></app-asset-list>
       </div>
     </div>
