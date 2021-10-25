@@ -6,7 +6,6 @@ import { AssetListComponent } from './asset-list/asset-list.component';
 import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
-import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-assets',
@@ -18,7 +17,7 @@ export class AssetsComponent implements AfterViewInit {
   @ViewChild('listMyAssets') listMyAssets: AssetListComponent;
   @ViewChild('listOfferedAssets') listOfferedAssets: AssetListComponent;
   @ViewChild('listPreviousAssets') listPreviousAssets: AssetListComponent;
-  searchByDid = new FormControl(undefined);
+
   AssetListType = AssetListType;
 
   constructor(private dialog: MatDialog,
@@ -87,10 +86,6 @@ export class AssetsComponent implements AfterViewInit {
 
   setSelectedTab(i: number) {
     this.assetsTabGroup.selectedIndex = i;
-  }
-
-  updateSearchByDidValue(e) {
-
   }
 
   private initDefault(index?: number) {

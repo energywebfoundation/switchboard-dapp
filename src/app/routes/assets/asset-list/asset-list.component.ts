@@ -41,10 +41,10 @@ export interface AssetList extends Asset {
 })
 export class AssetListComponent implements OnInit, OnDestroy {
   @Input() listType: number;
+  @Input() showDidFilter = false;
   @ViewChild(MatSort) sort: MatSort;
   @Output() selectTab = new EventEmitter<any>();
-  @Input() didFilterControl!: FormControl;
-
+  searchByDid = new FormControl(undefined);
   AssetListType = AssetListType;
 
   dataSource: MatTableDataSource<AssetList> = new MatTableDataSource([]);
@@ -257,11 +257,15 @@ export class AssetListComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _checkDidControlChanges(): void {
-    if (!this.didFilterControl) {
+  updateSearchByDidValue(value) {
+    if (!value.did) {
       return;
     }
-    this.didFilterControl.valueChanges
+    this.searchByDid.setValue(value.did);
+  }
+
+  private _checkDidControlChanges(): void {
+    this.searchByDid.valueChanges
       .pipe(
         distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
         takeUntil(this.unsubscribe)
