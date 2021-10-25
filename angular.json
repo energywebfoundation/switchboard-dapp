@@ -45,12 +45,12 @@
               },
               {
                 "input": "src/app/shared/styles/themes/theme-b.scss",
-                "bundleName": "theme-b",
+                "bundleName": "default",
                 "inject": true
               },
               {
                 "input": "src/app/shared/styles/themes/theme-c.scss",
-                "bundleName": "theme-c",
+                "bundleName": "stedin",
                 "inject": true
               }
             ],

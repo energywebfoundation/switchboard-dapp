@@ -1,26 +1,19 @@
 import { Injectable } from '@angular/core';
+import { EnvService } from '../../shared/services/env/env.service';
 
 @Injectable()
 export class ThemesService {
 
-  readonly defaultTheme = 'C';
+  readonly defaultTheme = 'default';
   private styleTag: any;
 
-  constructor() {
+  constructor(private env: EnvService) {
     this.createElement();
-    this.setTheme('C');
+    this.setTheme(env.theme);
   }
 
-  setTheme(name: 'A' | 'B' | 'C') {
-    switch (name) {
-      case 'A':
-        return this.injectStylesheet('theme-a.css');
-      case 'B':
-        return this.injectStylesheet('theme-b.css');  
-      case 'C':
-      default:
-        return this.injectStylesheet('theme-c.css');
-    }
+  setTheme(name: string) {
+    this.injectStylesheet(name + '.css');
   }
 
   injectStylesheet(theme: string) {
