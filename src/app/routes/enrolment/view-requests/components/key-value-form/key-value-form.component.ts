@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { KeyValue } from '../key-value.interface';
 
 @Component({
   selector: 'app-key-value-form',
@@ -7,7 +8,7 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./key-value-form.component.scss']
 })
 export class KeyValueFormComponent {
-  @Output() add = new EventEmitter();
+  @Output() add = new EventEmitter<KeyValue>();
   @Output() cancel = new EventEmitter();
 
   form = this.fb.group({

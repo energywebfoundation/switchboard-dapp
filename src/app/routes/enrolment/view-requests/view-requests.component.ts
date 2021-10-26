@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
@@ -9,6 +9,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
+import { KeyValue } from './components/key-value.interface';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -22,6 +23,7 @@ export class ViewRequestsComponent implements OnInit {
   claim: any;
   fields = [];
   userDid$ = this.store.select(userSelectors.getDid);
+  keyValueList = [];
 
   constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -31,6 +33,10 @@ export class ViewRequestsComponent implements OnInit {
               private loadingService: LoadingService,
               private store: Store<UserClaimState>,
               private notifService: NotificationService) {
+  }
+
+  canAccept() {
+    return this.listType === 'issuer' && !this.claim?.isAccepted && !this.claim?.isRejected;
   }
 
   async ngOnInit() {
@@ -46,6 +52,10 @@ export class ViewRequestsComponent implements OnInit {
         this.fields = decoded.claimData.fields;
       }
     }
+  }
+
+  keyValueListHandler(list: KeyValue[]) {
+    this.keyValueList = list;
   }
 
   async approve() {

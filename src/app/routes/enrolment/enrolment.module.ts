@@ -17,6 +17,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-code-scanner.module';
 import { KeyValueFormComponent } from './view-requests/components/key-value-form/key-value-form.component';
+import { KeyValueListComponent } from './view-requests/components/key-value-list/key-value-list.component';
+import { KeyValueComponent } from './view-requests/components/key-value/key-value.component';
 
 const routes: Routes = [
   {path: '', component: EnrolmentComponent}
@@ -28,7 +30,9 @@ const routes: Routes = [
     EnrolToRoleComponent,
     ViewRequestsComponent,
     ViewRoleComponent,
-    KeyValueFormComponent
+    KeyValueFormComponent,
+    KeyValueListComponent,
+    KeyValueComponent
   ],
   imports: [
     SharedModule,
