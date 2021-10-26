@@ -3,6 +3,7 @@ import { cleanHierarchy, getListSuccess, setHistorySuccess } from './organizatio
 import { getMainOrgs } from './utils/get-main-orgs';
 import { getOrgHierarchy } from './utils/get-org-hierarchy';
 import { OrganizationProvider } from './models/organization-provider.interface';
+import { updateHistory } from './utils/update-history';
 
 export const USER_FEATURE_KEY = 'organization';
 
@@ -29,7 +30,11 @@ const organizationReducer = createReducer(
     };
   }),
   on(setHistorySuccess, (state, {history, element}) => {
-    return {...state, history, hierarchy: getOrgHierarchy(state.hierarchy, element)};
+    return {
+      ...state,
+      history: updateHistory(state.list, history),
+      hierarchy: getOrgHierarchy(state.hierarchy, element)
+    };
   }),
   on(cleanHierarchy, (state) => ({...state, hierarchy: [], history: getMainOrgs(state.list)}))
 );

@@ -15,6 +15,7 @@ export class ApplicationEffects {
     this.actions$.pipe(
       ofType(ApplicationActions.getList),
       switchMap(() => this.iamService.wrapWithLoadingService(this.iamService.getENSTypesByOwner(ENSNamespaceTypes.Application)).pipe(
+          map((list: IApp[]) => list.map((app) => ({...app, containsRoles: app?.roles?.length > 0}))),
           map((list: IApp[]) => ApplicationActions.getListSuccess({list})),
           catchError((err) => {
             console.error(err);
