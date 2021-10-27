@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { DidBookHttpService } from './did-book-http.service';
 
 export interface DidBookRecord {
   label: string;
@@ -8,22 +9,26 @@ export interface DidBookRecord {
   created_at: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DidBookService {
-  constructor() {
+  private list = new BehaviorSubject([]);
+
+  constructor(private httpDodBook: DidBookHttpService) {
+    this.getList();
   }
 
-  getList(): Observable<DidBookRecord[]> {
-    return of([]);
+  get list$(): Observable<DidBookRecord[]> {
+    return this.list.asObservable();
+  }
+
+  getList(): void {
+    this.httpDodBook.getList().subscribe((list) => this.list.next(list));
   }
 
   add(record: Partial<DidBookRecord>) {
-
+    this.list.next([...this.list.value, record]);
   }
 
   delete(uuid: string) {
-
   }
 }

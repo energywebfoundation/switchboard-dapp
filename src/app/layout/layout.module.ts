@@ -27,7 +27,7 @@ import { DidBookModule } from '../modules/did-book/did-book.module';
     ClipboardModule,
     UserIdleModule.forRoot({idle: environment.userIdle, timeout: environment.userIdle}),
     UserMenuModule,
-    DidBookModule
+    DidBookModule.forRoot()
   ],
   providers: [],
   declarations: [

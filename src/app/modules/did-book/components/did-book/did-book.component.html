@@ -5,5 +5,5 @@
   </button>
 </h4>
 
-<app-did-book-form></app-did-book-form>
+<app-did-book-form (add)="addHandler($event)"></app-did-book-form>
 <app-did-book-list [list]="list$ | async"></app-did-book-list>

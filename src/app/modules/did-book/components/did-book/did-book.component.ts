@@ -8,7 +8,7 @@ import { DidBookService } from '../../services/did-book.service';
 })
 export class DidBookComponent implements OnInit {
 
-  list$ = this.didBookService.getList();
+  list$ = this.didBookService.list$;
 
   constructor(private didBookService: DidBookService) {
   }
@@ -16,4 +16,11 @@ export class DidBookComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  addHandler(record) {
+    this.didBookService.add(record);
+  }
+
+  delete(uuid: string) {
+    this.didBookService.delete(uuid);
+  }
 }
