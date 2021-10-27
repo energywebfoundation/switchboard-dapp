@@ -46,17 +46,10 @@ $editor-height: 100px;
   }
 
   .editor {
-    border: 1px solid rgb(82, 67, 110);
-
-    &:focus-within {
-      border: 1px solid rgb(103, 58, 183);
-    }
 
     .NgxEditor {
       border: none;
       border-radius: 0;
-      background: #1C1726;
-      color: white;
       height: $editor-height;
       overflow-y: scroll;
 
@@ -74,7 +67,6 @@ $editor-height: 100px;
       }
 
       &__Placeholder::before {
-        color: #9080bb;
         font-size: 16px;
       }
 
@@ -85,47 +77,19 @@ $editor-height: 100px;
 
       &__Popup {
         right: 0;
-        color: white;
-        background: #1C1726;
       }
 
       &__MenuBar {
         justify-content: flex-end;
         border-radius: 0;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-        color: white;
-        background: #1C1726;
       }
 
       &__MenuItem {
         cursor: pointer;
-        background-color: #1C1726;
-
-        svg {
-          fill: #fff
-        }
-
-        &:hover {
-          background-color: #1C1726;
-
-          svg {
-            fill: #33CBCB
-          }
-        }
-
-        &.NgxEditor__MenuItem--Active {
-          background-color: #1C1726;
-
-          svg {
-            fill: #33CBCB
-          }
-        }
-
       }
     }
 
     .CodeMirror {
-      border: 1px solid #eee;
       height: auto;
       margin-bottom: 0.7rem;
 

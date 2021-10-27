@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="staking-card">
   <mat-card-header class="card-header">
     <div>
       <mat-card-title class="color-white-flat">{{organization}}</mat-card-title>
@@ -23,7 +23,7 @@
     <app-progress-bar class="card-progress" size="long" [rating]="stakeRating"></app-progress-bar>
   </mat-card-content>
 
-  <mat-card-actions>
+  <mat-card-actions class="staking-card-actions">
     <span class="text-subtitle">Active Services <span
         class="color-white-flat ml-2 action-count">{{activeServices}}</span></span>
     <span class="text-subtitle">Number of Nodes <span

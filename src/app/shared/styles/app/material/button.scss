@@ -86,7 +86,7 @@
 .profile-wrapper {
     // position: absolute;
     // right: 0;
-    margin-right: 34px;
+    margin-right: 20px;
 
     span {
         color: #FFF;
@@ -123,30 +123,13 @@
     letter-spacing: 0.2px;
 }
 
-.mat-button-toggle-group {
-    border: solid 1px #33CBCB;
-}
-
 .mat-button-toggle {
-    color: #33CBCB!important;
     background-color: transparent;
     font-family: 'Rajdhani', sans-serif;
 }
 
-.mat-button-toggle-checked {
-    background-color: #33CBCB;
-}
-
-.mat-button-toggle-checked .mat-button-toggle-label-content {
-    color: white;
-}
-
 .multiline-tooltip {
     white-space: pre-line;
-}
-
-.tooltip-color {
-    color:#9080BA;
 }
 
 .tooltip-wrapper {

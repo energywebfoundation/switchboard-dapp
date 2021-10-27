@@ -6,9 +6,7 @@
     .mat-icon-button {
         color: #7FADFF;
 
-        &:hover {
-            color: #33CBCB;
-        }
+    
     }
 }
 
@@ -27,10 +25,6 @@ mat-datetimepicker-content {
 
 .mat-datetimepicker-calendar-body-cell-content.mat-datetimepicker-calendar-body-today:not(.mat-datetimepicker-calendar-body-selected) {
     border-color: #FFF !important;
-}
-
-.mat-datetimepicker-calendar-body-selected {
-    background-color: #A466FF !important;
 }
 
 .mat-datetimepicker-clock {
@@ -68,14 +62,6 @@ mat-datetimepicker-content {
     .cdk-overlay-dark-backdrop {
         background: rgba(24, 20, 32, 0) !important;
     }
-}
-
-.history-list-item {
-    background-color: #363446;
-}
-
-.field-list-item {
-    background-color: #363446;
 }
 
 .bg-status, .bg-type {
@@ -124,7 +110,6 @@ mat-datetimepicker-content {
 }
 
 .mat-dialog-actions {
-    border-top: 1px solid #363546 !important;
     margin: 10px 0 !important;
     padding: 20px 24px !important;
 }

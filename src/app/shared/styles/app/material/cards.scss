@@ -124,7 +124,6 @@ ul {
   color: #FFF;
 }
 .mat-expansion-panel-header-title, .mat-expansion-indicator::after {
-  color: #9081ba !important;
   font-family: "Rajdhani", sans-serif;
   font-weight: 600;
 }
@@ -188,12 +187,10 @@ ul {
       border-radius: 15px;
       border: 0;
       background: transparent;
-      color: #FFF !important;
 
           &::after {
               content: "";
               background-image: linear-gradient(180deg, #1D1929 0%, #161220 100%);
-              border: 1px solid #2A2837;
               box-shadow: 0 2px 4px 0 rgba(0,0,0,0.14);
               border-radius: 8px;
               position: absolute;
@@ -467,14 +464,11 @@ ul {
   }
 
   .card-hint {
-    border: 1px solid rgb(239 225 181 / 0.2);
     display: flex;
     padding: 10px;
     justify-content: center;
-    background-color: rgb(81 78 81 / 0.2);
     border-radius: 5px;
     font-size: 12px;
-    color: #fff2c1;
 
     .mat-icon {
       font-size: 16px;
@@ -482,12 +476,9 @@ ul {
   }
 
   .card-success {
-    border: 1px solid rgb(135 193 141 / 45%);
     padding: 10px;
-    background-color: rgba(117, 254, 197, 0.05);
     border-radius: 5px;
     font-size: 12px;
-    color: rgb(174 255 176 / 71%);
 
     .mat-icon {
       font-size: 21px;
@@ -496,14 +487,11 @@ ul {
   }
 
   .card-info {
-    border: 1px solid rgb(193 255 249 / 50%);
     display: flex;
     padding: 10px;
     justify-content: center;
-    background-color: rgb(193 255 249 / 8%);
     border-radius: 5px;
     font-size: 12px;
-    color: #c1fff9;
 
     .mat-icon {
       font-size: 21px;
@@ -512,14 +500,11 @@ ul {
   }
 
   .card-warning {
-    border: 1px solid rgb(255 165 0 / 50%);
     display: flex;
     padding: 10px;
     justify-content: center;
-    background-color: rgb(255 165 0 / 8%);
     border-radius: 5px;
     font-size: 12px;
-    color: #FFA500;
 
     .mat-icon {
       font-size: 21px;
@@ -532,7 +517,6 @@ ul {
     display: flex;
     flex-direction: column;
     border-radius: 5px;
-    border: 1px solid #3c3b4d;
     width: 100%;
     background-color: transparent;
 
@@ -548,7 +532,6 @@ ul {
     flex-direction: column;
     border-radius: 5px;
     width: 100%;
-    background-color: #2d2c3d;
 
     .break-word {
       word-wrap: break-word !important; 
