@@ -50,7 +50,25 @@ describe('ApplicationEffects', () => {
       iamServiceSpy.getENSTypesByOwner.and.returnValue(cold('--a|', {a: [{namespace: 'test'}]}));
 
       expectObservable(effects.getList$).toBe('---c', {
-        c: ApplicationActions.getListSuccess({list: [{namespace: 'test'}] as any as IApp[]})
+        c: ApplicationActions.getListSuccess({list: [{namespace: 'test', containsRoles: false}] as any as IApp[]})
+
+      });
+    });
+  });
+
+  it('should set containsRoles to true when element have any roles', () => {
+    scheduler.run(({cold, hot, expectObservable}) => {
+      actions$ = hot('-a', {a: ApplicationActions.getList});
+      iamServiceSpy.getENSTypesByOwner.and.returnValue(cold('--a|', {a: [{namespace: 'test', roles: [{}]}]}));
+
+      expectObservable(effects.getList$).toBe('---c', {
+        c: ApplicationActions.getListSuccess({
+          list: [{
+            namespace: 'test',
+            roles: [{}],
+            containsRoles: true
+          }] as any as IApp[]
+        })
 
       });
     });

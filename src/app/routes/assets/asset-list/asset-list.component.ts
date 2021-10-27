@@ -10,8 +10,8 @@ import { TransferOwnershipComponent } from '../../applications/transfer-ownershi
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
 import { EditAssetDialogComponent } from '../edit-asset-dialog/edit-asset-dialog.component';
-import { filter, finalize, first, map, switchMap, tap } from 'rxjs/operators';
-import { forkJoin, from, Observable } from 'rxjs';
+import { distinctUntilChanged, filter, finalize, first, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { forkJoin, from, Observable, Subject } from 'rxjs';
 import { VerificationMethodComponent } from '../verification-method/verification-method.component';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,6 +20,7 @@ import { mapClaimsProfile } from '@operators';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 import { DidQrCodeComponent } from '../did-qr-code/did-qr-code.component';
+import { FormControl } from '@angular/forms';
 
 export const RESET_LIST = true;
 
@@ -40,9 +41,10 @@ export interface AssetList extends Asset {
 })
 export class AssetListComponent implements OnInit, OnDestroy {
   @Input() listType: number;
+  @Input() showDidFilter = false;
   @ViewChild(MatSort) sort: MatSort;
   @Output() selectTab = new EventEmitter<any>();
-
+  searchByDid = new FormControl(undefined);
   AssetListType = AssetListType;
 
   dataSource: MatTableDataSource<AssetList> = new MatTableDataSource([]);
@@ -51,6 +53,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
   defaultLogo = ASSET_DEFAULT_LOGO;
 
   private _iamSubscriptionId: number;
+  private unsubscribe = new Subject<void>();
+  private _shadowList;
 
   constructor(private toastr: SwitchboardToastrService,
               private dialog: MatDialog,
@@ -64,6 +68,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
   async ngOnDestroy(): Promise<void> {
     // Unsubscribe from IAM Events
     await this.iamService.iam.unsubscribeFrom(this._iamSubscriptionId);
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   async ngOnInit(): Promise<void> {
@@ -101,6 +107,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
         return item[property];
       }
     };
+
+    this._checkDidControlChanges();
   }
 
   getAssetList() {
@@ -113,6 +121,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
       finalize(() => this.loadingService.hide())
     ).subscribe((data: AssetList[]) => {
       this.dataSource.data = data;
+      this._shadowList = data;
     }, error => {
       console.error(error);
       this.toastr.error(error.message || 'Could not retrieve list. Please contact system administrator.');
@@ -246,6 +255,30 @@ export class AssetListComponent implements OnInit, OnDestroy {
       data,
       maxWidth: '100%',
     });
+  }
+
+  updateSearchByDidValue(value) {
+    if (!value.did) {
+      return;
+    }
+    this.searchByDid.setValue(value.did);
+  }
+
+  private _checkDidControlChanges(): void {
+    this.searchByDid.valueChanges
+      .pipe(
+        distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
+        takeUntil(this.unsubscribe)
+      )
+      .subscribe(value => this.updateListByDid(value));
+  }
+
+  private updateListByDid(value: string): void {
+    if (value) {
+      this.dataSource.data = this._shadowList.filter((item) => item.id.includes(value));
+    } else {
+      this.dataSource.data = this._shadowList;
+    }
   }
 
   private getAssetsWithClaims() {
