@@ -6,6 +6,7 @@ import { SettingsService } from './core/settings/settings.service';
 import { UrlService } from './shared/services/url-service/url.service';
 import { Store } from '@ngrx/store';
 import * as AuthActions from './state/auth/auth.actions';
+import { ThemesService } from './core/themes/themes.service';
 
 @Component({
   selector: 'app-root',
@@ -58,6 +59,7 @@ export class AppComponent implements OnInit {
               private matIconRegistry: MatIconRegistry,
               private domSanitizer: DomSanitizer,
               private urlHistoryService: UrlService,
+              private themeService: ThemesService,
               private store: Store) {
     this.matIconRegistry.addSvgIcon(
       'wallet-icon',
@@ -207,6 +209,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('app component');
     this.urlHistoryService.init();
     // prevent empty links to reload the page
     document.addEventListener('click', e => {
