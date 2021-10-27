@@ -16,6 +16,7 @@ import { UserClaimState } from '../../state/user-claim/user.reducer';
 import { SwitchboardToastr, SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import { LoginService } from '../../shared/services/login/login.service';
 import { logoutWithRedirectUrl } from '../../state/auth/auth.actions';
+import { DidBookComponent } from '../../modules/did-book/components/did-book/did-book.component';
 
 @Component({
   selector: 'app-header',
@@ -131,6 +132,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
           // Update User Name
         }
       });
+  }
+
+  openDidBook(): void {
+    this.dialog.open(DidBookComponent, {
+      width: '440px',
+      data: {},
+      maxWidth: '100%',
+      disableClose: true
+    });
   }
 
   ngOnInit() {

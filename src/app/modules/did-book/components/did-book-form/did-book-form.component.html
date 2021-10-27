@@ -1,1 +1,32 @@
-<p>did-book-form works!</p>
+<form [formGroup]="form">
+  <div class="px-0">
+    <mat-label class="ml-3 pl-1">Label</mat-label>
+    <mat-form-field class="mt-2" appearance="outline">
+      <input matInput type="text" placeholder="Label" autocomplete="off"
+             data-qa-id="label"
+             formControlName="label">
+      <mat-error>This field is <strong>required</strong>.</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="px-0">
+    <mat-label class="ml-3 pl-1">Did</mat-label>
+    <mat-form-field class="mt-2" appearance="outline">
+      <input matInput type="text" placeholder="Did" autocomplete="off"
+             data-qa-id="did"
+             formControlName="did">
+      <mat-error>This field is <strong>required</strong>.</mat-error>
+      <mat-error>Invalid DID format.</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="d-flex justify-content-end mb-2">
+    <button mat-stroked-button class="btn-small mr-2" data-qa-id="cancel" (click)="reject()">Cancel</button>
+    <button mat-raised-button
+            class="btn btn-small btn btn-primary"
+            type="submit"
+            (click)="submit()"
+            [disabled]="isFormInvalid"
+            data-qa-id="add">
+      Add
+    </button>
+  </div>
+</form>

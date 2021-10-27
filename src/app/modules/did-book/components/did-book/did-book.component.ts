@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DidBookService } from '../../services/did-book.service';
 
 @Component({
   selector: 'app-did-book',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DidBookComponent implements OnInit {
 
-  constructor() {
+  list$ = this.didBookService.getList();
+
+  constructor(private didBookService: DidBookService) {
   }
 
   ngOnInit(): void {
