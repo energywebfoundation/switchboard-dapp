@@ -1,5 +1,5 @@
 <form role="form" [formGroup]="enrolmentForm">
-  <div formGroupName="registrationTypes">
+  <div formGroupName="registrationTypes" *ngIf="showRegistrationTypes">
     <mat-checkbox class="pl-3 md-enroll"
                   data-qa-id="on-chain"
                   formControlName="onChain"

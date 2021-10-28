@@ -12,6 +12,7 @@ import { RegistrationTypes } from 'iam-client-lib';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { dispatchInputEvent } from '@tests';
 
 describe('EnrolmentFormComponent', () => {
   let component: EnrolmentFormComponent;
@@ -19,10 +20,7 @@ describe('EnrolmentFormComponent', () => {
   let hostDebug: DebugElement;
   let host: HTMLElement;
   const fieldSelector = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=field-${id}] ${postSelector}`));
-  const dispatchEvent = (el) => {
-    el.dispatchEvent(new Event('input'));
-    el.dispatchEvent(new Event('blur'));
-  };
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [EnrolmentFormComponent],
@@ -181,7 +179,7 @@ describe('EnrolmentFormComponent', () => {
       it('should check date required validation', () => {
         dateInput.value = '';
 
-        dispatchEvent(dateInput);
+        dispatchInputEvent(dateInput);
         fixture.detectChanges();
         const dateError = fieldSelector(0, 'mat-error').nativeElement;
 
@@ -226,7 +224,7 @@ describe('EnrolmentFormComponent', () => {
       it('should check minimum date validation', () => {
         dateInput.value = '1/1/1970';
 
-        dispatchEvent(dateInput);
+        dispatchInputEvent(dateInput);
         fixture.detectChanges();
 
         const dateError = fieldSelector(0, 'mat-error').nativeElement;
@@ -237,7 +235,7 @@ describe('EnrolmentFormComponent', () => {
       it('should check minimum date validation', () => {
         dateInput.value = '1/1/2200';
 
-        dispatchEvent(dateInput);
+        dispatchInputEvent(dateInput);
         fixture.detectChanges();
 
         const dateError = fieldSelector(0, 'mat-error').nativeElement;
@@ -266,7 +264,7 @@ describe('EnrolmentFormComponent', () => {
     it('should check required error', () => {
       field.value = '';
 
-      dispatchEvent(field);
+      dispatchInputEvent(field);
       fixture.detectChanges();
 
       const error = fieldSelector(0, 'mat-error').nativeElement;
@@ -277,7 +275,7 @@ describe('EnrolmentFormComponent', () => {
     it('should check max length error', () => {
       field.value = '1234567';
 
-      dispatchEvent(field);
+      dispatchInputEvent(field);
       fixture.detectChanges();
 
       const error = fieldSelector(0, 'mat-error').nativeElement;
@@ -288,7 +286,7 @@ describe('EnrolmentFormComponent', () => {
     it('should check max length error', () => {
       field.value = 'a';
 
-      dispatchEvent(field);
+      dispatchInputEvent(field);
       fixture.detectChanges();
 
       const error = fieldSelector(0, 'mat-error').nativeElement;
@@ -315,7 +313,7 @@ describe('EnrolmentFormComponent', () => {
     it('should check required error', () => {
       field.value = '';
 
-      dispatchEvent(field);
+      dispatchInputEvent(field);
       fixture.detectChanges();
 
       const error = fieldSelector(0, 'mat-error').nativeElement;
@@ -326,7 +324,7 @@ describe('EnrolmentFormComponent', () => {
     it('should check maxValue error', () => {
       field.value = '15';
 
-      dispatchEvent(field);
+      dispatchInputEvent(field);
       fixture.detectChanges();
 
       const error = fieldSelector(0, 'mat-error').nativeElement;
@@ -336,7 +334,7 @@ describe('EnrolmentFormComponent', () => {
     it('should check maxValue error', () => {
       field.value = '1';
 
-      dispatchEvent(field);
+      dispatchInputEvent(field);
       fixture.detectChanges();
 
       const error = fieldSelector(0, 'mat-error').nativeElement;
