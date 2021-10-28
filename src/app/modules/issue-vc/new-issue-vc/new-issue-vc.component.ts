@@ -13,8 +13,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class NewIssueVcComponent implements OnInit {
   fieldList = [];
   form = this.fb.group({
-    did: ['', [Validators.required, HexValidators.isDidValid()]],
-    name: ['', [Validators.required]],
+    subject: ['', [Validators.required, HexValidators.isDidValid()]],
     type: ['', [Validators.required]]
   });
 
@@ -56,8 +55,8 @@ export class NewIssueVcComponent implements OnInit {
 
   private setDid() {
     if (this.data?.did) {
-      this.form.patchValue({did: this.data.did});
-      this.form.get('did').disable();
+      this.form.patchValue({subject: this.data.did});
+      this.form.get('subject').disable();
     }
   }
 }

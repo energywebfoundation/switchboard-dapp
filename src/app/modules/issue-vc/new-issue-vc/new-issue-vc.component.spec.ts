@@ -68,22 +68,19 @@ describe('NewArbitraryCredentialComponent', () => {
     mockDialogData.setDid('did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89');
     fixture.detectChanges();
 
-    const {issueDid} = getSelectors(hostDebug);
+    const {subjectDid} = getSelectors(hostDebug);
 
     expect(component.isDidPredefined()).toBeTrue();
-    expect(issueDid.disabled).toBeTrue();
+    expect(subjectDid.disabled).toBeTrue();
   });
 
   it('should create new VC', () => {
     fixture.detectChanges();
 
-    const {issueDid, selectType, name, createBtn} = getSelectors(hostDebug);
+    const {subjectDid, selectType, createBtn} = getSelectors(hostDebug);
 
-    issueDid.value = 'did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89';
-    dispatchInputEvent(issueDid);
-
-    name.value = 'Name';
-    dispatchInputEvent(name);
+    subjectDid.value = 'did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89';
+    dispatchInputEvent(subjectDid);
 
     selectType.click();
     fixture.detectChanges();
@@ -101,9 +98,8 @@ describe('NewArbitraryCredentialComponent', () => {
 
 const getSelectors = (hostDebug) => {
   return {
-    issueDid: getElement(hostDebug)('issue-did')?.nativeElement,
+    subjectDid: getElement(hostDebug)('subject-did')?.nativeElement,
     selectType: getElement(hostDebug)('select-type')?.nativeElement,
-    name: getElement(hostDebug)('name')?.nativeElement,
     createBtn: getElement(hostDebug)('create')?.nativeElement
   };
 };

@@ -22,26 +22,18 @@
           </mat-form-field>
         </div>
         <div class="col-lg-12">
-          <mat-label class="ml-3 pl-1">DID</mat-label>
+          <mat-label class="ml-3 pl-1">Subject</mat-label>
           <mat-form-field class="mt-2" appearance="outline">
-            <input matInput formControlName="did" placeholder="DID" maxlength="256"
-                   data-qa-id="issue-did"
+            <input matInput formControlName="did" placeholder="DID that is receiving the credential" maxlength="256"
+                   data-qa-id="subject-did"
                    required autocomplete="off">
             <button *ngIf="!isDidPredefined()" matSuffix mat-icon-button aria-label="Scan DID" appQrCodeScanner
                     (scannedValue)="scannedValue($event)">
               <mat-icon>qr_code_2</mat-icon>
             </button>
-            <mat-error *ngIf="getControl('did').hasError('required')">DID is <strong>required</strong></mat-error>
-            <mat-error *ngIf="getControl('did').hasError('invalidDid')">DID format is invalid</mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-lg-12">
-          <mat-label class="ml-3 pl-1">Name</mat-label>
-          <mat-form-field class="mt-2" appearance="outline">
-            <input matInput formControlName="name" placeholder="Name" maxlength="256"
-                   data-qa-id="name"
-                   required autocomplete="off">
-            <mat-error *ngIf="getControl('name').hasError('required')">Name is <strong>required</strong></mat-error>
+            <mat-error *ngIf="getControl('subject').hasError('required')">Subject is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="getControl('subject').hasError('invalidDid')">Subject DID format is invalid</mat-error>
           </mat-form-field>
         </div>
       </div>
