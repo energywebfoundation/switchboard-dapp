@@ -93,7 +93,7 @@ jobs:
         with:
           switches: -r
           path: dist/*
-          remote_path: ${{ env.SB_APP_DIR }}/stedin
+          remote_path: ${{ env.SB_APP_DIR }}/stedin-dev
           remote_host: ${{ secrets.SB_WEB_HOST }}
           remote_user: ${{ secrets.GH_SWITCHBOARD_USERNAME }}
           remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
