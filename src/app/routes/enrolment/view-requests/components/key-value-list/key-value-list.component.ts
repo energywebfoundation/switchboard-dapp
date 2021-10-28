@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { KeyValue } from '../key-value.interface';
 
 @Component({
@@ -8,22 +7,32 @@ import { KeyValue } from '../key-value.interface';
   styleUrls: ['./key-value-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class KeyValueListComponent {
-  @Input() set data(value: KeyValue[]) {
-    if (!value) {
-      return;
-    }
+export class KeyValueListComponent implements OnInit {
+  @Input() data: KeyValue[];
 
-    this.dataSource.data = value;
-  };
+  @Input() mode: 'edit' | 'display' = 'edit';
 
   @Output() delete = new EventEmitter<number>();
-  displayedColumns = ['key', 'value', 'actions'];
+  displayedColumns: string[];
 
-  dataSource = new MatTableDataSource<KeyValue>([]);
+  ngOnInit() {
+    this.determineColumns();
+  }
+
+  isEditionMode() {
+    return this.mode === 'edit';
+  }
 
   removePair(index: number) {
     this.delete.emit(index);
+  }
+
+  determineColumns() {
+    const defaultColumns = ['key', 'value'];
+    if (this.isEditionMode()) {
+      defaultColumns.push('actions');
+    }
+    this.displayedColumns = defaultColumns;
   }
 
 }

@@ -12,6 +12,12 @@ import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { KeyValue } from './components/key-value.interface';
 
 const TOASTR_HEADER = 'Enrolment Request';
+const sampleData =
+  {
+    createdBy: 'Alex',
+    from: '9.0',
+    to: '8.0'
+  };
 
 @Component({
   selector: 'app-view-requests',
@@ -24,6 +30,7 @@ export class ViewRequestsComponent implements OnInit {
   fields = [];
   userDid$ = this.store.select(userSelectors.getDid);
   keyValueList = [];
+  dataSource = this.createKeyValuePair(sampleData);
 
   constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -118,5 +125,9 @@ export class ViewRequestsComponent implements OnInit {
     return keyValue.reduce((prev, next) => {
       return {...prev, [next.key]: next.value};
     }, {});
+  }
+
+  private createKeyValuePair(object: Object) {
+    return Object.keys(object).map(key => ({key, value: object[key]}));
   }
 }
