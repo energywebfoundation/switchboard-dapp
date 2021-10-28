@@ -176,7 +176,7 @@ a {
     background: url("/assets/img/stedin-logo.png") no-repeat;
     width: 150px;
     height: 30px;
-    background-size: 150px 130px;
+    background-size: 150px 30px;
 }
 
 /* ========================================================================
@@ -1234,27 +1234,27 @@ color: $stedin-gray;
       }
     }
 
-// Preloader - Hidden
-// .preloader {
-//     background-color: $stedin-yellow;
-//     background-image: -webkit-linear-gradient(90deg, $stedin-yellow 10%, darken($stedin-yellow, 5%) 90%); /* Chrome 10+, Saf5.1+ */
-//     background-image: -moz-linear-gradient(90deg, $stedin-yellow 10%, darken($stedin-yellow, 5%) 90%); /* FF3.6+ */
-//     background-image: -ms-linear-gradient(90deg, $stedin-yellow 10%, darken($stedin-yellow, 5%) 90%); /* IE10 */
-//     background-image: -o-linear-gradient(90deg, $stedin-yellow 10%, darken($stedin-yellow, 5%) 90%); /* Opera 11.10+ */
-//     background-image: linear-gradient(90deg, $stedin-yellow 10%, darken($stedin-yellow, 5%) 90%); /* W3C */
-// }
+// Preloader
+.preloader {
+    background-color: $stedin-yellow;
+    background-image: -webkit-linear-gradient(90deg, $stedin-yellow 10%, darken($stedin-yellow, 5%) 90%); /* Chrome 10+, Saf5.1+ */
+    background-image: -moz-linear-gradient(90deg, $stedin-yellow 10%, darken($stedin-yellow, 5%) 90%); /* FF3.6+ */
+    background-image: -ms-linear-gradient(90deg, $stedin-yellow 10%, darken($stedin-yellow, 5%) 90%); /* IE10 */
+    background-image: -o-linear-gradient(90deg, $stedin-yellow 10%, darken($stedin-yellow, 5%) 90%); /* Opera 11.10+ */
+    background-image: linear-gradient(90deg, $stedin-yellow 10%, darken($stedin-yellow, 5%) 90%); /* W3C */
+}
 
-// .preloader-progress {
-//     background: url("/assets/img/preloader/stedin-preloader.empty.png") no-repeat;
-//     width: 200px;
-//     height: 37.5px;
-//     background-size: 200px 37.5px;
-// }
+.preloader-progress {
+    background: url("/assets/img/preloader/stedin-preloader.empty.png") no-repeat;
+    width: 200px;
+    height: 37.5px;
+    background-size: 200px 37.5px;
+}
 
-//   /*@noflip*/
-// .preloader-progress-bar {
-//     background: url("/assets/img/preloader/stedin-preloader.full.png") no-repeat;
-//     width: 200px;
-//     height: 37.5px;
-//     background-size: 200px 37.5px;
-// }
+  /*@noflip*/
+.preloader-progress-bar {
+    background: url("/assets/img/preloader/stedin-preloader.full.png") no-repeat;
+    width: 200px;
+    height: 37.5px;
+    background-size: 200px 37.5px;
+}
