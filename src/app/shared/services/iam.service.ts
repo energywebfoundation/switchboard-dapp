@@ -88,8 +88,8 @@ export class IamService {
     return this.iam.getProviderType();
   }
 
-  issueClaim() {
-    return from([]);
+  issueClaim(data: { subject: string, claim: any }) {
+    return from(this.iam.issueClaim(data));
   }
 
   registerAsset() {

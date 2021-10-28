@@ -3,6 +3,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  EnrolmentField,
+  EnrolmentSubmission
+} from '../../../routes/registration/enrolment-form/enrolment-form.component';
 
 @Component({
   selector: 'app-new-issue-vc',
@@ -35,22 +39,18 @@ export class NewIssueVcComponent implements OnInit {
   }
 
   scannedValue(data: { value: string }) {
-    this.form.patchValue({did: data.value});
+    this.form.patchValue({subject: data.value});
   }
 
   isFormDisabled() {
     return this.form.invalid;
   }
 
-  create() {
+  create(data: EnrolmentSubmission) {
     if (this.isFormDisabled()) {
       return;
     }
-    this.issuanceVcService.create(this.form.value, this.fieldList);
-  }
-
-  fieldListChangeHandler(data) {
-    this.fieldList = [...data];
+    this.issuanceVcService.create({subject: this.form.get('subject').value, claim: this.createClaim(data.fields)});
   }
 
   private setDid() {
@@ -58,5 +58,20 @@ export class NewIssueVcComponent implements OnInit {
       this.form.patchValue({subject: this.data.did});
       this.form.get('subject').disable();
     }
+  }
+
+  private createClaim(fields: EnrolmentField[]) {
+    const parseVersion = (version: string | number) => {
+      if (typeof (version) === 'string') {
+        return parseInt(version.split('.')[0], 10);
+      }
+      return version;
+    };
+
+    return {
+      fields: JSON.parse(JSON.stringify(fields)),
+      // claimType: this.selectedNamespace,
+      claimTypeVersion: 1 //parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION
+    };
   }
 }

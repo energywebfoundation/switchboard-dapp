@@ -9,7 +9,7 @@ export class IssuanceVcService {
   constructor(private iamService: IamService) {
   }
 
-  create(data, fields) {
-    this.iamService.issueClaim();
+  create(data: { subject: string, claim: any }) {
+    this.iamService.issueClaim(data);
   }
 }
