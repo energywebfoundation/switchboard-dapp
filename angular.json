@@ -41,17 +41,17 @@
               {
                 "input": "src/app/shared/styles/themes/theme-a.scss",
                 "bundleName": "theme-a",
-                "inject": true
+                "inject": false
               },
               {
                 "input": "src/app/shared/styles/themes/theme-b.scss",
                 "bundleName": "default",
-                "inject": true
+                "inject": false
               },
               {
                 "input": "src/app/shared/styles/themes/theme-c.scss",
                 "bundleName": "stedin",
-                "inject": true
+                "inject": false
               }
             ],
             "scripts": [
