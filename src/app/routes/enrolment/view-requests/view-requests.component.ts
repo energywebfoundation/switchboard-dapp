@@ -67,7 +67,8 @@ export class ViewRequestsComponent implements OnInit {
         id: this.claim.id,
         token: this.claim.token,
         subjectAgreement: this.claim.subjectAgreement,
-        registrationTypes: this.claim.registrationTypes
+        registrationTypes: this.claim.registrationTypes,
+        claimParams: this.createRecordParams(this.keyValueList)
       };
 
       await this.iamService.iam.issueClaimRequest(req);
@@ -111,5 +112,11 @@ export class ViewRequestsComponent implements OnInit {
         }
       }
     });
+  }
+
+  private createRecordParams(keyValue: KeyValue[]): Record<string, string> {
+    return keyValue.reduce((prev, next) => {
+      return {...prev, [next.key]: next.value};
+    }, {});
   }
 }

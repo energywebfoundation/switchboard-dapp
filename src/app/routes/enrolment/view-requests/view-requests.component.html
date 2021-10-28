@@ -68,6 +68,10 @@
             <app-key-value (updatedList)="keyValueListHandler($event)"></app-key-value>
           </div>
         </div>
+        <div class="col-lg-12 mt-2 mb-3" *ngIf="canAccept()">
+          <div class="card card-default mb-3 pb-0 shadow-none">
+          </div>
+        </div>
         <div class="col-lg-12 mt-2"
              *ngIf="claim?.registrationTypes?.length === 2 && (userDid$ | async) !== claim.requester && !claim.isAccepted">
 
