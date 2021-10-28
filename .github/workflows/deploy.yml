@@ -71,7 +71,7 @@ jobs:
           echo "Prod Env Disabled"
           npm run build
 
-      - name: Deploy switchboard-dev
+      - name: Deploy SB-dev
         if: github.ref == 'refs/heads/develop'
         uses: burnett01/rsync-deployments@5.0
         with:
