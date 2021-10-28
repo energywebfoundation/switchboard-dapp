@@ -343,6 +343,27 @@ describe('EnrolmentFormComponent', () => {
     });
   });
 
+  it('should have enabled submit button when registration types are removed', () => {
+    component.showRegistrationTypes = false;
+    component.fieldList = [{
+      fieldType: 'number',
+      label: 'label',
+      maxValue: 10,
+      minValue: 2,
+      required: true
+    }];
+
+    const field = fieldSelector(0, 'input').nativeElement;
+
+    field.value = '3';
+
+    dispatchInputEvent(field);
+    fixture.detectChanges();
+
+    const {submit} = getSelectors(hostDebug);
+    expect(submit.nativeElement.disabled).toBeFalse();
+  });
+
 });
 
 const getSelectors = (hostDebug: DebugElement) => {
