@@ -8,7 +8,9 @@
 @import '../app/material/colors';
 
 // VARIABLES
-
+:root {
+    --loader-color: #FFD100;
+}
 // Cutoms Gray colors for theme
 $stedin-gray:           #4D4D4D;
 $stedin-gray-light:     #97999B;
@@ -16,26 +18,26 @@ $stedin-gray-lighter:   #EAEAEA;
 $stedin-gray-ultralight:#F0F0F0;
 
 // Custom brand colors for theme
-$stedin-yellow:         #FFD100;
-$stedin-yellow-light:   #FFE053;
+$stedin-yellow: #FFD100;
+$stedin-yellow-light: #FFE053;
 
-$stedin-blue:           #62B5E5;
-$stedin-orange:         #FF9614;
-$stedin-violet:         #009688;
-$stedin-green:          #BFB800;
-$stedin-purple:         #BB76CF;
-$stedin-red:             #EB5764;  
-$white:                 #FFFFFF;  
+$stedin-blue: #62B5E5;
+$stedin-orange: #FF9614;
+$stedin-violet: #009688;
+$stedin-green: #BFB800;
+$stedin-purple: #BB76CF;
+$stedin-red: #EB5764;
+$white: #FFFFFF;
 
 
 // LAYOUT
 
-$content-bg:                    $stedin-gray-ultralight;
-$aside-bg:                      $stedin-gray-ultralight;
+$content-bg: $stedin-gray-ultralight;
+$aside-bg: $stedin-gray-ultralight;
 
 // NAVBAR TOP
 
-$nav-top-bg:                    $stedin-gray-light;
+$nav-top-bg: $stedin-gray-light;
 $nav-top-bg-start:              $nav-top-bg;
 $nav-top-bg-end:                $nav-top-bg;
 $nav-header-bg:                 transparent;
@@ -165,7 +167,7 @@ a {
     .welcome-header-logo {
         background: url("/assets/img/stedin-logo.png") no-repeat;
         height: 44px;
-        width: 174px; 
+        width: 174px;
         background-size: contain;
     }
 }
@@ -410,7 +412,7 @@ mat-drawer {
  th.mat-header-cell {
     background-color: $white!important;
     color: $stedin-gray !important;
-} 
+ }
 
 .mat-row:nth-child(odd){
     background-color: $white important;
@@ -472,7 +474,7 @@ tr.mat-row {
 .mat-dialog-title {
     color: $stedin-gray;
     border-bottom: 1px solid #DFDFDF;
-} 
+}
 
 .mat-dialog-container .mat-icon-button {
     color: $stedin-gray;
@@ -492,7 +494,7 @@ tr.mat-row {
 }
 
 .mat-step-header .mat-step-label.mat-step-label-active {
-    color: $stedin-gray; 
+    color: $stedin-gray;
 }
 
 .header-notification-container {
@@ -559,11 +561,11 @@ tr.mat-row {
 .mat-form-field {
     ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
       color: #B0ADDC;
-    }  
+    }
     :-ms-input-placeholder { /* Internet Explorer 10-11 */
       color: #B0ADDC;
     }
-  
+
   }
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
@@ -585,15 +587,16 @@ tr.mat-row {
     color: $stedin-gray;
 }
 
-.mat-form-field { 
+.mat-form-field {
     ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-      color: $stedin-gray-light;
-    }  
-    :-ms-input-placeholder { /* Internet Explorer 10-11 */
-      color: $stedin-gray-light;
+        color: $stedin-gray-light;
     }
-  
-  }
+
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: $stedin-gray-light;
+    }
+
+}
 
 .mat-select-value {
     color: $stedin-gray;
@@ -647,7 +650,7 @@ mat-label {
     .mat-input-element {
         color: $stedin-gray;
     }
-      
+
     .mat-form-field-outline {
         background: $white !important;
         color: $stedin-gray;
@@ -658,7 +661,7 @@ mat-label {
     }
 }
 
-// Button 
+// Button
 
 .btn-color-primary {
     color: $stedin-gray;
@@ -671,7 +674,7 @@ mat-label {
 
     &:hover {
         border-color: #000000 !important;
-        color: #000000!important; 
+        color: #000000 !important;
     }
 }
 
@@ -685,7 +688,7 @@ mat-label {
 
     &:hover {
         border-color: $stedin-blue !important;
-        color: $stedin-blue !important; 
+        color: $stedin-blue !important;
     }
 }
 
@@ -695,7 +698,7 @@ mat-label {
 
     &:hover {
         border-color: $stedin-blue !important;
-        color: $stedin-blue !important; 
+        color: $stedin-blue !important;
     }
 }
 
@@ -799,7 +802,7 @@ mat-label {
 .color-white {
     color: $stedin-gray;
 }
-  
+
 .mat-option:nth-child(odd) {
     background: $stedin-gray-light;;
 }
@@ -821,14 +824,14 @@ mat-label {
     color: #000000;
     background: rgb(215,215,215);
   }
-  
+
 .mat-autocomplete-panel {
     background: #f7f7f7;
   }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #7E7E7E; 
+    background: #7E7E7E;
     border-radius: 10px;
 }
 
@@ -839,11 +842,11 @@ mat-label {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #646363; 
+    background: #646363;
 }
 
 ::-moz-scrollbar-thumb:hover {
-    background: #646363; 
+    background: #646363;
 }
 
 // others
@@ -862,7 +865,7 @@ mat-label {
 
 .color-default {
     color: $stedin-gray !important;
-}  
+}
 
 .border-warned {
     border-left: 3px solid $stedin-orange !important;
@@ -911,40 +914,40 @@ mat-label {
     background-color: $white !important;
     color: $stedin-gray !important;
   }
-  
-  .mat-calendar-body-cell-content {
+
+.mat-calendar-body-cell-content {
     color: $stedin-gray !important;
   }
-  
-  .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
+
+.mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
     color: $stedin-gray;
   }
-  
-  .mat-calendar-body-label {
+
+.mat-calendar-body-label {
     color: $stedin-gray !important;
   }
-  
-  .mat-calendar-table-header-divider {
+
+.mat-calendar-table-header-divider {
     color: $stedin-gray !important;
   }
-  
-  .mat-calendar-arrow {
+
+.mat-calendar-arrow {
     border-top-color: $stedin-gray !important;
   }
-  
-  .mat-calendar-table-header {
+
+.mat-calendar-table-header {
     color: $stedin-gray !important;
   }
-  
-  .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected) {
     border-color: $stedin-gray !important;
   }
-  
-  .mat-calendar-body-selected {
+
+.mat-calendar-body-selected {
     background-color: $stedin-yellow !important;
   }
-  
-  .mat-calendar-table-header-divider::after {
+
+.mat-calendar-table-header-divider::after {
     background: $stedin-gray-light;
   }
 
@@ -963,7 +966,7 @@ mat-label {
 
 .border-vertical {
     border-left: 1px solid $stedin-gray;
-  
+
     mat-icon {
       color: $stedin-gray;
     }
@@ -976,8 +979,8 @@ mat-label {
 }
 
 .footer-enroll {
-    background-color: $white; 
-    color: $stedin-gray; 
+    background-color: $white;
+    color: $stedin-gray;
 }
 
 .welcome-bottom-footer {
@@ -1052,35 +1055,35 @@ color: $stedin-gray;
     .mat-select-placeholder, .mat-placeholder {
       color: $stedin-gray-light;
     }
-  
+
     .mat-select-value {
       color: $stedin-gray;
     }
-  
+
     .mat-select-arrow {
       color: $stedin-gray;
     }
-  
+
     .mat-input-element {
       color: $stedin-gray;
     }
-  
+
     ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
       color: $stedin-gray;
     }
-  
+
     :-ms-input-placeholder { /* Internet Explorer 10-11 */
       color: $stedin-gray;
     }
-  
-  }
-  
-  ::ng-deep .mat-checkbox-disabled:not(.mat-checkbox-checked) .mat-checkbox-frame {
+
+}
+
+::ng-deep .mat-checkbox-disabled:not(.mat-checkbox-checked) .mat-checkbox-frame {
     opacity: 0.5;
     border-color: currentColor;
   }
-  
-  ::ng-deep .mat-checkbox-disabled .mat-checkbox-label {
+
+::ng-deep .mat-checkbox-disabled .mat-checkbox-label {
     color: currentColor;
     opacity: 0.3;
   }
@@ -1110,7 +1113,7 @@ color: $stedin-gray;
             border: 1px solid $stedin-gray;
             color: $stedin-gray;
         }
-    }    
+    }
 
     .swal-button--confirm {
         &:not([disabled]):hover {
@@ -1174,12 +1177,12 @@ color: $stedin-gray;
 
     .editor {
       border: 1px solid $stedin-gray-light;
-  
-      &:focus-within {
+
+        &:focus-within {
         border: 1px solid $stedin-gray;
       }
-  
-      .NgxEditor {
+
+        .NgxEditor {
         background: $white;
         color: $stedin-gray;
         border: 1px solid $stedin-gray;
@@ -1192,46 +1195,46 @@ color: $stedin-gray;
           color: $stedin-gray;
           background: $white;
         }
-  
-        &__MenuBar {
+
+            &__MenuBar {
           border-bottom: 1px solid $stedin-gray-lighter;
           color: $stedin-gray;
           background: $white;
         }
-  
-        &__MenuItem {
+
+            &__MenuItem {
           background-color: $white;
-  
-          svg {
+
+                svg {
             fill: $stedin-gray;
           }
-  
-          &:hover {
+
+                &:hover {
             background-color: $stedin-gray-light;
-  
-            svg {
+
+                    svg {
               fill: $stedin-gray;
             }
           }
-  
-          &.NgxEditor__MenuItem--Active {
+
+                &.NgxEditor__MenuItem--Active {
             background-color: #1C1726;
-  
-            svg {
+
+                    svg {
               fill: $stedin-gray;
             }
           }
-  
-        }
+
+            }
       }
-  
-      .CodeMirror {
+
+        .CodeMirror {
         border: 1px solid $stedin-gray;
 
       }
     }
 
-// Preloader - Hidden 
+// Preloader - Hidden
 // .preloader {
 //     background-color: $stedin-yellow;
 //     background-image: -webkit-linear-gradient(90deg, $stedin-yellow 10%, darken($stedin-yellow, 5%) 90%); /* Chrome 10+, Saf5.1+ */
@@ -1247,7 +1250,7 @@ color: $stedin-gray;
 //     height: 37.5px;
 //     background-size: 200px 37.5px;
 // }
-  
+
 //   /*@noflip*/
 // .preloader-progress-bar {
 //     background: url("/assets/img/preloader/stedin-preloader.full.png") no-repeat;

@@ -5,22 +5,25 @@
 @import '../app/variables';
 @import '../app/material/colors';
 
+:root {
+    --loader-color: #a567ff;
+}
 
 // LAYOUT
 
-$content-bg:                    #181423;
-$aside-bg:                      #181423;
-$preloader-bg:                  #181423;      
+$content-bg: #181423;
+$aside-bg: #181423;
+$preloader-bg: #181423;
 
 // NAVBAR TOP
 
-$nav-top-bg:                     #181523;
-$nav-top-bg-start:              $nav-top-bg;
-$nav-top-bg-end:                $nav-top-bg;
-$nav-header-bg:                 transparent;
+$nav-top-bg: #181523;
+$nav-top-bg-start: $nav-top-bg;
+$nav-top-bg-end: $nav-top-bg;
+$nav-header-bg: transparent;
 
-$nav-top-item:                  #fff;
-$nav-top-item-active:           darken(#FFF, 60%);
+$nav-top-item: #fff;
+$nav-top-item-active: darken(#FFF, 60%);
 
 // SIDEBAR
 
@@ -145,7 +148,7 @@ a {
     .welcome-header-logo {
         background: url("/assets/img/logo-ew-switchboard.svg") no-repeat;
         height: 44px;
-        width: 174px; 
+        width: 174px;
         background-size: contain;
     }
 }
@@ -395,7 +398,7 @@ mat-drawer {
  th.mat-header-cell {
     background-color: #24222F !important;
     color: #FFFFFF !important;
-} 
+ }
 
 .mat-row:nth-child(odd){
     background-color: #2A2833 important;
@@ -465,7 +468,7 @@ tr.mat-row {
 .mat-dialog-title {
     color: #bcb1e0;
     border-bottom: 1px solid #363546;
-} 
+}
 
 .mat-dialog-container .mat-icon-button {
     color: #726690;
@@ -501,16 +504,16 @@ tr.mat-row {
     color: #a6a5ab;
 
     &:hover {
-      mat-icon {
-        color: #33CBCB;
-      }
+        mat-icon {
+            color: #33CBCB;
+        }
     }
-  }
- 
-  .mat-dialog-container .mat-icon-button:hover {
+}
+
+.mat-dialog-container .mat-icon-button:hover {
     color: #33CBCB;
-}  
-  
+}
+
 .mat-dialog-actions {
     border-top: 1px solid #363546 !important;
 }
@@ -609,7 +612,7 @@ mat-label {
     .mat-input-element {
         color: #FFF;
     }
-      
+
     .mat-form-field-outline {
         background: #181522 !important;
         color: #554675;
@@ -647,7 +650,7 @@ mat-label {
 
     &:hover {
         border-color: #5bd6d6 !important;
-        color: #5bd6d6 !important; 
+        color: #5bd6d6 !important;
     }
 }
 
@@ -662,7 +665,7 @@ mat-label {
 
     &:hover {
         border-color: #5bd6d6 !important;
-        color: #5bd6d6!important; 
+        color: #5bd6d6 !important;
     }
 }
 
@@ -672,7 +675,7 @@ mat-label {
 
     &:hover {
         border-color: #33CBCB !important;
-        color: #33CBCB !important; 
+        color: #33CBCB !important;
     }
 }
 
@@ -724,7 +727,7 @@ mat-label {
 
 .mat-raised-button[disabled] {
     color: rgba(255, 255, 255, 0.3);
-    background-color: rgb(33 29 47);    
+    background-color: rgb(33 29 47);
 }
 
 .icon-color {
@@ -754,15 +757,16 @@ mat-label {
     color: rgba(255,255,255,0.8);
 }
 
-.mat-form-field { 
+.mat-form-field {
     ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-      color: #B0ADDC;
-    }  
+        color: #B0ADDC;
+    }
+
     :-ms-input-placeholder { /* Internet Explorer 10-11 */
-      color: #B0ADDC;
-    } 
+        color: #B0ADDC;
+    }
 }
-  
+
 .help-wrapper {
     .help-color {
         color: #9080BA;
@@ -778,7 +782,7 @@ mat-label {
 .color-white {
     color: #FFFFFF;
 }
-  
+
 .mat-option:nth-child(odd) {
     background: #383746;
 }
@@ -800,29 +804,29 @@ mat-label {
     color: #FFF;
     background: #2A2837;
 }
-  
+
   .mat-autocomplete-panel {
     background: #2A2837;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #8D7DB6; 
+    background: #8D7DB6;
     border-radius: 10px;
 }
 
 ::-moz-scrollbar-thumb {
-    background: #8D7DB6; 
+    background: #8D7DB6;
     border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #33CBCB; 
+    background: #33CBCB;
 }
 
 ::-moz-scrollbar-thumb:hover {
-    background: #33CBCB; 
+    background: #33CBCB;
 }
 
 .border-bottom-1 {
@@ -862,7 +866,7 @@ mat-label {
 
 .color-default {
     color: #FFF !important;
-}  
+}
 
 .border-warned {
     border-left: 3px solid #FFA500 !important;
@@ -898,40 +902,40 @@ mat-label {
     background-color: #2a2937 !important;
     color: rgba(255,255,255,.87) !important;
   }
-  
-  .mat-calendar-body-cell-content {
+
+.mat-calendar-body-cell-content {
     color: rgba(255,255,255,.87) !important;
   }
-  
-  .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
+
+.mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
     color: rgba(255,255,255,.54);
   }
-  
-  .mat-calendar-body-label {
+
+.mat-calendar-body-label {
     color: rgba(255,255,255,.54) !important;
   }
-  
-  .mat-calendar-table-header-divider {
+
+.mat-calendar-table-header-divider {
     color: rgba(255,255,255,.38) !important;
   }
-  
-  .mat-calendar-arrow {
+
+.mat-calendar-arrow {
     border-top-color: rgba(255,255,255,.54) !important;
   }
-  
-  .mat-calendar-table-header {
+
+.mat-calendar-table-header {
     color: rgba(255,255,255,.38) !important;
   }
-  
-  .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected) {
     border-color: rgba(255,255,255,.38) !important;
   }
-  
-  .mat-calendar-body-selected {
+
+.mat-calendar-body-selected {
     background-color: #673ab7 !important;
   }
-  
-  .mat-calendar-table-header-divider::after {
+
+.mat-calendar-table-header-divider::after {
     background: rgba(255, 255, 255,.12);
   }
 
@@ -950,12 +954,12 @@ mat-label {
 
 .border-vertical {
     border-left: 1px solid #c1fff9;
-  
+
     mat-icon {
       color: #c1fff9;
     }
   }
-  
+
 //   Welcome Page
 
 .header-enroll {
@@ -963,8 +967,8 @@ mat-label {
 }
 
 .footer-enroll {
-    background-color: #382856; 
-    color: rgba(255, 255, 255, 0.5); 
+    background-color: #382856;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .welcome-bottom-footer {
@@ -1029,35 +1033,35 @@ color: #33CBCB;
     .mat-select-placeholder, .mat-placeholder {
       color: currentColor;
     }
-  
+
     .mat-select-value {
       color: currentColor;
     }
-  
+
     .mat-select-arrow {
       color: currentColor;
     }
-  
+
     .mat-input-element {
       color: currentColor;
     }
-  
+
     ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
       color: currentColor;
     }
-  
+
     :-ms-input-placeholder { /* Internet Explorer 10-11 */
       color: currentColor;
     }
-  
-  }
-  
-  ::ng-deep .mat-checkbox-disabled:not(.mat-checkbox-checked) .mat-checkbox-frame {
+
+}
+
+::ng-deep .mat-checkbox-disabled:not(.mat-checkbox-checked) .mat-checkbox-frame {
     opacity: 0.5;
     border-color: currentColor;
   }
-  
-  ::ng-deep .mat-checkbox-disabled .mat-checkbox-label {
+
+::ng-deep .mat-checkbox-disabled .mat-checkbox-label {
     color: currentColor;
     opacity: 0.3;
   }
@@ -1087,7 +1091,7 @@ color: #33CBCB;
             border: 1px solid #289b9b;
             color: #289b9b;
         }
-    }    
+    }
 
     .swal-button--confirm {
         &:not([disabled]):hover {
@@ -1144,63 +1148,63 @@ color: #33CBCB;
 
 .swal-overlay {
     background-color: rgba(16, 14, 22, .9) !important;
-}  
+}
 
 // Text Editor
 
     .editor {
       border: 1px solid rgb(82, 67, 110);
-  
-      &:focus-within {
+
+        &:focus-within {
         border: 1px solid rgb(103, 58, 183);
       }
-  
-      .NgxEditor {
+
+        .NgxEditor {
         background: #1C1726;
         color: white;
-   
-        &__Placeholder::before {
+
+            &__Placeholder::before {
           font-size: 16px;
         }
-  
-        &__Popup {
+
+            &__Popup {
           color: white;
           background: #1C1726;
         }
-  
-        &__MenuBar {
+
+            &__MenuBar {
           border-bottom: 1px solid rgba(0, 0, 0, 0.2);
           color: white;
           background: #1C1726;
         }
-  
-        &__MenuItem {
+
+            &__MenuItem {
           background-color: #1C1726;
-  
-          svg {
+
+                svg {
             fill: #fff;
           }
-  
-          &:hover {
+
+                &:hover {
             background-color: #1C1726;
-  
-            svg {
+
+                    svg {
               fill: #33CBCB
             }
           }
-  
-          &.NgxEditor__MenuItem--Active {
+
+                &.NgxEditor__MenuItem--Active {
             background-color: #1C1726;
-  
-            svg {
+
+                    svg {
               fill: #33CBCB
             }
           }
-  
-        }
+
+            }
       }
-  
-      .CodeMirror {
+
+        .CodeMirror {
         border: 1px solid #eee;
       }
     }
@@ -1211,7 +1215,7 @@ color: #33CBCB;
     background-color: #181423;
 }
 
-// Preloader 
+// Preloader
 .preloader {
     background-color: $preloader-bg;
     background-image: -webkit-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* Chrome 10+, Saf5.1+ */
@@ -1227,7 +1231,7 @@ color: #33CBCB;
     height: 65.5px;
     background-size: 200px 65.5px;
 }
-  
+
 .preloader-progress-bar {
     background: url("/assets/img/preloader/preloader.full.png") no-repeat;
     width: 200px;
