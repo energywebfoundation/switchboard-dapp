@@ -88,6 +88,10 @@ export class IamService {
     return this.iam.getProviderType();
   }
 
+  issueClaim() {
+    return from([]);
+  }
+
   registerAsset() {
     return from(this.iam.registerAsset());
   }
