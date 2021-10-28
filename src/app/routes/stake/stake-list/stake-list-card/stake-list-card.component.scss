@@ -4,12 +4,10 @@
 }
 
 .text-subtitle {
-  color: #A6A5AC;
   font-size: .7rem;
 }
 
-.mat-card {
-  background: #242230;
+.mat-card .staking-card {
   padding: 0;
   font-family: 'Rajdhani', sans-serif;
 
@@ -48,10 +46,9 @@
   }
 }
 
-.mat-card-actions {
+.mat-card-actions .staking-card-actions{
   display: flex;
   justify-content: space-between;
-  background: #201E2B;
   margin: 0;
 
   .action-count {

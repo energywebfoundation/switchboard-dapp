@@ -20,8 +20,11 @@ export class LoadingComponent implements AfterViewInit {
   public isCancellable = false;
   public msg = '';
   public msgList: string[];
+  loaderColor: string;
 
   constructor(private spinner: NgxSpinnerService, private loadingService: LoadingService) {
+    this.loaderColor = getComputedStyle(document.documentElement)
+      .getPropertyValue('--loader-color');
   }
 
   ngAfterViewInit(): void {

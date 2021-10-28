@@ -32,7 +32,8 @@
               "src/favicon.ico",
               "src/assets",
               "src/manifest.webmanifest",
-              "src/manifest.json"
+              "src/manifest.json",
+              "src/env.js"
             ],
             "styles": [
               "src/app/core/preloader/preloader.scss",
@@ -40,12 +41,17 @@
               {
                 "input": "src/app/shared/styles/themes/theme-a.scss",
                 "bundleName": "theme-a",
-                "inject": true
+                "inject": false
               },
               {
                 "input": "src/app/shared/styles/themes/theme-b.scss",
-                "bundleName": "theme-b",
-                "inject": true
+                "bundleName": "default",
+                "inject": false
+              },
+              {
+                "input": "src/app/shared/styles/themes/theme-c.scss",
+                "bundleName": "stedin",
+                "inject": false
               }
             ],
             "scripts": [

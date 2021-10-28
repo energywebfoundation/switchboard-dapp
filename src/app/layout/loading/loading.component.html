@@ -2,7 +2,7 @@
   <ngx-spinner
       bdColor="rgba(16, 14, 22, .9)"
       size="medium"
-      color="#a567ff"
+      [color]="loaderColor"
       type="ball-spin-fade"
       class="text-center">
     <p class="label-role mt-4" *ngIf='!msg && !msgList' data-qa-id="loading">Loading...</p>

@@ -9,8 +9,8 @@
           <div class="col-md-12">
             <div class="d-flex flex-row align-items-center">
               <img [src]="details.logoUrl" width="61px" height="61px">
-              <div class="d-flex flex-column color-white ml-3 pt-3">
-                <h5 class="mb-0 color-primary letter-spacing text-uppercase">Staking</h5>
+              <div class="d-flex flex-column text-color ml-3 pt-3">
+                <h5 class="mb-0 small letter-spacing text-uppercase">Staking</h5>
                 <h2>{{details.orgName}}</h2>
               </div>
             </div>
@@ -28,8 +28,8 @@
         <div class="row">
           <div class="col-md-6 col-lg-12 my-2">
             <div class="staking-widget widget-inner px-4 py-4">
-              <div class="staking-widget-xs-label color-white mb-2">Your account balance</div>
-              <h3 class="mb-0 color-white">
+              <div class="staking-widget-xs-label text-color mb-2">Your account balance</div>
+              <h3 class="mb-0 text-color">
                 <ng-container *ngIf="balance$ | async as balance">{{balance | lastDigits}}
                 </ng-container>
                 <span class="staking-currency">VT</span>
@@ -42,12 +42,12 @@
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="d-flex flex-column" matTooltipPosition="below"
                        matTooltip="Recent performance of the Provider, based on the performance of the nodes and any events of VT salshed.">
-                    <div class="staking-widget-xl-label color-white">
+                    <div class="staking-widget-xl-label text-color">
                       Performance
                     </div>
-                    <div class="staking-widget-sm-label color-white">Excellent</div>
+                    <div class="staking-widget-sm-label text-color">Excellent</div>
                   </div>
-                  <h3 class="mb-0 color-white">{{performance}}%</h3>
+                  <h3 class="mb-0 text-color">{{performance}}%</h3>
                 </div>
                 <div class="mt-3">
                   <mat-progress-bar mode="determinate" [value]="performance"></mat-progress-bar>
@@ -58,11 +58,11 @@
 <!--          <div class="col-md-12 my-2">-->
 <!--            <div class="staking-widget py-3 px-4">-->
 <!--              <div class="d-flex flex-column mt-2">-->
-<!--                <div class="staking-widget-xl-label color-white" matTooltip="You will not be able to access the staked VT until they are returned to you.-->
+<!--                <div class="staking-widget-xl-label text-color" matTooltip="You will not be able to access the staked VT until they are returned to you.-->
 <!--The stake with reward will be returned to the same address from which the stake was received."-->
 <!--                     matTooltipPosition="below">Annual Reward-->
 <!--                </div>-->
-<!--                <div class="staking-widget-sm-label color-white"-->
+<!--                <div class="staking-widget-sm-label text-color"-->
 <!--                     matTooltip="0.0270% per day yields 10.355% per year when compounded."-->
 <!--                     matTooltipPosition="below">-->
 <!--                  Estimated daily reward 0.03%-->
@@ -71,7 +71,7 @@
 <!--              <div class="d-flex justify-content-between align-items-center my-3">-->
 <!--                <img src="../../../../assets/img/staking/annual-reward-image.png" width="82px"-->
 <!--                     height="88px">-->
-<!--                <h3 class="mb-0 color-white">{{annualReward$ | async}}%</h3>-->
+<!--                <h3 class="mb-0 text-color">{{annualReward$ | async}}%</h3>-->
 <!--              </div>-->
 <!--            </div>-->
 <!--          </div>-->
@@ -88,7 +88,7 @@
         <div class="staking-terms p-4">
           <div class="d-flex flex-row align-items-center ml-0 ml-md-2 mt-2">
             <img src="../../../../assets/img/staking/terms-condition-image.png" width="65" height="64">
-            <div class="staking-widget-xl-label color-white ml-0 ml-md-2">Terms and Conditions</div>
+            <div class="staking-widget-xl-label text-color ml-0 ml-md-2">Terms and Conditions</div>
           </div>
           <div>
             <ul class="staking-list d-flex flex-column mt-4 mr-3 pl-2">
