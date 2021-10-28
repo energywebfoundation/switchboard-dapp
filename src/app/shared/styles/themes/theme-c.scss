@@ -488,6 +488,11 @@ tr.mat-row {
     border: 1px solid $white;
 }
 
+.img-thumbnail {
+    background-color: $stedin-gray-ultralight;
+    border: $thumbnail-border-width solid $stedin-gray-light;
+}
+
 .mat-divider {
     border-top-color: #000000 !important;
     opacity: 0.1;
