@@ -209,7 +209,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('app component');
     this.urlHistoryService.init();
     // prevent empty links to reload the page
     document.addEventListener('click', e => {
