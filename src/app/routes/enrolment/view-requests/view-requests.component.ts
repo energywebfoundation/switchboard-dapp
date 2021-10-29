@@ -30,7 +30,7 @@ export class ViewRequestsComponent implements OnInit {
   fields = [];
   userDid$ = this.store.select(userSelectors.getDid);
   keyValueList = [];
-  dataSource = this.createKeyValuePair(sampleData);
+  claimParams = this.createKeyValuePair(sampleData);
 
   constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -59,6 +59,7 @@ export class ViewRequestsComponent implements OnInit {
         this.fields = decoded.claimData.fields;
       }
     }
+    await this.setClaimParams();
   }
 
   keyValueListHandler(list: KeyValue[]) {
@@ -119,6 +120,16 @@ export class ViewRequestsComponent implements OnInit {
         }
       }
     });
+  }
+
+  private async setClaimParams() {
+    this.loadingService.show();
+    const data = await this.iamService.iam.getDidDocument({did: this.claim.subject, includeClaims: true});
+    const filteredData = data.service.filter(obj => obj.claimParams);
+    if (filteredData.length > 0) {
+      this.claimParams = this.createKeyValuePair(filteredData[0]?.claimParams);
+    }
+    this.loadingService.hide();
   }
 
   private createRecordParams(keyValue: KeyValue[]): Record<string, string> {
