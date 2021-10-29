@@ -13,11 +13,10 @@
           <mat-label class="ml-3 pl-1">Type</mat-label>
           <mat-form-field appearance="outline"
                           class="mr-0 mr-lg-0 mb-2 mb-lg-0">
-            <mat-select formControlName="type" placeholder="Select Type" data-qa-id="select-type">
-              <mat-option [value]="'manufacturer'" data-qa-id="manufacturer">Manufacturer</mat-option>
-              <mat-option [value]="'owner'" data-qa-id="owner">Owner</mat-option>
-              <mat-option [value]="'installer'" data-qa-id="installer">Installer</mat-option>
-              <mat-option [value]="'verifier'" data-qa-id="verifier">Verifier</mat-option>
+            <mat-select formControlName="type" placeholder="Select Type" data-qa-id="select-type"
+                        (selectionChange)="roleTypeSelected($event)">
+              <mat-option *ngFor="let role of roles"
+                          [value]="role" [attr.data-qa-id]="role.name">{{role.name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>

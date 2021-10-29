@@ -7,6 +7,8 @@ import {
   EnrolmentField,
   EnrolmentSubmission
 } from '../../../routes/registration/enrolment-form/enrolment-form.component';
+import { PreconditionTypes } from 'iam-client-lib';
+import { RolePreconditionType } from '../../../routes/registration/request-claim/request-claim.component';
 
 @Component({
   selector: 'app-new-issue-vc',
@@ -20,6 +22,11 @@ export class NewIssueVcComponent implements OnInit {
     subject: ['', [Validators.required, HexValidators.isDidValid()]],
     type: ['', [Validators.required]]
   });
+  roles;
+  selectedRole;
+  selectedNamespace;
+  isPrecheckSuccess;
+  rolePreconditionList = [];
 
   constructor(private fb: FormBuilder,
               @Inject(MAT_DIALOG_DATA) public data: { did: string },
@@ -27,7 +34,75 @@ export class NewIssueVcComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.issuanceVcService.getIssuerRoles().subscribe((roles) => {
+      this.roles = roles;
+    });
     this.setDid();
+  }
+
+  roleTypeSelected(e: any) {
+    if (e && e.value && e.value.definition) {
+      this.fieldList = e.value.definition.fields || [];
+      console.log(e);
+      this.selectedRole = e.value.definition;
+      this.selectedNamespace = e.value.namespace;
+
+      // Init Preconditions
+      this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
+
+    }
+  }
+
+  private _preconditionCheck(preconditionList: any[]) {
+    let retVal = true;
+
+    if (preconditionList && preconditionList.length) {
+      for (const precondition of preconditionList) {
+        switch (precondition.type) {
+          case PreconditionTypes.Role:
+            // Check for Role Conditions
+            this.rolePreconditionList = [];
+
+            const conditions = precondition.conditions;
+            if (conditions) {
+              for (const roleCondition of conditions) {
+                const status = this._getRoleConditionStatus(roleCondition);
+                this.rolePreconditionList.push({
+                  namespace: roleCondition,
+                  status
+                });
+
+                if (status !== RolePreconditionType.SYNCED) {
+                  retVal = false;
+                }
+              }
+            }
+            break;
+        }
+      }
+    }
+
+    return retVal;
+  }
+
+  private _getRoleConditionStatus(namespace: string) {
+    let status = RolePreconditionType.PENDING;
+
+    // Check if namespace exists in synced DID Doc Roles
+    for (const roleObj of this.userRoleList) {
+      if (roleObj.claimType === namespace) {
+        if (roleObj.isAccepted) {
+          if (roleObj.isSynced) {
+            status = RolePreconditionType.SYNCED;
+          } else {
+            status = RolePreconditionType.APPROVED;
+          }
+        }
+        break;
+      }
+    }
+
+    return status;
   }
 
   isDidPredefined(): boolean {
