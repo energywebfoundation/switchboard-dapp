@@ -42,10 +42,4 @@ describe('KeyValueListComponent', () => {
 
     expect(spyDelete).toHaveBeenCalledWith(0);
   });
-
-  it('should not set undefined for data', () => {
-    component.data = undefined;
-    fixture.detectChanges();
-    expect(component.dataSource.data).toEqual([]);
-  });
 });
