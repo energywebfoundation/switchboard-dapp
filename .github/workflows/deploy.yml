@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ 'develop', 'master', 'staging' ]
+    branches: [ 'develop', 'master', 'staging', 'deploy_for_stedin' ]
   pull_request:
     branches: [ 'develop', 'master' ]
 
@@ -83,12 +83,12 @@ jobs:
           remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
 
       - name: Set env file properties for stedin before deploy
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/deploy_for_stedin'
         run: |
           npm run stedin:flags
 
       - name: Deploy stedin
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/deploy_for_stedin'
         uses: burnett01/rsync-deployments@5.0
         with:
           switches: -r
