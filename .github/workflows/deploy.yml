@@ -71,13 +71,29 @@ jobs:
           echo "Prod Env Disabled"
           npm run build
 
-      - name: Deploy on develop branch
+      - name: Deploy SB-dev
         if: github.ref == 'refs/heads/develop'
         uses: burnett01/rsync-deployments@5.0
         with:
           switches: -r
           path: dist/*
           remote_path: ${{ env.SB_APP_DIR }}/develop
+          remote_host: ${{ secrets.SB_WEB_HOST }}
+          remote_user: ${{ secrets.GH_SWITCHBOARD_USERNAME }}
+          remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
+
+      - name: Set env file properties for stedin before deploy
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          npm run stedin:flags
+
+      - name: Deploy stedin
+        if: github.ref == 'refs/heads/develop'
+        uses: burnett01/rsync-deployments@5.0
+        with:
+          switches: -r
+          path: dist/*
+          remote_path: ${{ env.SB_APP_DIR }}/stedin-dev
           remote_host: ${{ secrets.SB_WEB_HOST }}
           remote_user: ${{ secrets.GH_SWITCHBOARD_USERNAME }}
           remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
