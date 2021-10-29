@@ -66,6 +66,8 @@ import { FeatureToggleDirective } from './feature-toggle/feature-toggle.directiv
 import { CopyToClipboardModule } from './directives/copy-to-clipboard/copy-to-clipboard.module';
 import { DidFormatMinifierModule } from './pipes/did-format-minifier/did-format-minifier.module';
 import { TableHeadingComponent } from './components/table-heading/table-heading.component';
+import { ToggleApplicationDirective } from './feature-toggle/toggle-application.directive';
+import { ToggleStakingDirective } from './feature-toggle/toggle-staking.directive';
 
 
 const MATERIAL_MODULES = [
@@ -144,7 +146,9 @@ const MATERIAL_MODULES = [
     SmartSearchComponent,
     ReplaceUnderscorePipe,
     FeatureToggleDirective,
-    TableHeadingComponent
+    TableHeadingComponent,
+    ToggleApplicationDirective,
+    ToggleStakingDirective
   ],
   exports: [
     CommonModule,
@@ -181,6 +185,8 @@ const MATERIAL_MODULES = [
     CopyToClipboardModule,
     DidFormatMinifierModule,
     TableHeadingComponent,
+    ToggleApplicationDirective,
+    ToggleStakingDirective
   ],
   entryComponents: [MinifiedDidViewerDialogComponent]
 })
