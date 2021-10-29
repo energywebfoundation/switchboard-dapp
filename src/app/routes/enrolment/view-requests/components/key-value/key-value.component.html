@@ -9,4 +9,4 @@
 </div>
 
 <app-key-value-form *ngIf="formVisible" (cancel)="hideForm()" (add)="addHandler($event)"></app-key-value-form>
-<app-key-value-list [data]="pairsList" (delete)="removeHandler($event)"></app-key-value-list>
+<app-key-value-list *ngIf="hasListElements()" [data]="pairsList" (delete)="removeHandler($event)"></app-key-value-list>

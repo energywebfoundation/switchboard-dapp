@@ -19,6 +19,10 @@ export class KeyValueComponent {
     this.formVisible = false;
   }
 
+  hasListElements(): boolean {
+    return this.pairsList.length > 0;
+  }
+
   addHandler(pair: KeyValue): void {
     this.hideForm();
     this.updateList([...this.pairsList, pair]);
