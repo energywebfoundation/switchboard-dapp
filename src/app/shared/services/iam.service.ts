@@ -139,8 +139,8 @@ export class IamService {
     }));
   }
 
-  getDidDocument() {
-    return from(this.iam.getDidDocument());
+  getDidDocument(data?: { did: string, includeClaims: boolean }) {
+    return from(this.iam.getDidDocument(data));
   }
 
   async getAddress() {

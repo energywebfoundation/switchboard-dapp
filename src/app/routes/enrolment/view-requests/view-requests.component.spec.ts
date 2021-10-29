@@ -9,6 +9,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { LoadingService } from '../../../shared/services/loading.service';
 import { NotificationService } from '../../../shared/services/notification.service';
 import { dialogSpy, iamServiceSpy, loadingServiceSpy } from '@tests';
+import { of } from 'rxjs';
 
 describe('ViewRequestsComponent', () => {
   let component: ViewRequestsComponent;
@@ -38,6 +39,7 @@ describe('ViewRequestsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewRequestsComponent);
     component = fixture.componentInstance;
+    iamServiceSpy.getDidDocument.and.returnValue(of({service: []}));
     fixture.detectChanges();
   });
 

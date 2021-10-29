@@ -10,14 +10,9 @@ import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { KeyValue } from './components/key-value.interface';
+import { map } from 'rxjs/operators';
 
 const TOASTR_HEADER = 'Enrolment Request';
-const sampleData =
-  {
-    createdBy: 'Alex',
-    from: '9.0',
-    to: '8.0'
-  };
 
 @Component({
   selector: 'app-view-requests',
@@ -30,7 +25,7 @@ export class ViewRequestsComponent implements OnInit {
   fields = [];
   userDid$ = this.store.select(userSelectors.getDid);
   keyValueList = [];
-  claimParams = this.createKeyValuePair(sampleData);
+  claimParams;
 
   constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -122,14 +117,18 @@ export class ViewRequestsComponent implements OnInit {
     });
   }
 
-  private async setClaimParams() {
+  private setClaimParams() {
     this.loadingService.show();
-    const data = await this.iamService.iam.getDidDocument({did: this.claim.subject, includeClaims: true});
-    const filteredData = data.service.filter(obj => obj.claimParams);
-    if (filteredData.length > 0) {
-      this.claimParams = this.createKeyValuePair(filteredData[0]?.claimParams);
-    }
-    this.loadingService.hide();
+    this.iamService.getDidDocument({did: this.claim.subject, includeClaims: true})
+      .pipe(
+        map((data) => data.service.filter(obj => obj.claimParams))
+      )
+      .subscribe(data => {
+        if (data.length > 0) {
+          this.claimParams = this.createKeyValuePair(data[0]?.claimParams);
+        }
+        this.loadingService.hide();
+      });
   }
 
   private createRecordParams(keyValue: KeyValue[]): Record<string, string> {
