@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ViewRequestsComponent } from './view-requests.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -17,8 +17,8 @@ describe('ViewRequestsComponent', () => {
   const switchboardToastrServiceSpy = jasmine.createSpyObj('SwitchboardToastrService', ['error', 'success']);
   const notificationServiceSpy = jasmine.createSpyObj('NotificationService', ['decreasePendingApprovalCount']);
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       declarations: [ViewRequestsComponent],
       providers: [
         provideMockStore(),
@@ -33,7 +33,7 @@ describe('ViewRequestsComponent', () => {
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewRequestsComponent);
@@ -43,12 +43,5 @@ describe('ViewRequestsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should run approve', () => {
-    component.approve();
-
-    expect(loadingServiceSpy.show).toHaveBeenCalled();
-    expect(loadingServiceSpy.hide).toHaveBeenCalled();
   });
 });
