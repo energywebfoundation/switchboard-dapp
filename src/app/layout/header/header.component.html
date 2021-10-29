@@ -41,7 +41,8 @@
           <h6 class="mb-0">Enrolments</h6>
         </a>
       </li>
-      <li class="nav-item coming-soon" [ngClass]="{ 'active': currentNav.includes('applications') }"
+      <li class="nav-item coming-soon" *appToggleApplication
+          [ngClass]="{ 'active': currentNav.includes('applications') }"
           data-qa-id="header-applications">
         <a class="nav-link d-lg-block d-xl-block coming-soon link-footer">
           <div class="icon-footer-center">
@@ -50,7 +51,7 @@
           <h6 class="mb-0">Applications</h6>
         </a>
       </li>
-      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('stake') }"
+      <li class="nav-item" *appToggleStaking [ngClass]="{ 'active': currentNav.includes('stake') }"
           data-qa-id="header-stake">
         <a class="nav-link d-lg-block d-xl-block link-footer" routerLink="stake">
           <div class="icon-footer-center">
