@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
@@ -9,6 +9,8 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
+import { KeyValue } from './components/key-value.interface';
+import { map } from 'rxjs/operators';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -22,6 +24,8 @@ export class ViewRequestsComponent implements OnInit {
   claim: any;
   fields = [];
   userDid$ = this.store.select(userSelectors.getDid);
+  keyValueList = [];
+  claimParams;
 
   constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -31,6 +35,10 @@ export class ViewRequestsComponent implements OnInit {
               private loadingService: LoadingService,
               private store: Store<UserClaimState>,
               private notifService: NotificationService) {
+  }
+
+  canAccept() {
+    return this.listType === 'issuer' && !this.claim?.isAccepted && !this.claim?.isRejected;
   }
 
   async ngOnInit() {
@@ -46,6 +54,11 @@ export class ViewRequestsComponent implements OnInit {
         this.fields = decoded.claimData.fields;
       }
     }
+    await this.setClaimParams();
+  }
+
+  keyValueListHandler(list: KeyValue[]) {
+    this.keyValueList = list;
   }
 
   async approve() {
@@ -57,7 +70,8 @@ export class ViewRequestsComponent implements OnInit {
         id: this.claim.id,
         token: this.claim.token,
         subjectAgreement: this.claim.subjectAgreement,
-        registrationTypes: this.claim.registrationTypes
+        registrationTypes: this.claim.registrationTypes,
+        claimParams: this.createRecordParams(this.keyValueList)
       };
 
       await this.iamService.iam.issueClaimRequest(req);
@@ -101,5 +115,29 @@ export class ViewRequestsComponent implements OnInit {
         }
       }
     });
+  }
+
+  private setClaimParams() {
+    this.loadingService.show();
+    this.iamService.getDidDocument({did: this.claim.subject, includeClaims: true})
+      .pipe(
+        map((data) => data.service.filter(obj => obj.claimParams))
+      )
+      .subscribe(data => {
+        if (data.length > 0) {
+          this.claimParams = this.createKeyValuePair(data[0]?.claimParams);
+        }
+        this.loadingService.hide();
+      });
+  }
+
+  private createRecordParams(keyValue: KeyValue[]): Record<string, string> {
+    return keyValue.reduce((prev, next) => {
+      return {...prev, [next.key]: next.value};
+    }, {});
+  }
+
+  private createKeyValuePair(object: Object) {
+    return Object.keys(object).map(key => ({key, value: object[key]}));
   }
 }
