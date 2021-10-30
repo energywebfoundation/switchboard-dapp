@@ -66,7 +66,7 @@ export class NewIssueVcComponent implements OnInit {
             const conditions = precondition.conditions;
             if (conditions) {
               for (const roleCondition of conditions) {
-                const status = this._getRoleConditionStatus(roleCondition);
+                const status = this._getRoleConditionStatus(roleCondition, []);
                 this.rolePreconditionList.push({
                   namespace: roleCondition,
                   status
@@ -85,11 +85,51 @@ export class NewIssueVcComponent implements OnInit {
     return retVal;
   }
 
-  private _getRoleConditionStatus(namespace: string) {
+  // private async getNotEnrolledRoles() {
+  //   let roleList = await this.iamService.iam.getRolesByNamespace({
+  //     parentType: this.roleType === RoleType.APP ? ENSNamespaceTypes.Application : ENSNamespaceTypes.Organization,
+  //     namespace: this.namespace
+  //   });
+  //
+  //   if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
+  //     this.userRoleList = (await this.iamService.iam.getClaimsBySubject({
+  //       did: this.form.value.subject
+  //     })).filter((claim: Claim) => !claim.isRejected);
+  //   }
+  //
+  //   if (roleList && roleList.length) {
+  //     roleList = roleList.filter((role: any) => {
+  //       let retVal = true;
+  //       const defaultRole = `${this.defaultRole}.${ENSNamespaceTypes.Roles}.${this.namespace}`;
+  //       for (let i = 0; i < this.userRoleList.length; i++) {
+  //         if (role.namespace === this.userRoleList[i].claimType &&
+  //           // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
+  //           role.definition.version.toString().split('.')[0] === this.userRoleList[i].claimTypeVersion.toString().split('.')[0]) {
+  //           if (role.namespace === defaultRole) {
+  //             // Display Error
+  //             if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
+  //               this.displayAlert('Your asset has already enrolled to this role.', 'error');
+  //             } else {
+  //               this.displayAlert('You have already enrolled to this role.', 'error');
+  //             }
+  //           }
+  //           retVal = false;
+  //           break;
+  //         }
+  //       }
+  //
+  //       return retVal;
+  //     });
+  //   }
+  //
+  //   return roleList;
+  // }
+
+  private _getRoleConditionStatus(namespace: string, roleList) {
     let status = RolePreconditionType.PENDING;
 
     // Check if namespace exists in synced DID Doc Roles
-    for (const roleObj of this.userRoleList) {
+    for (const roleObj of roleList) {
       if (roleObj.claimType === namespace) {
         if (roleObj.isAccepted) {
           if (roleObj.isSynced) {
