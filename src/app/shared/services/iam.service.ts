@@ -89,7 +89,7 @@ export class IamService {
   }
 
   issueClaim(data: { subject: string, claim: any }) {
-    return from(this.iam.issueClaim(data));
+    return this.wrapWithLoadingService(this.iam.issueClaim(data));
   }
 
   registerAsset() {

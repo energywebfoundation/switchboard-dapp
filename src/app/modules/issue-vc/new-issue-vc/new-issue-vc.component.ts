@@ -2,13 +2,15 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   EnrolmentField,
   EnrolmentSubmission
 } from '../../../routes/registration/enrolment-form/enrolment-form.component';
 import { PreconditionTypes } from 'iam-client-lib';
 import { RolePreconditionType } from '../../../routes/registration/request-claim/request-claim.component';
+
+const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
 @Component({
   selector: 'app-new-issue-vc',
@@ -30,6 +32,7 @@ export class NewIssueVcComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               @Inject(MAT_DIALOG_DATA) public data: { did: string },
+              public dialogRef: MatDialogRef<NewIssueVcComponent>,
               private issuanceVcService: IssuanceVcService) {
   }
 
@@ -49,8 +52,18 @@ export class NewIssueVcComponent implements OnInit {
 
       // Init Preconditions
       this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
+      console.log(this.rolePreconditionList);
+      console.log(this.isPrecheckSuccess);
 
     }
+  }
+
+  isRolePreconditionApproved(status: RolePreconditionType): boolean {
+    return status === RolePreconditionType.APPROVED;
+  }
+
+  isRolePreconditionPending(status: RolePreconditionType): boolean {
+    return status === RolePreconditionType.PENDING;
   }
 
   private _preconditionCheck(preconditionList: any[]) {
@@ -165,7 +178,11 @@ export class NewIssueVcComponent implements OnInit {
     if (this.isFormDisabled()) {
       return;
     }
-    this.issuanceVcService.create({subject: this.form.get('subject').value, claim: this.createClaim(data.fields)});
+    this.issuanceVcService.create({subject: this.form.get('subject').value, claim: this.createClaim(data.fields)})
+      .subscribe((data) => {
+        console.log(data);
+        this.dialogRef.close();
+      });
   }
 
   private setDid() {
@@ -185,8 +202,8 @@ export class NewIssueVcComponent implements OnInit {
 
     return {
       fields: JSON.parse(JSON.stringify(fields)),
-      // claimType: this.selectedNamespace,
-      claimTypeVersion: 1 //parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION
+      claimType: this.selectedNamespace,
+      claimTypeVersion: parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION
     };
   }
 }
