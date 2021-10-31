@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
@@ -9,14 +9,14 @@ import {
 } from '../../../routes/registration/enrolment-form/enrolment-form.component';
 import { PreconditionTypes } from 'iam-client-lib';
 import { RolePreconditionType } from '../../../routes/registration/request-claim/request-claim.component';
+import { IamService } from '../../../shared/services/iam.service';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
 @Component({
   selector: 'app-new-issue-vc',
   templateUrl: './new-issue-vc.component.html',
-  styleUrls: ['./new-issue-vc.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./new-issue-vc.component.scss']
 })
 export class NewIssueVcComponent implements OnInit {
   fieldList = [];
@@ -28,11 +28,13 @@ export class NewIssueVcComponent implements OnInit {
   selectedRole;
   selectedNamespace;
   isPrecheckSuccess;
+  alreadyEnroled;
   rolePreconditionList = [];
 
   constructor(private fb: FormBuilder,
               @Inject(MAT_DIALOG_DATA) public data: { did: string },
               public dialogRef: MatDialogRef<NewIssueVcComponent>,
+              private iamService: IamService,
               private issuanceVcService: IssuanceVcService) {
   }
 
@@ -41,9 +43,16 @@ export class NewIssueVcComponent implements OnInit {
       this.roles = roles;
     });
     this.setDid();
+
+    this.form.get('subject').valueChanges.subscribe(async (d) => {
+      if (this.form.get('subject').valid) {
+        await this.getNotEnrolledRoles(d);
+      }
+
+    });
   }
 
-  roleTypeSelected(e: any) {
+  async roleTypeSelected(e: any) {
     if (e && e.value && e.value.definition) {
       this.fieldList = e.value.definition.fields || [];
       console.log(e);
@@ -52,6 +61,9 @@ export class NewIssueVcComponent implements OnInit {
 
       // Init Preconditions
       this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
+      if (this.form.get('subject').valid) {
+        await this.getNotEnrolledRoles(this.form.get('subject').value);
+      }
       console.log(this.rolePreconditionList);
       console.log(this.isPrecheckSuccess);
 
@@ -98,45 +110,27 @@ export class NewIssueVcComponent implements OnInit {
     return retVal;
   }
 
-  // private async getNotEnrolledRoles() {
-  //   let roleList = await this.iamService.iam.getRolesByNamespace({
-  //     parentType: this.roleType === RoleType.APP ? ENSNamespaceTypes.Application : ENSNamespaceTypes.Organization,
-  //     namespace: this.namespace
-  //   });
-  //
-  //   if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
-  //     this.userRoleList = (await this.iamService.iam.getClaimsBySubject({
-  //       did: this.form.value.subject
-  //     })).filter((claim: Claim) => !claim.isRejected);
-  //   }
-  //
-  //   if (roleList && roleList.length) {
-  //     roleList = roleList.filter((role: any) => {
-  //       let retVal = true;
-  //       const defaultRole = `${this.defaultRole}.${ENSNamespaceTypes.Roles}.${this.namespace}`;
-  //       for (let i = 0; i < this.userRoleList.length; i++) {
-  //         if (role.namespace === this.userRoleList[i].claimType &&
-  //           // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
-  //           role.definition.version.toString().split('.')[0] === this.userRoleList[i].claimTypeVersion.toString().split('.')[0]) {
-  //           if (role.namespace === defaultRole) {
-  //             // Display Error
-  //             if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
-  //               this.displayAlert('Your asset has already enrolled to this role.', 'error');
-  //             } else {
-  //               this.displayAlert('You have already enrolled to this role.', 'error');
-  //             }
-  //           }
-  //           retVal = false;
-  //           break;
-  //         }
-  //       }
-  //
-  //       return retVal;
-  //     });
-  //   }
-  //
-  //   return roleList;
-  // }
+  private async getNotEnrolledRoles(did) {
+    let roleList = [...this.roles];
+
+    const list = (await this.iamService.iam.getClaimsBySubject({
+      did
+    })).filter((claim) => !claim.isRejected);
+
+    if (roleList && roleList.length) {
+      const role = this.form.value.type;
+      console.log(role);
+      this.alreadyEnroled =
+        list.some(el => {
+          return role.namespace === el.claimType &&
+            // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
+            role.definition.version.toString().split('.')[0] === el.claimTypeVersion.toString().split('.')[0] && role.namespace === this.form.get('type').value.namespace;
+        });
+      console.log(list);
+    }
+
+    return roleList;
+  }
 
   private _getRoleConditionStatus(namespace: string, roleList) {
     let status = RolePreconditionType.PENDING;
@@ -171,7 +165,7 @@ export class NewIssueVcComponent implements OnInit {
   }
 
   isFormDisabled() {
-    return this.form.invalid;
+    return this.form.invalid || this.alreadyEnroled || !this.isPrecheckSuccess;
   }
 
   create(data: EnrolmentSubmission) {

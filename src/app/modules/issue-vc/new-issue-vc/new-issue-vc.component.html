@@ -33,6 +33,7 @@
             <mat-error *ngIf="getControl('subject').hasError('required')">Subject is <strong>required</strong>
             </mat-error>
             <mat-error *ngIf="getControl('subject').hasError('invalidDid')">Subject DID format is invalid</mat-error>
+            <mat-error *ngIf="alreadyEnroled">You already enroled selected role type for this DID</mat-error>
           </mat-form-field>
         </div>
       </div>
