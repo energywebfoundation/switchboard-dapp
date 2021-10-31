@@ -33,9 +33,11 @@
             <mat-error *ngIf="getControl('subject').hasError('required')">Subject is <strong>required</strong>
             </mat-error>
             <mat-error *ngIf="getControl('subject').hasError('invalidDid')">Subject DID format is invalid</mat-error>
-            <mat-error *ngIf="alreadyEnroled">You already enroled selected role type for this DID</mat-error>
           </mat-form-field>
         </div>
+      </div>
+      <div class="card card-warning mb-4 pb-2" *ngIf="alreadyEnroled">You already enroled selected role type for this
+        DID
       </div>
       <ng-container *ngIf="!isPrecheckSuccess && rolePreconditionList?.length">
         <ng-container *ngFor="let precondition of rolePreconditionList">
