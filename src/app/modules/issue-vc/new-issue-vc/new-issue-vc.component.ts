@@ -3,10 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  EnrolmentField,
-  EnrolmentSubmission
-} from '../../../routes/registration/enrolment-form/enrolment-form.component';
 import { PreconditionTypes } from 'iam-client-lib';
 import { RolePreconditionType } from '../../../routes/registration/request-claim/request-claim.component';
 import { IamService } from '../../../shared/services/iam.service';
@@ -155,6 +151,10 @@ export class NewIssueVcComponent implements OnInit {
     return status;
   }
 
+  keyValueListHandler(e) {
+    this.fieldList = e;
+  }
+
   isDidPredefined(): boolean {
     return Boolean(this.data?.did);
   }
@@ -171,11 +171,11 @@ export class NewIssueVcComponent implements OnInit {
     return this.form.invalid || this.alreadyEnroled || !this.isPrecheckSuccess;
   }
 
-  create(data: EnrolmentSubmission) {
+  create() {
     if (this.isFormDisabled()) {
       return;
     }
-    this.issuanceVcService.create({subject: this.form.get('subject').value, claim: this.createClaim(data.fields)})
+    this.issuanceVcService.create({subject: this.form.get('subject').value, claim: this.createClaim()})
       .subscribe((data) => {
         console.log(data);
         this.dialogRef.close();
@@ -189,7 +189,7 @@ export class NewIssueVcComponent implements OnInit {
     }
   }
 
-  private createClaim(fields: EnrolmentField[]) {
+  private createClaim() {
     const parseVersion = (version: string | number) => {
       if (typeof (version) === 'string') {
         return parseInt(version.split('.')[0], 10);
@@ -198,7 +198,7 @@ export class NewIssueVcComponent implements OnInit {
     };
 
     return {
-      fields: JSON.parse(JSON.stringify(fields)),
+      fields: this.fieldList,
       claimType: this.selectedNamespace,
       claimTypeVersion: parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION
     };

@@ -56,8 +56,15 @@
           </div>
         </ng-container>
       </ng-container>
-      <app-enrolment-form [fieldList]="fieldList" [showRegistrationTypes]="false" [disabledSubmit]="isFormDisabled()"
-                          (submitForm)="create($event)"></app-enrolment-form>
+      <app-key-value (updatedList)="keyValueListHandler($event)"></app-key-value>
+
+      <div mat-dialog-actions class="d-flex justify-content-center" style="border-top: 0;">
+        <button mat-raised-button class="btn btn-primary w-100" data-qa-id="create" type="submit"
+                [disabled]="isFormDisabled()"
+                (click)="create()">
+          Create
+        </button>
+      </div>
     </form>
   </div>
 </div>
