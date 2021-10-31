@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-code-scanner.module';
 import { CreateFieldsModule } from '../applications/new-role/components/create-fields/create-fields.module';
 import { IssueVcModule } from '../../modules/issue-vc/issue-vc.module';
-import { KeyValueModule } from './view-requests/components/key-value.module';
+import { KeyValueModule } from '../../modules/key-value/key-value.module';
 
 const routes: Routes = [
   {path: '', component: EnrolmentComponent}

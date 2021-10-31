@@ -5,7 +5,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateFieldsModule } from '../../routes/applications/new-role/components/create-fields/create-fields.module';
 import { NewIssueVcComponent } from './new-issue-vc/new-issue-vc.component';
-import { KeyValueModule } from '../../routes/enrolment/view-requests/components/key-value.module';
+import { KeyValueModule } from '../key-value/key-value.module';
 
 
 @NgModule({

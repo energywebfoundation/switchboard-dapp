@@ -9,7 +9,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
-import { KeyValue } from './components/key-value.interface';
+import { KeyValue } from '../../../modules/key-value/key-value.interface';
 import { map } from 'rxjs/operators';
 
 const TOASTR_HEADER = 'Enrolment Request';
