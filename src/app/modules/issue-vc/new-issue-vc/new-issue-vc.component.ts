@@ -10,6 +10,7 @@ import {
 import { PreconditionTypes } from 'iam-client-lib';
 import { RolePreconditionType } from '../../../routes/registration/request-claim/request-claim.component';
 import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -34,6 +35,7 @@ export class NewIssueVcComponent implements OnInit {
   constructor(private fb: FormBuilder,
               @Inject(MAT_DIALOG_DATA) public data: { did: string },
               public dialogRef: MatDialogRef<NewIssueVcComponent>,
+              private loadingService: LoadingService,
               private iamService: IamService,
               private issuanceVcService: IssuanceVcService) {
   }
@@ -111,6 +113,7 @@ export class NewIssueVcComponent implements OnInit {
   }
 
   private async getNotEnrolledRoles(did) {
+    this.loadingService.show();
     let roleList = [...this.roles];
 
     const list = (await this.iamService.iam.getClaimsBySubject({
@@ -128,7 +131,7 @@ export class NewIssueVcComponent implements OnInit {
         });
       console.log(list);
     }
-
+    this.loadingService.hide();
     return roleList;
   }
 
