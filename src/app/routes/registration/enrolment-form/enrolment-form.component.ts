@@ -29,6 +29,7 @@ export class EnrolmentFormComponent {
   });
 
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
+  @Input() showRegistrationTypes: boolean = true;
 
   @Input() set fieldList(list: IRoleDefinition['fields']) {
     this.fields = list;

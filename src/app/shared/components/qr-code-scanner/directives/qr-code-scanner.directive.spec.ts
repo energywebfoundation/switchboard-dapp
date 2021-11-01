@@ -39,9 +39,23 @@ describe('QrCodeScannerDirective', () => {
   });
 
   it('should check if emits value', () => {
-    dialogSpy.open.and.returnValue({afterClosed: () => of({did: 'did'})});
+    dialogSpy.open.and.returnValue({afterClosed: () => of({value: 'did'})});
     getElement(hostDebug)('scanner').nativeElement.click();
 
     expect(component.scanned).toBeTrue();
+  });
+
+  it('should not emits value when closing with null', () => {
+    dialogSpy.open.and.returnValue({afterClosed: () => of(null)});
+    getElement(hostDebug)('scanner').nativeElement.click();
+
+    expect(component.scanned).toBeFalse();
+  });
+
+  it('should not emits value when closing with empty object', () => {
+    dialogSpy.open.and.returnValue({afterClosed: () => of({})});
+    getElement(hostDebug)('scanner').nativeElement.click();
+
+    expect(component.scanned).toBeFalse();
   });
 });

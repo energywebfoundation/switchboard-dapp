@@ -5,6 +5,8 @@ import { UrlParamService } from '../../shared/services/url-param.service';
 import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 import { MatTabGroup } from '@angular/material/tabs';
 import { NotificationService } from '../../shared/services/notification.service';
+import { MatDialog } from '@angular/material/dialog';
+import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 
 @Component({
   selector: 'app-enrolment',
@@ -37,7 +39,8 @@ export class EnrolmentComponent implements AfterViewInit {
   constructor(private activeRoute: ActivatedRoute,
               private notificationService: NotificationService,
               private urlParamService: UrlParamService,
-              private router: Router) {
+              private router: Router,
+              private dialog: MatDialog) {
   }
 
   ngAfterViewInit(): void {
@@ -65,6 +68,9 @@ export class EnrolmentComponent implements AfterViewInit {
         } else if (queryParams.selectedTab) {
           if (queryParams.selectedTab === '1') {
             this.initDefaultMyEnrolments();
+          }
+          if (queryParams.selectedTab === '2') {
+            this.initDefault(2);
           } else {
             this.initDefault();
           }
@@ -113,14 +119,22 @@ export class EnrolmentComponent implements AfterViewInit {
     this.searchByDid.setValue(value.did);
   }
 
-  private initDefault() {
+  createVC() {
+    this.dialog.open(NewIssueVcComponent, {
+      width: '600px',
+      maxWidth: '100%',
+      disableClose: true
+    });
+  }
+
+  private initDefault(index?: number) {
     if (!this._queryParamSelectedTabInit) {
       this.issuerListAccepted = false;
       this.asyncSetDropdownValue(this.dropdownValue.pending);
     }
 
     if (this.enrolmentTabGroup) {
-      this.enrolmentTabGroup.selectedIndex = 0;
+      this.enrolmentTabGroup.selectedIndex = index || 0;
     }
   }
 

@@ -34,7 +34,6 @@ import * as ApplicationSelectors from './governance/application/application.sele
 import * as RoleActions from './governance/role/role.actions';
 import * as RoleSelectors from './governance/role/role.selectors';
 
-
 export * from './store-root.module';
 export {
   AssetDetailsActions,
@@ -60,5 +59,5 @@ export {
   RoleSelectors,
 
   LayoutActions,
-  LayoutSelectors
+  LayoutSelectors,
 };

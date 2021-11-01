@@ -32,6 +32,6 @@ describe('QrCodeScannerComponent', () => {
     const did = 'did:ethr:example';
     component.scanned({text: did});
 
-    expect(dialogSpy.close).toHaveBeenCalledWith({did});
+    expect(dialogSpy.close).toHaveBeenCalledWith({value: did});
   });
 });

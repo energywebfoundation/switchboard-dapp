@@ -206,16 +206,21 @@
         </mat-step>
 
         <mat-step [completed]="false">
-          <form [formGroup]="roleForm">
-            <ng-template matStepLabel>Set Fields</ng-template>
-
-            <app-role-field [fieldsForm]="fieldsForm" [dataSource]="dataSource" [isChecking]="isChecking"
-                            (cleanForm)="formResetHandler()" (updateData)="dataSourceChangeHandler($event)"
-                            (back)="back()"
-                            (proceed)="proceedConfirmDetails()">
-            </app-role-field>
-
-          </form>
+          <ng-template matStepLabel>Set Fields</ng-template>
+          <app-role-field [fieldsList]="dataSource.data" [isChecking]="isChecking"
+                          (updateData)="dataSourceChangeHandler($event)">
+          </app-role-field>
+          <div class="d-flex justify-content-end mb-2">
+            <button mat-stroked-button
+                    class="btn btn-small mr-2 back"
+                    data-qa-id="back"
+                    (click)="back()">
+              Back
+            </button>
+            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking"
+                    (click)="proceedConfirmDetails()">Next
+            </button>
+          </div>
         </mat-step>
 
         <mat-step [editable]="false" [completed]="false">

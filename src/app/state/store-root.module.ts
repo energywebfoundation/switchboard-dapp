@@ -24,7 +24,7 @@ import { RoleStoreSliceModule } from './governance/role/role-store-slice.module'
     OrganizationStoreSliceModule,
     LayoutStoreSliceModule,
     ApplicationStoreSliceModule,
-    RoleStoreSliceModule
+    RoleStoreSliceModule,
   ],
 })
 export class StoreRootModule {

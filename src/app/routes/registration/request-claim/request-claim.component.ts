@@ -36,7 +36,7 @@ interface FormClaim extends Claim {
   claimTypeVersion: string;
 }
 
-enum RolePreconditionType {
+export enum RolePreconditionType {
   SYNCED = 'synced',
   APPROVED = 'approved',
   PENDING = 'pending'

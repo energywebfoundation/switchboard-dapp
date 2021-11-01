@@ -21,6 +21,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 import { DidQrCodeComponent } from '../did-qr-code/did-qr-code.component';
 import { FormControl } from '@angular/forms';
+import { NewIssueVcComponent } from '../../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 
 export const RESET_LIST = true;
 
@@ -143,6 +144,18 @@ export class AssetListComponent implements OnInit, OnDestroy {
         this.getAssetList();
       }
       dialogRef.unsubscribe();
+    });
+  }
+
+  createVC(element) {
+    console.log(element);
+    this.dialog.open(NewIssueVcComponent, {
+      width: '600px',
+      data: {
+        did: element.id
+      },
+      maxWidth: '100%',
+      disableClose: true
     });
   }
 
