@@ -16,11 +16,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-code-scanner.module';
-import { KeyValueFormComponent } from './view-requests/components/key-value-form/key-value-form.component';
-import { KeyValueListComponent } from './view-requests/components/key-value-list/key-value-list.component';
-import { KeyValueComponent } from './view-requests/components/key-value/key-value.component';
 import { CreateFieldsModule } from '../applications/new-role/components/create-fields/create-fields.module';
 import { IssueVcModule } from '../../modules/issue-vc/issue-vc.module';
+import { KeyValueModule } from '../../modules/key-value/key-value.module';
 
 const routes: Routes = [
   {path: '', component: EnrolmentComponent}
@@ -31,10 +29,7 @@ const routes: Routes = [
     EnrolmentComponent,
     EnrolToRoleComponent,
     ViewRequestsComponent,
-    ViewRoleComponent,
-    KeyValueFormComponent,
-    KeyValueListComponent,
-    KeyValueComponent
+    ViewRoleComponent
   ],
   imports: [
     SharedModule,
@@ -52,7 +47,8 @@ const routes: Routes = [
     MatInputModule,
     QrCodeScannerModule,
     IssueVcModule,
-    CreateFieldsModule
+    CreateFieldsModule,
+    KeyValueModule
   ],
   entryComponents: [ViewRequestsComponent, ViewRoleComponent]
 })

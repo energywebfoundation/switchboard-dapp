@@ -5,7 +5,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateFieldsModule } from '../../routes/applications/new-role/components/create-fields/create-fields.module';
 import { NewIssueVcComponent } from './new-issue-vc/new-issue-vc.component';
-import { EnrolmentFormModule } from '../../routes/registration/enrolment-form/enrolment-form.module';
+import { KeyValueModule } from '../key-value/key-value.module';
 
 
 @NgModule({
@@ -18,7 +18,7 @@ import { EnrolmentFormModule } from '../../routes/registration/enrolment-form/en
     QrCodeScannerModule,
     SharedModule,
     CreateFieldsModule,
-    EnrolmentFormModule
+    KeyValueModule
   ],
   exports: [
     NewIssueVcComponent
