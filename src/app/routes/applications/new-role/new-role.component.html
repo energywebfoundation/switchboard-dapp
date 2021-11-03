@@ -281,7 +281,7 @@
             </div>
             <mat-divider></mat-divider>
             <div class="text-left mt-3">
-              <div class="label opacity-50 mb-2">Fields</div>
+              <div class="label opacity-50 mb-2">Requestor Fields</div>
               <span class="color-white mb-0" *ngIf="!dataSource?.data?.length">None</span>
 
               <ng-container *ngIf="dataSource.data.length">
@@ -290,6 +290,18 @@
                                       [element]="element"
                                       class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block">
                   </app-fields-summary>
+                </div>
+              </ng-container>
+            </div>
+            <div class="text-left mt-3">
+              <div class="label opacity-50 mb-2">Issuer Required Fields</div>
+              <span class="color-white mb-0" *ngIf="!issuerFields?.data?.length">None</span>
+
+              <ng-container *ngIf="issuerFields.data.length">
+                <div class="field-list">
+                  <app-issuer-fields-summary *ngFor="let element of issuerFields.data"
+                                             [element]="element">
+                  </app-issuer-fields-summary>
                 </div>
               </ng-container>
             </div>
