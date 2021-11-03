@@ -7,6 +7,7 @@ import { RolePreconditionType } from '../../../routes/registration/request-claim
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { preconditionCheck } from '../../../routes/registration/utils/precondition-check';
+import { filter } from 'rxjs/operators';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -42,12 +43,9 @@ export class NewIssueVcComponent implements OnInit {
     });
     this.setDid();
 
-    this.form.get('subject').valueChanges.subscribe(async (d) => {
-      if (this.form.get('subject').valid) {
-        await this.getNotEnrolledRoles(d);
-      }
-
-    });
+    this.form.get('subject').valueChanges
+      .pipe(filter(() => this.isFormSubjectValid()))
+      .subscribe(async (d) => await this.getNotEnrolledRoles(d));
   }
 
   async roleTypeSelected(e: any) {
@@ -59,7 +57,7 @@ export class NewIssueVcComponent implements OnInit {
 
       // Init Preconditions
       this.setPreconditions();
-      if (this.form.get('subject').valid) {
+      if (this.isFormSubjectValid()) {
         await this.getNotEnrolledRoles(this.form.get('subject').value);
       }
       console.log(this.rolePreconditionList);
@@ -78,6 +76,10 @@ export class NewIssueVcComponent implements OnInit {
 
   isRolePreconditionPending(status: RolePreconditionType): boolean {
     return status === RolePreconditionType.PENDING;
+  }
+
+  isFormSubjectValid(): boolean {
+    return this.form.get('subject').valid;
   }
 
   private async getNotEnrolledRoles(did) {
