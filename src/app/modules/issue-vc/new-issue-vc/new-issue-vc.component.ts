@@ -43,7 +43,7 @@ export class NewIssueVcComponent implements OnInit {
     });
     this.setDid();
 
-    this.form.get('subject').valueChanges
+    this.getFormSubject().valueChanges
       .pipe(filter(() => this.isFormSubjectValid()))
       .subscribe(async (d) => await this.getNotEnrolledRoles(d));
   }
@@ -58,7 +58,7 @@ export class NewIssueVcComponent implements OnInit {
       // Init Preconditions
       this.setPreconditions();
       if (this.isFormSubjectValid()) {
-        await this.getNotEnrolledRoles(this.form.get('subject').value);
+        await this.getNotEnrolledRoles(this.getFormSubject().value);
       }
       console.log(this.rolePreconditionList);
       console.log(this.isPrecheckSuccess);
@@ -78,8 +78,12 @@ export class NewIssueVcComponent implements OnInit {
     return status === RolePreconditionType.PENDING;
   }
 
+  getFormSubject() {
+    return this.form.get('subject');
+  }
+
   isFormSubjectValid(): boolean {
-    return this.form.get('subject').valid;
+    return this.getFormSubject().valid;
   }
 
   private async getNotEnrolledRoles(did) {
@@ -129,7 +133,7 @@ export class NewIssueVcComponent implements OnInit {
     if (this.isFormDisabled()) {
       return;
     }
-    this.issuanceVcService.create({subject: this.form.get('subject').value, claim: this.createClaim()})
+    this.issuanceVcService.create({subject: this.getFormSubject().value, claim: this.createClaim()})
       .subscribe((data) => {
         console.log(data);
         this.dialogRef.close();
@@ -139,7 +143,7 @@ export class NewIssueVcComponent implements OnInit {
   private setDid() {
     if (this.data?.did) {
       this.form.patchValue({subject: this.data.did});
-      this.form.get('subject').disable();
+      this.getFormSubject().disable();
     }
   }
 
