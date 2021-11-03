@@ -99,8 +99,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   // Fields
   isAutolistLoading = false;
   hasSearchResult = true;
-  displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
-  displayedColumns: string[] = [...this.displayedColumnsView, 'actions'];
   dataSource = new MatTableDataSource([]);
   issuerFields = new MatTableDataSource([]);
   rolenamespaceList: Observable<any[]>;
