@@ -206,7 +206,7 @@
         </mat-step>
 
         <mat-step [completed]="false">
-          <ng-template matStepLabel>Set Fields</ng-template>
+          <ng-template matStepLabel>Set Requestor Fields</ng-template>
           <app-role-field [fieldsList]="dataSource.data" [isChecking]="isChecking"
                           (updateData)="dataSourceChangeHandler($event)">
           </app-role-field>
@@ -222,6 +222,24 @@
             </button>
           </div>
         </mat-step>
+
+        <mat-step [completed]="false">
+          <ng-template matStepLabel>Set Issuer Fields</ng-template>
+          <app-issuer-fields [issuerFields]="issuerFields.data"
+                             (updateData)="issuerFieldsChangeHandler($event)"></app-issuer-fields>
+          <div class="d-flex justify-content-end mb-2">
+            <button mat-stroked-button
+                    class="btn btn-small mr-2 back"
+                    data-qa-id="back"
+                    (click)="back()">
+              Back
+            </button>
+            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking"
+                    (click)="proceedConfirmDetails()">Next
+            </button>
+          </div>
+        </mat-step>
+
 
         <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Confirm Details</ng-template>

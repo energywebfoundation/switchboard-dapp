@@ -102,6 +102,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
   displayedColumns: string[] = [...this.displayedColumnsView, 'actions'];
   dataSource = new MatTableDataSource([]);
+  issuerFields = new MatTableDataSource([]);
   rolenamespaceList: Observable<any[]>;
   isExistsRoleName = false;
   public ViewType = ViewType;
@@ -176,6 +177,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
       // Construct Fields
       this.dataSource.data = def.fields ? [...def.fields] : [];
+      this.issuerFields.data = [];
       this._initDates();
 
       this.roleForm.patchValue({
@@ -308,6 +310,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     if (this.issuerList.length > 1) {
       this.issuerList.splice(i, 1);
     }
+  }
+
+  issuerFieldsChangeHandler(data) {
+    this.issuerFields.data = [...data];
   }
 
   addRestriction(event: ISmartSearch) {
