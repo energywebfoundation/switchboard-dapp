@@ -236,16 +236,21 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   private _initDates() {
     if (this.dataSource.data) {
-      for (const data of this.dataSource.data) {
-        if (data.fieldType === 'date') {
-          if (data.maxDate) {
-            data.maxDate = new Date(data.maxDate);
+      this.dataSource.data = this.dataSource.data.map((el) => {
+        if (el.fieldType === 'date') {
+          const date = {
+            ...el
+          };
+          if (el.maxDate) {
+            date.maxDate = new Date(el.maxDate);
           }
-          if (data.minDate) {
-            data.minDate = new Date(data.minDate);
+          if (el.minDate) {
+            date.minDate = new Date(el.minDate);
           }
+          return date;
         }
-      }
+        return el;
+      });
     }
   }
 
@@ -325,7 +330,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       } else {
         this.roleForm.get('data').patchValue({
           enrolmentPreconditions: [{type: PreconditionTypes.Role, conditions: [event.role.namespace]}]
-        })
+        });
       }
 
       this.restrictionRoleControl.setErrors(null);
