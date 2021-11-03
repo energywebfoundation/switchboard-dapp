@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Asset, ENSNamespaceTypes, IRoleDefinition, PreconditionTypes, RegistrationTypes } from 'iam-client-lib';
+import { Asset, ENSNamespaceTypes, IRoleDefinition, RegistrationTypes } from 'iam-client-lib';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
@@ -18,6 +18,7 @@ import { logout } from '../../../state/auth/auth.actions';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 import { filter, take } from 'rxjs/operators';
 import { AuthActions } from '@state';
+import { preconditionCheck } from '../utils/precondition-check';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -197,9 +198,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       this.selectedNamespace = e.value.namespace;
 
       // Init Preconditions
-      this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
-
+      this.setPreconditions();
     }
+  }
+
+  private setPreconditions(): void {
+    [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(this.selectedRole.enrolmentPreconditions, this.userRoleList);
   }
 
   async enrolForSelected(e: any) {
@@ -507,6 +511,8 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       namespace: this.namespace
     });
 
+    console.log(roleList);
+
     if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
       this.userRoleList = (await this.iamService.iam.getClaimsBySubject({
         did: this.roleTypeForm.value.assetDid
@@ -541,7 +547,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         return retVal;
       });
     }
-
+    console.log(roleList);
     return roleList;
   }
 
@@ -566,7 +572,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
               this.roleTypeForm.get('roleType').setValue(role);
 
               // Init Preconditions
-              this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
+              this.setPreconditions();
             });
         }
       }
@@ -594,55 +600,4 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     }
   }
 
-  private _getRoleConditionStatus(namespace: string) {
-    let status = RolePreconditionType.PENDING;
-
-    // Check if namespace exists in synced DID Doc Roles
-    for (const roleObj of this.userRoleList) {
-      if (roleObj.claimType === namespace) {
-        if (roleObj.isAccepted) {
-          if (roleObj.isSynced) {
-            status = RolePreconditionType.SYNCED;
-          } else {
-            status = RolePreconditionType.APPROVED;
-          }
-        }
-        break;
-      }
-    }
-
-    return status;
-  }
-
-  private _preconditionCheck(preconditionList: any[]) {
-    let retVal = true;
-
-    if (preconditionList && preconditionList.length) {
-      for (const precondition of preconditionList) {
-        switch (precondition.type) {
-          case PreconditionTypes.Role:
-            // Check for Role Conditions
-            this.rolePreconditionList = [];
-
-            const conditions = precondition.conditions;
-            if (conditions) {
-              for (const roleCondition of conditions) {
-                const status = this._getRoleConditionStatus(roleCondition);
-                this.rolePreconditionList.push({
-                  namespace: roleCondition,
-                  status
-                });
-
-                if (status !== RolePreconditionType.SYNCED) {
-                  retVal = false;
-                }
-              }
-            }
-            break;
-        }
-      }
-    }
-
-    return retVal;
-  }
 }

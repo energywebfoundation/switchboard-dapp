@@ -3,10 +3,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { PreconditionTypes } from 'iam-client-lib';
 import { RolePreconditionType } from '../../../routes/registration/request-claim/request-claim.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
+import { preconditionCheck } from '../../../routes/registration/utils/precondition-check';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -58,7 +58,7 @@ export class NewIssueVcComponent implements OnInit {
       this.selectedNamespace = e.value.namespace;
 
       // Init Preconditions
-      this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
+      this.setPreconditions();
       if (this.form.get('subject').valid) {
         await this.getNotEnrolledRoles(this.form.get('subject').value);
       }
@@ -68,44 +68,16 @@ export class NewIssueVcComponent implements OnInit {
     }
   }
 
+  private setPreconditions(): void {
+    [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(this.selectedRole.enrolmentPreconditions, []);
+  }
+
   isRolePreconditionApproved(status: RolePreconditionType): boolean {
     return status === RolePreconditionType.APPROVED;
   }
 
   isRolePreconditionPending(status: RolePreconditionType): boolean {
     return status === RolePreconditionType.PENDING;
-  }
-
-  private _preconditionCheck(preconditionList: any[]) {
-    let retVal = true;
-
-    if (preconditionList && preconditionList.length) {
-      for (const precondition of preconditionList) {
-        switch (precondition.type) {
-          case PreconditionTypes.Role:
-            // Check for Role Conditions
-            this.rolePreconditionList = [];
-
-            const conditions = precondition.conditions;
-            if (conditions) {
-              for (const roleCondition of conditions) {
-                const status = this._getRoleConditionStatus(roleCondition, []);
-                this.rolePreconditionList.push({
-                  namespace: roleCondition,
-                  status
-                });
-
-                if (status !== RolePreconditionType.SYNCED) {
-                  retVal = false;
-                }
-              }
-            }
-            break;
-        }
-      }
-    }
-
-    return retVal;
   }
 
   private async getNotEnrolledRoles(did) {
@@ -129,26 +101,6 @@ export class NewIssueVcComponent implements OnInit {
     }
     this.loadingService.hide();
     return roleList;
-  }
-
-  private _getRoleConditionStatus(namespace: string, roleList) {
-    let status = RolePreconditionType.PENDING;
-
-    // Check if namespace exists in synced DID Doc Roles
-    for (const roleObj of roleList) {
-      if (roleObj.claimType === namespace) {
-        if (roleObj.isAccepted) {
-          if (roleObj.isSynced) {
-            status = RolePreconditionType.SYNCED;
-          } else {
-            status = RolePreconditionType.APPROVED;
-          }
-        }
-        break;
-      }
-    }
-
-    return status;
   }
 
   keyValueListHandler(e) {
