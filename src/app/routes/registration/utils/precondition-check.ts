@@ -12,7 +12,7 @@ export interface PreconditionCheck {
   status: RolePreconditionType;
 }
 
-export const preconditionCheck = (preconditionList: EnrolmentPrecondition[], roleList: Claim[]): [boolean, PreconditionCheck[]] => {
+export const preconditionCheck = (preconditionList: EnrolmentPrecondition[], roleClaimList: Claim[]): [boolean, PreconditionCheck[]] => {
   let retVal = true;
   let rolePreconditionList: PreconditionCheck[];
   if (preconditionList && preconditionList.length) {
@@ -25,7 +25,7 @@ export const preconditionCheck = (preconditionList: EnrolmentPrecondition[], rol
           const conditions = precondition.conditions;
           if (conditions) {
             for (const roleCondition of conditions) {
-              const status = getRoleConditionStatus(roleCondition, roleList);
+              const status = getRoleConditionStatus(roleCondition, roleClaimList);
               rolePreconditionList.push({
                 namespace: roleCondition,
                 status
@@ -46,7 +46,6 @@ export const preconditionCheck = (preconditionList: EnrolmentPrecondition[], rol
 
 const getRoleConditionStatus = (namespace: string, roleList) => {
   let status = RolePreconditionType.PENDING;
-
   // Check if namespace exists in synced DID Doc Roles
   for (const roleObj of roleList) {
     if (roleObj.claimType === namespace) {
