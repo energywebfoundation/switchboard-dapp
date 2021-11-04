@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateFieldsModule } from '../../routes/applications/new-role/components/create-fields/create-fields.module';
 import { NewIssueVcComponent } from './new-issue-vc/new-issue-vc.component';
 import { KeyValueModule } from '../key-value/key-value.module';
+import { RequiredFieldsModule } from '../required-fields/required-fields.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { KeyValueModule } from '../key-value/key-value.module';
     QrCodeScannerModule,
     SharedModule,
     CreateFieldsModule,
-    KeyValueModule
+    KeyValueModule,
+    RequiredFieldsModule
   ],
   exports: [
     NewIssueVcComponent

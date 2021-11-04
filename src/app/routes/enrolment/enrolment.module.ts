@@ -19,6 +19,7 @@ import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-
 import { CreateFieldsModule } from '../applications/new-role/components/create-fields/create-fields.module';
 import { IssueVcModule } from '../../modules/issue-vc/issue-vc.module';
 import { KeyValueModule } from '../../modules/key-value/key-value.module';
+import { RequiredFieldsModule } from '../../modules/required-fields/required-fields.module';
 
 const routes: Routes = [
   {path: '', component: EnrolmentComponent}
@@ -48,7 +49,8 @@ const routes: Routes = [
     QrCodeScannerModule,
     IssueVcModule,
     CreateFieldsModule,
-    KeyValueModule
+    KeyValueModule,
+    RequiredFieldsModule
   ],
   entryComponents: [ViewRequestsComponent, ViewRoleComponent]
 })

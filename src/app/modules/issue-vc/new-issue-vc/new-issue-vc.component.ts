@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
@@ -8,6 +8,7 @@ import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { preconditionCheck } from '../../../routes/registration/utils/precondition-check';
 import { filter } from 'rxjs/operators';
+import { RequiredFields } from '../../required-fields/components/required-fields/required-fields.component';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -17,6 +18,7 @@ const DEFAULT_CLAIM_TYPE_VERSION = 1;
   styleUrls: ['./new-issue-vc.component.scss']
 })
 export class NewIssueVcComponent implements OnInit {
+  @ViewChild('requiredFields') requiredFields: RequiredFields;
   fieldList = [];
   form = this.fb.group({
     subject: ['', [Validators.required, HexValidators.isDidValid()]],
@@ -126,7 +128,7 @@ export class NewIssueVcComponent implements OnInit {
   }
 
   isFormDisabled() {
-    return this.form.invalid || this.alreadyEnroled || !this.isPrecheckSuccess;
+    return this.form.invalid || this.alreadyEnroled || !this.isPrecheckSuccess || !this.requiredFields.isValid();
   }
 
   create() {
@@ -158,7 +160,8 @@ export class NewIssueVcComponent implements OnInit {
     return {
       fields: this.fieldList,
       claimType: this.selectedNamespace,
-      claimTypeVersion: parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION
+      claimTypeVersion: parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION,
+      claimParams: this.requiredFields.fieldsData()
     };
   }
 }
