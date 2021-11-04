@@ -7,8 +7,9 @@ import { RolePreconditionType } from '../../../routes/registration/request-claim
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { preconditionCheck } from '../../../routes/registration/utils/precondition-check';
-import { filter } from 'rxjs/operators';
+import { filter, switchMap } from 'rxjs/operators';
 import { RequiredFields } from '../../required-fields/components/required-fields/required-fields.component';
+import { from } from 'rxjs';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -25,10 +26,10 @@ export class NewIssueVcComponent implements OnInit {
     type: ['', [Validators.required]]
   });
   roles;
-  selectedRole;
+  possibleRolesToEnrol;
+  selectedRoleDefinition;
   selectedNamespace;
   isPrecheckSuccess;
-  alreadyEnroled;
   rolePreconditionList = [];
 
   constructor(private fb: FormBuilder,
@@ -46,15 +47,17 @@ export class NewIssueVcComponent implements OnInit {
     this.setDid();
 
     this.getFormSubject().valueChanges
-      .pipe(filter(() => this.isFormSubjectValid()))
-      .subscribe(async (d) => await this.getNotEnrolledRoles(d));
+      .pipe(
+        filter(() => this.isFormSubjectValid()),
+        switchMap((did) => from(this.getNotEnrolledRoles(did)))
+      )
+      .subscribe((roles) => this.possibleRolesToEnrol = roles);
   }
 
   async roleTypeSelected(e: any) {
     if (e && e.value && e.value.definition) {
       this.fieldList = e.value.definition.fields || [];
-      console.log(e);
-      this.selectedRole = e.value.definition;
+      this.selectedRoleDefinition = e.value.definition;
       this.selectedNamespace = e.value.namespace;
 
       // Init Preconditions
@@ -62,14 +65,12 @@ export class NewIssueVcComponent implements OnInit {
       if (this.isFormSubjectValid()) {
         await this.getNotEnrolledRoles(this.getFormSubject().value);
       }
-      console.log(this.rolePreconditionList);
-      console.log(this.isPrecheckSuccess);
 
     }
   }
 
   private setPreconditions(): void {
-    [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(this.selectedRole.enrolmentPreconditions, []);
+    [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(this.selectedRoleDefinition.enrolmentPreconditions, []);
   }
 
   isRolePreconditionApproved(status: RolePreconditionType): boolean {
@@ -92,20 +93,25 @@ export class NewIssueVcComponent implements OnInit {
     this.loadingService.show();
     let roleList = [...this.roles];
 
-    const list = (await this.iamService.iam.getClaimsBySubject({
+    const assetClaims = (await this.iamService.iam.getClaimsBySubject({
       did
     })).filter((claim) => !claim.isRejected);
 
     if (roleList && roleList.length) {
-      const role = this.form.value.type;
-      console.log(role);
-      this.alreadyEnroled =
-        list.some(el => {
-          return role.namespace === el.claimType &&
+      roleList = roleList.filter((role: any) => {
+        let retVal = true;
+        for (let i = 0; i < assetClaims.length; i++) {
+          if (role.namespace === assetClaims[i].claimType &&
             // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
-            role.definition.version.toString().split('.')[0] === el.claimTypeVersion.toString().split('.')[0] && role.namespace === this.form.get('type').value.namespace;
-        });
-      console.log(list);
+            role.definition.version.toString().split('.')[0] === assetClaims[i].claimTypeVersion.toString().split('.')[0]) {
+
+            retVal = false;
+            break;
+          }
+        }
+
+        return retVal;
+      });
     }
     this.loadingService.hide();
     return roleList;
@@ -119,16 +125,12 @@ export class NewIssueVcComponent implements OnInit {
     return Boolean(this.data?.did);
   }
 
-  getControl(control: string) {
-    return this.form.get(control);
-  }
-
   scannedValue(data: { value: string }) {
     this.form.patchValue({subject: data.value});
   }
 
   isFormDisabled() {
-    return this.form.invalid || this.alreadyEnroled || !this.isPrecheckSuccess || !this.requiredFields.isValid();
+    return this.form.invalid || !this.isPrecheckSuccess || !this.requiredFields.isValid();
   }
 
   create() {
@@ -136,10 +138,7 @@ export class NewIssueVcComponent implements OnInit {
       return;
     }
     this.issuanceVcService.create({subject: this.getFormSubject().value, claim: this.createClaim()})
-      .subscribe((data) => {
-        console.log(data);
-        this.dialogRef.close();
-      });
+      .subscribe(() => this.dialogRef.close());
   }
 
   private setDid() {
@@ -160,7 +159,7 @@ export class NewIssueVcComponent implements OnInit {
     return {
       fields: this.fieldList,
       claimType: this.selectedNamespace,
-      claimTypeVersion: parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION,
+      claimTypeVersion: parseVersion(this.selectedRoleDefinition.version) || DEFAULT_CLAIM_TYPE_VERSION,
       claimParams: this.requiredFields.fieldsData()
     };
   }

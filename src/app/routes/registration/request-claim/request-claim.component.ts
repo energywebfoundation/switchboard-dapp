@@ -511,8 +511,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       namespace: this.namespace
     });
 
-    console.log(roleList);
-
     if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
       this.userRoleList = (await this.iamService.iam.getClaimsBySubject({
         did: this.roleTypeForm.value.assetDid

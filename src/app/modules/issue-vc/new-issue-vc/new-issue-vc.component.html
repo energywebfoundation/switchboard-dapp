@@ -19,9 +19,9 @@
                       (scannedValue)="scannedValue($event)">
                 <mat-icon>qr_code_2</mat-icon>
               </button>
-              <mat-error *ngIf="getControl('subject').hasError('required')">Subject is <strong>required</strong>
+              <mat-error *ngIf="getFormSubject().hasError('required')">Subject is <strong>required</strong>
               </mat-error>
-              <mat-error *ngIf="getControl('subject').hasError('invalidDid')">Subject DID format is invalid</mat-error>
+              <mat-error *ngIf="getFormSubject().hasError('invalidDid')">Subject DID format is invalid</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -31,15 +31,13 @@
             <mat-form-field appearance="outline" class="mr-0 mr-lg-0 mb-2 mb-lg-0">
               <mat-select formControlName="type" placeholder="Select Type" data-qa-id="select-type"
                           (selectionChange)="roleTypeSelected($event)">
-                <mat-option *ngFor="let role of roles" [value]="role" [attr.data-qa-id]="role.name">{{role.name}}
+                <mat-option *ngFor="let role of possibleRolesToEnrol" [value]="role"
+                            [attr.data-qa-id]="role.name">{{role.name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
         </div>
-      </div>
-      <div class="card card-warning mb-4 pb-2" *ngIf="alreadyEnroled">You already enroled selected role type for this
-        DID
       </div>
       <ng-container *ngIf="!isPrecheckSuccess && rolePreconditionList?.length">
         <ng-container *ngFor="let precondition of rolePreconditionList">
@@ -58,8 +56,10 @@
           </div>
         </ng-container>
       </ng-container>
-      <div class="card card-default d-flex shadow-none pt-3 mb-3" *ngIf="selectedRole?.metadata?.requiredParams">
-        <app-required-fields #requiredFields [fieldList]="selectedRole?.metadata?.requiredParams"></app-required-fields>
+      <div class="card card-default d-flex shadow-none pt-3 mb-3"
+           *ngIf="selectedRoleDefinition?.metadata?.requiredParams">
+        <app-required-fields #requiredFields
+                             [fieldList]="selectedRoleDefinition?.metadata?.requiredParams"></app-required-fields>
       </div>
 
       <div mat-dialog-actions class="d-flex justify-content-center" style="border-top: 0;">
