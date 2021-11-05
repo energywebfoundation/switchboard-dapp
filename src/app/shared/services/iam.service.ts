@@ -14,7 +14,7 @@ import { safeAppSdk } from './gnosis.safe.service';
 import { ConfigService } from './config.service';
 import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
-import { finalize, switchMap } from 'rxjs/operators';
+import { finalize, map, switchMap } from 'rxjs/operators';
 import { ClaimData } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 
 const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
@@ -86,6 +86,12 @@ export class IamService {
 
   get walletProvider() {
     return this.iam.getProviderType();
+  }
+
+  getClaimsBySubject(did: string) {
+    return from(this.iam.getClaimsBySubject({
+      did
+    })).pipe(map(claims => claims.filter((claim) => !claim.isRejected)));
   }
 
   getAllowedRolesByIssuer() {

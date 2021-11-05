@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
-import { from } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
 @Injectable({
@@ -23,16 +22,10 @@ export class IssuanceVcService {
     return this.iamService.issueClaim(data);
   }
 
-  async getAssetClaims(did: string) {
-    return (await this.iamService.iam.getClaimsBySubject({
-      did
-    })).filter((claim) => !claim.isRejected);
-  }
-
   getNotEnrolledRoles(did) {
     this.loadingService.show();
     let roleList = [...this.roles];
-    return from(this.getAssetClaims(did))
+    return this.iamService.getClaimsBySubject(did)
       .pipe(
         tap(assets => this.assetClaims = assets),
         map((assetsClaims: Claim[]) => {
