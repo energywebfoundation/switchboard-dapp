@@ -54,7 +54,7 @@ describe('IssuanceVcService', () => {
     iamServiceSpy.getClaimsBySubject.and.returnValue(of([{
       claimType: 'role.roles.test.iam.ewc',
       claimTypeVersion: 2,
-    },]));
+    }]));
     service.getNotEnrolledRoles('').subscribe((list) => {
       expect(list.length).toEqual(2);
     });
@@ -64,9 +64,28 @@ describe('IssuanceVcService', () => {
     iamServiceSpy.getClaimsBySubject.and.returnValue(of([{
       claimType: 'role.roles.test.iam.ewc',
       claimTypeVersion: 1,
-    },]));
+    }]));
     service.getNotEnrolledRoles('').subscribe((list) => {
       expect(list.length).toEqual(3);
+    });
+  });
+
+  it('should return 0 roles when asset claim contains all roles', () => {
+    iamServiceSpy.getClaimsBySubject.and.returnValue(of([
+      {
+        claimType: 'role.roles.test.iam.ewc',
+        claimTypeVersion: 2,
+      },
+      {
+        claimType: 'test.roles.test.iam.ewc',
+        claimTypeVersion: 1,
+      },
+      {
+        claimType: 'example.roles.test.iam.ewc',
+        claimTypeVersion: 1,
+      }]));
+    service.getNotEnrolledRoles('').subscribe((list) => {
+      expect(list.length).toEqual(0);
     });
   });
 });
