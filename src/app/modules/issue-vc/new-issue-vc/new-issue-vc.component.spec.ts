@@ -60,28 +60,9 @@ describe('NewIssueVCComponent', () => {
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
     issuanceVcServiceSpy.getNotEnrolledRoles.and.returnValue(of([{
-      'id': 569,
       'name': 'role',
-      'namespace': 'role.roles.dawidgil.iam.ewc',
+      'namespace': 'role.roles.test.iam.ewc',
       'definition': {
-        'fields': [
-          {
-            'label': 'requestor field',
-            'pattern': null,
-            'required': null,
-            'fieldType': 'text',
-            'maxLength': null,
-            'minLength': null
-          },
-          {
-            'label': 'required requestor field',
-            'pattern': null,
-            'required': true,
-            'fieldType': 'text',
-            'maxLength': null,
-            'minLength': null
-          }
-        ],
         'issuer': {
           'did': [
             'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3'
@@ -91,7 +72,6 @@ describe('NewIssueVCComponent', () => {
         'version': 2,
         'metadata': {},
         'roleName': 'issuerfields',
-        'roleType': 'org',
       }
     }]));
   });
