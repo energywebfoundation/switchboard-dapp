@@ -5,6 +5,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NewIssueVcComponent } from './new-issue-vc/new-issue-vc.component';
 import { RequiredFieldsModule } from '../required-fields/required-fields.module';
+import { EnrolmentFormModule } from '../../routes/registration/enrolment-form/enrolment-form.module';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { RequiredFieldsModule } from '../required-fields/required-fields.module'
     ReactiveFormsModule,
     QrCodeScannerModule,
     SharedModule,
-    RequiredFieldsModule
+    RequiredFieldsModule,
+    EnrolmentFormModule
   ],
   exports: [
     NewIssueVcComponent

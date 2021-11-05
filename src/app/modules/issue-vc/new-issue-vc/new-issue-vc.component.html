@@ -62,12 +62,18 @@
                              [fieldList]="selectedRoleDefinition?.metadata?.requiredParams"></app-required-fields>
       </div>
 
-      <div mat-dialog-actions class="d-flex justify-content-center" style="border-top: 0;">
-        <button mat-raised-button class="btn btn-primary w-100" data-qa-id="create" type="submit"
-                [disabled]="isFormDisabled()" (click)="create()">
-          Create
-        </button>
-      </div>
+      <app-enrolment-form
+          *ngIf="isPrecheckSuccess"
+          [fieldList]="fieldList"
+          [disabledSubmit]="isFormDisabled()"
+          (submitForm)="create($event)"></app-enrolment-form>
+
+      <!--      <div mat-dialog-actions class="d-flex justify-content-center" style="border-top: 0;">-->
+      <!--        <button mat-raised-button class="btn btn-primary w-100" data-qa-id="create" type="submit"-->
+      <!--                [disabled]="isFormDisabled()" (click)="create()">-->
+      <!--          Create-->
+      <!--        </button>-->
+      <!--      </div>-->
     </form>
   </div>
 </div>
