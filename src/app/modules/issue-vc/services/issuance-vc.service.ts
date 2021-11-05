@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
+import { from } from 'rxjs';
+import { finalize, map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IssuanceVcService {
-  roles;
+  private roles;
   assetClaims: Claim[];
 
   constructor(private iamService: IamService,
@@ -21,39 +23,43 @@ export class IssuanceVcService {
     return this.iamService.issueClaim(data);
   }
 
-  getIssuerRoles() {
-    return this.iamService.wrapWithLoadingService(this.iamService.iam.getAllowedRolesByIssuer({did: this.iamService.iam.getDid()}));
-  }
-
   async getAssetClaims(did: string) {
     return (await this.iamService.iam.getClaimsBySubject({
       did
     })).filter((claim) => !claim.isRejected);
   }
 
-  async getNotEnrolledRoles(did) {
+  getNotEnrolledRoles(did) {
     this.loadingService.show();
     let roleList = [...this.roles];
+    return from(this.getAssetClaims(did))
+      .pipe(
+        tap(assets => this.assetClaims = assets),
+        map((assetsClaims: Claim[]) => {
+          if (roleList && roleList.length) {
+            roleList = roleList.filter((role: any) => {
+              let retVal = true;
+              for (let i = 0; i < assetsClaims.length; i++) {
+                if (role.namespace === assetsClaims[i].claimType &&
+                  // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
+                  role.definition.version.toString().split('.')[0] === assetsClaims[i].claimTypeVersion.toString().split('.')[0]) {
 
-    this.assetClaims = await this.getAssetClaims(did);
+                  retVal = false;
+                  break;
+                }
+              }
 
-    if (roleList && roleList.length) {
-      roleList = roleList.filter((role: any) => {
-        let retVal = true;
-        for (let i = 0; i < this.assetClaims.length; i++) {
-          if (role.namespace === this.assetClaims[i].claimType &&
-            // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
-            role.definition.version.toString().split('.')[0] === this.assetClaims[i].claimTypeVersion.toString().split('.')[0]) {
+              return retVal;
+            });
 
-            retVal = false;
-            break;
+            return roleList;
           }
-        }
+        }),
+        finalize(() => this.loadingService.hide())
+      );
+  }
 
-        return retVal;
-      });
-    }
-    this.loadingService.hide();
-    return roleList;
+  private getIssuerRoles() {
+    return this.iamService.wrapWithLoadingService(this.iamService.iam.getAllowedRolesByIssuer({did: this.iamService.iam.getDid()}));
   }
 }

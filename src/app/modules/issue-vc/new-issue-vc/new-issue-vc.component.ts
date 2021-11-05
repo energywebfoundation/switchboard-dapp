@@ -5,9 +5,8 @@ import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RolePreconditionType } from '../../../routes/registration/request-claim/request-claim.component';
 import { preconditionCheck } from '../../../routes/registration/utils/precondition-check';
-import { filter } from 'rxjs/operators';
+import { filter, switchMap } from 'rxjs/operators';
 import { RequiredFields } from '../../required-fields/components/required-fields/required-fields.component';
-import { EnrolmentSubmission } from '../../../routes/registration/enrolment-form/enrolment-form.component';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -20,7 +19,7 @@ export class NewIssueVcComponent implements OnInit {
   @ViewChild('requiredFields') requiredFields: RequiredFields;
   fieldList = [];
   form = this.fb.group({
-    subject: ['', [Validators.required, HexValidators.isDidValid()]],
+    subject: ['did:ethr:0x396C21a535af79416fe725729812FE49958eFc54', [Validators.required, HexValidators.isDidValid()]],
     type: ['', [Validators.required]]
   });
   possibleRolesToEnrol;
@@ -36,12 +35,7 @@ export class NewIssueVcComponent implements OnInit {
 
   ngOnInit(): void {
     this.setDid();
-
-    this.getFormSubject().valueChanges
-      .pipe(
-        filter(() => this.isFormSubjectValid()),
-      )
-      .subscribe(async (did: string) => this.possibleRolesToEnrol = await this.issuanceVcService.getNotEnrolledRoles(did));
+    this.setPossibleRoles();
   }
 
   roleTypeSelected(e: any) {
@@ -88,15 +82,26 @@ export class NewIssueVcComponent implements OnInit {
   }
 
   isFormDisabled() {
+    if (!this.requiredFields) {
+      return this.form.invalid || !this.isPrecheckSuccess;
+    }
     return this.form.invalid || !this.isPrecheckSuccess || !this.requiredFields?.isValid();
   }
 
-  create(enrolForm?: EnrolmentSubmission) {
+  create() {
     if (this.isFormDisabled()) {
       return;
     }
-    this.issuanceVcService.create({subject: this.getFormSubject().value, claim: this.createClaim(enrolForm?.fields)})
+    this.issuanceVcService.create({subject: this.getFormSubject().value, claim: this.createClaim()})
       .subscribe(() => this.dialogRef.close());
+  }
+
+  private setPossibleRoles() {
+    this.getFormSubject().valueChanges
+      .pipe(
+        filter(() => this.isFormSubjectValid()),
+        switchMap((did) => this.issuanceVcService.getNotEnrolledRoles(did)),
+      ).subscribe((list) => this.possibleRolesToEnrol = list);
   }
 
   private setDid() {
@@ -106,7 +111,7 @@ export class NewIssueVcComponent implements OnInit {
     }
   }
 
-  private createClaim(fields) {
+  private createClaim() {
     const parseVersion = (version: string | number) => {
       if (typeof (version) === 'string') {
         return parseInt(version.split('.')[0], 10);
@@ -115,7 +120,6 @@ export class NewIssueVcComponent implements OnInit {
     };
 
     return {
-      fields,
       claimType: this.getFormType().value.namespace,
       claimTypeVersion: parseVersion(this.selectedRoleDefinition.version) || DEFAULT_CLAIM_TYPE_VERSION,
       claimParams: this.requiredFields.fieldsData()
