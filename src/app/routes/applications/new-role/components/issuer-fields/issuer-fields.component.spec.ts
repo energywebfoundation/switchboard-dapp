@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { IssuerFieldsComponent } from './issuer-fields.component';
 
@@ -6,12 +6,12 @@ describe('IssuerFieldsComponent', () => {
   let component: IssuerFieldsComponent;
   let fixture: ComponentFixture<IssuerFieldsComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       declarations: [IssuerFieldsComponent]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(IssuerFieldsComponent);
