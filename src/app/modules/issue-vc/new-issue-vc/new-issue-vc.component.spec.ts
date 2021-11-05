@@ -186,6 +186,24 @@ describe('NewIssueVCComponent', () => {
     expect(component.isFormDisabled()).toBeTrue();
   });
 
+  it('should check if form is enabled when requiredFields are valid', () => {
+    fixture.detectChanges();
+    component.requiredFields = {
+      isValid(): boolean {
+        return true;
+      },
+      fieldsData(): Record<string, string> {
+        return;
+      }
+    };
+    component.getFormSubject().setValue('did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89');
+    component.getFormType().setValue('test');
+    component.isPrecheckSuccess = true;
+
+    fixture.detectChanges();
+    expect(component.isFormDisabled()).toBeFalse();
+  });
+
   it('should check if form is disabled when did is incorrect', () => {
     component.getFormSubject().setValue('did:ethr:0x925b597D2a6Ac8D4a1CA31Dd65a1904f0F2e89');
     component.getFormType().setValue('test');
@@ -199,13 +217,6 @@ describe('NewIssueVCComponent', () => {
     const value = 'did:ethr:0x925b597D2a6Ac8D4a1CA31Dd65a1904f0F2e89';
     component.scannedValue(value);
     expect(component.getFormSubject().value).toEqual(value);
-  });
-
-  it('should not try to create a VC when form is invalid', () => {
-    fixture.detectChanges();
-    // issuanceVcServiceSpy.create.and.returnValue(of());
-    component.create();
-    expect(issuanceVcServiceSpy.create).not.toHaveBeenCalled();
   });
 
 });
