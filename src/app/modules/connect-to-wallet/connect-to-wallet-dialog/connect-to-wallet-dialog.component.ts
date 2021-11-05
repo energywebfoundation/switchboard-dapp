@@ -18,15 +18,10 @@ export class ConnectToWalletDialogComponent {
   constructor(private store: Store, @Inject(MAT_DIALOG_DATA) public data: { navigateOnTimeout: boolean }) {
   }
 
-  connectToWalletConnect() {
-    this.login(WalletProvider.WalletConnect);
-  }
-
-  connectToMetamask() {
-    this.login(WalletProvider.MetaMask);
-  }
-
-  private login(provider: WalletProvider) {
-    this.store.dispatch(AuthActions.loginViaDialog({provider, navigateOnTimeout: this.data?.navigateOnTimeout ?? true}));
+  login(provider: WalletProvider) {
+    this.store.dispatch(AuthActions.loginViaDialog({
+      provider,
+      navigateOnTimeout: this.data?.navigateOnTimeout ?? true
+    }));
   }
 }

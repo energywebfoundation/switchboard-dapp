@@ -75,14 +75,15 @@ export class LoginService {
    * Disconnect from IAM
    */
   logout(saveDeepLink?: boolean) {
-    this.iamService.closeConnection();
-
-    saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
+    this.iamService.closeConnection().subscribe(() => {
+      saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
+    });
   }
 
   disconnect() {
-    this.iamService.closeConnection();
-    location.reload();
+    this.iamService.closeConnection().subscribe(() => {
+      location.reload();
+    });
   }
 
   setDeepLink(deepLink: any) {

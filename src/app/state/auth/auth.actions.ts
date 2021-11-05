@@ -65,3 +65,7 @@ export const setMetamaskLoginOptions = createAction(
   '[AUTH] Set Metamask LogIn Options',
   props<{ present: boolean, chainId: number | undefined }>()
 );
+
+export const navigateWhenSessionActive = createAction(
+  '[AUTH] Navigate to dashboard when session is active'
+);
