@@ -42,10 +42,7 @@ export class NewIssueVcComponent implements OnInit {
     if (e && e.value && e.value.definition) {
       this.fieldList = e.value.definition.fields || [];
       this.selectedRoleDefinition = e.value.definition;
-
-      // Init Preconditions
       this.setPreconditions();
-      console.log(this.form.value.type);
     }
   }
 
@@ -77,11 +74,11 @@ export class NewIssueVcComponent implements OnInit {
     return Boolean(this.data?.did);
   }
 
-  scannedValue(data: { value: string }) {
-    this.form.patchValue({subject: data.value});
+  scannedValue(did: string): void {
+    this.form.patchValue({subject: did});
   }
 
-  isFormDisabled() {
+  isFormDisabled(): boolean {
     if (!this.requiredFields) {
       return this.form.invalid || !this.isPrecheckSuccess;
     }
@@ -122,7 +119,7 @@ export class NewIssueVcComponent implements OnInit {
     return {
       claimType: this.getFormType().value.namespace,
       claimTypeVersion: parseVersion(this.selectedRoleDefinition.version) || DEFAULT_CLAIM_TYPE_VERSION,
-      claimParams: this.requiredFields.fieldsData()
+      claimParams: this.requiredFields?.fieldsData()
     };
   }
 }

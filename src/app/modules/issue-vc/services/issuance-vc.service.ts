@@ -14,7 +14,7 @@ export class IssuanceVcService {
 
   constructor(private iamService: IamService,
               private loadingService: LoadingService) {
-    this.getIssuerRoles().subscribe((roles) => {
+    this.iamService.getAllowedRolesByIssuer().subscribe((roles) => {
       this.roles = roles;
     });
   }
@@ -59,7 +59,4 @@ export class IssuanceVcService {
       );
   }
 
-  private getIssuerRoles() {
-    return this.iamService.wrapWithLoadingService(this.iamService.iam.getAllowedRolesByIssuer({did: this.iamService.iam.getDid()}));
-  }
 }

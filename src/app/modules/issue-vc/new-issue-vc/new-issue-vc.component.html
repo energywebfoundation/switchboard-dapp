@@ -16,7 +16,7 @@
               <input matInput formControlName="subject" placeholder="DID that is receiving the credential"
                      maxlength="256" data-qa-id="subject-did" required autocomplete="off">
               <button *ngIf="!isDidPredefined()" matSuffix mat-icon-button aria-label="Scan DID" appQrCodeScanner
-                      (scannedValue)="scannedValue($event)">
+                      (scannedValue)="scannedValue($event.value)">
                 <mat-icon>qr_code_2</mat-icon>
               </button>
               <mat-error *ngIf="getFormSubject().hasError('required')">Subject is <strong>required</strong>

@@ -7,7 +7,7 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./issuer-field-form.component.scss']
 })
 export class IssuerFieldFormComponent implements OnInit {
-  @Input() data;
+  @Input() data: { name: string; description: string; pattern: string };
   @Output() added = new EventEmitter();
   @Output() updated = new EventEmitter();
   @Output() canceled = new EventEmitter();

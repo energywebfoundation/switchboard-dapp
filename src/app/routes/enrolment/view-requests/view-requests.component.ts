@@ -121,7 +121,7 @@ export class ViewRequestsComponent implements OnInit {
   }
 
   private async getRoleMetadata(namespace: string) {
-    const definitions: any = await this.iamService.iam.getRolesDefinition({namespaces: [namespace]});
+    const definitions: any = await this.iamService.getRolesDefinition([namespace]);
     const requiredParams = definitions[namespace]?.metadata?.requiredParams;
     if (requiredParams && Array.isArray(requiredParams) && requiredParams.length > 0) {
       this.fieldList = requiredParams;

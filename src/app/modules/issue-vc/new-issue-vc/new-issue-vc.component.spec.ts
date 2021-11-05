@@ -59,7 +59,41 @@ describe('NewIssueVCComponent', () => {
     fixture = TestBed.createComponent(NewIssueVcComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
-    issuanceVcServiceSpy.getNotEnrolledRoles.and.returnValue(of([]));
+    issuanceVcServiceSpy.getNotEnrolledRoles.and.returnValue(of([{
+      'id': 569,
+      'name': 'role',
+      'namespace': 'role.roles.dawidgil.iam.ewc',
+      'definition': {
+        'fields': [
+          {
+            'label': 'requestor field',
+            'pattern': null,
+            'required': null,
+            'fieldType': 'text',
+            'maxLength': null,
+            'minLength': null
+          },
+          {
+            'label': 'required requestor field',
+            'pattern': null,
+            'required': true,
+            'fieldType': 'text',
+            'maxLength': null,
+            'minLength': null
+          }
+        ],
+        'issuer': {
+          'did': [
+            'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3'
+          ],
+          'issuerType': 'DID'
+        },
+        'version': 2,
+        'metadata': {},
+        'roleName': 'issuerfields',
+        'roleType': 'org',
+      }
+    }]));
   });
 
   it('should create', () => {
@@ -77,18 +111,22 @@ describe('NewIssueVCComponent', () => {
     expect(subjectDid.disabled).toBeTrue();
   });
 
-  xit('should create new VC', () => {
+  it('should create new VC', () => {
+    issuanceVcServiceSpy.create.and.returnValue(of());
     fixture.detectChanges();
 
-    const {subjectDid, selectType, createBtn} = getSelectors(hostDebug);
+    const {subjectDid, createBtn} = getSelectors(hostDebug);
 
     subjectDid.value = 'did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89';
     dispatchInputEvent(subjectDid);
 
+    fixture.detectChanges();
+
+    const {selectType} = getSelectors(hostDebug);
     selectType.click();
     fixture.detectChanges();
 
-    getElement(hostDebug)('owner').nativeElement.click();
+    getElement(hostDebug)('role').nativeElement.click();
 
     fixture.detectChanges();
 
@@ -96,6 +134,22 @@ describe('NewIssueVCComponent', () => {
 
     createBtn.click();
     expect(issuanceVcServiceSpy.create).toHaveBeenCalled();
+  });
+
+  it('should not display role list when did is invalid', () => {
+    fixture.detectChanges();
+
+    const {subjectDid} = getSelectors(hostDebug);
+
+    subjectDid.value = 'invalid did';
+    dispatchInputEvent(subjectDid);
+
+    fixture.detectChanges();
+
+    const {selectType} = getSelectors(hostDebug);
+
+    expect(component.isFormSubjectValid()).toBeFalse();
+    expect(selectType).toBeFalsy();
   });
 
   it('should check if form is enabled when form is valid and precheck is true', () => {
@@ -120,6 +174,19 @@ describe('NewIssueVCComponent', () => {
     component.isPrecheckSuccess = true;
     fixture.detectChanges();
     expect(component.isFormDisabled()).toBeTrue();
+  });
+
+  it('scannedValue should patch subject property', () => {
+    fixture.detectChanges();
+    const value = 'did:ethr:0x925b597D2a6Ac8D4a1CA31Dd65a1904f0F2e89';
+    component.scannedValue(value);
+    expect(component.getFormSubject().value).toEqual(value);
+  });
+
+  it('should not try to create a VC when form is invalid', () => {
+    // issuanceVcServiceSpy.create.and.returnValue(of());
+    component.create();
+    expect(issuanceVcServiceSpy.create).not.toHaveBeenCalled();
   });
 });
 

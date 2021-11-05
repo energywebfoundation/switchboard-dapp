@@ -88,6 +88,14 @@ export class IamService {
     return this.iam.getProviderType();
   }
 
+  getAllowedRolesByIssuer() {
+    return this.wrapWithLoadingService(this.iam.getAllowedRolesByIssuer({did: this.iam.getDid()}));
+  }
+
+  getRolesDefinition(namespaces: string[]) {
+    return this.iam.getRolesDefinition({namespaces});
+  }
+
   issueClaim(data: { subject: string, claim: any }) {
     return this.wrapWithLoadingService(this.iam.issueClaim(data));
   }
