@@ -27,18 +27,9 @@ export class IssuanceVcService {
         tap(assets => this.assetClaims = assets),
         map((assetsClaims: Claim[]) => {
           return this.roles.filter((role: any) => {
-            let retVal = true;
-            for (let i = 0; i < assetsClaims.length; i++) {
-              if (role.namespace === assetsClaims[i].claimType &&
-                // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
-                role.definition.version.toString().split('.')[0] === assetsClaims[i].claimTypeVersion.toString().split('.')[0]) {
-
-                retVal = false;
-                break;
-              }
-            }
-
-            return retVal;
+            return !assetsClaims.some((asset) => role.namespace === asset.claimType &&
+              // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
+              role.definition.version.toString().split('.')[0] === asset.claimTypeVersion.toString().split('.')[0]);
           });
         }),
         finalize(() => this.loadingService.hide())
