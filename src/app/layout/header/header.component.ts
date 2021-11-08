@@ -17,6 +17,9 @@ import { SwitchboardToastr, SwitchboardToastrService } from '../../shared/servic
 import { LoginService } from '../../shared/services/login/login.service';
 import { logoutWithRedirectUrl } from '../../state/auth/auth.actions';
 import { DidBookComponent } from '../../modules/did-book/components/did-book/did-book.component';
+import { DidBookService } from '../../modules/did-book/services/did-book.service';
+import { AuthSelectors } from '@state';
+import { truthy } from '@operators';
 
 @Component({
   selector: 'app-header',
@@ -69,7 +72,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private notifService: NotificationService,
               public settings: SettingsService, public dialog: MatDialog,
               private store: Store<UserClaimState>,
-              private loginService: LoginService) {
+              private loginService: LoginService,
+              private didBookService: DidBookService) {
+    this.store.select(AuthSelectors.isUserLoggedIn)
+      .pipe(
+        truthy(),
+        takeUntil(this._subscription$)
+      ).subscribe(() => this.didBookService.getList());
+
     if (localStorage.getItem('currentUser')) {
       this.currentUserDid = JSON.parse(localStorage.getItem('currentUser')).did;
       this.currentUserRole = JSON.parse(localStorage.getItem('currentUser')).organizationType;
@@ -355,7 +365,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.clearSwitchboardToaster();
-    this.store.dispatch(logoutWithRedirectUrl())
+    this.store.dispatch(logoutWithRedirectUrl());
   }
 
   clearSwitchboardToaster(): void {

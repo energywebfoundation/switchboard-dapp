@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { DidBookRecord } from '../../services/did-book.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { DidBookRecord } from '../models/did-book-record';
 
 @Component({
   selector: 'app-did-book-list',
@@ -14,13 +13,13 @@ export class DidBookListComponent {
       return;
     }
 
-    this.dataSource.data = value;
+    this.data = value;
   };
 
   @Output() delete = new EventEmitter<string>();
-  displayedColumns = ['label', 'actions'];
 
-  dataSource = new MatTableDataSource<DidBookRecord>([]);
+  displayedColumns = ['label', 'actions'];
+  data: DidBookRecord[] = [];
 
   remove(id: string) {
     this.delete.emit(id);

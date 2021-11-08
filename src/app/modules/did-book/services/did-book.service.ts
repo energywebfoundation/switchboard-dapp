@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DidBookHttpService } from './did-book-http.service';
+import { DidBookRecord } from '../components/models/did-book-record';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 
-export interface DidBookRecord {
-  label: string;
-  did: string;
-  uuid: string;
-  created_at: string;
-}
+const TOASTR_HEADER = 'DID Book';
 
 @Injectable()
 export class DidBookService {
   private list = new BehaviorSubject([]);
 
-  constructor(private httpDodBook: DidBookHttpService) {
-    this.getList();
+  constructor(private httpDidBook: DidBookHttpService,
+              private toastr: SwitchboardToastrService) {
   }
 
   get list$(): Observable<DidBookRecord[]> {
@@ -22,13 +19,16 @@ export class DidBookService {
   }
 
   getList(): void {
-    this.httpDodBook.getList().subscribe((list) => this.list.next(list));
+    this.httpDidBook.getList().subscribe((list: DidBookRecord[]) => this.list.next(list));
   }
 
   add(record: Partial<DidBookRecord>) {
-    this.list.next([...this.list.value, record]);
+    this.httpDidBook.add(record).subscribe(() =>
+      this.toastr.info('New DID Address has been added', TOASTR_HEADER));
   }
 
   delete(uuid: string) {
+    this.httpDidBook.delete(uuid).subscribe(() =>
+      this.toastr.info('DID Address has been successfully removed', TOASTR_HEADER));
   }
 }

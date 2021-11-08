@@ -1,42 +1,32 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { DidBookRecord } from '../components/models/did-book-record';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { finalize } from 'rxjs/operators';
 
 @Injectable()
 export class DidBookHttpService {
+  private readonly didBookEndpoint = '/didContact';
+  private readonly httpOptions = {withCredentials: true};
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private loadingService: LoadingService) {
   }
 
   getList() {
-    return of([
-      {
-        label: 'asd',
-        did: 'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3'
-      }, {
-        label: 'asd1',
-        did: 'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3'
-      }, {
-        label: 'asd2',
-        did: 'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3'
-      }, {
-        label: 'asd3',
-        did: 'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3'
-      }, {
-        label: 'asd4',
-        did: 'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3'
-      }, {
-        label: 'asd5',
-        did: 'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3'
-      },
-    ]);
+    return this.http.get(environment.cacheServerUrl + this.didBookEndpoint, this.httpOptions);
   }
 
   delete(uuid: string) {
-
+    this.loadingService.show('Deleting DID record');
+    return this.http.delete(environment.cacheServerUrl + this.didBookEndpoint + `/${uuid}`, this.httpOptions)
+      .pipe(finalize(() => this.loadingService.hide()));
   }
 
-  add(record) {
-
+  add(record: Partial<DidBookRecord>) {
+    this.loadingService.show('Adding DID record');
+    return this.http.post(environment.cacheServerUrl + this.didBookEndpoint, record, this.httpOptions)
+      .pipe(finalize(() => this.loadingService.hide()));
   }
 }
