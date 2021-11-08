@@ -34,7 +34,7 @@ export class DidBookFormComponent implements OnInit {
     if (this.isFormInvalid) {
       return;
     }
-    this.add.emit(this.form.value);
+    this.add.emit(this.form.getRawValue());
     this.clear();
   }
 
