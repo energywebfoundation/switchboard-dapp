@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ExpiredRequestError } from '../../../shared/errors/errors';
 import { IamRequestService } from '../../../shared/services/iam-request.service';
 import { IamService } from '../../../shared/services/iam.service';
@@ -10,8 +10,6 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatStepper } from '@angular/material/stepper';
 import { Subject } from 'rxjs';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
-import { DidBookService } from '../../../modules/did-book/services/did-book.service';
 import { extractAddress } from '../../../utils/functions/extract-address/extract-address';
 
 const TOASTR_HEADER = 'Transfer Ownership';
@@ -27,7 +25,7 @@ const ListType = {
   templateUrl: './transfer-ownership.component.html',
   styleUrls: ['./transfer-ownership.component.scss']
 })
-export class TransferOwnershipComponent implements OnInit, OnDestroy {
+export class TransferOwnershipComponent implements OnDestroy {
   destroy$ = new Subject();
 
   private stepper: MatStepper;
@@ -41,10 +39,10 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   namespace = '';
   assetDid = '';
   type: string;
-  didBook$ = this.didBookServ.list$;
 
   newOwnerModifiedAddress = new FormControl('');
-  newOwnerDID = new FormControl('', [Validators.required, HexValidators.isDidValid()]);
+  didValid: boolean;
+  newOwnerDID: string;
 
   public mySteps = [];
   isProcessing = false;
@@ -58,15 +56,18 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
               private changeDetector: ChangeDetectorRef,
               public dialogRef: MatDialogRef<TransferOwnershipComponent>,
               public dialog: MatDialog,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              private didBookServ: DidBookService) {
+              @Inject(MAT_DIALOG_DATA) public data: any) {
     this.namespace = this.data.namespace;
     this.type = this.data.type;
     this.assetDid = this.data.assetDid;
   }
 
 
-  ngOnInit(): void {
+  didChangeHandler(e) {
+    if (e.valid) {
+      this.newOwnerDID = e.did;
+    }
+    this.didValid = e.valid;
   }
 
   ngOnDestroy(): void {
@@ -89,7 +90,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   }
 
   async closeDialog(isSuccess?: boolean) {
-    if (this.newOwnerDID.touched && !isSuccess) {
+    if (this.didValid && !isSuccess) {
       if (await this.confirm('There are unsaved changes. Do you wish to continue?', true)) {
         this.dialogRef.close(false);
       }
@@ -102,9 +103,9 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
   }
 
   async submit() {
-    if (this.newOwnerDID.value === this.iamService.signerService.did) {
+    if (this.newOwnerDID === this.iamService.signerService.did) {
       this.toastr.error('You cannot transfer to your own DID.', TOASTR_HEADER);
-    } else if (this.newOwnerDID.valid) {
+    } else if (this.didValid) {
       if (this.namespace) {
         await this._transferOrgAppRole();
       } else if (this.assetDid) {
@@ -121,7 +122,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
       const returnSteps = this.iamService.signerService.address === this.data.owner;
       const req = {
         namespace: this.namespace,
-        newOwner: extractAddress(this.newOwnerDID.value),
+        newOwner: extractAddress(this.newOwnerDID),
         returnSteps
       };
 
@@ -145,7 +146,6 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
             next: async () => await call
           }];
 
-        this.newOwnerDID.disable();
         this.isProcessing = true;
         this.changeDetector.detectChanges();
         this.loadingService.hide();
@@ -169,7 +169,7 @@ export class TransferOwnershipComponent implements OnInit, OnDestroy {
       try {
         await this.iamService.assetsService.offerAsset({
           assetDID: this.assetDid,
-          offerTo: extractAddress(this.newOwnerDID.value)
+          offerTo: extractAddress(this.newOwnerDID)
         });
         this.dialogRef.close(true);
       } catch (e) {

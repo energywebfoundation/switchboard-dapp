@@ -33,6 +33,7 @@ import { ApplicationListComponent } from './application-list/application-list.co
 import { ActionsMenuComponent } from './actions/actions-menu/actions-menu.component';
 import { FilterComponent } from './filter/filter.component';
 import { CreateFieldsModule } from './new-role/components/create-fields/create-fields.module';
+import { DidBookModule } from '../../modules/did-book/did-book.module';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -77,7 +78,8 @@ const routes: Routes = [
     GovernanceDetailsModule,
     MatExpansionModule,
     NgxEditorModule,
-    CreateFieldsModule
+    CreateFieldsModule,
+    DidBookModule
   ],
   entryComponents: [
     NewOrganizationComponent,
