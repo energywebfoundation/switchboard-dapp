@@ -14,7 +14,7 @@ export class DidBookService {
               private toastr: SwitchboardToastrService) {
   }
 
-  get list$(): Observable<DidBookRecord[]> {
+  getList$(): Observable<DidBookRecord[]> {
     return this.list.asObservable();
   }
 

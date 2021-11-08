@@ -11,7 +11,6 @@ import { map, startWith } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DidBookComponent implements OnInit {
-
   list$;
   filter = new FormControl('');
 
@@ -19,7 +18,7 @@ export class DidBookComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.list$ = combineLatest([this.didBookService.list$, this.filter.valueChanges.pipe(startWith(''))])
+    this.list$ = combineLatest([this.didBookService.getList$(), this.filter.valueChanges.pipe(startWith(''))])
       .pipe(map(([list, value]) =>
         list.filter(el => el.label.toLowerCase().includes(value.toLowerCase()))
       ));

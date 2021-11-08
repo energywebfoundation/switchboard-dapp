@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DidBookFormComponent } from './did-book-form.component';
 import { dispatchInputEvent, getElement } from '@tests';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('DidBookFormComponent', () => {
   let component: DidBookFormComponent;
@@ -9,6 +10,9 @@ describe('DidBookFormComponent', () => {
   let hostDebug;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      imports: [
+        ReactiveFormsModule
+      ],
       declarations: [DidBookFormComponent]
     })
       .compileComponents();
@@ -35,13 +39,13 @@ describe('DidBookFormComponent', () => {
 
   it('should emit adding pair when form is valid', () => {
     const addSpy = spyOn(component.add, 'emit');
-    const {key, value, add} = getSelectors(hostDebug);
+    const {label, did, add} = getSelectors(hostDebug);
 
-    key.value = 'test';
-    dispatchInputEvent(key);
+    label.value = 'test';
+    dispatchInputEvent(label);
 
-    value.value = 'value';
-    dispatchInputEvent(value);
+    did.value = 'value';
+    dispatchInputEvent(did);
 
     fixture.detectChanges();
 
@@ -62,6 +66,6 @@ describe('DidBookFormComponent', () => {
 const getSelectors = (hostDebug) => ({
   cancel: getElement(hostDebug)('cancel')?.nativeElement,
   add: getElement(hostDebug)('add')?.nativeElement,
-  key: getElement(hostDebug)('key')?.nativeElement,
-  value: getElement(hostDebug)('value')?.nativeElement,
+  label: getElement(hostDebug)('label')?.nativeElement,
+  did: getElement(hostDebug)('did')?.nativeElement,
 });

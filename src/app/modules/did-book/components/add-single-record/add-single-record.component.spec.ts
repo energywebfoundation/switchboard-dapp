@@ -4,6 +4,7 @@ import { AddSingleRecordComponent } from './add-single-record.component';
 import { DidBookService } from '../../services/did-book.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { dialogSpy } from '@tests';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AddSingleRecordComponent', () => {
   let component: AddSingleRecordComponent;
@@ -14,10 +15,11 @@ describe('AddSingleRecordComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AddSingleRecordComponent],
       providers: [
-        {provider: DidBookService, useValue: didBookServiceSpy},
-        {provider: MatDialogRef, useValue: dialogSpy},
-        {provider: MAT_DIALOG_DATA, useValue: {did: 'did'}}
-      ]
+        {provide: DidBookService, useValue: didBookServiceSpy},
+        {provide: MatDialogRef, useValue: dialogSpy},
+        {provide: MAT_DIALOG_DATA, useValue: {did: 'did'}}
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));
