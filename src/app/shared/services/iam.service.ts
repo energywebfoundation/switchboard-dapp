@@ -19,9 +19,6 @@ import { ClaimData } from 'iam-client-lib/dist/src/cacheServerClient/cacheServer
 
 const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
 
-const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
-const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
-
 export const VOLTA_CHAIN_ID = 73799;
 
 @Injectable({
