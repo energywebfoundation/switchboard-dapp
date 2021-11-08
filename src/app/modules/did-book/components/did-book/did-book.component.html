@@ -7,9 +7,22 @@
 <div mat-dialog-content>
   <div class="mb-2 mt-4 mx-4 mx-lg-4 pb-3">
     <app-did-book-form (add)="addHandler($event)"></app-did-book-form>
-
     <ng-container *ngIf="list$ | async as list">
-      <app-did-book-list *ngIf="list.length > 0" [list]="list" (delete)="delete($event)"></app-did-book-list>
+      <div class="mb-4 mt-4">
+        <mat-form-field appearance="outline"
+                        class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+          <input matInput autocomplete="off" [formControl]="filter" type="text" placeholder="Search through Label"
+                 data-qa-id="filter-did"
+                 maxlength="256"/>
+        </mat-form-field>
+      </div>
+      <app-did-book-list *ngIf="list.length > 0; else emptyList" [list]="list"
+                         (delete)="delete($event)"></app-did-book-list>
     </ng-container>
   </div>
 </div>
+
+
+<ng-template #emptyList>
+  <app-no-records></app-no-records>
+</ng-template>
