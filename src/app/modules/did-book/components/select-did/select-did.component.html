@@ -19,5 +19,10 @@
         </mat-error>
       </mat-form-field>
     </div>
+    <div class="col-12" *ngIf="isNotKnownDid && newOwnerDID.valid">
+      <div>Do you want to add this did to your DID Book?
+        <button mat-stroked-button class="btn-small mr-2" data-qa-id="add" (click)="approveHandler()">Yes</button>
+      </div>
+    </div>
   </div>
 </div>

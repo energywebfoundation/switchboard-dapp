@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../../utils/validators/is-hex/is-hex.validator';
 
@@ -8,8 +8,8 @@ import { HexValidators } from '../../../../utils/validators/is-hex/is-hex.valida
   styleUrls: ['./did-book-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DidBookFormComponent {
-  @Input() data;
+export class DidBookFormComponent implements OnInit {
+  @Input() did;
   @Output() add = new EventEmitter();
   @Output() cancel = new EventEmitter();
 
@@ -18,11 +18,16 @@ export class DidBookFormComponent {
     did: ['', [Validators.required, HexValidators.isDidValid()]]
   });
 
-  constructor(private fb: FormBuilder) {
-  }
 
   get isFormInvalid() {
     return this.form.invalid;
+  }
+
+  constructor(private fb: FormBuilder) {
+  }
+
+  ngOnInit() {
+    this.setPredefinedDid();
   }
 
   submit() {
@@ -35,10 +40,17 @@ export class DidBookFormComponent {
 
   reject() {
     this.cancel.emit();
+    this.form.reset();
   }
 
   private clear(): void {
     this.form.reset();
+  }
+
+  private setPredefinedDid() {
+    if (this.did) {
+      this.form.patchValue({did: this.did});
+    }
   }
 
 }
