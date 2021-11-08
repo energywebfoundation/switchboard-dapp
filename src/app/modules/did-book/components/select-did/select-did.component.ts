@@ -26,7 +26,9 @@ export class SelectDidComponent implements OnInit {
   ngOnInit(): void {
     this.didBook$ = combineLatest([this.didBookServ.list$, this.newOwnerDID.valueChanges.pipe(startWith(''))])
       .pipe(map(([list, value]) => {
-          const filteredList = list.filter(el => el.did.toLowerCase().includes(value.toLowerCase()));
+          const filteredList = list.filter(el =>
+            el.did.toLowerCase().includes(value.toLowerCase()) || el.label.toLowerCase().includes(value.toLowerCase())
+          );
           this.isNotKnownDid = filteredList.length === 0;
           return filteredList;
         })
