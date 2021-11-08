@@ -50,6 +50,7 @@ export class DidBookFormComponent implements OnInit {
   private setPredefinedDid() {
     if (this.did) {
       this.form.patchValue({did: this.did});
+      this.form.get('did').disable();
     }
   }
 

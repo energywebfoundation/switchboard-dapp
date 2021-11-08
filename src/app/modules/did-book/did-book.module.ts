@@ -7,6 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { DidBookService } from './services/did-book.service';
 import { DidBookHttpService } from './services/did-book-http.service';
 import { SelectDidComponent } from './components/select-did/select-did.component';
+import { AddSingleRecordComponent } from './components/add-single-record/add-single-record.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { SelectDidComponent } from './components/select-did/select-did.component
     DidBookFormComponent,
     DidBookListComponent,
     DidBookComponent,
-    SelectDidComponent
+    SelectDidComponent,
+    AddSingleRecordComponent
   ],
   imports: [
     CommonModule,

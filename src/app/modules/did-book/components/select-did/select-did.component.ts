@@ -4,6 +4,8 @@ import { HexValidators } from '../../../../utils/validators/is-hex/is-hex.valida
 import { DidBookService } from '../../services/did-book.service';
 import { combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { AddSingleRecordComponent } from '../add-single-record/add-single-record.component';
 
 @Component({
   selector: 'app-select-did',
@@ -17,7 +19,8 @@ export class SelectDidComponent implements OnInit {
   newOwnerDID = new FormControl('', [Validators.required, HexValidators.isDidValid()]);
   isNotKnownDid: boolean;
 
-  constructor(private didBookServ: DidBookService) {
+  constructor(private didBookServ: DidBookService,
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -29,7 +32,6 @@ export class SelectDidComponent implements OnInit {
         })
       );
 
-
     this.newOwnerDID.valueChanges
       .subscribe((did) => {
         this.didChange.emit({did, valid: this.newOwnerDID.valid});
@@ -37,6 +39,10 @@ export class SelectDidComponent implements OnInit {
   }
 
   approveHandler() {
+    this.dialog.open(AddSingleRecordComponent, {
+      width: '550px',
+      data: {did: this.newOwnerDID.value}
+    });
   }
 
 }
