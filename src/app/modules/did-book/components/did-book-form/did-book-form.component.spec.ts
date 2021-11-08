@@ -3,6 +3,10 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DidBookFormComponent } from './did-book-form.component';
 import { dispatchInputEvent, getElement } from '@tests';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DidBookFormComponent', () => {
   let component: DidBookFormComponent;
@@ -11,7 +15,11 @@ describe('DidBookFormComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        NoopAnimationsModule
       ],
       declarations: [DidBookFormComponent]
     })
@@ -44,13 +52,14 @@ describe('DidBookFormComponent', () => {
     label.value = 'test';
     dispatchInputEvent(label);
 
-    did.value = 'value';
+    did.value = 'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8A1234567890';
     dispatchInputEvent(did);
 
     fixture.detectChanges();
 
     expect(add.disabled).toBeFalse();
     add.click();
+    fixture.detectChanges();
     expect(addSpy).toHaveBeenCalled();
   });
 
