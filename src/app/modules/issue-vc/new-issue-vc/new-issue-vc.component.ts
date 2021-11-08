@@ -19,7 +19,7 @@ export class NewIssueVcComponent implements OnInit {
   @ViewChild('requiredFields') requiredFields: RequiredFields;
   fieldList = [];
   form = this.fb.group({
-    subject: ['did:ethr:0x396C21a535af79416fe725729812FE49958eFc54', [Validators.required, HexValidators.isDidValid()]],
+    subject: ['', [Validators.required, HexValidators.isDidValid()]],
     type: ['', [Validators.required]]
   });
   possibleRolesToEnrol;
