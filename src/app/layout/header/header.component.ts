@@ -146,7 +146,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   openDidBook(): void {
     this.dialog.open(DidBookComponent, {
-      width: '440px',
+      width: '600px',
       data: {},
       maxWidth: '100%',
       disableClose: true

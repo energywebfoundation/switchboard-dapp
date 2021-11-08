@@ -30,10 +30,15 @@ export class DidBookFormComponent {
       return;
     }
     this.add.emit(this.form.value);
+    this.clear();
   }
 
   reject() {
     this.cancel.emit();
+  }
+
+  private clear(): void {
+    this.form.reset();
   }
 
 }

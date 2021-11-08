@@ -5,8 +5,11 @@
   </button>
 </h4>
 <div mat-dialog-content>
-  <div class="mb-2 mt-4 mx-4 mx-lg-4">
+  <div class="mb-2 mt-4 mx-4 mx-lg-4 pb-3">
     <app-did-book-form (add)="addHandler($event)"></app-did-book-form>
-    <app-did-book-list [list]="list$ | async" (delete)="delete($event)"></app-did-book-list>
+
+    <ng-container *ngIf="list$ | async as list">
+      <app-did-book-list *ngIf="list.length > 0" [list]="list" (delete)="delete($event)"></app-did-book-list>
+    </ng-container>
   </div>
 </div>

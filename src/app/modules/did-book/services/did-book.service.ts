@@ -23,12 +23,23 @@ export class DidBookService {
   }
 
   add(record: Partial<DidBookRecord>) {
-    this.httpDidBook.add(record).subscribe(() =>
-      this.toastr.info('New DID Address has been added', TOASTR_HEADER));
+    this.httpDidBook.add(record).subscribe((newRecord: DidBookRecord) => {
+        this.list.next([...this.list.value, newRecord]);
+        this.toastr.success('New DID Address has been added', TOASTR_HEADER);
+      },
+      error => this.toastr.error(error.message));
   }
 
-  delete(uuid: string) {
-    this.httpDidBook.delete(uuid).subscribe(() =>
-      this.toastr.info('DID Address has been successfully removed', TOASTR_HEADER));
+  delete(id: string) {
+    this.httpDidBook.delete(id).subscribe(() => {
+        this.list.next(this.removeFromList(id));
+        this.toastr.success('DID Address has been successfully removed', TOASTR_HEADER);
+      },
+      error => this.toastr.error(error.message)
+    );
+  }
+
+  private removeFromList(id) {
+    return this.list.value.filter((el) => el.id !== id);
   }
 }
