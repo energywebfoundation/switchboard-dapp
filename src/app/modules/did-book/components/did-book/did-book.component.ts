@@ -3,6 +3,7 @@ import { DidBookService } from '../../services/did-book.service';
 import { FormControl } from '@angular/forms';
 import { combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { DidBookRecord } from '../models/did-book-record';
 
 @Component({
   selector: 'app-did-book',
@@ -24,7 +25,7 @@ export class DidBookComponent implements OnInit {
       ));
   }
 
-  addHandler(record) {
+  addHandler(record: Partial<DidBookRecord>) {
     this.didBookService.add(record);
   }
 

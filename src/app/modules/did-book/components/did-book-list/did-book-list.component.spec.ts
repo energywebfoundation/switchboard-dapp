@@ -18,10 +18,31 @@ describe('DidBookListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DidBookListComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  it('should stick with default data when passing falsy value', () => {
+    component.list = undefined;
+    fixture.detectChanges();
+
+    expect(component.list).toEqual([]);
+  });
+
+  it('should set data when passing an array', () => {
+    component.list = [];
+    fixture.detectChanges();
+
+    expect(component.list).toEqual([]);
+  });
+
+  it('should emit delete event when calling remove method', () => {
+    const deleteSpy = spyOn(component.delete, 'emit');
+    component.remove('1');
+
+    expect(deleteSpy).toHaveBeenCalledWith('1');
   });
 });

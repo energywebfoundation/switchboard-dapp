@@ -16,10 +16,14 @@ export class DidBookListComponent {
     this.data = value;
   };
 
+  get list() {
+    return this.data;
+  }
+
   @Output() delete = new EventEmitter<string>();
 
   displayedColumns = ['label', 'actions'];
-  data: DidBookRecord[] = [];
+  private data: DidBookRecord[] = [];
 
   remove(id: string) {
     this.delete.emit(id);
