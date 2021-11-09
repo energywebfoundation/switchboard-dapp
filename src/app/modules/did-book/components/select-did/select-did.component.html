@@ -5,6 +5,7 @@
       <mat-form-field class="mt-2" appearance="outline">
         <input matInput autocomplete="off" [formControl]="newOwnerDID" type="text"
                placeholder="New Owner DID"
+               data-qa-id="owner"
                [matAutocomplete]="auto"
                required maxlength="256"/>
         <mat-autocomplete #auto="matAutocomplete">
