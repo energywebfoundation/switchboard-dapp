@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
 import { catchError, filter, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { ProviderType, isMetamaskExtensionPresent } from 'iam-client-lib';
+import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
 import { from, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginService } from '../../shared/services/login/login.service';
@@ -14,8 +14,6 @@ import * as userActions from '../user-claim/user.actions';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import * as StakeActions from '../stake/stake.actions';
 import * as AuthSelectors from './auth.selectors';
-import { IamService } from 'src/app/shared/services/iam.service';
-import { filterAsync } from 'src/app/operators/filter-async/filterAsync';
 
 @Injectable()
 export class AuthEffects {
@@ -174,7 +172,7 @@ export class AuthEffects {
   setWalletProviderAfterLogin$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginSuccess),
-      map(() => AuthActions.setProvider({ walletProvider: this.loginService.providerType }))
+      map(() => AuthActions.setProvider({walletProvider: this.loginService.getProviderType()}))
     ));
 
   navigateToDashboardWhenSessionIsActive$ = createEffect(() =>

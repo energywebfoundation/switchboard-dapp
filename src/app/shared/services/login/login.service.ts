@@ -66,7 +66,7 @@ export class LoginService {
     };
   }
 
-  get providerType() {
+  getProviderType() {
     return this.iamService.providerType;
   }
 
