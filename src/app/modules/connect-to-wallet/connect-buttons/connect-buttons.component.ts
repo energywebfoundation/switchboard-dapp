@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { WalletProvider } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 
 @Component({
   selector: 'app-connect-buttons',
@@ -10,18 +10,18 @@ export class ConnectButtonsComponent {
   @Input() metamaskPresent: boolean;
   @Input() metamaskDisabled: boolean;
 
-  @Output() connectTo = new EventEmitter<WalletProvider>();
+  @Output() connectTo = new EventEmitter<ProviderType>();
 
   connectToWalletConnect() {
-    this.connectTo.emit(WalletProvider.WalletConnect);
+    this.connectTo.emit(ProviderType.WalletConnect);
   }
 
   connectToMetamask() {
-    this.connectTo.emit(WalletProvider.MetaMask);
+    this.connectTo.emit(ProviderType.MetaMask);
   }
 
   connectToEKC() {
-    this.connectTo.emit(WalletProvider.EKC);
+    this.connectTo.emit(ProviderType.EKC);
   }
 
 }

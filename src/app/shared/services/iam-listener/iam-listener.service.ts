@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {ProviderEvent} from 'iam-client-lib'
 import { IamService } from '../iam.service';
 
 export enum ProviderEventsEnum {
@@ -16,20 +17,20 @@ export class IamListenerService {
   }
 
   setListeners(callback: (config) => void) {
-    this.iamService.iam.on(ProviderEventsEnum.AccountChanged, () => {
-      this._displayAccountAndNetworkChanges(ProviderEventsEnum.AccountChanged, callback);
+    this.iamService.signerService.on(ProviderEvent.AccountChanged, () => {
+      this._displayAccountAndNetworkChanges(ProviderEvent.AccountChanged, callback);
     });
 
-    this.iamService.iam.on(ProviderEventsEnum.NetworkChanged, () => {
-      this._displayAccountAndNetworkChanges(ProviderEventsEnum.NetworkChanged, callback);
+    this.iamService.signerService.on(ProviderEvent.NetworkChanged, () => {
+      this._displayAccountAndNetworkChanges(ProviderEvent.NetworkChanged, callback);
     });
 
-    this.iamService.iam.on(ProviderEventsEnum.Disconnected, () => {
-      this._displayAccountAndNetworkChanges(ProviderEventsEnum.Disconnected, callback);
+    this.iamService.signerService.on(ProviderEvent.Disconnected, () => {
+      this._displayAccountAndNetworkChanges(ProviderEvent.Disconnected, callback);
     });
   }
 
-  private _displayAccountAndNetworkChanges(changeType: ProviderEventsEnum, callback: (config) => void): void {
+  private _displayAccountAndNetworkChanges(changeType: ProviderEvent, callback: (config) => void): void {
     const {message, title} = this.getSwalConfigInfo(changeType);
 
     const config = {
@@ -42,19 +43,19 @@ export class IamListenerService {
     callback(config);
   }
 
-  private getSwalConfigInfo(type: ProviderEventsEnum) {
+  private getSwalConfigInfo(type: ProviderEvent) {
     switch (type) {
-      case ProviderEventsEnum.AccountChanged:
+      case ProviderEvent.AccountChanged:
         return {
           title: 'Account Changed',
           message: 'Account is changed.'
         };
-      case ProviderEventsEnum.NetworkChanged:
+      case ProviderEvent.NetworkChanged:
         return {
           title: 'Network Changed',
           message: 'Network is changed.'
         };
-      case ProviderEventsEnum.Disconnected:
+      case ProviderEvent.Disconnected:
         return {
           title: 'Disconnected',
           message: 'You are disconnected from your wallet.'

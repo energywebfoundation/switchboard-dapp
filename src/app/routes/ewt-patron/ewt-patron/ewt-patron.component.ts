@@ -4,8 +4,8 @@ import { map, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import swal from 'sweetalert';
-import { IamService } from '../../../shared/services/iam.service';
 import { AuthActions, PoolActions, PoolSelectors } from '@state';
+import { LoginService } from 'src/app/shared/services/login/login.service';
 
 @Component({
   selector: 'app-ewt-patron',
@@ -21,7 +21,7 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store,
               private activatedRoute: ActivatedRoute,
-              private iamService: IamService) {
+              private loginService: LoginService) {
   }
 
   ngOnDestroy(): void {
@@ -35,7 +35,7 @@ export class EwtPatronComponent implements OnInit, OnDestroy {
   }
 
   private login() {
-    if (this.iamService.isSessionActive()) {
+    if (this.loginService.isSessionActive()) {
       this.store.dispatch(AuthActions.reinitializeAuthForPatron());
     } else {
       this.store.dispatch(AuthActions.openLoginDialog());

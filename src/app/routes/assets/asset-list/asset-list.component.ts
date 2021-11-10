@@ -68,14 +68,14 @@ export class AssetListComponent implements OnInit, OnDestroy {
 
   async ngOnDestroy(): Promise<void> {
     // Unsubscribe from IAM Events
-    await this.iamService.iam.unsubscribeFrom(this._iamSubscriptionId);
+    await this.iamService.messagingService.unsubscribeFrom(this._iamSubscriptionId);
     this.unsubscribe.next();
     this.unsubscribe.complete();
   }
 
   async ngOnInit(): Promise<void> {
     // Subscribe to IAM events
-    this._iamSubscriptionId = await this.iamService.iam.subscribeTo({
+    this._iamSubscriptionId = await this.iamService.messagingService.subscribeTo({
       messageHandler: this._handleMessage.bind(this)
     });
 
@@ -163,7 +163,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     if (await this._confirm('The offered ownership of this asset will be cancelled.', HEADER_CANCEL_OWNERSHIP)) {
       try {
         this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
-        await this.iamService.iam.cancelAssetOffer({
+        await this.iamService.assetsService.cancelAssetOffer({
           assetDID: data.id
         });
         this.toastr.success('Offered ownership is cancelled successfully.', HEADER_CANCEL_OWNERSHIP);
@@ -181,7 +181,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     if (await this._confirm('You will become the owner of this asset.', HEADER_ACCEPT_OWNERSHIP)) {
       try {
         this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
-        await this.iamService.iam.acceptAssetOffer({
+        await this.iamService.assetsService.acceptAssetOffer({
           assetDID: data.id
         });
         this.toastr.success('A new asset is added successfully to your list.', HEADER_ACCEPT_OWNERSHIP);
@@ -200,7 +200,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     if (await this._confirm('You are rejecting this offered asset.', HEADER_REJECT_OWNERSHIP)) {
       try {
         this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
-        await this.iamService.iam.rejectAssetOffer({
+        await this.iamService.assetsService.rejectAssetOffer({
           assetDID: data.id
         });
         this.toastr.success('You have rejected an offered asset successfully.', HEADER_REJECT_OWNERSHIP);
@@ -297,10 +297,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
   private getAssetsWithClaims() {
     return forkJoin([
         from(
-          this.iamService.iam.getUserClaims()).pipe(
+          this.iamService.claimsService.getUserClaims()).pipe(
           mapClaimsProfile()
         ),
-        this.loadAssetList(this.iamService.iam.getOwnedAssets())
+        this.loadAssetList(this.iamService.assetsService.getOwnedAssets())
       ]
     ).pipe(
       map(([profile, assets]) => this.addClaimData(profile, assets))
@@ -314,12 +314,12 @@ export class AssetListComponent implements OnInit, OnDestroy {
   private assetListFactory(): Observable<AssetList[]> {
     if (this.listType === AssetListType.PREV_OWNED_ASSETS) {
       return this.loadAssetList(
-        this.iamService.iam.getPreviouslyOwnedAssets({owner: this.iamService.iam.getDid()})
+        this.iamService.assetsService.getPreviouslyOwnedAssets({owner: this.iamService.signerService.did})
       ).pipe(
         this.mapEnrolments()
       );
     } else if (this.listType === AssetListType.OFFERED_ASSETS) {
-      return this.loadAssetList(this.iamService.iam.getOfferedAssets())
+      return this.loadAssetList(this.iamService.assetsService.getOfferedAssets())
         .pipe(
           this.mapEnrolments()
         );
@@ -331,7 +331,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
   private mapEnrolments() {
     return (source: Observable<Asset[]>) => {
       return source.pipe(
-        switchMap((assets: Asset[]) => from(this.iamService.iam.getClaimsBySubjects(this.getAssetsIds(assets)))
+        switchMap((assets: Asset[]) => from(this.iamService.claimsService.getClaimsBySubjects(this.getAssetsIds(assets)))
           .pipe(
             map((claims) => claims.map(claim => claim.subject)),
             map(claims => assets.map((asset) => ({...asset, hasEnrolments: claims.includes(asset.id)})))

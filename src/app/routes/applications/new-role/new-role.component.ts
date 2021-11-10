@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { ENSNamespaceTypes, IRole, PreconditionTypes } from 'iam-client-lib';
+import { IRole, NamespaceType, PreconditionType, SearchType } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { debounceTime, delay, startWith, switchMap, take } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
@@ -19,6 +19,11 @@ import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumer
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
+
+export enum ENSPrefixes {
+  Roles = 'roles',
+  Apps = 'apps',
+};
 
 export const RoleType = {
   ORG: 'org',
@@ -80,7 +85,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         roleName: '',
         did: this.fb.array([])
       }),
-      enrolmentPreconditions: [[{type: PreconditionTypes.Role, conditions: []}]]
+      enrolmentPreconditions: [[{ type: PreconditionType.Role, conditions: [] }]]
     })
   });
   public issuerGroup = this.fb.group({
@@ -93,8 +98,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   public isChecking = false;
   public RoleType = RoleType;
   public RoleTypeList = RoleTypeList;
-  public ENSPrefixes = ENSNamespaceTypes;
-  public issuerList: string[] = [this.iamService.iam.getDid()];
+  public ENSPrefixes = ENSPrefixes;
+  public issuerList: string[] = [this.iamService.signerService.did];
 
   // Fields
   isAutolistLoading = false;
@@ -171,7 +176,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       const def = this.origData.definition;
 
       // Construct Parent Namespace
-      const arrParentNamespace = this.origData.namespace.split(ENSNamespaceTypes.Roles);
+      const arrParentNamespace = this.origData.namespace.split(NamespaceType.Role);
       const parentNamespace = arrParentNamespace[1].substring(1);
 
       // Construct Fields
@@ -269,7 +274,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
     if (this.IssuerType.DID === data.value) {
       // Set current user's DID
-      this.issuerList.push(this.iamService.iam.getDid());
+      this.issuerList.push(this.iamService.signerService.did);
     }
   }
 
@@ -318,7 +323,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         enrolmentPreconditions[0].conditions.push(event.role.namespace);
       } else {
         this.roleForm.get('data').patchValue({
-          enrolmentPreconditions: [{type: PreconditionTypes.Role, conditions: [event.role.namespace]}]
+          enrolmentPreconditions: [{type: PreconditionType.Role, conditions: [event.role.namespace] }]
         })
       }
 
@@ -360,13 +365,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
       // Check if namespace is taken
       const orgData = this.roleForm.value;
-      const exists = await this.iamService.iam.checkExistenceOfDomain({
+      const exists = await this.iamService.domainsService.checkExistenceOfDomain({
         domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
       });
 
       if (exists) {
         // If exists check if current user is the owner of this namespace and allow him/her to overwrite
-        const isOwner = await this.iamService.iam.isOwner({
+        const isOwner = await this.iamService.domainsService.isOwner({
           domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
         });
 
@@ -425,18 +430,16 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
           });
 
         // Check if rolename exists or valid
-        const exists = await this.iamService.iam.checkExistenceOfDomain({
+        const exists = await this.iamService.domainsService.checkExistenceOfDomain({
           domain: roleFormValue.data.issuer.roleName
         });
 
-        if (!exists || !roleFormValue.data.issuer.roleName.includes(`.${ENSNamespaceTypes.Roles}.`)) {
+        if (!exists || !roleFormValue.data.issuer.roleName.includes(`.${NamespaceType.Role}.`)) {
           this.toastr.error('Issuer Role Namespace does not exist or is invalid.', this.TOASTR_HEADER);
           allowToProceed = false;
         } else {
           // Check if there are approved users to issue the claim
-          const did = await this.iamService.iam.getRoleDIDs({
-            namespace: roleFormValue.data.issuer.roleName
-          });
+          const did = await this.iamService.domainsService.getDIDsByRole(roleFormValue.data.issuer.roleName);
 
           if (!did || !did.length) {
             allowToProceed = false;
@@ -483,19 +486,19 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
           });
 
         // Check if namespace exists
-        let exists = await this.iamService.iam.checkExistenceOfDomain({
+        let exists = await this.iamService.domainsService.checkExistenceOfDomain({
           domain: this.roleForm.value.parentNamespace
         });
 
         if (exists) {
           // Check if role sub-domain exists in this namespace
-          exists = await this.iamService.iam.checkExistenceOfDomain({
+          exists = await this.iamService.domainsService.checkExistenceOfDomain({
             domain: `${this.ENSPrefixes.Roles}.${this.roleForm.value.parentNamespace}`
           });
 
           if (exists) {
             // check if user is authorized to create a role under this namespace
-            const isOwner = await this.iamService.iam.isOwner({
+            const isOwner = await this.iamService.domainsService.isOwner({
               domain: this.roleForm.value.parentNamespace
             });
 
@@ -525,7 +528,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   async confirmRole(skipNextStep?: boolean) {
-    const req = JSON.parse(JSON.stringify({...this.roleForm.value, returnSteps: true}));
+    const req = JSON.parse(JSON.stringify({ ...this.roleForm.value, returnSteps: true }));
 
     req.namespace = `${this.ENSPrefixes.Roles}.${req.parentNamespace}`;
     delete req.parentNamespace;
@@ -588,10 +591,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   private async proceedCreateSteps(req: any) {
-    const returnSteps = this.data.owner === this.iamService.iam.address;
-    req = {...req, returnSteps};
+    const returnSteps = this.data.owner === this.iamService.signerService.address;
     try {
-      const call = this.iamService.iam.createRole(req);
+      const call = this.iamService.domainsService.createRole(req);
       // Retrieve the steps to create an organization
       this.txs = returnSteps ?
         await call :
@@ -653,7 +655,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       this.txs = [
         {
           info: 'Setting up definitions',
-          next: async () => await this.iamService.iam.setRoleDefinition({
+          next: async () => await this.iamService.domainsService.setRoleDefinition({
             data: req.data,
             domain: newDomain
           })
@@ -727,10 +729,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       if (word.length > 2) {
         word = word.toLowerCase();
         try {
-          retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
-            search: word,
-            types: ['Role']
-          });
+          retVal = await this.iamService.domainsService.getENSTypesBySearchPhrase(
+            word,
+            [SearchType.Role]
+          );
 
           if (retVal && retVal.length) {
             this.hasSearchResult = true;
@@ -756,7 +758,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     let enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions');
     if (!enrolmentPreconditions || !enrolmentPreconditions.value || !enrolmentPreconditions.value.length) {
       this.roleForm.get('data').get('enrolmentPreconditions').setValue([{
-        type: PreconditionTypes.Role,
+        type: PreconditionType.Role,
         conditions: []
       }]);
       enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions');

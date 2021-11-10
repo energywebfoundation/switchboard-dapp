@@ -7,7 +7,7 @@ import { IamService } from '../../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { NamespaceType } from 'iam-client-lib';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
@@ -90,7 +90,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   viewRoles(data: { namespace: string }) {
     const [app, org] = data.namespace
       .replace('.iam.ewc', '')
-      .split(`.${ENSNamespaceTypes.Application}.`);
+      .split(`.${NamespaceType.Application}.`);
 
     this.updateFilter.emit({
       listType: ListType.ROLE,
@@ -130,8 +130,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
 
   private async getRemovalSteps(listType: string, roleDefinition: any) {
     this.loadingService.show();
-    const returnSteps = this.iamService.iam.address === roleDefinition.owner;
-    const call = this.iamService.iam.deleteApplication({
+    const returnSteps = this.iamService.signerService.address === roleDefinition.owner;
+    const call = this.iamService.domainsService.deleteApplication({
       namespace: roleDefinition.namespace,
       returnSteps
     });
@@ -151,6 +151,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   filter(filters): void {
-    this.store.dispatch(ApplicationActions.updateFilters({filters}));
+    this.store.dispatch(ApplicationActions.updateFilters({ filters }));
   }
 }

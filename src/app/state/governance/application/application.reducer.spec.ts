@@ -1,6 +1,6 @@
 import * as fromReducer from './application.reducer';
 import * as ApplicationActions from './application.actions';
-import { ENSNamespaceTypes, IApp } from 'iam-client-lib';
+import { NamespaceType, IApp } from 'iam-client-lib';
 
 describe('Application reducer', () => {
   describe('getListSuccess action', () => {
@@ -33,14 +33,14 @@ describe('Application reducer', () => {
       const {initialState} = fromReducer;
       const list = [
         {namespace: 'test.iam.ewc'},
-        {namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`},
+        {namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`},
       ] as IApp[];
 
       const modifiedState = {...initialState, filters: {...initialState.filters, organization: 'abc'}};
       const action = ApplicationActions.getListSuccess({list});
       const state = fromReducer.reducer(modifiedState, action);
 
-      expect(state.filteredList).toEqual([{namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`}] as IApp[]);
+      expect(state.filteredList).toEqual([{namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`}] as IApp[]);
       expect(state.filteredList.length).toBe(1);
     });
   });
@@ -61,7 +61,7 @@ describe('Application reducer', () => {
       const {initialState} = fromReducer;
       const list = [
         {namespace: 'test.iam.ewc'},
-        {namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`},
+        {namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`},
       ] as IApp[];
 
       const modifiedState = {...initialState, list};
@@ -69,7 +69,7 @@ describe('Application reducer', () => {
       const action = ApplicationActions.updateFilters({filters});
       const state = fromReducer.reducer(modifiedState, action);
 
-      expect(state.filteredList).toEqual([{namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`}] as IApp[]);
+      expect(state.filteredList).toEqual([{namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`}] as IApp[]);
       expect(state.filteredList.length).toBe(1);
     });
   });
@@ -90,7 +90,7 @@ describe('Application reducer', () => {
 
       const list = [
         {namespace: 'test.iam.ewc'},
-        {namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`},
+        {namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`},
       ];
 
       const modifiedState = {
@@ -100,7 +100,7 @@ describe('Application reducer', () => {
           application: 'test',
           role: ''
         },
-        filteredList: [{namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`}],
+        filteredList: [{namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`}],
         filterVisible: true
       };
 

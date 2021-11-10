@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import * as authSelectors from '../../state/auth/auth.selectors';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { WalletProvider } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 import { AuthActions } from '@state';
 
 describe('WelcomeComponent', () => {
@@ -54,9 +54,9 @@ describe('WelcomeComponent', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     fixture.detectChanges();
 
-    component.login(WalletProvider.MetaMask);
+    component.login(ProviderType.MetaMask);
     expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining({
-      provider: WalletProvider.MetaMask,
+      provider: ProviderType.MetaMask,
       returnUrl: undefined
     }));
   });
@@ -66,9 +66,9 @@ describe('WelcomeComponent', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     fixture.detectChanges();
 
-    component.login(WalletProvider.MetaMask);
+    component.login(ProviderType.MetaMask);
     expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining({
-      provider: WalletProvider.MetaMask,
+      provider: ProviderType.MetaMask,
       returnUrl: 'value'
     }));
   });
@@ -80,7 +80,7 @@ describe('WelcomeComponent', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     fixture.detectChanges();
     expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining(AuthActions.welcomeLogin({
-      provider: WalletProvider.PrivateKey,
+      provider: ProviderType.PrivateKey,
       returnUrl: undefined
     })));
   });

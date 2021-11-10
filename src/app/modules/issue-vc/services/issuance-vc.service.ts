@@ -14,6 +14,6 @@ export class IssuanceVcService {
   }
 
   getIssuerRoles() {
-    return this.iamService.wrapWithLoadingService(this.iamService.iam.getAllowedRolesByIssuer({did: this.iamService.iam.getDid()}));
+    return this.iamService.wrapWithLoadingService(this.iamService.domainsService.getAllowedRolesByIssuer(this.iamService.signerService.did));
   }
 }

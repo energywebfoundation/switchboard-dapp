@@ -8,7 +8,7 @@ import { IamService } from '../../../shared/services/iam.service';
 import { ToastrService } from 'ngx-toastr';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { PreconditionTypes } from 'iam-client-lib';
+import { PreconditionType } from 'iam-client-lib';
 
 describe('NewRoleComponent', () => {
   let component: NewRoleComponent;
@@ -89,7 +89,7 @@ describe('NewRoleComponent', () => {
         enrolmentPreconditions:
           [
             [
-              {type: PreconditionTypes.Role, conditions: ['a', 'b', 'c', 'd']},
+              {type: PreconditionType.Role, conditions: ['a', 'b', 'c', 'd']},
             ]
           ]
       })

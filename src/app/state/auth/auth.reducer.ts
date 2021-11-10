@@ -1,12 +1,11 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as AuthActions from './auth.actions';
-import { WalletProvider } from 'iam-client-lib';
-import { AccountInfo } from 'iam-client-lib/dist/src/iam';
+import {  ProviderType, AccountInfo } from 'iam-client-lib';
 
 export const USER_FEATURE_KEY = 'auth';
 
 export interface AuthState {
-  walletProvider: WalletProvider | undefined;
+  walletProvider: ProviderType | undefined;
   accountInfo: AccountInfo;
   metamask: {
     present: boolean;

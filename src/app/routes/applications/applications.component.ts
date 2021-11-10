@@ -103,7 +103,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.isIamEwcOwner = await this.iamService.iam.isOwner({
+    this.isIamEwcOwner = await this.iamService.domainsService.isOwner({
       domain: 'iam.ewc'
     });
   }

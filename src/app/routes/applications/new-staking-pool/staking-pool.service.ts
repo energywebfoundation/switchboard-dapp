@@ -6,7 +6,7 @@ import { from } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
 import { BigNumber } from 'ethers';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { NamespaceType } from 'iam-client-lib';
 
 
 export interface IStakingPool {
@@ -31,8 +31,8 @@ export class StakingPoolService {
   getListOfOrganizationRoles(org: string) {
     this.loadingService.show();
     return from(
-      this.iamService.iam.getENSTypesByOwner({
-        type: ENSNamespaceTypes.Roles,
+      this.iamService.domainsService.getENSTypesByOwner({
+        type: NamespaceType.Role,
         owner: org
       })
     ).pipe(

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StakingPool } from 'iam-client-lib';
 import { BigNumber } from 'ethers';
-import { TransactionSpeed } from 'iam-client-lib/dist/src/staking';
 import { from } from 'rxjs';
 
 @Injectable({
@@ -18,8 +17,8 @@ export class StakingPoolFacade {
     this.pool = pool;
   }
 
-  putStake(stake: BigNumber | number, transactionSpeed?: TransactionSpeed) {
-    return from(this.pool.putStake(stake, transactionSpeed));
+  putStake(stake: BigNumber | number) {
+    return from(this.pool.putStake(stake));
   }
 
   requestWithdrawDelay() {
@@ -34,15 +33,15 @@ export class StakingPoolFacade {
     return from(this.pool.getStake(patron));
   }
 
-  requestWithdraw(transactionSpeed?: TransactionSpeed) {
-    return from(this.pool.requestWithdraw(transactionSpeed));
+  requestWithdraw() {
+    return from(this.pool.requestWithdraw());
   };
 
   withdrawalDelay() {
     return from(this.pool.withdrawalDelay());
   }
 
-  withdraw(transactionSpeed?: TransactionSpeed) {
-    return from(this.pool.withdraw(transactionSpeed));
+  withdraw() {
+    return from(this.pool.withdraw());
   }
 }

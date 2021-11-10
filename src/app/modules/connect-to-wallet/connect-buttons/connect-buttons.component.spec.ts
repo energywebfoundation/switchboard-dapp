@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ConnectButtonsComponent } from './connect-buttons.component';
 import { DebugElement } from '@angular/core';
 import { getElement } from '@tests';
-import { WalletProvider } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 
 describe('ConnectButtonsComponent', () => {
   let component: ConnectButtonsComponent;
@@ -62,21 +62,21 @@ describe('ConnectButtonsComponent', () => {
     const {metamaskBtn} = selectors(hostDebug);
     metamaskBtn.nativeElement.click();
 
-    expect(connectToSpy).toHaveBeenCalledWith(WalletProvider.MetaMask);
+    expect(connectToSpy).toHaveBeenCalledWith(ProviderType.MetaMask);
   });
 
   it('should dispatch login action with WalletConnect when clicking on wallet connect button', () => {
     const {mobileWalletBtn} = selectors(hostDebug);
     mobileWalletBtn.nativeElement.click();
 
-    expect(connectToSpy).toHaveBeenCalledWith(WalletProvider.WalletConnect);
+    expect(connectToSpy).toHaveBeenCalledWith(ProviderType.WalletConnect);
   });
 
   it('should dispatch login action with Azure when clicking on Use Azure button', () => {
     const {azureBtn} = selectors(hostDebug);
     azureBtn.nativeElement.click();
 
-    expect(connectToSpy).toHaveBeenCalledWith(WalletProvider.EKC);
+    expect(connectToSpy).toHaveBeenCalledWith(ProviderType.EKC);
   });
 
   it('should not find metamask button when is not available', () => {

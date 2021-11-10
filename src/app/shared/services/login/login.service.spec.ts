@@ -65,8 +65,8 @@ describe('LoginService', () => {
   }));
 
   it('should display error with toastr about pending notifications', () => {
-    iamServiceSpy.initializeConnection.and.returnValue(throwError({message: 'Request of type \'wallet_requestPermissions\''}));
-    service.login().pipe(take(1)).subscribe(({success}) => {
+    iamServiceSpy.initializeConnection.and.returnValue(throwError({ message: 'Request of type \'wallet_requestPermissions\'' }));
+    service.login().pipe(take(1)).subscribe(({ success }) => {
       expect(success).toBe(false);
       expect(toastrSpy.error).toHaveBeenCalledWith('Please check if you do not have pending notifications in your wallet');
     });

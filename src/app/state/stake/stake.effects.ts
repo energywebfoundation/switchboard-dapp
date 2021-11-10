@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { SearchType } from 'iam-client-lib';
 import { IamService } from '../../shared/services/iam.service';
 import { LoadingService } from '../../shared/services/loading.service';
 import { Store } from '@ngrx/store';
@@ -40,7 +41,7 @@ export class StakeEffects {
     this.actions$.pipe(
       ofType(StakeActions.launchStakingPool),
       tap(() => this.loadingService.show()),
-      switchMap(({pool}) =>
+      switchMap(({ pool }) =>
         this.stakingService.launchStakingPool(pool)
           .pipe(
             map(() => {
@@ -55,7 +56,7 @@ export class StakeEffects {
             finalize(() => this.loadingService.hide())
           )
       )
-    ), {dispatch: false}
+    ), { dispatch: false }
   );
 
 
@@ -65,13 +66,13 @@ export class StakeEffects {
         ofType(StakeActions.getAllServices),
         tap(() => this.loadingService.show('Loading list of providers')),
         switchMap(() => {
-          return combineLatest([
+            return combineLatest([
               this.stakingService.allServices(),
-              from(this.iamService.iam.getENSTypesBySearchPhrase({types: ['Org'], search: 'iam.ewc'}))
-            ]
+              from(this.iamService.domainsService.getENSTypesBySearchPhrase('iam.ewc', [SearchType.Org])),
+          ]
           ).pipe(
             filterProviders(),
-            map((providers: Provider[]) => StakeActions.getAllServicesSuccess({providers})),
+            map((providers: Provider[]) => StakeActions.getAllServicesSuccess({ providers })),
             finalize(() => this.loadingService.hide())
           );
         }),

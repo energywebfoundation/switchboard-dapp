@@ -4,7 +4,7 @@ import { ConnectToWalletDialogComponent } from './connect-to-wallet-dialog.compo
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import * as authSelectors from '../../../state/auth/auth.selectors';
-import { WalletProvider } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 describe('ConnectToWalletDialogComponent', () => {
@@ -50,9 +50,9 @@ describe('ConnectToWalletDialogComponent', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     fixture.detectChanges();
 
-    component.login(WalletProvider.MetaMask);
+    component.login(ProviderType.MetaMask);
     expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining({
-      provider: WalletProvider.MetaMask,
+      provider: ProviderType.MetaMask,
       navigateOnTimeout: true
     }));
   });

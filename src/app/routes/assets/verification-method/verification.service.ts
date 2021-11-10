@@ -29,7 +29,7 @@ export class VerificationService {
   updateDocumentAndReload(did: string, publicKey: string, publicKeysAmount: number) {
     this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
     return from(
-      this.iamService.iam.updateDidDocument(this.getUpdateOptions(did, publicKey))
+      this.iamService.didRegistry.updateDocument(this.getUpdateOptions(did, publicKey))
     ).pipe(
       catchError(err => {
         this.loadingService.hide();
@@ -66,7 +66,7 @@ export class VerificationService {
 
   private loadDocumentPublicKeys(did, includeClaims) {
     return from(
-      this.iamService.iam.getDidDocument({did, includeClaims})
+      this.iamService.didRegistry.getDidDocument({did, includeClaims})
     ).pipe(
       map((document) => document.publicKey),
     );

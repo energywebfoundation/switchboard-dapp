@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { SearchType } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ListType, LoadingCount } from '../../shared/constants/shared-constants';
@@ -110,10 +111,10 @@ export class SearchResultComponent implements OnInit {
   private async _initView(namespace: string) {
     const [
       foundNamespace
-    ] = await this.iamService.iam.getENSTypesBySearchPhrase({
-      search: namespace,
-      types: ['App', 'Org']
-    });
+    ] = await this.iamService.domainsService.getENSTypesBySearchPhrase(
+      namespace,
+      [SearchType.App, SearchType.Org]
+    );
     if (foundNamespace) {
       this.data = {
         type: (foundNamespace.definition as { orgName?: string }).orgName
@@ -142,10 +143,10 @@ export class SearchResultComponent implements OnInit {
 
         if (word.length > 2) {
           word = word.toLowerCase();
-          retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
-            search: word,
-            types: listType
-          });
+          retVal = await this.iamService.domainsService.getENSTypesBySearchPhrase(
+            word,
+            listType
+          );
         }
       }
     } catch (e) {

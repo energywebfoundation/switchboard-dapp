@@ -34,7 +34,7 @@ export class EditAssetDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadingService.show();
-    from(this.iamService.iam.getUserClaims()).pipe(
+    from(this.iamService.claimsService.getUserClaims()).pipe(
       mapClaimsProfile()
     ).subscribe((profile: any) => {
       this.loadingService.hide();
@@ -52,7 +52,7 @@ export class EditAssetDialogComponent implements OnInit {
       return;
     }
     this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
-    from(this.iamService.iam.createSelfSignedClaim({
+    from(this.iamService.claimsService.createSelfSignedClaim({
       data: this.createClaimObjectUpdate()
     })).pipe(
       takeUntil(this.dialogRef.afterClosed())
