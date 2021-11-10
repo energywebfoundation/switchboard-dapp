@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IamService, PROVIDER_TYPE } from '../iam.service';
 import { LoadingService } from '../loading.service';
 import { ToastrService } from 'ngx-toastr';
-import { ProviderType, AccountInfo, PUBLIC_KEY } from 'iam-client-lib';
+import { AccountInfo, ProviderType, PUBLIC_KEY } from 'iam-client-lib';
 import SWAL from 'sweetalert';
 import { from, Observable, of } from 'rxjs';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
@@ -50,7 +50,7 @@ export class LoginService {
   storeSession() {
     localStorage.setItem(PROVIDER_TYPE, this.iamService.providerType);
     return from(this.iamService.getPublicKey()).pipe(
-      map((key) => localStorage.setItem(PUBLIC_KEY, key as string)),
+      map((key) => localStorage.setItem(PUBLIC_KEY, key)),
     );
   }
 
@@ -76,13 +76,14 @@ export class LoginService {
   login(loginOptions?: LoginOptions, redirectOnChange: boolean = true): Observable<{ success: boolean; accountInfo?: AccountInfo | undefined }> {
     return from(this.iamService.initializeConnection(loginOptions))
       .pipe(
-        map(({ did, connected, userClosedModal, accountInfo }) => {
+        map(({did, connected, userClosedModal, accountInfo}) => {
           const loginSuccessful = did && connected && !userClosedModal;
           if (loginSuccessful) {
             this.iamListenerService.setListeners((config) => this.openSwal(config, redirectOnChange));
           }
-          return { success: Boolean(loginSuccessful), accountInfo };
+          return {success: Boolean(loginSuccessful), accountInfo};
         }),
+
         delayWhen(({ success }) => { if (success) return this.storeSession() }),
         catchError(err => this.handleLoginErrors(err, redirectOnChange))
       );
@@ -179,7 +180,7 @@ export class LoginService {
       const loginError = LOGIN_TOASTR_UNDERSTANDABLE_ERRORS.filter(error => e.message.includes(error.key))[0];
       this.toastr.error(loginError ? loginError.message : e.message);
     }
-    return of({ success: false });
+    return of({success: false});
   }
 
   private saveDeepLink(): void {
