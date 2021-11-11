@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {ProviderEvent} from 'iam-client-lib'
-import { IamService } from '../iam.service';
+import { ProviderEvent } from 'iam-client-lib';
+import { SignerFacadeService } from '../signer-facade/signer-facade.service';
 
 export enum ProviderEventsEnum {
   AccountChanged = 'accountChanged',
@@ -13,19 +13,19 @@ export enum ProviderEventsEnum {
 })
 export class IamListenerService {
 
-  constructor(private iamService: IamService) {
+  constructor(private signerFacade: SignerFacadeService) {
   }
 
   setListeners(callback: (config) => void) {
-    this.iamService.signerService.on(ProviderEvent.AccountChanged, () => {
+    this.signerFacade.on(ProviderEvent.AccountChanged, () => {
       this._displayAccountAndNetworkChanges(ProviderEvent.AccountChanged, callback);
     });
 
-    this.iamService.signerService.on(ProviderEvent.NetworkChanged, () => {
+    this.signerFacade.on(ProviderEvent.NetworkChanged, () => {
       this._displayAccountAndNetworkChanges(ProviderEvent.NetworkChanged, callback);
     });
 
-    this.iamService.signerService.on(ProviderEvent.Disconnected, () => {
+    this.signerFacade.on(ProviderEvent.Disconnected, () => {
       this._displayAccountAndNetworkChanges(ProviderEvent.Disconnected, callback);
     });
   }
