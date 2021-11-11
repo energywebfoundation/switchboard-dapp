@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { IamService } from '../../../shared/services/iam.service';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { from } from 'rxjs';
@@ -7,6 +6,7 @@ import { catchError, finalize } from 'rxjs/operators';
 
 import { BigNumber } from 'ethers';
 import { NamespaceType } from 'iam-client-lib';
+import { DomainsFacadeService } from '../../../shared/services/domains-facade/domains-facade.service';
 
 
 export interface IStakingPool {
@@ -23,7 +23,7 @@ export interface IStakingPool {
 })
 export class StakingPoolService {
 
-  constructor(private iamService: IamService,
+  constructor(private domainsFacade: DomainsFacadeService,
               private sbToastr: SwitchboardToastrService,
               private loadingService: LoadingService) {
   }
@@ -31,7 +31,7 @@ export class StakingPoolService {
   getListOfOrganizationRoles(org: string) {
     this.loadingService.show();
     return from(
-      this.iamService.domainsService.getENSTypesByOwner({
+      this.domainsFacade.getENSTypesByOwner({
         type: NamespaceType.Role,
         owner: org
       })
