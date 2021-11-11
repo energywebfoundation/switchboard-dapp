@@ -283,6 +283,10 @@ describe('AuthEffects', () => {
       loginServiceSpy.isSessionActive.and.returnValue(true);
       store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
       loginServiceSpy.login.and.returnValue(of(false));
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: 'type',
+        publicKey: 'key'
+      });
 
       effects.reinitializeLoggedUser$.subscribe((resultAction) => {
         expect(resultAction).toEqual(AuthActions.loginFailure());
