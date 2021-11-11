@@ -19,6 +19,7 @@ import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumer
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
+import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 
 export enum ENSPrefixes {
   Roles = 'roles',
@@ -99,7 +100,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   public RoleType = RoleType;
   public RoleTypeList = RoleTypeList;
   public ENSPrefixes = ENSPrefixes;
-  public issuerList: string[] = [this.iamService.signerService.did];
+  public issuerList: string[] = [this.signerFacade.getDid()];
 
   // Fields
   isAutolistLoading = false;
@@ -127,6 +128,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
               private spinner: NgxSpinnerService,
               public dialogRef: MatDialogRef<NewRoleComponent>,
               public dialog: MatDialog,
+              private signerFacade: SignerFacadeService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
@@ -274,7 +276,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
     if (this.IssuerType.DID === data.value) {
       // Set current user's DID
-      this.issuerList.push(this.iamService.signerService.did);
+      this.issuerList.push(this.signerFacade.getDid());
     }
   }
 
