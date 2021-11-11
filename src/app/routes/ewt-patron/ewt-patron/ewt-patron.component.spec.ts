@@ -6,14 +6,15 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { StakeState } from '../../../state/stake/stake.reducer';
 import { LastDigitsPipe } from '../pipes/last-digits.pipe';
 import { ActivatedRoute } from '@angular/router';
-import { IamService } from '../../../shared/services/iam.service';
-import { iamServiceSpy, MockActivatedRoute } from '@tests';
+import { MockActivatedRoute } from '@tests';
 import { AuthActions, PoolActions, PoolSelectors } from '@state';
+import { LoginService } from '../../../shared/services/login/login.service';
 
 describe('EwtPatronComponent', () => {
   let component: EwtPatronComponent;
   let fixture: ComponentFixture<EwtPatronComponent>;
   let store: MockStore<StakeState>;
+  const loginServiceSpy = jasmine.createSpyObj(LoginService, ['isSessionActive']);
   const mockActivatedRoute = new MockActivatedRoute();
   const setUp = (options?: {
     balance?: string;
@@ -35,7 +36,7 @@ describe('EwtPatronComponent', () => {
     TestBed.configureTestingModule({
       declarations: [EwtPatronComponent, LastDigitsPipe],
       providers: [
-        {provide: IamService, useValue: iamServiceSpy},
+        {provide: LoginService, useValue: loginServiceSpy},
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
         provideMockStore()
       ],
@@ -69,7 +70,7 @@ describe('EwtPatronComponent', () => {
     setUp();
     mockActivatedRoute.testParams = {org: 'org'};
     const dispatchSpy = spyOn(store, 'dispatch');
-    iamServiceSpy.isSessionActive.and.returnValue(true);
+    loginServiceSpy.isSessionActive.and.returnValue(true);
     fixture.detectChanges();
 
     component.ngOnInit();
@@ -80,7 +81,7 @@ describe('EwtPatronComponent', () => {
     setUp();
     mockActivatedRoute.testParams = {org: 'org'};
     const dispatchSpy = spyOn(store, 'dispatch');
-    iamServiceSpy.isSessionActive.and.returnValue(false);
+    loginServiceSpy.isSessionActive.and.returnValue(false);
     fixture.detectChanges();
 
     component.ngOnInit();
