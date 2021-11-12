@@ -63,6 +63,8 @@ declare namespace Cypress {
      * Gets mat-error selector and compares displayed error with provided string.
      */
     validationError(text: string): Chainable<Element>;
+
+    waitUntilLoaderDisappear(): void;
   }
 }
 
@@ -80,7 +82,11 @@ Cypress.Commands.add('login', () => {
 
   cy.intercept('**/login').as('getLogin');
   // cy.intercept({method: 'GET', url: '**/DID/*'}, {fixture: 'did/cached-did.json'});
-  cy.wait('@getLogin', {timeout: 60000});
+  // cy.wait('@getLogin', {timeout: 60000});
+});
+
+Cypress.Commands.add('waitUntilLoaderDisappear', () => {
+  cy.get('.loading-text', {timeout: 30000}).should('not.be.visible');
 });
 
 Cypress.Commands.add('insertValue', (id: string, value: string) => {

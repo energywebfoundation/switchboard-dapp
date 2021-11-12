@@ -12,6 +12,7 @@ describe('Dashboard view tests', () => {
   });
   it('should see user info in dashboard', () => {
     cy.wait('@cachedDidDoc');
+    cy.waitUntilLoaderDisappear();
     cy.dataQaId('user-info-name').contains('Test name');
   });
 
