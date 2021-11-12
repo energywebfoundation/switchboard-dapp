@@ -13,7 +13,7 @@ describe('Header view tests', () => {
   });
 
   it('should open dialog and check if data is displayed', () => {
-    cy.wait('@cachedDidDoc');
+    cy.wait('@cachedDidDoc', {timeout: 30000});
     cy.waitUntilLoaderDisappear();
     cy.dataQaId('user-menu').click({force: true});
     cy.dataQaId('opened-menu-name').contains(userDialog.name);
