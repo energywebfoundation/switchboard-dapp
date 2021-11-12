@@ -1,42 +1,41 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
+  AccountInfo,
   AssetsService,
+  ClaimData,
   ClaimsService,
+  DidRegistry,
   DomainsService,
-  NamespaceType,
+  initWithEKC,
+  initWithGnosis,
+  initWithKms,
+  initWithMetamask,
+  initWithPrivateKeySigner,
+  initWithWalletConnect,
   MessagingMethod,
   MessagingService,
+  NamespaceType,
+  ProviderType,
   setCacheConfig,
   setChainConfig,
   setMessagingConfig,
   SignerService,
   StakingService,
-  DidRegistry,
-  ClaimData,
-  ProviderType,
-  initWithWalletConnect,
-  initWithKms,
-  initWithGnosis,
-  initWithMetamask,
-  initWithPrivateKeySigner,
-  AccountInfo,
-  initWithEKC,
-} from "iam-client-lib";
-import { IDIDDocument } from "@ew-did-registry/did-resolver-interface";
-import { environment } from "src/environments/environment";
-import { LoadingService } from "./loading.service";
-import { safeAppSdk } from "./gnosis.safe.service";
-import { ConfigService } from "./config.service";
-import { from, Observable } from "rxjs";
-import { LoginOptions } from "./login/login.service";
-import { finalize, switchMap } from "rxjs/operators";
-import { truthy } from "@operators";
+} from 'iam-client-lib';
+import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
+import { environment } from 'src/environments/environment';
+import { LoadingService } from './loading.service';
+import { safeAppSdk } from './gnosis.safe.service';
+import { from, Observable } from 'rxjs';
+import { LoginOptions } from './login/login.service';
+import { finalize } from 'rxjs/operators';
+import { truthy } from '@operators';
 
-const { walletConnectOptions, cacheServerUrl, natsServerUrl } = environment;
+const {walletConnectOptions, cacheServerUrl, natsServerUrl} = environment;
 
 export const VOLTA_CHAIN_ID = 73799;
-export const PROVIDER_TYPE = "ProviderType";
-const PRIVATE_KEY = "PrivateKey";
+export const PROVIDER_TYPE = 'ProviderType';
+const PRIVATE_KEY = 'PrivateKey';
 
 export type InitializeData = {
   did: string | undefined;
@@ -62,7 +61,6 @@ export class IamService {
 
   constructor(
     private loadingService: LoadingService,
-    private configService: ConfigService
   ) {
     // Set Cache Server
     setCacheConfig(VOLTA_CHAIN_ID, {
@@ -139,14 +137,13 @@ export class IamService {
     providerType,
     initCacheServer = true,
     createDocument = true,
-    privateKey,
   }: LoginOptions) {
     try {
       const {
         signerService,
         messagingService,
         connectToCacheServer,
-      } = await this.initSignerService(providerType, privateKey);
+      } = await this.initSignerService(providerType);
       this.signerService = signerService;
       this.messagingService = messagingService;
       if (initCacheServer) {
@@ -166,6 +163,7 @@ export class IamService {
         }
       }
     } catch (e) {
+      console.error(e);
       return {
         did: undefined,
         connected: false,
@@ -232,7 +230,6 @@ export class IamService {
 
   private async initSignerService(
     providerType: ProviderType,
-    privateKey: string
   ) {
     switch (providerType) {
       case ProviderType.MetaMask:
@@ -243,7 +240,7 @@ export class IamService {
         return initWithKms();
       case ProviderType.PrivateKey:
         return initWithPrivateKeySigner(
-          privateKey,
+          localStorage.getItem('PrivateKey'),
           walletConnectOptions.rpcUrl
         );
       case ProviderType.Gnosis:

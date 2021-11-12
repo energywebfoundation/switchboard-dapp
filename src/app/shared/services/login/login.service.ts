@@ -14,7 +14,6 @@ export interface LoginOptions {
   reinitializeMetamask?: boolean;
   initCacheServer?: boolean;
   createDocument?: boolean;
-  privateKey?: string;
 }
 
 interface LoginError {
