@@ -11,7 +11,8 @@ describe('Dashboard view tests', () => {
     cy.intercept({method: 'GET', url: '**/DID/*'}, {fixture: 'did/cached-did.json'}).as('cachedDidDoc');
   });
   it('should see user info in dashboard', () => {
-    cy.wait('@cachedDidDoc');
+    cy.wait('@cachedDidDoc', {timeout: 30000});
+    cy.waitUntilLoaderDisappear();
     cy.dataQaId('user-info-name').contains('Test name');
   });
 

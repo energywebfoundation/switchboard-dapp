@@ -81,7 +81,7 @@ export class PoolEffects {
     this.actions$.pipe(
       ofType(PoolActions.getStake),
       switchMap(() =>
-        from(this.iamService.getAddress())
+        from(this.iamService.address)
           .pipe(
             switchMap((address) => this.stakingPoolFacade.getStake(address)
               .pipe(

@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { PreconditionTypes } from 'iam-client-lib';
+import { PreconditionType } from 'iam-client-lib';
 import { RolePreconditionType } from '../../../routes/registration/request-claim/request-claim.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
@@ -82,7 +82,7 @@ export class NewIssueVcComponent implements OnInit {
     if (preconditionList && preconditionList.length) {
       for (const precondition of preconditionList) {
         switch (precondition.type) {
-          case PreconditionTypes.Role:
+          case PreconditionType.Role:
             // Check for Role Conditions
             this.rolePreconditionList = [];
 
@@ -112,7 +112,7 @@ export class NewIssueVcComponent implements OnInit {
     this.loadingService.show();
     let roleList = [...this.roles];
 
-    const list = (await this.iamService.iam.getClaimsBySubject({
+    const list = (await this.iamService.claimsService.getClaimsBySubject({
       did
     })).filter((claim) => !claim.isRejected);
 

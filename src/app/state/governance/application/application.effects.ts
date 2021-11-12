@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import * as ApplicationActions from './application.actions';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { ENSNamespaceTypes, IApp } from 'iam-client-lib';
+import { NamespaceType, IApp } from 'iam-client-lib';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { of } from 'rxjs';
 
@@ -14,13 +14,13 @@ export class ApplicationEffects {
   getList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ApplicationActions.getList),
-      switchMap(() => this.iamService.wrapWithLoadingService(this.iamService.getENSTypesByOwner(ENSNamespaceTypes.Application)).pipe(
+      switchMap(() => this.iamService.wrapWithLoadingService(this.iamService.getENSTypesByOwner(NamespaceType.Application)).pipe(
           map((list: IApp[]) => list.map((app) => ({...app, containsRoles: app?.roles?.length > 0}))),
           map((list: IApp[]) => ApplicationActions.getListSuccess({list})),
           catchError((err) => {
             console.error(err);
             this.toastr.error('Something went wrong while getting list of applications', 'Application');
-            return of(ApplicationActions.getListFailure({error: err.message}));
+            return of(ApplicationActions.getListFailure({ error: err.message }));
           })
         )
       )

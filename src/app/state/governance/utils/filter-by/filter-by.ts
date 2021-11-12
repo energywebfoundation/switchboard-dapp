@@ -1,4 +1,5 @@
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { NamespaceType } from 'iam-client-lib';
+import { ENSPrefixes } from 'src/app/routes/applications/new-role/new-role.component';
 
 export const filterBy = (data: any[], organization: string, application: string, role: string): any[] => {
   if (organization) {
@@ -19,8 +20,8 @@ export const filterBy = (data: any[], organization: string, application: string,
 const filterByOrg = (data, organization) => {
   return data.filter((item: any) => {
     let arr = item.namespace.split('.iam.ewc');
-    arr = arr[0].split(ENSNamespaceTypes.Roles);
-    arr = arr[arr.length - 1].split(ENSNamespaceTypes.Application);
+    arr = arr[0].split(ENSPrefixes.Roles);
+    arr = arr[arr.length - 1].split(NamespaceType.Application);
 
     const org = arr[arr.length - 1];
     return (org.toUpperCase().indexOf(organization.toUpperCase()) >= 0);
@@ -28,14 +29,14 @@ const filterByOrg = (data, organization) => {
 };
 
 const filterByApp = (data, application) => {
-  return data.filter((item: any) => filterByType(item, application, ENSNamespaceTypes.Application));
+  return data.filter((item: any) => filterByType(item, application, ENSPrefixes.Apps));
 };
 
 const filterByRole = (data, role) => {
-  return data.filter((item: any) => filterByType(item, role, ENSNamespaceTypes.Roles));
+  return data.filter((item: any) => filterByType(item, role, ENSPrefixes.Roles));
 };
 
-const filterByType = (item, filterBy, type: ENSNamespaceTypes) => {
+const filterByType = (item, filterBy, type: ENSPrefixes) => {
   let arr = item.namespace.split(`.${type}.`);
   arr = arr[0].split('.');
   return (arr[arr.length - 1].toUpperCase().indexOf(filterBy.toUpperCase()) >= 0);

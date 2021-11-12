@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ENSNamespaceTypes, IRole } from 'iam-client-lib';
+import { IRole, NamespaceType } from 'iam-client-lib';
 import { IamService } from '../../../../shared/services/iam.service';
 import { Observable } from 'rxjs';
 
@@ -13,7 +13,7 @@ export class RoleService {
 
   getRoleList(): Observable<IRole[]> {
     return this.iamService.wrapWithLoadingService<IRole[]>(
-      this.iamService.getENSTypesByOwner(ENSNamespaceTypes.Roles) as Promise<IRole[]>
+      this.iamService.getENSTypesByOwner(NamespaceType.Role) as Promise<IRole[]>
     );
   }
 }

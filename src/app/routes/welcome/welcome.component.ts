@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { WalletProvider } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 import { filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import * as authSelectors from '../../state/auth/auth.selectors';
@@ -35,14 +35,14 @@ export class WelcomeComponent implements OnInit {
     this.store.dispatch(AuthActions.navigateWhenSessionActive());
   }
 
-  login(provider: WalletProvider) {
+  login(provider: ProviderType) {
     this.store.dispatch(AuthActions.welcomeLogin({provider, returnUrl: this._returnUrl}));
   }
 
   private tryToLoginWithPrivateKey() {
     if (window.localStorage.getItem('PrivateKey')) {
       console.log('Found PrivateKey. Using to login.');
-      this.login(WalletProvider.PrivateKey);
+      this.login(ProviderType.PrivateKey);
     }
   }
 }

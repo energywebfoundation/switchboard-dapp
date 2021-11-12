@@ -1,6 +1,6 @@
 import * as authSelectors from './auth.selectors';
 import { getWalletProvider } from './auth.selectors';
-import { WalletProvider } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 
 describe('Auth Selectors', () => {
 
@@ -44,7 +44,7 @@ describe('Auth Selectors', () => {
     });
 
     it('should return defined wallet provider', () => {
-      expect(authSelectors.getWalletProvider.projector({walletProvider: WalletProvider.WalletConnect})).toBe(WalletProvider.WalletConnect);
+      expect(authSelectors.getWalletProvider.projector({walletProvider: ProviderType.WalletConnect})).toBe(ProviderType.WalletConnect);
     });
   });
 

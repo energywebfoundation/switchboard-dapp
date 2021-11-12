@@ -1,6 +1,6 @@
 import * as fromReducer from './role.reducer';
 import * as RoleActions from './role.actions';
-import { ENSNamespaceTypes, IRole } from 'iam-client-lib';
+import { NamespaceType, IRole } from 'iam-client-lib';
 
 describe('Role reducer', () => {
   describe('getListSuccess action', () => {
@@ -33,16 +33,16 @@ describe('Role reducer', () => {
       const {initialState} = fromReducer;
       const list = [
         {namespace: 'test.iam.ewc'},
-        {namespace: `testrole.${ENSNamespaceTypes.Roles}.ttt.iam.ewc`},
-        {namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`},
-        {namespace: `rolapp.${ENSNamespaceTypes.Roles}.testapp.${ENSNamespaceTypes.Application}.dsa.iam.ewc`}
+        {namespace: `testrole.${NamespaceType.Role}.ttt.iam.ewc`},
+        {namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`},
+        {namespace: `rolapp.${NamespaceType.Role}.testapp.${NamespaceType.Application}.dsa.iam.ewc`}
       ] as IRole[];
 
       const modifiedState = {...initialState, filters: {...initialState.filters, organization: 'abc'}};
       const action = RoleActions.getListSuccess({list});
       const state = fromReducer.reducer(modifiedState, action);
 
-      expect(state.filteredList).toEqual([{namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`}] as IRole[]);
+      expect(state.filteredList).toEqual([{namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`}] as IRole[]);
       expect(state.filteredList.length).toBe(1);
     });
   });
@@ -63,9 +63,9 @@ describe('Role reducer', () => {
       const {initialState} = fromReducer;
       const list = [
         {namespace: 'test.iam.ewc'},
-        {namespace: `testrole.${ENSNamespaceTypes.Roles}.ttt.iam.ewc`},
-        {namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`},
-        {namespace: `rolapp.${ENSNamespaceTypes.Roles}.testapp.${ENSNamespaceTypes.Application}.dsa.iam.ewc`}
+        {namespace: `testrole.${NamespaceType.Role}.ttt.iam.ewc`},
+        {namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`},
+        {namespace: `rolapp.${NamespaceType.Role}.testapp.${NamespaceType.Application}.dsa.iam.ewc`}
       ] as IRole[];
 
       const modifiedState = {...initialState, list};
@@ -73,7 +73,7 @@ describe('Role reducer', () => {
       const action = RoleActions.updateFilters({filters});
       const state = fromReducer.reducer(modifiedState, action);
 
-      expect(state.filteredList).toEqual([{namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`}] as IRole[]);
+      expect(state.filteredList).toEqual([{namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`}] as IRole[]);
       expect(state.filteredList.length).toBe(1);
     });
   });
@@ -94,9 +94,9 @@ describe('Role reducer', () => {
 
       const list = [
         {namespace: 'test.iam.ewc'},
-        {namespace: `testrole.${ENSNamespaceTypes.Roles}.ttt.iam.ewc`},
-        {namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`},
-        {namespace: `rolapp.${ENSNamespaceTypes.Roles}.testapp.${ENSNamespaceTypes.Application}.dsa.iam.ewc`}
+        {namespace: `testrole.${NamespaceType.Role}.ttt.iam.ewc`},
+        {namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`},
+        {namespace: `rolapp.${NamespaceType.Role}.testapp.${NamespaceType.Application}.dsa.iam.ewc`}
       ];
 
       const modifiedState = {
@@ -106,7 +106,7 @@ describe('Role reducer', () => {
           application: 'test',
           role: ''
         },
-        filteredList: [{namespace: `testapp.${ENSNamespaceTypes.Application}.abc.iam.ewc`}],
+        filteredList: [{namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`}],
         filterVisible: true
       };
 

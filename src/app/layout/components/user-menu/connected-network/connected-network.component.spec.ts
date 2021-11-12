@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ConnectedNetworkComponent } from './connected-network.component';
-import { WalletProvider } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ConnectedNetworkComponent', () => {
@@ -28,7 +28,7 @@ describe('ConnectedNetworkComponent', () => {
   });
 
   it('should check if walletIcon property is set', () => {
-    component.wallet = WalletProvider.WalletConnect;
+    component.wallet = ProviderType.WalletConnect;
     fixture.detectChanges();
 
     expect(component.walletIcon).toBeTruthy();

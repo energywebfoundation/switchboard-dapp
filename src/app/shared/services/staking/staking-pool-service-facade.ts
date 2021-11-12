@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StakingPoolService } from 'iam-client-lib';
+import { StakingService } from 'iam-client-lib';
 import { IamService } from '../iam.service';
 import { StakingPoolFacade } from '../pool/staking-pool-facade';
 import { from } from 'rxjs';
@@ -9,13 +9,13 @@ import { BigNumber } from 'ethers';
   providedIn: 'root'
 })
 export class StakingPoolServiceFacade {
-  private stakingPoolService: StakingPoolService;
+  private stakingPoolService: StakingService;
 
   constructor(private iamService: IamService, private stakingPoolFacade: StakingPoolFacade) {
   }
 
   async init() {
-    this.stakingPoolService = await StakingPoolService.init(this.iamService.iam.getSigner());
+    this.stakingPoolService = this.iamService.stakingService;
     return Boolean(this.stakingPoolService);
   }
 
@@ -36,7 +36,7 @@ export class StakingPoolServiceFacade {
     patronRoles: string[];
     principal: BigNumber;
   }) {
-    return from(this.stakingPoolService.launchStakingPool(pool));
+    return from(this.stakingPoolService.launchPool(pool));
   }
 
 }
