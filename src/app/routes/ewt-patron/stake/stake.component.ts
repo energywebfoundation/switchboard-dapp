@@ -15,7 +15,7 @@ import * as PoolActions from '../../../state/pool/pool.actions';
 export class StakeComponent {
   inputFocused: boolean;
   tokenAmount: number;
-  amountToStake = new FormControl('', [Validators.min(1), Validators.required]);
+  amountToStake = new FormControl('', [Validators.min(1), Validators.required, Validators.max(50000)]);
   balance$ = this.store.select(poolSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
   earnedReward$ = this.store.select(poolSelectors.getReward);
   stakeAmount$ = this.store.select(poolSelectors.getStakeAmount);
