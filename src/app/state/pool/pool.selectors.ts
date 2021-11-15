@@ -52,6 +52,18 @@ export const getStakeAmount = createSelector(
   (state: Stake) => state?.amount ? formatEther(state.amount) : '0'
 );
 
+export const getMaxPossibleAmountToStake = createSelector(
+  getStake,
+  (state: Stake) => {
+    console.log(state);
+    if (state?.amount) {
+      console.log(formatEther(state.amount));
+      return +state.amount.sub(50000).abs().toString();
+    }
+    return 50000;
+  }
+);
+
 export const isWithdrawingDelayFinished = createSelector(
   getStakeState,
   (state: PoolState) => state.withdrawing
