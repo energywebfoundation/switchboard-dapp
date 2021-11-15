@@ -22,6 +22,7 @@
         <mat-error *ngIf="amountToStake.hasError('min')">Minimum value is 1</mat-error>
         <mat-error *ngIf="amountToStake.hasError('required')">This field is <strong>required</strong>
         </mat-error>
+        <mat-hint align="start" class="color-grey">Max. 50.000 EWT per DID</mat-hint>
       </mat-form-field>
       <app-percent-buttons #percentButtons (percent)="calcStakeAmount($event)">
       </app-percent-buttons>
