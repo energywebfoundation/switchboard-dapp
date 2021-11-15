@@ -56,7 +56,7 @@
       <div class="mt-2 d-flex justify-content-end align-items-center text-color">
         <!-- <mat-slide-toggle [formControl]="compound" class="slide-toggle">Compound</mat-slide-toggle> -->
         <button mat-raised-button class="stake-btn text-color text-uppercase" data-qa-id="stake"
-                [disabled]="(isStakingDisabled$ | async) || isAmountInvalid()" (click)="stake()">
+                [disabled]="isAmountInvalid()" (click)="stake()">
           Stake
         </button>
       </div>
