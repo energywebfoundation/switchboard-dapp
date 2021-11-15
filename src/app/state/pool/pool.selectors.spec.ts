@@ -9,20 +9,6 @@ describe('Pool Selectors', () => {
     });
   });
 
-  describe('isStakingDisabled', () => {
-    it('should return false when status is nonstaking', () => {
-      expect(poolSelectors.isStakingDisabled.projector({status: StakeStatus.NONSTAKING})).toBe(false);
-    });
-
-    it('should return true when status is staking', () => {
-      expect(poolSelectors.isStakingDisabled.projector({status: StakeStatus.STAKING})).toBe(true);
-    });
-
-    it('should return true when status is withdrawing', () => {
-      expect(poolSelectors.isStakingDisabled.projector({status: StakeStatus.WITHDRAWING})).toBe(true);
-    });
-  });
-
   describe('isWithdrawDisabled', () => {
     it('should return false when status is staking', () => {
       expect(poolSelectors.isWithdrawDisabled.projector({status: StakeStatus.STAKING})).toBe(false);

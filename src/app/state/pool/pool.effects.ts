@@ -97,28 +97,18 @@ export class PoolEffects {
   putStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PoolActions.putStake),
-      withLatestFrom(
-        this.store.select(poolSelectors.isStakingDisabled)
-      ),
-      filter(([, isStakeDisabled]) => {
-        if (isStakeDisabled) {
-          this.toastr.error('You can not stake to this provider because you already staked to it!');
-        }
-        return !isStakeDisabled;
-      }),
       tap(() => this.loadingService.show('Putting your stake')),
-      switchMap(([{amount}]) => {
-
-          return this.stakingPoolFacade.putStake(parseEther(amount))
-            .pipe(
-              map(() => {
-                this.dialog.open(StakeSuccessComponent, {
-                  width: '400px',
-                  maxWidth: '100%',
-                  disableClose: true,
-                  backdropClass: 'backdrop-shadow'
-                });
-                return PoolActions.getStake();
+      switchMap(({amount}) => {
+        return this.stakingPoolFacade.putStake(parseEther(amount))
+          .pipe(
+            map(() => {
+              this.dialog.open(StakeSuccessComponent, {
+                width: '400px',
+                maxWidth: '100%',
+                disableClose: true,
+                backdropClass: 'backdrop-shadow'
+              });
+              return PoolActions.getStake();
               }),
               catchError(err => {
                 console.error(err);
