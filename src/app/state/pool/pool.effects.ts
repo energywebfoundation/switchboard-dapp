@@ -81,14 +81,10 @@ export class PoolEffects {
     this.actions$.pipe(
       ofType(PoolActions.getStake),
       switchMap(() =>
-        from(this.iamService.address)
+        this.stakingPoolFacade.getStake(this.iamService.address)
           .pipe(
-            switchMap((address) => this.stakingPoolFacade.getStake(address)
-              .pipe(
-                filter<Stake>(Boolean),
-                map((stake) => PoolActions.getStakeSuccess({stake}))
-              )
-            )
+            filter<Stake>(Boolean),
+            map((stake) => PoolActions.getStakeSuccess({stake}))
           )
       )
     )
@@ -99,16 +95,16 @@ export class PoolEffects {
       ofType(PoolActions.putStake),
       tap(() => this.loadingService.show('Putting your stake')),
       switchMap(({amount}) => {
-        return this.stakingPoolFacade.putStake(parseEther(amount))
-          .pipe(
-            map(() => {
-              this.dialog.open(StakeSuccessComponent, {
-                width: '400px',
-                maxWidth: '100%',
-                disableClose: true,
-                backdropClass: 'backdrop-shadow'
-              });
-              return PoolActions.getStake();
+          return this.stakingPoolFacade.putStake(parseEther(amount))
+            .pipe(
+              map(() => {
+                this.dialog.open(StakeSuccessComponent, {
+                  width: '400px',
+                  maxWidth: '100%',
+                  disableClose: true,
+                  backdropClass: 'backdrop-shadow'
+                });
+                return PoolActions.getStake();
               }),
               catchError(err => {
                 console.error(err);
