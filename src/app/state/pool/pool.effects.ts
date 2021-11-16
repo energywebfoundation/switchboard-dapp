@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
 import { PoolState } from './pool.reducer';
 import * as PoolActions from './pool.actions';
-import { catchError, delay, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { utils } from 'ethers';
 import { Stake, StakeStatus } from 'iam-client-lib';
@@ -81,7 +81,7 @@ export class PoolEffects {
     this.actions$.pipe(
       ofType(PoolActions.getStake),
       switchMap(() =>
-        this.stakingPoolFacade.getStake(this.iamService.address)
+        this.stakingPoolFacade.getStake()
           .pipe(
             filter<Stake>(Boolean),
             map((stake) => PoolActions.getStakeSuccess({stake}))
@@ -118,24 +118,6 @@ export class PoolEffects {
     )
   );
 
-  withdrawalDelay$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PoolActions.getWithdrawalDelay),
-      switchMap(() =>
-        this.stakingPoolFacade.withdrawalDelay()
-          .pipe(
-            map(withdrawalDelay => () => delay(withdrawalDelay as any)),
-            map(() => PoolActions.withdrawalDelayExpired()
-            ),
-            catchError(err => {
-              console.error('Could not get withdrawal delay', err);
-              return of(PoolActions.getWithdrawalDelayFailure({err}));
-            }),
-          )
-      )
-    )
-  );
-
   showProgressBar$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PoolActions.withdrawRequest, PoolActions.displayConfirmationDialog),
@@ -148,26 +130,6 @@ export class PoolEffects {
         });
       })
     ), {dispatch: false}
-  );
-
-  withdrawRequest$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PoolActions.withdrawRequest),
-      switchMap(() =>
-        this.stakingPoolFacade.requestWithdraw()
-          .pipe(
-            map(() => {
-              return PoolActions.getWithdrawalDelay();
-            }),
-            catchError((err) => {
-              console.error(err);
-              this.toastr.error('Error occurs while trying to request a withdraw.');
-              this.dialog.closeAll();
-              return of(PoolActions.withdrawRequestFailure({err}));
-            }),
-          )
-      )
-    )
   );
 
   withdrawReward$ = createEffect(() =>
