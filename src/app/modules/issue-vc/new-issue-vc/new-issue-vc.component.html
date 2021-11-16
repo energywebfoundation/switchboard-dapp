@@ -56,19 +56,13 @@
           </div>
         </ng-container>
       </ng-container>
-      <div class="card card-default d-flex shadow-none pt-3 mb-3"
-           *ngIf="selectedRoleDefinition?.metadata?.requiredParams">
-        Issuer required fields
-        <app-required-fields #requiredFields
-                             [fieldList]="selectedRoleDefinition?.metadata?.requiredParams"></app-required-fields>
-      </div>
-
-      <div mat-dialog-actions class="d-flex justify-content-center" style="border-top: 0;">
-        <button mat-raised-button class="btn btn-primary w-100" data-qa-id="create" type="submit"
-                [disabled]="isFormDisabled()" (click)="create()">
-          Create
-        </button>
-      </div>
+      <app-enrolment-form
+          *ngIf="isPrecheckSuccess"
+          [showRegistrationTypes]="false"
+          [fieldList]="fieldList"
+          [disabledSubmit]="isFormDisabled()"
+          (submitForm)="create($event)">
+      </app-enrolment-form>
     </form>
   </div>
 </div>

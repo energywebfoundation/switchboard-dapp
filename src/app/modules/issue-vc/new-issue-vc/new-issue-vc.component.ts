@@ -40,7 +40,7 @@ export class NewIssueVcComponent implements OnInit {
 
   roleTypeSelected(e: any) {
     if (e && e.value && e.value.definition) {
-      this.fieldList = e.value.definition.fields || [];
+      this.fieldList = e.value.definition.issuerFields || [];
       this.selectedRoleDefinition = e.value.definition;
       this.setPreconditions();
     }
@@ -85,11 +85,11 @@ export class NewIssueVcComponent implements OnInit {
     return this.form.invalid || !this.isPrecheckSuccess || !this.requiredFields?.isValid();
   }
 
-  create() {
-    if (this.isFormDisabled()) {
+  create(e) {
+    if (this.isFormDisabled() && e.value) {
       return;
     }
-    this.issuanceVcService.create({subject: this.getFormSubject().value, claim: this.createClaim()})
+    this.issuanceVcService.create({subject: this.getFormSubject().value, claim: this.createClaim(e.fields)})
       .subscribe(() => this.dialogRef.close());
   }
 
@@ -108,7 +108,7 @@ export class NewIssueVcComponent implements OnInit {
     }
   }
 
-  private createClaim() {
+  private createClaim(fields) {
     const parseVersion = (version: string | number) => {
       if (typeof (version) === 'string') {
         return parseInt(version.split('.')[0], 10);
@@ -119,7 +119,7 @@ export class NewIssueVcComponent implements OnInit {
     return {
       claimType: this.getFormType().value.namespace,
       claimTypeVersion: parseVersion(this.selectedRoleDefinition.version) || DEFAULT_CLAIM_TYPE_VERSION,
-      claimParams: this.requiredFields?.fieldsData()
+      issuerFields: fields
     };
   }
 }

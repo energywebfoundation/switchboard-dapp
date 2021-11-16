@@ -24,6 +24,7 @@ export class ViewRequestsComponent implements OnInit {
   listType: string;
   claim: any;
   fields = [];
+  issuerFields = [];
   userDid$ = this.store.select(userSelectors.getDid);
   claimParams;
   fieldList = [];
@@ -58,11 +59,11 @@ export class ViewRequestsComponent implements OnInit {
       const decoded: any = await this.iamService.didRegistry.decodeJWTToken({
         token: this.claim.token
       });
-      if (decoded.claimData && decoded.claimData.fields) {
-        this.fields = decoded.claimData.fields;
+      if (decoded.claimData) {
+        this.fields = decoded.claimData?.fields ? decoded.claimData?.fields : [];
+        this.issuerFields = decoded.claimData?.issuerFields ? decoded.claimData?.issuerFields : [];
       }
     }
-    await this.setClaimParams();
   }
 
   async approve() {
@@ -74,7 +75,7 @@ export class ViewRequestsComponent implements OnInit {
         token: this.claim.token,
         subjectAgreement: this.claim.subjectAgreement,
         registrationTypes: this.claim.registrationTypes,
-        claimParams: this.requiredFields?.fieldsData()
+        issuerFields: []
       };
 
       await this.iamService.claimsService.issueClaimRequest(req);

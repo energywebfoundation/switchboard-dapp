@@ -20,6 +20,7 @@ import { CreateFieldsModule } from '../applications/new-role/components/create-f
 import { IssueVcModule } from '../../modules/issue-vc/issue-vc.module';
 import { KeyValueModule } from '../../modules/key-value/key-value.module';
 import { RequiredFieldsModule } from '../../modules/required-fields/required-fields.module';
+import { EnrolmentFormModule } from '../registration/enrolment-form/enrolment-form.module';
 
 const routes: Routes = [
   {path: '', component: EnrolmentComponent}
@@ -50,7 +51,8 @@ const routes: Routes = [
     IssueVcModule,
     CreateFieldsModule,
     KeyValueModule,
-    RequiredFieldsModule
+    RequiredFieldsModule,
+    EnrolmentFormModule
   ],
   entryComponents: [ViewRequestsComponent, ViewRoleComponent]
 })

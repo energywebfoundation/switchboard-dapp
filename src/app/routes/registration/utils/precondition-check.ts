@@ -1,6 +1,5 @@
-import { PreconditionTypes } from 'iam-client-lib';
+import { Claim, PreconditionType } from 'iam-client-lib';
 import { RolePreconditionType } from '../request-claim/request-claim.component';
-import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 
 export interface EnrolmentPrecondition {
   type: string,
@@ -18,7 +17,7 @@ export const preconditionCheck = (preconditionList: EnrolmentPrecondition[], rol
   if (preconditionList && preconditionList.length) {
     for (const precondition of preconditionList) {
       switch (precondition.type) {
-        case PreconditionTypes.Role:
+        case PreconditionType.Role:
           // Check for Role Conditions
           rolePreconditionList = [];
 
