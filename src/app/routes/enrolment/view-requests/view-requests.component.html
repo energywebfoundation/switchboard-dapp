@@ -78,7 +78,11 @@
         </div>
         <div class="col-lg-12 mt-2 mb-3" *ngIf="canAccept() && roleContainRequiredParams()">
           <div class="card card-default mb-3 pb-0 shadow-none">
-            <app-required-fields #requiredFields [fieldList]="fieldList"></app-required-fields>
+            <app-enrolment-form #issuerFields
+                                [fieldList]="fieldList"
+                                [showRegistrationTypes]="false"
+                                [showSubmit]="false">
+            </app-enrolment-form>
           </div>
         </div>
         <div class="col-lg-12 mt-2"

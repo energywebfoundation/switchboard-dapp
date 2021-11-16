@@ -9,8 +9,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
-import { map } from 'rxjs/operators';
-import { RequiredFields } from '../../../modules/required-fields/components/required-fields/required-fields.component';
+import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.component';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -20,7 +19,7 @@ const TOASTR_HEADER = 'Enrolment Request';
   styleUrls: ['./view-requests.component.scss']
 })
 export class ViewRequestsComponent implements OnInit {
-  @ViewChild('requiredFields', {static: false}) requiredFields: RequiredFields;
+  @ViewChild('issuerFields', {static: false}) requiredFields: EnrolmentForm;
   listType: string;
   claim: any;
   fields = [];
@@ -54,7 +53,7 @@ export class ViewRequestsComponent implements OnInit {
   async ngOnInit() {
     this.listType = this.data.listType;
     this.claim = this.data.claimData;
-    this.getRoleMetadata(this.claim.claimType);
+    await this.getRoleIssuerFields(this.claim.claimType);
     if (this.claim && this.claim.token) {
       const decoded: any = await this.iamService.didRegistry.decodeJWTToken({
         token: this.claim.token
@@ -75,7 +74,7 @@ export class ViewRequestsComponent implements OnInit {
         token: this.claim.token,
         subjectAgreement: this.claim.subjectAgreement,
         registrationTypes: this.claim.registrationTypes,
-        issuerFields: []
+        issuerFields: this.requiredFields.fieldsData()
       };
 
       await this.iamService.claimsService.issueClaimRequest(req);
@@ -121,29 +120,13 @@ export class ViewRequestsComponent implements OnInit {
     });
   }
 
-  private async getRoleMetadata(namespace: string) {
-    const definitions: any = await this.iamService.getRolesDefinition([namespace]);
-    const requiredParams = definitions[namespace]?.metadata?.requiredParams;
-    if (requiredParams && Array.isArray(requiredParams) && requiredParams.length > 0) {
-      this.fieldList = requiredParams;
-    }
-  }
-
-  private setClaimParams() {
+  private async getRoleIssuerFields(namespace: string) {
     this.loadingService.show();
-    this.iamService.getDidDocument({did: this.claim.subject, includeClaims: true})
-      .pipe(
-        map((data) => data.service.filter(obj => obj.claimParams))
-      )
-      .subscribe(data => {
-        if (data.length > 0) {
-          this.claimParams = this.createKeyValuePair(data[0]?.claimParams);
-        }
-        this.loadingService.hide();
-      });
-  }
-
-  private createKeyValuePair(object: Object) {
-    return Object.keys(object).map(key => ({key, value: object[key]}));
+    const definitions: any = await this.iamService.getRolesDefinition([namespace]);
+    const issuerFieldList = definitions[namespace]?.issuerFields;
+    if (issuerFieldList && Array.isArray(issuerFieldList) && issuerFieldList.length > 0) {
+      this.fieldList = issuerFieldList;
+    }
+    this.loadingService.hide();
   }
 }
