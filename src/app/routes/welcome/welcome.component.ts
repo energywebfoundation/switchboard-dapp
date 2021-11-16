@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { WalletProvider } from 'iam-client-lib';
+import { ActivatedRoute } from '@angular/router';
+import { ProviderType } from 'iam-client-lib';
 import { filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import * as authSelectors from '../../state/auth/auth.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
-import { IamService } from '../../shared/services/iam.service';
 
 const {version} = require('../../../../package.json');
 
@@ -21,43 +20,29 @@ export class WelcomeComponent implements OnInit {
 
   private _returnUrl;
 
-  constructor(private route: Router,
-              private activeRoute: ActivatedRoute,
-              private store: Store,
-              private iamService: IamService) {
+  constructor(private activeRoute: ActivatedRoute,
+              private store: Store) {
   }
 
   async ngOnInit() {
     this.tryToLoginWithPrivateKey();
-    this.activeRoute.queryParams.pipe(
-      filter((queryParams) => queryParams && queryParams.returnUrl)
-    )
+    this.activeRoute.queryParams
+      .pipe(filter((queryParams) => queryParams && queryParams.returnUrl))
       .subscribe((queryParams: any) => {
         this._returnUrl = queryParams.returnUrl;
       });
 
-    // Immediately navigate to dashboard if user is currently logged-in to walletconnect
-    if (this.iamService.isSessionActive()) {
-      this.route.navigate(['dashboard']);
-    }
+    this.store.dispatch(AuthActions.navigateWhenSessionActive());
   }
 
-  connectToWalletConnect() {
-    this.login(WalletProvider.WalletConnect);
-  }
-
-  connectToMetamask() {
-    this.login(WalletProvider.MetaMask);
-  }
-
-  private login(provider: WalletProvider) {
+  login(provider: ProviderType) {
     this.store.dispatch(AuthActions.welcomeLogin({provider, returnUrl: this._returnUrl}));
   }
 
   private tryToLoginWithPrivateKey() {
     if (window.localStorage.getItem('PrivateKey')) {
       console.log('Found PrivateKey. Using to login.');
-      this.login(WalletProvider.PrivateKey);
+      this.login(ProviderType.PrivateKey);
     }
   }
 }

@@ -8,7 +8,8 @@ import { IamService } from '../../../shared/services/iam.service';
 import { ToastrService } from 'ngx-toastr';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { PreconditionTypes } from 'iam-client-lib';
+import { PreconditionType } from 'iam-client-lib';
+import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 
 describe('NewRoleComponent', () => {
   let component: NewRoleComponent;
@@ -24,7 +25,6 @@ describe('NewRoleComponent', () => {
       'error'
     ]);
   const iamSpy = jasmine.createSpyObj('iam', [
-    'getDid',
     'checkExistenceOfDomain',
     'isOwner',
     'getRoleDIDs',
@@ -32,6 +32,8 @@ describe('NewRoleComponent', () => {
     'setRoleDefinition',
     'getENSTypesBySearchPhrase'
   ]);
+
+  const signerFacadeSpy = jasmine.createSpyObj(SignerFacadeService, ['getDid']);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,7 +45,8 @@ describe('NewRoleComponent', () => {
         {provide: ToastrService, useValue: toastrSpy},
         {provide: MatDialogRef, useValue: {}},
         {provide: MatDialog, useValue: matDialogSpy},
-        {provide: MAT_DIALOG_DATA, useValue: {}}
+        {provide: MAT_DIALOG_DATA, useValue: {}},
+        {provide: SignerFacadeService, useValue: signerFacadeSpy}
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -89,7 +92,7 @@ describe('NewRoleComponent', () => {
         enrolmentPreconditions:
           [
             [
-              {type: PreconditionTypes.Role, conditions: ['a', 'b', 'c', 'd']},
+              {type: PreconditionType.Role, conditions: ['a', 'b', 'c', 'd']},
             ]
           ]
       })

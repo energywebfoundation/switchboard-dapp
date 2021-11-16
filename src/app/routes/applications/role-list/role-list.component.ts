@@ -87,7 +87,7 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   filter(filters): void {
-    this.store.dispatch(RoleActions.updateFilters({filters}));
+    this.store.dispatch(RoleActions.updateFilters({ filters }));
   }
 
   private setData(): void {

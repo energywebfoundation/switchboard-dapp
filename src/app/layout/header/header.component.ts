@@ -2,7 +2,7 @@ import { Event, NavigationEnd, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
-import { AssetHistoryEventType, ENSNamespaceTypes } from 'iam-client-lib';
+import { AssetHistoryEventType, NamespaceType } from 'iam-client-lib';
 
 import { SettingsService } from '../../core/settings/settings.service';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
@@ -60,7 +60,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private _iamSubscriptionId: number;
   private isInitNotificationCount = false;
 
-  @ViewChild('fsbutton', {static: true}) fsbutton;  // the fullscreen button
+  @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
 
   constructor(private iamService: IamService,
               private router: Router,
@@ -109,7 +109,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this._subscription$.complete();
 
     // Unsubscribe to IAM Events
-    await this.iamService.iam.unsubscribeFrom(this._iamSubscriptionId);
+    await this.iamService.messagingService.unsubscribeFrom(this._iamSubscriptionId);
   }
 
   didCopied() {
@@ -204,7 +204,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
 
     // Listen to External Messages
-    this._iamSubscriptionId = await this.iamService.iam.subscribeTo({
+    this._iamSubscriptionId = await this.iamService.messagingService.subscribeTo({
       messageHandler: this._handleMessage.bind(this)
     });
   }
@@ -249,8 +249,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private async _initPendingClaimsCount() {
     try {
       // Get Pending Claims to be Approved
-      const pendingClaimsList = (await this.iamService.iam.getClaimsByIssuer({
-        did: this.iamService.iam.getDid(),
+      const pendingClaimsList = (await this.iamService.claimsService.getClaimsByIssuer({
+        did: this.iamService.signerService.did,
         isAccepted: false
       })).filter(item => !item.isRejected);
       this.tasks.pendingApprovalCount = pendingClaimsList.length;
@@ -265,17 +265,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private async _initApprovedClaimsForSyncCount() {
     try {
       // Get Approved Claims
-      const approvedClaimsList = await this.iamService.iam.getClaimsByRequester({
-        did: this.iamService.iam.getDid(),
+      const approvedClaimsList = await this.iamService.claimsService.getClaimsByRequester({
+        did: this.iamService.signerService.did,
         isAccepted: true
       });
 
       // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-      let claims: any[] = await this.iamService.iam.getUserClaims();
+      let claims: any[] = await this.iamService.claimsService.getUserClaims();
       claims = claims.filter((item: any) => {
         if (item && item.claimType) {
           const arr = item.claimType.split('.');
-          if (arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles) {
+          if (arr.length > 1 && arr[1] === NamespaceType.Role) {
             return true;
           }
           return false;
@@ -308,7 +308,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private async _initAssetsOfferedToMeSyncCount() {
     try {
-      this.tasks.assetsOfferedToMeCount = (await this.iamService.iam.getOfferedAssets()).length;
+      this.tasks.assetsOfferedToMeCount = (await this.iamService.assetsService.getOfferedAssets()).length;
       if (this.tasks.assetsOfferedToMeCount < 0) {
         this.tasks.assetsOfferedToMeCount = 0;
       }

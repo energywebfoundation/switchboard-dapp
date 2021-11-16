@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { WalletProvider } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 
 const ICON_MAP = new Map()
   .set('Azure', 'assets/img/icons/azure-logo-icon.svg')
-  .set(WalletProvider.WalletConnect, 'assets/img/icons/wallet-connect-icon.svg')
-  .set(WalletProvider.EwKeyManager, 'assets/img/icons/key-manager-icon.svg')
-  .set(WalletProvider.MetaMask, 'assets/img/icons/metamask-logo.svg');
+  .set(ProviderType.WalletConnect, 'assets/img/icons/wallet-connect-icon.svg')
+  .set(ProviderType.EwKeyManager, 'assets/img/icons/key-manager-icon.svg')
+  .set(ProviderType.MetaMask, 'assets/img/icons/metamask-logo.svg');
 
 
 @Component({
@@ -16,7 +16,7 @@ const ICON_MAP = new Map()
 })
 export class ConnectedNetworkComponent implements OnInit {
   @Input() chainName: string;
-  @Input() wallet: WalletProvider | string;
+  @Input() wallet: ProviderType | string;
   walletIcon: string;
 
   ngOnInit(): void {

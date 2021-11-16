@@ -9,7 +9,7 @@ import * as AuthActions from '../../../state/auth/auth.actions';
 import { AuthSelectors, UserClaimSelectors } from '@state';
 import { MatMenuModule } from '@angular/material/menu';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { AccountInfo } from 'iam-client-lib/dist/src/iam';
+import { AccountInfo } from 'iam-client-lib';
 
 describe('StakingHeaderComponent', () => {
   let component: StakingHeaderComponent;

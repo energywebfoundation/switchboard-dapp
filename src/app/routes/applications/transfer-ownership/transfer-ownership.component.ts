@@ -96,7 +96,7 @@ export class TransferOwnershipComponent implements OnDestroy {
   }
 
   async submit() {
-    if (this.newOwnerAddress.value === this.iamService.iam.getDid()) {
+    if (this.newOwnerAddress.value === this.iamService.signerService.did) {
       this.toastr.error('You cannot transfer to your own DID.', TOASTR_HEADER);
     } else if (this.newOwnerAddress.valid) {
       if (this.namespace) {
@@ -112,7 +112,7 @@ export class TransferOwnershipComponent implements OnDestroy {
   private async _transferOrgAppRole() {
     if (await this.confirm('You will no longer be the owner of this namespace. Do you wish to continue?')) {
       this.loadingService.show();
-      const returnSteps = this.iamService.iam.address === this.data.owner ? true : false;
+      const returnSteps = this.iamService.signerService.address === this.data.owner ? true : false;
       const req = {
         namespace: this.namespace,
         newOwner: this.newOwnerAddress.value,
@@ -123,13 +123,13 @@ export class TransferOwnershipComponent implements OnDestroy {
       try {
         switch (this.type) {
           case ListType.ORG:
-            call = this.iamService.iam.changeOrgOwnership(req);
+            call = this.iamService.domainsService.changeOrgOwnership(req);
             break;
           case ListType.APP:
-            call = this.iamService.iam.changeAppOwnership(req);
+            call = this.iamService.domainsService.changeAppOwnership(req);
             break;
           case ListType.ROLE:
-            call = this.iamService.iam.changeRoleOwnership(req);
+            call = this.iamService.domainsService.changeRoleOwnership(req);
             break;
         }
         this.mySteps = returnSteps ?
@@ -161,7 +161,7 @@ export class TransferOwnershipComponent implements OnDestroy {
       this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
 
       try {
-        await this.iamService.iam.offerAsset({
+        await this.iamService.assetsService.offerAsset({
           assetDID: this.assetDid,
           offerTo: this.newOwnerAddress.value
         });

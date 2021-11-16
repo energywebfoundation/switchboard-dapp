@@ -1,6 +1,6 @@
 import { Component, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { NamespaceType } from 'iam-client-lib';
 import { IamService } from '../../../shared/services/iam.service';
 import { environment } from '../../../../environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -44,7 +44,7 @@ export class NewOrganizationComponent {
   });
   public isChecking = false;
   private _isLogoUrlValid = true;
-  public ENSPrefixes = ENSNamespaceTypes;
+  public ENSPrefixes = NamespaceType;
   public ViewType = ViewType;
 
   viewType: string = ViewType.NEW;
@@ -144,13 +144,13 @@ export class NewOrganizationComponent {
 
       // Check if org namespace is taken
       const orgData = this.orgForm.value;
-      const exists = await this.iamService.iam.checkExistenceOfDomain({
+      const exists = await this.iamService.domainsService.checkExistenceOfDomain({
         domain: `${orgData.orgName}.${orgData.namespace}`
       });
 
       if (exists) {
         // If exists check if current user is the owner of this namespace and allow him/her to overwrite
-        const isOwner = await this.iamService.iam.isOwner({
+        const isOwner = await this.iamService.domainsService.isOwner({
           domain: `${orgData.orgName}.${orgData.namespace}`
         });
 
@@ -191,7 +191,7 @@ export class NewOrganizationComponent {
       const orgData = this.orgForm.value;
 
       // If exists check if current user is the owner of this namespace and allow him/her to overwrite
-      const isOwner = await this.iamService.iam.isOwner({
+      const isOwner = await this.iamService.domainsService.isOwner({
         domain: `${orgData.orgName}.${orgData.namespace}`
       });
 
@@ -243,7 +243,7 @@ export class NewOrganizationComponent {
   }
 
   async confirmOrg(skipNextStep?: boolean) {
-    const req = JSON.parse(JSON.stringify({...this.orgForm.value, returnSteps: true}));
+    const req = JSON.parse(JSON.stringify({ ...this.orgForm.value, returnSteps: true }));
     req.data.orgName = req.data.organizationName;
     delete req.data.organizationName;
 
@@ -311,9 +311,9 @@ export class NewOrganizationComponent {
   }
 
   async proceedCreateSteps(req: any) {
-    req = {...req, returnSteps: this._returnSteps};
+    req = {...req, returnSteps: this._returnSteps };
     try {
-      const call = this.iamService.iam.createOrganization(req);
+      const call = this.iamService.domainsService.createOrganization(req);
       // Retrieve the steps to create an organization
       this.txs = this._returnSteps ?
         await call :
@@ -374,7 +374,7 @@ export class NewOrganizationComponent {
       this.txs = [
         {
           info: 'Setting up definitions',
-          next: async () => await this.iamService.iam.setRoleDefinition({
+          next: async () => await this.iamService.domainsService.setRoleDefinition({
             data: req.data,
             domain: newDomain
           })

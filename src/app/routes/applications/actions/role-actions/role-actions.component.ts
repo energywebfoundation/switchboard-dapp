@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ViewType } from '../../new-organization/new-organization.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NewRoleComponent } from '../../new-role/new-role.component';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { NamespaceType } from 'iam-client-lib';
 import { ActionBaseAbstract } from '../action-base.abstract';
 
 @Component({
@@ -40,7 +40,7 @@ export class RoleActionsComponent extends ActionBaseAbstract implements OnInit {
 
   private constructEnrolmentUrl(listType: string, roleDefinition: any) {
     const name = roleDefinition.name;
-    const arr = roleDefinition.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
+    const arr = roleDefinition.namespace.split(`.${NamespaceType.Role}.`);
     let namespace = '';
 
     if (arr.length > 1) {

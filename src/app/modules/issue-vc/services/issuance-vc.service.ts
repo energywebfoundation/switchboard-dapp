@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { finalize, map, tap } from 'rxjs/operators';
+import { Claim } from 'iam-client-lib';
 
 @Injectable({
   providedIn: 'root'

@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
+import { NamespaceType, SearchType } from 'iam-client-lib';
 import { IamService } from '../../services/iam.service';
 import { ISmartSearch } from '../../../routes/applications/new-role/new-role.component';
 
@@ -92,10 +93,10 @@ export class SmartSearchComponent implements AfterViewInit {
 
         if (word.length > 2) {
           word = word.toLowerCase();
-          retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
-            search: word,
-            types: this.fieldName === 'rolePage' ? ['Role'] : ['App', 'Org']
-          });
+          retVal = await this.iamService.domainsService.getENSTypesBySearchPhrase(
+            word,
+            this.fieldName === 'rolePage' ? [SearchType.Role] : [SearchType.App, SearchType.Org]
+          );
           this.isAutolistLoading.value = false;
         }
       }

@@ -1,6 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { WalletProvider } from 'iam-client-lib';
-import { AccountInfo } from 'iam-client-lib/dist/src/iam';
+import { ProviderType, AccountInfo } from 'iam-client-lib';
 
 export const init = createAction(
   '[AUTH] Initialize Possible Options To Log In'
@@ -8,12 +7,12 @@ export const init = createAction(
 
 export const loginViaDialog = createAction(
   '[AUTH] Login User With Provider via Dialog',
-  props<{ provider: WalletProvider, navigateOnTimeout?: boolean }>()
+  props<{ provider: ProviderType, navigateOnTimeout?: boolean }>()
 );
 
 export const welcomeLogin = createAction(
   '[AUTH][Welcome Page] Login User With Provider',
-  props<{ provider: WalletProvider, returnUrl: string }>()
+  props<{ provider: ProviderType, returnUrl: string }>()
 );
 
 export const openLoginDialog = createAction(
@@ -30,7 +29,7 @@ export const loginFailure = createAction(
 
 export const setProvider = createAction(
   '[AUTH] Set Wallet Provider',
-  props<{ walletProvider: WalletProvider }>()
+  props<{ walletProvider: ProviderType }>()
 );
 
 export const reinitializeAuth = createAction(
@@ -64,4 +63,8 @@ export const getMetamaskOptions = createAction(
 export const setMetamaskLoginOptions = createAction(
   '[AUTH] Set Metamask LogIn Options',
   props<{ present: boolean, chainId: number | undefined }>()
+);
+
+export const navigateWhenSessionActive = createAction(
+  '[AUTH] Navigate to dashboard when session is active'
 );

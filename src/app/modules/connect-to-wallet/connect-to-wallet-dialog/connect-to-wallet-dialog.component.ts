@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { WalletProvider } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 import * as authSelectors from '../../../state/auth/auth.selectors';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../../../state/auth/auth.actions';
@@ -18,15 +18,10 @@ export class ConnectToWalletDialogComponent {
   constructor(private store: Store, @Inject(MAT_DIALOG_DATA) public data: { navigateOnTimeout: boolean }) {
   }
 
-  connectToWalletConnect() {
-    this.login(WalletProvider.WalletConnect);
-  }
-
-  connectToMetamask() {
-    this.login(WalletProvider.MetaMask);
-  }
-
-  private login(provider: WalletProvider) {
-    this.store.dispatch(AuthActions.loginViaDialog({provider, navigateOnTimeout: this.data?.navigateOnTimeout ?? true}));
+  login(provider: ProviderType) {
+    this.store.dispatch(AuthActions.loginViaDialog({
+      provider,
+      navigateOnTimeout: this.data?.navigateOnTimeout ?? true
+    }));
   }
 }

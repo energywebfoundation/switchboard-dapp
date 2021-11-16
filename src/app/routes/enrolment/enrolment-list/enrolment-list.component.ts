@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ClaimData, ENSNamespaceTypes } from 'iam-client-lib';
+import { ClaimData, NamespaceType } from 'iam-client-lib';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
@@ -56,7 +56,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     // Subscribe to IAM events
-    this._iamSubscriptionId = await this.iamService.iam.subscribeTo({
+    this._iamSubscriptionId = await this.iamService.messagingService.subscribeTo({
       messageHandler: this._handleMessage.bind(this)
     });
 
@@ -98,7 +98,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this._subscription$.complete();
 
     // Unsubscribe from IAM Events
-    await this.iamService.iam.unsubscribeFrom(this._iamSubscriptionId);
+    await this.iamService.messagingService.unsubscribeFrom(this._iamSubscriptionId);
   }
 
   public async getList(isRejected: boolean, isAccepted?: boolean) {
@@ -109,25 +109,25 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
     try {
       if (this.listType === EnrolmentListType.ASSET) {
-        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getClaimsBySubject({
+        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.claimsService.getClaimsBySubject({
           did: this.subject,
           isAccepted
         }));
       } else if (this.listType === EnrolmentListType.ISSUER) {
-        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getClaimsByIssuer({
-          did: this.iamService.iam.getDid(),
+        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.claimsService.getClaimsByIssuer({
+          did: this.iamService.signerService.did,
           isAccepted
         }));
       } else {
-        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.iam.getClaimsByRequester({
-          did: this.iamService.iam.getDid(),
+        list = this._getRejectedOnly(isRejected, isAccepted, await this.iamService.claimsService.getClaimsByRequester({
+          did: this.iamService.signerService.did,
           isAccepted
         }));
       }
 
       if (list && list.length) {
         for (const item of list) {
-          const arr = item.claimType.split(`.${ENSNamespaceTypes.Roles}.`);
+          const arr = item.claimType.split(`.${NamespaceType.Role}.`);
           item.roleName = arr[0];
           item.requestDate = new Date(item.createdAt);
         }
@@ -198,7 +198,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       this.loadingService.show();
 
       try {
-        await this.iamService.iam.deleteClaim({
+        await this.iamService.claimsService.deleteClaim({
           id: element.id
         });
         this.toastr.success('Action is successful.', 'Cancel Enrolment Request');
@@ -230,12 +230,12 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   private async appendDidDocSyncStatus(list: any[]) {
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    const did = this.listType === EnrolmentListType.ASSET ? {did: this.subject} : undefined;
-    const claims: ClaimData[] = (await this.iamService.iam.getUserClaims(did))
+    const did = this.listType === EnrolmentListType.ASSET ? { did: this.subject } : undefined;
+    const claims: ClaimData[] = (await this.iamService.claimsService.getUserClaims(did))
       .filter((item: ClaimData) => {
         if (item && item.claimType) {
           const arr = item.claimType.split('.');
-          if (arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles) {
+          if (arr.length > 1 && arr[1] === NamespaceType.Role) {
             return true;
           }
           return false;
@@ -258,7 +258,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
 
     try {
-      const retVal = await this.iamService.iam.publishPublicClaim({
+      const retVal = await this.iamService.claimsService.publishPublicClaim({
         token: element.issuedToken
       });
 

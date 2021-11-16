@@ -1,21 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 
 import { VerificationService } from './verification.service';
-import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { DidRegistryFacadeService } from '../../../shared/services/did-registry-facade/did-registry-facade.service';
 
 
 describe('VerificationService', () => {
   let service: VerificationService;
-  const iamSpy = jasmine.createSpyObj('iam', ['updateDidDocument', 'getDidDocument']);
   const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
   const toastrSpy = jasmine.createSpyObj('ToastrService', ['success']);
+  const didRegistryFacadeSpy = jasmine.createSpyObj(DidRegistryFacadeService, ['updateDocument', 'getDidDocument']);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        {provide: IamService, useValue: {iam: iamSpy}},
+        {provide: DidRegistryFacadeService, useValue: didRegistryFacadeSpy},
         {provide: LoadingService, useValue: loadingServiceSpy},
         {provide: SwitchboardToastrService, useValue: toastrSpy}
       ]
@@ -35,8 +35,8 @@ describe('VerificationService', () => {
         publicKeyHex: '0x0235c8f279e7c9d63e1f7ed4084ed8ceb7e1f8877b31507ab73019a5b90ca43ff1',
         type: 'Secp256k1veriKey'
       };
-      iamSpy.updateDidDocument.and.returnValue(Promise.resolve());
-      iamSpy.getDidDocument.and.returnValue(Promise.resolve({
+      didRegistryFacadeSpy.updateDocument.and.returnValue(Promise.resolve());
+      didRegistryFacadeSpy.getDidDocument.and.returnValue(Promise.resolve({
         publicKey: [publicKey]
       }));
       service.updateDocumentAndReload('', '', 0).subscribe((publicKeys) => {
@@ -48,7 +48,7 @@ describe('VerificationService', () => {
     });
 
     it('should check while error occurs', () => {
-      iamSpy.updateDidDocument.and.returnValue(Promise.reject());
+      didRegistryFacadeSpy.updateDocument.and.returnValue(Promise.reject());
 
       service.updateDocumentAndReload('', '', 0).subscribe(() => {
       }, () => {

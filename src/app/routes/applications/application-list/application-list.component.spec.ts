@@ -10,7 +10,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { ApplicationActions, ApplicationSelectors } from '@state';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { NamespaceType } from 'iam-client-lib';
 import { ListType } from '../../../shared/constants/shared-constants';
 
 describe('ApplicationListComponent', () => {
@@ -55,7 +55,7 @@ describe('ApplicationListComponent', () => {
     it('should emit event with not nested organization and application ', () => {
       const eventSpy = spyOn(component.updateFilter, 'emit');
       setup();
-      component.viewRoles({namespace: `testapp.${ENSNamespaceTypes.Application}.test.iam.ewc`});
+      component.viewRoles({namespace: `testapp.${NamespaceType.Application}.test.iam.ewc`});
 
       expect(eventSpy).toHaveBeenCalledWith({
         listType: ListType.ROLE,
@@ -67,7 +67,7 @@ describe('ApplicationListComponent', () => {
     it('should emit event with nested organization and application', () => {
       const eventSpy = spyOn(component.updateFilter, 'emit');
       setup();
-      component.viewRoles({namespace: `testapp.${ENSNamespaceTypes.Application}.suborg.test.iam.ewc`});
+      component.viewRoles({namespace: `testapp.${NamespaceType.Application}.suborg.test.iam.ewc`});
 
       expect(eventSpy).toHaveBeenCalledWith({
         listType: ListType.ROLE,

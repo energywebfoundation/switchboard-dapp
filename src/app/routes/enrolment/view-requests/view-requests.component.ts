@@ -55,7 +55,7 @@ export class ViewRequestsComponent implements OnInit {
     this.claim = this.data.claimData;
     this.getRoleMetadata(this.claim.claimType);
     if (this.claim && this.claim.token) {
-      const decoded: any = await this.iamService.iam.decodeJWTToken({
+      const decoded: any = await this.iamService.didRegistry.decodeJWTToken({
         token: this.claim.token
       });
       if (decoded.claimData && decoded.claimData.fields) {
@@ -77,7 +77,7 @@ export class ViewRequestsComponent implements OnInit {
         claimParams: this.requiredFields?.fieldsData()
       };
 
-      await this.iamService.iam.issueClaimRequest(req);
+      await this.iamService.claimsService.issueClaimRequest(req);
 
       this.notifService.decreasePendingApprovalCount();
       this.toastr.success('Request is approved.', TOASTR_HEADER);
@@ -104,7 +104,7 @@ export class ViewRequestsComponent implements OnInit {
       if (res) {
         this.loadingService.show();
         try {
-          await this.iamService.iam.rejectClaimRequest({
+          await this.iamService.claimsService.rejectClaimRequest({
             id: this.claim.id,
             requesterDID: this.claim.requester
           });
