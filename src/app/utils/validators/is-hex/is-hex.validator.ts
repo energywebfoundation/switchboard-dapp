@@ -5,8 +5,8 @@ const hexValues = '[0-9a-fA-F]';
 const ethAddrPattern = `0x${hexValues}{40}`;
 const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
 
-const hexRegex = new RegExp(`^(0x)(${hexValues})`);
-const didRegex = new RegExp(DIDPattern);
+export const hexRegex = new RegExp(`^(0x)(${hexValues})`);
+export const didRegex = new RegExp(DIDPattern);
 
 // 0x + 66
 const SHORT_HEX = 68;

@@ -19,26 +19,11 @@
       <mat-icon>info</mat-icon>
       <span class="pb-2">ASSET: {{ assetDid }}</span>
     </div>
-    <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-      <div class="row">
-        <div class="col-12">
-          <mat-label class="ml-3 pl-1">New Owner Address</mat-label>
-          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-            <input matInput autocomplete="off" [formControl]="newOwnerAddress" type="text"
-                   placeholder="New Owner Address"
-                   required maxlength="256"/>
-            <mat-error *ngIf="newOwnerAddress?.errors?.required">New Owner Address is
-              <strong>required</strong></mat-error>
-            <mat-error *ngIf="newOwnerAddress?.errors?.isHexInvalid">ETH Address format is invalid
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-    </div>
+    <app-select-did (didChange)="didChangeHandler($event)"></app-select-did>
     <div class="d-flex justify-content-end mb-3" *ngIf="!mySteps?.length">
       <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
       <button mat-raised-button class="btn btn-small btn-primary" (click)="submit()"
-              [disabled]="newOwnerAddress.invalid">Next
+              [disabled]="!didValid">Next
       </button>
     </div>
   </ng-container>
@@ -54,7 +39,7 @@
         <mat-divider></mat-divider>
         <div class="text-left my-3">
           <div class="label opacity-50 mb-2">New Owner Address</div>
-          <span class="color-white mb-0">{{ newOwnerAddress?.value }}</span>
+          <span class="color-white mb-0">{{ newOwnerDID }}</span>
         </div>
       </div>
       <mat-vertical-stepper class="w-100" [linear]="true" #stepper *ngIf="mySteps?.length">
