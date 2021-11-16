@@ -119,6 +119,15 @@ describe('EnrolmentFormComponent', () => {
       expect(onChain.nativeElement.checked).toBeTruthy('on chain should be selected');
       expect(submit.nativeElement.disabled).toBeFalsy('submit button should be enabled');
     });
+
+    it('should not find submit button when showSubmit is false', () => {
+      component.fieldList = [];
+      component.showSubmit = false;
+      fixture.detectChanges();
+
+      const {submit} = getSelectors(hostDebug);
+      expect(submit).toBeFalsy();
+    });
   });
 
 

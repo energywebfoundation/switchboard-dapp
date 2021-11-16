@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angu
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
 import { IRoleDefinition, RegistrationTypes } from 'iam-client-lib';
+import { KeyValue } from '@angular/common';
 
 export interface EnrolmentField {
   key: string;
@@ -9,9 +10,17 @@ export interface EnrolmentField {
 }
 
 export interface EnrolmentSubmission {
-  fields: EnrolmentField[];
+  fields: KeyValue<string, string>[];
   registrationTypes: RegistrationTypes[];
   valid: boolean;
+}
+
+export interface EnrolmentForm {
+  isValid(): boolean;
+
+  fieldsData(): KeyValue<string, string>[];
+
+  getRegistrationTypes(): RegistrationTypes[];
 }
 
 @Component({
@@ -19,15 +28,9 @@ export interface EnrolmentSubmission {
   templateUrl: './enrolment-form.component.html',
   styleUrls: ['./enrolment-form.component.scss']
 })
-export class EnrolmentFormComponent {
-  enrolmentForm: FormGroup = new FormGroup({
-    registrationTypes: new FormGroup({
-      offChain: new FormControl({value: true, disabled: false}),
-      onChain: new FormControl({value: false, disabled: true}),
-    }, requireCheckboxesToBeCheckedValidator()),
-    fields: new FormArray([])
-  });
+export class EnrolmentFormComponent implements EnrolmentForm {
 
+  @Input() showSubmit = true;
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
   @Input() showRegistrationTypes: boolean = true;
 
@@ -46,9 +49,24 @@ export class EnrolmentFormComponent {
   @Input() disabledSubmit: boolean;
   @Output() submitForm = new EventEmitter<EnrolmentSubmission>();
 
+  enrolmentForm: FormGroup = new FormGroup({
+    registrationTypes: new FormGroup({
+      offChain: new FormControl({value: true, disabled: false}),
+      onChain: new FormControl({value: false, disabled: true}),
+    }, requireCheckboxesToBeCheckedValidator()),
+    fields: new FormArray([])
+  });
   private fields;
 
   constructor(private cdRef: ChangeDetectorRef) {
+  }
+
+  isValid() {
+    return this.enrolmentForm.valid;
+  }
+
+  fieldsData(): KeyValue<string, string>[] {
+    return this.buildEnrolmentFormFields();
   }
 
   submit() {
@@ -58,11 +76,11 @@ export class EnrolmentFormComponent {
     this.submitForm.next({
       fields: this.buildEnrolmentFormFields(),
       registrationTypes: this.getRegistrationTypes(),
-      valid: this.enrolmentForm.valid
+      valid: this.isValid()
     });
   }
 
-  private getRegistrationTypes(): RegistrationTypes[] {
+  getRegistrationTypes(): RegistrationTypes[] {
     const result = [];
     if (this.registrationTypesGroup.get('offChain').value) {
       result.push(RegistrationTypes.OffChain);
