@@ -22,7 +22,7 @@ export class DidBookListComponent {
 
   @Output() delete = new EventEmitter<string>();
 
-  displayedColumns = ['label', 'actions'];
+  displayedColumns = ['label', 'did', 'actions'];
   private data: DidBookRecord[] = [];
 
   remove(id: string) {
