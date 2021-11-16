@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   AccountInfo,
   AssetsService,
+  CacheClient,
   ClaimData,
   ClaimsService,
   DidRegistry,
@@ -29,13 +30,12 @@ import { safeAppSdk } from './gnosis.safe.service';
 import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
 import { truthy } from '@operators';
-import { finalize, map, switchMap } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 const {walletConnectOptions, cacheServerUrl, natsServerUrl} = environment;
 
 export const VOLTA_CHAIN_ID = 73799;
 export const PROVIDER_TYPE = 'ProviderType';
-const PRIVATE_KEY = 'PrivateKey';
 
 export type InitializeData = {
   did: string | undefined;
@@ -58,6 +58,7 @@ export class IamService {
   domainsService: DomainsService;
   stakingService: StakingService;
   assetsService: AssetsService;
+  cacheClient: CacheClient;
 
   constructor(
     private loadingService: LoadingService,
@@ -98,11 +99,11 @@ export class IamService {
   }
 
   getAllowedRolesByIssuer() {
-    return this.wrapWithLoadingService(this.domainsService.getAllowedRolesByIssuer({did: this.iam.getDid()}));
+    return this.wrapWithLoadingService(this.domainsService.getAllowedRolesByIssuer(this.signerService.did));
   }
 
   getRolesDefinition(namespaces: string[]) {
-    // return this.claimsService.getRolesDefinition({namespaces});
+    return this.cacheClient.getRolesDefinition(namespaces);
   }
 
   registerAsset() {
@@ -166,10 +167,12 @@ export class IamService {
           stakingService,
           assetsService,
           connectToDidRegistry,
+          cacheClient
         } = await connectToCacheServer();
         this.domainsService = domainsService;
         this.stakingService = stakingService;
         this.assetsService = assetsService;
+        this.cacheClient = cacheClient;
         if (createDocument) {
           const { didRegistry, claimsService } = await connectToDidRegistry();
           this.didRegistry = didRegistry;
