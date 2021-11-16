@@ -182,8 +182,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
       // Construct Fields
       this.dataSource.data = def.fields ? [...def.fields] : [];
-      this.issuerFields.data = def?.metadata?.requiredParams ? [...def?.metadata?.requiredParams] : [];
-      this._initDates();
+      this.issuerFields.data = def?.issuerFields ? [...def.issuerFields] : [];
 
       this.roleForm.patchValue({
         roleType: def.roleType,
@@ -551,9 +550,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
     req.data.issuer.did = this.issuerList;
     req.data.fields = this.dataSource.data;
-    req.data.metadata = {
-      requiredParams: this.issuerFields.data
-    };
+    req.data.issuerFields = this.issuerFields.data;
 
     if (!skipNextStep) {
       // Set the second step to non-editable

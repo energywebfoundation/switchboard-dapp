@@ -225,8 +225,9 @@
 
         <mat-step [completed]="false">
           <ng-template matStepLabel>Set Issuer Fields</ng-template>
-          <app-issuer-fields [issuerFields]="issuerFields.data"
-                             (updateData)="issuerFieldsChangeHandler($event)"></app-issuer-fields>
+          <app-role-field [fieldsList]="issuerFields.data"
+                          (updateData)="issuerFieldsChangeHandler($event)">
+          </app-role-field>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button
                     class="btn btn-small mr-2 back"
@@ -299,9 +300,10 @@
 
               <ng-container *ngIf="issuerFields.data.length">
                 <div class="field-list">
-                  <app-issuer-fields-summary *ngFor="let element of issuerFields.data"
-                                             [element]="element">
-                  </app-issuer-fields-summary>
+                  <app-fields-summary *ngFor="let element of issuerFields.data"
+                                      [element]="element"
+                                      class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block">
+                  </app-fields-summary>
                 </div>
               </ng-container>
             </div>
