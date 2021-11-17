@@ -1,5 +1,5 @@
 import { preconditionCheck } from './precondition-check';
-import { RolePreconditionType } from '../request-claim/request-claim.component';
+import { RolePreconditionType } from '../models/role-precondition-type.enum';
 
 describe('Test preconditionCheck', () => {
   it('should return empty list of preconditions and true', () => {

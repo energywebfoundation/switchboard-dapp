@@ -3,10 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { preconditionCheck } from '../../../routes/registration/utils/precondition-check';
+import { PreconditionCheck, preconditionCheck } from '../../../routes/registration/utils/precondition-check';
 import { filter, switchMap } from 'rxjs/operators';
 import { RequiredFields } from '../../required-fields/components/required-fields/required-fields.component';
-import { RolePreconditionType } from '../../../routes/registration/models/role-precondition-type.enum';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -25,7 +24,7 @@ export class NewIssueVcComponent implements OnInit {
   possibleRolesToEnrol;
   selectedRoleDefinition;
   isPrecheckSuccess;
-  rolePreconditionList = [];
+  rolePreconditionList: PreconditionCheck[] = [];
 
   constructor(private fb: FormBuilder,
               @Inject(MAT_DIALOG_DATA) public data: { did: string },
@@ -48,14 +47,6 @@ export class NewIssueVcComponent implements OnInit {
 
   private setPreconditions(): void {
     [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(this.selectedRoleDefinition.enrolmentPreconditions, this.issuanceVcService.assetClaims);
-  }
-
-  isRolePreconditionApproved(status: RolePreconditionType): boolean {
-    return status === RolePreconditionType.APPROVED;
-  }
-
-  isRolePreconditionPending(status: RolePreconditionType): boolean {
-    return status === RolePreconditionType.PENDING;
   }
 
   getFormSubject() {

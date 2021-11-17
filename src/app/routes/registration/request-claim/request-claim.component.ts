@@ -17,9 +17,8 @@ import { logout } from '../../../state/auth/auth.actions';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 import { filter, take } from 'rxjs/operators';
 import { AuthActions } from '@state';
-import { preconditionCheck } from '../utils/precondition-check';
+import { PreconditionCheck, preconditionCheck } from '../utils/precondition-check';
 import { LoginService } from 'src/app/shared/services/login/login.service';
-import { RolePreconditionType } from '../models/role-precondition-type.enum';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -67,7 +66,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public isLoggedIn = false;
   public isPrecheckSuccess = false;
   isLoading = false;
-  rolePreconditionList = [];
+  rolePreconditionList: PreconditionCheck[] = [];
   public roleType: string;
 
   private userRoleList: FormClaim[];
@@ -104,14 +103,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   isApplication(): boolean {
     return this.roleType === RoleType.APP;
-  }
-
-  isRolePreconditionApproved(status: RolePreconditionType): boolean {
-    return status === RolePreconditionType.APPROVED;
-  }
-
-  isRolePreconditionPending(status: RolePreconditionType): boolean {
-    return status === RolePreconditionType.PENDING;
   }
 
   getNamespaceRegistrationRoles(): Set<RegistrationTypes> {
