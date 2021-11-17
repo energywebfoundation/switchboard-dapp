@@ -16,10 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-code-scanner.module';
-import { CreateFieldsModule } from '../applications/new-role/components/create-fields/create-fields.module';
 import { IssueVcModule } from '../../modules/issue-vc/issue-vc.module';
-import { KeyValueModule } from '../../modules/key-value/key-value.module';
-import { RequiredFieldsModule } from '../../modules/required-fields/required-fields.module';
 import { EnrolmentFormModule } from '../registration/enrolment-form/enrolment-form.module';
 import { FieldsComponent } from './fields/fields.component';
 
@@ -51,9 +48,6 @@ const routes: Routes = [
     MatInputModule,
     QrCodeScannerModule,
     IssueVcModule,
-    CreateFieldsModule,
-    KeyValueModule,
-    RequiredFieldsModule,
     EnrolmentFormModule
   ],
   entryComponents: [ViewRequestsComponent, ViewRoleComponent]
