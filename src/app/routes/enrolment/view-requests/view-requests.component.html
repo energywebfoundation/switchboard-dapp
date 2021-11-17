@@ -45,31 +45,9 @@
           </div>
         </div>
 
-        <!-- FIELDS-->
-        <div class="col-lg-12 mt-2" *ngIf="fields?.length">
-          <div class="card card-default mb-3 pb-0 shadow-none">
-            <h4 class="mt-3">Requestor fields</h4>
-            <ng-container *ngFor="let field of fields; let i = index;">
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2"> {{ field?.key }} </div>
-                <span class="color-white mb-0"> {{ field?.value }} </span>
-              </div>
-              <mat-divider *ngIf="i < (fields.length - 1)"></mat-divider>
-            </ng-container>
-          </div>
-        </div>
-        <div class="col-lg-12 mt-2" *ngIf="issuerFields?.length">
-          <div class="card card-default mb-3 pb-0 shadow-none">
-            <h4 class="mt-3">Issuer fields</h4>
-            <ng-container *ngFor="let field of issuerFields; let i = index;">
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2"> {{ field?.key }} </div>
-                <span class="color-white mb-0"> {{ field?.value }} </span>
-              </div>
-              <mat-divider *ngIf="i < (fields.length - 1)"></mat-divider>
-            </ng-container>
-          </div>
-        </div>
+        <app-fields *ngIf="fields?.length" title="Requestor fields" [fieldsList]="fields"></app-fields>
+        <app-fields *ngIf="issuerFields?.length" title="Issuer fields" [fieldsList]="issuerFields"></app-fields>
+
         <div class="col-lg-12 mt-2" *ngIf="!fields?.length">
           <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
             <mat-icon>info</mat-icon>

@@ -21,6 +21,7 @@ import { IssueVcModule } from '../../modules/issue-vc/issue-vc.module';
 import { KeyValueModule } from '../../modules/key-value/key-value.module';
 import { RequiredFieldsModule } from '../../modules/required-fields/required-fields.module';
 import { EnrolmentFormModule } from '../registration/enrolment-form/enrolment-form.module';
+import { FieldsComponent } from './fields/fields.component';
 
 const routes: Routes = [
   {path: '', component: EnrolmentComponent}
@@ -31,7 +32,8 @@ const routes: Routes = [
     EnrolmentComponent,
     EnrolToRoleComponent,
     ViewRequestsComponent,
-    ViewRoleComponent
+    ViewRoleComponent,
+    FieldsComponent
   ],
   imports: [
     SharedModule,
