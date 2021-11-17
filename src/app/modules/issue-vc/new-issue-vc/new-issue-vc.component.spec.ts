@@ -91,11 +91,11 @@ describe('NewIssueVCComponent', () => {
     expect(subjectDid.disabled).toBeTrue();
   });
 
-  it('should create new VC', () => {
+  it('should create set did and role for new vc.', () => {
     issuanceVcServiceSpy.create.and.returnValue(of());
     fixture.detectChanges();
 
-    const {subjectDid, createBtn} = getSelectors(hostDebug);
+    const {subjectDid} = getSelectors(hostDebug);
 
     subjectDid.value = 'did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89';
     dispatchInputEvent(subjectDid);
@@ -109,11 +109,7 @@ describe('NewIssueVCComponent', () => {
     getElement(hostDebug)('role').nativeElement.click();
 
     fixture.detectChanges();
-
-    expect(createBtn.disabled).toBeFalse();
-
-    createBtn.click();
-    expect(issuanceVcServiceSpy.create).toHaveBeenCalled();
+    expect(component.isFormDisabled()).toBeFalse();
   });
 
   it('should not display role list when did is invalid', () => {
@@ -148,42 +144,6 @@ describe('NewIssueVCComponent', () => {
     expect(component.isFormDisabled()).toBeTrue();
   });
 
-  it('should check if form is disabled when requiredFields are invalid', () => {
-    fixture.detectChanges();
-    component.requiredFields = {
-      isValid(): boolean {
-        return false;
-      },
-      fieldsData(): Record<string, string> {
-        return;
-      }
-    };
-    component.getFormSubject().setValue('did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89');
-    component.getFormType().setValue('test');
-    component.isPrecheckSuccess = true;
-
-    fixture.detectChanges();
-    expect(component.isFormDisabled()).toBeTrue();
-  });
-
-  it('should check if form is enabled when requiredFields are valid', () => {
-    fixture.detectChanges();
-    component.requiredFields = {
-      isValid(): boolean {
-        return true;
-      },
-      fieldsData(): Record<string, string> {
-        return;
-      }
-    };
-    component.getFormSubject().setValue('did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89');
-    component.getFormType().setValue('test');
-    component.isPrecheckSuccess = true;
-
-    fixture.detectChanges();
-    expect(component.isFormDisabled()).toBeFalse();
-  });
-
   it('should check if form is disabled when did is incorrect', () => {
     component.getFormSubject().setValue('did:ethr:0x925b597D2a6Ac8D4a1CA31Dd65a1904f0F2e89');
     component.getFormType().setValue('test');
@@ -205,6 +165,5 @@ const getSelectors = (hostDebug) => {
   return {
     subjectDid: getElement(hostDebug)('subject-did')?.nativeElement,
     selectType: getElement(hostDebug)('select-type')?.nativeElement,
-    createBtn: getElement(hostDebug)('create')?.nativeElement
   };
 };
