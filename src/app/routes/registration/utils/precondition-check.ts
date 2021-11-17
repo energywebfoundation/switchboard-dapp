@@ -1,5 +1,5 @@
 import { Claim, PreconditionType } from 'iam-client-lib';
-import { RolePreconditionType } from '../request-claim/request-claim.component';
+import { RolePreconditionType } from '../models/role-precondition-type.enum';
 
 export interface EnrolmentPrecondition {
   type: string,

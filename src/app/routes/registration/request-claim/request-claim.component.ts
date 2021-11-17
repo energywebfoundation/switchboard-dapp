@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Asset, NamespaceType, IRoleDefinition, PreconditionType, RegistrationTypes, Claim } from 'iam-client-lib';
+import { Asset, Claim, IRoleDefinition, NamespaceType, RegistrationTypes } from 'iam-client-lib';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
@@ -19,6 +19,7 @@ import { filter, take } from 'rxjs/operators';
 import { AuthActions } from '@state';
 import { preconditionCheck } from '../utils/precondition-check';
 import { LoginService } from 'src/app/shared/services/login/login.service';
+import { RolePreconditionType } from '../models/role-precondition-type.enum';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -35,12 +36,6 @@ const SwalButtons = {
 interface FormClaim extends Claim {
   isSynced?: boolean;
   claimTypeVersion: string;
-}
-
-export enum RolePreconditionType {
-  SYNCED = 'synced',
-  APPROVED = 'approved',
-  PENDING = 'pending'
 }
 
 @Component({

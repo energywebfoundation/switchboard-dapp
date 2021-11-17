@@ -3,10 +3,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { RolePreconditionType } from '../../../routes/registration/request-claim/request-claim.component';
 import { preconditionCheck } from '../../../routes/registration/utils/precondition-check';
 import { filter, switchMap } from 'rxjs/operators';
 import { RequiredFields } from '../../required-fields/components/required-fields/required-fields.component';
+import { RolePreconditionType } from '../../../routes/registration/models/role-precondition-type.enum';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
