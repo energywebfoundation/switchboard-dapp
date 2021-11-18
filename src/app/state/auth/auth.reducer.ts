@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as AuthActions from './auth.actions';
-import {  ProviderType, AccountInfo } from 'iam-client-lib';
+import { AccountInfo, ProviderType } from 'iam-client-lib';
 
 export const USER_FEATURE_KEY = 'auth';
 
@@ -11,6 +11,7 @@ export interface AuthState {
     present: boolean;
     chainId: number | undefined;
   };
+  defaultChainId: number;
   loggedIn: boolean;
 }
 
@@ -21,6 +22,7 @@ export const initialState: AuthState = {
     present: true,
     chainId: undefined
   },
+  defaultChainId: undefined,
   loggedIn: false
 };
 
@@ -38,6 +40,7 @@ const authReducer = createReducer(
     })
   ),
   on(AuthActions.setProvider, (state, {walletProvider}) => ({...state, walletProvider})),
+  on(AuthActions.setDefaultChainId, (state, {defaultChainId}) => ({...state, defaultChainId})),
 );
 
 export function reducer(state: AuthState | undefined, action: Action) {

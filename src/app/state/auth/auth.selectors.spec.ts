@@ -6,15 +6,21 @@ describe('Auth Selectors', () => {
 
   describe('isMetamaskDisabled', () => {
     it('should return true when chainId is undefined', () => {
-      expect(authSelectors.isMetamaskDisabled.projector({metamask: {chainId: undefined}})).toBeFalsy();
+      expect(authSelectors.isMetamaskDisabled.projector({
+        metamask: {chainId: undefined},
+        defaultChainId: undefined
+      })).toBeFalsy();
     });
 
     it('should return true when chainId is different than volta chain id', () => {
-      expect(authSelectors.isMetamaskDisabled.projector({metamask: {chainId: 123}})).toBeTruthy();
+      expect(authSelectors.isMetamaskDisabled.projector({metamask: {chainId: 123}, defaultChainId: 1})).toBeTruthy();
     });
 
     it('should return false when metamaskChainId is set to Volta chain', () => {
-      expect(authSelectors.isMetamaskDisabled.projector({metamask: {chainId: '0x12047'}})).toBeFalsy();
+      expect(authSelectors.isMetamaskDisabled.projector({
+        metamask: {chainId: '0x12047'},
+        defaultChainId: 73799
+      })).toBeFalsy();
     });
   });
 

@@ -31,8 +31,6 @@ import { finalize } from 'rxjs/operators';
 import { truthy } from '@operators';
 import { EnvService } from './env/env.service';
 
-
-export const VOLTA_CHAIN_ID = 73799;
 export const PROVIDER_TYPE = 'ProviderType';
 
 export type InitializeData = {
