@@ -4,7 +4,6 @@ import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-
 import { SharedModule } from '../../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NewIssueVcComponent } from './new-issue-vc/new-issue-vc.component';
-import { RequiredFieldsModule } from '../required-fields/required-fields.module';
 import { EnrolmentFormModule } from '../../routes/registration/enrolment-form/enrolment-form.module';
 import { RolePreconditionListModule } from '../../routes/registration/role-precondition-list/role-precondition-list.module';
 
@@ -18,7 +17,6 @@ import { RolePreconditionListModule } from '../../routes/registration/role-preco
     ReactiveFormsModule,
     QrCodeScannerModule,
     SharedModule,
-    RequiredFieldsModule,
     EnrolmentFormModule,
     RolePreconditionListModule
   ],
