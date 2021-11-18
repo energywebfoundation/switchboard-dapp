@@ -22,7 +22,7 @@
     "cypress:run": "ng run switchboard-dapp:cypress-run --spec cypress/integration/ui/**/*.spec.ts",
     "cy:run:ci": "npm run ng serve",
     "precy:run:ci": "echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p",
-    "stedin:flags": "node stedin.js"
+    "stedin:flags": "node scripts/stedin.js"
   },
   "dependencies": {
     "@angular/animations": "11.2.14",
