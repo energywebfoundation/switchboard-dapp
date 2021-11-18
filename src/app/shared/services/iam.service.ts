@@ -67,10 +67,7 @@ export class IamService {
     });
 
     // Set RPC
-    setChainConfig(envService.chainId, {
-      rpcUrl: envService.rpcUrl,
-      stakingPoolFactoryAddress: envService.stakingPoolFactoryAddress,
-    });
+    setChainConfig(envService.chainId, this.getChainConfig());
 
     // Set Messaging Options
     setMessagingConfig(envService.chainId, {
@@ -96,17 +93,15 @@ export class IamService {
   }
 
   getUserClaims(did?: string) {
-    return from(this.claimsService.getUserClaims({ did }));
+    return from(this.claimsService.getUserClaims({did}));
   }
 
-  createSelfSignedClaim({
-    data,
-    subject,
-  }: {
-    data: ClaimData;
-    subject?: string;
-  }) {
-    return from(this.claimsService.createSelfSignedClaim({ data, subject }));
+  createSelfSignedClaim(
+    {data, subject}: {
+      data: ClaimData;
+      subject?: string;
+    }) {
+    return from(this.claimsService.createSelfSignedClaim({data, subject}));
   }
 
   deleteOrganization(namespace: string, returnSteps: boolean) {
@@ -124,8 +119,8 @@ export class IamService {
 
   getAssetById(id) {
     return this.wrapWithLoadingService(
-      this.assetsService.getAssetById({ id }),
-      { message: "Getting selected asset data..." }
+      this.assetsService.getAssetById({id}),
+      {message: 'Getting selected asset data...'}
     );
   }
 
@@ -133,11 +128,7 @@ export class IamService {
     return from(this.signerService.closeConnection()).pipe(truthy());
   }
 
-  async initializeConnection({
-    providerType,
-    initCacheServer = true,
-    createDocument = true,
-  }: LoginOptions) {
+  async initializeConnection({providerType, initCacheServer = true, createDocument = true}: LoginOptions) {
     try {
       const {
         signerService,
@@ -157,7 +148,7 @@ export class IamService {
         this.stakingService = stakingService;
         this.assetsService = assetsService;
         if (createDocument) {
-          const { didRegistry, claimsService } = await connectToDidRegistry();
+          const {didRegistry, claimsService} = await connectToDidRegistry();
           this.didRegistry = didRegistry;
           this.claimsService = claimsService;
         }
@@ -167,7 +158,7 @@ export class IamService {
       return {
         did: undefined,
         connected: false,
-        userClosedModal: e.message === "User closed modal",
+        userClosedModal: e.message === 'User closed modal',
         realtimeExchangeConnected: false,
         accountInfo: undefined,
       };
@@ -203,7 +194,7 @@ export class IamService {
   }
 
   isOwner(namespace: string) {
-    return from(this.domainsService.isOwner({ domain: namespace }));
+    return from(this.domainsService.isOwner({domain: namespace}));
   }
 
   getOrganizationsByOwner() {
@@ -222,10 +213,21 @@ export class IamService {
     loaderConfig?: { message: string | string[]; cancelable?: boolean }
   ) {
     this.loadingService.show(
-      loaderConfig?.message || "",
+      loaderConfig?.message || '',
       !!loaderConfig?.cancelable
     );
     return from(source).pipe(finalize(() => this.loadingService.hide()));
+  }
+
+  private getChainConfig() {
+    const chainConfig: any = {
+      rpcUrl: this.envService.rpcUrl,
+    };
+
+    if (this.envService.stakingPoolFactoryAddress) {
+      chainConfig.stakingPoolFactoryAddress = this.envService.stakingPoolFactoryAddress;
+    }
+    return chainConfig;
   }
 
   private async initSignerService(
