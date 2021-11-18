@@ -5,11 +5,9 @@ export abstract class FieldsAbstract<T> {
 
   abstract get fields(): T[];
 
-
   showFieldsForm = false;
   fieldIndex: number;
   fieldToEdit = null;
-
 
   addFieldHandler(fieldData) {
     const data = [...this.fields, fieldData];
