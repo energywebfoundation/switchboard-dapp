@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { IamService } from './iam.service';
+import { EnvService } from './env/env.service';
 
 describe('IamService', () => {
   let service: IamService;
@@ -9,6 +10,7 @@ describe('IamService', () => {
     TestBed.configureTestingModule({
       providers: [
         IamService,
+        {provide: EnvService, useValue: {}}
       ]
     });
 
