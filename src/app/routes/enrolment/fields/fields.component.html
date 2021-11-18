@@ -1,10 +1,10 @@
 <div class="col-lg-12 mt-2" *ngIf="fieldsList?.length">
   <div class="card card-default mb-3 pb-0 shadow-none">
-    <h4 class="mt-3">{{title}}</h4>
+    <h4 class="mt-3" data-qa-id="field-list-title">{{ title }}</h4>
     <ng-container *ngFor="let field of fieldsList; let i = index;">
       <div class="text-left my-3">
-        <div class="label opacity-50 mb-2"> {{ field?.key }} </div>
-        <span class="color-white mb-0"> {{ field?.value }} </span>
+        <div class="label opacity-50 mb-2" [attr.data-qa-id]="'field-list-key-'+i"> {{ field?.key }} </div>
+        <span class="color-white mb-0" [attr.data-qa-id]="'field-list-value-'+i"> {{ field?.value }} </span>
       </div>
       <mat-divider *ngIf="i < (fieldsList.length - 1)"></mat-divider>
     </ng-container>
