@@ -532,7 +532,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         return retVal;
       });
     }
-    console.log(roleList);
+
     return roleList;
   }
 
