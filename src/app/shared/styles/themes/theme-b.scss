@@ -582,14 +582,15 @@ tr.mat-row {
     color: #A567FF;
 }
 
-.mat-input-element {
-    color: #FFF;
-    caret-color: #FFF;
-}
 
 .mat-input-element {
-    color: #FFF;
-    font-size: 14px;
+  color: #FFF;
+  caret-color: #FFF;
+  font-size: 14px;
+
+  &[disabled] {
+    color: rgba(255, 255, 255, 0.4);
+  }
 }
 
   .mat-form-field-outline {
@@ -730,9 +731,10 @@ mat-label {
     box-shadow: 0 8px 20px 0 #131214 !important;
 }
 
+.mat-raised-button.mat-button-disabled.mat-button-disabled,
 .mat-raised-button[disabled] {
-    color: rgba(255, 255, 255, 0.3);
-    background-color: rgb(33 29 47);
+  color: rgba(255, 255, 255, 0.3);
+  background-color: rgb(33, 29, 47);
 }
 
 .icon-color {

@@ -36,6 +36,7 @@ import { CreateFieldsModule } from './new-role/components/create-fields/create-f
 import { IssuerFieldsComponent } from './new-role/components/issuer-fields/issuer-fields.component';
 import { IssuerFieldFormComponent } from './new-role/components/issuer-field-form/issuer-field-form.component';
 import { IssuerFieldsSummaryComponent } from './new-role/components/issuer-fields-summary/issuer-fields-summary.component';
+import { DidBookModule } from '../../modules/did-book/did-book.module';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -83,7 +84,8 @@ const routes: Routes = [
     GovernanceDetailsModule,
     MatExpansionModule,
     NgxEditorModule,
-    CreateFieldsModule
+    CreateFieldsModule,
+    DidBookModule
   ],
   entryComponents: [
     NewOrganizationComponent,

@@ -23,11 +23,11 @@ export class LoadingComponent implements AfterViewInit {
   loaderColor: string;
 
   constructor(private spinner: NgxSpinnerService, private loadingService: LoadingService) {
-    this.loaderColor = getComputedStyle(document.documentElement)
-      .getPropertyValue('--loader-color');
   }
 
   ngAfterViewInit(): void {
+    setTimeout(() => this.loaderColor = getComputedStyle(document.documentElement)
+      .getPropertyValue('--loader-color'), 100);
     // Subscribe to cancellable event
     this.loadingService.isCancellable.subscribe((isCancellable: boolean) => {
       const $setTimeout = setTimeout(() => {
