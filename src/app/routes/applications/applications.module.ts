@@ -33,9 +33,6 @@ import { ApplicationListComponent } from './application-list/application-list.co
 import { ActionsMenuComponent } from './actions/actions-menu/actions-menu.component';
 import { FilterComponent } from './filter/filter.component';
 import { CreateFieldsModule } from './new-role/components/create-fields/create-fields.module';
-import { IssuerFieldsComponent } from './new-role/components/issuer-fields/issuer-fields.component';
-import { IssuerFieldFormComponent } from './new-role/components/issuer-field-form/issuer-field-form.component';
-import { IssuerFieldsSummaryComponent } from './new-role/components/issuer-fields-summary/issuer-fields-summary.component';
 import { DidBookModule } from '../../modules/did-book/did-book.module';
 
 const routes: Routes = [
@@ -62,9 +59,6 @@ const routes: Routes = [
     FilterComponent,
     ActionsMenuComponent,
     TransactionsCompleteComponent,
-    IssuerFieldsComponent,
-    IssuerFieldFormComponent,
-    IssuerFieldsSummaryComponent
   ],
   imports: [
     CommonModule,
