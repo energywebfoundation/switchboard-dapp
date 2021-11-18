@@ -23,19 +23,17 @@ import {
   StakingService,
 } from 'iam-client-lib';
 import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
-import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
 import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
 import { finalize } from 'rxjs/operators';
 import { truthy } from '@operators';
+import { EnvService } from './env/env.service';
 
-const {walletConnectOptions, cacheServerUrl, natsServerUrl} = environment;
 
 export const VOLTA_CHAIN_ID = 73799;
 export const PROVIDER_TYPE = 'ProviderType';
-const PRIVATE_KEY = 'PrivateKey';
 
 export type InitializeData = {
   did: string | undefined;
@@ -61,21 +59,22 @@ export class IamService {
 
   constructor(
     private loadingService: LoadingService,
+    private envService: EnvService
   ) {
     // Set Cache Server
-    setCacheConfig(VOLTA_CHAIN_ID, {
-      url: cacheServerUrl,
+    setCacheConfig(envService.chainId, {
+      url: envService.cacheServerUrl,
     });
 
     // Set RPC
-    setChainConfig(VOLTA_CHAIN_ID, {
-      rpcUrl: walletConnectOptions.rpcUrl,
+    setChainConfig(envService.chainId, {
+      rpcUrl: envService.rpcUrl,
     });
 
     // Set Messaging Options
-    setMessagingConfig(VOLTA_CHAIN_ID, {
+    setMessagingConfig(envService.chainId, {
       messagingMethod: MessagingMethod.Nats,
-      natsServerUrl,
+      natsServerUrl: envService.natsServerUrl,
     });
   }
 
@@ -241,7 +240,7 @@ export class IamService {
       case ProviderType.PrivateKey:
         return initWithPrivateKeySigner(
           localStorage.getItem('PrivateKey'),
-          walletConnectOptions.rpcUrl
+          this.envService.rpcUrl
         );
       case ProviderType.Gnosis:
         return initWithGnosis(safeAppSdk);
