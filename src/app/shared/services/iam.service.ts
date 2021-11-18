@@ -237,7 +237,7 @@ export class IamService {
       case ProviderType.WalletConnect:
         return initWithWalletConnect();
       case ProviderType.EwKeyManager:
-        return initWithKms();
+        return initWithKms({kmsServerUrl: this.envService.kmsServerUrl});
       case ProviderType.PrivateKey:
         return initWithPrivateKeySigner(
           localStorage.getItem('PrivateKey'),
