@@ -54,15 +54,11 @@ export class ViewRequestsComponent implements OnInit {
     this.listType = this.data.listType;
     this.claim = this.data.claimData;
     await this.getRoleIssuerFields(this.claim.claimType);
-    if (this.claim && this.claim.token) {
-      const decoded: any = await this.iamService.didRegistry.decodeJWTToken({
-        token: this.claim.token
-      });
-      if (decoded.claimData) {
-        this.fields = decoded.claimData?.fields ? decoded.claimData?.fields : [];
-        this.issuerFields = decoded.claimData?.issuerFields ? decoded.claimData?.issuerFields : [];
-      }
+    if (this.claim) {
+      await this.setIssuerFields();
+      await this.setRequestorFields();
     }
+
   }
 
   async approve() {
@@ -128,5 +124,29 @@ export class ViewRequestsComponent implements OnInit {
       this.fieldList = issuerFieldList;
     }
     this.loadingService.hide();
+  }
+
+  private async setIssuerFields() {
+    if (this.claim.issuedToken) {
+      const decoded = await this.decode(this.claim.issuedToken);
+      if (decoded.claimData) {
+        this.issuerFields = decoded.claimData?.issuerFields ? decoded.claimData?.issuerFields : [];
+      }
+    }
+  }
+
+  private async setRequestorFields() {
+    if (this.claim.token) {
+      const decoded = await this.decode(this.claim.token);
+      if (decoded.claimData) {
+        this.fields = decoded.claimData?.fields ? decoded.claimData?.fields : [];
+      }
+    }
+  }
+
+  private async decode(token): Promise<any> {
+    return await this.iamService.didRegistry.decodeJWTToken({
+      token
+    });
   }
 }
