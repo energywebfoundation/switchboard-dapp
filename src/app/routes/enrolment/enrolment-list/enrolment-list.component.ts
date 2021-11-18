@@ -182,6 +182,23 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
   }
 
+  // async addToDidDoc(element: any) {
+  //   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+  //     width: '600px',
+  //     maxHeight: 'auto',
+  //     data: {
+  //       header: 'Sync credential to my DID document',
+  //       message: 'It is currently necessary to sync the credential to your DID document in order to make it available to verifiers. However, please note that this will make your role data public on IPFS.'
+  //     },
+  //     maxWidth: '100%',
+  //     disableClose: true
+  //   }).afterClosed().toPromise();
+
+  //   if (await dialogRef) {
+  //     this.syncClaimToDidDoc(element);
+  //   }
+  // }
+
   async cancelClaimRequest(element: any) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
