@@ -69,6 +69,7 @@ export class IamService {
     // Set RPC
     setChainConfig(envService.chainId, {
       rpcUrl: envService.rpcUrl,
+      stakingPoolFactoryAddress: envService.stakingPoolFactoryAddress,
     });
 
     // Set Messaging Options
