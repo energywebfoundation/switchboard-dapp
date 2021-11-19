@@ -104,6 +104,10 @@ describe('tests for isHexValidator', () => {
     it('should return null when did is valid', () => {
       expect(getFormErrors('did:ethr:0x' + stringWithLength(40), HexValidators.isDidValid)).toEqual(null);
     });
+
+    it('should return null when did have method and method specified id', () => {
+      expect(getFormErrors('did:ethr:specificid:0x' + stringWithLength(40), HexValidators.isDidValid)).toEqual(null);
+    });
   });
 });
 
