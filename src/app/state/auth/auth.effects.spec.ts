@@ -14,6 +14,7 @@ import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import * as AuthSelectors from './auth.selectors';
+import { EnvService } from '../../shared/services/env/env.service';
 
 describe('AuthEffects', () => {
 
@@ -31,6 +32,7 @@ describe('AuthEffects', () => {
         {provide: LoginService, useValue: loginServiceSpy},
         {provide: MatDialog, useValue: dialogSpy},
         {provide: Router, useValue: routerSpy},
+        {provide: EnvService, useValue: {}},
         provideMockStore(),
         provideMockActions(() => actions$),
       ],
