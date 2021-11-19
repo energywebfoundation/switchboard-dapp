@@ -80,7 +80,7 @@ export class ViewRequestsComponent implements OnInit {
       this.toastr.success('Request is approved.', TOASTR_HEADER);
       this.dialogRef.close(true);
     } catch (e) {
-      this.toastr.error(e.message, TOASTR_HEADER);
+      this.toastr.error(e?.message, TOASTR_HEADER);
     } finally {
       this.loadingService.hide();
     }
