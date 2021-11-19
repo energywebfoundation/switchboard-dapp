@@ -1,27 +1,31 @@
 <form role="form" [formGroup]="enrolmentForm">
   <div formGroupName="registrationTypes" *ngIf="showRegistrationTypes">
-    <mat-checkbox class="pl-3 md-enroll"
-                  data-qa-id="on-chain"
-                  formControlName="onChain"
-                  [ngStyle]="txtboxColor">
-            <span class="mb-3 d-inline-flex"
-                  [ngStyle]="txtColor"
-                  matTooltip="A role recorded in a smart contract that can be read by other smart contracts">
-                On-chain
-            </span>
+    <mat-checkbox class="pl-3 md-enroll" data-qa-id="on-chain" formControlName="onChain" [ngStyle]="txtboxColor">
+      <span class="mb-3 d-inline-flex" [ngStyle]="txtColor"
+        matTooltip="A role recorded in a smart contract that can be read by other smart contracts">
+        On-chain
+      </span>
     </mat-checkbox>
-    <mat-checkbox class="pl-3 md-enroll"
-                  data-qa-id="off-chain"
-                  formControlName="offChain"
-                  [ngStyle]="txtboxColor">
-        <span class="mb-3 d-inline-flex"
-              [ngStyle]="txtColor"
-              matTooltip="A JWT verifiable credential that can be presented">
-            Off-chain
-        </span>
+    <mat-checkbox class="pl-3 md-enroll" data-qa-id="off-chain" formControlName="offChain" [ngStyle]="txtboxColor">
+      <span class="mb-3 d-inline-flex" [ngStyle]="txtColor"
+        matTooltip="A JWT verifiable credential that can be presented">
+        Off-chain
+      </span>
     </mat-checkbox>
+
+    <!-- On-chain, warning -->
+    <!-- <div
+      class="card card-warning d-flex flex-row justify-content-start align-items-center shadow-none mb-3">
+      <mat-icon>report_problem</mat-icon>
+      <div class="d-flex flex-column">
+        <div class="f-14" [ngStyle]="txtColor">
+          On-chain role will be included in the blockchain history once the issuer approves the request.
+        </div>
+      </div>
+    </div> -->
+
     <mat-error *ngIf="registrationTypesGroup.hasError('notEnoughCheckboxChecked')"
-               data-qa-id="not-enough-checkbox-checked">
+      data-qa-id="not-enough-checkbox-checked">
       You need to pick at least one option.
     </mat-error>
   </div>
@@ -30,32 +34,28 @@
     <div class="row">
       <!-- START: Dynamic Form Fields -->
       <ng-container *ngFor="let field of enrolmentForm?.get('fields')?.controls; let i = index;">
-        <div
-            [ngClass]="{ 'col-lg-12': (fieldList[i].fieldType === 'text' || fieldList[i].fieldType === 'boolean'),
+        <div [ngClass]="{ 'col-lg-12': (fieldList[i].fieldType === 'text' || fieldList[i].fieldType === 'boolean'),
                         'col-lg-6': (fieldList[i].fieldType === 'number' || fieldList[i].fieldType === 'date')
                         }">
           <mat-label [ngStyle]="txtColor" data-qa-id="label" class="ml-3 pl-1"
-                     *ngIf="fieldList[i].fieldType !== 'boolean'">{{
-              fieldList[i].label }} {{ fieldList[i].required ? '' : '(Optional)'}}
+            *ngIf="fieldList[i].fieldType !== 'boolean'">{{
+            fieldList[i].label }} {{ fieldList[i].required ? '' : '(Optional)'}}
           </mat-label>
 
           <!-- TYPE: Text -->
           <mat-form-field class="mt-2 md-enroll" appearance="outline" floatPlaceholder="never"
-                          *ngIf="fieldList[i].fieldType === 'text'"
-                          [attr.data-qa-id]="'field-' + i"
-                          [ngStyle]="txtColor">
-            <input matInput type="text" placeholder="{{ fieldList[i].label }}"
-                   [formControl]="getControl(i)"/>
+            *ngIf="fieldList[i].fieldType === 'text'" [attr.data-qa-id]="'field-' + i" [ngStyle]="txtColor">
+            <input matInput type="text" placeholder="{{ fieldList[i].label }}" [formControl]="getControl(i)" />
             <mat-error *ngIf="getControl(i)?.errors?.required">This field is
               required.
             </mat-error>
             <mat-error *ngIf="getControl(i)?.errors?.minlength">Please input at
               least {{
-                fieldList[i].minLength }} characters.
+              fieldList[i].minLength }} characters.
             </mat-error>
             <mat-error *ngIf="getControl(i)?.errors?.maxlength">Please input at
               most {{
-                fieldList[i].maxLength }} characters.
+              fieldList[i].maxLength }} characters.
             </mat-error>
             <mat-error *ngIf="getControl(i)?.errors?.pattern">Incorrect data
               format.
@@ -64,31 +64,24 @@
 
           <!-- TYPE: Number -->
           <mat-form-field class="mt-2 md-enroll" appearance="outline" floatPlaceholder="never"
-                          *ngIf="fieldList[i].fieldType === 'number'"
-                          [attr.data-qa-id]="'field-' + i"
-                          [ngStyle]="txtColor">
-            <input matInput type="number" placeholder="{{ fieldList[i].label }}"
-                   [formControl]="getControl(i)"/>
+            *ngIf="fieldList[i].fieldType === 'number'" [attr.data-qa-id]="'field-' + i" [ngStyle]="txtColor">
+            <input matInput type="number" placeholder="{{ fieldList[i].label }}" [formControl]="getControl(i)" />
             <mat-error *ngIf="getControl(i)?.errors?.required">This field is
               required.
             </mat-error>
             <mat-error *ngIf="getControl(i)?.errors?.max">Max value is {{
-                fieldList[i].maxValue }}.
+              fieldList[i].maxValue }}.
             </mat-error>
             <mat-error *ngIf="getControl(i)?.errors?.min">Min value is {{
-                fieldList[i].minValue }}.
+              fieldList[i].minValue }}.
             </mat-error>
           </mat-form-field>
 
           <!-- TYPE: Date -->
           <mat-form-field class="mt-2 md-enroll bg-transparent" appearance="outline" floatPlaceholder="never"
-                          *ngIf="fieldList[i].fieldType === 'date'"
-                          [attr.data-qa-id]="'field-' + i"
-                          [ngStyle]="txtColor">
-            <input [matDatepicker]="picker" [max]="fieldList[i].maxDate"
-                   [min]="fieldList[i].minDate"
-                   matInput placeholder="{{ fieldList[i].label }}" autocomplete="off"
-                   [formControl]="getControl(i)">
+            *ngIf="fieldList[i].fieldType === 'date'" [attr.data-qa-id]="'field-' + i" [ngStyle]="txtColor">
+            <input [matDatepicker]="picker" [max]="fieldList[i].maxDate" [min]="fieldList[i].minDate" matInput
+              placeholder="{{ fieldList[i].label }}" autocomplete="off" [formControl]="getControl(i)">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="getControl(i)?.errors?.required">This field is
@@ -104,11 +97,9 @@
 
           <!-- TYPE: Boolean -->
           <mat-checkbox class="pl-3 md-enroll" *ngIf="fieldList[i].fieldType === 'boolean'"
-                        [attr.data-qa-id]="'field-' + i"
-                        [formControl]="getControl(i)"
-                        [ngStyle]="txtboxColor"><span
-              class="mb-3 d-inline-flex" data-qa-id="label"
-              [ngStyle]="txtColor">{{ fieldList[i].label }} {{  fieldList[i].required ? '' : '(Optional)'}}</span>
+            [attr.data-qa-id]="'field-' + i" [formControl]="getControl(i)" [ngStyle]="txtboxColor"><span
+              class="mb-3 d-inline-flex" data-qa-id="label" [ngStyle]="txtColor">{{ fieldList[i].label }} {{
+              fieldList[i].required ? '' : '(Optional)'}}</span>
           </mat-checkbox>
         </div>
       </ng-container>
@@ -118,9 +109,7 @@
 
   <div class="mt-3">
     <button mat-raised-button data-qa-id="submit-request" class="btn btn-primary md-enroll w-100" type="submit"
-            (click)="submit()"
-            [disabled]="disabledSubmit || enrolmentForm.invalid"
-            [ngStyle]="btnColor">Submit Request
+      (click)="submit()" [disabled]="disabledSubmit || enrolmentForm.invalid" [ngStyle]="btnColor">Submit Request
     </button>
   </div>
 </form>
