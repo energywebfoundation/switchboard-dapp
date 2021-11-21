@@ -1,7 +1,8 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { PoolState, USER_FEATURE_KEY } from './pool.reducer';
-import { Stake, StakeStatus } from 'iam-client-lib';
+import { Stake } from 'iam-client-lib';
 import { utils } from 'ethers';
+import { MAX_STAKE_AMOUNT } from './models/const';
 
 const {formatEther} = utils;
 
@@ -37,16 +38,6 @@ export const getStake = createSelector(
   (state: PoolState) => state?.userStake
 );
 
-export const isStakingDisabled = createSelector(
-  getStake,
-  (state: Stake) => state?.status === StakeStatus.STAKING || state?.status === StakeStatus.WITHDRAWING
-);
-
-export const isWithdrawDisabled = createSelector(
-  getStake,
-  (state: Stake) => state?.status !== StakeStatus.STAKING
-);
-
 export const getStakeAmount = createSelector(
   getStake,
   (state: Stake) => state?.amount ? formatEther(state.amount) : '0'
@@ -55,12 +46,7 @@ export const getStakeAmount = createSelector(
 export const getMaxPossibleAmountToStake = createSelector(
   getStake,
   (state: Stake) => {
-    console.log(state);
-    if (state?.amount) {
-      console.log(formatEther(state.amount));
-      return +state.amount.sub(50000).abs().toString();
-    }
-    return 50000;
+    return state?.amount ? +state.amount.sub(MAX_STAKE_AMOUNT).abs().toString() : MAX_STAKE_AMOUNT;
   }
 );
 

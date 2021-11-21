@@ -1,5 +1,7 @@
 import * as poolSelectors from './pool.selectors';
-import { StakeStatus } from 'iam-client-lib';
+import { getMaxPossibleAmountToStake } from './pool.selectors';
+import { BigNumber } from 'ethers';
+import { MAX_STAKE_AMOUNT } from './models/const';
 
 describe('Pool Selectors', () => {
 
@@ -9,13 +11,21 @@ describe('Pool Selectors', () => {
     });
   });
 
-  describe('isWithdrawDisabled', () => {
-    it('should return false when status is staking', () => {
-      expect(poolSelectors.isWithdrawDisabled.projector({status: StakeStatus.STAKING})).toBe(false);
+  describe('getMaxPossibleAmountToStake', () => {
+    it('should return MAX_STAKE_AMOUNT value when amount is not specified', () => {
+      expect(poolSelectors.getMaxPossibleAmountToStake.projector({})).toBe(MAX_STAKE_AMOUNT);
     });
 
-    it('should return true when status is nonstaking', () => {
-      expect(poolSelectors.isWithdrawDisabled.projector({status: StakeStatus.NONSTAKING})).toBe(true);
+    it('should calculate max possible amount when is already putted 100', () => {
+      expect(poolSelectors.getMaxPossibleAmountToStake.projector({amount: BigNumber.from(100)})).toEqual(49900);
+    });
+
+    it('should return 0 when amount is equal to maximum stake amount', () => {
+      expect(poolSelectors.getMaxPossibleAmountToStake.projector({amount: BigNumber.from(MAX_STAKE_AMOUNT)})).toEqual(0);
+    });
+
+    it('should return maximu stake amount when amount is equal to 0', () => {
+      expect(poolSelectors.getMaxPossibleAmountToStake.projector({amount: BigNumber.from(0)})).toEqual(MAX_STAKE_AMOUNT);
     });
   });
 
