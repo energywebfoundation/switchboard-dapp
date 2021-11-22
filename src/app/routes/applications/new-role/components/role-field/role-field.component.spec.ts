@@ -39,38 +39,38 @@ describe('RoleFieldComponent', () => {
     const data = {value: 'testData'};
     spyOn(component.updateData, 'emit');
 
-    component.updateDataSource(data);
+    component.updateDataSource(data as any);
 
     expect(component.updateData.emit).toHaveBeenCalledWith(data as any);
   });
 
   it('should be run moveDown', () => {
-    component.fieldsList = [1, 2, 3];
+    component.fieldsList = [1, 2, 3] as any;
     spyOn(component, 'updateDataSource');
 
     component.moveDown(1);
 
-    expect(component.updateDataSource).toHaveBeenCalledWith([1, 3, 2]);
+    expect(component.updateDataSource).toHaveBeenCalledWith([1, 3, 2] as any);
   });
 
   it('should be run moveUp', () => {
-    component.fieldsList = [1, 2, 3];
+    component.fieldsList = [1, 2, 3] as any;
     const i = 1;
     spyOn(component, 'updateDataSource');
 
     component.moveUp(i);
 
-    expect(component.updateDataSource).toHaveBeenCalledWith([2, 1, 3]);
+    expect(component.updateDataSource).toHaveBeenCalledWith([2, 1, 3] as any);
   });
 
   it('should be run deleteField', () => {
-    component.fieldsList = [1, 2, 3];
+    component.fieldsList = [1, 2, 3] as any;
     const i = 1;
     spyOn(component, 'updateDataSource');
 
     component.deleteField(i);
 
-    expect(component.updateDataSource).toHaveBeenCalledWith([1, 3]);
+    expect(component.updateDataSource).toHaveBeenCalledWith([1, 3] as any);
   });
 
   it('should be run showAddFieldForm', () => {

@@ -20,6 +20,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
+import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
 
 export enum ENSPrefixes {
   Roles = 'roles',
@@ -105,8 +106,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   // Fields
   isAutolistLoading = false;
   hasSearchResult = true;
-  dataSource = new MatTableDataSource([]);
-  issuerFields = new MatTableDataSource([]);
+  dataSource = new MatTableDataSource<IFieldDefinition>([]);
+  issuerFields = new MatTableDataSource<IFieldDefinition>([]);
   rolenamespaceList: Observable<any[]>;
   isExistsRoleName = false;
   public ViewType = ViewType;

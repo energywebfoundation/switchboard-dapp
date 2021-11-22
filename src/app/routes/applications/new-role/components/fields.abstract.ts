@@ -1,7 +1,7 @@
 import { EventEmitter } from '@angular/core';
 
 export abstract class FieldsAbstract<T> {
-  abstract updateData: EventEmitter<T>;
+  abstract updateData: EventEmitter<T[]>;
 
   abstract get fields(): T[];
 
@@ -9,13 +9,13 @@ export abstract class FieldsAbstract<T> {
   fieldIndex: number;
   fieldToEdit = null;
 
-  addFieldHandler(fieldData) {
+  addFieldHandler(fieldData: T) {
     const data = [...this.fields, fieldData];
     this.updateDataSource(data);
     this.hideForm();
   }
 
-  updateFieldHandler(fieldData) {
+  updateFieldHandler(fieldData: T) {
     const data = this.fields.map((item, index) => {
       if (this.fieldIndex === index) {
         return fieldData;
@@ -62,7 +62,7 @@ export abstract class FieldsAbstract<T> {
     this.updateDataSource([...list]);
   }
 
-  updateDataSource(data) {
+  updateDataSource(data: T[]) {
     this.updateData.emit(data);
   }
 
