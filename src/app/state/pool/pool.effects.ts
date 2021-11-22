@@ -43,19 +43,6 @@ export class PoolEffects {
     )
   );
 
-  stakeIsInWithdrawingStatus$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PoolActions.getStakeSuccess),
-      map(({stake}) => stake.status),
-      filter((status: StakeStatus) => status === StakeStatus.WITHDRAWING),
-      mergeMap(() => [
-        PoolActions.getAccountBalance(),
-        PoolActions.checkReward(),
-        PoolActions.displayConfirmationDialog()
-      ])
-    )
-  );
-
   stakeIsInStakingStatus$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PoolActions.getStakeSuccess),
