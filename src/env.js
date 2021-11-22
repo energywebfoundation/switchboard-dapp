@@ -13,6 +13,6 @@
     window.__env.cacheServerUrl = 'https://identitycache-dev.energyweb.org/v1';
     window.__env.natsServerUrl = 'https://identityevents-dev.energyweb.org/';
     window.__env.kmsServerUrl = undefined;
-    window.__env.stakingPoolFactoryAddress = undefined;
+    window.__env.stakingPoolFactoryAddress = '0x3490B3e5E7C1f696c61FDe1c2679725B19274B0e';
 
 }(this));
