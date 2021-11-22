@@ -58,7 +58,7 @@ describe('PoolEffects', () => {
       effects.initPool$.pipe(take(1)).subscribe(resultAction => {
         expect(resultAction).toEqual(PoolActions.getStake());
       });
-      effects.initPool$.pipe(skip(1)).subscribe(resultAction => {
+      effects.initPool$.pipe(skip(1), take(1)).subscribe(resultAction => {
         expect(resultAction).toEqual(PoolActions.getOrganizationDetails());
       });
     }));
