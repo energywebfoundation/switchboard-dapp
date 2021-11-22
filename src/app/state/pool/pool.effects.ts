@@ -8,7 +8,7 @@ import { PoolState } from './pool.reducer';
 import * as PoolActions from './pool.actions';
 import { catchError, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
-import { utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { Stake, StakeStatus } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
 import * as poolSelectors from './pool.selectors';
@@ -187,6 +187,34 @@ export class PoolEffects {
     )
   );
 
+  getOrganizationLimit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.getHardCap),
+      switchMap(() => this.stakingPoolFacade.getHardCap().pipe(
+          map((cap: BigNumber) => PoolActions.getHardCapSuccess({cap})),
+          catchError(err => {
+            console.error(err);
+            return of(PoolActions.getHardCapFailure({err: err?.message}));
+          })
+        )
+      )
+    )
+  );
+
+  getContributorLimit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.getContributorLimit),
+      switchMap(() => this.stakingPoolFacade.getContributionLimit().pipe(
+          map((cap: BigNumber) => PoolActions.getContributorLimitSuccess({cap})),
+          catchError(err => {
+            console.error(err);
+            return of(PoolActions.getContributorLimitFailure({err: err?.message}));
+          })
+        )
+      )
+    )
+  );
+
   constructor(private actions$: Actions,
               private store: Store<PoolState>,
               private iamService: IamService,
@@ -205,7 +233,7 @@ export class PoolEffects {
             this.toastr.error(`Organization ${organization} do not exist as a provider.`);
             return [PoolActions.getOrganizationDetails()];
           }
-          return [PoolActions.getStake(), PoolActions.getOrganizationDetails()];
+          return [PoolActions.getStake(), PoolActions.getOrganizationDetails(), PoolActions.getHardCap(), PoolActions.getContributorLimit()];
         })
       );
   }

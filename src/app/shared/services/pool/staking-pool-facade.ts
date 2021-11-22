@@ -34,10 +34,10 @@ export class StakingPoolFacade {
   }
 
   getHardCap() {
-    return this.pool.getHardCap();
+    return from(this.pool.getHardCap());
   }
 
   getContributionLimit() {
-    return this.pool.getContributionLimit();
+    return from(this.pool.getContributionLimit());
   }
 }
