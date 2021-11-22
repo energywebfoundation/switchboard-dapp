@@ -99,6 +99,7 @@ export class NewIssueVcComponent implements OnInit {
   }
 
   private createClaim(fields) {
+    // TODO: Move this method to separate service and use it in request-claim component.
     const parseVersion = (version: string | number) => {
       if (typeof (version) === 'string') {
         return parseInt(version.split('.')[0], 10);
