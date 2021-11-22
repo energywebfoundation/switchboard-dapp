@@ -32,4 +32,12 @@ export class StakingPoolFacade {
   withdraw() {
     return from(this.pool.withdraw());
   }
+
+  getHardCap() {
+    return this.pool.getHardCap();
+  }
+
+  getContributionLimit() {
+    return this.pool.getContributionLimit();
+  }
 }
