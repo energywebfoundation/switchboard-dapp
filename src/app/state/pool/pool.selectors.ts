@@ -50,8 +50,17 @@ export const getStakeAmount = createSelector(
 
 export const getMaxPossibleAmountToStake = createSelector(
   getStake,
-  (state: Stake) => {
-    return state?.amount ? +state.amount.sub(MAX_STAKE_AMOUNT).abs().toString() : MAX_STAKE_AMOUNT;
+  getStakeState,
+  (stake: Stake, state: PoolState) => {
+    if (!state.contributorLimit) {
+      return MAX_STAKE_AMOUNT;
+    }
+    const maxValue = +formatEther(state.contributorLimit);
+    if (!stake?.amount) {
+      return maxValue;
+    }
+    const puttedStake = +formatEther(stake.amount);
+    return maxValue - puttedStake;
   }
 );
 
@@ -63,4 +72,22 @@ export const isWithdrawingDelayFinished = createSelector(
 export const getOrganizationDetails = createSelector(
   getStakeState,
   (state: PoolState) => state?.organizationDetails
+);
+
+export const getOrganizationLimit = createSelector(
+  getStakeState,
+  (state: PoolState) => {
+    console.log(state.organizationLimit?.toString());
+    return state?.organizationLimit?.toString();
+  }
+);
+
+export const getContributorLimit = createSelector(
+  getStakeState,
+  (state: PoolState) => {
+    if (state.contributorLimit) {
+      return formatEther(state.contributorLimit);
+    }
+    return state.contributorLimit;
+  }
 );

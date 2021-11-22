@@ -16,6 +16,7 @@ export interface PoolState {
   withdrawing: boolean;
   organizationDetails: IOrganizationDefinition;
   contributorLimit: BigNumber;
+  organizationLimit: BigNumber;
 }
 
 export const initialState: PoolState = {
@@ -27,7 +28,8 @@ export const initialState: PoolState = {
   userStake: null,
   withdrawing: false,
   organizationDetails: null,
-  contributorLimit: null
+  contributorLimit: null,
+  organizationLimit: null
 };
 
 const poolReducer = createReducer(
@@ -49,7 +51,8 @@ const poolReducer = createReducer(
   on(PoolActions.withdrawalDelayExpired, (state) => ({...state, withdrawing: false})),
   on(PoolActions.getOrganizationDetailsSuccess, (state, {orgDetails}) => ({...state, organizationDetails: orgDetails})),
   on(PoolActions.withdrawRewardSuccess, (state) => ({...state, reward: '0'})),
-  on(PoolActions.getHardCapSuccess, (state, {cap}) => ({...state, contributorLimit: cap})),
+  on(PoolActions.getContributorLimitSuccess, (state, {cap}) => ({...state, contributorLimit: cap})),
+  on(PoolActions.getHardCapSuccess, (state, {cap}) => ({...state, organizationLimit: cap})),
 );
 
 export function reducer(state: PoolState | undefined, action: Action) {

@@ -6,6 +6,7 @@ import { PercentButtonsComponent } from '../percent-buttons/percent-buttons.comp
 import { Store } from '@ngrx/store';
 import * as poolSelectors from '../../../state/pool/pool.selectors';
 import * as PoolActions from '../../../state/pool/pool.actions';
+import { MAX_STAKE_AMOUNT } from '../../../state/pool/models/const';
 
 @Component({
   selector: 'app-stake',
@@ -15,12 +16,16 @@ import * as PoolActions from '../../../state/pool/pool.actions';
 export class StakeComponent {
   inputFocused: boolean;
   tokenAmount: number;
-  amountToStake = new FormControl('', [Validators.min(1), Validators.required, Validators.max(50000)]);
-  maxAmount$ = this.store.select(poolSelectors.getMaxPossibleAmountToStake);
-  balance$ = this.store.select(poolSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
+  amountToStake = new FormControl('', [Validators.min(1), Validators.required, Validators.max(MAX_STAKE_AMOUNT)]);
+  maxAmount$ = this.store.select(poolSelectors.getMaxPossibleAmountToStake).pipe(tap(value => {
+    this.setAmountValidators(value);
+    this.tokenAmount = +value;
+  }));
+  balance$ = this.store.select(poolSelectors.getBalance);
   earnedReward$ = this.store.select(poolSelectors.getReward);
   stakeAmount$ = this.store.select(poolSelectors.getStakeAmount);
   isWithdrawDisabled$ = this.store.select(poolSelectors.isWithdrawDisabled);
+  getContributorLimit$ = this.store.select(poolSelectors.getContributorLimit);
 
   @ViewChild('percentButtons') percentButtons: PercentButtonsComponent;
 
@@ -58,6 +63,10 @@ export class StakeComponent {
 
   withdraw() {
     this.store.dispatch(PoolActions.withdrawRequest());
+  }
+
+  setAmountValidators(maxAmount: number) {
+    this.amountToStake.setValidators([Validators.min(1), Validators.required, Validators.max(maxAmount)]);
   }
 
 }
