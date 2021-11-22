@@ -27,6 +27,7 @@ export function createTranslateLoader(http: HttpClient) {
 }
 
 const providers: Provider[] = [
+  EnvServiceProvider,
   ConfigService,
   {
     provide: APP_INITIALIZER,
@@ -36,7 +37,6 @@ const providers: Provider[] = [
     multi: true,
   },
   {provide: FEAT_TOGGLE_TOKEN, useFactory: getEnv},
-  EnvServiceProvider
 ];
 
 if (environment.SENTRY_DNS) {

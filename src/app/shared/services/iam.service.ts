@@ -25,17 +25,14 @@ import {
   StakingService,
 } from 'iam-client-lib';
 import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
-import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
 import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
 import { truthy } from '@operators';
 import { finalize, map } from 'rxjs/operators';
+import { EnvService } from './env/env.service';
 
-const {walletConnectOptions, cacheServerUrl, natsServerUrl} = environment;
-
-export const VOLTA_CHAIN_ID = 73799;
 export const PROVIDER_TYPE = 'ProviderType';
 
 export type InitializeData = {
@@ -63,21 +60,20 @@ export class IamService {
 
   constructor(
     private loadingService: LoadingService,
+    private envService: EnvService
   ) {
     // Set Cache Server
-    setCacheConfig(VOLTA_CHAIN_ID, {
-      url: cacheServerUrl
+    setCacheConfig(envService.chainId, {
+      url: envService.cacheServerUrl,
     });
 
     // Set RPC
-    setChainConfig(VOLTA_CHAIN_ID, {
-      rpcUrl: walletConnectOptions.rpcUrl
-    });
+    setChainConfig(envService.chainId, this.getChainConfig());
 
     // Set Messaging Options
-    setMessagingConfig(VOLTA_CHAIN_ID, {
+    setMessagingConfig(envService.chainId, {
       messagingMethod: MessagingMethod.Nats,
-      natsServerUrl,
+      natsServerUrl: envService.natsServerUrl,
     });
   }
 
@@ -112,17 +108,15 @@ export class IamService {
   }
 
   getUserClaims(did?: string) {
-    return from(this.claimsService.getUserClaims({ did }));
+    return from(this.claimsService.getUserClaims({did}));
   }
 
-  createSelfSignedClaim({
-    data,
-    subject,
-  }: {
-    data: ClaimData;
-    subject?: string;
-  }) {
-    return from(this.claimsService.createSelfSignedClaim({ data, subject }));
+  createSelfSignedClaim(
+    {data, subject}: {
+      data: ClaimData;
+      subject?: string;
+    }) {
+    return from(this.claimsService.createSelfSignedClaim({data, subject}));
   }
 
   deleteOrganization(namespace: string, returnSteps: boolean) {
@@ -140,8 +134,8 @@ export class IamService {
 
   getAssetById(id) {
     return this.wrapWithLoadingService(
-      this.assetsService.getAssetById({ id }),
-      { message: "Getting selected asset data..." }
+      this.assetsService.getAssetById({id}),
+      {message: 'Getting selected asset data...'}
     );
   }
 
@@ -149,11 +143,7 @@ export class IamService {
     return from(this.signerService.closeConnection()).pipe(truthy());
   }
 
-  async initializeConnection({
-    providerType,
-    initCacheServer = true,
-    createDocument = true,
-  }: LoginOptions) {
+  async initializeConnection({providerType, initCacheServer = true, createDocument = true}: LoginOptions) {
     try {
       const {
         signerService,
@@ -175,7 +165,7 @@ export class IamService {
         this.assetsService = assetsService;
         this.cacheClient = cacheClient;
         if (createDocument) {
-          const { didRegistry, claimsService } = await connectToDidRegistry();
+          const {didRegistry, claimsService} = await connectToDidRegistry();
           this.didRegistry = didRegistry;
           this.claimsService = claimsService;
         }
@@ -185,7 +175,7 @@ export class IamService {
       return {
         did: undefined,
         connected: false,
-        userClosedModal: e.message === "User closed modal",
+        userClosedModal: e.message === 'User closed modal',
         realtimeExchangeConnected: false,
         accountInfo: undefined,
       };
@@ -221,7 +211,7 @@ export class IamService {
   }
 
   isOwner(namespace: string) {
-    return from(this.domainsService.isOwner({ domain: namespace }));
+    return from(this.domainsService.isOwner({domain: namespace}));
   }
 
   getOrganizationsByOwner() {
@@ -240,10 +230,21 @@ export class IamService {
     loaderConfig?: { message: string | string[]; cancelable?: boolean }
   ) {
     this.loadingService.show(
-      loaderConfig?.message || "",
+      loaderConfig?.message || '',
       !!loaderConfig?.cancelable
     );
     return from(source).pipe(finalize(() => this.loadingService.hide()));
+  }
+
+  private getChainConfig() {
+    const chainConfig: any = {
+      rpcUrl: this.envService.rpcUrl,
+    };
+
+    if (this.envService.stakingPoolFactoryAddress) {
+      chainConfig.stakingPoolFactoryAddress = this.envService.stakingPoolFactoryAddress;
+    }
+    return chainConfig;
   }
 
   private async initSignerService(
@@ -255,11 +256,11 @@ export class IamService {
       case ProviderType.WalletConnect:
         return initWithWalletConnect();
       case ProviderType.EwKeyManager:
-        return initWithKms();
+        return initWithKms({kmsServerUrl: this.envService.kmsServerUrl});
       case ProviderType.PrivateKey:
         return initWithPrivateKeySigner(
           localStorage.getItem('PrivateKey'),
-          walletConnectOptions.rpcUrl
+          this.envService.rpcUrl
         );
       case ProviderType.Gnosis:
         return initWithGnosis(safeAppSdk);

@@ -14,6 +14,7 @@ import * as userActions from '../user-claim/user.actions';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import * as StakeActions from '../stake/stake.actions';
 import * as AuthSelectors from './auth.selectors';
+import { EnvService } from '../../shared/services/env/env.service';
 
 @Injectable()
 export class AuthEffects {
@@ -24,7 +25,7 @@ export class AuthEffects {
       switchMap(() =>
         from(isMetamaskExtensionPresent())
           .pipe(
-            map(({ isMetamaskPresent, chainId }) =>
+            map(({isMetamaskPresent, chainId}) =>
               AuthActions.setMetamaskLoginOptions({
                 present: isMetamaskPresent,
                 chainId
@@ -35,11 +36,18 @@ export class AuthEffects {
     )
   );
 
+  defaultChainId$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.init),
+      map(() => AuthActions.setDefaultChainId({defaultChainId: this.envService.chainId}))
+    )
+  );
+
   loginViaDialog$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginViaDialog),
-      tap(({ provider, navigateOnTimeout }) => this.loginService.waitForSignature(provider, true, navigateOnTimeout)),
-      switchMap(({ provider, navigateOnTimeout }) =>
+      tap(({provider, navigateOnTimeout}) => this.loginService.waitForSignature(provider, true, navigateOnTimeout)),
+      switchMap(({provider, navigateOnTimeout}) =>
         this.loginService.login({
           providerType: provider,
           reinitializeMetamask: provider === ProviderType.MetaMask
@@ -188,7 +196,8 @@ export class AuthEffects {
               private loginService: LoginService,
               private loadingService: LoadingService,
               private dialog: MatDialog,
-              private router: Router) {
+              private router: Router,
+              private envService: EnvService) {
   }
 
 }

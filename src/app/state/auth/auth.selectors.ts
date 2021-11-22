@@ -1,6 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AuthState, USER_FEATURE_KEY } from './auth.reducer';
-import { VOLTA_CHAIN_ID } from '../../shared/services/iam.service';
 
 export const getAuthState = createFeatureSelector<AuthState>(USER_FEATURE_KEY);
 
@@ -17,7 +16,7 @@ export const isMetamaskPresent = createSelector(
 export const isMetamaskDisabled = createSelector(
   getAuthState,
   (state) =>
-    state?.metamask.chainId && parseInt(`${state?.metamask.chainId}`, 16) !== VOLTA_CHAIN_ID
+    state?.metamask.chainId && parseInt(`${state?.metamask.chainId}`, 16) !== state?.defaultChainId
 );
 
 export const getWalletProvider = createSelector(

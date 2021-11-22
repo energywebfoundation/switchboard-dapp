@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ProviderType, AccountInfo } from 'iam-client-lib';
+import { AccountInfo, ProviderType } from 'iam-client-lib';
 
 export const init = createAction(
   '[AUTH] Initialize Possible Options To Log In'
@@ -67,4 +67,9 @@ export const setMetamaskLoginOptions = createAction(
 
 export const navigateWhenSessionActive = createAction(
   '[AUTH] Navigate to dashboard when session is active'
+);
+
+export const setDefaultChainId = createAction(
+  '[AUTH] Set Default Chain ID from ENV config',
+  props<{ defaultChainId: number }>()
 );
