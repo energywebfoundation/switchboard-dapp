@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ClaimData, NamespaceType } from 'iam-client-lib';
+import { ClaimData, NamespaceType, RegistrationTypes } from 'iam-client-lib';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
@@ -148,6 +148,34 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
+  isAccepted(element) {
+    return element?.isAccepted;
+  }
+
+  isSynced(element) {
+    return element?.isSynced;
+  }
+
+  isRejected(element) {
+    return !element?.isAccepted && element?.isRejected;
+  }
+
+  isPending(element) {
+    return !element?.isAccepted && !element?.isRejected;
+  }
+
+  isPendingSync(element) {
+    return (!this.viewedByIssuer() && !this.isSynced(element)) || !this.isOnlyOnChain(element);
+  }
+
+  viewedByIssuer() {
+    return this.listType === EnrolmentListType.ISSUER;
+  }
+
+  isOnlyOnChain(element) {
+    return element.registrationTypes.length === 1 && element.registrationTypes.includes(RegistrationTypes.OnChain);
+  }
+
   view(element: any) {
     this.dialog.open(ViewRequestsComponent, {
       width: '600px', data: {
@@ -230,7 +258,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   private async appendDidDocSyncStatus(list: any[]) {
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    const did = this.listType === EnrolmentListType.ASSET ? { did: this.subject } : undefined;
+    const did = this.listType === EnrolmentListType.ASSET ? {did: this.subject} : undefined;
     const claims: ClaimData[] = (await this.iamService.claimsService.getUserClaims(did))
       .filter((item: ClaimData) => {
         if (item && item.claimType) {
