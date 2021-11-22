@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { PoolState, USER_FEATURE_KEY } from './pool.reducer';
-import { Stake } from 'iam-client-lib';
+import { Stake, StakeStatus } from 'iam-client-lib';
 import { utils } from 'ethers';
 import { MAX_STAKE_AMOUNT } from './models/const';
 
@@ -36,6 +36,11 @@ export const getAnnualReward = createSelector(
 export const getStake = createSelector(
   getStakeState,
   (state: PoolState) => state?.userStake
+);
+
+export const isWithdrawDisabled = createSelector(
+  getStake,
+  (state: Stake) => state?.status !== StakeStatus.STAKING
 );
 
 export const getStakeAmount = createSelector(

@@ -20,6 +20,7 @@ export class StakeComponent {
   balance$ = this.store.select(poolSelectors.getBalance).pipe(tap(balance => this.tokenAmount = +balance));
   earnedReward$ = this.store.select(poolSelectors.getReward);
   stakeAmount$ = this.store.select(poolSelectors.getStakeAmount);
+  isWithdrawDisabled$ = this.store.select(poolSelectors.isWithdrawDisabled);
 
   @ViewChild('percentButtons') percentButtons: PercentButtonsComponent;
 
