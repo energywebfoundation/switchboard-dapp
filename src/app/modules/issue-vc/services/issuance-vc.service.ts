@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { finalize, map, tap } from 'rxjs/operators';
-import { Claim } from 'iam-client-lib';
+import { Claim, IRole } from 'iam-client-lib';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IssuanceVcService {
-  private roles = [];
+  private roles: IRole[] = [];
   assetClaims: Claim[];
 
   constructor(private iamService: IamService,
@@ -20,7 +21,7 @@ export class IssuanceVcService {
     return this.iamService.issueClaim(data);
   }
 
-  getNotEnrolledRoles(did) {
+  getNotEnrolledRoles(did): Observable<IRole[]> {
     this.loadingService.show();
     return this.iamService.getClaimsBySubject(did)
       .pipe(
@@ -37,7 +38,7 @@ export class IssuanceVcService {
   }
 
   private getAllowedRoles(): void {
-    this.iamService.getAllowedRolesByIssuer().subscribe((roles) => this.roles = roles);
+    this.iamService.getAllowedRolesByIssuer().subscribe((roles: IRole[]) => this.roles = roles);
   }
 
 }

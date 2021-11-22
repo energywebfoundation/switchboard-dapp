@@ -32,7 +32,7 @@
               <mat-select formControlName="type" placeholder="Select Type" data-qa-id="select-type"
                           (selectionChange)="roleTypeSelected($event)">
                 <mat-option *ngFor="let role of possibleRolesToEnrol" [value]="role"
-                            [attr.data-qa-id]="role.name">{{role.name}}
+                            [attr.data-qa-id]="role?.name">{{role?.name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>

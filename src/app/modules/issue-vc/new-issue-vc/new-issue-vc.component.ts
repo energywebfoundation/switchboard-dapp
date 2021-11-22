@@ -5,6 +5,10 @@ import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { PreconditionCheck, preconditionCheck } from '../../../routes/registration/utils/precondition-check';
 import { filter, switchMap } from 'rxjs/operators';
+import { EnrolmentSubmission } from '../../../routes/registration/enrolment-form/enrolment-form.component';
+import { IRole } from 'iam-client-lib';
+import { MatSelectChange } from '@angular/material/select/select';
+import { IRoleDefinition } from '@energyweb/iam-contracts';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -19,9 +23,9 @@ export class NewIssueVcComponent implements OnInit {
     subject: ['', [Validators.required, HexValidators.isDidValid()]],
     type: ['', [Validators.required]]
   });
-  possibleRolesToEnrol;
-  selectedRoleDefinition;
-  isPrecheckSuccess;
+  possibleRolesToEnrol: IRole[];
+  selectedRoleDefinition: IRoleDefinition;
+  isPrecheckSuccess: boolean;
   rolePreconditionList: PreconditionCheck[] = [];
 
   constructor(private fb: FormBuilder,
@@ -35,8 +39,8 @@ export class NewIssueVcComponent implements OnInit {
     this.setPossibleRoles();
   }
 
-  roleTypeSelected(e: any) {
-    if (e && e.value && e.value.definition) {
+  roleTypeSelected(e: MatSelectChange) {
+    if (e?.value?.definition) {
       this.fieldList = e.value.definition.issuerFields || [];
       this.selectedRoleDefinition = e.value.definition;
       this.setPreconditions();
@@ -71,8 +75,8 @@ export class NewIssueVcComponent implements OnInit {
     return this.form.invalid || !this.isPrecheckSuccess;
   }
 
-  create(e) {
-    if (this.isFormDisabled() && e.value) {
+  create(e: EnrolmentSubmission) {
+    if (this.isFormDisabled() && e.valid) {
       return;
     }
     this.issuanceVcService.create({subject: this.getFormSubject().value, claim: this.createClaim(e.fields)})

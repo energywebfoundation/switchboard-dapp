@@ -13,6 +13,7 @@ import {
   initWithMetamask,
   initWithPrivateKeySigner,
   initWithWalletConnect,
+  IRole,
   MessagingMethod,
   MessagingService,
   NamespaceType,
@@ -98,8 +99,8 @@ export class IamService {
     })).pipe(map(claims => claims.filter((claim) => !claim.isRejected)));
   }
 
-  getAllowedRolesByIssuer() {
-    return this.wrapWithLoadingService(this.domainsService.getAllowedRolesByIssuer(this.signerService.did));
+  getAllowedRolesByIssuer(): Observable<IRole[]> {
+    return this.wrapWithLoadingService(this.domainsService.getAllowedRolesByIssuer(this.signerService.did) as any as Promise<IRole[]>);
   }
 
   getRolesDefinition(namespaces: string[]) {
