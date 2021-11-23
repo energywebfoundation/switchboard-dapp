@@ -5,12 +5,12 @@
       <div class="staking-widget-xs-label text-color mb-2">Your account balance</div>
       <h3 class="mb-0 text-color" data-qa-id="stake-balance">
         <ng-container *ngIf="(balance$ | async) as balance">{{balance | lastDigits}}</ng-container>
-        <span class="staking-currency ml-2">VT</span></h3>
+        <span class="staking-currency ml-2">EWT</span></h3>
     </div>
     <div class="col-12 col-lg-7 pt-3 pt-lg-0">
       <ng-container *ngIf="getContributorLimit$ | async as contributorLimit">
         <mat-form-field class="staking-textfield" appearance="outline">
-          <mat-label class="ml-3 pl-1">VT Stake Amount</mat-label>
+          <mat-label class="ml-3 pl-1">EWT Stake Amount</mat-label>
           <input matInput class="amount-input" data-qa-id="stake-amount" [formControl]="amountToStake"
                  autocomplete="off"
                  type="number"
@@ -81,7 +81,7 @@
           <ng-container *ngIf="(earnedReward$ | async) as earnedReward">
             {{earnedReward | lastDigits: 6}}
           </ng-container>
-          <span class="staking-currency">VT</span>
+          <span class="staking-currency">EWT</span>
         </h3>
       </div>
     </div>
@@ -94,7 +94,7 @@
           <ng-container *ngIf="(stakeAmount$ | async) as stakeAmount">
             {{stakeAmount | lastDigits}}
           </ng-container>
-          <span class="staking-currency">VT</span>
+          <span class="staking-currency">EWT</span>
         </h3>
       </div>
       <div class="d-flex justify-content-end">
