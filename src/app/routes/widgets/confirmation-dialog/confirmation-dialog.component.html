@@ -1,7 +1,17 @@
 <div mat-dialog-content class="h-auto">
-  <h3 class="font-weight-700 mt-4 pt-1">{{ data?.header || 'Confirm' }}</h3>
-  <div class="mt-0 mb-2">
-    <div>{{ data?.message }}</div>
+  <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center py-2 pr-3">
+    
+    <!-- Shows only for Syncing to DID Document -->
+    <!-- <div class="d-flex align-items-center justify-content-start justify-content-lg-center pt-4 pb-2 py-lg-4 pr-2">
+      <mat-icon class="color-warned icon-dialog" svgIcon="sync-did-icon"></mat-icon>
+    </div> -->
+
+    <div class="pl-0 pl-lg-2">
+      <h3 class="font-weight-700 mt-4 pt-1">{{ data?.header || 'Confirm' }}</h3>
+      <div class="mt-0 mb-2">
+        <div>{{ data?.message }}</div>
+      </div>
+    </div>
   </div>
 </div>
 
