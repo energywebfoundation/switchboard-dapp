@@ -119,6 +119,62 @@ describe('EnrolmentFormComponent', () => {
       expect(onChain.nativeElement.checked).toBeTruthy('on chain should be selected');
       expect(submit.nativeElement.disabled).toBeFalsy('submit button should be enabled');
     });
+
+    it('should disable checkboxes when only onChain is predefined and set to true', () => {
+      component.fieldList = [];
+      component.predefinedRegTypes = {onChain: true};
+
+      fixture.detectChanges();
+
+      const {offChain, onChain} = getSelectors(hostDebug);
+
+      expect(offChain.nativeElement.checked).toBeFalsy('off chain should be deselected');
+      expect(offChain.nativeElement.disabled).toBeTruthy('off chain is not disabled');
+      expect(onChain.nativeElement.checked).toBeTruthy('on chain should be selected');
+      expect(onChain.nativeElement.disabled).toBeTruthy('on chain is not disabled');
+    });
+
+    it('should disable checkboxes when only offChain is predefined and set to true', () => {
+      component.fieldList = [];
+      component.predefinedRegTypes = {offChain: true};
+
+      fixture.detectChanges();
+
+      const {offChain, onChain} = getSelectors(hostDebug);
+
+      expect(offChain.nativeElement.checked).toBeTruthy('off chain should be selected');
+      expect(offChain.nativeElement.disabled).toBeTruthy('off chain is not disabled');
+      expect(onChain.nativeElement.checked).toBeFalsy('on chain should be deselected');
+      expect(onChain.nativeElement.disabled).toBeTruthy('on chain is not disabled');
+    });
+
+    it('should disable checkboxes when offChain and onChain are predefined and set to true', () => {
+      component.fieldList = [];
+      component.predefinedRegTypes = {offChain: true, onChain: true};
+
+      fixture.detectChanges();
+
+      const {offChain, onChain} = getSelectors(hostDebug);
+
+      expect(offChain.nativeElement.checked).toBeTruthy('off chain should be selected');
+      expect(offChain.nativeElement.disabled).toBeTruthy('off chain is disabled');
+      expect(onChain.nativeElement.checked).toBeTruthy('on chain should be selected');
+      expect(onChain.nativeElement.disabled).toBeTruthy('on chain is disabled');
+    });
+
+    it('should not disable checkboxes when offChain and onChain are predefined and set to false', () => {
+      component.fieldList = [];
+      component.predefinedRegTypes = {offChain: false, onChain: false};
+
+      fixture.detectChanges();
+
+      const {offChain, onChain} = getSelectors(hostDebug);
+
+      expect(offChain.nativeElement.checked).toBeTruthy('off chain should be selected');
+      expect(offChain.nativeElement.disabled).toBeFalsy('off chain is not disabled');
+      expect(onChain.nativeElement.checked).toBeFalsy('on chain should not be selected');
+      expect(onChain.nativeElement.disabled).toBeFalsy('on chain is not disabled');
+    });
   });
 
 

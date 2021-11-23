@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
 import { IRoleDefinition, RegistrationTypes } from 'iam-client-lib';
@@ -14,12 +14,17 @@ export interface EnrolmentSubmission {
   valid: boolean;
 }
 
+export interface PredefinedRegistrationTypes {
+  onChain?: boolean;
+  offChain?: boolean;
+}
+
 @Component({
   selector: 'app-enrolment-form',
   templateUrl: './enrolment-form.component.html',
   styleUrls: ['./enrolment-form.component.scss']
 })
-export class EnrolmentFormComponent {
+export class EnrolmentFormComponent implements OnInit {
   enrolmentForm: FormGroup = new FormGroup({
     registrationTypes: new FormGroup({
       offChain: new FormControl({value: true, disabled: false}),
@@ -40,6 +45,8 @@ export class EnrolmentFormComponent {
     return this.fields;
   }
 
+  @Input() predefinedRegTypes: PredefinedRegistrationTypes;
+
   @Input() txtboxColor;
   @Input() txtColor;
   @Input() btnColor;
@@ -49,6 +56,10 @@ export class EnrolmentFormComponent {
   private fields;
 
   constructor(private cdRef: ChangeDetectorRef) {
+  }
+
+  ngOnInit() {
+    this.setPredefinedFormatForCheckboxes();
   }
 
   submit() {
@@ -165,6 +176,26 @@ export class EnrolmentFormComponent {
     }
 
     return validations;
+  }
+
+  private setPredefinedFormatForCheckboxes(): void {
+    if (!this.predefinedRegTypes) {
+      return;
+    }
+    if (this.predefinedRegTypes.onChain || this.predefinedRegTypes.offChain) {
+      this.registrationTypesGroup.reset(
+        {
+          offChain: {
+            value: Boolean(this.predefinedRegTypes.offChain),
+            disabled: true
+          },
+          onChain: {
+            value: Boolean(this.predefinedRegTypes.onChain),
+            disabled: true
+          }
+        }
+      );
+    }
   }
 
 }
