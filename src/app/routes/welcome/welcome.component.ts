@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import * as authSelectors from '../../state/auth/auth.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
+import { EnvService } from '../../shared/services/env/env.service';
 
 const {version} = require('../../../../package.json');
 
@@ -17,10 +18,13 @@ export class WelcomeComponent implements OnInit {
   disableMetamaskButton$ = this.store.select(authSelectors.isMetamaskDisabled);
   isMetamaskExtensionAvailable$ = this.store.select(authSelectors.isMetamaskPresent);
   version: string = version;
+  showEkcOption = this.envService.showAzureLoginOption;
+
 
   private _returnUrl;
 
   constructor(private activeRoute: ActivatedRoute,
+              private envService: EnvService,
               private store: Store) {
   }
 
