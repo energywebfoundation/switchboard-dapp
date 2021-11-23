@@ -13,7 +13,6 @@ import { Stake, StakeStatus } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
 import * as poolSelectors from './pool.selectors';
 import { ToastrService } from 'ngx-toastr';
-import { WithdrawComponent } from '../../routes/ewt-patron/withdraw/withdraw.component';
 import { IOrganizationDefinition } from '@energyweb/iam-contracts';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import { StakingPoolFacade } from '../../shared/services/pool/staking-pool-facade';
@@ -103,20 +102,6 @@ export class PoolEffects {
         }
       )
     )
-  );
-
-  showProgressBar$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PoolActions.withdrawRequest, PoolActions.displayConfirmationDialog),
-      map(() => {
-        this.dialog.open(WithdrawComponent, {
-          width: '400px',
-          maxWidth: '100%',
-          disableClose: true,
-          backdropClass: 'backdrop-shadow'
-        });
-      })
-    ), {dispatch: false}
   );
 
   withdrawReward$ = createEffect(() =>

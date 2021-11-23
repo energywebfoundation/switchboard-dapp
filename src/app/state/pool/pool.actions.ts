@@ -44,19 +44,6 @@ export const putStakeFailure = createAction(
   props<{ err: string }>()
 );
 
-export const withdrawRequest = createAction(
-  '[Pool] Withdraw Request Reward'
-);
-
-export const withdrawRequestSuccess = createAction(
-  '[Pool] Withdraw Request Reward Success'
-);
-
-export const withdrawRequestFailure = createAction(
-  '[Pool] Withdraw Request Reward Failure',
-  props<{ err: string }>()
-);
-
 export const withdrawReward = createAction(
   '[Pool] Withdraw Reward'
 );

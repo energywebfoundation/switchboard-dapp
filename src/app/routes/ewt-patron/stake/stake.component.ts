@@ -62,7 +62,7 @@ export class StakeComponent {
   }
 
   withdraw() {
-    this.store.dispatch(PoolActions.withdrawRequest());
+    this.store.dispatch(PoolActions.withdrawReward());
   }
 
   setAmountValidators(maxAmount: number) {

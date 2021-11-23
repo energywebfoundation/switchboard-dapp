@@ -47,7 +47,6 @@ const poolReducer = createReducer(
         depositStart: stake.depositStart
       }
     })),
-  on(PoolActions.withdrawRequest, (state) => ({...state, withdrawing: true})),
   on(PoolActions.withdrawalDelayExpired, (state) => ({...state, withdrawing: false})),
   on(PoolActions.getOrganizationDetailsSuccess, (state, {orgDetails}) => ({...state, organizationDetails: orgDetails})),
   on(PoolActions.withdrawRewardSuccess, (state) => ({...state, reward: '0'})),
