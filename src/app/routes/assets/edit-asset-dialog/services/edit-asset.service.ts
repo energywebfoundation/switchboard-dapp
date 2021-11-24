@@ -25,7 +25,7 @@ export class EditAssetService {
     return this.claimFacade.createSelfSignedClaim({
       data: {profile}
     }).pipe(map(() => {
-        this.store.dispatch(UserClaimActions.updateUserClaims({profile: profile}));
+        this.store.dispatch(UserClaimActions.updateLocalStateUserClaims({profile: profile}));
         this.toastr.success('Successfully updated Asset data');
         return true;
       }),
