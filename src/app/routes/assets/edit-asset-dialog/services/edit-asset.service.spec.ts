@@ -6,7 +6,8 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { SwitchboardToastrService } from '../../../../shared/services/switchboard-toastr.service';
 import { dialogSpy, toastrSpy } from '@tests';
 import { MatDialogRef } from '@angular/material/dialog';
-import { UserClaimSelectors } from '@state';
+import { UserClaimActions, UserClaimSelectors } from '@state';
+import { of, throwError } from 'rxjs';
 
 describe('EditAssetService', () => {
   let service: EditAssetService;
@@ -34,6 +35,28 @@ describe('EditAssetService', () => {
 
     service.getProfile().subscribe((profile) => {
       expect(profile).toEqual({assetProfiles: {}});
+      done();
+    });
+  });
+
+  it('should check if action is dispatched and message successful is displayed', (done) => {
+    claimsFacadeSpy.createSelfSignedClaim.and.returnValue(of(''));
+    const dispatchSpy = spyOn(mockStore, 'dispatch');
+
+    service.update({}).subscribe((v) => {
+      expect(dispatchSpy).toHaveBeenCalledWith(UserClaimActions.updateUserClaims({profile: {}}));
+      expect(toastrSpy.success).toHaveBeenCalled();
+      expect(v).toBeTrue();
+      done();
+    });
+  });
+
+  it('should check if error is thrown when updating', (done) => {
+    claimsFacadeSpy.createSelfSignedClaim.and.returnValue(throwError({message: 'error'}));
+
+    service.update({}).subscribe((v) => {
+      expect(toastrSpy.error).toHaveBeenCalled();
+      expect(v).toBeFalse();
       done();
     });
   });

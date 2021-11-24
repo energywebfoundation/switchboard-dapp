@@ -95,6 +95,7 @@ describe('EditAssetDialogComponent', () => {
     editAssetServiceSpy.getProfile.and.returnValue(of({
       assetProfiles: {}
     }));
+    editAssetServiceSpy.update.and.returnValue(of(true));
     fixture.detectChanges();
     const {name, icon, submit} = getSelectors(hostDebug);
 
@@ -108,7 +109,7 @@ describe('EditAssetDialogComponent', () => {
 
     submit.click();
 
-    expect(editAssetServiceSpy.update).toHaveBeenCalledOnceWith({
+    expect(editAssetServiceSpy.update).toHaveBeenCalledWith({
       assetProfiles: {
         '1': {
           name: 'name',
@@ -116,6 +117,7 @@ describe('EditAssetDialogComponent', () => {
         }
       }
     });
+    expect(dialogSpy.close).toHaveBeenCalledWith(true);
   });
 });
 

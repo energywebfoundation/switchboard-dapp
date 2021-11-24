@@ -41,7 +41,8 @@ export class EditAssetDialogComponent implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    this.editAssetService.update(this.createClaimObjectUpdate());
+    this.editAssetService.update(this.createClaimObjectUpdate())
+      .subscribe((v) => this.dialogRef.close(v));
   }
 
   private createClaimObjectUpdate(): Profile {

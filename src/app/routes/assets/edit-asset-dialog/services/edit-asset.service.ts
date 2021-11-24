@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Profile } from 'iam-client-lib';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, take } from 'rxjs/operators';
 import { UserClaimActions, UserClaimSelectors } from '@state';
 import { Store } from '@ngrx/store';
 import { SwitchboardToastrService } from '../../../../shared/services/switchboard-toastr.service';
 import { ClaimsFacadeService } from '../../../../shared/services/claims-facade/claims-facade.service';
-import { MatDialogRef } from '@angular/material/dialog';
-import { EditAssetDialogComponent } from '../edit-asset-dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +14,7 @@ export class EditAssetService {
 
   constructor(private claimFacade: ClaimsFacadeService,
               private store: Store,
-              private toastr: SwitchboardToastrService,
-              private dialogRef: MatDialogRef<EditAssetDialogComponent>) {
+              private toastr: SwitchboardToastrService) {
   }
 
   getProfile(): Observable<Profile> {
@@ -25,15 +22,17 @@ export class EditAssetService {
   }
 
   update(profile: Profile) {
-    this.claimFacade.createSelfSignedClaim({
+    return this.claimFacade.createSelfSignedClaim({
       data: {profile}
-    }).subscribe(() => {
-      this.store.dispatch(UserClaimActions.updateUserClaims({profile: profile}));
-      this.toastr.success('Successfully updated Asset data');
-      this.dialogRef.close(true);
-    }, error => {
-      console.error(error);
-      this.toastr.error(error?.message);
-    });
+    }).pipe(map(() => {
+        this.store.dispatch(UserClaimActions.updateUserClaims({profile: profile}));
+        this.toastr.success('Successfully updated Asset data');
+        return true;
+      }),
+      catchError(error => {
+        console.error(error);
+        this.toastr.error(error?.message);
+        return of(false);
+      }));
   }
 }
