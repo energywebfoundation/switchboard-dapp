@@ -1,14 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
-import { IamService } from '../../../shared/services/iam.service';
-import { from } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { Asset, AssetProfile, Profile } from 'iam-client-lib';
-import { LoadingService } from '../../../shared/services/loading.service';
-import { CancelButton } from '../../../layout/loading/loading.component';
-import { Store } from '@ngrx/store';
-import { UserClaimActions, UserClaimSelectors } from '@state';
+import { EditAssetService } from './services/edit-asset.service';
 
 const assetProfilesKey = 'assetProfiles';
 
@@ -26,18 +20,14 @@ export class EditAssetDialogComponent implements OnInit {
 
   private profile: Profile;
 
-  constructor(public dialogRef: MatDialogRef<EditAssetDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: Asset,
+  constructor(private dialogRef: MatDialogRef<EditAssetDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) private data: Asset,
               private fb: FormBuilder,
-              private iamService: IamService,
-              private loadingService: LoadingService,
-              private store: Store) {
+              private editAssetService: EditAssetService) {
   }
 
   ngOnInit(): void {
-    this.loadingService.show();
-    this.store.select(UserClaimSelectors.getUserProfile).subscribe((profile: any) => {
-      this.loadingService.hide();
+    this.editAssetService.getProfile().subscribe((profile: Profile) => {
       this.profile = profile;
       this.updateForm(profile);
     });
@@ -51,16 +41,7 @@ export class EditAssetDialogComponent implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
-    from(this.iamService.claimsService.createSelfSignedClaim({
-      data: {profile: this.createClaimObjectUpdate()}
-    })).pipe(
-      takeUntil(this.dialogRef.afterClosed())
-    ).subscribe(() => {
-      this.store.dispatch(UserClaimActions.updateUserClaims({profile: this.createClaimObjectUpdate()}));
-      this.loadingService.hide();
-      this.dialogRef.close(true);
-    });
+    this.editAssetService.update(this.createClaimObjectUpdate());
   }
 
   private createClaimObjectUpdate(): Profile {
@@ -75,9 +56,8 @@ export class EditAssetDialogComponent implements OnInit {
     });
   }
 
-  private updateForm(profile) {
+  private updateForm(profile: Profile) {
     const assetProfile: AssetProfile = profile && profile[assetProfilesKey] && profile[assetProfilesKey][this.data.id];
-
     if (!assetProfile) {
       return;
     }
