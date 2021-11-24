@@ -2,6 +2,7 @@ import { Action, createReducer, on } from '@ngrx/store';
 import * as PoolActions from './pool.actions';
 import { Stake } from 'iam-client-lib';
 import { IOrganizationDefinition } from '@energyweb/iam-contracts';
+import { BigNumber } from 'ethers';
 
 export const USER_FEATURE_KEY = 'pool';
 
@@ -14,6 +15,8 @@ export interface PoolState {
   userStake: Stake;
   withdrawing: boolean;
   organizationDetails: IOrganizationDefinition;
+  contributorLimit: BigNumber;
+  organizationLimit: BigNumber;
 }
 
 export const initialState: PoolState = {
@@ -25,6 +28,8 @@ export const initialState: PoolState = {
   userStake: null,
   withdrawing: false,
   organizationDetails: null,
+  contributorLimit: null,
+  organizationLimit: null
 };
 
 const poolReducer = createReducer(
@@ -42,10 +47,11 @@ const poolReducer = createReducer(
         depositStart: stake.depositStart
       }
     })),
-  on(PoolActions.withdrawRequest, (state) => ({...state, withdrawing: true})),
   on(PoolActions.withdrawalDelayExpired, (state) => ({...state, withdrawing: false})),
   on(PoolActions.getOrganizationDetailsSuccess, (state, {orgDetails}) => ({...state, organizationDetails: orgDetails})),
   on(PoolActions.withdrawRewardSuccess, (state) => ({...state, reward: '0'})),
+  on(PoolActions.getContributorLimitSuccess, (state, {cap}) => ({...state, contributorLimit: cap})),
+  on(PoolActions.getHardCapSuccess, (state, {cap}) => ({...state, organizationLimit: cap})),
 );
 
 export function reducer(state: PoolState | undefined, action: Action) {

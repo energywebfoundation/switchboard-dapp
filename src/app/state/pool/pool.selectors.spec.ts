@@ -1,5 +1,7 @@
 import * as poolSelectors from './pool.selectors';
-import { StakeStatus } from 'iam-client-lib';
+import { getMaxPossibleAmountToStake } from './pool.selectors';
+import { BigNumber } from 'ethers';
+import { MAX_STAKE_AMOUNT } from './models/const';
 
 describe('Pool Selectors', () => {
 
@@ -9,27 +11,29 @@ describe('Pool Selectors', () => {
     });
   });
 
-  describe('isStakingDisabled', () => {
-    it('should return false when status is nonstaking', () => {
-      expect(poolSelectors.isStakingDisabled.projector({status: StakeStatus.NONSTAKING})).toBe(false);
+  describe('getMaxPossibleAmountToStake', () => {
+    it('should return MAX_STAKE_AMOUNT value when amount is not specified', () => {
+      expect(poolSelectors.getMaxPossibleAmountToStake.projector({}, {contributorLimit: BigNumber.from('0x1b1ae4d6e2ef500000')})).toBe(500);
     });
 
-    it('should return true when status is staking', () => {
-      expect(poolSelectors.isStakingDisabled.projector({status: StakeStatus.STAKING})).toBe(true);
+    it('should calculate max possible amount when is already putted 100', () => {
+      expect(poolSelectors.getMaxPossibleAmountToStake.projector({amount: BigNumber.from('0x1bc16d674ec80000')}, {contributorLimit: BigNumber.from('0x1b1ae4d6e2ef500000')})).toEqual(498);
     });
 
-    it('should return true when status is withdrawing', () => {
-      expect(poolSelectors.isStakingDisabled.projector({status: StakeStatus.WITHDRAWING})).toBe(true);
-    });
-  });
-
-  describe('isWithdrawDisabled', () => {
-    it('should return false when status is staking', () => {
-      expect(poolSelectors.isWithdrawDisabled.projector({status: StakeStatus.STAKING})).toBe(false);
+    it('should return 0 when amount is equal to maximum stake amount', () => {
+      expect(poolSelectors.getMaxPossibleAmountToStake.projector({amount: BigNumber.from('0x1b1ae4d6e2ef500000')}, {contributorLimit: BigNumber.from('0x1b1ae4d6e2ef500000')})).toEqual(0);
     });
 
-    it('should return true when status is nonstaking', () => {
-      expect(poolSelectors.isWithdrawDisabled.projector({status: StakeStatus.NONSTAKING})).toBe(true);
+    it('should return maximum stake amount when amount is equal to 0', () => {
+      expect(poolSelectors.getMaxPossibleAmountToStake.projector({amount: BigNumber.from(0)}, {contributorLimit: BigNumber.from('0x1b1ae4d6e2ef500000')})).toEqual(500);
+    });
+
+    it('should return default value when contributorLimit is undefined', () => {
+      expect(poolSelectors.getMaxPossibleAmountToStake.projector({}, {})).toBe(MAX_STAKE_AMOUNT);
+    });
+
+    it('should return contributionLimit when amount is null', () => {
+      expect(poolSelectors.getMaxPossibleAmountToStake.projector({amount: null}, {contributorLimit: BigNumber.from('0x1b1ae4d6e2ef500000')})).toBe(500);
     });
   });
 

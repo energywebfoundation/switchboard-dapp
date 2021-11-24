@@ -20,7 +20,7 @@ import {
   setChainConfig,
   setMessagingConfig,
   SignerService,
-  StakingService,
+  StakingFactoryService,
 } from 'iam-client-lib';
 import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
 import { LoadingService } from './loading.service';
@@ -52,7 +52,7 @@ export class IamService {
   claimsService: ClaimsService;
   messagingService: MessagingService;
   domainsService: DomainsService;
-  stakingService: StakingService;
+  stakingService: StakingFactoryService;
   assetsService: AssetsService;
 
   constructor(
@@ -138,12 +138,12 @@ export class IamService {
       if (initCacheServer) {
         const {
           domainsService,
-          stakingService,
+          stakingPoolService,
           assetsService,
           connectToDidRegistry,
         } = await connectToCacheServer();
         this.domainsService = domainsService;
-        this.stakingService = stakingService;
+        this.stakingService = stakingPoolService;
         this.assetsService = assetsService;
         if (createDocument) {
           const {didRegistry, claimsService} = await connectToDidRegistry();

@@ -2,6 +2,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { PoolState, USER_FEATURE_KEY } from './pool.reducer';
 import { Stake, StakeStatus } from 'iam-client-lib';
 import { utils } from 'ethers';
+import { MAX_STAKE_AMOUNT } from './models/const';
 
 const {formatEther} = utils;
 
@@ -37,11 +38,6 @@ export const getStake = createSelector(
   (state: PoolState) => state?.userStake
 );
 
-export const isStakingDisabled = createSelector(
-  getStake,
-  (state: Stake) => state?.status === StakeStatus.STAKING || state?.status === StakeStatus.WITHDRAWING
-);
-
 export const isWithdrawDisabled = createSelector(
   getStake,
   (state: Stake) => state?.status !== StakeStatus.STAKING
@@ -52,6 +48,22 @@ export const getStakeAmount = createSelector(
   (state: Stake) => state?.amount ? formatEther(state.amount) : '0'
 );
 
+export const getMaxPossibleAmountToStake = createSelector(
+  getStake,
+  getStakeState,
+  (stake: Stake, state: PoolState) => {
+    if (!state.contributorLimit) {
+      return MAX_STAKE_AMOUNT;
+    }
+    const maxValue = +formatEther(state.contributorLimit);
+    if (!stake?.amount) {
+      return maxValue;
+    }
+    const puttedStake = +formatEther(stake.amount);
+    return maxValue - puttedStake;
+  }
+);
+
 export const isWithdrawingDelayFinished = createSelector(
   getStakeState,
   (state: PoolState) => state.withdrawing
@@ -60,4 +72,22 @@ export const isWithdrawingDelayFinished = createSelector(
 export const getOrganizationDetails = createSelector(
   getStakeState,
   (state: PoolState) => state?.organizationDetails
+);
+
+export const getOrganizationLimit = createSelector(
+  getStakeState,
+  (state: PoolState) => {
+    console.log(state.organizationLimit?.toString());
+    return state?.organizationLimit?.toString();
+  }
+);
+
+export const getContributorLimit = createSelector(
+  getStakeState,
+  (state: PoolState) => {
+    if (state.contributorLimit) {
+      return formatEther(state.contributorLimit);
+    }
+    return state.contributorLimit;
+  }
 );

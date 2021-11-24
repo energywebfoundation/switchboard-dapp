@@ -6,14 +6,13 @@ import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
 import { PoolState } from './pool.reducer';
 import * as PoolActions from './pool.actions';
-import { catchError, delay, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
-import { utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { Stake, StakeStatus } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
 import * as poolSelectors from './pool.selectors';
 import { ToastrService } from 'ngx-toastr';
-import { WithdrawComponent } from '../../routes/ewt-patron/withdraw/withdraw.component';
 import { IOrganizationDefinition } from '@energyweb/iam-contracts';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import { StakingPoolFacade } from '../../shared/services/pool/staking-pool-facade';
@@ -43,19 +42,6 @@ export class PoolEffects {
     )
   );
 
-  stakeIsInWithdrawingStatus$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PoolActions.getStakeSuccess),
-      map(({stake}) => stake.status),
-      filter((status: StakeStatus) => status === StakeStatus.WITHDRAWING),
-      mergeMap(() => [
-        PoolActions.getAccountBalance(),
-        PoolActions.checkReward(),
-        PoolActions.displayConfirmationDialog()
-      ])
-    )
-  );
-
   stakeIsInStakingStatus$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PoolActions.getStakeSuccess),
@@ -81,14 +67,10 @@ export class PoolEffects {
     this.actions$.pipe(
       ofType(PoolActions.getStake),
       switchMap(() =>
-        from(this.iamService.address)
+        this.stakingPoolFacade.getStake()
           .pipe(
-            switchMap((address) => this.stakingPoolFacade.getStake(address)
-              .pipe(
-                filter<Stake>(Boolean),
-                map((stake) => PoolActions.getStakeSuccess({stake}))
-              )
-            )
+            filter<Stake>(Boolean),
+            map((stake) => PoolActions.getStakeSuccess({stake}))
           )
       )
     )
@@ -97,18 +79,8 @@ export class PoolEffects {
   putStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PoolActions.putStake),
-      withLatestFrom(
-        this.store.select(poolSelectors.isStakingDisabled)
-      ),
-      filter(([, isStakeDisabled]) => {
-        if (isStakeDisabled) {
-          this.toastr.error('You can not stake to this provider because you already staked to it!');
-        }
-        return !isStakeDisabled;
-      }),
       tap(() => this.loadingService.show('Putting your stake')),
-      switchMap(([{amount}]) => {
-
+      switchMap(({amount}) => {
           return this.stakingPoolFacade.putStake(parseEther(amount))
             .pipe(
               map(() => {
@@ -128,58 +100,6 @@ export class PoolEffects {
               finalize(() => this.loadingService.hide())
             );
         }
-      )
-    )
-  );
-
-  withdrawalDelay$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PoolActions.getWithdrawalDelay),
-      switchMap(() =>
-        this.stakingPoolFacade.withdrawalDelay()
-          .pipe(
-            map(withdrawalDelay => () => delay(withdrawalDelay as any)),
-            map(() => PoolActions.withdrawalDelayExpired()
-            ),
-            catchError(err => {
-              console.error('Could not get withdrawal delay', err);
-              return of(PoolActions.getWithdrawalDelayFailure({err}));
-            }),
-          )
-      )
-    )
-  );
-
-  showProgressBar$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PoolActions.withdrawRequest, PoolActions.displayConfirmationDialog),
-      map(() => {
-        this.dialog.open(WithdrawComponent, {
-          width: '400px',
-          maxWidth: '100%',
-          disableClose: true,
-          backdropClass: 'backdrop-shadow'
-        });
-      })
-    ), {dispatch: false}
-  );
-
-  withdrawRequest$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PoolActions.withdrawRequest),
-      switchMap(() =>
-        this.stakingPoolFacade.requestWithdraw()
-          .pipe(
-            map(() => {
-              return PoolActions.getWithdrawalDelay();
-            }),
-            catchError((err) => {
-              console.error(err);
-              this.toastr.error('Error occurs while trying to request a withdraw.');
-              this.dialog.closeAll();
-              return of(PoolActions.withdrawRequestFailure({err}));
-            }),
-          )
       )
     )
   );
@@ -252,6 +172,34 @@ export class PoolEffects {
     )
   );
 
+  getOrganizationLimit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.getHardCap),
+      switchMap(() => this.stakingPoolFacade.getHardCap().pipe(
+          map((cap: BigNumber) => PoolActions.getHardCapSuccess({cap})),
+          catchError(err => {
+            console.error(err);
+            return of(PoolActions.getHardCapFailure({err: err?.message}));
+          })
+        )
+      )
+    )
+  );
+
+  getContributorLimit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.getContributorLimit),
+      switchMap(() => this.stakingPoolFacade.getContributionLimit().pipe(
+          map((cap: BigNumber) => PoolActions.getContributorLimitSuccess({cap})),
+          catchError(err => {
+            console.error(err);
+            return of(PoolActions.getContributorLimitFailure({err: err?.message}));
+          })
+        )
+      )
+    )
+  );
+
   constructor(private actions$: Actions,
               private store: Store<PoolState>,
               private iamService: IamService,
@@ -270,7 +218,7 @@ export class PoolEffects {
             this.toastr.error(`Organization ${organization} do not exist as a provider.`);
             return [PoolActions.getOrganizationDetails()];
           }
-          return [PoolActions.getStake(), PoolActions.getOrganizationDetails()];
+          return [PoolActions.getStake(), PoolActions.getOrganizationDetails(), PoolActions.getHardCap(), PoolActions.getContributorLimit()];
         })
       );
   }

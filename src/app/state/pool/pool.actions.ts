@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Stake } from 'iam-client-lib';
 import { IOrganizationDefinition } from '@energyweb/iam-contracts';
+import { BigNumber } from 'ethers';
 
 export const initPool = createAction('[Pool] Initialize Pool');
 
@@ -43,19 +44,6 @@ export const putStakeFailure = createAction(
   props<{ err: string }>()
 );
 
-export const withdrawRequest = createAction(
-  '[Pool] Withdraw Request Reward'
-);
-
-export const withdrawRequestSuccess = createAction(
-  '[Pool] Withdraw Request Reward Success'
-);
-
-export const withdrawRequestFailure = createAction(
-  '[Pool] Withdraw Request Reward Failure',
-  props<{ err: string }>()
-);
-
 export const withdrawReward = createAction(
   '[Pool] Withdraw Reward'
 );
@@ -89,6 +77,35 @@ export const getWithdrawalDelayFailure = createAction(
 export const getOrganizationDetails = createAction(
   '[Pool] Get Organization Details'
 );
+
+export const getHardCap = createAction(
+  '[Pool] Get Hard Organization Limit'
+);
+
+export const getHardCapSuccess = createAction(
+  '[Pool] Get Hard Organization Limit Success',
+  props<{ cap: BigNumber }>()
+);
+
+export const getHardCapFailure = createAction(
+  '[Pool] Get Hard Organization Limit Failure',
+  props<{ err: string }>()
+);
+
+export const getContributorLimit = createAction(
+  '[Pool] Get Contributor Limit'
+);
+
+export const getContributorLimitSuccess = createAction(
+  '[Pool] Get Contributor Limit Success',
+  props<{ cap: BigNumber }>()
+);
+
+export const getContributorLimitFailure = createAction(
+  '[Pool] Get Contributor Limit Failure',
+  props<{ err: string }>()
+);
+
 export const getOrganizationDetailsSuccess = createAction(
   '[Pool] Get Organization Details Success',
   props<{ orgDetails: IOrganizationDefinition }>()

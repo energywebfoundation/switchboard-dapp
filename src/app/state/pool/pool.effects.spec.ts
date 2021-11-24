@@ -58,7 +58,7 @@ describe('PoolEffects', () => {
       effects.initPool$.pipe(take(1)).subscribe(resultAction => {
         expect(resultAction).toEqual(PoolActions.getStake());
       });
-      effects.initPool$.pipe(skip(1)).subscribe(resultAction => {
+      effects.initPool$.pipe(skip(1), take(1)).subscribe(resultAction => {
         expect(resultAction).toEqual(PoolActions.getOrganizationDetails());
       });
     }));
@@ -93,7 +93,6 @@ describe('PoolEffects', () => {
 
     it('should put a stake and refresh data', () => {
       actions$.next(PoolActions.putStake({amount: '5'}));
-      store.overrideSelector(poolSelectors.isStakingDisabled, false);
 
       stakingPoolFacadeSpy.putStake.and.returnValue(of());
 
@@ -106,7 +105,6 @@ describe('PoolEffects', () => {
 
     it('should not put a stake when staking is disabled', waitForAsync(() => {
       actions$.next(PoolActions.putStake({amount: '5'}));
-      store.overrideSelector(poolSelectors.isStakingDisabled, true);
 
       stakingPoolFacadeSpy.putStake.and.returnValue(of());
 
@@ -119,7 +117,6 @@ describe('PoolEffects', () => {
 
     it('should return failure action when putStake throws an error', () => {
       actions$.next(PoolActions.putStake({amount: '5'}));
-      store.overrideSelector(poolSelectors.isStakingDisabled, false);
 
       stakingPoolFacadeSpy.putStake.and.returnValue(from(Promise.reject({message: 'message'})));
 
