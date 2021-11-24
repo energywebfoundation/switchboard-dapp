@@ -650,6 +650,20 @@ mat-label {
     color: #000000;
 }
 
+.mat-slide-toggle-thumb {
+    background-color: #bcb0df;
+}
+
+.mat-slide-toggle.mat-checked {
+
+    .mat-slide-toggle-thumb {
+        background-color: #a467ff;
+    }
+    .mat-slide-toggle-bar {
+        background-color: rgba(164, 103, 255, 0.3);
+    }
+}
+
 .mat-stroked-filter-button {
     border-color: #33CBCB !important;
     color: #33CBCB !important;

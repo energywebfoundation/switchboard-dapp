@@ -17,6 +17,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { UserMenuModule } from './components/user-menu/user-menu.module';
 import { DidBookModule } from '../modules/did-book/did-book.module';
+import { SbSettingsComponent } from './header/sb-settings/sb-settings.component';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { DidBookModule } from '../modules/did-book/did-book.module';
     OffsidebarComponent,
     FooterComponent,
     DialogUserComponent,
-    LoadingComponent
+    LoadingComponent,
+    SbSettingsComponent
   ],
   entryComponents: [DialogUserComponent],
   exports: [

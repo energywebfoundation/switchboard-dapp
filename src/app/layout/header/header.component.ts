@@ -6,6 +6,7 @@ import { AssetHistoryEventType, NamespaceType } from 'iam-client-lib';
 
 import { SettingsService } from '../../core/settings/settings.service';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
+import { SbSettingsComponent } from './sb-settings/sb-settings.component';
 import { IamService } from '../../shared/services/iam.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { Observable, Subject } from 'rxjs';
@@ -142,6 +143,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
           // Update User Name
         }
       });
+  }
+
+  openSettings(): void {
+    const dialogRef = this.dialog.open(SbSettingsComponent, {
+      width: '600px',
+      data: {},
+      maxWidth: '100%',
+      disableClose: true
+    });
   }
 
   openDidBook(): void {
