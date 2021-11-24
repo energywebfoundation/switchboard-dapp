@@ -140,7 +140,7 @@ describe('VerificationMethodComponent with html', () => {
     hostDebug = fixture.debugElement;
   });
 
-  it('should check form validators', () => {
+  it('should check form validators', async () => {
     setUp([]);
     const publicKey = getElement(hostDebug)('public-key').nativeElement;
     publicKey.value = '';
@@ -169,10 +169,11 @@ describe('VerificationMethodComponent with html', () => {
     const select = getElement(hostDebug)('select-type').nativeElement;
     select.click();
     fixture.detectChanges();
-    const option = getElement(hostDebug)('select-option-0').nativeElement;
-    option.click();
-
-    expect(component.isFormDisabled).toBeFalse();
+    await fixture.whenStable().then(() => {
+      const option = getElement(hostDebug)('select-option-0').nativeElement;
+      option.click();
+      expect(component.isFormDisabled).toBeFalse();
+    });
 
   });
 });
