@@ -2,6 +2,9 @@
 import * as AssetDetailsActions from './assets/details/asset-details.actions';
 import * as AssetDetailsSelectors from './assets/details/asset-details.selectors';
 
+import * as OwnedAssetsActions from './assets/owned/owned.actions';
+import * as OwnedAssetsSelectors from './assets/owned/owned.selectors';
+
 // === Auth ===
 import * as AuthActions from './auth/auth.actions';
 import * as AuthSelectors from './auth/auth.selectors';
@@ -38,6 +41,8 @@ export * from './store-root.module';
 export {
   AssetDetailsActions,
   AssetDetailsSelectors,
+  OwnedAssetsActions,
+  OwnedAssetsSelectors,
 
   AuthActions,
   AuthSelectors,
