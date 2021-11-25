@@ -62,6 +62,9 @@
       </li>
     </ul>
     <ul class="navbar-nav flex-row align-items-center profile-wrapper">
+      <li class="nav-item d-none d-xl-block mr-4" matTooltip="Enabling experimental features will restart the application. You may experience some issues while using the experimental features.">
+        <mat-slide-toggle>Enable experimental</mat-slide-toggle>
+      </li>
       <li class="nav-item dropdown dropdown-list" dropdown>
         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret cursor-pointer" dropdownToggle>
           <!-- loading here -->
@@ -208,9 +211,12 @@
             data-qa-id="menu-did-book">
       DID Book
     </button>
-    <button class="color-link px-4 pb-2 border-bottom-1" mat-menu-item (click)="openSettings()">
-      Settings
-    </button>  
+    <div class="d-block d-xl-none">
+      <div class="d-flex justify-content-between align-items-center my-1 px-4 py-2" matTooltip="Enabling experimental features will restart the application. You may experience some issues while using the experimental features.">
+        <div class="color-link">Experimental</div>
+        <mat-slide-toggle></mat-slide-toggle>
+      </div>
+    </div>
     <button class="d-block d-md-none border-bottom-1 color-link px-4" mat-menu-item (click)="openDialogUser()"><a
         class="color-link"
         href="https://energyweb.atlassian.net/wiki/spaces/SWITCH/pages/1712554033/Using+Switchboard"
