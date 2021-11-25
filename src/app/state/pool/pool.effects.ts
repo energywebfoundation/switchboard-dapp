@@ -16,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IOrganizationDefinition } from '@energyweb/iam-contracts';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import { StakingPoolFacade } from '../../shared/services/pool/staking-pool-facade';
+import { WithdrawComponent } from '../../routes/ewt-patron/withdraw/withdraw.component';
 
 const {formatEther, parseEther} = utils;
 
@@ -41,6 +42,28 @@ export class PoolEffects {
       )
     )
   );
+
+  setFinishDateOfStakingPool$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.stakingPoolFinishDate),
+      switchMap(() => this.stakingPoolFacade.getEndDate()
+        .pipe(
+          map((d) => d.toNumber()),
+          map((date) => PoolActions.stakingPoolFinishDateSuccess({date}))
+        )
+      )
+    ));
+
+  setStartDateOfStakingPool$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.stakingPoolStartDate),
+      switchMap(() => this.stakingPoolFacade.getStartDate()
+        .pipe(
+          map((d) => d.toNumber()),
+          map((date: number) => PoolActions.stakingPoolStartDateSuccess({date}))
+        )
+      )
+    ));
 
   stakeIsInStakingStatus$ = createEffect(() =>
     this.actions$.pipe(
@@ -108,8 +131,8 @@ export class PoolEffects {
     this.actions$.pipe(
       ofType(PoolActions.withdrawReward),
       tap(() => this.loadingService.show('Withdrawing your reward...')),
-      switchMap(() =>
-        this.stakingPoolFacade.withdraw().pipe(
+      switchMap(({value}) =>
+        this.stakingPoolFacade.partialWithdraw(parseEther(value.toString())).pipe(
           mergeMap(() => {
             this.dialog.closeAll();
             return [PoolActions.withdrawRewardSuccess(), PoolActions.getStake()];
@@ -132,7 +155,7 @@ export class PoolEffects {
       ofType(PoolActions.checkReward),
       switchMap(() =>
         this.stakingPoolFacade.checkReward().pipe(
-          map((reward) => PoolActions.checkRewardSuccess({reward: formatEther(reward as any)})),
+          map((reward) => PoolActions.checkRewardSuccess({reward})),
           catchError(err => {
             console.error(err);
             return of(PoolActions.checkRewardFailure(err));
@@ -155,15 +178,29 @@ export class PoolEffects {
     )
   );
 
+  showProgressBar$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.openWithdrawDialog),
+      map(() => {
+        this.dialog.open(WithdrawComponent, {
+          width: '400px',
+          maxWidth: '100%',
+          disableClose: true,
+          backdropClass: 'backdrop-shadow'
+        });
+      })
+    ), {dispatch: false}
+  );
+
   getOrganizationDetails$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PoolActions.getOrganizationDetails),
       tap(() => this.loadingService.show('Getting Organization details')),
       withLatestFrom(this.store.select(poolSelectors.getOrganization)),
       switchMap(([, organization]) => from(this.iamService.getDefinition(organization)).pipe(
-          map((definition: IOrganizationDefinition) => PoolActions.getOrganizationDetailsSuccess({orgDetails: definition})),
-          catchError(err => {
-            console.error(err);
+        map((definition: IOrganizationDefinition) => PoolActions.getOrganizationDetailsSuccess({orgDetails: definition})),
+        catchError(err => {
+          console.error(err);
             return of(PoolActions.getOrganizationDetailsFailure({err: err.message}));
           }),
           finalize(() => this.loadingService.hide())
@@ -218,7 +255,8 @@ export class PoolEffects {
             this.toastr.error(`Organization ${organization} do not exist as a provider.`);
             return [PoolActions.getOrganizationDetails()];
           }
-          return [PoolActions.getStake(), PoolActions.getOrganizationDetails(), PoolActions.getHardCap(), PoolActions.getContributorLimit()];
+          return [PoolActions.getStake(), PoolActions.getOrganizationDetails(), PoolActions.getHardCap(), PoolActions.getContributorLimit(), PoolActions.stakingPoolFinishDate(),
+            PoolActions.stakingPoolStartDate()];
         })
       );
   }

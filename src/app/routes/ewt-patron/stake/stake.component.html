@@ -55,6 +55,16 @@
       </div>
       <div class="mt-1 d-flex justify-content-between payment-details color-grey">
         <div class="info">
+          Staking pool expires
+        </div>
+        <div class="text-color"
+             matTooltip="0.0270% per day yields 10.355% per year when compounded daily or 9.855% per year not compounded."
+             matTooltipPosition="below">
+          {{dates$ | async | date: 'dd-MM-yy'}}
+        </div>
+      </div>
+      <div class="mt-1 d-flex justify-content-between payment-details color-grey">
+        <div class="info">
           You will be charged with gas fee
         </div>
       </div>

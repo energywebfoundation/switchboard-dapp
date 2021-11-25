@@ -26,6 +26,7 @@ export class StakeComponent {
   stakeAmount$ = this.store.select(poolSelectors.getStakeAmount);
   isWithdrawDisabled$ = this.store.select(poolSelectors.isWithdrawDisabled);
   getContributorLimit$ = this.store.select(poolSelectors.getContributorLimit);
+  dates$ = this.store.select(poolSelectors.expirationDate);
 
   @ViewChild('percentButtons') percentButtons: PercentButtonsComponent;
 
@@ -62,7 +63,7 @@ export class StakeComponent {
   }
 
   withdraw() {
-    this.store.dispatch(PoolActions.withdrawReward());
+    this.store.dispatch(PoolActions.openWithdrawDialog());
   }
 
   setAmountValidators(maxAmount: number) {
