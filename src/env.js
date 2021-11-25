@@ -2,7 +2,7 @@
     window.__env = window.__env || {};
 
     // Setting theme
-    window.__env.theme = 'default';
+    window.__env.theme = 'stedin';
     // Showing Application
     window.__env.application = true;
     // Show Staking

@@ -635,12 +635,16 @@ tr.mat-row {
         background-color: $stedin-yellow;
     }
     .mat-slide-toggle-bar {
-        background-color: $stedin-yellow-light;
-        opacity: 0.7;
+        background-color: $white;
+    }
+    .mat-slide-toggle-content {
+        color: $stedin-gray !important;
     }
 }
+
 .mat-slide-toggle-content {
     font-size: 13px;
+    color: $stedin-gray-light !important;
 }
 
 .mat-input-element {
