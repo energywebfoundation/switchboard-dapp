@@ -14,7 +14,6 @@ export class AssetsFacadeService {
   }
 
   getOwnedAssets() {
-    console.log('loading owned assets');
     this.loadingService.show('Loading owned assets');
     return from(this.iamService.assetsService.getOwnedAssets())
       .pipe(finalize(() => this.loadingService.hide()));

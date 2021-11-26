@@ -1,37 +1,36 @@
-import { getAsset, getAssetDetails } from './asset-details.selectors';
+import * as OwnedSelectors from './owned.selectors';
 
-describe('Asset Details Selectors', () => {
-
-  describe('getAsset selector', () => {
-    it('should return undefined when passing empty object', () => {
-      expect(getAsset.projector({})).toBeUndefined();
+describe('Owned Assets Selectors', () => {
+  const asset: any = {
+    'id': 'did:ethr:0xc77dcA7fdC0bEA01D755349aA8C0b6EAb70907CA',
+    'owner': 'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3',
+    'createdAt': '2021-11-18T08:21:45.000Z',
+    'updatedAt': '2021-11-18T08:21:45.000Z',
+  };
+  describe('getOwnedAssets', () => {
+    it('should return empty array when assets are empty', () => {
+      expect(OwnedSelectors.getOwnedAssets.projector([], {})).toEqual([]);
     });
 
-    it('should return object when passing object containing asset', () => {
-      expect(getAsset.projector({asset: {}})).toEqual({});
-    });
-  });
-
-  describe('getAssetDetails selector', () => {
-    it('should return undefined when asset and claims are undefined', () => {
-      expect(getAssetDetails.projector(undefined, undefined)).toEqual({});
+    it('should return array of assets with hasEnrolment property when claims are empty', () => {
+      expect(OwnedSelectors.getOwnedAssets.projector([asset], {})).toEqual([{
+        ...asset,
+        hasEnrolments: true,
+      } as any]);
     });
 
-    it('should return empty object when asset is undefined', () => {
-      const assetClaim = {'1': {name: '', icon: ''}};
-      expect(getAssetDetails.projector(undefined, assetClaim)).toEqual({});
-    });
-
-    it('should return asset when claim is undefined', () => {
-      const asset = {id: ''};
-      expect(getAssetDetails.projector(asset, undefined)).toEqual(asset);
-    });
-
-    it('should return concatenated asset and asset claim', () => {
-      const asset = {id: '1'};
-      const claim = {'1': {name: ''}};
-
-      expect(getAssetDetails.projector(asset, claim)).toEqual({...asset, ...(claim['1'])});
+    it('should return array of assets updated by claims', () => {
+      const assetClaim = {
+        name: 'example',
+        icon: 'https://url.com'
+      };
+      expect(OwnedSelectors.getOwnedAssets.projector([asset], {
+        [asset.id]: assetClaim
+      })).toEqual([{
+        ...asset,
+        ...assetClaim,
+        hasEnrolments: true,
+      } as any]);
     });
   });
 });

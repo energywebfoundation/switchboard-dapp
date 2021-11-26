@@ -12,8 +12,7 @@ import { finalize } from 'rxjs/operators';
 export class ClaimsFacadeService {
 
   constructor(private iamService: IamService,
-              private loadingService: LoadingService,
-  ) {
+              private loadingService: LoadingService) {
   }
 
   createSelfSignedClaim(data: { data: ClaimData; subject?: string; }) {

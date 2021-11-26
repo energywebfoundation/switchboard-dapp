@@ -21,11 +21,8 @@ import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 import { DidQrCodeComponent } from '../did-qr-code/did-qr-code.component';
 import { FormControl } from '@angular/forms';
 import { NewIssueVcComponent } from '../../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
-import { getAssets } from '../../../state/assets/owned/owned.selectors';
 import { Store } from '@ngrx/store';
-import { getOwnedAssets } from '../../../state/assets/owned/owned.actions';
-
-export const RESET_LIST = true;
+import { OwnedAssetsActions, OwnedAssetsSelectors } from '@state';
 
 const HEADER_TRANSFER_OWNERSHIP = 'Transfer Ownership';
 const HEADER_CANCEL_OWNERSHIP = 'Cancel Offered Ownership';
@@ -314,8 +311,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
           this.mapEnrolments()
         );
     } else {
-      this.store.dispatch(getOwnedAssets());
-      return this.store.select(getAssets);
+      this.store.dispatch(OwnedAssetsActions.getOwnedAssets());
+      return this.store.select(OwnedAssetsSelectors.getOwnedAssets);
     }
   }
 

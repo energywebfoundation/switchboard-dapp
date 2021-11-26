@@ -1,11 +1,11 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as OwnedActions from './owned.actions';
-import { Asset } from 'iam-client-lib';
+import { OwnedAsset } from './models/owned-asset';
 
 export const USER_FEATURE_KEY = 'owned';
 
 export interface OwnedState {
-  assets: Asset[];
+  assets: OwnedAsset[];
   error: string;
 }
 

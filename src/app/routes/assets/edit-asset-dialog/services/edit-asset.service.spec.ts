@@ -44,7 +44,7 @@ describe('EditAssetService', () => {
     const dispatchSpy = spyOn(mockStore, 'dispatch');
 
     service.update({}).subscribe((v) => {
-      expect(dispatchSpy).toHaveBeenCalledWith(UserClaimActions.updateUserClaims({profile: {}}));
+      expect(dispatchSpy).toHaveBeenCalledWith(UserClaimActions.updateLocalStateUserClaims({profile: {}}));
       expect(toastrSpy.success).toHaveBeenCalled();
       expect(v).toBeTrue();
       done();

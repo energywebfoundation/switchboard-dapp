@@ -4,22 +4,23 @@ import { of, ReplaySubject, throwError } from 'rxjs';
 
 import { provideMockActions } from '@ngrx/effects/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { OwnedEffects } from './asset-details.effects';
-import * as AssetDetailsActions from './asset-details.actions';
-import { IamService } from '../../../shared/services/iam.service';
+import * as OwnedActions from './owned.actions';
 import { iamServiceSpy } from '@tests';
+import { OwnedEffects } from './owned.effects';
+import { AssetsFacadeService } from '../../../shared/services/assets-facade/assets-facade.service';
 
-describe('AssetDetailsEffects', () => {
+describe('OwnedEffects', () => {
 
   let actions$: ReplaySubject<any>;
   let effects: OwnedEffects;
   let store: MockStore;
+  const assetFacadeSpy = jasmine.createSpyObj(AssetsFacadeService, ['getOwnedAssets']);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         OwnedEffects,
-        {provide: IamService, useValue: iamServiceSpy},
+        {provide: AssetsFacadeService, useValue: assetFacadeSpy},
         provideMockStore(),
         provideMockActions(() => actions$),
       ],
@@ -35,21 +36,39 @@ describe('AssetDetailsEffects', () => {
     });
 
     it('should dispatch success action with asset ', (done) => {
-      actions$.next(AssetDetailsActions.getDetails({assetId: '1'}));
+      const asset = {
+        'id': 'did:ethr:0xc77dcA7fdC0bEA01D755349aA8C0b6EAb70907CA',
+        'owner': 'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3',
+        'createdAt': '2021-11-18T08:21:45.000Z',
+        'updatedAt': '2021-11-18T08:21:45.000Z',
+      } as any;
+      assetFacadeSpy.getOwnedAssets.and.returnValue(of([
+        asset
+      ]));
+      actions$.next(OwnedActions.getOwnedAssets());
       iamServiceSpy.getAssetById.and.returnValue(of({id: '1'}));
-      effects.getAssetDetails$
+      effects.getOwnedAssets$
         .subscribe(resultAction => {
-          expect(resultAction).toEqual(AssetDetailsActions.getDetailsSuccess({asset: {id: '1'}}));
+          expect(resultAction).toEqual(OwnedActions.getOwnedAssetsSuccess({
+            assets: [
+              {
+                ...asset,
+                createdDate: new Date(asset.createdAt),
+                modifiedDate: new Date(asset.updatedAt),
+              }
+            ]
+          }));
           done();
         });
     });
 
     it('should dispatch failure action on thrown error ', (done) => {
-      actions$.next(AssetDetailsActions.getDetails({assetId: '1'}));
+      assetFacadeSpy.getOwnedAssets.and.returnValue(throwError({message: 'Error'}));
+      actions$.next(OwnedActions.getOwnedAssets());
       iamServiceSpy.getAssetById.and.returnValue(throwError({message: 'Error'}));
-      effects.getAssetDetails$
+      effects.getOwnedAssets$
         .subscribe(resultAction => {
-          expect(resultAction).toEqual(AssetDetailsActions.getDetailsFailure({error: 'Error'}));
+          expect(resultAction).toEqual(OwnedActions.getOwnedAssetsFailure({error: 'Error'}));
           done();
         });
     });

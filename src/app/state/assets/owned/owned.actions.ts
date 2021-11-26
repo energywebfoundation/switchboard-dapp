@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Asset } from 'iam-client-lib';
+import { OwnedAsset } from './models/owned-asset';
 
 export const getOwnedAssets = createAction(
   '[OWNED ASSETS] Get Owned Assets',
@@ -7,7 +7,7 @@ export const getOwnedAssets = createAction(
 
 export const getOwnedAssetsSuccess = createAction(
   '[OWNED ASSETS] Get Owned Assets Success',
-  props<{ assets: Asset[] }>()
+  props<{ assets: OwnedAsset[] }>()
 );
 
 export const getOwnedAssetsFailure = createAction(

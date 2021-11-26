@@ -8,22 +8,15 @@ export const getOwnedState = createSelector(
   state => state && state[USER_FEATURE_KEY]
 );
 
-export const getAsset = createSelector(
+export const getAssets = createSelector(
   getOwnedState,
   (state) => state?.assets
 );
 
-export const getAssets = createSelector(
-  getAsset,
+export const getOwnedAssets = createSelector(
+  getAssets,
   getAllAssetsClaim,
   (assets, assetsClaim) => {
-    debugger;
-    console.log(assetsClaim);
-    console.log(assets?.map((asset) => ({
-      ...asset,
-      ...(assetsClaim && assetsClaim[asset.id]),
-      hasEnrolments: true
-    })));
     return assets?.map((asset) => ({
       ...asset,
       ...(assetsClaim && assetsClaim[asset.id]),
