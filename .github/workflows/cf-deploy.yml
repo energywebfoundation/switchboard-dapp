@@ -65,7 +65,7 @@ jobs:
       - name: Build branch
         run: |
           cp ${{ needs.env_name.outputs.env_file }} src/environments/environment.ts
-          npm run build-prod
+          npm run build
       - name: Ensure dist is present
         run: |
           test -d "dist" && echo OK || exit 1
