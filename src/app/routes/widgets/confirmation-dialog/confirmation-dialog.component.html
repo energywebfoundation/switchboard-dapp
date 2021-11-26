@@ -1,14 +1,14 @@
 <div mat-dialog-content class="h-auto">
   <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center py-2 pr-3">
-    
-    <!-- Shows only for Syncing to DID Document -->
-    <!-- <div class="d-flex align-items-center justify-content-start justify-content-lg-center pt-4 pb-2 py-lg-4 pr-2">
-      <mat-icon class="color-warned icon-dialog" svgIcon="sync-did-icon"></mat-icon>
-    </div> -->
+
+    <div *ngIf="svgIcon" data-qa-id="icon"
+         class="d-flex align-items-center justify-content-start justify-content-lg-center pt-4 pb-2 py-lg-4 pr-2">
+      <mat-icon class="color-warned icon-dialog" [svgIcon]="svgIcon"></mat-icon>
+    </div>
 
     <div class="pl-0 pl-lg-2">
-      <h3 class="font-weight-700 mt-4 pt-1">{{ data?.header || 'Confirm' }}</h3>
-      <div class="mt-0 mb-2">
+      <h3 class="font-weight-700 mt-4 pt-1" data-qa-id="header">{{ data?.header || 'Confirm' }}</h3>
+      <div class="mt-0 mb-2" data-qa-id="message">
         <div>{{ data?.message }}</div>
       </div>
     </div>
@@ -16,14 +16,26 @@
 </div>
 
 <div class="d-flex justify-content-end align-items-bottom my-4 mx-4" *ngIf="!isDiscardButton && !isProceedButton">
-  <button mat-stroked-button class="btn btn-small mr-2" type="submit" (click)="closeMe(false)">Cancel</button>
-  <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="closeMe(true)">Confirm</button>
+  <button mat-stroked-button class="btn btn-small mr-2" type="submit" (click)="closeMe(false)" data-qa-id="cancel">
+    Cancel
+  </button>
+  <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="closeMe(true)"
+          data-qa-id="confirm">Confirm
+  </button>
 </div>
 <div class="d-flex justify-content-end align-items-bottom my-4 mx-4" *ngIf="isDiscardButton">
-  <button mat-stroked-button class="btn btn-small mr-2" type="submit" (click)="closeMe(false)">Continue</button>
-  <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="closeMe(true)">Discard</button>
+  <button mat-stroked-button class="btn btn-small mr-2" type="submit" (click)="closeMe(false)" data-qa-id="continue">
+    Continue
+  </button>
+  <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="closeMe(true)"
+          data-qa-id="discard">Discard
+  </button>
 </div>
 <div class="d-flex justify-content-end align-items-bottom my-4 mx-4" *ngIf="isProceedButton">
-  <button mat-stroked-button class="btn btn-small mr-2" type="submit" (click)="closeMe(false)">Cancel</button>
-  <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="closeMe(true)">Proceed</button>
+  <button mat-stroked-button class="btn btn-small mr-2" type="submit" (click)="closeMe(false)" data-qa-id="cancel">
+    Cancel
+  </button>
+  <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="closeMe(true)"
+          data-qa-id="proceed">Proceed
+  </button>
 </div>

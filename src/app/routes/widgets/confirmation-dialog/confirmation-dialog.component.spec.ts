@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 describe('ConfirmationDialogComponent', () => {
   let component: ConfirmationDialogComponent;
@@ -11,6 +13,10 @@ describe('ConfirmationDialogComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ConfirmationDialogComponent],
+      imports: [
+        MatButtonModule,
+        MatIconTestingModule,
+      ],
       providers: [
         {provide: MAT_DIALOG_DATA, useValue: {}},
         {provide: MatDialogRef, useValue: {}}

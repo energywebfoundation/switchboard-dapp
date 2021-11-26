@@ -1,31 +1,35 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ClaimData, NamespaceType } from "iam-client-lib";
-import { distinctUntilChanged, takeUntil } from "rxjs/operators";
-import { Subject } from "rxjs";
-import { CancelButton } from "../../../layout/loading/loading.component";
-import { IamService } from "../../../shared/services/iam.service";
-import { LoadingService } from "../../../shared/services/loading.service";
-import { NotificationService } from "../../../shared/services/notification.service";
-import { ConfirmationDialogComponent } from "../../widgets/confirmation-dialog/confirmation-dialog.component";
-import { ViewRequestsComponent } from "../view-requests/view-requests.component";
-import { MatSort } from "@angular/material/sort";
-import { MatDialog } from "@angular/material/dialog";
-import { MatTableDataSource } from "@angular/material/table";
-import { FormControl } from "@angular/forms";
-import { SwitchboardToastrService } from "../../../shared/services/switchboard-toastr.service";
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ClaimData, NamespaceType } from 'iam-client-lib';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { CancelButton } from '../../../layout/loading/loading.component';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { NotificationService } from '../../../shared/services/notification.service';
+import {
+  ConfirmationDialogComponent,
+  ConfirmationDialogData
+} from '../../widgets/confirmation-dialog/confirmation-dialog.component';
+import { ViewRequestsComponent } from '../view-requests/view-requests.component';
+import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { FormControl } from '@angular/forms';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { truthy } from '@operators';
 
 export const EnrolmentListType = {
-  ISSUER: "issuer",
-  APPLICANT: "applicant",
-  ASSET: "asset",
+  ISSUER: 'issuer',
+  APPLICANT: 'applicant',
+  ASSET: 'asset',
 };
 
-const TOASTR_HEADER = "Enrolment";
+const TOASTR_HEADER = 'Enrolment';
 
 @Component({
-  selector: "app-enrolment-list",
-  templateUrl: "./enrolment-list.component.html",
-  styleUrls: ["./enrolment-list.component.scss"],
+  selector: 'app-enrolment-list',
+  templateUrl: './enrolment-list.component.html',
+  styleUrls: ['./enrolment-list.component.scss'],
 })
 export class EnrolmentListComponent implements OnInit, OnDestroy {
   @Input() listType: string;
@@ -53,7 +57,8 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private toastr: SwitchboardToastrService,
     private notifService: NotificationService
-  ) {}
+  ) {
+  }
 
   async ngOnInit() {
     // Subscribe to IAM events
@@ -66,18 +71,18 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     // Initialize table
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = (item, property) => {
-      if (property === "status") {
+      if (property === 'status') {
         if (item.isAccepted) {
           if (item.isSynced) {
-            return "approved";
+            return 'approved';
           } else {
-            return "approved pending sync";
+            return 'approved pending sync';
           }
         } else {
           if (item.isRejected) {
-            return "rejected";
+            return 'rejected';
           } else {
-            return "pending";
+            return 'pending';
           }
         }
       } else {
@@ -90,21 +95,21 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       this.listType === EnrolmentListType.ASSET
     ) {
       this.displayedColumns = [
-        "requestDate",
-        "roleName",
-        "parentNamespace",
-        "status",
-        "actions",
+        'requestDate',
+        'roleName',
+        'parentNamespace',
+        'status',
+        'actions',
       ];
     } else {
       this.displayedColumns = [
-        "requestDate",
-        "roleName",
-        "parentNamespace",
-        "requester",
-        "asset",
-        "status",
-        "actions",
+        'requestDate',
+        'roleName',
+        'parentNamespace',
+        'requester',
+        'asset',
+        'status',
+        'actions',
       ];
     }
 
@@ -185,12 +190,12 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   view(element: any) {
     this.dialog
       .open(ViewRequestsComponent, {
-        width: "600px",
+        width: '600px',
         data: {
           listType: this.listType,
           claimData: element,
         },
-        maxWidth: "100%",
+        maxWidth: '100%',
         disableClose: true,
       })
       .afterClosed()
@@ -203,42 +208,34 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   async addToDidDoc(element: any) {
-    const dialogRef = this.dialog
-      .open(ConfirmationDialogComponent, {
-        // width: '400px',
-        // maxHeight: '195px',
-        // data: {
-        //   header: TOASTR_HEADER,
-        //   message: 'This role will be added to your DID Document. Do you wish to continue?'
-        // },
-        width: "600px",
-        maxHeight: "auto",
+    this.dialog
+      .open<ConfirmationDialogComponent, ConfirmationDialogData>(ConfirmationDialogComponent, {
+        width: '600px',
+        maxHeight: 'auto',
         data: {
-          header: "Sync credential to my DID document",
+          header: 'Sync credential to my DID document',
+          svgIcon: 'sync-did-icon',
           message:
-            "It is currently necessary to sync the credential to your DID document in order to make it available. However, please note that this will make your role data public and permanent.",
+            'It is currently necessary to sync the credential to your DID document in order to make it available. However, please note that this will make your role data public and permanent.',
         },
-        maxWidth: "100%",
+        maxWidth: '100%',
         disableClose: true,
       })
       .afterClosed()
-      .toPromise();
-
-    if (await dialogRef) {
-      this.syncClaimToDidDoc(element);
-    }
+      .pipe(truthy())
+      .subscribe(() => this.syncClaimToDidDoc(element));
   }
 
   async cancelClaimRequest(element: any) {
     const dialogRef = this.dialog
       .open(ConfirmationDialogComponent, {
-        width: "400px",
-        maxHeight: "195px",
+        width: '400px',
+        maxHeight: '195px',
         data: {
           header: TOASTR_HEADER,
-          message: "Are you sure to cancel this enrolment request?",
+          message: 'Are you sure to cancel this enrolment request?',
         },
-        maxWidth: "100%",
+        maxWidth: '100%',
         disableClose: true,
       })
       .afterClosed()
@@ -252,14 +249,14 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
           id: element.id,
         });
         this.toastr.success(
-          "Action is successful.",
-          "Cancel Enrolment Request"
+          'Action is successful.',
+          'Cancel Enrolment Request'
         );
         await this.getList(this.rejected, this.accepted);
       } catch (e) {
         console.error(e);
         this.toastr.error(
-          "Failed to cancel the enrolment request.",
+          'Failed to cancel the enrolment request.',
           TOASTR_HEADER
         );
       } finally {
@@ -297,13 +294,13 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
     const did =
       this.listType === EnrolmentListType.ASSET
-        ? { did: this.subject }
+        ? {did: this.subject}
         : undefined;
     const claims: ClaimData[] = (
       await this.iamService.claimsService.getUserClaims(did)
     ).filter((item: ClaimData) => {
       if (item && item.claimType) {
-        const arr = item.claimType.split(".");
+        const arr = item.claimType.split('.');
         if (arr.length > 1 && arr[1] === NamespaceType.Role) {
           return true;
         }
@@ -325,7 +322,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   private async syncClaimToDidDoc(element: any) {
     this.loadingService.show(
-      "Please confirm this transaction in your connected wallet.",
+      'Please confirm this transaction in your connected wallet.',
       CancelButton.ENABLED
     );
 
@@ -336,17 +333,17 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
       if (retVal) {
         this.notifService.decreasePendingDidDocSyncCount();
-        this.toastr.success("Action is successful.", "Sync to DID Document");
+        this.toastr.success('Action is successful.', 'Sync to DID Document');
         await this.getList(this.rejected, this.accepted);
       } else {
         this.toastr.warning(
-          "Unable to proceed with this action. Please contact system administrator.",
-          "Sync to DID Document"
+          'Unable to proceed with this action. Please contact system administrator.',
+          'Sync to DID Document'
         );
       }
     } catch (e) {
       console.error(e);
-      this.toastr.error(e, "Sync to DID Document");
+      this.toastr.error(e, 'Sync to DID Document');
     }
 
     this.loadingService.hide();
