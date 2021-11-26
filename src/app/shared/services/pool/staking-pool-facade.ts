@@ -30,12 +30,10 @@ export class StakingPoolFacade {
   }
 
   checkReward() {
-    console.log('check reward');
     return from(this.pool.checkReward());
   }
 
   getStake() {
-    console.log('get stake');
     return from(this.pool.getStake());
   }
 

@@ -10,7 +10,7 @@ export const getStakeState = createFeatureSelector<PoolState>(USER_FEATURE_KEY);
 
 export const getReward = createSelector(
   getStakeState,
-  (state: PoolState) => formatEther(state.reward as any)
+  (state: PoolState) => formatEther(state.reward)
 );
 
 export const getBalance = createSelector(
