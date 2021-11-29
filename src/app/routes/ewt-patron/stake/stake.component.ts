@@ -60,7 +60,7 @@ export class StakeComponent {
   }
 
   setAmountValidators(maxAmount: number) {
-    this.amountToStake.setValidators([Validators.min(1), Validators.required, Validators.max(maxAmount)]);
+    this.amountToStake.setValidators([Validators.min(0), Validators.required, Validators.max(maxAmount)]);
   }
 
 }

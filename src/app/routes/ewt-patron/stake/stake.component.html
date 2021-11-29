@@ -13,7 +13,6 @@
           <mat-label class="ml-3 pl-1">EWT Stake Amount</mat-label>
           <input matInput class="amount-input" data-qa-id="stake-amount" [formControl]="amountToStake"
                  autocomplete="off"
-                 type="number"
                  [max]="maxAmount$ | async" min="0" maxlength="256" (focus)="inputFocused = true"/>
           <div matSuffix class="d-flex" *ngIf="inputFocused">
             <button mat-icon-button class="bg-transparent" (click)="clear($event)">
@@ -21,7 +20,7 @@
             </button>
           </div>
 
-          <mat-error *ngIf="amountToStake.hasError('min')">Minimum value is 1</mat-error>
+          <mat-error *ngIf="amountToStake.hasError('min')">Minimum value is 0</mat-error>
           <mat-error *ngIf="amountToStake.hasError('required')">This field is <strong>required</strong></mat-error>
           <mat-error *ngIf="amountToStake.hasError('max')">The stake limit is {{contributorLimit}}. You already staked
             <ng-container *ngIf="(stakeAmount$ | async) as stakeAmount">
