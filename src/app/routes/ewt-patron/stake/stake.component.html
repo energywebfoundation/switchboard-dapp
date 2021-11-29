@@ -25,7 +25,7 @@
           <mat-error *ngIf="amountToStake.hasError('required')">This field is <strong>required</strong></mat-error>
           <mat-error *ngIf="amountToStake.hasError('max')">The stake limit is {{contributorLimit}}. You already staked
             <ng-container *ngIf="(stakeAmount$ | async) as stakeAmount">
-              {{stakeAmount | lastDigits}}
+              {{stakeAmount}}
             </ng-container>
           </mat-error>
           <mat-hint align="start" class="color-grey">Max. {{contributorLimit}} EWT per DID</mat-hint>
