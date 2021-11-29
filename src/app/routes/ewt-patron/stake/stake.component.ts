@@ -1,8 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
 import { tap } from 'rxjs/operators';
-import { PercentButtonsComponent } from '../percent-buttons/percent-buttons.component';
 import { Store } from '@ngrx/store';
 import * as poolSelectors from '../../../state/pool/pool.selectors';
 import * as PoolActions from '../../../state/pool/pool.actions';
@@ -28,7 +27,6 @@ export class StakeComponent {
   getContributorLimit$ = this.store.select(poolSelectors.getContributorLimit);
   dates$ = this.store.select(poolSelectors.expirationDate);
 
-  @ViewChild('percentButtons') percentButtons: PercentButtonsComponent;
 
   constructor(private store: Store) {
   }
@@ -37,16 +35,11 @@ export class StakeComponent {
     e.preventDefault();
     e.stopPropagation();
     this.inputFocused = false;
-    this.percentButtons.selectedPercentButton = null;
     this.amountToStake.setValue('');
   }
 
   isAmountInvalid() {
     return this.amountToStake.invalid;
-  }
-
-  inputChangeHandler() {
-    this.percentButtons.selectedPercentButton = null;
   }
 
   calcStakeAmount(percent: number) {

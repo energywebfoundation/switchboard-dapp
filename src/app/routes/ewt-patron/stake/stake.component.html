@@ -14,8 +14,7 @@
           <input matInput class="amount-input" data-qa-id="stake-amount" [formControl]="amountToStake"
                  autocomplete="off"
                  type="number"
-                 [max]="maxAmount$ | async" min="0" maxlength="256" (focus)="inputFocused = true"
-                 (keydown)="inputChangeHandler()"/>
+                 [max]="maxAmount$ | async" min="0" maxlength="256" (focus)="inputFocused = true"/>
           <div matSuffix class="d-flex" *ngIf="inputFocused">
             <button mat-icon-button class="bg-transparent" (click)="clear($event)">
               <mat-icon>close</mat-icon>
@@ -33,8 +32,6 @@
         </mat-form-field>
       </ng-container>
 
-      <app-percent-buttons #percentButtons (percent)="calcStakeAmount($event)">
-      </app-percent-buttons>
       <div class="mt-4 d-flex justify-content-between color-grey payment-details">
         <div class="info">
           Reward payment interval
