@@ -47,7 +47,7 @@ export class WithdrawComponent {
 
   private parseStringToFloat(amount) {
     const [integerNumber, fractional] = amount.split('.');
-    const subFractional = fractional ? fractional.substring(0, 5) : [];
+    const subFractional = fractional ? fractional.substring(0, 5) + '00000' : [];
     return parseFloat(integerNumber + subFractional) / 100000;
   }
 
