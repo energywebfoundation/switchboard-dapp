@@ -28,7 +28,7 @@ jobs:
             echo "::set-output name=env_file::src/environments/environment.dev.ts"
             echo "::set-output name=build_script::npm run build"
           elif [ "${{ github.ref }}" = "refs/heads/master" ]; then
-            echo "::set-output name=env_name::dev"
+            echo "::set-output name=env_name::staging"
             echo "::set-output name=env_file::src/environments/environment.prod.ts"
             echo "::set-output name=build_script::npm run build-prod"
           fi
