@@ -102,17 +102,17 @@ export class PoolEffects {
   putStake$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PoolActions.putStake),
-      tap(() => this.loadingService.show('Putting your stake')),
+      tap(() => this.loadingService.show('Staking your EWT')),
       switchMap(({amount}) => {
-          return this.stakingPoolFacade.putStake(parseEther(amount))
-            .pipe(
-              map(() => {
-                this.dialog.open(StakeSuccessComponent, {
-                  width: '400px',
-                  maxWidth: '100%',
-                  disableClose: true,
-                  backdropClass: 'backdrop-shadow'
-                });
+        return this.stakingPoolFacade.putStake(parseEther(amount))
+          .pipe(
+            map(() => {
+              this.dialog.open(StakeSuccessComponent, {
+                width: '400px',
+                maxWidth: '100%',
+                disableClose: true,
+                backdropClass: 'backdrop-shadow'
+              });
                 return PoolActions.getStake();
               }),
               catchError(err => {
