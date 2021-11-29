@@ -52,7 +52,8 @@
         </div>
       </div>
     </div>
-    <app-card class="col-6 col-md-3 col-lg-2 col-lg-offset-1"
+    <app-card *ngIf="isExperimentalEnabled$ | async"
+              class="col-6 col-md-3 col-lg-2 col-lg-offset-1"
               image="assets-icon.png"
               title="Assets"
               (click)="goToAssets()">
