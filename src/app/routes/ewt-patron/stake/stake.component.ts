@@ -25,6 +25,7 @@ export class StakeComponent {
   stakeAmount$ = this.store.select(poolSelectors.getStakeAmount);
   isWithdrawDisabled$ = this.store.select(poolSelectors.isWithdrawDisabled);
   getContributorLimit$ = this.store.select(poolSelectors.getContributorLimit);
+  calculatedPercent$ = this.store.select(poolSelectors.calculateStakedPercent);
   dates$ = this.store.select(poolSelectors.expirationDate);
 
 
