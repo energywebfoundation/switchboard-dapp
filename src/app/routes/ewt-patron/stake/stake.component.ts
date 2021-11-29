@@ -15,7 +15,7 @@ import { MAX_STAKE_AMOUNT } from '../../../state/pool/models/const';
 export class StakeComponent {
   inputFocused: boolean;
   tokenAmount: number;
-  amountToStake = new FormControl('', [Validators.min(1), Validators.required, Validators.max(MAX_STAKE_AMOUNT)]);
+  amountToStake = new FormControl('', [Validators.min(0), Validators.required, Validators.max(MAX_STAKE_AMOUNT)]);
   maxAmount$ = this.store.select(poolSelectors.getMaxPossibleAmountToStake).pipe(tap(value => {
     this.setAmountValidators(value);
     this.tokenAmount = +value;
