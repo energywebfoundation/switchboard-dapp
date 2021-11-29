@@ -149,6 +149,28 @@ export class PoolEffects {
     )
   );
 
+  withdrawAllReward$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.withdrawAllReward),
+      tap(() => this.loadingService.show('Withdrawing your reward...')),
+      switchMap(() =>
+        this.stakingPoolFacade.withdraw().pipe(
+          mergeMap(() => {
+            this.dialog.closeAll();
+            return [PoolActions.withdrawRewardSuccess(), PoolActions.getStake()];
+          }),
+          catchError(err => {
+            console.error(err);
+            return of(PoolActions.withdrawRewardFailure({err}));
+          }),
+          finalize(() => {
+            this.loadingService.hide();
+          })
+        ),
+      )
+    )
+  );
+
 
   checkReward$ = createEffect(() =>
     this.actions$.pipe(

@@ -25,11 +25,16 @@
 
 <app-divider></app-divider>
 
-<div class="d-flex justify-content-center mt-3">
-  <button mat-raised-button mat-dialog-close class="stake-secondary-btn color-white text-uppercase mr-4">Close</button>
+<div class="d-flex flex-wrap justify-content-center ">
+  <button mat-raised-button mat-dialog-close class="mt-3 stake-secondary-btn color-white text-uppercase mr-4">Close
+  </button>
 
-  <button mat-raised-button class="stake-btn text-color text-uppercase" [disabled]="isAmountInvalid"
+  <button mat-raised-button class="mt-3 mr-4 stake-btn text-color text-uppercase" [disabled]="isAmountInvalid"
           (click)="withdraw()">Confirm
+  </button>
+
+  <button mat-raised-button class="stake-btn text-color text-uppercase mt-3 mr-4"
+          (click)="withdrawAll()">Withdraw All
   </button>
 </div>
 

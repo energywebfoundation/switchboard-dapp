@@ -49,6 +49,10 @@ export const withdrawReward = createAction(
   props<{ value: string }>()
 );
 
+export const withdrawAllReward = createAction(
+  '[Pool] Withdraw All Reward'
+);
+
 export const withdrawRewardSuccess = createAction(
   '[Pool] Withdraw Reward Success'
 );

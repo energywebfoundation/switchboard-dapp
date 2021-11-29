@@ -26,6 +26,10 @@ export class WithdrawComponent {
     this.store.dispatch(PoolActions.withdrawReward({value: this.amount.value}));
   }
 
+  withdrawAll() {
+    this.store.dispatch(PoolActions.withdrawAllReward());
+  }
+
   clear(e) {
     e.preventDefault();
     e.stopPropagation();
