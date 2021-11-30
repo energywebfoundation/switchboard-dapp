@@ -435,7 +435,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       }
     }
 
-    if (!this.experimentalEnabled) {
+    if (!this.experimentalEnabled && config && config['buttons'] && config['buttons'][SwalButtons.ENROL_FOR_ASSET]) {
       delete config['buttons'][SwalButtons.ENROL_FOR_ASSET];
     }
     return config;
