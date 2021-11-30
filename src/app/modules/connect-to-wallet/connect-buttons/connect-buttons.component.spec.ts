@@ -73,6 +73,8 @@ describe('ConnectButtonsComponent', () => {
   });
 
   it('should dispatch login action with Azure when clicking on Use Azure button', () => {
+    component.showEkcOption = true;
+    fixture.detectChanges();
     const {azureBtn} = selectors(hostDebug);
     azureBtn.nativeElement.click();
 
@@ -84,6 +86,14 @@ describe('ConnectButtonsComponent', () => {
     const {metamaskBtn} = selectors(hostDebug);
 
     expect(metamaskBtn).toBeFalsy();
+  });
+
+  it('should not display azureBtn when showing is set to false', () => {
+    component.showEkcOption = false;
+    fixture.detectChanges();
+    const {azureBtn} = selectors(hostDebug);
+
+    expect(azureBtn).toBeNull();
   });
 });
 

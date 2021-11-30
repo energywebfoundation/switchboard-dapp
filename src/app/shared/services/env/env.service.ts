@@ -11,4 +11,5 @@ export class EnvService {
   natsServerUrl = 'https://identityevents-dev.energyweb.org/';
   kmsServerUrl = undefined;
   stakingPoolFactoryAddress = undefined;
+  showAzureLoginOption = true;
 }
