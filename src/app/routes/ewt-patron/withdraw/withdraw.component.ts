@@ -43,7 +43,7 @@ export class WithdrawComponent {
   }
 
   private setValidators(amount: string) {
-    this.amount.setValidators([Validators.required, Validators.max(parseStringToFloat(amount))]);
+    this.amount.setValidators([Validators.required, Validators.min(0), Validators.max(parseStringToFloat(amount))]);
   }
 
 }

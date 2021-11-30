@@ -18,7 +18,7 @@
     </button>
   </div>
 
-  <mat-error *ngIf="amount.hasError('min')">Minimum value is 1</mat-error>
+  <mat-error *ngIf="amount.hasError('min')">Minimum value is 0</mat-error>
   <mat-error *ngIf="amount.hasError('max')">Maximum possible value is {{maxAmount$ | async}}</mat-error>
   <mat-error *ngIf="amount.hasError('required')">This field is <strong>required</strong></mat-error>
 </mat-form-field>
