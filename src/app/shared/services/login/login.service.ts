@@ -80,10 +80,18 @@ export class LoginService {
           if (loginSuccessful) {
             this.iamListenerService.setListeners((config) => this.openSwal(config, redirectOnChange));
           }
+          if (!loginSuccessful) {
+            this.loadingService.hide();
+            this.openSwal({
+              title: 'Ops!', text: 'Something went wrong :('
+            }, redirectOnChange);
+          }
           return {success: Boolean(loginSuccessful), accountInfo};
         }),
 
-        delayWhen(({ success }) => { if (success) return this.storeSession() }),
+        delayWhen(({success}) => {
+          if (success) return this.storeSession();
+        }),
         catchError(err => this.handleLoginErrors(err, redirectOnChange))
       );
   }
