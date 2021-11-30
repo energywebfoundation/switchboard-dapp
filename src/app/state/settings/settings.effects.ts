@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import * as SettingsActions from './settings.actions';
 import { SettingsStorage } from './models/settings-storage';
 import { UrlService } from '../../shared/services/url-service/url.service';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, switchMap, take, tap } from 'rxjs/operators';
 
 @Injectable()
 export class SettingsEffects {
@@ -15,8 +15,9 @@ export class SettingsEffects {
         ofType(SettingsActions.disableExperimental),
         switchMap(() => this.urlService.current
           .pipe(
+            take(1),
             filter((url) => url.includes('assets')),
-            map(() => this.urlService.goTo('dashboard'))
+            tap(() => this.urlService.goTo('dashboard'))
           )
         )
       ), {dispatch: false}
