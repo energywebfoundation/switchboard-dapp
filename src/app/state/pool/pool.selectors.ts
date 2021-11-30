@@ -108,5 +108,5 @@ export const expirationDate = createSelector(
 export const calculateStakedPercent = createSelector(
   getContributorLimit,
   getStakeAmount,
-  (limit, amount) => (+amount * 100) / (+limit)
+  (limit, amount) => Math.round(((+amount * 100) / (+limit) * 100)) / 100
 );
