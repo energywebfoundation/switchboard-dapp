@@ -119,6 +119,10 @@ export class EnrolmentFormComponent implements OnInit {
     return this.enrolmentForm.get('registrationTypes');
   }
 
+  get isOnChainChecked() {
+    return this.registrationTypesGroup.get('onChain').value;
+  }
+
   private createControls(list) {
     return list.map((field) => {
       this.setFieldDefaults(field);

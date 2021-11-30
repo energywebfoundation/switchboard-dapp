@@ -1,22 +1,36 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+export interface ConfirmationDialogData {
+  message?: string;
+  header?: string;
+  isDiscardButton?: boolean;
+  isProceedButton?: boolean;
+  svgIcon?: string;
+}
 
 @Component({
   selector: 'app-confirmation-dialog',
   templateUrl: './confirmation-dialog.component.html',
-  styleUrls: ['./confirmation-dialog.component.scss']
+  styleUrls: ['./confirmation-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConfirmationDialogComponent {
+export class ConfirmationDialogComponent implements OnInit {
   isDiscardButton = false;
   isProceedButton = false;
+  svgIcon;
 
-  constructor(public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.isDiscardButton = data && data.isDiscardButton ? true : false;
-    this.isProceedButton = data && data.isProceedButton ? true : false;
+  constructor(private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: ConfirmationDialogData) {
   }
 
-  closeMe(accept: boolean) {
+  ngOnInit() {
+    this.svgIcon = this.data?.svgIcon;
+    this.isDiscardButton = this.data?.isDiscardButton;
+    this.isProceedButton = this.data?.isProceedButton;
+  }
+
+  close(accept: boolean) {
     this.dialogRef.close(accept);
   }
 }
