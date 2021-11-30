@@ -1,4 +1,4 @@
-import { createReducer, on, Action } from '@ngrx/store';
+import { Action, createReducer, on } from '@ngrx/store';
 import { Profile } from 'iam-client-lib';
 import * as userActions from './user.actions';
 
@@ -18,7 +18,10 @@ export const initialState: UserClaimState = {
 
 const userReducer = createReducer(
   initialState,
-  on(userActions.setProfile, userActions.updateUserClaimsSuccess, (state, {profile}) => ({...state, profile})),
+  on(userActions.setProfile, userActions.updateUserClaimsSuccess, userActions.updateLocalStateUserClaims, (state, {profile}) => ({
+    ...state,
+    profile
+  })),
   on(userActions.clearUserClaim, (state) => ({...state, profile: null, didDocument: null})),
   on(userActions.setDidDocument, (state, {didDocument}) => ({...state, didDocument}))
 );

@@ -18,6 +18,11 @@ export const loadUserClaimsFailure = createAction(
   props<{ error: any }>()
 );
 
+export const updateLocalStateUserClaims = createAction(
+  '[User] Update Local State User Claims ',
+  props<{ profile: Partial<Profile> }>()
+);
+
 export const updateUserClaims = createAction(
   '[User] Update User Claims',
   props<{ profile: Partial<Profile> }>()

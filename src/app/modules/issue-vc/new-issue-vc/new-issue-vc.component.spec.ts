@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { dispatchInputEvent, getElement } from '@tests';
 
-export class MockDialogData {
+class MockDialogData {
   did: string;
 
   get data() {
