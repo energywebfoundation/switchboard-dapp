@@ -5,6 +5,7 @@ import * as PoolActions from '../../../state/pool/pool.actions';
 import * as poolSelectors from '../../../state/pool/pool.selectors';
 import { FormControl, Validators } from '@angular/forms';
 import { tap } from 'rxjs/operators';
+import { parseStringToFloat } from '../../../utils/functions/parse-string-to-float/parse-string-to-float';
 
 @Component({
   selector: 'app-withdraw',
@@ -42,13 +43,7 @@ export class WithdrawComponent {
   }
 
   private setValidators(amount: string) {
-    this.amount.setValidators([Validators.required, Validators.max(this.parseStringToFloat(amount))]);
-  }
-
-  private parseStringToFloat(amount) {
-    const [integerNumber, fractional] = amount.split('.');
-    const subFractional = fractional ? fractional.substring(0, 5) + '00000' : [];
-    return parseFloat(integerNumber + subFractional) / 100000;
+    this.amount.setValidators([Validators.required, Validators.max(parseStringToFloat(amount))]);
   }
 
 }
