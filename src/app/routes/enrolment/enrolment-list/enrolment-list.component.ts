@@ -165,7 +165,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   isPendingSync(element) {
-    return (!this.viewedByIssuer() && !this.isSynced(element)) || !this.isOnlyOnChain(element);
+    return (!this.viewedByIssuer() && !this.isSynced(element) && this.isOffChain(element)) || !this.isOnlyOnChain(element);
   }
 
   viewedByIssuer() {
@@ -174,6 +174,10 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   isOnlyOnChain(element) {
     return element.registrationTypes.length === 1 && element.registrationTypes.includes(RegistrationTypes.OnChain);
+  }
+
+  isOffChain(element) {
+    return element.registrationTypes.includes(RegistrationTypes.OffChain);
   }
 
   view(element: any) {
