@@ -29,7 +29,9 @@
               <mat-select class="md-enroll" placeholder="Enrol For" formControlName="enrolFor"
                           (selectionChange)="enrolForSelected($event)">
                 <mat-option class="md-enroll" [ngStyle]="listColor" [value]="EnrolForType.ME">Myself</mat-option>
-                <mat-option class="md-enroll" [ngStyle]="listColor" [value]="EnrolForType.ASSET">My Asset</mat-option>
+                <mat-option *ngIf="experimentalEnabled" class="md-enroll" [ngStyle]="listColor"
+                            [value]="EnrolForType.ASSET">My Asset
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
