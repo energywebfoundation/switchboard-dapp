@@ -755,32 +755,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return selected && selected.namespace ? selected.namespace : '';
   }
 
-  onSelectedItem(event: any) {
-    // Make sure that enrolmentPreconditions field exists
-    let enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions');
-    if (!enrolmentPreconditions || !enrolmentPreconditions.value || !enrolmentPreconditions.value.length) {
-      this.roleForm.get('data').get('enrolmentPreconditions').setValue([{
-        type: PreconditionType.Role,
-        conditions: []
-      }]);
-      enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions');
-    }
-
-    // Make sure that conditions field exists
-    let conditions = enrolmentPreconditions.value[0].conditions;
-    if (!enrolmentPreconditions) {
-      conditions = this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions = [];
-    }
-
-    // Check if item is already added
-    if (conditions.includes(event.option.value.namespace)) {
-      this.toastr.warning('Role already exists in the list.');
-    } else {
-      conditions.push(event.option.value.namespace);
-      this.clearSearchTxt();
-    }
-  }
-
   clearSearchTxt() {
     this.roleControl.setValue('');
   }
