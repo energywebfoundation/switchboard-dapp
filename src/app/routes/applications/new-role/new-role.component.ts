@@ -786,6 +786,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   removePreconditionRole(idx: number) {
-    this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions.splice(idx, 1);
+    const conditions = [...this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions];
+    conditions.splice(idx, 1);
+    this.roleForm.get('data').get('enrolmentPreconditions').reset([{type: PreconditionType.Role, conditions}]);
   }
 }
