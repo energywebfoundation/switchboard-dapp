@@ -77,7 +77,10 @@ export const getOrganizationDetails = createSelector(
 export const getOrganizationLimit = createSelector(
   getStakeState,
   (state: PoolState) => {
-    return state?.organizationLimit?.toString();
+    if (state.organizationLimit) {
+      return formatEther(state.organizationLimit);
+    }
+    return state.organizationLimit;
   }
 );
 
@@ -108,5 +111,31 @@ export const expirationDate = createSelector(
 export const calculateStakedPercent = createSelector(
   getContributorLimit,
   getStakeAmount,
-  (limit, amount) => Math.round(((+amount * 100) / (+limit) * 100)) / 100
+  (limit, amount) => {
+    if (!amount) {
+      return 0;
+    }
+    return Math.round(((+amount * 100) / (+limit) * 100)) / 100;
+  }
+);
+
+export const getTotalStaked = createSelector(
+  getStakeState,
+  (state) => {
+    if (state.totalStaked) {
+      return formatEther(state.totalStaked);
+    }
+    return state.totalStaked;
+  }
+);
+
+export const getTotalStakedPercent = createSelector(
+  getOrganizationLimit,
+  getTotalStaked,
+  (limit, amount) => {
+    if (!amount) {
+      return 0;
+    }
+    return Math.round(((+amount * 100) / (+limit) * 100)) / 100;
+  }
 );

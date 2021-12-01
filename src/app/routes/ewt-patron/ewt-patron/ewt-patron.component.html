@@ -102,6 +102,19 @@
             </ul>
           </div>
         </div>
+        <div class="col-md-6 col-lg-12 my-2">
+          <div class="staking-widget widget-inner px-4 py-4">
+            <div class="staking-widget-xs-label text-color mb-2">Staking pool stats</div>
+            <h3 class="mb-0 text-color">
+              <ng-container *ngIf="balance$ | async as balance">{{balance | lastDigits}}
+              </ng-container>
+              <span class="staking-currency">EWT</span>
+
+            </h3>
+            <mat-progress-bar mode="determinate" [value]="getTotalStakedPercent$ | async"></mat-progress-bar>
+            <span class="limit-text text-color mt-2">{{getTotalStakedPercent$ | async}}% of {{hardCap$ | async }} EWT Staking Pool limit</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
