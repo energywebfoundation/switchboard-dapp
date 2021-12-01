@@ -5,7 +5,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import * as poolSelectors from '../../../state/pool/pool.selectors';
 
-describe('WithdrawComponent', () => {
+xdescribe('WithdrawComponent', () => {
   let component: WithdrawComponent;
   let fixture: ComponentFixture<WithdrawComponent>;
   let store: MockStore;

@@ -21,6 +21,14 @@ export class StakingPoolFacade {
     return from(this.pool.putStake(stake));
   }
 
+  getStartDate() {
+    return from(this.pool.getStart());
+  }
+
+  getEndDate() {
+    return from(this.pool.getEnd());
+  }
+
   checkReward() {
     return from(this.pool.checkReward());
   }
@@ -39,5 +47,9 @@ export class StakingPoolFacade {
 
   getContributionLimit() {
     return from(this.pool.getContributionLimit());
+  }
+
+  partialWithdraw(value: BigNumber) {
+    return from(this.pool.partialWithdraw(value));
   }
 }

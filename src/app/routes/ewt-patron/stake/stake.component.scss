@@ -67,6 +67,12 @@ h5 {
   text-transform: uppercase;
 }
 
+.limit-text {
+  font-size: 16px;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
 ::ng-deep mat-label {
   color: #A6A5AC !important;
   font-family: 'Roboto', sans-serif !important;
@@ -203,5 +209,9 @@ h5 {
 
 .highlight {
   color: #32DCDC;
+}
+
+mat-progress-bar {
+  border-radius: 5px;
 }
 

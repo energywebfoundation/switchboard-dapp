@@ -8,7 +8,7 @@ export const initPool = createAction('[Pool] Initialize Pool');
 export const checkReward = createAction('[Pool] Check Accumulated Reward');
 export const checkRewardSuccess = createAction(
   '[Pool] Check Accumulated Reward Success',
-  props<{ reward: string }>()
+  props<{ reward: BigNumber }>()
 );
 export const checkRewardFailure = createAction(
   '[Pool] Check Accumulated Reward Failure',
@@ -45,7 +45,12 @@ export const putStakeFailure = createAction(
 );
 
 export const withdrawReward = createAction(
-  '[Pool] Withdraw Reward'
+  '[Pool] Withdraw Reward',
+  props<{ value: string }>()
+);
+
+export const withdrawAllReward = createAction(
+  '[Pool] Withdraw All Reward'
 );
 
 export const withdrawRewardSuccess = createAction(
@@ -78,6 +83,10 @@ export const getOrganizationDetails = createAction(
   '[Pool] Get Organization Details'
 );
 
+export const openWithdrawDialog = createAction(
+  '[Pool] Open Withdraw Dialog'
+);
+
 export const getHardCap = createAction(
   '[Pool] Get Hard Organization Limit'
 );
@@ -99,6 +108,23 @@ export const getContributorLimit = createAction(
 export const getContributorLimitSuccess = createAction(
   '[Pool] Get Contributor Limit Success',
   props<{ cap: BigNumber }>()
+);
+
+export const stakingPoolFinishDate = createAction(
+  '[Pool] Get Staking Pool Finish Date'
+);
+
+export const stakingPoolFinishDateSuccess = createAction(
+  '[Pool] Get Staking Pool Finish Date Success',
+  props<{ date: number }>()
+);
+export const stakingPoolStartDate = createAction(
+  '[Pool] Get Staking Pool Start Date'
+);
+
+export const stakingPoolStartDateSuccess = createAction(
+  '[Pool] Get Staking Pool Start Date Success',
+  props<{ date: number }>()
 );
 
 export const getContributorLimitFailure = createAction(

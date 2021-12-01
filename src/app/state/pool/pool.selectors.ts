@@ -10,7 +10,7 @@ export const getStakeState = createFeatureSelector<PoolState>(USER_FEATURE_KEY);
 
 export const getReward = createSelector(
   getStakeState,
-  (state: PoolState) => state.reward
+  (state: PoolState) => formatEther(state.reward)
 );
 
 export const getBalance = createSelector(
@@ -77,7 +77,6 @@ export const getOrganizationDetails = createSelector(
 export const getOrganizationLimit = createSelector(
   getStakeState,
   (state: PoolState) => {
-    console.log(state.organizationLimit?.toString());
     return state?.organizationLimit?.toString();
   }
 );
@@ -90,4 +89,24 @@ export const getContributorLimit = createSelector(
     }
     return state.contributorLimit;
   }
+);
+
+export const allTokens = createSelector(
+  getStakeState,
+  (state: PoolState) => {
+    return formatEther(state?.userStake?.amount?.add(state?.reward));
+  }
+);
+
+export const expirationDate = createSelector(
+  getStakeState,
+  (state: PoolState) => {
+    return new Date(state?.endDate * 1000);
+  }
+);
+
+export const calculateStakedPercent = createSelector(
+  getContributorLimit,
+  getStakeAmount,
+  (limit, amount) => Math.round(((+amount * 100) / (+limit) * 100)) / 100
 );

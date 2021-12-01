@@ -14,27 +14,24 @@
           <input matInput class="amount-input" data-qa-id="stake-amount" [formControl]="amountToStake"
                  autocomplete="off"
                  type="number"
-                 [max]="maxAmount$ | async" min="0" maxlength="256" (focus)="inputFocused = true"
-                 (keydown)="inputChangeHandler()"/>
+                 [max]="maxAmount$ | async" min="0" maxlength="256" (focus)="inputFocused = true"/>
           <div matSuffix class="d-flex" *ngIf="inputFocused">
             <button mat-icon-button class="bg-transparent" (click)="clear($event)">
               <mat-icon>close</mat-icon>
             </button>
           </div>
 
-          <mat-error *ngIf="amountToStake.hasError('min')">Minimum value is 1</mat-error>
+          <mat-error *ngIf="amountToStake.hasError('min')">Minimum value is 0</mat-error>
           <mat-error *ngIf="amountToStake.hasError('required')">This field is <strong>required</strong></mat-error>
-          <mat-error *ngIf="amountToStake.hasError('max')">Maximum value is {{contributorLimit}}. You already put
+          <mat-error *ngIf="amountToStake.hasError('max')">The stake limit is {{contributorLimit}}. You already staked
             <ng-container *ngIf="(stakeAmount$ | async) as stakeAmount">
-              {{stakeAmount | lastDigits}}
+              {{stakeAmount}}
             </ng-container>
           </mat-error>
           <mat-hint align="start" class="color-grey">Max. {{contributorLimit}} EWT per DID</mat-hint>
         </mat-form-field>
       </ng-container>
 
-      <app-percent-buttons #percentButtons (percent)="calcStakeAmount($event)">
-      </app-percent-buttons>
       <div class="mt-4 d-flex justify-content-between color-grey payment-details">
         <div class="info">
           Reward payment interval
@@ -51,6 +48,16 @@
              matTooltip="0.0270% per day yields 10.355% per year when compounded daily or 9.855% per year not compounded."
              matTooltipPosition="below">
           0.03%
+        </div>
+      </div>
+      <div class="mt-1 d-flex justify-content-between payment-details color-grey">
+        <div class="info">
+          Staking pool expires
+        </div>
+        <div class="text-color"
+             matTooltip="0.0270% per day yields 10.355% per year when compounded daily or 9.855% per year not compounded."
+             matTooltipPosition="below">
+          {{dates$ | async | date: 'dd-MM-yy'}}
         </div>
       </div>
       <div class="mt-1 d-flex justify-content-between payment-details color-grey">
@@ -103,6 +110,12 @@
                 [disabled]="isWithdrawDisabled$ | async"
                 (click)="withdraw()">Withdraw
         </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="mt-3 d-flex flex-column col-xs-12 col-md-8" *ngIf="calculatedPercent$ | async as calculatedPercent">
+        <mat-progress-bar mode="determinate" [value]="calculatedPercent"></mat-progress-bar>
+        <span class="limit-text text-color mt-1">{{calculatedPercent}}% of {{getContributorLimit$ | async }} EWT Personal Limit</span>
       </div>
     </div>
   </div>
