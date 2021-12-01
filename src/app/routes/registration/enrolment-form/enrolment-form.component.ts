@@ -37,7 +37,7 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
   enrolmentForm: FormGroup = new FormGroup({
     registrationTypes: new FormGroup({
       offChain: new FormControl({value: false, disabled: false}),
-      onChain: new FormControl({value: true, disabled: false}),
+      onChain: new FormControl({value: false, disabled: false}),
     }, requireCheckboxesToBeCheckedValidator()),
     fields: new FormArray([])
   });
@@ -54,6 +54,8 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
   get fieldList(): IRoleDefinition['fields'] {
     return this.fields;
   }
+
+  @Input() showOffChain: boolean;
 
   @Input() predefinedRegTypes: PredefinedRegistrationTypes;
 
@@ -121,7 +123,7 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
       {
         offChain: {value: false, disabled: false},
         onChain: {
-          value: true,
+          value: false,
           disabled: !this.namespaceRegistrationRoles?.has(RegistrationTypes.OnChain)
         }
       }

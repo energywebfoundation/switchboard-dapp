@@ -6,9 +6,10 @@
         On-chain
       </span>
     </mat-checkbox>
-    <mat-checkbox class="pl-3 md-enroll" data-qa-id="off-chain" formControlName="offChain" [ngStyle]="txtboxColor">
+    <mat-checkbox *ngIf="showOffChain" class="pl-3 md-enroll" data-qa-id="off-chain" formControlName="offChain"
+                  [ngStyle]="txtboxColor">
       <span class="mb-3 d-inline-flex" [ngStyle]="txtColor"
-        matTooltip="A JWT verifiable credential that can be presented">
+            matTooltip="A JWT verifiable credential that can be presented">
         Off-chain
       </span>
     </mat-checkbox>
@@ -24,9 +25,14 @@
       </div>
     </div>
 
-    <mat-error *ngIf="registrationTypesGroup.hasError('notEnoughCheckboxChecked')"
-      data-qa-id="not-enough-checkbox-checked">
+    <mat-error *ngIf="registrationTypesGroup.hasError('notEnoughCheckboxChecked') && showOffChain"
+               data-qa-id="not-enough-checkbox-checked">
       You need to pick at least one option.
+    </mat-error>
+
+    <mat-error *ngIf="registrationTypesGroup.hasError('notEnoughCheckboxChecked') && !showOffChain"
+               data-qa-id="not-enough-checkbox-checked">
+      You need to select on-chain option.
     </mat-error>
   </div>
 
