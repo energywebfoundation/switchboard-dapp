@@ -1,19 +1,17 @@
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { IRole, NamespaceType, PreconditionType, SearchType } from 'iam-client-lib';
+import { IRole, NamespaceType, PreconditionType } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { debounceTime, delay, startWith, switchMap, take } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { delay, take } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 import { ListType } from '../../../shared/constants/shared-constants';
 import { IamService } from '../../../shared/services/iam.service';
-import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatTableDataSource } from '@angular/material/table';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
@@ -67,8 +65,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger;
-
   IssuerType = {
     DID: 'DID',
     Role: 'Role'
@@ -93,9 +89,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     newIssuer: ['', HexValidators.isDidValid()]
   });
 
-  public roleControl = this.fb.control('');
   public restrictionRoleControl = this.fb.control('');
-  public environment = environment;
   public isChecking = false;
   public RoleType = RoleType;
   public RoleTypeList = RoleTypeList;
@@ -103,12 +97,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   public issuerList: string[] = [this.signerFacade.getDid()];
 
   // Fields
-  isAutolistLoading = false;
-  hasSearchResult = true;
   displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
   displayedColumns: string[] = [...this.displayedColumnsView, 'actions'];
   dataSource = new MatTableDataSource([]);
-  rolenamespaceList: Observable<any[]>;
   isExistsRoleName = false;
   public ViewType = ViewType;
   viewType: string = ViewType.NEW;
@@ -120,7 +111,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   private _retryCount = 0;
   private _currentIdx = 0;
   private _requests = {};
-  private _onSearchKeywordInput$: any;
 
   constructor(private fb: FormBuilder,
               private iamService: IamService,
@@ -137,11 +127,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.rolenamespaceList = this.roleControl.valueChanges.pipe(
-      debounceTime(1200),
-      startWith(''),
-      switchMap(async (value) => await this._searchRoleNamespace(value))
-    );
 
     this._init(this.data);
   }
@@ -712,51 +697,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private async _searchRoleNamespace(keyword: any): Promise<any[]> {
-    if (this.autocompleteTrigger) {
-      this.autocompleteTrigger.closePanel();
-    }
-
-    this.isAutolistLoading = true;
-    let retVal = [];
-
-    if (keyword) {
-      let word;
-      if (!keyword.trim && keyword.name) {
-        word = keyword.name;
-      } else {
-        word = keyword.trim();
-      }
-
-      if (word.length > 2) {
-        word = word.toLowerCase();
-        try {
-          retVal = await this.iamService.domainsService.getENSTypesBySearchPhrase(
-            word,
-            [SearchType.Role]
-          );
-
-          if (retVal && retVal.length) {
-            this.hasSearchResult = true;
-            if (this.autocompleteTrigger) {
-              this.autocompleteTrigger.openPanel();
-            }
-          }
-        } catch (e) {
-          this.toastr.error('Could not load search result.', 'Server Error');
-        }
-      }
-    }
-    this.isAutolistLoading = false;
-    return retVal;
-  }
-
   displayFn(selected: any) {
     return selected && selected.namespace ? selected.namespace : '';
-  }
-
-  clearSearchTxt() {
-    this.roleControl.setValue('');
   }
 
   removePreconditionRole(idx: number) {
