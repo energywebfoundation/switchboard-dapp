@@ -22,6 +22,7 @@ import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-t
 import { StakingHeaderComponent } from './staking-header/staking-header.component';
 import { StakingFooterComponent } from './staking-footer/staking-footer.component';
 import { UserMenuModule } from '../../layout/components/user-menu/user-menu.module';
+import { NotEnroledRoleInfoComponent } from './not-enroled-role-info/not-enroled-role-info.component';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { UserMenuModule } from '../../layout/components/user-menu/user-menu.modu
     LastDigitsPipe,
     StakingHeaderComponent,
     StakingFooterComponent,
+    NotEnroledRoleInfoComponent,
   ],
   imports: [
     CommonModule,

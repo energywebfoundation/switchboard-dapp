@@ -17,6 +17,7 @@ import { IOrganizationDefinition } from '@energyweb/iam-contracts';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import { StakingPoolFacade } from '../../shared/services/pool/staking-pool-facade';
 import { WithdrawComponent } from '../../routes/ewt-patron/withdraw/withdraw.component';
+import { NotEnroledRoleInfoComponent } from '../../routes/ewt-patron/not-enroled-role-info/not-enroled-role-info.component';
 
 const {formatEther, parseEther} = utils;
 
@@ -105,15 +106,15 @@ export class PoolEffects {
       ofType(PoolActions.putStake),
       tap(() => this.loadingService.show('Staking your EWT')),
       switchMap(({amount}) => {
-        return this.stakingPoolFacade.putStake(parseEther(amount))
-          .pipe(
-            map(() => {
-              this.dialog.open(StakeSuccessComponent, {
-                width: '400px',
-                maxWidth: '100%',
-                disableClose: true,
-                backdropClass: 'backdrop-shadow'
-              });
+          return this.stakingPoolFacade.putStake(parseEther(amount))
+            .pipe(
+              map(() => {
+                this.dialog.open(StakeSuccessComponent, {
+                  width: '400px',
+                  maxWidth: '100%',
+                  disableClose: true,
+                  backdropClass: 'backdrop-shadow'
+                });
                 return PoolActions.getStake();
               }),
               catchError(err => {
@@ -221,9 +222,9 @@ export class PoolEffects {
       tap(() => this.loadingService.show('Getting Organization details')),
       withLatestFrom(this.store.select(poolSelectors.getOrganization)),
       switchMap(([, organization]) => from(this.iamService.getDefinition(organization)).pipe(
-        map((definition: IOrganizationDefinition) => PoolActions.getOrganizationDetailsSuccess({orgDetails: definition})),
-        catchError(err => {
-          console.error(err);
+          map((definition: IOrganizationDefinition) => PoolActions.getOrganizationDetailsSuccess({orgDetails: definition})),
+          catchError(err => {
+            console.error(err);
             return of(PoolActions.getOrganizationDetailsFailure({err: err.message}));
           }),
           finalize(() => this.loadingService.hide())
@@ -260,14 +261,35 @@ export class PoolEffects {
     )
   );
 
+  getRoles$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.getRoles),
+      switchMap(() => from(this.iamService.claimsService.getClaimsByRequester({
+          did: this.iamService.signerService.did,
+          isAccepted: true
+        })).pipe(
+          map((roles) => roles.filter((item) => item.claimType === 'email.roles.verification.apps.energyweb.iam.ewc')),
+          filter(roles => roles.length === 0),
+          map(() => {
+            this.dialog.open(NotEnroledRoleInfoComponent, {
+              width: '400px',
+              maxWidth: '100%',
+              disableClose: true,
+            });
+          })
+        )
+      )
+    ), {dispatch: false}
+  );
+
   getContributorLimit$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PoolActions.getContributorLimit),
       switchMap(() => this.stakingPoolFacade.getContributionLimit().pipe(
-        map((cap: BigNumber) => PoolActions.getContributorLimitSuccess({cap})),
-        catchError(err => {
-          console.error(err);
-          return of(PoolActions.getContributorLimitFailure({err: err?.message}));
+          map((cap: BigNumber) => PoolActions.getContributorLimitSuccess({cap})),
+          catchError(err => {
+            console.error(err);
+            return of(PoolActions.getContributorLimitFailure({err: err?.message}));
           })
         )
       )
@@ -293,7 +315,7 @@ export class PoolEffects {
             return [PoolActions.getOrganizationDetails()];
           }
           return [PoolActions.getStake(), PoolActions.getOrganizationDetails(), PoolActions.getHardCap(), PoolActions.getContributorLimit(), PoolActions.stakingPoolFinishDate(),
-            PoolActions.stakingPoolStartDate(), PoolActions.totalStaked()];
+            PoolActions.stakingPoolStartDate(), PoolActions.totalStaked(), PoolActions.getRoles()];
         })
       );
   }
