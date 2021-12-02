@@ -17,6 +17,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { truthy } from '@operators';
+import { Store } from '@ngrx/store';
+import { SettingsSelectors } from '@state';
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
@@ -51,12 +53,12 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   private _iamSubscriptionId: number;
   private _shadowList = [];
 
-  constructor(
-    private loadingService: LoadingService,
-    private iamService: IamService,
-    private dialog: MatDialog,
-    private toastr: SwitchboardToastrService,
-    private notifService: NotificationService
+  constructor(private loadingService: LoadingService,
+              private iamService: IamService,
+              private dialog: MatDialog,
+              private toastr: SwitchboardToastrService,
+              private notifService: NotificationService,
+              private store: Store
   ) {
   }
 
@@ -102,15 +104,29 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         'actions',
       ];
     } else {
-      this.displayedColumns = [
-        'requestDate',
-        'roleName',
-        'parentNamespace',
-        'requester',
-        'asset',
-        'status',
-        'actions',
-      ];
+      this.store.select(SettingsSelectors.isExperimentalEnabled).subscribe((v) => {
+        if (v) {
+          this.displayedColumns = [
+            'requestDate',
+            'roleName',
+            'parentNamespace',
+            'requester',
+            'asset',
+            'status',
+            'actions',
+          ];
+        } else {
+          this.displayedColumns = [
+            'requestDate',
+            'roleName',
+            'parentNamespace',
+            'requester',
+            'status',
+            'actions',
+          ];
+        }
+      });
+
     }
 
     await this.getList(this.rejected, this.accepted);
@@ -133,6 +149,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this.dynamicRejected = isRejected;
     this.dynamicAccepted = isAccepted;
     let list = [];
+    debugger;
 
     try {
       if (this.listType === EnrolmentListType.ASSET) {
