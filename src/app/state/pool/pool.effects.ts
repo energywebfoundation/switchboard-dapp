@@ -245,14 +245,28 @@ export class PoolEffects {
     )
   );
 
+  getTotalStaked = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PoolActions.totalStaked),
+      switchMap(() => this.stakingPoolFacade.getTotalStaked().pipe(
+          map((cap: BigNumber) => PoolActions.totalStakedSuccess({cap})),
+          catchError(err => {
+            console.error(err);
+            return of(PoolActions.totalStakedFailure({err: err?.message}));
+          })
+        )
+      )
+    )
+  );
+
   getContributorLimit$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PoolActions.getContributorLimit),
       switchMap(() => this.stakingPoolFacade.getContributionLimit().pipe(
-          map((cap: BigNumber) => PoolActions.getContributorLimitSuccess({cap})),
-          catchError(err => {
-            console.error(err);
-            return of(PoolActions.getContributorLimitFailure({err: err?.message}));
+        map((cap: BigNumber) => PoolActions.getContributorLimitSuccess({cap})),
+        catchError(err => {
+          console.error(err);
+          return of(PoolActions.getContributorLimitFailure({err: err?.message}));
           })
         )
       )
@@ -278,7 +292,7 @@ export class PoolEffects {
             return [PoolActions.getOrganizationDetails()];
           }
           return [PoolActions.getStake(), PoolActions.getOrganizationDetails(), PoolActions.getHardCap(), PoolActions.getContributorLimit(), PoolActions.stakingPoolFinishDate(),
-            PoolActions.stakingPoolStartDate()];
+            PoolActions.stakingPoolStartDate(), PoolActions.totalStaked()];
         })
       );
   }

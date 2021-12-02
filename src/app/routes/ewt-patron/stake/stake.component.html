@@ -113,9 +113,10 @@
       </div>
     </div>
     <div class="row">
-      <div class="mt-3 d-flex flex-column col-xs-12 col-md-8" *ngIf="calculatedPercent$ | async as calculatedPercent">
-        <mat-progress-bar mode="determinate" [value]="calculatedPercent"></mat-progress-bar>
-        <span class="limit-text text-color mt-1">{{calculatedPercent}}% of {{getContributorLimit$ | async }} EWT Personal Limit</span>
+      <div class="mt-3 d-flex flex-column col-xs-12 col-md-8">
+        <mat-progress-bar mode="determinate" [value]="calculatedPercent$ | async"></mat-progress-bar>
+        <span class="limit-text text-color mt-1">{{calculatedPercent$ | async}}% of {{getContributorLimit$ | async }}
+          EWT Personal Limit</span>
       </div>
     </div>
   </div>

@@ -19,6 +19,7 @@ export interface PoolState {
   organizationLimit: BigNumber;
   endDate: number;
   startDate: number;
+  totalStaked: BigNumber;
 }
 
 export const initialState: PoolState = {
@@ -33,7 +34,8 @@ export const initialState: PoolState = {
   contributorLimit: null,
   organizationLimit: null,
   endDate: null,
-  startDate: null
+  startDate: null,
+  totalStaked: null
 };
 
 const poolReducer = createReducer(
@@ -56,6 +58,7 @@ const poolReducer = createReducer(
   on(PoolActions.withdrawRewardSuccess, (state) => ({...state, reward: BigNumber.from(0)})),
   on(PoolActions.getContributorLimitSuccess, (state, {cap}) => ({...state, contributorLimit: cap})),
   on(PoolActions.getHardCapSuccess, (state, {cap}) => ({...state, organizationLimit: cap})),
+  on(PoolActions.totalStakedSuccess, (state, {cap}) => ({...state, totalStaked: cap})),
   on(PoolActions.stakingPoolFinishDateSuccess, (state, {date}) => ({...state, endDate: date})),
   on(PoolActions.stakingPoolStartDateSuccess, (state, {date}) => ({...state, startDate: date})),
 );
