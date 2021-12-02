@@ -3,14 +3,15 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NewIssueVcComponent } from './new-issue-vc.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IssuanceVcService } from '../services/issuance-vc.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { dispatchInputEvent, getElement } from '@tests';
+import { dialogSpy, dispatchInputEvent, getElement } from '@tests';
+import { of } from 'rxjs';
 
 class MockDialogData {
   did: string;
@@ -24,10 +25,10 @@ class MockDialogData {
   }
 }
 
-xdescribe('NewArbitraryCredentialComponent', () => {
+describe('NewIssueVCComponent', () => {
   let component: NewIssueVcComponent;
   let fixture: ComponentFixture<NewIssueVcComponent>;
-  const issuanceVcServiceSpy = jasmine.createSpyObj('IssuanceVcService', ['create']);
+  const issuanceVcServiceSpy = jasmine.createSpyObj('IssuanceVcService', ['create', 'getNotEnrolledRoles']);
   let mockDialogData;
   let hostDebug: DebugElement;
   beforeEach(waitForAsync(() => {
@@ -45,6 +46,7 @@ xdescribe('NewArbitraryCredentialComponent', () => {
       ],
       providers: [
         {provide: MAT_DIALOG_DATA, useValue: mockDialogData},
+        {provide: MatDialogRef, useValue: dialogSpy},
         {provide: IssuanceVcService, useValue: issuanceVcServiceSpy},
 
       ],
@@ -57,6 +59,21 @@ xdescribe('NewArbitraryCredentialComponent', () => {
     fixture = TestBed.createComponent(NewIssueVcComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
+    issuanceVcServiceSpy.getNotEnrolledRoles.and.returnValue(of([{
+      'name': 'role',
+      'namespace': 'role.roles.test.iam.ewc',
+      'definition': {
+        'issuer': {
+          'did': [
+            'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3'
+          ],
+          'issuerType': 'DID'
+        },
+        'version': 2,
+        'metadata': {},
+        'roleName': 'issuerfields',
+      }
+    }]));
   });
 
   it('should create', () => {
@@ -74,32 +91,79 @@ xdescribe('NewArbitraryCredentialComponent', () => {
     expect(subjectDid.disabled).toBeTrue();
   });
 
-  it('should create new VC', () => {
+  it('should create set did and role for new vc.', () => {
+    issuanceVcServiceSpy.create.and.returnValue(of());
     fixture.detectChanges();
 
-    const {subjectDid, selectType, createBtn} = getSelectors(hostDebug);
+    const {subjectDid} = getSelectors(hostDebug);
 
     subjectDid.value = 'did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89';
     dispatchInputEvent(subjectDid);
 
+    fixture.detectChanges();
+
+    const {selectType} = getSelectors(hostDebug);
     selectType.click();
     fixture.detectChanges();
 
-    getElement(hostDebug)('owner').nativeElement.click();
+    getElement(hostDebug)('role').nativeElement.click();
+
+    fixture.detectChanges();
+    expect(component.isFormDisabled()).toBeFalse();
+  });
+
+  it('should not display role list when did is invalid', () => {
+    fixture.detectChanges();
+
+    const {subjectDid} = getSelectors(hostDebug);
+
+    subjectDid.value = 'invalid did';
+    dispatchInputEvent(subjectDid);
 
     fixture.detectChanges();
 
-    expect(createBtn.disabled).toBeFalse();
+    const {selectType} = getSelectors(hostDebug);
 
-    createBtn.click();
-    expect(issuanceVcServiceSpy.create).toHaveBeenCalled();
+    expect(component.isFormSubjectValid()).toBeFalse();
+    expect(selectType).toBeFalsy();
   });
+
+  it('should check if form is enabled when form is valid and precheck is true', () => {
+    component.getFormSubject().setValue('did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89');
+    component.getFormType().setValue('test');
+    component.isPrecheckSuccess = true;
+    fixture.detectChanges();
+    expect(component.isFormDisabled()).toBeFalse();
+  });
+
+  it('should check if form is disabled when precheck is false', () => {
+    component.getFormSubject().setValue('did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89');
+    component.getFormType().setValue('test');
+    component.isPrecheckSuccess = false;
+    fixture.detectChanges();
+    expect(component.isFormDisabled()).toBeTrue();
+  });
+
+  it('should check if form is disabled when did is incorrect', () => {
+    component.getFormSubject().setValue('did:ethr:0x925b597D2a6Ac8D4a1CA31Dd65a1904f0F2e89');
+    component.getFormType().setValue('test');
+    component.isPrecheckSuccess = true;
+    fixture.detectChanges();
+    expect(component.isFormDisabled()).toBeTrue();
+  });
+
+  it('scannedValue should patch subject property', () => {
+    fixture.detectChanges();
+    const value = 'did:ethr:0x925b597D2a6Ac8D4a1CA31Dd65a1904f0F2e89';
+    component.scannedValue(value);
+    expect(component.getFormSubject().value).toEqual(value);
+  });
+
 });
 
 const getSelectors = (hostDebug) => {
   return {
     subjectDid: getElement(hostDebug)('subject-did')?.nativeElement,
     selectType: getElement(hostDebug)('select-type')?.nativeElement,
-    createBtn: getElement(hostDebug)('create')?.nativeElement
   };
 };

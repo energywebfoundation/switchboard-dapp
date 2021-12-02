@@ -21,6 +21,7 @@ import { logout } from '../../../state/auth/auth.actions';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 import { filter, take } from 'rxjs/operators';
 import { AuthActions } from '@state';
+import { PreconditionCheck, preconditionCheck } from '../utils/precondition-check';
 import { LoginService } from 'src/app/shared/services/login/login.service';
 
 const TOASTR_HEADER = 'Enrolment';
@@ -38,12 +39,6 @@ const SwalButtons = {
 interface FormClaim extends Claim {
   isSynced?: boolean;
   claimTypeVersion: string;
-}
-
-export enum RolePreconditionType {
-  SYNCED = 'synced',
-  APPROVED = 'approved',
-  PENDING = 'pending'
 }
 
 @Component({
@@ -76,7 +71,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public isPrecheckSuccess = false;
   public predefinedRegTypes: PredefinedRegistrationTypes;
   isLoading = false;
-  rolePreconditionList = [];
+  rolePreconditionList: PreconditionCheck[] = [];
   public roleType: string;
 
   private userRoleList: FormClaim[];
@@ -113,14 +108,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   isApplication(): boolean {
     return this.roleType === RoleType.APP;
-  }
-
-  isRolePreconditionApproved(status: RolePreconditionType): boolean {
-    return status === RolePreconditionType.APPROVED;
-  }
-
-  isRolePreconditionPending(status: RolePreconditionType): boolean {
-    return status === RolePreconditionType.PENDING;
   }
 
   getNamespaceRegistrationRoles(): Set<RegistrationTypes> {
@@ -207,9 +194,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       this.selectedNamespace = e.value.namespace;
 
       // Init Preconditions
-      this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
-
+      this.setPreconditions();
     }
+  }
+
+  private setPreconditions(): void {
+    [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(this.selectedRole.enrolmentPreconditions, this.userRoleList);
   }
 
   async enrolForSelected(e: any) {
@@ -282,10 +272,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   goToEnrolment() {
     if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid}});
+      this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid } });
     } else {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/enrolment?notif=myEnrolments'}});
+      this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/enrolment?notif=myEnrolments' } });
     }
   }
 
@@ -575,7 +565,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
               this.roleTypeForm.get('roleType').setValue(role);
 
               // Init Preconditions
-              this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
+              this.setPreconditions();
             });
         }
       }
@@ -603,55 +593,4 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     }
   }
 
-  private _getRoleConditionStatus(namespace: string) {
-    let status = RolePreconditionType.PENDING;
-
-    // Check if namespace exists in synced DID Doc Roles
-    for (const roleObj of this.userRoleList) {
-      if (roleObj.claimType === namespace) {
-        if (roleObj.isAccepted) {
-          if (roleObj.isSynced) {
-            status = RolePreconditionType.SYNCED;
-          } else {
-            status = RolePreconditionType.APPROVED;
-          }
-        }
-        break;
-      }
-    }
-
-    return status;
-  }
-
-  private _preconditionCheck(preconditionList: any[]) {
-    let retVal = true;
-
-    if (preconditionList && preconditionList.length) {
-      for (const precondition of preconditionList) {
-        switch (precondition.type) {
-          case PreconditionType.Role:
-            // Check for Role Conditions
-            this.rolePreconditionList = [];
-
-            const conditions = precondition.conditions;
-            if (conditions) {
-              for (const roleCondition of conditions) {
-                const status = this._getRoleConditionStatus(roleCondition);
-                this.rolePreconditionList.push({
-                  namespace: roleCondition,
-                  status
-                });
-
-                if (status !== RolePreconditionType.SYNCED) {
-                  retVal = false;
-                }
-              }
-            }
-            break;
-        }
-      }
-    }
-
-    return retVal;
-  }
 }

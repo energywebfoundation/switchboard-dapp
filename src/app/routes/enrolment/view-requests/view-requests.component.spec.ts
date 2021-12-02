@@ -27,7 +27,7 @@ describe('ViewRequestsComponent', () => {
         {provide: LoadingService, useValue: loadingServiceSpy},
         {provide: IamService, useValue: iamServiceSpy},
         {provide: SwitchboardToastrService, useValue: switchboardToastrServiceSpy},
-        {provide: MAT_DIALOG_DATA, useValue: {listType: 1, claimData: 2}},
+        {provide: MAT_DIALOG_DATA, useValue: {listType: 1, claimData: {claimType: 'test'}}},
         {provide: MatDialogRef, useValue: matDialogRefSpy},
         {provide: MatDialog, useValue: dialogSpy},
       ],
@@ -40,6 +40,7 @@ describe('ViewRequestsComponent', () => {
     fixture = TestBed.createComponent(ViewRequestsComponent);
     component = fixture.componentInstance;
     iamServiceSpy.getDidDocument.and.returnValue(of({service: []}));
+    iamServiceSpy.getRolesDefinition.and.returnValue(Promise.resolve({}));
     fixture.detectChanges();
   });
 

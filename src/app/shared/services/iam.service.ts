@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   AccountInfo,
   AssetsService,
+  CacheClient,
   ClaimData,
   ClaimsService,
   DidRegistry,
@@ -12,6 +13,7 @@ import {
   initWithMetamask,
   initWithPrivateKeySigner,
   initWithWalletConnect,
+  IRole,
   MessagingMethod,
   MessagingService,
   NamespaceType,
@@ -27,8 +29,8 @@ import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
 import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
-import { finalize } from 'rxjs/operators';
 import { truthy } from '@operators';
+import { finalize, map } from 'rxjs/operators';
 import { EnvService } from './env/env.service';
 
 export const PROVIDER_TYPE = 'ProviderType';
@@ -44,7 +46,7 @@ export type InitializeData = {
 };
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class IamService {
   signerService: SignerService;
@@ -54,6 +56,7 @@ export class IamService {
   domainsService: DomainsService;
   stakingService: StakingFactoryService;
   assetsService: AssetsService;
+  cacheClient: CacheClient;
 
   constructor(
     private loadingService: LoadingService,
@@ -84,6 +87,20 @@ export class IamService {
 
   issueClaim(data: { subject: string; claim: any }) {
     return this.wrapWithLoadingService(this.claimsService.issueClaim(data));
+  }
+
+  getClaimsBySubject(did: string) {
+    return from(this.claimsService.getClaimsBySubject({
+      did
+    })).pipe(map(claims => claims.filter((claim) => !claim.isRejected)));
+  }
+
+  getAllowedRolesByIssuer(): Observable<IRole[]> {
+    return this.wrapWithLoadingService(this.domainsService.getAllowedRolesByIssuer(this.signerService.did) as any as Promise<IRole[]>);
+  }
+
+  getRolesDefinition(namespaces: string[]) {
+    return this.cacheClient.getRolesDefinition(namespaces);
   }
 
   registerAsset() {
@@ -141,10 +158,12 @@ export class IamService {
           stakingPoolService,
           assetsService,
           connectToDidRegistry,
+          cacheClient
         } = await connectToCacheServer();
         this.domainsService = domainsService;
         this.stakingService = stakingPoolService;
         this.assetsService = assetsService;
+        this.cacheClient = cacheClient;
         if (createDocument) {
           const {didRegistry, claimsService} = await connectToDidRegistry();
           this.didRegistry = didRegistry;

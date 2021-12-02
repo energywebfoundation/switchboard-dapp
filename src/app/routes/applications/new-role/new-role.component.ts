@@ -18,6 +18,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
+import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
 
 export enum ENSPrefixes {
   Roles = 'roles',
@@ -97,9 +98,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   public issuerList: string[] = [this.signerFacade.getDid()];
 
   // Fields
+  dataSource = new MatTableDataSource<IFieldDefinition>([]);
+  issuerFields = new MatTableDataSource<IFieldDefinition>([]);
   displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
   displayedColumns: string[] = [...this.displayedColumnsView, 'actions'];
-  dataSource = new MatTableDataSource([]);
   isExistsRoleName = false;
   public ViewType = ViewType;
   viewType: string = ViewType.NEW;
@@ -168,7 +170,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
       // Construct Fields
       this.dataSource.data = def.fields ? [...def.fields] : [];
-      this._initDates();
+      this.issuerFields.data = def?.issuerFields ? [...def.issuerFields] : [];
+      // this._initDates();
 
       this.roleForm.patchValue({
         roleType: def.roleType,
@@ -226,16 +229,21 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   private _initDates() {
     if (this.dataSource.data) {
-      for (const data of this.dataSource.data) {
-        if (data.fieldType === 'date') {
-          if (data.maxDate) {
-            data.maxDate = new Date(data.maxDate);
+      this.dataSource.data = this.dataSource.data.map((el) => {
+        if (el.fieldType === 'date') {
+          const date = {
+            ...el
+          };
+          if (el.maxDate) {
+            date.maxDate = new Date(el.maxDate);
           }
-          if (data.minDate) {
-            data.minDate = new Date(data.minDate);
+          if (el.minDate) {
+            date.minDate = new Date(el.minDate);
           }
+          return date;
         }
-      }
+        return el;
+      });
     }
   }
 
@@ -300,6 +308,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     if (this.issuerList.length > 1) {
       this.issuerList.splice(i, 1);
     }
+  }
+
+  issuerFieldsChangeHandler(data) {
+    this.issuerFields.data = [...data];
   }
 
   addRestriction(event: ISmartSearch) {
@@ -527,7 +539,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
     req.data.issuer.did = this.issuerList;
     req.data.fields = this.dataSource.data;
-    req.data.metadata = {};
+    req.data.issuerFields = this.issuerFields.data;
 
     if (!skipNextStep) {
       // Set the second step to non-editable

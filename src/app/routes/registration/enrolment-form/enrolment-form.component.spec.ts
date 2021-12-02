@@ -175,6 +175,15 @@ describe('EnrolmentFormComponent', () => {
       expect(onChain.nativeElement.checked).toBeFalsy('on chain should not be selected');
       expect(onChain.nativeElement.disabled).toBeFalsy('on chain should not be disabled');
     });
+
+    it('should not find submit button when showSubmit is false', () => {
+      component.fieldList = [];
+      component.showSubmit = false;
+      fixture.detectChanges();
+
+      const {submit} = getSelectors(hostDebug);
+      expect(submit).toBeFalsy();
+    });
   });
 
 

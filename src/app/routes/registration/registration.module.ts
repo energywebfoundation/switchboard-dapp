@@ -11,6 +11,7 @@ import { LayoutModule } from '../../layout/layout.module';
 import { SelectAssetDialogComponent } from './select-asset-dialog/select-asset-dialog.component';
 import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-to-wallet.module';
 import { EnrolmentFormModule } from './enrolment-form/enrolment-form.module';
+import { RolePreconditionListModule } from './role-precondition-list/role-precondition-list.module';
 
 
 const routes: Routes = [];
@@ -28,7 +29,8 @@ const routes: Routes = [];
     NgxSpinnerModule,
     LayoutModule,
     ConnectToWalletModule,
-    EnrolmentFormModule
+    EnrolmentFormModule,
+    RolePreconditionListModule
   ],
   declarations: [
     RequestClaimComponent,

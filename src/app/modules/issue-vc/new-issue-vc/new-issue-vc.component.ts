@@ -3,10 +3,12 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { PreconditionType } from 'iam-client-lib';
-import { RolePreconditionType } from '../../../routes/registration/request-claim/request-claim.component';
-import { IamService } from '../../../shared/services/iam.service';
-import { LoadingService } from '../../../shared/services/loading.service';
+import { PreconditionCheck, preconditionCheck } from '../../../routes/registration/utils/precondition-check';
+import { filter, switchMap } from 'rxjs/operators';
+import { EnrolmentSubmission } from '../../../routes/registration/enrolment-form/enrolment-form.component';
+import { IRole } from 'iam-client-lib';
+import { MatSelectChange } from '@angular/material/select/select';
+import { IRoleDefinition } from '@energyweb/iam-contracts';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -21,175 +23,83 @@ export class NewIssueVcComponent implements OnInit {
     subject: ['', [Validators.required, HexValidators.isDidValid()]],
     type: ['', [Validators.required]]
   });
-  roles;
-  selectedRole;
-  selectedNamespace;
-  isPrecheckSuccess;
-  alreadyEnroled;
-  rolePreconditionList = [];
+  possibleRolesToEnrol: IRole[];
+  selectedRoleDefinition: IRoleDefinition;
+  isPrecheckSuccess: boolean;
+  rolePreconditionList: PreconditionCheck[] = [];
 
   constructor(private fb: FormBuilder,
               @Inject(MAT_DIALOG_DATA) public data: { did: string },
               public dialogRef: MatDialogRef<NewIssueVcComponent>,
-              private loadingService: LoadingService,
-              private iamService: IamService,
               private issuanceVcService: IssuanceVcService) {
   }
 
   ngOnInit(): void {
-    this.issuanceVcService.getIssuerRoles().subscribe((roles) => {
-      this.roles = roles;
-    });
     this.setDid();
-
-    this.form.get('subject').valueChanges.subscribe(async (d) => {
-      if (this.form.get('subject').valid) {
-        await this.getNotEnrolledRoles(d);
-      }
-
-    });
+    this.setPossibleRoles();
   }
 
-  async roleTypeSelected(e: any) {
-    if (e && e.value && e.value.definition) {
-      this.fieldList = e.value.definition.fields || [];
-      console.log(e);
-      this.selectedRole = e.value.definition;
-      this.selectedNamespace = e.value.namespace;
-
-      // Init Preconditions
-      this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
-      if (this.form.get('subject').valid) {
-        await this.getNotEnrolledRoles(this.form.get('subject').value);
-      }
-      console.log(this.rolePreconditionList);
-      console.log(this.isPrecheckSuccess);
-
+  roleTypeSelected(e: MatSelectChange) {
+    if (e?.value?.definition) {
+      this.fieldList = e.value.definition.issuerFields || [];
+      this.selectedRoleDefinition = e.value.definition;
+      this.setPreconditions();
     }
   }
 
-  isRolePreconditionApproved(status: RolePreconditionType): boolean {
-    return status === RolePreconditionType.APPROVED;
+  private setPreconditions(): void {
+    [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(this.selectedRoleDefinition.enrolmentPreconditions, this.issuanceVcService.assetClaims);
   }
 
-  isRolePreconditionPending(status: RolePreconditionType): boolean {
-    return status === RolePreconditionType.PENDING;
+  getFormSubject() {
+    return this.form.get('subject');
   }
 
-  private _preconditionCheck(preconditionList: any[]) {
-    let retVal = true;
-
-    if (preconditionList && preconditionList.length) {
-      for (const precondition of preconditionList) {
-        switch (precondition.type) {
-          case PreconditionType.Role:
-            // Check for Role Conditions
-            this.rolePreconditionList = [];
-
-            const conditions = precondition.conditions;
-            if (conditions) {
-              for (const roleCondition of conditions) {
-                const status = this._getRoleConditionStatus(roleCondition, []);
-                this.rolePreconditionList.push({
-                  namespace: roleCondition,
-                  status
-                });
-
-                if (status !== RolePreconditionType.SYNCED) {
-                  retVal = false;
-                }
-              }
-            }
-            break;
-        }
-      }
-    }
-
-    return retVal;
+  getFormType() {
+    return this.form.get('type');
   }
 
-  private async getNotEnrolledRoles(did) {
-    this.loadingService.show();
-    let roleList = [...this.roles];
-
-    const list = (await this.iamService.claimsService.getClaimsBySubject({
-      did
-    })).filter((claim) => !claim.isRejected);
-
-    if (roleList && roleList.length) {
-      const role = this.form.value.type;
-      console.log(role);
-      this.alreadyEnroled =
-        list.some(el => {
-          return role.namespace === el.claimType &&
-            // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
-            role.definition.version.toString().split('.')[0] === el.claimTypeVersion.toString().split('.')[0] && role.namespace === this.form.get('type').value.namespace;
-        });
-      console.log(list);
-    }
-    this.loadingService.hide();
-    return roleList;
-  }
-
-  private _getRoleConditionStatus(namespace: string, roleList) {
-    let status = RolePreconditionType.PENDING;
-
-    // Check if namespace exists in synced DID Doc Roles
-    for (const roleObj of roleList) {
-      if (roleObj.claimType === namespace) {
-        if (roleObj.isAccepted) {
-          if (roleObj.isSynced) {
-            status = RolePreconditionType.SYNCED;
-          } else {
-            status = RolePreconditionType.APPROVED;
-          }
-        }
-        break;
-      }
-    }
-
-    return status;
-  }
-
-  keyValueListHandler(e) {
-    this.fieldList = e;
+  isFormSubjectValid(): boolean {
+    return this.getFormSubject().valid;
   }
 
   isDidPredefined(): boolean {
     return Boolean(this.data?.did);
   }
 
-  getControl(control: string) {
-    return this.form.get(control);
+  scannedValue(did: string): void {
+    this.form.patchValue({subject: did});
   }
 
-  scannedValue(data: { value: string }) {
-    this.form.patchValue({subject: data.value});
+  isFormDisabled(): boolean {
+    return this.form.invalid || !this.isPrecheckSuccess;
   }
 
-  isFormDisabled() {
-    return this.form.invalid || this.alreadyEnroled || !this.isPrecheckSuccess;
-  }
-
-  create() {
-    if (this.isFormDisabled()) {
+  create(e: EnrolmentSubmission) {
+    if (this.isFormDisabled() && e.valid) {
       return;
     }
-    this.issuanceVcService.create({subject: this.form.get('subject').value, claim: this.createClaim()})
-      .subscribe((data) => {
-        console.log(data);
-        this.dialogRef.close();
-      });
+    this.issuanceVcService.create({subject: this.getFormSubject().value, claim: this.createClaim(e.fields)})
+      .subscribe(() => this.dialogRef.close());
+  }
+
+  private setPossibleRoles() {
+    this.getFormSubject().valueChanges
+      .pipe(
+        filter(() => this.isFormSubjectValid()),
+        switchMap((did) => this.issuanceVcService.getNotEnrolledRoles(did)),
+      ).subscribe((list) => this.possibleRolesToEnrol = list);
   }
 
   private setDid() {
     if (this.data?.did) {
       this.form.patchValue({subject: this.data.did});
-      this.form.get('subject').disable();
+      this.getFormSubject().disable();
     }
   }
 
-  private createClaim() {
+  private createClaim(fields) {
+    // TODO: Move this method to separate service and use it in request-claim component.
     const parseVersion = (version: string | number) => {
       if (typeof (version) === 'string') {
         return parseInt(version.split('.')[0], 10);
@@ -198,9 +108,9 @@ export class NewIssueVcComponent implements OnInit {
     };
 
     return {
-      fields: this.fieldList,
-      claimType: this.selectedNamespace,
-      claimTypeVersion: parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION
+      claimType: this.getFormType().value.namespace,
+      claimTypeVersion: parseVersion(this.selectedRoleDefinition.version) || DEFAULT_CLAIM_TYPE_VERSION,
+      issuerFields: fields
     };
   }
 }

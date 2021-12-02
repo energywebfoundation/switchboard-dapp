@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-code-scanner.module';
 import { SharedModule } from '../../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CreateFieldsModule } from '../../routes/applications/new-role/components/create-fields/create-fields.module';
 import { NewIssueVcComponent } from './new-issue-vc/new-issue-vc.component';
-import { KeyValueModule } from '../key-value/key-value.module';
+import { EnrolmentFormModule } from '../../routes/registration/enrolment-form/enrolment-form.module';
+import { RolePreconditionListModule } from '../../routes/registration/role-precondition-list/role-precondition-list.module';
 
 
 @NgModule({
@@ -17,8 +17,8 @@ import { KeyValueModule } from '../key-value/key-value.module';
     ReactiveFormsModule,
     QrCodeScannerModule,
     SharedModule,
-    CreateFieldsModule,
-    KeyValueModule
+    EnrolmentFormModule,
+    RolePreconditionListModule
   ],
   exports: [
     NewIssueVcComponent

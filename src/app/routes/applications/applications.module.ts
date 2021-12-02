@@ -58,7 +58,7 @@ const routes: Routes = [
     ActionsMenuComponent,
     FilterComponent,
     ActionsMenuComponent,
-    TransactionsCompleteComponent
+    TransactionsCompleteComponent,
   ],
   imports: [
     CommonModule,

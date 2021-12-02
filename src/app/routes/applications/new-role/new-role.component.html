@@ -206,8 +206,8 @@
         </mat-step>
 
         <mat-step [completed]="false">
-          <ng-template matStepLabel>Set Fields</ng-template>
-          <app-role-field [fieldsList]="dataSource.data" [isChecking]="isChecking"
+          <ng-template matStepLabel>Set Requestor Fields</ng-template>
+          <app-role-field [fieldsList]="dataSource.data"
                           (updateData)="dataSourceChangeHandler($event)">
           </app-role-field>
           <div class="d-flex justify-content-end mb-2">
@@ -222,6 +222,25 @@
             </button>
           </div>
         </mat-step>
+
+        <mat-step [completed]="false">
+          <ng-template matStepLabel>Set Issuer Fields</ng-template>
+          <app-role-field [fieldsList]="issuerFields.data"
+                          (updateData)="issuerFieldsChangeHandler($event)">
+          </app-role-field>
+          <div class="d-flex justify-content-end mb-2">
+            <button mat-stroked-button
+                    class="btn btn-small mr-2 back"
+                    data-qa-id="back"
+                    (click)="back()">
+              Back
+            </button>
+            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking"
+                    (click)="proceedConfirmDetails()">Next
+            </button>
+          </div>
+        </mat-step>
+
 
         <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Confirm Details</ng-template>
@@ -263,12 +282,26 @@
             </div>
             <mat-divider></mat-divider>
             <div class="text-left mt-3">
-              <div class="label opacity-50 mb-2">Fields</div>
+              <div class="label opacity-50 mb-2">Requestor Fields</div>
               <span class="color-white mb-0" *ngIf="!dataSource?.data?.length">None</span>
 
               <ng-container *ngIf="dataSource.data.length">
                 <div class="field-list">
                   <app-fields-summary *ngFor="let element of dataSource.data"
+                                      [element]="element"
+                                      class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block">
+                  </app-fields-summary>
+                </div>
+              </ng-container>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="text-left mt-3">
+              <div class="label opacity-50 mb-2">Issuer Required Fields</div>
+              <span class="color-white mb-0" *ngIf="!issuerFields?.data?.length">None</span>
+
+              <ng-container *ngIf="issuerFields.data.length">
+                <div class="field-list">
+                  <app-fields-summary *ngFor="let element of issuerFields.data"
                                       [element]="element"
                                       class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block">
                   </app-fields-summary>

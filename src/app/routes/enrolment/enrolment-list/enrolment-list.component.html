@@ -48,21 +48,19 @@
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
       <td mat-cell *matCellDef="let element" data-label="Status">
-        <ng-container *ngIf="element?.isAccepted && element?.isSynced"><span class="color-success">Approved</span>
-        </ng-container>
-        <ng-container *ngIf="element?.isAccepted && !element?.isSynced">
+        <ng-container *ngIf="isAccepted(element)">
           <div class="d-flex flex-column flex-md-row justify-content-between mr-2">
-            <div class="color-success">Approved</div>     
-            <div class="mt-2 mt-md-0" *ngIf="listType !== ListType.ISSUER">
+            <div class="color-success">Approved</div>
+            <div class="mt-2 mt-md-0" *ngIf="isPendingSync(element)">
               <mat-icon class="color-warned icon-small mr-2" svgIcon="sync-did-icon"></mat-icon>
               <!-- Apply link to add to DID Document -->
-              <a class="color-white" href="#">Sync to DID Document</a>
+              <span class="color-white cursor-pointer" (click)="addToDidDoc(element)">Sync to DID Document</span>
             </div>
           </div>
         </ng-container>
-        <ng-container *ngIf="!element?.isAccepted && !element?.isRejected"><span class="color-warned">Pending</span>
+        <ng-container *ngIf="isPending(element)"><span class="color-warned">Pending</span>
         </ng-container>
-        <ng-container *ngIf="!element?.isAccepted && element?.isRejected"><span class="color-error">Rejected</span>
+        <ng-container *ngIf="isRejected(element)"><span class="color-error">Rejected</span>
         </ng-container>
       </td>
     </ng-container>
@@ -84,7 +82,7 @@
 
             <!-- Sync to DID -->
             <button mat-menu-item class="btn-color-primary" (click)="addToDidDoc(element)"
-                    *ngIf="listType !== ListType.ISSUER && element?.isAccepted && !element?.isSynced">
+                    *ngIf="isPendingSync(element) && isAccepted(element)">
               <mat-icon class="btn-color-primary">note_add</mat-icon>
               <span>Add to DID Document</span>
             </button>

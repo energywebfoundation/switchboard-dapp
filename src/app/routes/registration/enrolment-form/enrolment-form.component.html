@@ -107,7 +107,7 @@
     </div>
   </ng-container>
 
-  <div class="mt-3">
+  <div class="mt-3" *ngIf="showSubmit">
     <button mat-raised-button data-qa-id="submit-request" class="btn btn-primary md-enroll w-100" type="submit"
       (click)="submit()" [disabled]="disabledSubmit || enrolmentForm.invalid" [ngStyle]="btnColor">Submit Request
     </button>
