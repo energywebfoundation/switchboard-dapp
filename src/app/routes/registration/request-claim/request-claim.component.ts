@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Asset, Claim, IRoleDefinition, NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import { Asset, Claim, IRoleDefinition, NamespaceType, PreconditionType, RegistrationTypes } from 'iam-client-lib';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
@@ -10,7 +10,11 @@ import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wall
 import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-dialog.component';
 import { SubjectElements, ViewColorsSetter } from '../models/view-colors-setter';
 import swal from 'sweetalert';
-import { EnrolmentField, EnrolmentSubmission } from '../enrolment-form/enrolment-form.component';
+import {
+  EnrolmentField,
+  EnrolmentSubmission,
+  PredefinedRegistrationTypes
+} from '../enrolment-form/enrolment-form.component';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { Store } from '@ngrx/store';
 import { logout } from '../../../state/auth/auth.actions';
@@ -65,6 +69,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public txtboxColor = {};
   public isLoggedIn = false;
   public isPrecheckSuccess = false;
+  public predefinedRegTypes: PredefinedRegistrationTypes;
   isLoading = false;
   rolePreconditionList: PreconditionCheck[] = [];
   public roleType: string;
@@ -137,7 +142,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         }
 
         this.setUrlParams(params);
-
+        this.setPredefinedRegistrationTypes(params);
         this.resetData();
 
         try {
@@ -176,6 +181,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private async getRegistrationTypesOfRoles() {
     this.registrationTypesOfRole = await this.iamService.domainsService.registrationTypesOfRoles(this.roleList.map(role => role.namespace));
+  }
+
+  private setPredefinedRegistrationTypes(params) {
+    this.predefinedRegTypes = {onChain: params?.onchain === 'true', offChain: params?.offchain === 'true'};
   }
 
   roleTypeSelected(e: any) {
@@ -337,7 +346,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
     this.callbackUrl = params.returnUrl || (others ? others.returnUrl : undefined);
 
-    const viewColorsSetter = new ViewColorsSetter({ ...others, ...params });
+    const viewColorsSetter = new ViewColorsSetter({...others, ...params});
     viewColorsSetter.applyTo(this);
   }
 
@@ -369,15 +378,15 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         default:
           if (this.callbackUrl && !this.stayLoggedIn) {
             // Logout
-            this.store.dispatch(logout())
+            this.store.dispatch(logout());
             // Redirect to Callback URL
             location.href = this.callbackUrl;
           } else if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
             // Navigate to My Enrolments Page
-            this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid } });
+            this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid}});
           } else {
             // Navigate to My Enrolments Page
-            this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/enrolment?notif=myEnrolments' } });
+            this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/enrolment?notif=myEnrolments'}});
           }
       }
     } else {
@@ -469,8 +478,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private async _getDIDSyncedRoles() {
     try {
-      let claims: any[] = await this.iamService.claimsService.getUserClaims({
-      });
+      let claims: any[] = await this.iamService.claimsService.getUserClaims({});
       claims = claims
         .filter((item: any) => item && item.claimType)
         .filter((item) => {

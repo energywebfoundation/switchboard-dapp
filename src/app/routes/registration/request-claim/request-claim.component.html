@@ -68,6 +68,7 @@
       <app-enrolment-form
           *ngIf="isPrecheckSuccess"
           [namespaceRegistrationRoles]="getNamespaceRegistrationRoles()"
+          [predefinedRegTypes]="predefinedRegTypes"
           [fieldList]="fieldList"
           [disabledSubmit]="isSubmitDisabled()"
           [txtboxColor]="txtboxColor"

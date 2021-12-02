@@ -10,20 +10,19 @@ import { TransferOwnershipComponent } from '../../applications/transfer-ownershi
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
 import { EditAssetDialogComponent } from '../edit-asset-dialog/edit-asset-dialog.component';
-import { distinctUntilChanged, filter, finalize, first, map, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { forkJoin, from, Observable, Subject } from 'rxjs';
+import { distinctUntilChanged, filter, finalize, first, map, switchMap, takeUntil } from 'rxjs/operators';
+import { from, Observable, Subject } from 'rxjs';
 import { VerificationMethodComponent } from '../verification-method/verification-method.component';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { mapClaimsProfile } from '@operators';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 import { DidQrCodeComponent } from '../did-qr-code/did-qr-code.component';
 import { FormControl } from '@angular/forms';
 import { NewIssueVcComponent } from '../../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
-
-export const RESET_LIST = true;
+import { Store } from '@ngrx/store';
+import { OwnedAssetsActions, OwnedAssetsSelectors } from '@state';
 
 const HEADER_TRANSFER_OWNERSHIP = 'Transfer Ownership';
 const HEADER_CANCEL_OWNERSHIP = 'Cancel Offered Ownership';
@@ -62,7 +61,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
               private iamService: IamService,
               private notifService: NotificationService,
               private loadingService: LoadingService,
-              private route: Router) {
+              private route: Router,
+              private store: Store) {
 
   }
 
@@ -113,7 +113,6 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   getAssetList() {
-    this.loadingService.show();
     this.subscribeTo(this.assetListFactory());
   }
 
@@ -257,7 +256,6 @@ export class AssetListComponent implements OnInit, OnDestroy {
     this.subscribeTo(dialogRef.afterClosed().pipe(
       first(),
       filter(Boolean),
-      tap(() => this.loadingService.show()),
       switchMap(() => this.assetListFactory())
     ));
   }
@@ -294,37 +292,27 @@ export class AssetListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getAssetsWithClaims() {
-    return forkJoin([
-        from(
-          this.iamService.claimsService.getUserClaims()).pipe(
-          mapClaimsProfile()
-        ),
-        this.loadAssetList(this.iamService.assetsService.getOwnedAssets())
-      ]
-    ).pipe(
-      map(([profile, assets]) => this.addClaimData(profile, assets))
-    );
-  }
-
   private getAssetsIds(assets: Asset[]): string[] {
     return assets.map(asset => asset.id);
   }
 
   private assetListFactory(): Observable<AssetList[]> {
     if (this.listType === AssetListType.PREV_OWNED_ASSETS) {
+      this.loadingService.show();
       return this.loadAssetList(
         this.iamService.assetsService.getPreviouslyOwnedAssets({owner: this.iamService.signerService.did})
       ).pipe(
         this.mapEnrolments()
       );
     } else if (this.listType === AssetListType.OFFERED_ASSETS) {
+      this.loadingService.show();
       return this.loadAssetList(this.iamService.assetsService.getOfferedAssets())
         .pipe(
           this.mapEnrolments()
         );
     } else {
-      return this.getAssetsWithClaims();
+      this.store.dispatch(OwnedAssetsActions.getOwnedAssets());
+      return this.store.select(OwnedAssetsSelectors.getOwnedAssets);
     }
   }
 
@@ -339,14 +327,6 @@ export class AssetListComponent implements OnInit, OnDestroy {
         )
       );
     };
-  }
-
-  private addClaimData(profile, assets) {
-    return assets.map((asset) => ({
-      ...asset,
-      ...(profile && profile.assetProfiles && profile.assetProfiles[asset.id]),
-      hasEnrolments: true
-    }));
   }
 
   private _handleMessage(message: any) {

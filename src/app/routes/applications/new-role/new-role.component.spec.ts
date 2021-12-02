@@ -76,15 +76,6 @@ describe('NewRoleComponent', () => {
     expect(component.issuerList).toEqual(['1']);
   });
 
-  it('should be run clearSearchTxt', () => {
-    const testValue = 'roleForm';
-    component.roleControl = fb.control({testValue});
-
-    component.clearSearchTxt();
-
-    expect(component.roleControl.value).toBe('');
-  });
-
   it('should be run removePreconditionRole', () => {
     const index = 1;
     component.roleForm = fb.group({

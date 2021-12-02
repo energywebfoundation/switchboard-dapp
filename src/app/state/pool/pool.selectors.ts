@@ -2,6 +2,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { PoolState, USER_FEATURE_KEY } from './pool.reducer';
 import { Stake, StakeStatus } from 'iam-client-lib';
 import { utils } from 'ethers';
+import { MAX_STAKE_AMOUNT } from './models/const';
 
 const {formatEther} = utils;
 
@@ -9,7 +10,7 @@ export const getStakeState = createFeatureSelector<PoolState>(USER_FEATURE_KEY);
 
 export const getReward = createSelector(
   getStakeState,
-  (state: PoolState) => state.reward
+  (state: PoolState) => formatEther(state.reward)
 );
 
 export const getBalance = createSelector(
@@ -37,11 +38,6 @@ export const getStake = createSelector(
   (state: PoolState) => state?.userStake
 );
 
-export const isStakingDisabled = createSelector(
-  getStake,
-  (state: Stake) => state?.status === StakeStatus.STAKING || state?.status === StakeStatus.WITHDRAWING
-);
-
 export const isWithdrawDisabled = createSelector(
   getStake,
   (state: Stake) => state?.status !== StakeStatus.STAKING
@@ -52,6 +48,22 @@ export const getStakeAmount = createSelector(
   (state: Stake) => state?.amount ? formatEther(state.amount) : '0'
 );
 
+export const getMaxPossibleAmountToStake = createSelector(
+  getStake,
+  getStakeState,
+  (stake: Stake, state: PoolState) => {
+    if (!state.contributorLimit) {
+      return MAX_STAKE_AMOUNT;
+    }
+    const maxValue = +formatEther(state.contributorLimit);
+    if (!stake?.amount) {
+      return maxValue;
+    }
+    const puttedStake = +formatEther(stake.amount);
+    return maxValue - puttedStake;
+  }
+);
+
 export const isWithdrawingDelayFinished = createSelector(
   getStakeState,
   (state: PoolState) => state.withdrawing
@@ -60,4 +72,70 @@ export const isWithdrawingDelayFinished = createSelector(
 export const getOrganizationDetails = createSelector(
   getStakeState,
   (state: PoolState) => state?.organizationDetails
+);
+
+export const getOrganizationLimit = createSelector(
+  getStakeState,
+  (state: PoolState) => {
+    if (state.organizationLimit) {
+      return formatEther(state.organizationLimit);
+    }
+    return state.organizationLimit;
+  }
+);
+
+export const getContributorLimit = createSelector(
+  getStakeState,
+  (state: PoolState) => {
+    if (state.contributorLimit) {
+      return formatEther(state.contributorLimit);
+    }
+    return state.contributorLimit;
+  }
+);
+
+export const allTokens = createSelector(
+  getStakeState,
+  (state: PoolState) => {
+    return formatEther(state?.userStake?.amount?.add(state?.reward));
+  }
+);
+
+export const expirationDate = createSelector(
+  getStakeState,
+  (state: PoolState) => {
+    return new Date(state?.endDate * 1000);
+  }
+);
+
+export const calculateStakedPercent = createSelector(
+  getContributorLimit,
+  getStakeAmount,
+  (limit, amount) => {
+    if (!amount) {
+      return 0;
+    }
+    return Math.round(((+amount * 100) / (+limit) * 100)) / 100;
+  }
+);
+
+export const getTotalStaked = createSelector(
+  getStakeState,
+  (state) => {
+    if (state.totalStaked) {
+      return formatEther(state.totalStaked);
+    }
+    return state.totalStaked;
+  }
+);
+
+export const getTotalStakedPercent = createSelector(
+  getOrganizationLimit,
+  getTotalStaked,
+  (limit, amount) => {
+    if (!amount) {
+      return 0;
+    }
+    return Math.round(((+amount * 100) / (+limit) * 100)) / 100;
+  }
 );

@@ -71,3 +71,16 @@ p {
     fill: transparent;
   }
 }
+
+.amount-input {
+  color: #FFFFFF;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  &[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+  }
+}

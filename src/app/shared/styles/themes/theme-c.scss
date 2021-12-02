@@ -626,6 +626,27 @@ tr.mat-row {
     color: $stedin-gray;
 }
 
+.mat-slide-toggle-thumb {
+    background-color: $stedin-gray;
+}
+
+.mat-slide-toggle.mat-checked {
+    .mat-slide-toggle-thumb {
+        background-color: $stedin-yellow;
+    }
+    .mat-slide-toggle-bar {
+        background-color: $white;
+    }
+    .mat-slide-toggle-content {
+        color: $stedin-gray !important;
+    }
+}
+
+.mat-slide-toggle-content {
+    font-size: 13px;
+    color: $stedin-gray-light !important;
+}
+
 .mat-input-element {
     color: $stedin-gray;
     caret-color: $stedin-gray;

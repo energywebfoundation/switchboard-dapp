@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { FieldValidationService } from '../../../../../shared/services/field-validation.service';
@@ -14,7 +14,7 @@ const FIELD_TYPES = [
   templateUrl: './field-form.component.html',
   styleUrls: ['./field-form.component.scss']
 })
-export class FieldFormComponent implements OnInit {
+export class FieldFormComponent implements OnInit, OnDestroy {
   @Input() data;
   @Output() added = new EventEmitter();
   @Output() updated = new EventEmitter();

@@ -13,7 +13,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { dialogSpy, dispatchInputEvent, getElement } from '@tests';
 import { of } from 'rxjs';
 
-export class MockDialogData {
+class MockDialogData {
   did: string;
 
   get data() {

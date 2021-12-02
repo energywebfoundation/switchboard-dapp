@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
 import { IRoleDefinition, RegistrationTypes } from 'iam-client-lib';
@@ -23,12 +23,24 @@ export interface EnrolmentForm {
   getRegistrationTypes(): RegistrationTypes[];
 }
 
+export interface PredefinedRegistrationTypes {
+  onChain?: boolean;
+  offChain?: boolean;
+}
+
 @Component({
   selector: 'app-enrolment-form',
   templateUrl: './enrolment-form.component.html',
   styleUrls: ['./enrolment-form.component.scss']
 })
-export class EnrolmentFormComponent implements EnrolmentForm {
+export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
+  enrolmentForm: FormGroup = new FormGroup({
+    registrationTypes: new FormGroup({
+      offChain: new FormControl({value: true, disabled: false}),
+      onChain: new FormControl({value: false, disabled: true}),
+    }, requireCheckboxesToBeCheckedValidator()),
+    fields: new FormArray([])
+  });
 
   @Input() showSubmit = true;
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
@@ -43,22 +55,21 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     return this.fields;
   }
 
+  @Input() predefinedRegTypes: PredefinedRegistrationTypes;
+
   @Input() txtboxColor;
   @Input() txtColor;
   @Input() btnColor;
   @Input() disabledSubmit: boolean;
   @Output() submitForm = new EventEmitter<EnrolmentSubmission>();
 
-  enrolmentForm: FormGroup = new FormGroup({
-    registrationTypes: new FormGroup({
-      offChain: new FormControl({value: true, disabled: false}),
-      onChain: new FormControl({value: false, disabled: true}),
-    }, requireCheckboxesToBeCheckedValidator()),
-    fields: new FormArray([])
-  });
   private fields;
 
   constructor(private cdRef: ChangeDetectorRef) {
+  }
+
+  ngOnInit() {
+    this.setPredefinedFormatForCheckboxes();
   }
 
   isValid() {
@@ -126,6 +137,10 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     return this.enrolmentForm.get('registrationTypes');
   }
 
+  get isOnChainChecked() {
+    return this.registrationTypesGroup.get('onChain').value;
+  }
+
   private createControls(list) {
     return list.map((field) => {
       this.setFieldDefaults(field);
@@ -183,6 +198,26 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     }
 
     return validations;
+  }
+
+  private setPredefinedFormatForCheckboxes(): void {
+    if (!this.predefinedRegTypes) {
+      return;
+    }
+    if (this.predefinedRegTypes.onChain || this.predefinedRegTypes.offChain) {
+      this.registrationTypesGroup.reset(
+        {
+          offChain: {
+            value: Boolean(this.predefinedRegTypes.offChain),
+            disabled: true
+          },
+          onChain: {
+            value: Boolean(this.predefinedRegTypes.onChain),
+            disabled: true
+          }
+        }
+      );
+    }
   }
 
 }

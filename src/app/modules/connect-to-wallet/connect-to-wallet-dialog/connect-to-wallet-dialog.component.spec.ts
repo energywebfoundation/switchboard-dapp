@@ -6,6 +6,7 @@ import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import * as authSelectors from '../../../state/auth/auth.selectors';
 import { ProviderType } from 'iam-client-lib';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 describe('ConnectToWalletDialogComponent', () => {
   let component: ConnectToWalletDialogComponent;
@@ -27,7 +28,8 @@ describe('ConnectToWalletDialogComponent', () => {
       declarations: [ConnectToWalletDialogComponent],
       providers: [
         provideMockStore(),
-        {provide: MAT_DIALOG_DATA, useValue: {navigateOnTimeout: true}}
+        {provide: MAT_DIALOG_DATA, useValue: {navigateOnTimeout: true}},
+        {provide: EnvService, useValue: {}}
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

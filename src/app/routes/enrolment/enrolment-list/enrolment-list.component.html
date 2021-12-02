@@ -48,8 +48,15 @@
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
       <td mat-cell *matCellDef="let element" data-label="Status">
-        <ng-container *ngIf="isAccepted(element)"><span class="color-success">Approved</span>
-          <div *ngIf="isPendingSync(element)">Pending Sync to DID Document</div>
+        <ng-container *ngIf="isAccepted(element)">
+          <div class="d-flex flex-column flex-md-row justify-content-between mr-2">
+            <div class="color-success">Approved</div>
+            <div class="mt-2 mt-md-0" *ngIf="isPendingSync(element)">
+              <mat-icon class="color-warned icon-small mr-2" svgIcon="sync-did-icon"></mat-icon>
+              <!-- Apply link to add to DID Document -->
+              <a class="color-white" href="#">Sync to DID Document</a>
+            </div>
+          </div>
         </ng-container>
         <ng-container *ngIf="isPending(element)"><span class="color-warned">Pending</span>
         </ng-container>

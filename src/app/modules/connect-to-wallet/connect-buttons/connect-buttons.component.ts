@@ -9,6 +9,7 @@ import { ProviderType } from 'iam-client-lib';
 export class ConnectButtonsComponent {
   @Input() metamaskPresent: boolean;
   @Input() metamaskDisabled: boolean;
+  @Input() showEkcOption: boolean;
 
   @Output() connectTo = new EventEmitter<ProviderType>();
 

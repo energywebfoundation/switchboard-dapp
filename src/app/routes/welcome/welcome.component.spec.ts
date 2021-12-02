@@ -10,6 +10,7 @@ import * as authSelectors from '../../state/auth/auth.selectors';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ProviderType } from 'iam-client-lib';
 import { AuthActions } from '@state';
+import { EnvService } from '../../shared/services/env/env.service';
 
 describe('WelcomeComponent', () => {
   let component: WelcomeComponent;
@@ -27,6 +28,7 @@ describe('WelcomeComponent', () => {
       ],
       providers: [
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
+        {provide: EnvService, useValue: {}},
         provideMockStore()
       ],
       schemas: [NO_ERRORS_SCHEMA]

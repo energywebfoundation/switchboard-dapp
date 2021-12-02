@@ -1,18 +1,40 @@
-<ng-container *ngIf="(isWithdrawingDelayFinished$ | async) else withdrawTemplate">
-  <mat-progress-bar
-      color="primary"
-      mode="indeterminate">
-  </mat-progress-bar>
-  <p class="text-center mt-2">Preparing your withdrawal…</p>
-</ng-container>
-<ng-template #withdrawTemplate>
-  <div class="confirm-wrapper">
-    <p class="text-center">You are going to withdraw your tokens. <br>Please confirm.</p>
-    <app-divider></app-divider>
-    <div class="d-flex justify-content-center mt-3">
-      <button mat-raised-button class="stake-btn text-color text-uppercase" (click)="withdraw()">Confirm</button>
-    </div>
-  </div>
-</ng-template>
+<div class="d-flex justify-content-center align-items-center flex-column stake-success-container">
+  <h3 class="mt-3 mb-4">Withdraw?</h3>
+  <p class="text-center mt-1">
+    EWT will be transfered to your account balance.
+    You will be charged with gass fee.
+  </p>
+</div>
 
+<mat-form-field class="staking-textfield" appearance="outline">
+  <mat-label class="ml-3 pl-1">EWT Withdraw Amount</mat-label>
+  <input matInput class="amount-input" data-qa-id="stake-amount" [formControl]="amount"
+         autocomplete="off"
+         type="number"
+         [max]="maxAmount$ | async" min="0" maxlength="256" (focus)="inputFocused = true"/>
+  <div matSuffix class="d-flex" *ngIf="inputFocused">
+    <button mat-icon-button class="bg-transparent" (click)="clear($event)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-error *ngIf="amount.hasError('min')">Minimum value is 0</mat-error>
+  <mat-error *ngIf="amount.hasError('max')">Maximum possible value is {{maxAmount$ | async}}</mat-error>
+  <mat-error *ngIf="amount.hasError('required')">This field is <strong>required</strong></mat-error>
+</mat-form-field>
+
+<app-divider></app-divider>
+
+<div class="d-flex flex-wrap justify-content-center ">
+  <button mat-raised-button mat-dialog-close class="mt-3 stake-secondary-btn color-white text-uppercase mr-4">Close
+  </button>
+
+  <button mat-raised-button class="mt-3 mr-4 stake-btn text-color text-uppercase" [disabled]="isAmountInvalid"
+          (click)="withdraw()">Confirm
+  </button>
+
+  <button mat-raised-button class="stake-btn text-color text-uppercase mt-3 mr-4"
+          (click)="withdrawAll()">Withdraw All
+  </button>
+</div>
 
