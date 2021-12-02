@@ -443,12 +443,4 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       this.isAsset(item)
     );
   }
-
-  private updateListByNamespace(value: string): void {
-    if (value) {
-      this.dataSource.data = this.filterByNamespace(this._shadowList, value);
-    } else {
-      this.dataSource.data = this._shadowList;
-    }
-  }
 }
