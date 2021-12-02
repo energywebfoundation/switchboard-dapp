@@ -204,7 +204,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   isPendingSync(element) {
-    return (!this.viewedByIssuer() && !this.isSynced(element) && this.isOffChain(element)) || !this.isOnlyOnChain(element);
+    return (!this.viewedByIssuer() && !this.isSynced(element) && this.isOffChain(element)) && !this.isOnlyOnChain(element);
   }
 
   viewedByIssuer() {
