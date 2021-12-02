@@ -149,7 +149,6 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this.dynamicRejected = isRejected;
     this.dynamicAccepted = isAccepted;
     let list = [];
-    debugger;
 
     try {
       if (this.listType === EnrolmentListType.ASSET) {
@@ -425,19 +424,25 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   private updateListByDid(value: string): void {
     if (value) {
-      this.dataSource.data = this._shadowList.filter(
-        (item) => item.subject.includes(value) || item.requester.includes(value)
-      );
+      this.dataSource.data = this.filterByDid(this._shadowList, value);
     } else {
       this.dataSource.data = this._shadowList;
     }
   }
 
+  private filterByDid(list: any[], value: string) {
+    return list.filter((item) => item.subject.includes(value) || item.requester.includes(value));
+  }
+
+  private filterByNamespace(list: any[], value: string) {
+    return list.filter((item) =>
+      item.namespace.includes(value)
+    );
+  }
+
   private updateListByNamespace(value: string): void {
     if (value) {
-      this.dataSource.data = this._shadowList.filter((item) =>
-        item.namespace.includes(value)
-      );
+      this.dataSource.data = this.filterByNamespace(this._shadowList, value);
     } else {
       this.dataSource.data = this._shadowList;
     }
