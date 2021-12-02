@@ -73,6 +73,7 @@ export class PoolEffects {
       mergeMap(() => [
         PoolActions.getAccountBalance(),
         PoolActions.checkReward(),
+        PoolActions.totalStaked()
       ])
     )
   );
