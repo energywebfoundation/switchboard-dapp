@@ -50,7 +50,7 @@ export class StakingPoolFacade {
   }
 
   getTotalStaked() {
-    return from(this.pool.getContributionLimit());
+    return from(this.pool.getTotalStaked());
   }
 
   partialWithdraw(value: BigNumber) {

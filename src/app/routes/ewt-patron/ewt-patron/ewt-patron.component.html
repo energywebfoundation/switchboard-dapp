@@ -106,7 +106,7 @@
           <div class="staking-widget widget-inner px-4 py-4">
             <div class="staking-widget-xs-label text-color mb-2">Staking pool stats</div>
             <h3 class="mb-0 text-color">
-              <ng-container *ngIf="balance$ | async as balance">{{balance | lastDigits}}
+              <ng-container *ngIf="getTotalStaked$ | async as totalStaked">{{totalStaked | lastDigits}}
               </ng-container>
               <span class="staking-currency">EWT</span>
 
