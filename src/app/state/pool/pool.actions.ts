@@ -100,6 +100,11 @@ export const getHardCapFailure = createAction(
   '[Pool] Get Hard Organization Limit Failure',
   props<{ err: string }>()
 );
+
+export const getRoles = createAction(
+  '[Pool] Get User Roles'
+);
+
 export const totalStaked = createAction(
   '[Pool] Get Total Staked Amount'
 );
