@@ -210,6 +210,10 @@ export class AppComponent implements OnInit {
       'sync-did-icon',
       this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/img/icons/sync-did-icon.svg')
     );
+    this.matIconRegistry.addSvgIcon(
+      'add-to-claimmanager-icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/img/icons/add-to-claim-manager-icon.svg')
+    );
   }
 
   ngOnInit() {
