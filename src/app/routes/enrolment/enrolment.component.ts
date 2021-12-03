@@ -7,6 +7,8 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { NotificationService } from '../../shared/services/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
+import { Store } from '@ngrx/store';
+import { SettingsSelectors } from '@state';
 
 @Component({
   selector: 'app-enrolment',
@@ -34,13 +36,15 @@ export class EnrolmentComponent implements AfterViewInit {
   };
 
   public isMyEnrolmentShown = false;
+  isExperimentalEnabled$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
   private _queryParamSelectedTabInit = false;
 
   constructor(private activeRoute: ActivatedRoute,
               private notificationService: NotificationService,
               private urlParamService: UrlParamService,
               private router: Router,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private store: Store) {
   }
 
   ngAfterViewInit(): void {

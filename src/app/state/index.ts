@@ -37,6 +37,10 @@ import * as ApplicationSelectors from './governance/application/application.sele
 import * as RoleActions from './governance/role/role.actions';
 import * as RoleSelectors from './governance/role/role.selectors';
 
+// === Settings ===
+import * as SettingsActions from './settings/settings.actions';
+import * as SettingsSelectors from './settings/settings.selectors';
+
 export * from './store-root.module';
 export {
   AssetDetailsActions,
@@ -65,4 +69,7 @@ export {
 
   LayoutActions,
   LayoutSelectors,
+
+  SettingsActions,
+  SettingsSelectors
 };

@@ -10,3 +10,5 @@
        [alt]="title + 'image'">
   <h4 class="color-white mt-3 mb-4 my-lg-4" [class.opacity-01]="comingSoon">{{title}}</h4>
 </div>
+<mat-icon *ngIf="isExperimental" class="experimental-warning" matTooltip="This feature is experimental">report_problem
+</mat-icon>

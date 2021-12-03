@@ -7,6 +7,7 @@
 
 :root {
     --loader-color: #a567ff;
+    --warning-color: #FFA500;
 }
 
 // LAYOUT
@@ -334,9 +335,9 @@ ul.menu-top {
   }
 
   .card-warning {
-    border: 1px solid rgb(255 165 0 / 50%);
-    background-color: rgb(255 165 0 / 8%);
-    color: #FFA500;
+      border: 1px solid rgb(255 165 0 / 50%);
+      background-color: rgb(255 165 0 / 8%);
+      color: var(--warning-color);
   }
 
   .card-result {

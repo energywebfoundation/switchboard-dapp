@@ -49,7 +49,7 @@ describe('EnrolmentFormComponent', () => {
       .add(RegistrationTypes.OnChain)
       .add(RegistrationTypes.OffChain);
     component.disabledSubmit = false;
-
+    component.showOffChain = true;
   });
 
 
@@ -60,23 +60,12 @@ describe('EnrolmentFormComponent', () => {
   });
 
   describe('checkbox and submit button', () => {
-    it('should have enabled submit button when initialized with empty fieldList', () => {
+    it('should have disabled submit button when initialized with empty fieldList', () => {
       component.fieldList = [];
       fixture.detectChanges();
-      const {submit, checkboxError} = getSelectors(hostDebug);
 
-      expect(submit.nativeElement.disabled).toBeFalsy();
-      expect(checkboxError).toBeFalsy();
-    });
+      const {submit, offChain, onChain, checkboxError} = getSelectors(hostDebug);
 
-    it('should have disabled submit button when both registration types are deselected and message error showup', () => {
-      component.fieldList = [];
-
-      const {submit, offChain, onChain} = getSelectors(hostDebug);
-      offChain.nativeElement.click();
-      fixture.detectChanges();
-
-      const {checkboxError} = getSelectors(hostDebug);
       expect(offChain.nativeElement.checked).toBeFalsy();
       expect(onChain.nativeElement.checked).toBeFalsy();
       expect(submit.nativeElement.disabled).toBeTruthy();
@@ -93,26 +82,14 @@ describe('EnrolmentFormComponent', () => {
       expect(submit.nativeElement.disabled).toBeTruthy();
     });
 
-    it('should have disabled on-chain checkbox when registration types do not contains onChain type', () => {
-      component.namespaceRegistrationRoles = new Set<RegistrationTypes>().add(RegistrationTypes.OffChain);
-      component.fieldList = [];
-
-      fixture.detectChanges();
-
-      const {onChain} = getSelectors(hostDebug);
-
-      expect(onChain.nativeElement.checked).toBeFalsy();
-      expect(onChain.nativeElement.disabled).toBeTruthy();
-    });
-
     it('should have enabled submit button when only on-chain is selected', () => {
       component.fieldList = [];
 
       const {submit, offChain, onChain} = getSelectors(hostDebug);
       fixture.detectChanges();
-      onChain.nativeElement.click();
-      offChain.nativeElement.click();
 
+      onChain.nativeElement.click();
+      fixture.detectChanges();
 
       expect(component.enrolmentForm.valid).toBeTruthy();
       expect(offChain.nativeElement.checked).toBeFalsy('off chain should be deselected');
@@ -170,9 +147,7 @@ describe('EnrolmentFormComponent', () => {
 
       const {offChain, onChain} = getSelectors(hostDebug);
 
-      expect(offChain.nativeElement.checked).toBeTruthy('off chain should be selected');
       expect(offChain.nativeElement.disabled).toBeFalsy('off chain should not be disabled');
-      expect(onChain.nativeElement.checked).toBeFalsy('on chain should not be selected');
       expect(onChain.nativeElement.disabled).toBeFalsy('on chain should not be disabled');
     });
 
@@ -265,11 +240,11 @@ describe('EnrolmentFormComponent', () => {
         dateInput = fieldSelector(0, 'input').nativeElement;
       });
 
-      it('should have enabled submit button', () => {
+      it('should have disabled submit button', () => {
         fixture.detectChanges();
         const {submit} = getSelectors(hostDebug);
 
-        expect(submit.nativeElement.disabled).toBeFalsy();
+        expect(submit.nativeElement.disabled).toBeTrue();
       });
     });
 
@@ -408,7 +383,7 @@ describe('EnrolmentFormComponent', () => {
     });
   });
 
-  it('should have enabled submit button when registration types are removed', () => {
+  it('should have disabled submit button when registration types are removed', () => {
     component.showRegistrationTypes = false;
     component.fieldList = [{
       fieldType: 'number',
@@ -426,7 +401,7 @@ describe('EnrolmentFormComponent', () => {
     fixture.detectChanges();
 
     const {submit} = getSelectors(hostDebug);
-    expect(submit.nativeElement.disabled).toBeFalse();
+    expect(submit.nativeElement.disabled).toBeTrue();
   });
 
 });

@@ -5,12 +5,12 @@ import { LoadingService } from '../../shared/services/loading.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, filter, map, startWith, switchMap, take } from 'rxjs/operators';
-import { SearchType, ProviderType } from 'iam-client-lib';
+import { ProviderType, SearchType } from 'iam-client-lib';
 import { LoadingCount } from '../../shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
-import { LayoutActions } from '@state';
+import { LayoutActions, SettingsSelectors } from '@state';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,6 +30,7 @@ export class DashboardComponent implements AfterViewInit {
 
   userName$ = this.store.select(userSelectors.getUserName);
   userDid$ = this.store.select(userSelectors.getDid);
+  isExperimentalEnabled$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
 
   constructor(
     private iamService: IamService,
