@@ -3,6 +3,7 @@ import { AuthGuard } from '../shared/services/auth.guard';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 import { NgModule } from '@angular/core';
 import { NoPreloading, RouterModule } from '@angular/router';
+import { ExperimentalGuard } from '../shared/guards/experimental.guard';
 
 export const routes = [
   {
@@ -16,7 +17,11 @@ export const routes = [
         path: 'governance',
         loadChildren: () => import('./applications/applications.module').then(m => m.ApplicationsModule)
       },
-      {path: 'assets', loadChildren: () => import('./assets/assets.module').then(m => m.AssetsModule)},
+      {
+        path: 'assets',
+        loadChildren: () => import('./assets/assets.module').then(m => m.AssetsModule),
+        canActivate: [ExperimentalGuard]
+      },
       {path: 'enrolment', loadChildren: () => import('./enrolment/enrolment.module').then(m => m.EnrolmentModule)},
       {
         path: 'search-result',

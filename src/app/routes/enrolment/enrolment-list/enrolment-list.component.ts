@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ClaimData, NamespaceType, RegistrationTypes } from 'iam-client-lib';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { combineLatest, of, Subject } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
@@ -17,6 +17,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { truthy } from '@operators';
+import { Store } from '@ngrx/store';
+import { SettingsSelectors } from '@state';
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
@@ -51,13 +53,17 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   private _iamSubscriptionId: number;
   private _shadowList = [];
 
-  constructor(
-    private loadingService: LoadingService,
-    private iamService: IamService,
-    private dialog: MatDialog,
-    private toastr: SwitchboardToastrService,
-    private notifService: NotificationService
+  constructor(private loadingService: LoadingService,
+              private iamService: IamService,
+              private dialog: MatDialog,
+              private toastr: SwitchboardToastrService,
+              private notifService: NotificationService,
+              private store: Store
   ) {
+  }
+
+  isAsset(element) {
+    return element?.subject !== element?.claimType && element?.subject !== element?.requester;
   }
 
   async ngOnInit() {
@@ -89,6 +95,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         return item[property];
       }
     };
+    await this.getList(this.rejected, this.accepted);
 
     if (
       this.listType === EnrolmentListType.APPLICANT ||
@@ -102,20 +109,15 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         'actions',
       ];
     } else {
-      this.displayedColumns = [
-        'requestDate',
-        'roleName',
-        'parentNamespace',
-        'requester',
-        'asset',
-        'status',
-        'actions',
-      ];
+      this.store.select(SettingsSelectors.isExperimentalEnabled).subscribe((isExperimental: boolean) => {
+        this.displayedColumns = this.setDisplayedColumns(isExperimental);
+        this.dataSource.data = this.removeEnrollmentToAssets(this._shadowList, isExperimental);
+      });
+
     }
 
-    await this.getList(this.rejected, this.accepted);
-    this._checkNamespaceControlChanges();
-    this._checkDidControlChanges();
+    this.setFilters();
+
   }
 
   async ngOnDestroy(): Promise<void> {
@@ -181,9 +183,10 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
 
     this._shadowList = list;
-    if (this.namespaceFilterControl) {
-      this.updateListByNamespace(this.namespaceFilterControl.value);
-    }
+    const isExperimental = await this.store.select(SettingsSelectors.isExperimentalEnabled).pipe(take<boolean>(1)).toPromise();
+    this.dataSource.data = this.removeEnrollmentToAssets(
+      this.filterByNamespace(
+        this.filterByDid(this._shadowList, this.didFilterControl?.value), this.namespaceFilterControl?.value), isExperimental);
     this.loadingService.hide();
   }
 
@@ -231,11 +234,12 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         disableClose: true,
       })
       .afterClosed()
-      .pipe(takeUntil(this._subscription$))
-      .subscribe((reloadList: any) => {
-        if (reloadList) {
-          this.getList(this.dynamicRejected, this.dynamicAccepted);
-        }
+      .pipe(
+        truthy(),
+        takeUntil(this._subscription$)
+      )
+      .subscribe(() => {
+        this.getList(this.dynamicRejected, this.dynamicAccepted);
       });
   }
 
@@ -295,6 +299,21 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         this.loadingService.hide();
       }
     }
+  }
+
+  private setFilters() {
+    const controls = [
+      this.store.select(SettingsSelectors.isExperimentalEnabled),
+      this.namespaceFilterControl ? this.namespaceFilterControl.valueChanges : of(''),
+      this.didFilterControl ? this.didFilterControl.valueChanges : of('')
+    ];
+    combineLatest(controls)
+      .pipe(takeUntil(this._subscription$))
+      .subscribe(([isExperimental, namespace, did]: [boolean, string, string]) =>
+        this.dataSource.data = this.removeEnrollmentToAssets(
+          this.filterByNamespace(
+            this.filterByDid(this._shadowList, did), namespace), isExperimental)
+      );
   }
 
   private _getRejectedOnly(
@@ -377,52 +396,51 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
-  private _checkNamespaceControlChanges(): void {
-    if (!this.namespaceFilterControl) {
-      return;
-    }
-
-    this.namespaceFilterControl.valueChanges
-      .pipe(
-        distinctUntilChanged(
-          (prevValue, currentValue) => prevValue === currentValue
-        ),
-        takeUntil(this._subscription$)
-      )
-      .subscribe((value) => this.updateListByNamespace(value));
-  }
-
-  private _checkDidControlChanges(): void {
-    if (!this.didFilterControl) {
-      return;
-    }
-    this.didFilterControl.valueChanges
-      .pipe(
-        distinctUntilChanged(
-          (prevValue, currentValue) => prevValue === currentValue
-        ),
-        takeUntil(this._subscription$)
-      )
-      .subscribe((value) => this.updateListByDid(value));
-  }
-
-  private updateListByDid(value: string): void {
-    if (value) {
-      this.dataSource.data = this._shadowList.filter(
-        (item) => item.subject.includes(value) || item.requester.includes(value)
-      );
+  private setDisplayedColumns(isExperimental) {
+    if (isExperimental) {
+      return [
+        'requestDate',
+        'roleName',
+        'parentNamespace',
+        'requester',
+        'asset',
+        'status',
+        'actions',
+      ];
     } else {
-      this.dataSource.data = this._shadowList;
+      return [
+        'requestDate',
+        'roleName',
+        'parentNamespace',
+        'requester',
+        'status',
+        'actions',
+      ];
     }
   }
 
-  private updateListByNamespace(value: string): void {
-    if (value) {
-      this.dataSource.data = this._shadowList.filter((item) =>
-        item.namespace.includes(value)
-      );
-    } else {
-      this.dataSource.data = this._shadowList;
+  private filterByDid(list: any[], value: string) {
+    if (!value) {
+      return list;
     }
+    return list.filter((item) => item.subject.includes(value) || item.requester.includes(value));
+  }
+
+  private filterByNamespace(list: any[], value: string) {
+    if (!value) {
+      return list;
+    }
+    return list.filter((item) =>
+      item.namespace.includes(value)
+    );
+  }
+
+  private removeEnrollmentToAssets(list: any[], isExperimentalEnabled: boolean) {
+    if (isExperimentalEnabled) {
+      return list;
+    }
+    return list.filter((item) =>
+      this.isAsset(item)
+    );
   }
 }

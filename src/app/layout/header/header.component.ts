@@ -18,8 +18,9 @@ import { LoginService } from '../../shared/services/login/login.service';
 import { logoutWithRedirectUrl } from '../../state/auth/auth.actions';
 import { DidBookComponent } from '../../modules/did-book/components/did-book/did-book.component';
 import { DidBookService } from '../../modules/did-book/services/did-book.service';
-import { AuthSelectors } from '@state';
+import { AuthSelectors, SettingsActions, SettingsSelectors } from '@state';
 import { truthy } from '@operators';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-header',
@@ -55,6 +56,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   notificationNewItems = 0;
   notificationList$: Observable<SwitchboardToastr[]> = this.toastr.getMessageList()
     .pipe(tap(items => this.notificationNewItems = items.filter(item => item.isNew).length));
+  isExperimentalEnabled$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
 
   private _pendingApprovalCountListener: any;
   private _pendingSyncCountListener: any;
@@ -64,7 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private _iamSubscriptionId: number;
   private isInitNotificationCount = false;
 
-  @ViewChild('fsbutton', { static: true }) fsbutton;  // the fullscreen button
+  @ViewChild('fsbutton', {static: true}) fsbutton;  // the fullscreen button
 
   constructor(private iamService: IamService,
               private router: Router,
@@ -151,6 +153,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       maxWidth: '100%',
       disableClose: true
     });
+  }
+
+  onExperimentalChange(event: MatSlideToggleChange) {
+    this.store.dispatch(event.checked ? SettingsActions.enableExperimental() : SettingsActions.disableExperimental());
   }
 
   ngOnInit() {

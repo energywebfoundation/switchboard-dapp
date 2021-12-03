@@ -36,8 +36,8 @@ export interface PredefinedRegistrationTypes {
 export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
   enrolmentForm: FormGroup = new FormGroup({
     registrationTypes: new FormGroup({
-      offChain: new FormControl({value: true, disabled: false}),
-      onChain: new FormControl({value: false, disabled: true}),
+      offChain: new FormControl({value: false, disabled: false}),
+      onChain: new FormControl({value: false, disabled: false}),
     }, requireCheckboxesToBeCheckedValidator()),
     fields: new FormArray([])
   });
@@ -54,6 +54,8 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
   get fieldList(): IRoleDefinition['fields'] {
     return this.fields;
   }
+
+  @Input() showOffChain: boolean;
 
   @Input() predefinedRegTypes: PredefinedRegistrationTypes;
 
@@ -119,7 +121,7 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
     this.enrolmentForm.registerControl('fields', formArray);
     this.registrationTypesGroup.reset(
       {
-        offChain: {value: true, disabled: false},
+        offChain: {value: false, disabled: false},
         onChain: {
           value: false,
           disabled: !this.namespaceRegistrationRoles?.has(RegistrationTypes.OnChain)
