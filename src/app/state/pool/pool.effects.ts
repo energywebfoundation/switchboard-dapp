@@ -9,7 +9,7 @@ import * as PoolActions from './pool.actions';
 import { catchError, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { BigNumber, utils } from 'ethers';
-import { Stake, StakeStatus } from 'iam-client-lib';
+import { RegistrationTypes, Stake, StakeStatus } from 'iam-client-lib';
 import { StakeSuccessComponent } from '../../routes/ewt-patron/stake-success/stake-success.component';
 import * as poolSelectors from './pool.selectors';
 import { ToastrService } from 'ngx-toastr';
@@ -20,6 +20,7 @@ import { WithdrawComponent } from '../../routes/ewt-patron/withdraw/withdraw.com
 import { NotEnroledRoleInfoComponent } from '../../routes/ewt-patron/not-enroled-role-info/not-enroled-role-info.component';
 
 const {formatEther, parseEther} = utils;
+const REQUIRED_ROLE_FOR_STAKING = 'email.roles.verification.apps.energyweb.iam.ewc';
 
 @Injectable()
 export class PoolEffects {
@@ -264,21 +265,28 @@ export class PoolEffects {
   getRoles$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PoolActions.getRoles),
+      tap(() => this.loadingService.show()),
       switchMap(() => from(this.iamService.claimsService.getClaimsByRequester({
           did: this.iamService.signerService.did,
-          isAccepted: true
         })).pipe(
-          map((roles) => roles.filter((item) => item.claimType === 'email.roles.verification.apps.energyweb.iam.ewc')),
-          filter(roles => roles.length === 0),
-          map(() => {
-            this.dialog.open(NotEnroledRoleInfoComponent, {
-              width: '400px',
-              maxWidth: '100%',
-              disableClose: true,
-            });
-          })
+          filter((roles) => {
+            const length = roles.filter((item) =>
+              item.claimType === REQUIRED_ROLE_FOR_STAKING && item.registrationTypes.includes(RegistrationTypes.OnChain)).length;
+            if (length === 0) {
+              this.openNotEnrolledRoleDialog();
+            }
+            return length > 0;
+          }),
+          switchMap(() => from(this.iamService.claimsService.hasOnChainRole(this.iamService.signerService.did, REQUIRED_ROLE_FOR_STAKING, 1))
+            .pipe(
+              filter((v) => !v),
+              map(() => {
+                this.openNotEnrolledRoleDialog();
+              }),
+            )),
+          finalize(() => this.loadingService.hide())
         )
-      )
+      ),
     ), {dispatch: false}
   );
 
@@ -318,5 +326,13 @@ export class PoolEffects {
             PoolActions.stakingPoolStartDate(), PoolActions.totalStaked(), PoolActions.getRoles()];
         })
       );
+  }
+
+  private openNotEnrolledRoleDialog() {
+    this.dialog.open(NotEnroledRoleInfoComponent, {
+      width: '400px',
+      maxWidth: '100%',
+      disableClose: true,
+    });
   }
 }
