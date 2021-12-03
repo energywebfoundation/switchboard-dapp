@@ -273,7 +273,7 @@ export class PoolEffects {
             const length = roles.filter((item) =>
               item.claimType === REQUIRED_ROLE_FOR_STAKING && item.registrationTypes.includes(RegistrationTypes.OnChain)).length;
             if (length === 0) {
-              this.openNotEnrolledRoleDialog();
+              this.openNotEnroledRoleDialog();
             }
             return length > 0;
           }),
@@ -281,7 +281,7 @@ export class PoolEffects {
             .pipe(
               filter((v) => !v),
               map(() => {
-                this.openNotEnrolledRoleDialog();
+                this.openNotEnroledRoleDialog();
               }),
             )),
           finalize(() => this.loadingService.hide())
@@ -328,7 +328,7 @@ export class PoolEffects {
       );
   }
 
-  private openNotEnrolledRoleDialog() {
+  private openNotEnroledRoleDialog() {
     this.dialog.open(NotEnroledRoleInfoComponent, {
       width: '400px',
       maxWidth: '100%',
