@@ -58,10 +58,10 @@
                 <!-- Apply link to add to DID Document -->
                 <span class="color-white cursor-pointer" (click)="addToDidDoc(element)">Sync to DID Document</span>
               </div>
-              <div class="mt-2 mt-md-2 mb-md-2">
+              <div class="mt-2 mt-md-2 mb-md-2" *ngIf="element?.notSyncedOnChain">
                 <mat-icon class="color-warned icon-small mr-2" svgIcon="add-to-claimmanager-icon"></mat-icon>
                 <!-- Apply link to add to Claim manager -->
-                <span class="color-white cursor-pointer">Add to ClaimManager</span>
+                <span class="color-white cursor-pointer" (click)="addToClaimManager(element)">Add to ClaimManager</span>
               </div>
             </div>
           </div>
@@ -96,7 +96,8 @@
             </button>
 
             <!-- Add to the claim manager -->
-            <button mat-menu-item class="btn-color-primary">
+            <button mat-menu-item class="btn-color-primary" (click)="addToClaimManager(element)"
+                    *ngIf="isAccepted(element) && element?.notSyncedOnChain">
               <mat-icon svgIcon="add-to-claimmanager-icon" class="btn-color-primary"></mat-icon>
               <span>Add to ClaimManager</span>
             </button>

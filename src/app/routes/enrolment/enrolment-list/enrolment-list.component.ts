@@ -154,14 +154,14 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
           })
         );
       } else {
-        list = this._getRejectedOnly(
+        list = await Promise.all(this._getRejectedOnly(
           isRejected,
           isAccepted,
           await this.iamService.claimsService.getClaimsByRequester({
             did: this.iamService.signerService.did,
             isAccepted,
           })
-        );
+        ).map((item) => this.checkForNotSyncedOnChain(item)));
       }
 
       if (list && list.length) {
@@ -185,6 +185,16 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       this.updateListByNamespace(this.namespaceFilterControl.value);
     }
     this.loadingService.hide();
+  }
+
+  async checkForNotSyncedOnChain(item) {
+    if (item.registrationTypes.includes(RegistrationTypes.OnChain)) {
+      return {
+        ...item,
+        notSyncedOnChain: !(await this.iamService.claimsService.hasOnChainRole(this.iamService.signerService.did, item.claimType, parseInt(item.claimTypeVersion.toString(), 10)))
+      };
+    }
+    return item;
   }
 
   isAccepted(element) {
@@ -256,6 +266,25 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(truthy())
       .subscribe(() => this.syncClaimToDidDoc(element));
+  }
+
+  async addToClaimManager(element: any) {
+    this.dialog
+      .open<ConfirmationDialogComponent, ConfirmationDialogData>(ConfirmationDialogComponent, {
+        width: '600px',
+        maxHeight: 'auto',
+        data: {
+          header: 'Sync to Claim Manager',
+          svgIcon: 'add-to-claimmanager-icon',
+          message:
+            'It is necessary to register your role on-chain in order to make it available to verifying smart contracts. However, please note that this will make your role data permanently public.',
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .pipe(truthy())
+      .subscribe(() => this.syncToClaimManager(element));
   }
 
   async cancelClaimRequest(element: any) {
@@ -372,6 +401,26 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     } catch (e) {
       console.error(e);
       this.toastr.error(e, 'Sync to DID Document');
+    }
+
+    this.loadingService.hide();
+  }
+
+  private async syncToClaimManager(element: any) {
+    this.loadingService.show(
+      'Please confirm this transaction in your connected wallet.',
+      CancelButton.ENABLED
+    );
+
+    console.log(element);
+    try {
+      await this.iamService.claimsService.registerOnchain(element);
+
+      this.toastr.success('Action is successful.', 'Sync to Claim Manager');
+      await this.getList(this.rejected, this.accepted);
+    } catch (e) {
+      console.error(e);
+      this.toastr.error(e, 'Sync to Claim Manager');
     }
 
     this.loadingService.hide();
