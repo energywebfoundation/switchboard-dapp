@@ -82,19 +82,6 @@ describe('EnrolmentFormComponent', () => {
       expect(submit.nativeElement.disabled).toBeTruthy();
     });
 
-    // TODO: probably this test is no longer valid. Need to be checked.
-    xit('should have disabled on-chain checkbox when registration types do not contains onChain type', () => {
-      component.namespaceRegistrationRoles = new Set<RegistrationTypes>().add(RegistrationTypes.OffChain);
-      component.fieldList = [];
-
-      fixture.detectChanges();
-
-      const {onChain} = getSelectors(hostDebug);
-
-      expect(onChain.nativeElement.checked).toBeFalsy();
-      expect(onChain.nativeElement.disabled).toBeTruthy();
-    });
-
     it('should have enabled submit button when only on-chain is selected', () => {
       component.fieldList = [];
 
