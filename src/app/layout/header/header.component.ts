@@ -2,7 +2,7 @@ import { Event, NavigationEnd, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
-import { AssetHistoryEventType, NamespaceType } from 'iam-client-lib';
+import { AssetHistoryEventType, ClaimEventType, NamespaceType } from 'iam-client-lib';
 
 import { SettingsService } from '../../core/settings/settings.service';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
@@ -231,37 +231,61 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private _handleMessage(message: any) {
     if (message.type) {
-      // Handle Asset-related Events
       this._handleAssetEvents(message.type);
-    } else if (message.issuedToken) {
-      // Message has issued token ===> Newly Approved Claim
-      this.notifService.increasePendingDidDocSyncCount();
-      this.toastr.info('Your enrolment request is approved. ' +
-        'Please sync your approved claims in your DID Document.', 'Enrolment Approved');
-    } else if (message.isRejected) {
-      this.toastr.warning('Your enrolment request is rejected.', 'New Enrolment Request');
-    } else {
-      // Message has no issued token ===> Newly Requested Claim
-      this.notifService.increasePendingApprovalCount();
-      this.toastr.info('A new enrolment request is waiting for your approval.', 'New Enrolment Request');
+      this._handleClaimEvents(message.type);
     }
   }
 
   private _handleAssetEvents(type: string) {
     switch (type) {
       case AssetHistoryEventType.ASSET_OFFERED:
-        this.toastr.info('An asset is offered to you.', 'Asset Offered');
+        this.toastr.info("An asset is offered to you.", "Asset Offered");
         this.notifService.increaseAssetsOfferedToMeCount();
         break;
       case AssetHistoryEventType.ASSET_TRANSFERRED:
-        this.toastr.success('Your asset is successfully tranferred to a new owner.', 'Asset Transferred');
+        this.toastr.success(
+          "Your asset is successfully tranferred to a new owner.",
+          "Asset Transferred"
+        );
         break;
       case AssetHistoryEventType.ASSET_OFFER_CANCELED:
-        this.toastr.warning('An asset offered to you is cancelled by the owner.', 'Asset Offer Cancelled');
+        this.toastr.warning(
+          "An asset offered to you is cancelled by the owner.",
+          "Asset Offer Cancelled"
+        );
         this.notifService.decreaseAssetsOfferedToMeCount();
         break;
       case AssetHistoryEventType.ASSET_OFFER_REJECTED:
-        this.toastr.warning('An asset you offered is rejected.', 'Asset Offer Rejected');
+        this.toastr.warning(
+          "An asset you offered is rejected.",
+          "Asset Offer Rejected"
+        );
+        break;
+    }
+  }
+
+  private _handleClaimEvents(type: string) {
+    switch (type) {
+      case ClaimEventType.REQUEST_CREDENTIALS:
+        this.notifService.increasePendingApprovalCount();
+        this.toastr.info(
+          "A new enrolment request is waiting for your approval.",
+          "New Enrolment Request"
+        );
+        break;
+      case ClaimEventType.ISSUE_CREDENTIAL:
+        this.notifService.increasePendingDidDocSyncCount();
+        this.toastr.info(
+          "Your enrolment request is approved. " +
+            "Please sync your approved claims in your DID Document.",
+          "Enrolment Approved"
+        );
+        break;
+      case ClaimEventType.REJECT_CREDENTIAL:
+        this.toastr.warning(
+          "Your enrolment request is rejected.",
+          "New Enrolment Request"
+        );
         break;
     }
   }
