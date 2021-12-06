@@ -179,7 +179,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         roleName: def.roleName,
         namespace: `${this.ENSPrefixes.Roles}.${parentNamespace}`,
         data: {
-          version: this._incrementVersion(def.version),
+          version: def.version,
           issuer: {
             issuerType: def.issuer.issuerType,
             roleName: def.issuer.roleName,
@@ -204,13 +204,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
           this.roleName = value.roleName;
         }
       });
-  }
-
-  private _incrementVersion(version: string | number) {
-    if (typeof (version) === 'string') {
-      return parseInt(version.split('.')[0], 10) + 1;
-    }
-    return version + 1;
   }
 
   private _initPreconditions(preconditionList: any[]) {
