@@ -488,8 +488,6 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     if (isExperimentalEnabled) {
       return list;
     }
-    return list.filter((item) =>
-      this.isAsset(item)
-    );
+    return list.filter((item) => !this.isAsset(item));
   }
 }
