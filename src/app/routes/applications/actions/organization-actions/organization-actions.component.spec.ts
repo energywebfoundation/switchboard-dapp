@@ -61,30 +61,6 @@ describe('OrganizationActionsComponent', () => {
     });
   });
 
-  describe('isProvider', () => {
-    it('should check when an organization is a provider', () => {
-      component.organization = {
-        isProvider: true
-      } as any;
-      fixture.detectChanges();
-      const {createStakingPoolBtn, copyStakingUrlBtn} = actionSelectors(hostDebug);
-
-      expect(createStakingPoolBtn).toBeUndefined();
-      expect(copyStakingUrlBtn).toBeTruthy();
-    });
-
-    it('should check when an organization is not a provider', () => {
-      component.organization = {
-        isProvider: false
-      } as any;
-      fixture.detectChanges();
-      const {createStakingPoolBtn, copyStakingUrlBtn} = actionSelectors(hostDebug);
-
-      expect(createStakingPoolBtn).toBeTruthy();
-      expect(copyStakingUrlBtn).toBeUndefined();
-    });
-  });
-
   it('should call ConfirmationDialogComponent with proper information', () => {
     const element = {namespace: '', owner: ''} as any;
     component.organization = element;

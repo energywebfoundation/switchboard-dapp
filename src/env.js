@@ -5,8 +5,6 @@
     window.__env.theme = 'default';
     // Showing Application
     window.__env.application = true;
-    // Show Staking
-    window.__env.staking = false;
 
     window.__env.rpcUrl = 'https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/';
     window.__env.chainId = 73799;

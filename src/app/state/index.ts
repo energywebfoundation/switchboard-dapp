@@ -9,10 +9,6 @@ import * as OwnedAssetsSelectors from './assets/owned/owned.selectors';
 import * as AuthActions from './auth/auth.actions';
 import * as AuthSelectors from './auth/auth.selectors';
 
-// === Pool ===
-import * as PoolActions from './pool/pool.actions';
-import * as PoolSelectors from './pool/pool.selectors';
-
 // === Stake ===
 import * as StakeActions from './stake/stake.actions';
 import * as StakeSelectors from './stake/stake.selectors';
@@ -50,9 +46,6 @@ export {
 
   AuthActions,
   AuthSelectors,
-
-  PoolActions,
-  PoolSelectors,
 
   StakeActions,
   StakeSelectors,
