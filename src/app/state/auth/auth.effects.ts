@@ -141,17 +141,17 @@ export class AuthEffects {
 
   reinitializeLoggedUser$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AuthActions.reinitializeAuth, AuthActions.reinitializeAuthForPatron, AuthActions.reinitializeAuthForEnrol),
+      ofType(AuthActions.reinitializeAuth, AuthActions.reinitializeAuthForEnrol),
       filter(this.loginService.isSessionActive),
       concatLatestFrom(() => this.store.select(AuthSelectors.isUserLoggedIn)),
       filter(([, isLoggedIn]) => !isLoggedIn),
       tap(() => this.loadingService.show()),
       switchMap(() =>
-        this.loginService.login({ providerType: this.loginService.getSession().providerType })
+        this.loginService.login({providerType: this.loginService.getSession().providerType})
           .pipe(
-            map(({ success, accountInfo }) => {
+            map(({success, accountInfo}) => {
               if (success) {
-                return AuthActions.loginSuccess({ accountInfo });
+                return AuthActions.loginSuccess({accountInfo});
               }
               return AuthActions.loginFailure();
             }),

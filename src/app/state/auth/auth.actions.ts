@@ -40,16 +40,8 @@ export const reinitializeAuthForEnrol = createAction(
   '[AUTH] Reinitialize Logged User For Enrol Page',
 );
 
-export const reinitializeAuthForPatron = createAction(
-  '[AUTH] Reinitialize Logged User For Patron Page',
-);
-
 export const logout = createAction(
   '[AUTH] Logout'
-);
-
-export const retryLogin = createAction(
-  '[AUTH] Retry To Login'
 );
 
 export const logoutWithRedirectUrl = createAction(

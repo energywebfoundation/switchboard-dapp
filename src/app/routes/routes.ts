@@ -27,19 +27,11 @@ export const routes = [
         path: 'search-result',
         loadChildren: () => import('./search-result/search-result.module').then(m => m.SearchResultModule)
       },
-      {
-        path: 'stake',
-        loadChildren: () => import('./stake/stake.module').then(m => m.StakeModule)
-      }
     ]
   },
   {
     path: 'enrol',
     component: RequestClaimComponent,
-  },
-  {
-    path: 'staking',
-    loadChildren: () => import('./ewt-patron/ewt-patron.module').then(m => m.EwtPatronModule)
   },
   {
     path: 'welcome',

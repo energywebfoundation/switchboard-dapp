@@ -67,7 +67,6 @@ import { CopyToClipboardModule } from './directives/copy-to-clipboard/copy-to-cl
 import { DidFormatMinifierModule } from './pipes/did-format-minifier/did-format-minifier.module';
 import { TableHeadingComponent } from './components/table-heading/table-heading.component';
 import { ToggleApplicationDirective } from './feature-toggle/toggle-application.directive';
-import { ToggleStakingDirective } from './feature-toggle/toggle-staking.directive';
 import { NoRecordsComponent } from './components/no-records/no-records.component';
 
 
@@ -149,7 +148,6 @@ const MATERIAL_MODULES = [
     FeatureToggleDirective,
     TableHeadingComponent,
     ToggleApplicationDirective,
-    ToggleStakingDirective,
     NoRecordsComponent
   ],
   exports: [
@@ -188,7 +186,6 @@ const MATERIAL_MODULES = [
     DidFormatMinifierModule,
     TableHeadingComponent,
     ToggleApplicationDirective,
-    ToggleStakingDirective,
     NoRecordsComponent
   ],
   entryComponents: [MinifiedDidViewerDialogComponent]

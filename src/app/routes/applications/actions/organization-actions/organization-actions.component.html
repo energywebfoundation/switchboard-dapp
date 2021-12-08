@@ -25,14 +25,6 @@
   <span>Create Role</span>
 </button>
 
-<ng-container *ngIf="!organization?.isProvider">
-  <button mat-menu-item class="btn-color-primary" data-qa-id="create-staking-pool"
-          (click)="openStakingPool(organization)">
-    <mat-icon class="btn-color-primary btn-action-3" svgIcon="create-staking-icon"></mat-icon>
-    <span>Create Staking Pool</span>
-  </button>
-</ng-container>
-
 <button mat-menu-item class="btn-color-primary" data-qa-id="edit" (click)="edit()">
   <mat-icon class="btn-color-primary">edit</mat-icon>
   <span>Edit</span>
