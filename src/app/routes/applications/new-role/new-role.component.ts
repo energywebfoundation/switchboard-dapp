@@ -340,6 +340,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   async proceedSettingIssuer() {
+    if (this.roleForm.get('roleName').invalid) {
+      return;
+    }
     of(null)
       .pipe(
         take(1),
