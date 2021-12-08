@@ -74,6 +74,7 @@ export class IamService {
     setMessagingConfig(envService.chainId, {
       messagingMethod: MessagingMethod.Nats,
       natsServerUrl: envService.natsServerUrl,
+      natsEnvironmentName: envService.natsEnvironmentName,
     });
   }
 

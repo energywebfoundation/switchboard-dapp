@@ -13,5 +13,6 @@
     window.__env.kmsServerUrl = undefined;
     window.__env.stakingPoolFactoryAddress = '0xd61Ac65c0fECfb83108f6E374a57FfF9c692901d';
     window.__env.showAzureLoginOption = true;
+    window.__env.natsEnvironmentName = 'ewf-dev';
 
 }(this));

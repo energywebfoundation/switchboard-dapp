@@ -12,4 +12,5 @@ export class EnvService {
   kmsServerUrl = undefined;
   stakingPoolFactoryAddress = undefined;
   showAzureLoginOption = true;
+  natsEnvironmentName = 'ewf-dev';
 }
