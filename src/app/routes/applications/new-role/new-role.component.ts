@@ -243,8 +243,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return this.roleForm.get(control).hasError(errorType);
   }
 
-  alphaNumericOnly(): void {
-    this.isExistsRoleName = false;
+  issuer(control: string, errorType: string) {
+    return this.roleForm.get('data').get('issuer').get('roleName').hasError(errorType);
   }
 
   issuerTypeChanged(data: any) {
@@ -396,13 +396,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   async proceedSettingRestriction() {
-    const roleFormValue = this.roleForm.value;
+    console.log(this.roleForm?.value?.data);
+    const roleFormValue = this.roleForm.value.data.issuer;
     if (typeof roleFormValue.roleName !== 'string') {
       roleFormValue.roleName = roleFormValue.roleName.namespace;
-    }
-
-    if (roleFormValue.roleName !== roleFormValue.data.issuer.roleName) {
-      roleFormValue.data.issuer.roleName = roleFormValue.roleName;
     }
 
     const issuerType = roleFormValue.data.issuer.issuerType;
@@ -424,15 +421,15 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
         // Check if rolename exists or valid
         const exists = await this.iamService.domainsService.checkExistenceOfDomain({
-          domain: roleFormValue.data.issuer.roleName
+          domain: roleFormValue.data.issuer.roleName.namespace
         });
 
-        if (!exists || !roleFormValue.data.issuer.roleName.includes(`.${NamespaceType.Role}.`)) {
+        if (!exists || !roleFormValue.data.issuer.roleName.namespace.includes(`.${NamespaceType.Role}.`)) {
           this.toastr.error('Issuer Role Namespace does not exist or is invalid.', this.TOASTR_HEADER);
           allowToProceed = false;
         } else {
           // Check if there are approved users to issue the claim
-          const did = await this.iamService.domainsService.getDIDsByRole(roleFormValue.data.issuer.roleName);
+          const did = await this.iamService.domainsService.getDIDsByRole(roleFormValue.data.issuer.roleName.namespace);
 
           if (!did || !did.length) {
             allowToProceed = false;
@@ -450,6 +447,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         this.stepper.next();
       }
     }
+    console.log(this.roleForm?.value?.data?.issuer);
   }
 
   async proceedAddingFields() {
@@ -530,18 +528,18 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     delete req.roleType;
 
     req.data.roleName = req.roleName;
+    req.data.issuer.roleName = req.data.issuer.roleName.namespace;
 
     req.data.issuer.did = this.issuerList;
     req.data.fields = this.dataSource.data;
     req.data.issuerFields = this.issuerFields.data;
+    console.log(req);
 
     if (!skipNextStep) {
       // Set the second step to non-editable
       const list = this.stepper.steps.toArray();
       list[1].editable = false;
     }
-
-    // console.log('req', req);
 
     if (this.viewType === ViewType.UPDATE) {
       this.proceedUpdateStep(req, skipNextStep);

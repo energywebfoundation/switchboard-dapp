@@ -137,15 +137,15 @@
                     <mat-label class="ml-3 pl-1">Issuer Role Namespace</mat-label>
                     <app-smart-search
                         [placeholderSearch]="'Example:' + 'issuerrole.' + ENSPrefixes.Roles + '.myorg.iam.ewc'"
-                        [searchText]="roleForm.get('roleName')" [fieldName]="'rolePage'">
+                        [searchText]="roleForm.get('data').get('issuer').get('roleName')" [fieldName]="'rolePage'">
                     </app-smart-search>
-                    <mat-error *ngIf="controlHasError('roleName', 'required')">Issuer Role Namespace is
+                    <mat-error *ngIf="issuer('roleName', 'required')">Issuer Role Namespace is
                       <strong>required</strong>
                     </mat-error>
-                    <mat-error *ngIf="controlHasError('roleName', 'minlength')">Role Name need to have at least 3
+                    <mat-error *ngIf="issuer('roleName', 'minlength')">Role Name need to have at least 3
                       characters.
                     </mat-error>
-                    <mat-error *ngIf="controlHasError('roleName', 'maxlength')">Role Name need to have at max 256
+                    <mat-error *ngIf="issuer('roleName', 'maxlength')">Role Name need to have at max 256
                       characters.
                     </mat-error>
                   </div>
@@ -254,8 +254,7 @@
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Role Namespace</div>
-              <span class="color-white mb-0">{{ roleForm?.value?.roleName + '.' + ENSPrefixes.Roles + '.' +
-              roleForm?.value?.parentNamespace }}</span>
+              <span class="color-white mb-0">{{ roleForm?.value?.roleName }}</span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
@@ -269,7 +268,7 @@
             </div>
             <div class="text-left my-3" *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.Role">
               <div class="label opacity-50 mb-2">Issuer Role Namespace</div>
-              <span class="color-white mb-0">{{ roleForm?.value?.data?.issuer?.roleName }}</span>
+              <span class="color-white mb-0">{{ roleForm?.value?.data?.issuer?.roleName?.namespace }}</span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
