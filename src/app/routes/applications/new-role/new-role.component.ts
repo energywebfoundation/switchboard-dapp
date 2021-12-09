@@ -362,8 +362,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   async proceedSettingRestriction() {
-    console.log(this.roleForm?.value?.data);
-    const roleFormValue = this.roleForm.value.data.issuer;
+    const roleFormValue = this.roleForm.value;
     if (typeof roleFormValue.roleName !== 'string') {
       roleFormValue.roleName = roleFormValue.roleName.namespace;
     }
@@ -413,7 +412,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         this.stepper.next();
       }
     }
-    console.log(this.roleForm?.value?.data?.issuer);
   }
 
   async proceedAddingFields() {
@@ -499,7 +497,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     req.data.issuer.did = this.issuerList;
     req.data.fields = this.dataSource.data;
     req.data.issuerFields = this.issuerFields.data;
-    console.log(req);
 
     if (!skipNextStep) {
       // Set the second step to non-editable
