@@ -60,16 +60,18 @@ describe('EnrolmentFormComponent', () => {
   });
 
   describe('checkbox and submit button', () => {
-    it('should have disabled submit button when initialized with empty fieldList', () => {
+    it('should have disabled submit button when initialized with empty fieldList and deselected onchain', () => {
       component.fieldList = [];
       fixture.detectChanges();
 
       const {submit, offChain, onChain, checkboxError} = getSelectors(hostDebug);
 
+      onChain.nativeElement.click();
+      fixture.detectChanges();
+
       expect(offChain.nativeElement.checked).toBeFalsy();
       expect(onChain.nativeElement.checked).toBeFalsy();
       expect(submit.nativeElement.disabled).toBeTruthy();
-      expect(checkboxError.nativeElement).toBeTruthy();
     });
 
     it('should have disabled submit when disabledSubmit property is true', () => {
@@ -86,9 +88,6 @@ describe('EnrolmentFormComponent', () => {
       component.fieldList = [];
 
       const {submit, offChain, onChain} = getSelectors(hostDebug);
-      fixture.detectChanges();
-
-      onChain.nativeElement.click();
       fixture.detectChanges();
 
       expect(component.enrolmentForm.valid).toBeTruthy();
@@ -240,11 +239,11 @@ describe('EnrolmentFormComponent', () => {
         dateInput = fieldSelector(0, 'input').nativeElement;
       });
 
-      it('should have disabled submit button', () => {
+      it('should have enabled submit button', () => {
         fixture.detectChanges();
         const {submit} = getSelectors(hostDebug);
 
-        expect(submit.nativeElement.disabled).toBeTrue();
+        expect(submit.nativeElement.disabled).toBeFalse();
       });
     });
 
@@ -383,7 +382,7 @@ describe('EnrolmentFormComponent', () => {
     });
   });
 
-  it('should have disabled submit button when registration types are removed', () => {
+  it('should have enabled submit button when registration types are removed and elements from fieldList are filled', () => {
     component.showRegistrationTypes = false;
     component.fieldList = [{
       fieldType: 'number',
@@ -401,7 +400,7 @@ describe('EnrolmentFormComponent', () => {
     fixture.detectChanges();
 
     const {submit} = getSelectors(hostDebug);
-    expect(submit.nativeElement.disabled).toBeTrue();
+    expect(submit.nativeElement.disabled).toBeFalse();
   });
 
 });
