@@ -32,6 +32,7 @@ import { LoginOptions } from './login/login.service';
 import { truthy } from '@operators';
 import { finalize, map } from 'rxjs/operators';
 import { EnvService } from './env/env.service';
+import { ChainConfig } from 'iam-client-lib/dist/src/config/chain.config';
 
 export const PROVIDER_TYPE = 'ProviderType';
 
@@ -237,10 +238,14 @@ export class IamService {
     return from(source).pipe(finalize(() => this.loadingService.hide()));
   }
 
-  private getChainConfig() {
-    const chainConfig: any = {
+  private getChainConfig(): Partial<ChainConfig> {
+    const chainConfig: Partial<ChainConfig> = {
       rpcUrl: this.envService.rpcUrl,
     };
+
+    if (this.envService.claimManagerAddress) {
+      chainConfig.claimManagerAddress = this.envService.claimManagerAddress;
+    }
 
     if (this.envService.stakingPoolFactoryAddress) {
       chainConfig.stakingPoolFactoryAddress = this.envService.stakingPoolFactoryAddress;
