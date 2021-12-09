@@ -219,26 +219,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return retVal;
   }
 
-  private _initDates() {
-    if (this.dataSource.data) {
-      this.dataSource.data = this.dataSource.data.map((el) => {
-        if (el.fieldType === 'date') {
-          const date = {
-            ...el
-          };
-          if (el.maxDate) {
-            date.maxDate = new Date(el.maxDate);
-          }
-          if (el.minDate) {
-            date.minDate = new Date(el.minDate);
-          }
-          return date;
-        }
-        return el;
-      });
-    }
-  }
-
   controlHasError(control: string, errorType: string) {
     return this.roleForm.get(control).hasError(errorType);
   }
@@ -319,20 +299,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
       this.restrictionRoleControl.setErrors(null);
     }
-  }
-
-  private _getDate(origDate: any) {
-    let retVal = origDate;
-
-    if (origDate) {
-      retVal = origDate.getTime();
-    }
-
-    return retVal;
-  }
-
-  formResetHandler() {
-    // this.fieldsForm.reset();
   }
 
   dataSourceChangeHandler(data) {
