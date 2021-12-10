@@ -23,9 +23,9 @@ export const updateLocalStateUserClaims = createAction(
   props<{ profile: Partial<Profile> }>()
 );
 
-export const updateUserClaims = createAction(
+export const updateUserData = createAction(
   '[User] Update User Claims',
-  props<{ profile: Partial<Profile> }>()
+  props<{ userData: any }>()
 );
 
 export const updateUserClaimsFailure = createAction(

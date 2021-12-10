@@ -48,7 +48,7 @@ describe('DialogUserComponent', () => {
   });
 
   it('should create', () => {
-    store.overrideSelector(userSelectors.getUserProfile, {});
+    store.overrideSelector(userSelectors.getUserData, {});
     expect(component).toBeTruthy();
   });
 
@@ -59,7 +59,7 @@ describe('DialogUserComponent', () => {
       address: '123',
       birthdate: date.getTime()
     };
-    store.overrideSelector(userSelectors.getUserProfile, data as any);
+    store.overrideSelector(userSelectors.getUserData, data as any);
     component.ngOnInit();
     fixture.detectChanges();
 
