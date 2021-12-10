@@ -22,7 +22,6 @@
   }
 
   .mat-input-element {
-    color: #FFF;
     font-size: 14px;
   }
 
@@ -41,5 +40,16 @@
 
   .mat-select-value {
     font-size: 14px !important;
+  }
+}
+
+:host {
+  ::ng-deep .mat-form-field .mat-form-field-suffix .qr-code {
+    width: 28px !important;
+    height: 28px !important;
+
+    .mat-icon {
+      font-size: 21px !important;
+    }
   }
 }

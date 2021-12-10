@@ -1,25 +1,29 @@
-import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 
-import { ENSNamespaceTypes, PreconditionTypes, IRole } from 'iam-client-lib';
+import { IRole, NamespaceType, PreconditionType } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { debounceTime, delay, startWith, switchMap, take, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { delay, take } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 import { ListType } from '../../../shared/constants/shared-constants';
-import { FieldValidationService } from '../../../shared/services/field-validation.service';
 import { IamService } from '../../../shared/services/iam.service';
-import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatTableDataSource } from '@angular/material/table';
-import { Observable, of } from 'rxjs';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
+import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
+import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
+import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
+
+export enum ENSPrefixes {
+  Roles = 'roles',
+  Apps = 'apps',
+};
 
 export const RoleType = {
   ORG: 'org',
@@ -53,7 +57,7 @@ export interface ISmartSearch {
   templateUrl: './new-role.component.html',
   styleUrls: ['./new-role.component.scss']
 })
-export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
+export class NewRoleComponent implements OnInit, AfterViewInit {
   private stepper: MatStepper;
 
   @ViewChild('stepper') set content(content: MatStepper) {
@@ -61,8 +65,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       this.stepper = content;
     }
   }
-
-  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger;
 
   IssuerType = {
     DID: 'DID',
@@ -81,53 +83,25 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         roleName: '',
         did: this.fb.array([])
       }),
-      enrolmentPreconditions: [[{type: PreconditionTypes.Role, conditions: []}]]
+      enrolmentPreconditions: [[{ type: PreconditionType.Role, conditions: [] }]]
     })
   });
   public issuerGroup = this.fb.group({
-    newIssuer: ['', this.iamService.isValidDid]
+    newIssuer: ['', HexValidators.isDidValid()]
   });
 
-  public roleControl = this.fb.control('');
   public restrictionRoleControl = this.fb.control('');
-  public environment = environment;
   public isChecking = false;
   public RoleType = RoleType;
   public RoleTypeList = RoleTypeList;
-  public ENSPrefixes = ENSNamespaceTypes;
-  public issuerList: string[] = [this.iamService.iam.getDid()];
+  public ENSPrefixes = ENSPrefixes;
+  public issuerList: string[] = [this.signerFacade.getDid()];
 
   // Fields
-  fieldsForm = this.fb.group({
-    fieldType: ['', Validators.required],
-    label: ['', Validators.required],
-    validation: this.fb.group({
-      required: undefined,
-      minLength: [undefined, {
-        validators: Validators.min(0),
-        updateOn: 'blur'
-      }],
-      maxLength: [undefined, {
-        validators: Validators.min(1),
-        updateOn: 'blur'
-      }],
-      pattern: undefined,
-      minValue: [undefined, {
-        updateOn: 'blur'
-      }],
-      maxValue: [undefined, {
-        updateOn: 'blur'
-      }],
-      minDate: undefined,
-      maxDate: undefined
-    })
-  });
-  isAutolistLoading = false;
-  hasSearchResult = true;
+  dataSource = new MatTableDataSource<IFieldDefinition>([]);
+  issuerFields = new MatTableDataSource<IFieldDefinition>([]);
   displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
   displayedColumns: string[] = [...this.displayedColumnsView, 'actions'];
-  dataSource = new MatTableDataSource([]);
-  rolenamespaceList: Observable<any[]>;
   isExistsRoleName = false;
   public ViewType = ViewType;
   viewType: string = ViewType.NEW;
@@ -139,16 +113,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   private _retryCount = 0;
   private _currentIdx = 0;
   private _requests = {};
-  private _onSearchKeywordInput$: any;
-  private subscription$ = new Subject();
 
   constructor(private fb: FormBuilder,
               private iamService: IamService,
               private toastr: SwitchboardToastrService,
               private spinner: NgxSpinnerService,
-              private fieldValidationService: FieldValidationService,
               public dialogRef: MatDialogRef<NewRoleComponent>,
               public dialog: MatDialog,
+              private signerFacade: SignerFacadeService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
@@ -157,22 +129,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._induceInt();
-    this._induceRanges();
-
-    this.rolenamespaceList = this.roleControl.valueChanges.pipe(
-      debounceTime(1200),
-      startWith(''),
-      switchMap(async (value) => await this._searchRoleNamespace(value))
-    );
 
     this._init(this.data);
   }
 
-  ngOnDestroy(): void {
-    this.subscription$.next();
-    this.subscription$.complete();
-  }
 
   private _init(data: any) {
     if (data && data.viewType) {
@@ -205,12 +165,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       const def = this.origData.definition;
 
       // Construct Parent Namespace
-      const arrParentNamespace = this.origData.namespace.split(ENSNamespaceTypes.Roles);
+      const arrParentNamespace = this.origData.namespace.split(NamespaceType.Role);
       const parentNamespace = arrParentNamespace[1].substring(1);
 
       // Construct Fields
       this.dataSource.data = def.fields ? [...def.fields] : [];
-      this._initDates();
+      this.issuerFields.data = def?.issuerFields ? [...def.issuerFields] : [];
+      // this._initDates();
 
       this.roleForm.patchValue({
         roleType: def.roleType,
@@ -218,7 +179,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         roleName: def.roleName,
         namespace: `${this.ENSPrefixes.Roles}.${parentNamespace}`,
         data: {
-          version: this._incrementVersion(def.version),
+          version: def.version,
           issuer: {
             issuerType: def.issuer.issuerType,
             roleName: def.issuer.roleName,
@@ -245,13 +206,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  private _incrementVersion(version: string | number) {
-    if (typeof (version) === 'string') {
-      return parseInt(version.split('.')[0], 10) + 1;
-    }
-    return version + 1;
-  }
-
   private _initPreconditions(preconditionList: any[]) {
     const retVal = [];
 
@@ -268,58 +222,22 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _initDates() {
     if (this.dataSource.data) {
-      for (const data of this.dataSource.data) {
-        if (data.fieldType === 'date') {
-          if (data.maxDate) {
-            data.maxDate = new Date(data.maxDate);
+      this.dataSource.data = this.dataSource.data.map((el) => {
+        if (el.fieldType === 'date') {
+          const date = {
+            ...el
+          };
+          if (el.maxDate) {
+            date.maxDate = new Date(el.maxDate);
           }
-          if (data.minDate) {
-            data.minDate = new Date(data.minDate);
+          if (el.minDate) {
+            date.minDate = new Date(el.minDate);
           }
+          return date;
         }
-      }
+        return el;
+      });
     }
-  }
-
-  private _induceInt() {
-    const minLength = this.fieldsForm.get('validation').get('minLength');
-    const maxLength = this.fieldsForm.get('validation').get('maxLength');
-
-    minLength.valueChanges
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(data => {
-        if (data) {
-          minLength.setValue(parseInt(data), {emitEvent: false});
-        }
-      });
-
-    maxLength.valueChanges
-      .pipe(takeUntil(this.subscription$))
-      .subscribe(data => {
-        if (data) {
-          maxLength.setValue(parseInt(data), {emitEvent: false});
-        }
-      });
-  }
-
-  private _induceRanges() {
-    // Min & Max Length Range
-    this.fieldValidationService.autoRangeControls(
-      this.fieldsForm.get('validation').get('minLength'),
-      this.fieldsForm.get('validation').get('maxLength')
-    );
-
-    // Min & Max Value Range
-    this.fieldValidationService.autoRangeControls(
-      this.fieldsForm.get('validation').get('minValue'),
-      this.fieldsForm.get('validation').get('maxValue')
-    );
-
-    // Min & Max Date Range
-    this.fieldValidationService.autoRangeControls(
-      this.fieldsForm.get('validation').get('minDate'),
-      this.fieldsForm.get('validation').get('maxDate')
-    );
   }
 
   controlHasError(control: string, errorType: string) {
@@ -344,7 +262,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.IssuerType.DID === data.value) {
       // Set current user's DID
-      this.issuerList.push(this.iamService.iam.getDid());
+      this.issuerList.push(this.signerFacade.getDid());
     }
   }
 
@@ -385,6 +303,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  issuerFieldsChangeHandler(data) {
+    this.issuerFields.data = [...data];
+  }
+
   addRestriction(event: ISmartSearch) {
     if (event.searchType === 'restrictions') {
       const enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions').value;
@@ -393,7 +315,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
         enrolmentPreconditions[0].conditions.push(event.role.namespace);
       } else {
         this.roleForm.get('data').patchValue({
-          enrolmentPreconditions: [{type: PreconditionTypes.Role, conditions: [event.role.namespace]}]
+          enrolmentPreconditions: [{type: PreconditionType.Role, conditions: [event.role.namespace] }]
         })
       }
 
@@ -412,7 +334,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   formResetHandler() {
-    this.fieldsForm.reset();
+    // this.fieldsForm.reset();
   }
 
   dataSourceChangeHandler(data) {
@@ -435,13 +357,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // Check if namespace is taken
       const orgData = this.roleForm.value;
-      const exists = await this.iamService.iam.checkExistenceOfDomain({
+      const exists = await this.iamService.domainsService.checkExistenceOfDomain({
         domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
       });
 
       if (exists) {
         // If exists check if current user is the owner of this namespace and allow him/her to overwrite
-        const isOwner = await this.iamService.iam.isOwner({
+        const isOwner = await this.iamService.domainsService.isOwner({
           domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
         });
 
@@ -500,18 +422,16 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
           });
 
         // Check if rolename exists or valid
-        const exists = await this.iamService.iam.checkExistenceOfDomain({
+        const exists = await this.iamService.domainsService.checkExistenceOfDomain({
           domain: roleFormValue.data.issuer.roleName
         });
 
-        if (!exists || !roleFormValue.data.issuer.roleName.includes(`.${ENSNamespaceTypes.Roles}.`)) {
+        if (!exists || !roleFormValue.data.issuer.roleName.includes(`.${NamespaceType.Role}.`)) {
           this.toastr.error('Issuer Role Namespace does not exist or is invalid.', this.TOASTR_HEADER);
           allowToProceed = false;
         } else {
           // Check if there are approved users to issue the claim
-          const did = await this.iamService.iam.getRoleDIDs({
-            namespace: roleFormValue.data.issuer.roleName
-          });
+          const did = await this.iamService.domainsService.getDIDsByRole(roleFormValue.data.issuer.roleName);
 
           if (!did || !did.length) {
             allowToProceed = false;
@@ -558,19 +478,19 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
           });
 
         // Check if namespace exists
-        let exists = await this.iamService.iam.checkExistenceOfDomain({
+        let exists = await this.iamService.domainsService.checkExistenceOfDomain({
           domain: this.roleForm.value.parentNamespace
         });
 
         if (exists) {
           // Check if role sub-domain exists in this namespace
-          exists = await this.iamService.iam.checkExistenceOfDomain({
+          exists = await this.iamService.domainsService.checkExistenceOfDomain({
             domain: `${this.ENSPrefixes.Roles}.${this.roleForm.value.parentNamespace}`
           });
 
           if (exists) {
             // check if user is authorized to create a role under this namespace
-            const isOwner = await this.iamService.iam.isOwner({
+            const isOwner = await this.iamService.domainsService.isOwner({
               domain: this.roleForm.value.parentNamespace
             });
 
@@ -600,7 +520,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async confirmRole(skipNextStep?: boolean) {
-    const req = JSON.parse(JSON.stringify({...this.roleForm.value, returnSteps: true}));
+    const req = JSON.parse(JSON.stringify({ ...this.roleForm.value, returnSteps: true }));
 
     req.namespace = `${this.ENSPrefixes.Roles}.${req.parentNamespace}`;
     delete req.parentNamespace;
@@ -612,7 +532,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     req.data.issuer.did = this.issuerList;
     req.data.fields = this.dataSource.data;
-    req.data.metadata = {};
+    req.data.issuerFields = this.issuerFields.data;
 
     if (!skipNextStep) {
       // Set the second step to non-editable
@@ -663,10 +583,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private async proceedCreateSteps(req: any) {
-    const returnSteps = this.data.owner === this.iamService.iam.address;
-    req = {...req, returnSteps};
+    const returnSteps = this.data.owner === this.iamService.signerService.address;
     try {
-      const call = this.iamService.iam.createRole(req);
+      const call = this.iamService.domainsService.createRole(req);
       // Retrieve the steps to create an organization
       this.txs = returnSteps ?
         await call :
@@ -728,7 +647,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
       this.txs = [
         {
           info: 'Setting up definitions',
-          next: async () => await this.iamService.iam.setRoleDefinition({
+          next: async () => await this.iamService.domainsService.setRoleDefinition({
             data: req.data,
             domain: newDomain
           })
@@ -783,80 +702,13 @@ export class NewRoleComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private async _searchRoleNamespace(keyword: any): Promise<any[]> {
-    if (this.autocompleteTrigger) {
-      this.autocompleteTrigger.closePanel();
-    }
-
-    this.isAutolistLoading = true;
-    let retVal = [];
-
-    if (keyword) {
-      let word;
-      if (!keyword.trim && keyword.name) {
-        word = keyword.name;
-      } else {
-        word = keyword.trim();
-      }
-
-      if (word.length > 2) {
-        word = word.toLowerCase();
-        try {
-          retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
-            search: word,
-            types: ['Role']
-          });
-
-          if (retVal && retVal.length) {
-            this.hasSearchResult = true;
-            if (this.autocompleteTrigger) {
-              this.autocompleteTrigger.openPanel();
-            }
-          }
-        } catch (e) {
-          this.toastr.error('Could not load search result.', 'Server Error');
-        }
-      }
-    }
-    this.isAutolistLoading = false;
-    return retVal;
-  }
-
   displayFn(selected: any) {
     return selected && selected.namespace ? selected.namespace : '';
   }
 
-  onSelectedItem(event: any) {
-    // Make sure that enrolmentPreconditions field exists
-    let enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions');
-    if (!enrolmentPreconditions || !enrolmentPreconditions.value || !enrolmentPreconditions.value.length) {
-      this.roleForm.get('data').get('enrolmentPreconditions').setValue([{
-        type: PreconditionTypes.Role,
-        conditions: []
-      }]);
-      enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions');
-    }
-
-    // Make sure that conditions field exists
-    let conditions = enrolmentPreconditions.value[0].conditions;
-    if (!enrolmentPreconditions) {
-      conditions = this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions = [];
-    }
-
-    // Check if item is already added
-    if (conditions.includes(event.option.value.namespace)) {
-      this.toastr.warning('Role already exists in the list.');
-    } else {
-      conditions.push(event.option.value.namespace);
-      this.clearSearchTxt();
-    }
-  }
-
-  clearSearchTxt() {
-    this.roleControl.setValue('');
-  }
-
   removePreconditionRole(idx: number) {
-    this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions.splice(idx, 1);
+    const conditions = [...this.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions];
+    conditions.splice(idx, 1);
+    this.roleForm.get('data').get('enrolmentPreconditions').reset([{type: PreconditionType.Role, conditions}]);
   }
 }

@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -19,14 +19,12 @@ import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 
 import { ColorsService } from './colors/colors.service';
 import { ScrollableDirective } from './directives/scrollable/scrollable.directive';
 import { PreventPasteDirective } from './directives/prevent-paste.directive';
 import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
-import { DidFormatMinifierPipe } from './pipes/did-format-minifier.pipe';
 import { EnrolmentListComponent } from '../routes/enrolment/enrolment-list/enrolment-list.component';
 import { MinifiedDidViewerDirective } from './directives/minified-did-viewer/minified-did-viewer.directive';
 import { MinifiedDidViewerDialogComponent } from './directives/minified-did-viewer/minified-did-viewer-dialog.component';
@@ -64,8 +62,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { SmartSearchComponent } from './components/smart-search/smart-search.component';
 import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
-import { CopyToClipboardDirective } from './directives/copyToClipboard/copy-to-clipboard.directive';
 import { FeatureToggleDirective } from './feature-toggle/feature-toggle.directive';
+import { CopyToClipboardModule } from './directives/copy-to-clipboard/copy-to-clipboard.module';
+import { DidFormatMinifierModule } from './pipes/did-format-minifier/did-format-minifier.module';
+import { TableHeadingComponent } from './components/table-heading/table-heading.component';
+import { ToggleApplicationDirective } from './feature-toggle/toggle-application.directive';
+import { NoRecordsComponent } from './components/no-records/no-records.component';
 
 
 const MATERIAL_MODULES = [
@@ -127,6 +129,8 @@ const MATERIAL_MODULES = [
     TooltipModule.forRoot(),
     PopoverModule.forRoot(),
     TypeaheadModule.forRoot(),
+    CopyToClipboardModule,
+    DidFormatMinifierModule,
     MATERIAL_MODULES
   ],
   providers: [
@@ -136,14 +140,15 @@ const MATERIAL_MODULES = [
     ScrollableDirective,
     PreventPasteDirective,
     RetryBtnDirective,
-    DidFormatMinifierPipe,
     EnrolmentListComponent,
     MinifiedDidViewerDirective,
     MinifiedDidViewerDialogComponent,
     SmartSearchComponent,
     ReplaceUnderscorePipe,
-    CopyToClipboardDirective,
-    FeatureToggleDirective
+    FeatureToggleDirective,
+    TableHeadingComponent,
+    ToggleApplicationDirective,
+    NoRecordsComponent
   ],
   exports: [
     CommonModule,
@@ -172,13 +177,16 @@ const MATERIAL_MODULES = [
     PreventPasteDirective,
     RetryBtnDirective,
     MinifiedDidViewerDirective,
-    DidFormatMinifierPipe,
     EnrolmentListComponent,
     MATERIAL_MODULES,
     SmartSearchComponent,
     ReplaceUnderscorePipe,
-    CopyToClipboardDirective,
-    FeatureToggleDirective
+    FeatureToggleDirective,
+    CopyToClipboardModule,
+    DidFormatMinifierModule,
+    TableHeadingComponent,
+    ToggleApplicationDirective,
+    NoRecordsComponent
   ],
   entryComponents: [MinifiedDidViewerDialogComponent]
 })

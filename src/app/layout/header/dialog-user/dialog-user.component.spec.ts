@@ -48,7 +48,7 @@ describe('DialogUserComponent', () => {
   });
 
   it('should create', () => {
-    store.overrideSelector(userSelectors.getUserProfile, {});
+    store.overrideSelector(userSelectors.getUserData, {});
     expect(component).toBeTruthy();
   });
 
@@ -59,7 +59,7 @@ describe('DialogUserComponent', () => {
       address: '123',
       birthdate: date.getTime()
     };
-    store.overrideSelector(userSelectors.getUserProfile, data as any);
+    store.overrideSelector(userSelectors.getUserData, data as any);
     component.ngOnInit();
     fixture.detectChanges();
 
@@ -114,9 +114,9 @@ const selectors = (hostDebug: DebugElement) => {
 
   return {
     submit: getElement('submit').nativeElement,
-    name: getElement('name').nativeElement,
-    birthdate: getElement('birthdate').nativeElement,
-    address: getElement('address').nativeElement,
+    name: getElement('dialog-input-name').nativeElement,
+    birthdate: getElement('dialog-input-birthdate').nativeElement,
+    address: getElement('dialog-input-address').nativeElement,
     getElement
   };
 };

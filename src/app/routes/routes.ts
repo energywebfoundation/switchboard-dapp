@@ -3,6 +3,7 @@ import { AuthGuard } from '../shared/services/auth.guard';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 import { NgModule } from '@angular/core';
 import { NoPreloading, RouterModule } from '@angular/router';
+import { ExperimentalGuard } from '../shared/guards/experimental.guard';
 
 export const routes = [
   {
@@ -16,25 +17,21 @@ export const routes = [
         path: 'governance',
         loadChildren: () => import('./applications/applications.module').then(m => m.ApplicationsModule)
       },
-      {path: 'assets', loadChildren: () => import('./assets/assets.module').then(m => m.AssetsModule)},
+      {
+        path: 'assets',
+        loadChildren: () => import('./assets/assets.module').then(m => m.AssetsModule),
+        canActivate: [ExperimentalGuard]
+      },
       {path: 'enrolment', loadChildren: () => import('./enrolment/enrolment.module').then(m => m.EnrolmentModule)},
       {
         path: 'search-result',
         loadChildren: () => import('./search-result/search-result.module').then(m => m.SearchResultModule)
       },
-      {
-        path: 'stake',
-        loadChildren: () => import('./stake/stake.module').then(m => m.StakeModule)
-      }
     ]
   },
   {
     path: 'enrol',
     component: RequestClaimComponent,
-  },
-  {
-    path: 'staking',
-    loadChildren: () => import('./ewt-patron/ewt-patron.module').then(m => m.EwtPatronModule)
   },
   {
     path: 'welcome',

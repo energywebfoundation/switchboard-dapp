@@ -16,7 +16,7 @@ describe('ApplicationActionsComponent', () => {
   let fixture: ComponentFixture<ApplicationActionsComponent>;
   let hostDebug: DebugElement;
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
-  const element = {namespace: '', owner: ''};
+  const element = {namespace: '', owner: '', containsRoles: true};
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ApplicationActionsComponent],

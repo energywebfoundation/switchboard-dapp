@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HistoryElementComponent } from './history-element.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { DidFormatMinifierPipe } from '../../../../shared/pipes/did-format-minifier.pipe';
+import { DidFormatMinifierPipe } from '../../../../shared/pipes/did-format-minifier/did-format-minifier.pipe';
 
 describe('HistoryElementComponent', () => {
   let component: HistoryElementComponent;

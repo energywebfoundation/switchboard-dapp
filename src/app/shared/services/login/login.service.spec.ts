@@ -4,11 +4,12 @@ import { LoginService } from './login.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ToastrService } from 'ngx-toastr';
 import { LoadingService } from '../loading.service';
-import { IamService } from '../iam.service';
+import { IamService, PROVIDER_TYPE } from '../iam.service';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
 import { from, of, throwError } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
+import { ProviderType, PUBLIC_KEY } from 'iam-client-lib';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -33,7 +34,10 @@ describe('LoginService', () => {
   });
 
   it('should pass further value for isSessionActive', () => {
-    iamServiceSpy.isSessionActive.and.returnValue(true);
+    const localStore = {[PROVIDER_TYPE]: 'type', [PUBLIC_KEY]: 'public key'};
+    spyOn(window.localStorage, 'getItem').and.callFake((key) =>
+      key in localStore ? localStore[key] : null
+    );
     expect(service.isSessionActive()).toBe(true);
   });
 
@@ -43,31 +47,34 @@ describe('LoginService', () => {
       connected: true,
       userClosedModal: false
     }));
+    iamServiceSpy.getPublicKey.and.returnValue(of('public key'));
+    const getSpy = jasmine.createSpy().and.returnValue(ProviderType.MetaMask);
+    Object.defineProperty(IamService, 'providerType', {get: getSpy});
 
-    from(service.login()).subscribe((result) => {
-      expect(result).toBe(true);
+    from(service.login()).subscribe(({success}) => {
+      expect(success).toBe(true);
     });
   }));
 
   it('should return false when did is null', waitForAsync(() => {
     iamServiceSpy.initializeConnection.and.returnValue(of({connected: true, userClosedModal: false}));
-    service.login().pipe(take(1)).subscribe((result) => {
-      expect(result).toBe(false);
+    service.login().pipe(take(1)).subscribe(({success}) => {
+      expect(success).toBe(false);
     });
   }));
 
   it('should display random error with toastr', waitForAsync(() => {
     iamServiceSpy.initializeConnection.and.returnValue(throwError({message: 'Sample Error'}));
-    service.login().pipe(take(1)).subscribe((result) => {
-      expect(result).toBe(false);
+    service.login().pipe(take(1)).subscribe(({success}) => {
+      expect(success).toBe(false);
       expect(toastrSpy.error).toHaveBeenCalledWith('Sample Error');
     });
   }));
 
   it('should display error with toastr about pending notifications', () => {
-    iamServiceSpy.initializeConnection.and.returnValue(throwError({message: 'Request of type \'wallet_requestPermissions\''}));
-    service.login().pipe(take(1)).subscribe((result) => {
-      expect(result).toBe(false);
+    iamServiceSpy.initializeConnection.and.returnValue(throwError({ message: 'Request of type \'wallet_requestPermissions\'' }));
+    service.login().pipe(take(1)).subscribe(({ success }) => {
+      expect(success).toBe(false);
       expect(toastrSpy.error).toHaveBeenCalledWith('Please check if you do not have pending notifications in your wallet');
     });
   });

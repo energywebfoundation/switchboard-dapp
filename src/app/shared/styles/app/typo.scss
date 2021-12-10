@@ -9,10 +9,7 @@ body {
 }
 
 a {
-    color: #33CBCB;
-
     &:hover {
-        color: #33CBCB;
         text-decoration: none;
     }
 }
@@ -109,10 +106,6 @@ p {
     font-size: 12px !important;
 }
 
-.text-blur {
-    color: transparent; 
-    text-shadow: 0 0 5px rgba(255,255,255,0.5);
-}
 
 @include media-breakpoint-down(sm) {
     h2,.h2 {

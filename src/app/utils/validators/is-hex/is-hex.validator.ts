@@ -1,6 +1,12 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 
-const hexRegex = new RegExp('^(0x)([0-9a-fA-F])');
+const hexValues = '[0-9a-fA-F]';
+
+const ethAddrPattern = `0x${hexValues}{40}`;
+const DIDPattern = `^did:[a-z0-9]+:([a-z0-9]+:)?(${ethAddrPattern})$`;
+
+export const hexRegex = new RegExp(`^(0x)(${hexValues})`);
+export const didRegex = new RegExp(DIDPattern);
 
 // 0x + 66
 const SHORT_HEX = 68;
@@ -32,6 +38,20 @@ export class HexValidators {
   static isEthAddress() {
     return HexValidators.isHex([ETHEREUM_ADDRESS]);
   };
+
+  static isDidValid() {
+    return (control: AbstractControl) => {
+      if (!control.value) {
+        return null;
+      }
+
+      if (didRegex.test(control.value.trim())) {
+        return null;
+      }
+
+      return {invalidDid: true};
+    };
+  }
 }
 
 const isValidLength = (control: number, possibleLengths: number[]): boolean => {

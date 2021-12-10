@@ -62,7 +62,6 @@ body, .wrapper .section-container {
  ========================================================================== */
 .topnavbar {
     background-color: $nav-top-bg;
-    @include gradient-x($nav-top-bg-start, $nav-top-bg-end);
 
     @include media-breakpoint-up(lg) {
         .navbar-nav > .nav-item.show > .nav-link {

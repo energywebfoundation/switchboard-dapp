@@ -9,7 +9,6 @@ import { NewOrganizationComponent } from './new-organization/new-organization.co
 import { ViewOrganizationComponent } from './view-organization/view-organization.component';
 import { NewApplicationComponent } from './new-application/new-application.component';
 import { NewRoleComponent } from './new-role/new-role.component';
-import { GovernanceListComponent } from './governance-list/governance-list.component';
 import { TransferOwnershipComponent } from './transfer-ownership/transfer-ownership.component';
 import { RemoveOrgAppComponent } from './remove-org-app/remove-org-app.component';
 import { GovernanceDetailsModule } from './governance-view/governance-details/governance-details.module';
@@ -23,13 +22,18 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { NewStakingPoolComponent } from './new-staking-pool/new-staking-pool.component';
-import { RoleFieldComponent } from './new-role/components/role-field/role-field.component';
 import { OrganizationActionsComponent } from './actions/organization-actions/organization-actions.component';
 import { ApplicationActionsComponent } from './actions/application-actions/application-actions.component';
 import { RoleActionsComponent } from './actions/role-actions/role-actions.component';
 import { NgxEditorModule } from 'ngx-editor';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
-import { FieldsSummaryComponent } from './new-role/components/fields-summary/fields-summary.component';
+import { TransactionsCompleteComponent } from './transactions-complete/transactions-complete.component';
+import { RoleListComponent } from './role-list/role-list.component';
+import { ApplicationListComponent } from './application-list/application-list.component';
+import { ActionsMenuComponent } from './actions/actions-menu/actions-menu.component';
+import { FilterComponent } from './filter/filter.component';
+import { CreateFieldsModule } from './new-role/components/create-fields/create-fields.module';
+import { DidBookModule } from '../../modules/did-book/did-book.module';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -42,16 +46,19 @@ const routes: Routes = [
     ViewOrganizationComponent,
     NewApplicationComponent,
     NewRoleComponent,
-    GovernanceListComponent,
     TransferOwnershipComponent,
     RemoveOrgAppComponent,
     NewStakingPoolComponent,
-    RoleFieldComponent,
     OrganizationActionsComponent,
     ApplicationActionsComponent,
     RoleActionsComponent,
     OrganizationListComponent,
-    FieldsSummaryComponent
+    RoleListComponent,
+    ApplicationListComponent,
+    ActionsMenuComponent,
+    FilterComponent,
+    ActionsMenuComponent,
+    TransactionsCompleteComponent,
   ],
   imports: [
     CommonModule,
@@ -70,14 +77,17 @@ const routes: Routes = [
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    NgxEditorModule
+    NgxEditorModule,
+    CreateFieldsModule,
+    DidBookModule
   ],
   entryComponents: [
     NewOrganizationComponent,
     NewApplicationComponent,
     NewRoleComponent,
     TransferOwnershipComponent,
-    RemoveOrgAppComponent]
+    RemoveOrgAppComponent
+  ]
 })
 export class ApplicationsModule {
 }

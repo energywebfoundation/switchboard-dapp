@@ -2,7 +2,7 @@ import { Event, NavigationEnd, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
-import { AssetHistoryEventType, ENSNamespaceTypes } from 'iam-client-lib';
+import { AssetHistoryEventType, ClaimEventType, NamespaceType } from 'iam-client-lib';
 
 import { SettingsService } from '../../core/settings/settings.service';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
@@ -16,6 +16,11 @@ import { UserClaimState } from '../../state/user-claim/user.reducer';
 import { SwitchboardToastr, SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import { LoginService } from '../../shared/services/login/login.service';
 import { logoutWithRedirectUrl } from '../../state/auth/auth.actions';
+import { DidBookComponent } from '../../modules/did-book/components/did-book/did-book.component';
+import { DidBookService } from '../../modules/did-book/services/did-book.service';
+import { AuthSelectors, SettingsActions, SettingsSelectors } from '@state';
+import { truthy } from '@operators';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-header',
@@ -51,6 +56,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   notificationNewItems = 0;
   notificationList$: Observable<SwitchboardToastr[]> = this.toastr.getMessageList()
     .pipe(tap(items => this.notificationNewItems = items.filter(item => item.isNew).length));
+  isExperimentalEnabled$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
 
   private _pendingApprovalCountListener: any;
   private _pendingSyncCountListener: any;
@@ -68,7 +74,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private notifService: NotificationService,
               public settings: SettingsService, public dialog: MatDialog,
               private store: Store<UserClaimState>,
-              private loginService: LoginService) {
+              private loginService: LoginService,
+              private didBookService: DidBookService) {
+    this.store.select(AuthSelectors.isUserLoggedIn)
+      .pipe(
+        truthy(),
+        takeUntil(this._subscription$)
+      ).subscribe(() => this.didBookService.getList());
+
     if (localStorage.getItem('currentUser')) {
       this.currentUserDid = JSON.parse(localStorage.getItem('currentUser')).did;
       this.currentUserRole = JSON.parse(localStorage.getItem('currentUser')).organizationType;
@@ -109,7 +122,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this._subscription$.complete();
 
     // Unsubscribe to IAM Events
-    await this.iamService.iam.unsubscribeFrom(this._iamSubscriptionId);
+    await this.iamService.messagingService.unsubscribeFrom(this._iamSubscriptionId);
   }
 
   didCopied() {
@@ -131,6 +144,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
           // Update User Name
         }
       });
+  }
+
+  openDidBook(): void {
+    this.dialog.open(DidBookComponent, {
+      width: '600px',
+      data: {},
+      maxWidth: '100%',
+      disableClose: true
+    });
+  }
+
+  onExperimentalChange(event: MatSlideToggleChange) {
+    this.store.dispatch(event.checked ? SettingsActions.enableExperimental() : SettingsActions.disableExperimental());
   }
 
   ngOnInit() {
@@ -204,44 +230,68 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
 
     // Listen to External Messages
-    this._iamSubscriptionId = await this.iamService.iam.subscribeTo({
+    this._iamSubscriptionId = await this.iamService.messagingService.subscribeTo({
       messageHandler: this._handleMessage.bind(this)
     });
   }
 
   private _handleMessage(message: any) {
     if (message.type) {
-      // Handle Asset-related Events
       this._handleAssetEvents(message.type);
-    } else if (message.issuedToken) {
-      // Message has issued token ===> Newly Approved Claim
-      this.notifService.increasePendingDidDocSyncCount();
-      this.toastr.info('Your enrolment request is approved. ' +
-        'Please sync your approved claims in your DID Document.', 'Enrolment Approved');
-    } else if (message.isRejected) {
-      this.toastr.warning('Your enrolment request is rejected.', 'New Enrolment Request');
-    } else {
-      // Message has no issued token ===> Newly Requested Claim
-      this.notifService.increasePendingApprovalCount();
-      this.toastr.info('A new enrolment request is waiting for your approval.', 'New Enrolment Request');
+      this._handleClaimEvents(message.type);
     }
   }
 
   private _handleAssetEvents(type: string) {
     switch (type) {
       case AssetHistoryEventType.ASSET_OFFERED:
-        this.toastr.info('An asset is offered to you.', 'Asset Offered');
+        this.toastr.info("An asset is offered to you.", "Asset Offered");
         this.notifService.increaseAssetsOfferedToMeCount();
         break;
       case AssetHistoryEventType.ASSET_TRANSFERRED:
-        this.toastr.success('Your asset is successfully tranferred to a new owner.', 'Asset Transferred');
+        this.toastr.success(
+          "Your asset is successfully tranferred to a new owner.",
+          "Asset Transferred"
+        );
         break;
       case AssetHistoryEventType.ASSET_OFFER_CANCELED:
-        this.toastr.warning('An asset offered to you is cancelled by the owner.', 'Asset Offer Cancelled');
+        this.toastr.warning(
+          "An asset offered to you is cancelled by the owner.",
+          "Asset Offer Cancelled"
+        );
         this.notifService.decreaseAssetsOfferedToMeCount();
         break;
       case AssetHistoryEventType.ASSET_OFFER_REJECTED:
-        this.toastr.warning('An asset you offered is rejected.', 'Asset Offer Rejected');
+        this.toastr.warning(
+          "An asset you offered is rejected.",
+          "Asset Offer Rejected"
+        );
+        break;
+    }
+  }
+
+  private _handleClaimEvents(type: string) {
+    switch (type) {
+      case ClaimEventType.REQUEST_CREDENTIALS:
+        this.notifService.increasePendingApprovalCount();
+        this.toastr.info(
+          "A new enrolment request is waiting for your approval.",
+          "New Enrolment Request"
+        );
+        break;
+      case ClaimEventType.ISSUE_CREDENTIAL:
+        this.notifService.increasePendingDidDocSyncCount();
+        this.toastr.info(
+          "Your enrolment request is approved. " +
+            "Please sync your approved claims in your DID Document.",
+          "Enrolment Approved"
+        );
+        break;
+      case ClaimEventType.REJECT_CREDENTIAL:
+        this.toastr.warning(
+          "Your enrolment request is rejected.",
+          "New Enrolment Request"
+        );
         break;
     }
   }
@@ -249,8 +299,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private async _initPendingClaimsCount() {
     try {
       // Get Pending Claims to be Approved
-      const pendingClaimsList = (await this.iamService.iam.getClaimsByIssuer({
-        did: this.iamService.iam.getDid(),
+      const pendingClaimsList = (await this.iamService.claimsService.getClaimsByIssuer({
+        did: this.iamService.signerService.did,
         isAccepted: false
       })).filter(item => !item.isRejected);
       this.tasks.pendingApprovalCount = pendingClaimsList.length;
@@ -265,17 +315,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private async _initApprovedClaimsForSyncCount() {
     try {
       // Get Approved Claims
-      const approvedClaimsList = await this.iamService.iam.getClaimsByRequester({
-        did: this.iamService.iam.getDid(),
+      const approvedClaimsList = await this.iamService.claimsService.getClaimsByRequester({
+        did: this.iamService.signerService.did,
         isAccepted: true
       });
 
       // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-      let claims: any[] = await this.iamService.iam.getUserClaims();
+      let claims: any[] = await this.iamService.claimsService.getUserClaims();
       claims = claims.filter((item: any) => {
         if (item && item.claimType) {
           const arr = item.claimType.split('.');
-          if (arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles) {
+          if (arr.length > 1 && arr[1] === NamespaceType.Role) {
             return true;
           }
           return false;
@@ -308,7 +358,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private async _initAssetsOfferedToMeSyncCount() {
     try {
-      this.tasks.assetsOfferedToMeCount = (await this.iamService.iam.getOfferedAssets()).length;
+      this.tasks.assetsOfferedToMeCount = (await this.iamService.assetsService.getOfferedAssets()).length;
       if (this.tasks.assetsOfferedToMeCount < 0) {
         this.tasks.assetsOfferedToMeCount = 0;
       }
@@ -345,7 +395,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.clearSwitchboardToaster();
-    this.store.dispatch(logoutWithRedirectUrl())
+    this.store.dispatch(logoutWithRedirectUrl());
   }
 
   clearSwitchboardToaster(): void {
