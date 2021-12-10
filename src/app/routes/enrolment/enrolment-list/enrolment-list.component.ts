@@ -419,7 +419,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       }
     } catch (e) {
       console.error(e);
-      this.toastr.error(e, 'Sync to DID Document');
+      this.toastr.error(e?.message, 'Sync to DID Document');
     }
 
     this.loadingService.hide();
@@ -439,7 +439,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       await this.getList(this.rejected, this.accepted);
     } catch (e) {
       console.error(e);
-      this.toastr.error(e, 'Sync to Claim Manager');
+      this.toastr.error(e?.message, 'Sync to Claim Manager');
     }
 
     this.loadingService.hide();
