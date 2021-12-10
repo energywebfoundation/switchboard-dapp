@@ -62,7 +62,7 @@ jobs:
         run: |
           cp src/environments/environment.prod.ts src/environments/environment.ts
           echo "Prod Env Enabled"
-          npm run build-prod
+          npm run build-stg
 
       - name: Prepare for non-master branch
         if: github.ref != 'refs/heads/master'

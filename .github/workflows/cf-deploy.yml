@@ -30,7 +30,7 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/master" ]; then
             echo "::set-output name=env_name::staging"
             echo "::set-output name=env_file::src/environments/environment.prod.ts"
-            echo "::set-output name=build_script::npm run build-prod"
+            echo "::set-output name=build_script::npm run build-stg"
           fi
       - name: Use specified environment secrets from previous step
         run: |
