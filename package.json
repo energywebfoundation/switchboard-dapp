@@ -9,6 +9,8 @@
     "ng": "ng",
     "start": "ng serve",
     "start-dev": "ng build --watch",
+    "build-staging": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=production",
+    "postbuild-staging": "node scripts/staging-env.js",
     "build-prod": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=production",
     "postbuild-prod": "node scripts/prod-env.js",
     "build": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=dev",
