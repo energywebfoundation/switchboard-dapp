@@ -2,7 +2,7 @@ name: Deploy to bucket
 
 on:
   push:
-    branches: ['develop', 'master', 'sandbox']
+    branches: ['develop', 'master', 'sandbox', 'release']
 jobs:
   cancel-previous:
     name: 'Cancel Previous Runs'
