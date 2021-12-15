@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
-import { takeUntil, tap } from 'rxjs/operators';
+import { filter, takeUntil, tap } from 'rxjs/operators';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import { OrganizationActions, OrganizationSelectors } from '@state';
@@ -163,6 +163,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
 
   private setList(): void {
     this.store.select(OrganizationSelectors.getList).pipe(
+      filter((list) => list.length > 0),
       takeUntil(this.subscription$)
     ).subscribe((list) => {
       this.dataSource.data = list;

@@ -1,6 +1,6 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ReplaySubject } from 'rxjs';
+import { of, ReplaySubject } from 'rxjs';
 
 import { StakeEffects } from './stake.effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -11,6 +11,8 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { ToastrService } from 'ngx-toastr';
 import { StakeState } from './stake.reducer';
 import * as StakeActions from './stake.actions';
+import * as PoolActions from '../pool/pool.actions';
+import { skip, take } from 'rxjs/operators';
 import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-pool-service-facade';
 import { StakingPoolFacade } from '../../shared/services/pool/staking-pool-facade';
 import * as LayoutActions from '../layout/layout.actions';
@@ -51,8 +53,17 @@ describe('StakeEffects', () => {
 
     it('should return initPool action, getAccountBalance action and redirect action', waitForAsync(() => {
       actions$.next(StakeActions.initStakingPool());
+      stakingService.init.and.returnValue(of(true));
 
-      effects.initStakingPoolService$.subscribe(resultAction => {
+      effects.initStakingPoolService$.pipe(take(1)).subscribe(resultAction => {
+        expect(resultAction).toEqual(PoolActions.initPool());
+      });
+
+      effects.initStakingPoolService$.pipe(skip(1), take(1)).subscribe(resultAction => {
+        expect(resultAction).toEqual(PoolActions.getAccountBalance());
+      });
+
+      effects.initStakingPoolService$.pipe(skip(2), take(1)).subscribe(resultAction => {
         expect(resultAction).toEqual(LayoutActions.redirect());
       });
     }));

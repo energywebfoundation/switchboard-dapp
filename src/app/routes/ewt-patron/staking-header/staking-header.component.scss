@@ -1,0 +1,119 @@
+:host {
+  height: 56px;
+  background-color: transparent;
+  width: 100%;
+  display: block;
+}
+
+.header-wrapper {
+  padding: 15px;
+  width: 100%;
+  max-width: 1402px;
+  margin-bottom: 100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-user-info {
+  color: #FFF;
+  position: relative;
+  z-index: 3;
+  cursor: pointer;
+
+  mat-icon {
+    position: relative;
+    top: 1.3px;
+    left: 1px;
+  }
+}
+
+.did-wrapper {
+  margin-top: 7px;
+  background-color: #231f32;
+  color: #a6a5ab;
+  letter-spacing: 0.3px;
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
+    padding-top: 2px;
+  }
+
+  &:hover {
+    mat-icon {
+      color: #33CBCB;
+    }
+  }
+}
+
+.color-disabled {
+  color: #A6A5AC;
+}
+
+.connect-btn {
+  font-family: Rajdhani, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px !important;
+  border-radius: 16px;
+  letter-spacing: 1.25px;
+  background-color: #A566FF;
+  padding: 0 24px !important;
+  height: 42px;
+  width: auto;
+
+  &.mat-raised-button[disabled] {
+    color: #AF76FF !important;
+    background-color: rgb(165 102 255 / 20%) !important;
+  }
+
+  &:hover {
+    background-color: #ad74ff;
+  }
+}
+
+.network {
+  line-height: 6px;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  border: 1px solid #544d6e;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  padding: 2px 10px 2px 8px;
+
+  mat-icon {
+    height: 12px;
+    width: 12px;
+    font-size: 12px;
+  }
+}
+
+.account-title {
+  color: #FFF;
+  font-size: 14x;
+  letter-spacing: 0.3px;
+  font-weight: 400;
+}
+
+.account-name {
+  font-family: Rajdhani, sans-serif;
+  color: #FFF;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+}
+
+::ng-deep {
+  .mat-menu-panel {
+    color: #A6A5AC !important;
+    background: #2E293E !important;
+    min-width: 260px !important;
+    max-width: 300px !important;
+  }
+}

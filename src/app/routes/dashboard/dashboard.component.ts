@@ -5,12 +5,12 @@ import { LoadingService } from '../../shared/services/loading.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, filter, map, startWith, switchMap, take } from 'rxjs/operators';
-import { ProviderType, SearchType } from 'iam-client-lib';
+import { WalletProvider } from 'iam-client-lib';
 import { LoadingCount } from '../../shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
-import { LayoutActions, SettingsSelectors } from '@state';
+import { LayoutActions } from '@state';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +18,7 @@ import { LayoutActions, SettingsSelectors } from '@state';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements AfterViewInit {
-  private readonly walletProvider: ProviderType = undefined;
+  private readonly walletProvider: WalletProvider = undefined;
 
   public filteredOptions: Observable<any[]>;
   public searchForm: FormGroup;
@@ -30,7 +30,6 @@ export class DashboardComponent implements AfterViewInit {
 
   userName$ = this.store.select(userSelectors.getUserName);
   userDid$ = this.store.select(userSelectors.getDid);
-  isExperimentalEnabled$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
 
   constructor(
     private iamService: IamService,
@@ -56,7 +55,7 @@ export class DashboardComponent implements AfterViewInit {
       map((params) => params.returnUrl),
       take(1),
     ).subscribe((redirectUrl) => {
-      this.store.dispatch(LayoutActions.setRedirectUrl({ url: redirectUrl }));
+      this.store.dispatch(LayoutActions.setRedirectUrl({url: redirectUrl}));
     });
 
     this.store.dispatch(AuthActions.reinitializeAuth());
@@ -77,10 +76,10 @@ export class DashboardComponent implements AfterViewInit {
 
         if (word.length > 2) {
           word = word.toLowerCase();
-          retVal = await this.iamService.domainsService.getENSTypesBySearchPhrase(
-            word,
-            [SearchType.App, SearchType.Org]
-          );
+          retVal = await this.iamService.iam.getENSTypesBySearchPhrase({
+            search: word,
+            types: ['App', 'Org']
+          });
         }
       }
     } catch (e) {
@@ -99,7 +98,7 @@ export class DashboardComponent implements AfterViewInit {
   search(namespace?: string) {
     if (!this.isAutolistLoading.value) {
       this.route.navigate(['search-result'], {
-        queryParams: { keyword: this.searchTxtFieldValue, namespace }
+        queryParams: {keyword: this.searchTxtFieldValue, namespace}
       });
     }
   }
@@ -127,6 +126,10 @@ export class DashboardComponent implements AfterViewInit {
 
   goToAssets() {
     this.route.navigate(['assets']);
+  }
+
+  goToStake() {
+    this.route.navigate(['stake']);
   }
 
   clearSearchTxt() {

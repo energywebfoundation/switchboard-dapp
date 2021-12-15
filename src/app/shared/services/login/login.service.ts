@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { IamService, PROVIDER_TYPE } from '../iam.service';
+import { IamService } from '../iam.service';
 import { LoadingService } from '../loading.service';
+import { Store } from '@ngrx/store';
+import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import { ToastrService } from 'ngx-toastr';
-import { AccountInfo, ProviderType, PUBLIC_KEY } from 'iam-client-lib';
+import { WalletProvider } from 'iam-client-lib';
 import SWAL from 'sweetalert';
 import { from, Observable, of } from 'rxjs';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
-import { catchError, delayWhen, filter, map, take } from 'rxjs/operators';
+import { catchError, filter, map, take } from 'rxjs/operators';
 import { swalLoginError } from './helpers/swal-login-error-handler';
 
 export interface LoginOptions {
-  providerType?: ProviderType;
+  walletProvider?: WalletProvider;
   reinitializeMetamask?: boolean;
   initCacheServer?: boolean;
   createDocument?: boolean;
@@ -38,59 +40,27 @@ export class LoginService {
 
   constructor(private loadingService: LoadingService,
               private iamService: IamService,
+              private store: Store<UserClaimState>,
               private toastr: ToastrService,
               private iamListenerService: IamListenerService) {
   }
 
   isSessionActive() {
-    return (Boolean(localStorage.getItem(PROVIDER_TYPE)) && Boolean(localStorage.getItem(PUBLIC_KEY)));
-  }
-
-  storeSession() {
-    localStorage.setItem(PROVIDER_TYPE, this.iamService.providerType);
-    return from(this.iamService.getPublicKey()).pipe(
-      map((key) => localStorage.setItem(PUBLIC_KEY, key)),
-    );
-  }
-
-  clearSession() {
-    localStorage.removeItem(PROVIDER_TYPE);
-    localStorage.removeItem(PUBLIC_KEY);
-  }
-
-  getSession() {
-    return {
-      providerType: localStorage.getItem(PROVIDER_TYPE) as ProviderType,
-      publicKey: localStorage.getItem(PUBLIC_KEY),
-    };
-  }
-
-  getProviderType() {
-    return this.iamService.providerType;
+    return this.iamService.isSessionActive();
   }
 
   /**
    * Login via IAM and retrieve basic user info
    */
-  login(loginOptions?: LoginOptions, redirectOnChange: boolean = true): Observable<{ success: boolean; accountInfo?: AccountInfo | undefined }> {
-    return from(this.iamService.initializeConnection(loginOptions))
+  login(loginOptions?: LoginOptions, redirectOnChange: boolean = true): Observable<boolean> {
+    return this.iamService.initializeConnection(loginOptions)
       .pipe(
-        map(({did, connected, userClosedModal, accountInfo}) => {
+        map(({did, connected, userClosedModal}) => {
           const loginSuccessful = did && connected && !userClosedModal;
           if (loginSuccessful) {
             this.iamListenerService.setListeners((config) => this.openSwal(config, redirectOnChange));
           }
-          if (!loginSuccessful) {
-            this.loadingService.hide();
-            this.openSwal({
-              title: 'Ops!', text: 'Something went wrong :('
-            }, redirectOnChange);
-          }
-          return {success: Boolean(loginSuccessful), accountInfo};
-        }),
-
-        delayWhen(({success}) => {
-          if (success) return this.storeSession();
+          return Boolean(loginSuccessful);
         }),
         catchError(err => this.handleLoginErrors(err, redirectOnChange))
       );
@@ -100,25 +70,23 @@ export class LoginService {
    * Disconnect from IAM
    */
   logout(saveDeepLink?: boolean) {
-    this.clearSession();
-    this.iamService.closeConnection().subscribe(() => {
-      saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
-    });
+    this.iamService.closeConnection();
+
+    saveDeepLink ? this.saveDeepLink() : location.href = location.origin + '/welcome';
   }
 
   disconnect() {
-    this.iamService.closeConnection().subscribe(() => {
-      location.reload();
-    });
+    this.iamService.closeConnection();
+    location.reload();
   }
 
   setDeepLink(deepLink: any) {
     this._deepLink = deepLink;
   }
 
-  public waitForSignature(walletProvider?: ProviderType, isConnectAndSign?: boolean, navigateOnTimeout: boolean = true) {
+  public waitForSignature(walletProvider?: WalletProvider, isConnectAndSign?: boolean, navigateOnTimeout: boolean = true) {
     this._throwTimeoutError = false;
-    const timeoutInMinutes = walletProvider === ProviderType.EwKeyManager ? 2 : 1;
+    const timeoutInMinutes = walletProvider === WalletProvider.EwKeyManager ? 2 : 1;
     const connectionMessage = isConnectAndSign ? 'connection to a wallet and ' : '';
     const messages = [
       {
@@ -127,7 +95,7 @@ export class LoginService {
       },
       {
         message: 'EW Key Manager should appear in a new browser tab or window. If you do not see it, please check your browser settings.',
-        relevantProviders: ProviderType.EwKeyManager
+        relevantProviders: WalletProvider.EwKeyManager
       },
       {
         message: `If you do not complete this within ${timeoutInMinutes} minute${timeoutInMinutes === 1 ? '' : 's'},
@@ -187,7 +155,7 @@ export class LoginService {
       const loginError = LOGIN_TOASTR_UNDERSTANDABLE_ERRORS.filter(error => e.message.includes(error.key))[0];
       this.toastr.error(loginError ? loginError.message : e.message);
     }
-    return of({success: false});
+    return of(false);
   }
 
   private saveDeepLink(): void {

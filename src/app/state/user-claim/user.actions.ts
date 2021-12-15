@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
-import { ClaimData, Profile } from 'iam-client-lib';
+import { ClaimData } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
+import { Profile } from 'iam-client-lib';
 
 export const setUpUser = createAction('[User] Set Up User Data')
 
@@ -18,14 +19,9 @@ export const loadUserClaimsFailure = createAction(
   props<{ error: any }>()
 );
 
-export const updateLocalStateUserClaims = createAction(
-  '[User] Update Local State User Claims ',
-  props<{ profile: Partial<Profile> }>()
-);
-
-export const updateUserData = createAction(
+export const updateUserClaims = createAction(
   '[User] Update User Claims',
-  props<{ userData: any }>()
+  props<{ profile: Partial<Profile> }>()
 );
 
 export const updateUserClaimsFailure = createAction(

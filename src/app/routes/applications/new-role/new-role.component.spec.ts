@@ -8,8 +8,7 @@ import { IamService } from '../../../shared/services/iam.service';
 import { ToastrService } from 'ngx-toastr';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { PreconditionType } from 'iam-client-lib';
-import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
+import { PreconditionTypes } from 'iam-client-lib';
 
 describe('NewRoleComponent', () => {
   let component: NewRoleComponent;
@@ -25,6 +24,7 @@ describe('NewRoleComponent', () => {
       'error'
     ]);
   const iamSpy = jasmine.createSpyObj('iam', [
+    'getDid',
     'checkExistenceOfDomain',
     'isOwner',
     'getRoleDIDs',
@@ -32,8 +32,6 @@ describe('NewRoleComponent', () => {
     'setRoleDefinition',
     'getENSTypesBySearchPhrase'
   ]);
-
-  const signerFacadeSpy = jasmine.createSpyObj(SignerFacadeService, ['getDid']);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -45,8 +43,7 @@ describe('NewRoleComponent', () => {
         {provide: ToastrService, useValue: toastrSpy},
         {provide: MatDialogRef, useValue: {}},
         {provide: MatDialog, useValue: matDialogSpy},
-        {provide: MAT_DIALOG_DATA, useValue: {}},
-        {provide: SignerFacadeService, useValue: signerFacadeSpy}
+        {provide: MAT_DIALOG_DATA, useValue: {}}
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -76,6 +73,24 @@ describe('NewRoleComponent', () => {
     expect(component.issuerList).toEqual(['1']);
   });
 
+  it('should be run formResetHandler', () => {
+    spyOn(component.fieldsForm, 'reset');
+
+    component.formResetHandler();
+
+    expect(component.fieldsForm.reset).toHaveBeenCalled();
+  });
+
+  it('should be run clearSearchTxt', () => {
+    const testValue = 'roleForm';
+    const expectedResult = false;
+    component.roleControl = fb.control({testValue});
+
+    component.clearSearchTxt();
+
+    expect(component.roleControl.value).toBe('');
+  });
+
   it('should be run removePreconditionRole', () => {
     const index = 1;
     component.roleForm = fb.group({
@@ -83,7 +98,7 @@ describe('NewRoleComponent', () => {
         enrolmentPreconditions:
           [
             [
-              {type: PreconditionType.Role, conditions: ['a', 'b', 'c', 'd']},
+              {type: PreconditionTypes.Role, conditions: ['a', 'b', 'c', 'd']},
             ]
           ]
       })

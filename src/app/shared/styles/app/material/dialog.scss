@@ -6,7 +6,9 @@
     .mat-icon-button {
         color: #7FADFF;
 
-    
+        &:hover {
+            color: #33CBCB;
+        }
     }
 }
 
@@ -27,6 +29,10 @@ mat-datetimepicker-content {
     border-color: #FFF !important;
 }
 
+.mat-datetimepicker-calendar-body-selected {
+    background-color: #A466FF !important;
+}
+
 .mat-datetimepicker-clock {
     background-color: #23294e !important;
 }
@@ -44,7 +50,9 @@ mat-datetimepicker-content {
 }
 
 .mat-dialog-title {
+    color: #FFFFFF !important;
     padding: 10px 24px 10px 24px;
+    border-bottom: 1px solid #363546 !important;
     font-weight: 600;
     font-family: 'Rajdhani', sans-serif;
 }
@@ -62,6 +70,14 @@ mat-datetimepicker-content {
     .cdk-overlay-dark-backdrop {
         background: rgba(24, 20, 32, 0) !important;
     }
+}
+
+.history-list-item {
+    background-color: #363446;
+}
+
+.field-list-item {
+    background-color: #363446;
 }
 
 .bg-status, .bg-type {
@@ -110,6 +126,7 @@ mat-datetimepicker-content {
 }
 
 .mat-dialog-actions {
+    border-top: 1px solid #363546 !important;
     margin: 10px 0 !important;
     padding: 20px 24px !important;
 }
@@ -263,16 +280,48 @@ mat-checkbox {
     border-radius: 4px !important;
 }
 
+.mat-stepper-vertical-line::before {
+    border-left-color: #9080BA;
+}
+
 .mat-step-header .mat-step-label.mat-step-label-active {
     font-size: 16px !important;
+    color: #FFF;
     font-weight: 500;
     letter-spacing: 0.2px !important;
     opacity: 1;
     font-family: 'Rajdhani', sans-serif !important;
 }
 
+.mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
+    border: 1px solid #a467ff !important;
+    color: #a467ff !important;
+}
+
+.mat-step-header .mat-step-icon-state-edit {
+    color: transparent !important;
+}
+
+.mat-step-header .mat-step-icon-selected {
+    background-color: #a467ff!important;
+    border: 1px solid #a467ff !important;
+    color: #FFF !important;
+}
+
+.mat-step-header .mat-step-icon-state-edit {
+    background-color: #a467ff!important;
+    border: 1px solid #a467ff !important;
+    color: #FFF !important;
+}
+
+.mat-step-header .mat-step-icon {
+    border: 1px solid #9080BA;
+    background-color: transparent;
+    color: #9080BA;
+}
 
 .mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
+    color: #9080BA;
     font-size: 16px !important;
     font-family: 'Rajdhani', sans-serif !important;
     font-weight: 500;
@@ -287,6 +336,7 @@ mat-checkbox {
 }
 
 .image-wrapper {
+    border: 1px solid #353540;
     height: 100px;
     border-radius: 5px;
     padding: 5px;
@@ -397,8 +447,3 @@ mat-checkbox {
             font-weight: 600;
         }
     }
-
-    .icon-dialog {
-        width: 64px;
-        height: 64px;
-    }    

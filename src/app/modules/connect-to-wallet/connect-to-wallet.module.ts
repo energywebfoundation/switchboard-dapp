@@ -3,13 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ConnectToWalletDialogComponent } from './connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { ConnectButtonsComponent } from './connect-buttons/connect-buttons.component';
 
 
 @NgModule({
   declarations: [
-    ConnectToWalletDialogComponent,
-    ConnectButtonsComponent
+    ConnectToWalletDialogComponent
   ],
   imports: [
     CommonModule,
@@ -17,8 +15,7 @@ import { ConnectButtonsComponent } from './connect-buttons/connect-buttons.compo
     MatButtonModule
   ],
   exports: [
-    ConnectToWalletDialogComponent,
-    ConnectButtonsComponent
+    ConnectToWalletDialogComponent
   ]
 })
 export class ConnectToWalletModule {

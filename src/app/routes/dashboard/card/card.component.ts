@@ -10,7 +10,6 @@ export class CardComponent implements OnInit {
   @Input() image: string;
   @Input() title: string;
   @Input() comingSoon = false;
-  @Input() isExperimental: boolean;
   iconUrl: string;
 
   ngOnInit(): void {

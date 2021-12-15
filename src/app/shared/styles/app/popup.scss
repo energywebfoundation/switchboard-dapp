@@ -1,5 +1,13 @@
+.swal-overlay {
+    background-color: rgba(66, 59, 90, 0.28);
+}
+
+.swal-modal {
+    background-color: #2A2837;
+}
 
 .swal-title {
+    color: #FFF;
     font-size: 24px !important;
     font-family: "Rajdhani", sans-serif;
 }
@@ -11,17 +19,68 @@
     &:focus {
         box-shadow: none !important;
     }
+    &:not([disabled]):hover {
+        background-color: #289b9b;
+        border: 1px solid #289b9b;
+    }
+
+    .swal-button--cancel {
+        &:not([disabled]):hover {
+            border: 1px solid #289b9b;
+            color: #289b9b;
+        }
+    }    
+
+    .swal-button--confirm {
+        &:not([disabled]):hover {
+            background-color: #289b9b;
+        }
+    }
 }
 
 .swal-button.swal-button--viewMyEnrolments, .swal-button--enrolForAsset {
+    color: #FFF !important;
+    background-color: #33CBCB;
     font-size: 16px !important;
     font-family: "Rajdhani", sans-serif !important;
     text-transform: uppercase !important;
     font-weight: 700 !important;
+    border: 1px solid #33CBCB;
     margin: 0 3px;
+
+    &:hover {
+        background-color: #289b9b;
+        border: 1px solid #289b9b;
+    }
+}
+
+
+// Colors
+
+.swal-icon--success__line, .swal-icon--success__line--long {
+    background-color: #a467ff;
+}
+
+.swal-icon--warning__body, .swal-icon--warning__dot {
+    background-color: #FFA500;
+}
+
+.swal-text {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.swal-icon--success:after, .swal-icon--success:before {
+    background: #2A2837;
+}
+
+.swal-icon--success__hide-corners {
+    background: #2A2837;
 }
 
 .swal-button--cancel {
+    color: #33CBCB;
+    border: 1px solid #33CBCB;
+    background-color: transparent;
     border-radius: 4px;
     font-size: 16px;
     font-family: "Rajdhani", sans-serif;
@@ -29,6 +88,9 @@
     font-weight: 700;
 }
 .swal-button--confirm {
+    background-color: #33CBCB;
+    color: #fff;
+    border: 1px solid #33CBCB;
     border-radius: 4px;
     font-size: 16px;
     font-family: "Rajdhani", sans-serif;
@@ -61,5 +123,10 @@
     padding-top: 0;
     margin: 20px 20px 5px 20px;
     padding: 13px 16px;
+    border-top: 1px solid #363546 !important;
     flex-wrap: wrap;
+}
+
+.swal-overlay {
+    background-color: rgba(16, 14, 22, .9) !important;
 }

@@ -1,0 +1,32 @@
+:host {
+  display: block;
+}
+
+.description {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: justify;
+  color: #A6A5AC;
+}
+
+.box {
+  padding: 8px 16px;
+  background: #2A2A33;
+  border: 1px solid #554675;
+  box-sizing: border-box;
+  border-radius: 4px;
+
+}
+
+.box-line {
+  padding: 12px 0;
+
+  font-family: "Source Sans Pro", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  opacity: 0.8;
+}

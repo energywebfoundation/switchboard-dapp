@@ -1,26 +1,18 @@
 import * as authSelectors from './auth.selectors';
-import { getWalletProvider } from './auth.selectors';
-import { ProviderType } from 'iam-client-lib';
 
 describe('Auth Selectors', () => {
 
   describe('isMetamaskDisabled', () => {
     it('should return true when chainId is undefined', () => {
-      expect(authSelectors.isMetamaskDisabled.projector({
-        metamask: {chainId: undefined},
-        defaultChainId: undefined
-      })).toBeFalsy();
+      expect(authSelectors.isMetamaskDisabled.projector({metamask: {chainId: undefined}})).toBeFalsy();
     });
 
     it('should return true when chainId is different than volta chain id', () => {
-      expect(authSelectors.isMetamaskDisabled.projector({metamask: {chainId: 123}, defaultChainId: 1})).toBeTruthy();
+      expect(authSelectors.isMetamaskDisabled.projector({metamask: {chainId: 123}})).toBeTruthy();
     });
 
     it('should return false when metamaskChainId is set to Volta chain', () => {
-      expect(authSelectors.isMetamaskDisabled.projector({
-        metamask: {chainId: '0x12047'},
-        defaultChainId: 73799
-      })).toBeFalsy();
+      expect(authSelectors.isMetamaskDisabled.projector({metamask: {chainId: '0x12047'}})).toBeFalsy();
     });
   });
 
@@ -41,16 +33,6 @@ describe('Auth Selectors', () => {
 
     it('should return true when user is logged in', () => {
       expect(authSelectors.isUserLoggedIn.projector({loggedIn: true})).toBeTruthy();
-    });
-  });
-
-  describe('getWalletProvider', () => {
-    it('should return undefined when wallet is not defined', () => {
-      expect(authSelectors.getWalletProvider.projector({walletProvider: undefined})).toBeUndefined();
-    });
-
-    it('should return defined wallet provider', () => {
-      expect(authSelectors.getWalletProvider.projector({walletProvider: ProviderType.WalletConnect})).toBe(ProviderType.WalletConnect);
     });
   });
 

@@ -1,0 +1,65 @@
+::ng-deep .mat-card-header-text {
+  margin: 0px !important;
+  display: none;
+}
+
+.text-subtitle {
+  color: #A6A5AC;
+  font-size: .7rem;
+}
+
+.mat-card {
+  background: #242230;
+  padding: 0;
+  font-family: 'Rajdhani', sans-serif;
+
+  > * {
+    padding: 1rem;
+  }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  background-color: inherit;
+  padding-bottom: 0 !important;
+  border: 0px;
+
+  .card-header-image {
+    width: 2.8rem;
+    height: 2.9rem;
+  }
+
+  .mat-card-title {
+    font-size: 1rem;
+    margin-bottom: .5rem;
+  }
+}
+
+.mat-card-content {
+
+  .stake-amount {
+    font-size: 1.6rem;
+    margin-bottom: 0;
+
+    .text-subtitle {
+      font-size: 1.6rem;
+    }
+  }
+}
+
+.mat-card-actions {
+  display: flex;
+  justify-content: space-between;
+  background: #201E2B;
+  margin: 0;
+
+  .action-count {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  &:last-child {
+    padding-bottom: 1rem !important;
+  }
+}

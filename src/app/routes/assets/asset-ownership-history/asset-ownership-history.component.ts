@@ -30,7 +30,7 @@ export class AssetOwnershipHistoryComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       this.loadingService.show();
-      const list = await this.iamService.assetsService.getAssetHistory({
+      const list = await this.iamService.iam.getAssetHistory({
         id: this.data.id
       });
       this.dataSource.data = sortByEmittedDate(list.map((item: any) => {

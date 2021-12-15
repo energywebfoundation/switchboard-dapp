@@ -3,25 +3,20 @@
   <nav class="navbar topnavbar" role="navigation">
     <!-- START navbar header-->
     <div class="navbar-header" id="navbarHeader">
-      <a routerLink="/dashboard" data-qa-id="logo">
-        <!-- <img src="assets/img/logo-ew-switchboard.svg" class="logo-ew"/> -->
-        <div class="header-logo"></div>
+      <a routerLink="/dashboard">
+        <img src="assets/img/logo-ew-switchboard.svg" class="logo-ew"/>
       </a>
     </div>
     <ul class="menu-top navbar-nav mx-auto flex-row align-items-center" *ngIf="isNavMenuVisible">
-      <ng-container *ngIf="isExperimentalEnabled$ | async">
-        <li class="nav-item position-relative" [ngClass]="{ 'active': currentNav.includes('assets') }"
-            data-qa-id="header-assets">
-          <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/assets">
-            <div class="icon-footer-center">
-              <img src="../assets/img/icons/assets-icon.png" width="auto" height="21" alt="assets image">
-            </div>
-            <h6 class="mb-0">Assets</h6>
-          </a>
-          <mat-icon class="experimental-warning" matTooltip="This feature is experimental">report_problem</mat-icon>
-        </li>
-      </ng-container>
-      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('governance') }" data-qa-id="header-governance">
+      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('assets') }">
+        <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/assets">
+          <div class="icon-footer-center">
+            <img src="../assets/img/icons/assets-icon.png" width="auto" height="21" alt="assets image">
+          </div>
+          <h6 class="mb-0">Assets</h6>
+        </a>
+      </li>
+      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('governance') }">
         <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/governance">
           <div class="icon-footer-center">
             <img src="../assets/img/icons/governance-icon.png" width="auto" height="21" alt="Governance image">
@@ -37,7 +32,7 @@
               <h6 class="mb-0">Services</h6>
           </a>
       </li> -->
-      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('enrolment') }" data-qa-id="header-enrolment">
+      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('enrolment') }">
         <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/enrolment">
           <div class="icon-footer-center">
             <img src="../assets/img/icons/enrollment-icon.png" width="auto" height="21" alt="Enrolments image">
@@ -45,9 +40,7 @@
           <h6 class="mb-0">Enrolments</h6>
         </a>
       </li>
-      <li class="nav-item coming-soon" *appToggleApplication
-          [ngClass]="{ 'active': currentNav.includes('applications') }"
-          data-qa-id="header-applications">
+      <li class="nav-item coming-soon" [ngClass]="{ 'active': currentNav.includes('applications') }">
         <a class="nav-link d-lg-block d-xl-block coming-soon link-footer">
           <div class="icon-footer-center">
             <img src="../assets/img/icons/applications-icon.png" width="auto" height="21" alt="Dashboard image">
@@ -55,14 +48,16 @@
           <h6 class="mb-0">Applications</h6>
         </a>
       </li>
+      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('stake') }">
+        <a class="nav-link d-lg-block d-xl-block link-footer" routerLink="stake">
+          <div class="icon-footer-center">
+            <img src="../assets/img/icons/stake-icon.svg" width="auto" height="21" alt="Stake EWT image">
+          </div>
+          <h6 class="mb-0">Stake EWT</h6>
+        </a>
+      </li>
     </ul>
     <ul class="navbar-nav flex-row align-items-center profile-wrapper">
-      <li class="nav-item d-none d-xl-block mr-4"
-          matTooltip="Enabling experimental features will restart the application. You may experience some issues while using the experimental features.">
-        <mat-slide-toggle [checked]="isExperimentalEnabled$ | async" (change)="onExperimentalChange($event)">Enable
-          experimental
-        </mat-slide-toggle>
-      </li>
       <li class="nav-item dropdown dropdown-list" dropdown>
         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret cursor-pointer" dropdownToggle>
           <!-- loading here -->
@@ -188,8 +183,14 @@
         </a>
       </li>
       <li class="nav-item">
-        <div class="cursor-pointer" [matMenuTriggerFor]="menu" data-qa-id="user-menu">
-          <app-user-menu-trigger [userName]="userName"></app-user-menu-trigger>
+        <div class="cursor-pointer" [matMenuTriggerFor]="menu">
+          <div class="d-flex align-items-center ml-3 ml-md-0 flex-row">
+            <div class="d-none d-md-flex flex-column align-items-end ml-2 mr-2">
+              <div class="label-role"> {{ userName }} </div>
+            </div>
+            <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="34"
+                 height="34" alt="avatar">
+          </div>
         </div>
       </li>
     </ul>
@@ -197,26 +198,24 @@
   </nav>
   <!-- END Top Navbar-->
   <mat-menu #menu="matMenu" xPosition="before">
-    <div class="border-bottom-1 mt-2">
-      <app-user-name [userName]="userName"></app-user-name>
-      <app-user-did [did]="userDid$ | async"></app-user-did>
-    </div>
-    <button class="color-link px-4 pb-2 border-bottom-1" mat-menu-item (click)="openDialogUser()"
-            data-qa-id="menu-update-identity">
-      Update Identity
-    </button>
-    <button class="color-link px-4 pb-2 border-bottom-1" mat-menu-item (click)="openDidBook()"
-            data-qa-id="menu-did-book">
-      DID Book
-    </button>
-    <div class="d-block d-xl-none">
-      <div class="d-flex justify-content-between align-items-center my-1 px-4 py-2"
-           matTooltip="Enabling experimental features will restart the application. You may experience some issues while using the experimental features.">
-        <div class="color-link">Experimental</div>
-        <mat-slide-toggle [checked]="isExperimentalEnabled$ | async"
-                          (change)="onExperimentalChange($event)"></mat-slide-toggle>
+    <div class="border-bottom-1">
+      <div class="d-flex flex-column align-items-center m-3">
+        <img class="img-thumbnail rounded-circle mt-2 mb-3" src="../assets/img/identity-image.png" width="44"
+             height="44" alt="avatar">
+        <div class="label-role">{{ userName }}</div>
       </div>
+      <ng-container *ngIf="(userDid$ | async) as did">
+        <div class="d-flex align-items-center opacity-50 text-truncate-middle did-wrapper mx-3 mb-3"
+             matTooltip="Copy to clipboard"
+             appCopyToClipboard [copyClipboard]="did" message="User Did">
+          <div class="f-14">{{did | didFormatMinifier}}</div>
+          <mat-icon class="ml-2">content_copy</mat-icon>
+        </div>
+      </ng-container>
     </div>
+    <button class="color-link px-4 pb-2 border-bottom-1" mat-menu-item (click)="openDialogUser()">Update
+      Identity
+    </button>
     <button class="d-block d-md-none border-bottom-1 color-link px-4" mat-menu-item (click)="openDialogUser()"><a
         class="color-link"
         href="https://energyweb.atlassian.net/wiki/spaces/SWITCH/pages/1712554033/Using+Switchboard"

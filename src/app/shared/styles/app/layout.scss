@@ -95,6 +95,11 @@ body {
         }
     }
 
+    .logo-ew {
+        width: 150px;
+        height: auto;
+    }
+
     // Contains the main content
     .section-container {
         position: relative;
@@ -134,7 +139,7 @@ body {
     max-width: 1402px;
     border-top: 1px solid rgba(0, 0, 0, .15);
     margin-top: -1px;
-    margin-bottom: 0;
+    margin-bottom: 100px;
     margin-left: auto;
     margin-right: auto;
 
@@ -244,9 +249,9 @@ body {
         }
     }
 
-    // .header-logo {
-    //     width: 130px !important;
-    // }
+    .logo-ew {
+        width: 130px !important;
+    }
 
     ul.menu-top {
         background-color: rgb(21 17 31 / 95%);
@@ -629,15 +634,10 @@ _:-ms-lang(x),
     top: 0; 
     z-index: 3;
 
-    // img {
-    //     height: 44px;
-    //     width: auto;
-    // }
-
-    // .welcome-header-logo {
-    //     height: 44px;
-    //     width: auto; 
-    // }
+    img {
+        height: 44px;
+        width: auto;
+    }
 }
 
 @media (max-width: 991px) { 
@@ -706,6 +706,8 @@ _:-ms-lang(x),
 
 
 .bg-register {
+    background-color: #181421;
+    background-image: url("/assets/img/bg-energy.svg");
     background-position: bottom;
     background-repeat: no-repeat;
     background-size: contain;
@@ -788,7 +790,9 @@ _:-ms-lang(x),
     width: 100%;
     height: 34px;
     font-size: 12px;
+    background-color: #382856;
     padding: 7px 24px;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /* width */
@@ -811,4 +815,24 @@ _:-ms-lang(x),
 ::-moz-scrollbar-track {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #8D7DB6; 
+    border-radius: 10px;
+}
+
+::-moz-scrollbar-thumb {
+    background: #8D7DB6; 
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #33CBCB; 
+}
+
+::-moz-scrollbar-thumb:hover {
+    background: #33CBCB; 
 }

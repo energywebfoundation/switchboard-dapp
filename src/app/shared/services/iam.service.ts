@@ -1,277 +1,203 @@
 import { Injectable } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import {
-  AccountInfo,
-  AssetsService,
-  CacheClient,
-  ClaimData,
-  ClaimsService,
-  DidRegistry,
-  DomainsService,
-  initWithEKC,
-  initWithGnosis,
-  initWithKms,
-  initWithMetamask,
-  initWithPrivateKeySigner,
-  initWithWalletConnect,
-  IRole,
+  ENSNamespaceTypes,
+  IAM,
   MessagingMethod,
-  MessagingService,
-  NamespaceType,
-  ProviderType,
-  setCacheConfig,
+  SafeIam,
+  setCacheClientOptions,
   setChainConfig,
-  setMessagingConfig,
-  SignerService,
-  StakingFactoryService,
+  setMessagingOptions
 } from 'iam-client-lib';
-import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
+import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
+import { ConfigService } from './config.service';
 import { from, Observable } from 'rxjs';
 import { LoginOptions } from './login/login.service';
-import { truthy } from '@operators';
-import { finalize, map } from 'rxjs/operators';
-import { EnvService } from './env/env.service';
-import { ChainConfig } from 'iam-client-lib/dist/src/config/chain.config';
+import { finalize, switchMap } from 'rxjs/operators';
+import { ClaimData } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 
-export const PROVIDER_TYPE = 'ProviderType';
+const {walletConnectOptions, cacheServerUrl, natsServerUrl, kmsServerUrl} = environment;
 
-export type InitializeData = {
-  did: string | undefined;
-  connected: boolean;
-  userClosedModal: boolean;
-  didDocument: IDIDDocument | null;
-  identityToken?: string;
-  realtimeExchangeConnected: boolean;
-  accountInfo: AccountInfo | undefined;
-};
+const ethAddrPattern = '0x[A-Fa-f0-9]{40}';
+const DIDPattern = `^did:[a-z0-9]+:(${ethAddrPattern})$`;
+
+export const VOLTA_CHAIN_ID = 73799;
 
 @Injectable({
   providedIn: 'root'
 })
 export class IamService {
-  signerService: SignerService;
-  didRegistry: DidRegistry;
-  claimsService: ClaimsService;
-  messagingService: MessagingService;
-  domainsService: DomainsService;
-  stakingService: StakingFactoryService;
-  assetsService: AssetsService;
-  cacheClient: CacheClient;
+  private _iam: IAM;
 
-  constructor(
-    private loadingService: LoadingService,
-    private envService: EnvService
-  ) {
+  constructor(private loadingService: LoadingService,
+              configService: ConfigService) {
     // Set Cache Server
-    setCacheConfig(envService.chainId, {
-      url: envService.cacheServerUrl,
+    setCacheClientOptions(VOLTA_CHAIN_ID, {
+      url: cacheServerUrl
     });
 
     // Set RPC
-    setChainConfig(envService.chainId, this.getChainConfig());
+    setChainConfig(VOLTA_CHAIN_ID, {
+      rpcUrl: walletConnectOptions.rpcUrl
+    });
 
     // Set Messaging Options
-    setMessagingConfig(envService.chainId, {
+    setMessagingOptions(VOLTA_CHAIN_ID, {
       messagingMethod: MessagingMethod.Nats,
-      natsServerUrl: envService.natsServerUrl,
-      natsEnvironmentName: envService.natsEnvironmentName,
+      natsServerUrl,
     });
+
+    let connectionOptions;
+    if (kmsServerUrl) {
+      connectionOptions = {
+        ewKeyManagerUrl: kmsServerUrl
+      };
+    }
+
+    // Initialize Data
+    if (configService.safeInfo) {
+      this._iam = new SafeIam(safeAppSdk, connectionOptions);
+    } else {
+      this._iam = new IAM(connectionOptions);
+    }
+  }
+
+  /**
+   * Retrieve IAM Object Reference
+   */
+  get iam(): IAM {
+    return this._iam;
   }
 
   get address() {
-    return this.signerService.address;
-  }
-
-  get providerType() {
-    return this.signerService.providerType;
-  }
-
-  issueClaim(data: { subject: string; claim: any }) {
-    return this.wrapWithLoadingService(this.claimsService.issueClaim(data));
-  }
-
-  getClaimsBySubject(did: string) {
-    return from(this.claimsService.getClaimsBySubject({
-      did
-    })).pipe(map(claims => claims.filter((claim) => !claim.isRejected)));
-  }
-
-  getAllowedRolesByIssuer(): Observable<IRole[]> {
-    return this.wrapWithLoadingService(this.domainsService.getAllowedRolesByIssuer(this.signerService.did) as any as Promise<IRole[]>);
-  }
-
-  getRolesDefinition(namespaces: string[]) {
-    return this.cacheClient.getRolesDefinition(namespaces);
+    return this.iam.address;
   }
 
   registerAsset() {
-    return from(this.assetsService.registerAsset());
+    return from(this.iam.registerAsset());
   }
 
   getUserClaims(did?: string) {
-    return from(this.claimsService.getUserClaims({did}));
+    return from(this.iam.getUserClaims({did}));
   }
 
-  createSelfSignedClaim(
-    {data, subject}: {
-      data: ClaimData;
-      subject?: string;
-    }) {
-    return from(this.claimsService.createSelfSignedClaim({data, subject}));
+  createSelfSignedClaim({data, subject}: {
+    data: ClaimData;
+    subject?: string;
+  }) {
+    return from(this.iam.createSelfSignedClaim({data, subject}));
   }
 
   deleteOrganization(namespace: string, returnSteps: boolean) {
-    return this.domainsService.deleteOrganization({
+    return this.iam.deleteOrganization({
       namespace: namespace,
-      returnSteps,
+      returnSteps
     });
   }
 
   getOrgHistory(namespace: string) {
-    return this.wrapWithLoadingService(
-      this.domainsService.getOrgHierarchy(namespace)
-    );
+    return this.wrapWithLoadingService(this.iam.getOrgHierarchy({
+      namespace
+    }));
   }
 
   getAssetById(id) {
-    return this.wrapWithLoadingService(
-      this.assetsService.getAssetById({id}),
-      {message: 'Getting selected asset data...'}
-    );
+    return this.wrapWithLoadingService(this.iam.getAssetById({id}), {message: 'Getting selected asset data...'});
   }
 
   closeConnection() {
-    return from(this.signerService.closeConnection()).pipe(truthy());
+    this.iam.closeConnection();
   }
 
-  async initializeConnection({providerType, initCacheServer = true, createDocument = true}: LoginOptions) {
-    try {
-      const {
-        signerService,
-        messagingService,
-        connectToCacheServer,
-      } = await this.initSignerService(providerType);
-      this.signerService = signerService;
-      this.messagingService = messagingService;
-      if (initCacheServer) {
-        const {
-          domainsService,
-          stakingPoolService,
-          assetsService,
-          connectToDidRegistry,
-          cacheClient
-        } = await connectToCacheServer();
-        this.domainsService = domainsService;
-        this.stakingService = stakingPoolService;
-        this.assetsService = assetsService;
-        this.cacheClient = cacheClient;
-        if (createDocument) {
-          const {didRegistry, claimsService} = await connectToDidRegistry();
-          this.didRegistry = didRegistry;
-          this.claimsService = claimsService;
-        }
-      }
-    } catch (e) {
-      console.error(e);
-      return {
-        did: undefined,
-        connected: false,
-        userClosedModal: e.message === 'User closed modal',
-        realtimeExchangeConnected: false,
-        accountInfo: undefined,
-      };
-    }
-    return {
-      did: this.signerService.did,
-      connected: true,
-      userClosedModal: false,
-      realtimeExchangeConnected: true,
-      accountInfo: this.signerService.accountInfo,
-    };
+  initializeConnection(loginOptions: LoginOptions) {
+    return from(this.iam.initializeConnection(loginOptions));
+  }
+
+  isSessionActive() {
+    return this.iam.isSessionActive();
   }
 
   getDefinition(organization: string) {
-    return from(
-      this.domainsService.getDefinition({
-        type: NamespaceType.Organization,
-        namespace: organization,
-      })
-    );
+    return from(this.iam.getDefinition({
+      type: ENSNamespaceTypes.Organization,
+      namespace: organization
+    }));
   }
 
-  getDidDocument(data?: { did: string; includeClaims: boolean }) {
-    return from(this.didRegistry.getDidDocument(data));
+  getDidDocument() {
+    return from(this.iam.getDidDocument());
   }
 
-  getPublicKey() {
-    return this.signerService.publicKey();
+  async getAddress() {
+    return await this.iam.getSigner().getAddress();
   }
 
   async getBalance() {
-    return await this.signerService.balance();
+    return await this.iam.getSigner().provider.getBalance(await this.getAddress());
   }
 
   isOwner(namespace: string) {
-    return from(this.domainsService.isOwner({domain: namespace}));
+    return from(this.iam.isOwner({domain: namespace}));
   }
 
   getOrganizationsByOwner() {
-    return from(this.getENSTypesByOwner(NamespaceType.Organization));
+    return from(this.iam.getSigner().getAddress())
+      .pipe(
+        switchMap((owner) =>
+          from(this.iam.getENSTypesByOwner({
+              type: ENSNamespaceTypes.Organization,
+              owner,
+              excludeSubOrgs: false
+            })
+          )
+        )
+      );
   }
 
-  async getENSTypesByOwner(ensType: NamespaceType) {
-    return await this.domainsService.getENSTypesByOwner({
+  async getENSTypesByOwner(ensType: ENSNamespaceTypes) {
+    return await this.iam.getENSTypesByOwner({
       type: ensType,
-      owner: this.address,
+      owner: await this.iam.getSigner().getAddress(),
+      excludeSubOrgs: false
     });
   }
 
-  public wrapWithLoadingService<T>(
-    source: Promise<T> | Observable<T>,
-    loaderConfig?: { message: string | string[]; cancelable?: boolean }
-  ) {
-    this.loadingService.show(
-      loaderConfig?.message || '',
-      !!loaderConfig?.cancelable
+  /**
+   * @deprecated
+   * Use isAlphaNumericOnly function from utils/functions instead.
+   * @param event
+   * @param includeDot
+   */
+  isAlphaNumericOnly(event: any, includeDot?: boolean) {
+    const charCode = (event.which) ? event.which : event.keyCode;
+
+    // Check if key is alphanumeric key
+    return (
+      (charCode > 96 && charCode < 123) || // a-z
+      (charCode > 64 && charCode < 91) || // A-Z
+      (charCode > 47 && charCode < 58) || // 0-9
+      (includeDot && charCode === 46) // .
     );
-    return from(source).pipe(finalize(() => this.loadingService.hide()));
   }
 
-  private getChainConfig(): Partial<ChainConfig> {
-    const chainConfig: Partial<ChainConfig> = {
-      rpcUrl: this.envService.rpcUrl,
-    };
+  isValidDid(didCtrl: AbstractControl): { [key: string]: boolean } | null {
+    let retVal = null;
+    const did = didCtrl.value;
 
-    if (this.envService.claimManagerAddress) {
-      chainConfig.claimManagerAddress = this.envService.claimManagerAddress;
+    if (did && !RegExp(DIDPattern).test(did.trim())) {
+      retVal = {invalidDid: true};
     }
 
-    if (this.envService.stakingPoolFactoryAddress) {
-      chainConfig.stakingPoolFactoryAddress = this.envService.stakingPoolFactoryAddress;
-    }
-    return chainConfig;
+    return retVal;
   }
 
-  private async initSignerService(
-    providerType: ProviderType,
-  ) {
-    switch (providerType) {
-      case ProviderType.MetaMask:
-        return initWithMetamask();
-      case ProviderType.WalletConnect:
-        return initWithWalletConnect();
-      case ProviderType.EwKeyManager:
-        return initWithKms({kmsServerUrl: this.envService.kmsServerUrl});
-      case ProviderType.PrivateKey:
-        return initWithPrivateKeySigner(
-          localStorage.getItem('PrivateKey'),
-          this.envService.rpcUrl
-        );
-      case ProviderType.Gnosis:
-        return initWithGnosis(safeAppSdk);
-      case ProviderType.EKC:
-        return initWithEKC();
-    }
+  public wrapWithLoadingService<T>(source: Promise<T> | Observable<T>,
+                                   loaderConfig?: { message: string | string[]; cancelable?: boolean }) {
+    this.loadingService.show(loaderConfig?.message || '', !!loaderConfig?.cancelable);
+    return from(source).pipe(
+      finalize(() => this.loadingService.hide())
+    );
   }
 }
