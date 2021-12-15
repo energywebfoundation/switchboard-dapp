@@ -1,8 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Asset, AssetProfile, Profile } from 'iam-client-lib';
-import { EditAssetService } from './services/edit-asset.service';
+import { IamService } from '../../../shared/services/iam.service';
+import { from } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Asset, AssetProfile, ClaimData, Profile } from 'iam-client-lib';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { CancelButton } from '../../../layout/loading/loading.component';
+import { mapClaimsProfile } from '@operators';
 
 const assetProfilesKey = 'assetProfiles';
 
@@ -20,14 +25,19 @@ export class EditAssetDialogComponent implements OnInit {
 
   private profile: Profile;
 
-  constructor(private dialogRef: MatDialogRef<EditAssetDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) private data: Asset,
+  constructor(public dialogRef: MatDialogRef<EditAssetDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: Asset,
               private fb: FormBuilder,
-              private editAssetService: EditAssetService) {
+              private iamService: IamService,
+              private loadingService: LoadingService) {
   }
 
   ngOnInit(): void {
-    this.editAssetService.getProfile().subscribe((profile: Profile) => {
+    this.loadingService.show();
+    from(this.iamService.iam.getUserClaims()).pipe(
+      mapClaimsProfile()
+    ).subscribe((profile: any) => {
+      this.loadingService.hide();
       this.profile = profile;
       this.updateForm(profile);
     });
@@ -41,24 +51,34 @@ export class EditAssetDialogComponent implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    this.editAssetService.update(this.createClaimObjectUpdate())
-      .subscribe((v) => this.dialogRef.close(v));
+    this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
+    from(this.iamService.iam.createSelfSignedClaim({
+      data: this.createClaimObjectUpdate()
+    })).pipe(
+      takeUntil(this.dialogRef.afterClosed())
+    ).subscribe(() => {
+      this.loadingService.hide();
+      this.dialogRef.close(true);
+    });
   }
 
-  private createClaimObjectUpdate(): Profile {
+  private createClaimObjectUpdate(): ClaimData {
     return ({
-      ...this.profile,
-      assetProfiles: {
-        ...(this.profile && this.profile.assetProfiles),
-        [this.data.id]: {
-          ...this.form.getRawValue()
+      profile: {
+        ...this.profile,
+        assetProfiles: {
+          ...(this.profile && this.profile.assetProfiles),
+          [this.data.id]: {
+            ...this.form.getRawValue()
+          }
         }
       }
     });
   }
 
-  private updateForm(profile: Profile) {
+  private updateForm(profile) {
     const assetProfile: AssetProfile = profile && profile[assetProfilesKey] && profile[assetProfilesKey][this.data.id];
+
     if (!assetProfile) {
       return;
     }

@@ -32,7 +32,7 @@ export class SelectAssetDialogComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       this.loadingService.show();
-      this.dataSource.data = (await this.iamService.assetsService.getOwnedAssets()).map((data: DataAsset) => {
+      this.dataSource.data = (await this.iamService.iam.getOwnedAssets()).map((data: DataAsset) => {
         data.minifiedId = `${data.id.substr(0, 15)}...${data.id.substr(data.id.length - 5)}`;
         return {...data, isSelected: this.data.assetDiD === data.id};
       });

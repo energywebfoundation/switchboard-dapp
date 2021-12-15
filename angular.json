@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "switchboard-dapp": {
+    "ew-boilerplate-ui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -32,8 +32,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/manifest.webmanifest",
-              "src/manifest.json",
-              "src/env.js"
+              "src/manifest.json"
             ],
             "styles": [
               "src/app/core/preloader/preloader.scss",
@@ -41,17 +40,12 @@
               {
                 "input": "src/app/shared/styles/themes/theme-a.scss",
                 "bundleName": "theme-a",
-                "inject": false
+                "inject": true
               },
               {
                 "input": "src/app/shared/styles/themes/theme-b.scss",
-                "bundleName": "default",
-                "inject": false
-              },
-              {
-                "input": "src/app/shared/styles/themes/theme-c.scss",
-                "bundleName": "stedin",
-                "inject": false
+                "bundleName": "theme-b",
+                "inject": true
               }
             ],
             "scripts": [
@@ -142,14 +136,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "switchboard-dapp:build"
+            "browserTarget": "ew-boilerplate-ui:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "switchboard-dapp:build:production"
+              "browserTarget": "ew-boilerplate-ui:build:production"
             },
             "development": {
-              "browserTarget": "switchboard-dapp:build:development"
+              "browserTarget": "ew-boilerplate-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -157,7 +151,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "switchboard-dapp:build"
+            "browserTarget": "ew-boilerplate-ui:build"
           }
         },
         "test": {
@@ -193,43 +187,25 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.component.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"]
           }
         },
         "e2e": {
-          "builder": "@cypress/schematic:cypress",
+          "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "devServerTarget": "switchboard-dapp:serve",
-            "watch": true,
-            "headless": false
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "ew-boilerplate-ui:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "switchboard-dapp:serve:production"
+              "devServerTarget": "ew-boilerplate-ui:serve:production"
             }
-          }
-        },
-        "cypress-run": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "switchboard-dapp:serve"
-          }
-        },
-        "cypress-open": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "switchboard-dapp:serve",
-            "watch": true,
-            "headless": false
           }
         }
       }
     }
   },
-  "defaultProject": "switchboard-dapp",
+  "defaultProject": "ew-boilerplate-ui",
   "cli": {
     "analytics": false
   }

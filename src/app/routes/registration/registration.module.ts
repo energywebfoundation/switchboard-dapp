@@ -9,9 +9,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { RequestClaimComponent } from './request-claim/request-claim.component';
 import { LayoutModule } from '../../layout/layout.module';
 import { SelectAssetDialogComponent } from './select-asset-dialog/select-asset-dialog.component';
+import { EnrolmentFormComponent } from './enrolment-form/enrolment-form.component';
 import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-to-wallet.module';
-import { EnrolmentFormModule } from './enrolment-form/enrolment-form.module';
-import { RolePreconditionListModule } from './role-precondition-list/role-precondition-list.module';
 
 
 const routes: Routes = [];
@@ -28,15 +27,15 @@ const routes: Routes = [];
     MatDividerModule,
     NgxSpinnerModule,
     LayoutModule,
-    ConnectToWalletModule,
-    EnrolmentFormModule,
-    RolePreconditionListModule
+    ConnectToWalletModule
   ],
   declarations: [
     RequestClaimComponent,
-    SelectAssetDialogComponent
+    SelectAssetDialogComponent,
+    EnrolmentFormComponent
   ],
   entryComponents: [SelectAssetDialogComponent],
+  exports: []
 })
 
 export class RegistrationModule {

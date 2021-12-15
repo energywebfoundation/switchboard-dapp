@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { IamService } from '../../shared/services/iam.service';
-import { catchError, finalize, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { mapClaimsProfile } from '@operators';
 import { Profile } from 'iam-client-lib';
 import { LoadingService } from '../../shared/services/loading.service';
+import { CancelButton } from '../../layout/loading/loading.component';
 import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
 import { UserClaimState } from './user.reducer';
 import { ToastrService } from 'ngx-toastr';
 import * as UserClaimActions from './user.actions';
+import * as UserClaimSelectors from './user.selectors';
 
 @Injectable()
 export class UserEffects {
@@ -37,6 +39,35 @@ export class UserEffects {
       map((profile: Profile) => UserClaimActions.setProfile({profile}))
     )
   );
+
+  updateUserProfile$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserClaimActions.updateUserClaims),
+      tap(() => this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED)),
+      withLatestFrom(this.store.select(UserClaimSelectors.getUserProfile)),
+      map(([{profile}, oldProfile]) => this.mergeProfiles(oldProfile, profile)),
+      switchMap((profile: Profile) => from(this.iamService.createSelfSignedClaim({
+          data: {
+            profile
+          }
+        }))
+          .pipe(
+            map(() => {
+              this.toastr.success('Identity is updated.', 'Success');
+              return UserClaimActions.updateUserClaimsSuccess({profile});
+            }),
+            catchError(err => {
+              this.toastr.error(err.message, 'System Error');
+              console.error('Saving Identity Error', err);
+              return of(UserClaimActions.updateUserClaimsFailure({error: err}));
+            }),
+            finalize(() => {
+              this.loadingService.hide();
+              this.dialog.closeAll();
+            })
+          )
+      )
+    ));
 
   setUpUserData$ = createEffect(() =>
     this.actions$.pipe(

@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-import { LoginService } from './login/login.service';
+import { IamService } from './iam.service';
 
 @Injectable({providedIn: 'root'})
 export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    private loginService: LoginService
+    private iamService: IamService
   ) {
   }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (this.loginService.isSessionActive()) {
+    if (this.iamService.iam.isSessionActive()) {
       if (state.url === 'welcome') {
         this.router.navigate(['dashboard']);
       } else if (!state.url.startsWith('/dashboard')) {

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { EnrolmentComponent } from './enrolment.component';
@@ -15,23 +15,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
-import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-code-scanner.module';
-import { IssueVcModule } from '../../modules/issue-vc/issue-vc.module';
-import { EnrolmentFormModule } from '../registration/enrolment-form/enrolment-form.module';
-import { FieldsComponent } from './fields/fields.component';
 
 const routes: Routes = [
   {path: '', component: EnrolmentComponent}
 ];
 
 @NgModule({
-  declarations: [
-    EnrolmentComponent,
-    EnrolToRoleComponent,
-    ViewRequestsComponent,
-    ViewRoleComponent,
-    FieldsComponent
-  ],
+  declarations: [EnrolmentComponent, EnrolToRoleComponent, ViewRequestsComponent, ViewRoleComponent],
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
@@ -45,10 +35,7 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     NgxSpinnerModule,
     MatDialogModule,
-    MatInputModule,
-    QrCodeScannerModule,
-    IssueVcModule,
-    EnrolmentFormModule
+    MatInputModule
   ],
   entryComponents: [ViewRequestsComponent, ViewRoleComponent]
 })

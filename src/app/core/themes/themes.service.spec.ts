@@ -1,18 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+/* tslint:disable:no-unused-variable */
+
+import { TestBed, inject } from '@angular/core/testing';
 import { ThemesService } from './themes.service';
-import { EnvService } from '../../shared/services/env/env.service';
 
 describe('Service: Themes', () => {
-  let service: ThemesService;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ThemesService, {provide: EnvService, useValue: {}}]
+      providers: [ThemesService]
     });
-
-    service = TestBed.inject(ThemesService);
   });
 
-  it('should create', (() => {
+  it('should ...', inject([ThemesService], (service: ThemesService) => {
     expect(service).toBeTruthy();
   }));
 });

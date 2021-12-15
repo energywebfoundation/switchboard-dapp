@@ -8,7 +8,6 @@ import { SharedModule } from './shared/shared.module';
 import { RoutesModule } from './routes/routes.module';
 import { APP_BASE_HREF } from '@angular/common';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ThemesService } from './core/themes/themes.service';
 
 describe('App: ewUIBoilerPlate', () => {
   beforeEach(() => {
@@ -28,8 +27,7 @@ describe('App: ewUIBoilerPlate', () => {
       ],
       providers: [
         provideMockStore(),
-        {provide: APP_BASE_HREF, useValue: '/'},
-        {provide: ThemesService, useValue: {}}
+        {provide: APP_BASE_HREF, useValue: '/'}
       ]
     });
   });

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { from, of } from 'rxjs';
 import { DIDAttribute, PubKeyType } from 'iam-client-lib';
@@ -7,14 +8,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { retryWhenWithDelay } from '@operators';
-import { DidRegistryFacadeService } from '../../../shared/services/did-registry-facade/did-registry-facade.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VerificationService {
 
-  constructor(private didRegistryFacade: DidRegistryFacadeService,
+  constructor(private iamService: IamService,
               private loadingService: LoadingService,
               private toastr: SwitchboardToastrService) {
   }
@@ -29,7 +29,7 @@ export class VerificationService {
   updateDocumentAndReload(did: string, publicKey: string, publicKeysAmount: number) {
     this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
     return from(
-      this.didRegistryFacade.updateDocument(this.getUpdateOptions(did, publicKey))
+      this.iamService.iam.updateDidDocument(this.getUpdateOptions(did, publicKey))
     ).pipe(
       catchError(err => {
         this.loadingService.hide();
@@ -66,7 +66,7 @@ export class VerificationService {
 
   private loadDocumentPublicKeys(did, includeClaims) {
     return from(
-      this.didRegistryFacade.getDidDocument({did, includeClaims})
+      this.iamService.iam.getDidDocument({did, includeClaims})
     ).pipe(
       map((document) => document.publicKey),
     );

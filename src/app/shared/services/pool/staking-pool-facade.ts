@@ -1,59 +1,48 @@
 import { Injectable } from '@angular/core';
-import { StakingPoolService } from 'iam-client-lib';
+import { StakingPool } from 'iam-client-lib';
 import { BigNumber } from 'ethers';
+import { TransactionSpeed } from 'iam-client-lib/dist/src/staking';
 import { from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StakingPoolFacade {
-  private pool: StakingPoolService;
+  private pool: StakingPool;
 
   isPoolDefined(): boolean {
     return Boolean(this.pool);
   }
 
-  setPool(pool: StakingPoolService) {
+  setPool(pool: StakingPool) {
     this.pool = pool;
   }
 
-  putStake(stake: BigNumber | number) {
-    return from(this.pool.putStake(stake));
+  putStake(stake: BigNumber | number, transactionSpeed?: TransactionSpeed) {
+    return from(this.pool.putStake(stake, transactionSpeed));
   }
 
-  getStartDate() {
-    return from(this.pool.getStart());
-  }
-
-  getEndDate() {
-    return from(this.pool.getEnd());
+  requestWithdrawDelay() {
+    return from(this.pool.requestWithdrawDelay());
   }
 
   checkReward() {
     return from(this.pool.checkReward());
   }
 
-  getStake() {
-    return from(this.pool.getStake());
+  getStake(patron?: string) {
+    return from(this.pool.getStake(patron));
   }
 
-  withdraw() {
-    return from(this.pool.withdraw());
+  requestWithdraw(transactionSpeed?: TransactionSpeed) {
+    return from(this.pool.requestWithdraw(transactionSpeed));
+  };
+
+  withdrawalDelay() {
+    return from(this.pool.withdrawalDelay());
   }
 
-  getHardCap() {
-    return from(this.pool.getHardCap());
-  }
-
-  getContributionLimit() {
-    return from(this.pool.getContributionLimit());
-  }
-
-  getTotalStaked() {
-    return from(this.pool.getTotalStaked());
-  }
-
-  partialWithdraw(value: BigNumber) {
-    return from(this.pool.partialWithdraw(value));
+  withdraw(transactionSpeed?: TransactionSpeed) {
+    return from(this.pool.withdraw(transactionSpeed));
   }
 }

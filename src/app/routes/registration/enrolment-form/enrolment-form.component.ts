@@ -1,8 +1,7 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
 import { IRoleDefinition, RegistrationTypes } from 'iam-client-lib';
-import { KeyValue } from '@angular/common';
 
 export interface EnrolmentField {
   key: string;
@@ -10,22 +9,9 @@ export interface EnrolmentField {
 }
 
 export interface EnrolmentSubmission {
-  fields: KeyValue<string, string>[];
+  fields: EnrolmentField[];
   registrationTypes: RegistrationTypes[];
   valid: boolean;
-}
-
-export interface EnrolmentForm {
-  isValid(): boolean;
-
-  fieldsData(): KeyValue<string, string>[];
-
-  getRegistrationTypes(): RegistrationTypes[];
-}
-
-export interface PredefinedRegistrationTypes {
-  onChain?: boolean;
-  offChain?: boolean;
 }
 
 @Component({
@@ -33,18 +19,16 @@ export interface PredefinedRegistrationTypes {
   templateUrl: './enrolment-form.component.html',
   styleUrls: ['./enrolment-form.component.scss']
 })
-export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
+export class EnrolmentFormComponent {
   enrolmentForm: FormGroup = new FormGroup({
     registrationTypes: new FormGroup({
-      offChain: new FormControl({value: false, disabled: false}),
-      onChain: new FormControl({value: true, disabled: false}),
+      offChain: new FormControl({value: true, disabled: false}),
+      onChain: new FormControl({value: false, disabled: true}),
     }, requireCheckboxesToBeCheckedValidator()),
     fields: new FormArray([])
   });
 
-  @Input() showSubmit = true;
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
-  @Input() showRegistrationTypes: boolean = true;
 
   @Input() set fieldList(list: IRoleDefinition['fields']) {
     this.fields = list;
@@ -54,10 +38,6 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
   get fieldList(): IRoleDefinition['fields'] {
     return this.fields;
   }
-
-  @Input() showOffChain: boolean;
-
-  @Input() predefinedRegTypes: PredefinedRegistrationTypes;
 
   @Input() txtboxColor;
   @Input() txtColor;
@@ -70,18 +50,6 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
   constructor(private cdRef: ChangeDetectorRef) {
   }
 
-  ngOnInit() {
-    this.setPredefinedFormatForCheckboxes();
-  }
-
-  isValid() {
-    return this.enrolmentForm.valid;
-  }
-
-  fieldsData(): KeyValue<string, string>[] {
-    return this.buildEnrolmentFormFields();
-  }
-
   submit() {
     if (this.disabledSubmit) {
       return;
@@ -89,11 +57,11 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
     this.submitForm.next({
       fields: this.buildEnrolmentFormFields(),
       registrationTypes: this.getRegistrationTypes(),
-      valid: this.isValid()
+      valid: this.enrolmentForm.valid
     });
   }
 
-  getRegistrationTypes(): RegistrationTypes[] {
+  private getRegistrationTypes(): RegistrationTypes[] {
     const result = [];
     if (this.registrationTypesGroup.get('offChain').value) {
       result.push(RegistrationTypes.OffChain);
@@ -121,9 +89,9 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
     this.enrolmentForm.registerControl('fields', formArray);
     this.registrationTypesGroup.reset(
       {
-        offChain: {value: false, disabled: false},
+        offChain: {value: true, disabled: false},
         onChain: {
-          value: true,
+          value: false,
           disabled: !this.namespaceRegistrationRoles?.has(RegistrationTypes.OnChain)
         }
       }
@@ -137,10 +105,6 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
 
   get registrationTypesGroup(): AbstractControl {
     return this.enrolmentForm.get('registrationTypes');
-  }
-
-  get isOnChainChecked() {
-    return this.registrationTypesGroup.get('onChain').value;
   }
 
   private createControls(list) {
@@ -200,26 +164,6 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
     }
 
     return validations;
-  }
-
-  private setPredefinedFormatForCheckboxes(): void {
-    if (!this.predefinedRegTypes) {
-      return;
-    }
-    if (this.predefinedRegTypes.onChain || this.predefinedRegTypes.offChain) {
-      this.registrationTypesGroup.reset(
-        {
-          offChain: {
-            value: Boolean(this.predefinedRegTypes.offChain),
-            disabled: true
-          },
-          onChain: {
-            value: Boolean(this.predefinedRegTypes.onChain),
-            disabled: true
-          }
-        }
-      );
-    }
   }
 
 }

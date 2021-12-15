@@ -9,9 +9,11 @@ import { IamService } from '../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { UserClaimState } from './user.reducer';
+import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { dialogSpy, iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
 import * as UserClaimActions from './user.actions';
+import * as UserClaimSelectors from './user.selectors';
 
 describe('UserEffects', () => {
 
@@ -166,6 +168,76 @@ describe('UserEffects', () => {
       });
     });
 
+  });
+
+  describe('updateUserProfile$', () => {
+    let userProfile;
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should set user profile and check for called methods', (done) => {
+      userProfile = store.overrideSelector(UserClaimSelectors.getUserProfile, {});
+      actions$.next(UserClaimActions.updateUserClaims({profile: {name: 'test'}}));
+      iamServiceSpy.createSelfSignedClaim.and.returnValue(Promise.resolve(true));
+
+      effects.updateUserProfile$.pipe(
+        finalize(() => {
+          expect(loadingServiceSpy.hide).toHaveBeenCalled();
+          expect(dialogSpy.closeAll).toHaveBeenCalled();
+        })
+      ).subscribe(resultAction => {
+        expect(loadingServiceSpy.show).toHaveBeenCalled();
+        expect(toastrSpy.success).toHaveBeenCalled();
+        expect(resultAction).toEqual(UserClaimActions.updateUserClaimsSuccess({
+          profile: {
+            name: 'test',
+            assetProfiles: {}
+          }
+        }));
+        done();
+      });
+    });
+
+    it('should update existing user profile name', (done) => {
+      const assetProfiles = {'did:ethr': {name: 'asset name', icon: ''}};
+      userProfile = store.overrideSelector(UserClaimSelectors.getUserProfile,
+        {name: 'old', assetProfiles}
+      );
+      actions$.next(UserClaimActions.updateUserClaims({profile: {name: 'new'}}));
+      iamServiceSpy.createSelfSignedClaim.and.returnValue(Promise.resolve(true));
+
+      effects.updateUserProfile$.subscribe(resultAction => {
+        expect(resultAction).toEqual(
+          UserClaimActions.updateUserClaimsSuccess({profile: {name: 'new', assetProfiles}})
+        );
+        done();
+      });
+    });
+
+    it('should update asset profiles', (done) => {
+      const assetProfilesOld = {'did:ethr': {name: 'asset name', icon: ''}};
+      userProfile = store.overrideSelector(UserClaimSelectors.getUserProfile,
+        {name: 'old', assetProfiles: assetProfilesOld}
+      );
+      const assetProfilesNew = {'did:ethr23': {name: 'asset', icon: ''}};
+      actions$.next(UserClaimActions.updateUserClaims({profile: {name: 'new', assetProfiles: assetProfilesNew}}));
+      iamServiceSpy.createSelfSignedClaim.and.returnValue(Promise.resolve(true));
+
+      effects.updateUserProfile$.subscribe(resultAction => {
+        expect(resultAction).toEqual(
+          UserClaimActions.updateUserClaimsSuccess({
+            profile: {
+              name: 'new',
+              assetProfiles: {
+                ...assetProfilesOld, ...assetProfilesNew
+              }
+            }
+          })
+        );
+        done();
+      });
+    });
   });
 
 });

@@ -1,0 +1,13 @@
+.stake-list {
+  display: flex;
+  flex-direction: column;
+
+  .stake-list-banner {
+    width: auto;
+    margin: 1rem 0;
+  }
+
+  .row {
+    margin-top: 1rem;
+  }
+}

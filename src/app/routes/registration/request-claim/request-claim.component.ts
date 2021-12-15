@@ -2,7 +2,8 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Asset, Claim, IRoleDefinition, NamespaceType, PreconditionType, RegistrationTypes } from 'iam-client-lib';
+import { Asset, ENSNamespaceTypes, IRoleDefinition, PreconditionTypes, RegistrationTypes } from 'iam-client-lib';
+import { Claim } from 'iam-client-lib/dist/src/cacheServerClient/cacheServerClient.types';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
@@ -10,19 +11,13 @@ import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wall
 import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-dialog.component';
 import { SubjectElements, ViewColorsSetter } from '../models/view-colors-setter';
 import swal from 'sweetalert';
-import {
-  EnrolmentField,
-  EnrolmentSubmission,
-  PredefinedRegistrationTypes
-} from '../enrolment-form/enrolment-form.component';
+import { EnrolmentField, EnrolmentSubmission } from '../enrolment-form/enrolment-form.component';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { Store } from '@ngrx/store';
 import { logout } from '../../../state/auth/auth.actions';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 import { filter, take } from 'rxjs/operators';
-import { AuthActions, SettingsSelectors } from '@state';
-import { PreconditionCheck, preconditionCheck } from '../utils/precondition-check';
-import { LoginService } from 'src/app/shared/services/login/login.service';
+import { AuthActions } from '@state';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -39,6 +34,12 @@ const SwalButtons = {
 interface FormClaim extends Claim {
   isSynced?: boolean;
   claimTypeVersion: string;
+}
+
+enum RolePreconditionType {
+  SYNCED = 'synced',
+  APPROVED = 'approved',
+  PENDING = 'pending'
 }
 
 @Component({
@@ -69,11 +70,9 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public txtboxColor = {};
   public isLoggedIn = false;
   public isPrecheckSuccess = false;
-  public predefinedRegTypes: PredefinedRegistrationTypes;
   isLoading = false;
-  rolePreconditionList: PreconditionCheck[] = [];
+  rolePreconditionList = [];
   public roleType: string;
-  experimentalEnabled: boolean;
 
   private userRoleList: FormClaim[];
   private namespace: string;
@@ -87,7 +86,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   constructor(private fb: FormBuilder,
               private route: Router,
               private activeRoute: ActivatedRoute,
-              private loginService: LoginService,
               private iamService: IamService,
               private toastr: SwitchboardToastrService,
               public dialog: MatDialog,
@@ -99,7 +97,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public onPageUnload() {
     if (this.isLoggedIn && !this.stayLoggedIn) {
       // Always logout if user refreshes this screen or closes this tab
-      this.store.dispatch(logout());
+      this.store.dispatch(logout())
     }
   }
 
@@ -109,6 +107,14 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   isApplication(): boolean {
     return this.roleType === RoleType.APP;
+  }
+
+  isRolePreconditionApproved(status: RolePreconditionType): boolean {
+    return status === RolePreconditionType.APPROVED;
+  }
+
+  isRolePreconditionPending(status: RolePreconditionType): boolean {
+    return status === RolePreconditionType.PENDING;
   }
 
   getNamespaceRegistrationRoles(): Set<RegistrationTypes> {
@@ -124,8 +130,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   async ngOnInit() {
-    this.experimentalEnabled = await this.store.select(SettingsSelectors.isExperimentalEnabled).pipe(take<boolean>(1)).toPromise();
-
     this.activeRoute.queryParams.subscribe(async (params: any) => {
       this.cleanUpSwal();
       this.loadingService.show();
@@ -145,13 +149,13 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         }
 
         this.setUrlParams(params);
-        this.setPredefinedRegistrationTypes(params);
+
         this.resetData();
 
         try {
           // Get org/app definition
-          this.orgAppDetails = await this.iamService.domainsService.getDefinition({
-            type: this.roleType === RoleType.APP ? NamespaceType.Application : NamespaceType.Organization,
+          this.orgAppDetails = await this.iamService.iam.getDefinition({
+            type: this.roleType === RoleType.APP ? ENSNamespaceTypes.Application : ENSNamespaceTypes.Organization,
             namespace: this.namespace
           });
 
@@ -183,11 +187,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   private async getRegistrationTypesOfRoles() {
-    this.registrationTypesOfRole = await this.iamService.domainsService.registrationTypesOfRoles(this.roleList.map(role => role.namespace));
-  }
-
-  private setPredefinedRegistrationTypes(params) {
-    this.predefinedRegTypes = {onChain: params?.onchain === 'true', offChain: params?.offchain === 'true'};
+    this.registrationTypesOfRole = await this.iamService.iam.registrationTypesOfRoles(this.roleList.map(role => role.namespace));
   }
 
   roleTypeSelected(e: any) {
@@ -197,12 +197,9 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       this.selectedNamespace = e.value.namespace;
 
       // Init Preconditions
-      this.setPreconditions();
-    }
-  }
+      this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
 
-  private setPreconditions(): void {
-    [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(this.selectedRole.enrolmentPreconditions, this.userRoleList);
+    }
   }
 
   async enrolForSelected(e: any) {
@@ -239,7 +236,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     this.loadingService.show('Please confirm this transaction in your connected wallet.');
 
     try {
-      await this.iamService.claimsService.createClaimRequest({
+      await this.iamService.iam.createClaimRequest({
         issuer: issuerDids,
         claim: this.createClaim(enrolForm.fields),
         subject: this.roleTypeForm.value.assetDid ? this.roleTypeForm.value.assetDid : undefined,
@@ -263,9 +260,9 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     if (this.selectedRole.issuer) {
       if (this.selectedRole.issuer.roleName) {
         // Retrieve list of issuers by roleName
-        return await this.iamService.domainsService.getDIDsByRole(
-          this.selectedRole.issuer.roleName
-        );
+        return await this.iamService.iam.getRoleDIDs({
+          namespace: this.selectedRole.issuer.roleName
+        });
       } else if (this.selectedRole.issuer.did) {
         return this.selectedRole.issuer.did;
       }
@@ -275,16 +272,15 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   goToEnrolment() {
     if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid } });
+      this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid}});
     } else {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/enrolment?notif=myEnrolments' } });
+      this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/enrolment?notif=myEnrolments'}});
     }
   }
 
   logout() {
-    this.isLoggedIn = false;
-    this.store.dispatch(logout());
+    this.store.dispatch(logout())
   }
 
   selectAsset() {
@@ -381,7 +377,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         default:
           if (this.callbackUrl && !this.stayLoggedIn) {
             // Logout
-            this.store.dispatch(logout());
+            this.store.dispatch(logout())
             // Redirect to Callback URL
             location.href = this.callbackUrl;
           } else if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
@@ -411,7 +407,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     // Hide button if callback url is not available
     if (!this.callbackUrl) {
       delete config.button;
-      if (this.loginService.isSessionActive()) {
+      if (this.iamService.iam.isSessionActive()) {
         if (icon !== 'success') {
           config['buttons'] = {
             [SwalButtons.VIEW_MY_ENROMENTS]: 'View My Enrolments',
@@ -435,9 +431,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       }
     }
 
-    if (!this.experimentalEnabled && config && config['buttons'] && config['buttons'][SwalButtons.ENROL_FOR_ASSET]) {
-      delete config['buttons'][SwalButtons.ENROL_FOR_ASSET];
-    }
     return config;
   }
 
@@ -445,12 +438,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     let retVal = false;
 
     if (params.app &&
-      params.app.includes(`.${NamespaceType.Application}.`) &&
-      !params.app.includes(`.${NamespaceType.Role}.`)) {
+      params.app.includes(`.${ENSNamespaceTypes.Application}.`) &&
+      !params.app.includes(`.${ENSNamespaceTypes.Roles}.`)) {
       retVal = true;
     } else if (params.org &&
-      !params.org.includes(`.${NamespaceType.Application}.`) &&
-      !params.org.includes(`.${NamespaceType.Role}.`)) {
+      !params.org.includes(`.${ENSNamespaceTypes.Application}.`) &&
+      !params.org.includes(`.${ENSNamespaceTypes.Roles}.`)) {
       retVal = true;
     }
 
@@ -459,7 +452,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private async initLoginUser() {
     // Check Login
-    if (this.loginService.isSessionActive()) {
+    if (this.iamService.isSessionActive()) {
       this.store.dispatch(AuthActions.reinitializeAuthForEnrol());
       // Set Loggedin Flag to true
       this.isLoggedIn = await this.store.select(isUserLoggedIn).pipe(
@@ -484,12 +477,14 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private async _getDIDSyncedRoles() {
     try {
-      let claims: any[] = await this.iamService.claimsService.getUserClaims({});
+      let claims: any[] = await this.iamService.iam.getUserClaims({
+        did: this.roleTypeForm.value.enrolFor === EnrolForType.ASSET ? this.roleTypeForm.value.assetDid : this.iamService.iam.getDid()
+      });
       claims = claims
         .filter((item: any) => item && item.claimType)
         .filter((item) => {
           const arr = item.claimType.split('.');
-          return arr.length > 1 && arr[1] === NamespaceType.Role;
+          return arr.length > 1 && arr[1] === ENSNamespaceTypes.Roles;
         });
 
       if (claims && claims.length && this.userRoleList) {
@@ -507,25 +502,25 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   private async getNotEnrolledRoles() {
-    let roleList = await this.iamService.domainsService.getRolesByNamespace({
-      parentType: this.roleType === RoleType.APP ? NamespaceType.Application : NamespaceType.Organization,
+    let roleList = await this.iamService.iam.getRolesByNamespace({
+      parentType: this.roleType === RoleType.APP ? ENSNamespaceTypes.Application : ENSNamespaceTypes.Organization,
       namespace: this.namespace
     });
 
     if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
-      this.userRoleList = (await this.iamService.claimsService.getClaimsBySubject({
+      this.userRoleList = (await this.iamService.iam.getClaimsBySubject({
         did: this.roleTypeForm.value.assetDid
       })).filter((claim: Claim) => !claim.isRejected);
     } else {
-      this.userRoleList = (await this.iamService.claimsService.getClaimsByRequester({
-        did: this.iamService.signerService.did
+      this.userRoleList = (await this.iamService.iam.getClaimsByRequester({
+        did: this.iamService.iam.getDid()
       })).filter((claim: Claim) => !claim.isRejected);
     }
 
     if (roleList && roleList.length) {
       roleList = roleList.filter((role: any) => {
         let retVal = true;
-        const defaultRole = `${this.defaultRole}.${NamespaceType.Role}.${this.namespace}`;
+        const defaultRole = `${this.defaultRole}.${ENSNamespaceTypes.Roles}.${this.namespace}`;
         for (let i = 0; i < this.userRoleList.length; i++) {
           if (role.namespace === this.userRoleList[i].claimType &&
             // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
@@ -571,7 +566,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
               this.roleTypeForm.get('roleType').setValue(role);
 
               // Init Preconditions
-              this.setPreconditions();
+              this.isPrecheckSuccess = this._preconditionCheck(this.selectedRole.enrolmentPreconditions);
             });
         }
       }
@@ -599,4 +594,55 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     }
   }
 
+  private _getRoleConditionStatus(namespace: string) {
+    let status = RolePreconditionType.PENDING;
+
+    // Check if namespace exists in synced DID Doc Roles
+    for (const roleObj of this.userRoleList) {
+      if (roleObj.claimType === namespace) {
+        if (roleObj.isAccepted) {
+          if (roleObj.isSynced) {
+            status = RolePreconditionType.SYNCED;
+          } else {
+            status = RolePreconditionType.APPROVED;
+          }
+        }
+        break;
+      }
+    }
+
+    return status;
+  }
+
+  private _preconditionCheck(preconditionList: any[]) {
+    let retVal = true;
+
+    if (preconditionList && preconditionList.length) {
+      for (const precondition of preconditionList) {
+        switch (precondition.type) {
+          case PreconditionTypes.Role:
+            // Check for Role Conditions
+            this.rolePreconditionList = [];
+
+            const conditions = precondition.conditions;
+            if (conditions) {
+              for (const roleCondition of conditions) {
+                const status = this._getRoleConditionStatus(roleCondition);
+                this.rolePreconditionList.push({
+                  namespace: roleCondition,
+                  status
+                });
+
+                if (status !== RolePreconditionType.SYNCED) {
+                  retVal = false;
+                }
+              }
+            }
+            break;
+        }
+      }
+    }
+
+    return retVal;
+  }
 }
