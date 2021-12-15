@@ -11,7 +11,7 @@
     window.__env.cacheServerUrl = 'https://identitycache-dev.energyweb.org/v1';
     window.__env.natsServerUrl = 'https://identityevents-dev.energyweb.org/';
     window.__env.kmsServerUrl = undefined;
-    window.__env.stakingPoolFactoryAddress = '0xd61Ac65c0fECfb83108f6E374a57FfF9c692901d';
+    window.__env.stakingPoolFactoryAddress = undefined;
     window.__env.claimManagerAddress = '0xC3dD7ED75779b33F5Cfb709E0aB02b71fbFA3210';
     window.__env.showAzureLoginOption = true;
     window.__env.natsEnvironmentName = 'ewf-dev';
