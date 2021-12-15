@@ -6,6 +6,8 @@ fs.readFile(envConfig, 'utf8', function (err, data) {
         return console.log(err);
     }
     const result = data
+        .replace('chainId = 73799', 'chainId = 246')
+        .replace('rpcUrl = \'https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/\'', 'rpcUrl = \'https://rpc.energyweb.org/\'')
         .replace('cacheServerUrl = \'https://identitycache-dev.energyweb.org/v1\'', 'cacheServerUrl = \'https://identitycache.energyweb.org/v1\'')
         .replace('natsServerUrl = \'https://identityevents-dev.energyweb.org/\'', 'natsServerUrl = \'https://identityevents.energyweb.org/\'')
         .replace('kmsServerUrl = undefined', 'kmsServerUrl = \'https://kms.energyweb.org/connect/new\'')
