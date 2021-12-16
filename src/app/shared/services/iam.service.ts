@@ -247,9 +247,6 @@ export class IamService {
       chainConfig.claimManagerAddress = this.envService.claimManagerAddress;
     }
 
-    if (this.envService.stakingPoolFactoryAddress) {
-      chainConfig.stakingPoolFactoryAddress = this.envService.stakingPoolFactoryAddress;
-    }
     return chainConfig;
   }
 
