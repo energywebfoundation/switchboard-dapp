@@ -12,6 +12,7 @@ import { TestScheduler } from 'rxjs/testing';
 import { IamService } from '../../../shared/services/iam.service';
 import * as ApplicationActions from './application.actions';
 import { IApp } from 'iam-client-lib';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 describe('ApplicationEffects', () => {
 
@@ -26,6 +27,7 @@ describe('ApplicationEffects', () => {
         {provide: SwitchboardToastrService, useValue: toastrSpy},
         {provide: IamService, useValue: iamServiceSpy},
         {provide: MatDialog, useValue: dialogSpy},
+        {provide: EnvService, useValue: {rootNamespace: 'iam.ewc'}},
         provideMockStore(),
         provideMockActions(() => actions$),
       ],
@@ -50,7 +52,10 @@ describe('ApplicationEffects', () => {
       iamServiceSpy.getENSTypesByOwner.and.returnValue(cold('--a|', {a: [{namespace: 'test'}]}));
 
       expectObservable(effects.getList$).toBe('---c', {
-        c: ApplicationActions.getListSuccess({list: [{namespace: 'test', containsRoles: false}] as any as IApp[]})
+        c: ApplicationActions.getListSuccess({
+          list: [{namespace: 'test', containsRoles: false}] as any as IApp[],
+          namespace: 'iam.ewc'
+        })
 
       });
     });
@@ -67,7 +72,8 @@ describe('ApplicationEffects', () => {
             namespace: 'test',
             roles: [{}],
             containsRoles: true
-          }] as any as IApp[]
+          }] as any as IApp[],
+          namespace: 'iam.ewc'
         })
 
       });

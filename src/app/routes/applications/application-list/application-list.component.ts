@@ -14,6 +14,7 @@ import { ListType } from 'src/app/shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import { ApplicationActions, ApplicationSelectors } from '@state';
 import { takeUntil } from 'rxjs/operators';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 @Component({
   selector: 'app-application-list',
@@ -38,7 +39,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
               private dialog: MatDialog,
               private fb: FormBuilder,
               private toastr: SwitchboardToastrService,
-              private store: Store) {
+              private store: Store,
+              private envService: EnvService) {
   }
 
   ngOnInit() {
@@ -89,7 +91,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
 
   viewRoles(data: { namespace: string }) {
     const [app, org] = data.namespace
-      .replace('.iam.ewc', '')
+      .replace(`.${this.envService.rootNamespace}`, '')
       .split(`.${NamespaceType.Application}.`);
 
     this.updateFilter.emit({
@@ -151,6 +153,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   filter(filters): void {
-    this.store.dispatch(ApplicationActions.updateFilters({ filters }));
+    this.store.dispatch(ApplicationActions.updateFilters({filters, namespace: this.envService.rootNamespace}));
   }
 }

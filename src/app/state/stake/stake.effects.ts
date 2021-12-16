@@ -14,6 +14,7 @@ import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-
 import { Provider } from './models/provider.interface';
 import * as LayoutActions from '../layout/layout.actions';
 import { filterProviders } from './operators/filter-providers/filter-providers';
+import { EnvService } from '../../shared/services/env/env.service';
 
 
 @Injectable()
@@ -56,7 +57,7 @@ export class StakeEffects {
         switchMap(() => {
           return combineLatest([
               this.stakingService.allServices(),
-              from(this.iamService.domainsService.getENSTypesBySearchPhrase('iam.ewc', [SearchType.Org])),
+              from(this.iamService.domainsService.getENSTypesBySearchPhrase(this.envService.rootNamespace, [SearchType.Org])),
             ]
           ).pipe(
             filterProviders(),
@@ -73,6 +74,7 @@ export class StakeEffects {
               private loadingService: LoadingService,
               private toastr: ToastrService,
               private dialog: MatDialog,
-              private stakingService: StakingPoolServiceFacade) {
+              private stakingService: StakingPoolServiceFacade,
+              private envService: EnvService) {
   }
 }

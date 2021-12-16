@@ -12,6 +12,7 @@ import { takeUntil, tap } from 'rxjs/operators';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import { OrganizationActions, OrganizationSelectors } from '@state';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 const MAX_TOOLTIP_SUBORG_ITEMS = 5;
 
@@ -37,7 +38,8 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
               private iamService: IamService,
               private dialog: MatDialog,
               private toastr: SwitchboardToastrService,
-              private store: Store) {
+              private store: Store,
+              private envService: EnvService) {
   }
 
   ngOnInit() {
@@ -75,14 +77,14 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
   viewApps(data: any) {
     this.updateFilter.emit({
       listType: ListType.APP,
-      organization: data.namespace.split('.iam.ewc')[0]
+      organization: data.namespace.split(`.${this.envService.rootNamespace}`)[0]
     });
   }
 
   viewRoles(data: any) {
     this.updateFilter.emit({
       listType: ListType.ROLE,
-      organization: data.namespace.split('.iam.ewc')[0],
+      organization: data.namespace.split(`.${this.envService.rootNamespace}`)[0],
     });
   }
 

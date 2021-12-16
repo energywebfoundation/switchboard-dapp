@@ -28,16 +28,16 @@ export const initialState: RoleState = {
 
 const roleReducer = createReducer(
   initialState,
-  on(RoleActions.getListSuccess, (state, {list}) => ({
+  on(RoleActions.getListSuccess, (state, {list, namespace}) => ({
     ...state,
     list: [...list],
-    filteredList: filterBy([...list], state.filters.organization, state.filters.application, state.filters.role)
+    filteredList: filterBy([...list], state.filters.organization, state.filters.application, state.filters.role, namespace)
   })),
 
-  on(RoleActions.updateFilters, (state, {filters}) => ({
+  on(RoleActions.updateFilters, (state, {filters, namespace}) => ({
     ...state,
     filters: {...filters},
-    filteredList: filterBy(state.list, filters.organization, filters.application, filters.role)
+    filteredList: filterBy(state.list, filters.organization, filters.application, filters.role, namespace)
   })),
   on(RoleActions.toggleFilters, (state) => ({...state, filterVisible: !state.filterVisible})),
   on(RoleActions.showFilters, (state) => ({...state, filterVisible: true})),
