@@ -7,6 +7,7 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { IRole } from 'iam-client-lib';
 import { of } from 'rxjs';
 import { RoleService } from './services/role.service';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 @Injectable()
 export class RoleEffects {
@@ -15,7 +16,7 @@ export class RoleEffects {
     this.actions$.pipe(
       ofType(RoleActions.getList),
       switchMap(() => this.roleService.getRoleList().pipe(
-          map((list: IRole[]) => RoleActions.getListSuccess({list})),
+          map((list: IRole[]) => RoleActions.getListSuccess({list, namespace: this.envService.rootNamespace})),
           catchError((err) => {
             console.error(err);
             this.toastr.error('Something went wrong while getting list of roles', 'Roles');
@@ -29,7 +30,8 @@ export class RoleEffects {
   constructor(private actions$: Actions,
               private store: Store,
               private roleService: RoleService,
-              private toastr: SwitchboardToastrService
+              private toastr: SwitchboardToastrService,
+              private envService: EnvService
   ) {
   }
 

@@ -8,6 +8,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { OrganizationActions, OrganizationSelectors } from '@state';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 describe('OrganizationListComponent', () => {
   let component: OrganizationListComponent;
@@ -29,6 +30,7 @@ describe('OrganizationListComponent', () => {
         {provide: LoadingService, useValue: {}},
         {provide: IamService, useValue: {}},
         {provide: SwitchboardToastrService, useValue: {}},
+        {provide: EnvService, useValue: {rootNamespace: 'iam.ewc'}},
         provideMockStore()
       ],
       schemas: [NO_ERRORS_SCHEMA]

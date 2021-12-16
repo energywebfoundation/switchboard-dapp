@@ -15,6 +15,7 @@ import { StakingPoolServiceFacade } from '../../shared/services/staking/staking-
 import { StakingPoolFacade } from '../../shared/services/pool/staking-pool-facade';
 import * as LayoutActions from '../layout/layout.actions';
 import { dialogSpy, iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
+import { EnvService } from '../../shared/services/env/env.service';
 
 describe('StakeEffects', () => {
 
@@ -34,6 +35,7 @@ describe('StakeEffects', () => {
         {provide: ToastrService, useValue: toastrSpy},
         {provide: StakingPoolServiceFacade, useValue: stakingService},
         {provide: StakingPoolFacade, useValue: stakingPoolFacadeSpy},
+        {provide: EnvService, useValue: {rootNamespace: 'iam.ewc'}},
         provideMockStore(),
         provideMockActions(() => actions$),
       ],

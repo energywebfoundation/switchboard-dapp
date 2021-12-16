@@ -8,7 +8,7 @@ export const getList = createAction(
 
 export const getListSuccess = createAction(
   '[APP] Get Application List Success',
-  props<{ list: IApp[] }>()
+  props<{ list: IApp[], namespace: string }>()
 );
 
 export const getListFailure = createAction(
@@ -18,7 +18,7 @@ export const getListFailure = createAction(
 
 export const updateFilters = createAction(
   '[APP] Update Filters',
-  props<{ filters: Filters }>()
+  props<{ filters: Filters, namespace: string }>()
 );
 
 export const toggleFilters = createAction(
