@@ -62,11 +62,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { SmartSearchComponent } from './components/smart-search/smart-search.component';
 import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
-import { FeatureToggleDirective } from './feature-toggle/feature-toggle.directive';
 import { CopyToClipboardModule } from './directives/copy-to-clipboard/copy-to-clipboard.module';
 import { DidFormatMinifierModule } from './pipes/did-format-minifier/did-format-minifier.module';
 import { TableHeadingComponent } from './components/table-heading/table-heading.component';
-import { ToggleApplicationDirective } from './feature-toggle/toggle-application.directive';
 import { NoRecordsComponent } from './components/no-records/no-records.component';
 
 
@@ -145,9 +143,7 @@ const MATERIAL_MODULES = [
     MinifiedDidViewerDialogComponent,
     SmartSearchComponent,
     ReplaceUnderscorePipe,
-    FeatureToggleDirective,
     TableHeadingComponent,
-    ToggleApplicationDirective,
     NoRecordsComponent
   ],
   exports: [
@@ -181,11 +177,9 @@ const MATERIAL_MODULES = [
     MATERIAL_MODULES,
     SmartSearchComponent,
     ReplaceUnderscorePipe,
-    FeatureToggleDirective,
     CopyToClipboardModule,
     DidFormatMinifierModule,
     TableHeadingComponent,
-    ToggleApplicationDirective,
     NoRecordsComponent
   ],
   entryComponents: [MinifiedDidViewerDialogComponent]
