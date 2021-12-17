@@ -1,6 +1,6 @@
 import * as fromReducer from './application.reducer';
 import * as ApplicationActions from './application.actions';
-import { NamespaceType, IApp } from 'iam-client-lib';
+import { IApp, NamespaceType } from 'iam-client-lib';
 
 describe('Application reducer', () => {
   describe('getListSuccess action', () => {
@@ -9,7 +9,7 @@ describe('Application reducer', () => {
       const list = [
         {namespace: 'test'} as IApp
       ] as IApp[];
-      const action = ApplicationActions.getListSuccess({list});
+      const action = ApplicationActions.getListSuccess({list, namespace: 'iam.ewc'});
       const state = fromReducer.reducer(initialState, action);
 
       expect(state.list).toEqual(list);
@@ -22,7 +22,7 @@ describe('Application reducer', () => {
       const list = [
         {namespace: 'test'} as IApp
       ] as IApp[];
-      const action = ApplicationActions.getListSuccess({list});
+      const action = ApplicationActions.getListSuccess({list, namespace: 'iam.ewc'});
       const state = fromReducer.reducer(initialState, action);
 
       expect(state.filteredList).toEqual(list);
@@ -37,7 +37,7 @@ describe('Application reducer', () => {
       ] as IApp[];
 
       const modifiedState = {...initialState, filters: {...initialState.filters, organization: 'abc'}};
-      const action = ApplicationActions.getListSuccess({list});
+      const action = ApplicationActions.getListSuccess({list, namespace: 'iam.ewc'});
       const state = fromReducer.reducer(modifiedState, action);
 
       expect(state.filteredList).toEqual([{namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`}] as IApp[]);
@@ -50,7 +50,7 @@ describe('Application reducer', () => {
       const {initialState} = fromReducer;
 
       const filters = {organization: 'org', application: 'app', role: ''};
-      const action = ApplicationActions.updateFilters({filters});
+      const action = ApplicationActions.updateFilters({filters, namespace: 'iam.ewc'});
       const state = fromReducer.reducer(initialState, action);
 
       expect(state.filters).toEqual(filters);
@@ -66,7 +66,7 @@ describe('Application reducer', () => {
 
       const modifiedState = {...initialState, list};
       const filters = {organization: 'abc', application: 'testapp', role: ''};
-      const action = ApplicationActions.updateFilters({filters});
+      const action = ApplicationActions.updateFilters({filters, namespace: 'iam.ewc'});
       const state = fromReducer.reducer(modifiedState, action);
 
       expect(state.filteredList).toEqual([{namespace: `testapp.${NamespaceType.Application}.abc.iam.ewc`}] as IApp[]);

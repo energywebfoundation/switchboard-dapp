@@ -8,6 +8,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { RoleActions, RoleSelectors } from '@state';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RoleType } from '../new-role/new-role.component';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 describe('RoleListComponent', () => {
   let component: RoleListComponent;
@@ -27,6 +28,7 @@ describe('RoleListComponent', () => {
       imports: [ReactiveFormsModule],
       providers: [
         {provide: MatDialog, useValue: dialogSpy},
+        {provide: EnvService, useValue: {rootNamespace: 'iam.ewc'}},
         provideMockStore()
       ],
       schemas: [NO_ERRORS_SCHEMA]

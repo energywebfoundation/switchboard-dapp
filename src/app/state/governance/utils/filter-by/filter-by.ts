@@ -1,9 +1,9 @@
 import { NamespaceType } from 'iam-client-lib';
 import { ENSPrefixes } from 'src/app/routes/applications/new-role/new-role.component';
 
-export const filterBy = (data: any[], organization: string, application: string, role: string): any[] => {
+export const filterBy = (data: any[], organization: string, application: string, role: string, namespace: string): any[] => {
   if (organization) {
-    data = filterByOrg(data, organization);
+    data = filterByOrg(data, organization, namespace);
   }
 
   if (application) {
@@ -17,9 +17,9 @@ export const filterBy = (data: any[], organization: string, application: string,
   return data;
 };
 
-const filterByOrg = (data, organization) => {
+const filterByOrg = (data, organization, namespace) => {
   return data.filter((item: any) => {
-    let arr = item.namespace.split('.iam.ewc');
+    let arr = item.namespace.split(namespace);
     arr = arr[0].split(ENSPrefixes.Roles);
     arr = arr[arr.length - 1].split(NamespaceType.Application);
 

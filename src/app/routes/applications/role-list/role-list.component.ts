@@ -10,6 +10,7 @@ import { RoleType } from '../new-role/new-role.component';
 import { Store } from '@ngrx/store';
 import { RoleActions, RoleSelectors } from '@state';
 import { takeUntil } from 'rxjs/operators';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 @Component({
   selector: 'app-role-list',
@@ -29,7 +30,8 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(private dialog: MatDialog,
               private fb: FormBuilder,
-              private store: Store) {
+              private store: Store,
+              private envService: EnvService) {
   }
 
   ngOnInit(): void {
@@ -87,7 +89,7 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   filter(filters): void {
-    this.store.dispatch(RoleActions.updateFilters({ filters }));
+    this.store.dispatch(RoleActions.updateFilters({filters, namespace: this.envService.rootNamespace}));
   }
 
   private setData(): void {
