@@ -154,7 +154,7 @@
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
             },
-            "dev": {
+            "develop": {
               "budgets": [
                 {
                   "type": "anyComponentStyle",
