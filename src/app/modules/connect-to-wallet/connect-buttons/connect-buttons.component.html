@@ -23,8 +23,8 @@
     USE METAMASK
   </button>
   <div class="d-flex flex-column justify-content-center mt-1 text-center" *ngIf="metamaskDisabled"
-       data-qa-id="no-volta">
-    <div class="opacity-50 pr-1 ">You are not connected to {{fullNetworkName}}.</div>
+       data-qa-id="wrong-network">
+    <div class="opacity-50 pr-1">You are not connected to {{fullNetworkName}}.</div>
     <a class="switch-network" (click)="importMetamaskConf()" target="_blank">Import configurations</a>
   </div>
 </div>
