@@ -32,6 +32,8 @@
   </button>
   <div class="d-flex justify-content-center mt-1" *ngIf="metamaskDisabled"
        data-qa-id="no-volta">
+    <div class="opacity-50 pr-1 ">You are not connected to Energy Web Chain.</div>
+    <a class="switch-network" (click)="importMetamaskConf()" target="_blank">Import configurations</a>
     <span class="opacity-50 pr-1">You are not connected to Volta Network.</span> <a
       href="https://energyweb.atlassian.net/wiki/spaces/EWF/pages/703201459/Volta+Connecting+to+Remote+RPC+and+Metamask"
       target="_blank">Help?</a>

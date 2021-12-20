@@ -14,5 +14,11 @@ export const environment = {
   showAzureLoginOption: false,
   natsEnvironmentName: 'ewf-prod',
   rootNamespace: 'auth.ewc',
+
+  networkName: 'EWC',
+  currencyName: 'EWT',
+  currencySymbol: 'EWT',
+  blockExplorerUrl: 'https://explorer.energyweb.org',
+
   ...constants
 };
