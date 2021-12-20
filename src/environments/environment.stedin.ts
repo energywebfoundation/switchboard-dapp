@@ -14,5 +14,12 @@ export const environment = {
   showAzureLoginOption: true,
   natsEnvironmentName: 'ewf-dev',
   rootNamespace: 'iam.ewc',
+
+  fullNetworkName: 'EnergyWeb Volta Chain',
+  networkName: 'EnergyWeb Volta Chain',
+  currencyName: 'Volta Token',
+  currencySymbol: 'VT',
+  blockExplorerUrl: 'https://volta-explorer.energyweb.org',
+
   ...constants
 };

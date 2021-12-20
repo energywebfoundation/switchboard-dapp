@@ -16,4 +16,10 @@ export class EnvService {
   natsEnvironmentName: string = environment.natsEnvironmentName;
   rootNamespace: string = environment.rootNamespace;
 
+  networkName: string = environment.networkName;
+  fullNetworkName: string = environment.fullNetworkName;
+  currencyName: string = environment.currencyName;
+  currencySymbol: string = environment.currencySymbol;
+  blockExplorerUrl: string = environment.blockExplorerUrl;
+
 }
