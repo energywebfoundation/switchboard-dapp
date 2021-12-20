@@ -19,7 +19,8 @@ export const environment = {
   natsEnvironmentName: 'ewf-dev',
   rootNamespace: 'iam.ewc',
 
-  networkName: 'EnergyWeb Volta Chain',
+  fullNetworkName: 'EnergyWeb Volta Chain',
+  networkName: 'Volta',
   currencyName: 'Volta Token',
   currencySymbol: 'VT',
   blockExplorerUrl: 'https://volta-explorer.energyweb.org',

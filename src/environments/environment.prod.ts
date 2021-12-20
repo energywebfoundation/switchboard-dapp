@@ -15,6 +15,7 @@ export const environment = {
   natsEnvironmentName: 'ewf-prod',
   rootNamespace: 'auth.ewc',
 
+  fullNetworkName: 'Energy Web Chain',
   networkName: 'EWC',
   currencyName: 'EWT',
   currencySymbol: 'EWT',

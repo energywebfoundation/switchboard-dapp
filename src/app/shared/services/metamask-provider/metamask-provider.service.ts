@@ -10,6 +10,10 @@ export class MetamaskProviderService {
   constructor(private envService: EnvService) {
   }
 
+  getFullNetworkName() {
+    return this.envService.fullNetworkName;
+  }
+
   public async importMetamaskConf() {
     try {
       const metamaskProvider: any = await detectMetamask({
