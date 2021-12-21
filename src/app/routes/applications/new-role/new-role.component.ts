@@ -125,6 +125,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return this.roleForm.get('roleName').value + '.' + ENSPrefixes.Roles + '.' + this.roleForm?.value?.parentNamespace;
   }
 
+  get isCreatingNew() {
+    return this.viewType !== ViewType.UPDATE;
+  }
+
   constructor(private fb: FormBuilder,
               private iamService: IamService,
               private toastr: SwitchboardToastrService,

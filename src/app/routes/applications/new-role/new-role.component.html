@@ -12,7 +12,7 @@
         <ng-template matStepperIcon="edit">
           <mat-icon>check</mat-icon>
         </ng-template>
-        <mat-step [completed]="false" *ngIf="viewType !== ViewType.UPDATE">
+        <mat-step [completed]="false" *ngIf="isCreatingNew">
           <ng-template matStepLabel>New Role</ng-template>
           <app-role-name [roleType]="roleType"
                          [parentNamespace]="parentNamespace"
