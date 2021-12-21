@@ -30,6 +30,12 @@ export const RoleType = {
   CUSTOM: 'custom'
 };
 
+export enum RoleTypeEnum {
+  ORG = 'org',
+  APP = 'app',
+  CUSTOM = 'custom'
+}
+
 const RoleTypeList = [{
   label: 'Organization',
   value: RoleType.ORG

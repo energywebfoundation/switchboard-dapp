@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { isAlphaNumericOnly } from '../../../../../utils/functions/is-alpha-numeric';
-import { ENSPrefixes } from '../../new-role.component';
+import { ENSPrefixes, RoleTypeEnum } from '../../new-role.component';
 import { FormControl, Validators } from '@angular/forms';
 import { isAlphanumericValidator } from '../../../../../utils/validators/is-alphanumeric.validator';
 import { RoleCreationService } from '../../services/role-creation.service';
@@ -8,11 +8,10 @@ import { RoleCreationService } from '../../services/role-creation.service';
 @Component({
   selector: 'app-role-name',
   templateUrl: './role-name.component.html',
-  styleUrls: ['./role-name.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./role-name.component.scss']
 })
 export class RoleNameComponent {
-  @Input() roleType: string;
+  @Input() roleType: RoleTypeEnum;
   @Input() parentNamespace: string;
 
   @Output() proceed = new EventEmitter<string>();
@@ -30,7 +29,7 @@ export class RoleNameComponent {
     return this.form.value + '.' + ENSPrefixes.Roles + '.' + this.parentNamespace;
   }
 
-  controlHasError(control: string, errorType: string): boolean {
+  controlHasError(errorType: string): boolean {
     return this.form.hasError(errorType);
   }
 
@@ -47,6 +46,7 @@ export class RoleNameComponent {
     if (this.form.invalid) {
       return;
     }
+    debugger;
 
     const canProceed = await this.roleCreationService.checkIfUserCanUseDomain(this.ensNamespace);
     this.existAndNotOwner = !canProceed;
