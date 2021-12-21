@@ -34,6 +34,7 @@ import { ActionsMenuComponent } from './actions/actions-menu/actions-menu.compon
 import { FilterComponent } from './filter/filter.component';
 import { CreateFieldsModule } from './new-role/components/create-fields/create-fields.module';
 import { DidBookModule } from '../../modules/did-book/did-book.module';
+import { RoleNameComponent } from './new-role/components/role-name/role-name.component';
 
 const routes: Routes = [
   {path: '', component: ApplicationsComponent}
@@ -59,6 +60,7 @@ const routes: Routes = [
     FilterComponent,
     ActionsMenuComponent,
     TransactionsCompleteComponent,
+    RoleNameComponent,
   ],
   imports: [
     CommonModule,

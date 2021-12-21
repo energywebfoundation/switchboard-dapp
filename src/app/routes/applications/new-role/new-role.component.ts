@@ -82,7 +82,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         roleName: '',
         did: this.fb.array([])
       }),
-      enrolmentPreconditions: [[{ type: PreconditionType.Role, conditions: [] }]]
+      enrolmentPreconditions: [[{type: PreconditionType.Role, conditions: []}]]
     })
   });
   public issuerGroup = this.fb.group({
@@ -112,6 +112,18 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   private _retryCount = 0;
   private _currentIdx = 0;
   private _requests = {};
+
+  get roleType() {
+    return this.roleForm.value.roleType === RoleType.ORG ? 'Organization' : 'Application';
+  }
+
+  get parentNamespace() {
+    return this.roleForm.value.parentNamespace;
+  }
+
+  get namespace() {
+    return this.roleForm.get('roleName').value + '.' + ENSPrefixes.Roles + '.' + this.roleForm?.value?.parentNamespace;
+  }
 
   constructor(private fb: FormBuilder,
               private iamService: IamService,
@@ -293,8 +305,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         enrolmentPreconditions[0].conditions.push(event.role.namespace);
       } else {
         this.roleForm.get('data').patchValue({
-          enrolmentPreconditions: [{type: PreconditionType.Role, conditions: [event.role.namespace] }]
-        })
+          enrolmentPreconditions: [{type: PreconditionType.Role, conditions: [event.role.namespace]}]
+        });
       }
 
       this.restrictionRoleControl.setErrors(null);
@@ -305,60 +317,12 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     this.dataSource.data = [...data];
   }
 
-  async proceedSettingIssuer() {
-    if (this.roleForm.get('roleName').invalid) {
-      return;
-    }
-    of(null)
-      .pipe(
-        take(1),
-        delay(1)
-      )
-      .subscribe(() => {
-        this.isChecking = true;
-        this.spinner.show();
-      });
-
-    if (this.roleForm.value.roleName) {
-      let allowToProceed = true;
-
-      // Check if namespace is taken
-      const orgData = this.roleForm.value;
-      const exists = await this.iamService.domainsService.checkExistenceOfDomain({
-        domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
-      });
-
-      if (exists) {
-        // If exists check if current user is the owner of this namespace and allow him/her to overwrite
-        const isOwner = await this.iamService.domainsService.isOwner({
-          domain: `${orgData.roleName}.${this.ENSPrefixes.Roles}.${orgData.parentNamespace}`
-        });
-
-        if (!isOwner) {
-          allowToProceed = false;
-
-          // Do not allow to proceed if namespace already exists
-          this.toastr.error('Role namespace already exists. You have no access rights to it.', this.TOASTR_HEADER);
-        } else {
-          this.spinner.hide();
-          allowToProceed = false;
-          this.isExistsRoleName = true;
-        }
-      }
-
-      if (allowToProceed) {
-        // Proceed
-        this.roleForm.get('data').get('issuer').get('issuerType').setValue(this.IssuerType.DID);
-        this.stepper.selected.editable = false;
-        this.stepper.selected.completed = true;
-        this.stepper.next();
-      }
-    } else {
-      this.toastr.error('Form is invalid.', this.TOASTR_HEADER);
-    }
-
-    this.isChecking = false;
-    this.spinner.hide();
+  proceedSettingIssuer(roleName) {
+    this.roleForm.get('roleName').setValue(roleName);
+    this.roleForm.get('data').get('issuer').get('issuerType').setValue(this.IssuerType.DID);
+    this.stepper.selected.editable = false;
+    this.stepper.selected.completed = true;
+    this.stepper.next();
   }
 
   async proceedSettingRestriction() {
@@ -483,7 +447,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   async confirmRole(skipNextStep?: boolean) {
-    const req = JSON.parse(JSON.stringify({ ...this.roleForm.value, returnSteps: true }));
+    const req = JSON.parse(JSON.stringify({...this.roleForm.value, returnSteps: true}));
 
     req.namespace = `${this.ENSPrefixes.Roles}.${req.parentNamespace}`;
     delete req.parentNamespace;
@@ -645,6 +609,15 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       maxWidth: '100%',
       disableClose: true
     }).afterClosed().toPromise();
+  }
+
+  async confirmClose(touched: boolean) {
+    if (!touched) {
+      return;
+    }
+    if (await this.confirm('There are unsaved changes.', true)) {
+      this.dialogRef.close(false);
+    }
   }
 
   async closeDialog(isSuccess?: boolean) {
