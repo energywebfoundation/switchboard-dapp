@@ -39,19 +39,18 @@ export class RoleNameComponent {
   }
 
   cancel(): void {
-    this.abort.next({touched: this.form.touched});
+    this.abort.emit({touched: this.form.touched});
   }
 
   async next(): Promise<void> {
     if (this.form.invalid) {
       return;
     }
-    debugger;
 
     const canProceed = await this.roleCreationService.checkIfUserCanUseDomain(this.ensNamespace);
     this.existAndNotOwner = !canProceed;
     if (canProceed) {
-      this.proceed.next(this.form.value);
+      this.proceed.emit(this.form.value);
     }
 
   }

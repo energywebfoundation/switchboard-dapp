@@ -41,17 +41,16 @@ describe('RoleNameComponent', () => {
     fixture = TestBed.createComponent(RoleNameComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
+    component.parentNamespace = 'namespace.iam.ewc';
+    component.roleType = RoleTypeEnum.ORG;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
-    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
   it('should check required field validation', () => {
-    component.parentNamespace = 'namespace';
-    component.roleType = RoleTypeEnum.ORG;
-    fixture.detectChanges();
     const {roleName} = selectors(hostDebug);
 
     roleName.value = '';
@@ -62,9 +61,6 @@ describe('RoleNameComponent', () => {
     expect(matError.textContent).toContain('Role Name is required');
   });
   it('should check minimal length field validation', () => {
-    component.parentNamespace = 'namespace';
-    component.roleType = RoleTypeEnum.ORG;
-    fixture.detectChanges();
     const {roleName} = selectors(hostDebug);
 
     roleName.value = '12';
@@ -76,9 +72,6 @@ describe('RoleNameComponent', () => {
   });
 
   it('should check if field contains only alphanumeric values', () => {
-    component.parentNamespace = 'namespace';
-    component.roleType = RoleTypeEnum.ORG;
-    fixture.detectChanges();
     const {roleName} = selectors(hostDebug);
 
     roleName.value = 'ąść';
@@ -91,11 +84,6 @@ describe('RoleNameComponent', () => {
 
   it('should display error message with already taken role name', async () => {
     roleCreationServiceSpy.checkIfUserCanUseDomain.and.returnValue(Promise.resolve(false));
-
-    component.parentNamespace = 'namespace';
-    component.roleType = RoleTypeEnum.ORG;
-
-    fixture.detectChanges();
     const {roleName} = selectors(hostDebug);
 
     roleName.value = 'role';
@@ -111,6 +99,43 @@ describe('RoleNameComponent', () => {
     expect(component.existAndNotOwner).toBeTrue();
     const {matError} = selectors(hostDebug);
     expect(matError.textContent).toContain('This name already exists. Please try another');
+  });
+
+  it('should display ens namespace', () => {
+    const {roleName} = selectors(hostDebug);
+
+    roleName.value = 'example';
+    dispatchInputEvent(roleName);
+    fixture.detectChanges();
+
+    const {roleNamespace} = selectors(hostDebug);
+
+    expect(roleNamespace.textContent).toContain('example.roles.namespace.iam.ewc');
+  });
+
+  it('should check if emits proceed event', async () => {
+    roleCreationServiceSpy.checkIfUserCanUseDomain.and.returnValue(Promise.resolve(true));
+    const {roleName} = selectors(hostDebug);
+    const proceedEvent = spyOn(component.proceed, 'emit');
+
+    roleName.value = 'role';
+    dispatchInputEvent(roleName);
+    fixture.detectChanges();
+
+    await component.next();
+    expect(proceedEvent).toHaveBeenCalledWith('role');
+  });
+
+  it('should emits abort event with touched equal to true property', () => {
+    const {roleName} = selectors(hostDebug);
+    const abortEvent = spyOn(component.abort, 'emit');
+
+    roleName.value = 'role';
+    dispatchInputEvent(roleName);
+    fixture.detectChanges();
+
+    component.cancel();
+    expect(abortEvent).toHaveBeenCalledWith({touched: true});
   });
 });
 
