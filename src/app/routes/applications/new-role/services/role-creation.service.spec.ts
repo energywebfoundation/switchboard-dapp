@@ -5,10 +5,11 @@ import { DomainsFacadeService } from '../../../../shared/services/domains-facade
 import { SwitchboardToastrService } from '../../../../shared/services/switchboard-toastr.service';
 import { loadingServiceSpy, toastrSpy } from '@tests';
 import { LoadingService } from '../../../../shared/services/loading.service';
+import { IssuerType } from '../models/issuer-type.enum';
 
 describe('RoleCreationService', () => {
   let service: RoleCreationService;
-  const domainsFacadeServiceSpy = jasmine.createSpyObj(DomainsFacadeService, ['isOwner', 'checkExistenceOfDomain']);
+  const domainsFacadeServiceSpy = jasmine.createSpyObj(DomainsFacadeService, ['isOwner', 'checkExistenceOfDomain', 'getDIDsByRole']);
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -63,6 +64,62 @@ describe('RoleCreationService', () => {
       const result = await service.checkIfUserCanUseDomain('domain');
 
       expect(result).toBeFalse();
+      expect(toastrSpy.error).toHaveBeenCalled();
+    });
+  });
+
+  describe('areIssuersValid method', () => {
+    it('should return false and display a message when type is did and list is empty', async () => {
+      const result = await service.areIssuersValid(IssuerType.DID, '', []);
+
+      expect(result).toBeFalse();
+      expect(toastrSpy.error).toHaveBeenCalled();
+    });
+
+    it('should return false and display a message when type is role and role name is empty', async () => {
+      const result = await service.areIssuersValid(IssuerType.ROLE, '', []);
+
+      expect(result).toBeFalse();
+      expect(toastrSpy.error).toHaveBeenCalled();
+    });
+
+    it('should return true when type is did and list is not empty', async () => {
+      const result = await service.areIssuersValid(IssuerType.DID, '', ['did']);
+
+      expect(result).toBeTrue();
+    });
+
+    it('should return false when role name do not exist', async () => {
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(false));
+      const result = await service.areIssuersValid(IssuerType.ROLE, 'role', []);
+
+      expect(result).toBeFalse();
+      expect(toastrSpy.error).toHaveBeenCalled();
+    });
+
+    it('should return false when name exist but do not contain roles in namespace', async () => {
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(true));
+      const result = await service.areIssuersValid(IssuerType.ROLE, 'role', []);
+
+      expect(result).toBeFalse();
+      expect(toastrSpy.error).toHaveBeenCalled();
+    });
+
+    it('should return false when role exist but do not contains approved users', async () => {
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(true));
+      domainsFacadeServiceSpy.getDIDsByRole.and.returnValue(Promise.resolve([]));
+      const result = await service.areIssuersValid(IssuerType.ROLE, 'role.roles.asd.iam.ewc', []);
+
+      expect(result).toBeFalse();
+      expect(toastrSpy.error).toHaveBeenCalled();
+    });
+
+    it('should return true when role exist and contains approved users', async () => {
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(true));
+      domainsFacadeServiceSpy.getDIDsByRole.and.returnValue(Promise.resolve(['did']));
+      const result = await service.areIssuersValid(IssuerType.ROLE, 'role.roles.asd.iam.ewc', []);
+
+      expect(result).toBeTrue();
       expect(toastrSpy.error).toHaveBeenCalled();
     });
   });

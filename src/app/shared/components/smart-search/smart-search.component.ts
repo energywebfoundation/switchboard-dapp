@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, Input, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
-import { NamespaceType, SearchType } from 'iam-client-lib';
+import { SearchType } from 'iam-client-lib';
 import { IamService } from '../../services/iam.service';
 import { ISmartSearch } from '../../../routes/applications/new-role/new-role.component';
 

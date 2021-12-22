@@ -29,7 +29,7 @@
             <ng-container formGroupName="data">
               <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer">
                 <mat-label class="ml-3 pl-1">Issuer Type</mat-label>
-                <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                <mat-form-field class="mt-2" appearance="outline">
                   <mat-select placeholder="Issuer Type" formControlName="issuerType"
                               (selectionChange)="issuerTypeChanged($event)" required>
                     <mat-option *ngFor="let issuerType of IssuerType | keyvalue" [value]="issuerType.value">
@@ -37,72 +37,12 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer"
-                   *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.DID">
-                <div>
-                  <div class="label color-white ml-1 pl-2 pb-2">1 Issuer(s)</div>
-                  <div
-                      class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3 w-100"
-                      *ngFor="let did of issuerList; let i = index">
-                    <div class="d-flex justify-content-between w-100">
-                      <div class="d-flex justify-content-start align-items-center flex-nowrap">
-                        <div class="pt-1">
-                          <mat-icon>check_circle</mat-icon>
-                        </div>
-                        <div class="color-white break-word">{{ did }}</div>
-                      </div>
-                      <div class="d-flex align-items-center pr-2">
-                        <button mat-icon-button matSuffix class="mat-primary icon-btn-small color-error"
-                                matTooltip="Remove" *ngIf="issuerList.length > 1" (click)="removeDid(i)">
-                          <mat-icon>delete</mat-icon>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="pt-2" [formGroup]="issuerGroup">
-                    <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                      <input matInput placeholder="Add Issuer DID (Optional)" autocomplete="off"
-                             formControlName="newIssuer" minlength="3" maxlength="256">
-                      <button matTooltip="Add Issuer" matSuffix mat-icon-button aria-label="Add" type="submit"
-                              (click)="addDid()" [disabled]="issuerGroup.invalid">
-                        <mat-icon>add</mat-icon>
-                      </button>
-                      <mat-error *ngIf="issuerGroup?.controls?.newIssuer?.errors?.invalidDid">DID format is invalid
-                      </mat-error>
-                    </mat-form-field>
-
-                    <!-- <div class="d-flex justify-content-end mb-2">
-                      <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="addDid()"
-                        [disabled]="issuerGroup.invalid">Add</button>
-                    </div> -->
-                  </div>
-                </div>
+              <div *ngIf="isDIDType" class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+                <app-issuer-did [issuerList]="issuerList"></app-issuer-did>
               </div>
-              <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer"
-                   *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.Role">
-                <div class="row mt-2">
-                  <div class="col-lg-12">
-                    <div
-                        class="ml-3 card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-                      <mat-icon>notifications_none</mat-icon>
-                      <span class="pb-2">Issuer Role Namespace can be organization or application role.</span>
-                    </div>
-                    <mat-label class="ml-3 pl-1">Issuer Role Namespace</mat-label>
-                    <app-smart-search
-                        [placeholderSearch]="'Example:' + 'issuerrole.' + ENSPrefixes.Roles + '.myorg.iam.ewc'"
-                        [searchText]="roleForm.get('data').get('issuer').get('roleName')" [fieldName]="'rolePage'">
-                    </app-smart-search>
-                    <mat-error *ngIf="issuer('roleName', 'required')">Issuer Role Namespace is
-                      <strong>required</strong>
-                    </mat-error>
-                    <mat-error *ngIf="issuer('roleName', 'minlength')">Role Name need to have at least 3
-                      characters.
-                    </mat-error>
-                    <mat-error *ngIf="issuer('roleName', 'maxlength')">Role Name need to have at max 256
-                      characters.
-                    </mat-error>
-                  </div>
-                </div>
+              <div *ngIf="isRoleType" class="card card-default d-flex shadow-none d-flex pt-3 mb-3"
+                   formGroupName="issuer">
+                <app-search-issuer-role class="row mt-2" [role]="issuerRoleName"></app-search-issuer-role>
               </div>
             </ng-container>
             <div class="d-flex justify-content-end mb-2">

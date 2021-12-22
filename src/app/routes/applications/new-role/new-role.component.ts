@@ -18,6 +18,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
+import { RoleCreationService } from './services/role-creation.service';
 
 export enum ENSPrefixes {
   Roles = 'roles',
@@ -73,7 +74,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   IssuerType = {
     DID: 'DID',
-    Role: 'Role'
+    Role: 'ROLE'
   };
 
   public roleForm = this.fb.group({
@@ -113,7 +114,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   origData: any;
   roleName: string;
   private TOASTR_HEADER = 'Create New Role';
-
   public txs: any[];
   private _retryCount = 0;
   private _currentIdx = 0;
@@ -135,6 +135,22 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return this.viewType !== ViewType.UPDATE;
   }
 
+  get isDIDType() {
+    return this.roleForm?.value?.data?.issuer?.issuerType === this.IssuerType.DID;
+  }
+
+  get isRoleType() {
+    return this.roleForm?.value?.data?.issuer?.issuerType === this.IssuerType.Role;
+  }
+
+  get issuerType() {
+    return this.roleForm.get('data').get('issuer').get('issuerType').value;
+  }
+
+  get issuerRoleName() {
+    return this.roleForm.get('data').get('issuer').get('roleName');
+  }
+
   constructor(private fb: FormBuilder,
               private iamService: IamService,
               private toastr: SwitchboardToastrService,
@@ -142,6 +158,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
               public dialogRef: MatDialogRef<NewRoleComponent>,
               public dialog: MatDialog,
               private signerFacade: SignerFacadeService,
+              private roleCreationService: RoleCreationService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
@@ -193,7 +210,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       this.dataSource.data = def.fields ? [...def.fields] : [];
       this.issuerFields.data = def?.issuerFields ? [...def.issuerFields] : [];
       // this._initDates();
-
       this.roleForm.patchValue({
         roleType: def.roleType,
         parentNamespace,
@@ -330,75 +346,25 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   proceedSettingIssuer(roleName) {
     this.roleForm.get('roleName').setValue(roleName);
     this.roleForm.get('data').get('issuer').get('issuerType').setValue(this.IssuerType.DID);
-    this.stepper.selected.editable = false;
-    this.stepper.selected.completed = true;
-    this.stepper.next();
+    this.goNextStep();
   }
 
-  async proceedSettingRestriction() {
-    const roleFormValue = this.roleForm.value;
-    if (typeof roleFormValue.roleName !== 'string') {
-      roleFormValue.roleName = roleFormValue.roleName.namespace;
+  async proceedSettingRestriction(): Promise<void> {
+    const canProceed = await this.roleCreationService.areIssuersValid(this.issuerType, this.issuerRoleName.value, this.issuerList);
+    if (canProceed) {
+      // Proceed to Adding Fields Step
+      this.goNextStep();
     }
 
-    const issuerType = roleFormValue.data.issuer.issuerType;
-    if (this.IssuerType.DID === issuerType && !this.issuerList.length) {
-      this.toastr.error('Issuer list is empty.', this.TOASTR_HEADER);
-    } else if (this.IssuerType.Role === issuerType && !roleFormValue.data.issuer.roleName) {
-      this.toastr.error('Issuer Role is empty.', this.TOASTR_HEADER);
-    } else {
-      let allowToProceed = true;
-      if (this.IssuerType.Role === issuerType) {
-        of(null)
-          .pipe(
-            take(1),
-            delay(1)
-          )
-          .subscribe(() => {
-            this.spinner.show();
-          });
-
-        // Check if rolename exists or valid
-        const exists = await this.iamService.domainsService.checkExistenceOfDomain({
-          domain: roleFormValue.data.issuer.roleName.namespace
-        });
-
-        if (!exists || !roleFormValue.data.issuer.roleName.namespace.includes(`.${NamespaceType.Role}.`)) {
-          this.toastr.error('Issuer Role Namespace does not exist or is invalid.', this.TOASTR_HEADER);
-          allowToProceed = false;
-        } else {
-          // Check if there are approved users to issue the claim
-          const did = await this.iamService.domainsService.getDIDsByRole(roleFormValue.data.issuer.roleName.namespace);
-
-          if (!did || !did.length) {
-            allowToProceed = false;
-            this.toastr.error('Issuer Role has no approved users.', this.TOASTR_HEADER);
-          }
-        }
-
-        this.spinner.hide();
-      }
-
-      if (allowToProceed) {
-        // Proceed to Adding Fields Step
-        this.stepper.selected.editable = false;
-        this.stepper.selected.completed = true;
-        this.stepper.next();
-      }
-    }
   }
 
   async proceedAddingFields() {
     // Proceed to Adding Fields Step
-    this.stepper.selected.editable = false;
-    this.stepper.selected.completed = true;
-    this.stepper.next();
+    this.goNextStep();
   }
 
   proceedConfirmDetails() {
-    this.stepper.selected.editable = false;
-    this.stepper.selected.completed = true;
-    this.stepper.next();
+    this.goNextStep();
   }
 
   async confirmParentNamespace() {
@@ -645,6 +611,12 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       }
       this.dialogRef.close(isSuccess);
     }
+  }
+
+  private goNextStep() {
+    this.stepper.selected.editable = false;
+    this.stepper.selected.completed = true;
+    this.stepper.next();
   }
 
   displayFn(selected: any) {

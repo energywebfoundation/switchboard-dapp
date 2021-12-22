@@ -24,4 +24,8 @@ export class DomainsFacadeService {
   async isOwner(domain: string): Promise<boolean> {
     return await this.domainsService.isOwner({domain});
   }
+
+  async getDIDsByRole(role: string): Promise<string[]> {
+    return await this.domainsService.getDIDsByRole(role);
+  }
 }
