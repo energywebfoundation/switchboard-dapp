@@ -20,13 +20,13 @@
                          (abort)="confirmClose($event.touched)"></app-role-name>
         </mat-step>
         <mat-step [completed]="false">
+          <ng-template matStepLabel>Set Role Issuers</ng-template>
+          <div *ngIf="!isCreatingNew"
+               class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3 mt-2">
+            <span class="pb-2">{{ namespace }}</span>
+          </div>
           <form [formGroup]="roleForm">
-            <ng-template matStepLabel>Set Role Issuers</ng-template>
             <ng-container formGroupName="data">
-              <div *ngIf="!isCreatingNew"
-                   class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
-                <span class="pb-2">{{ namespace }}</span>
-              </div>
               <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer">
                 <mat-label class="ml-3 pl-1">Issuer Type</mat-label>
                 <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
