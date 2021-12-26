@@ -3,8 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { SearchType } from 'iam-client-lib';
-import { ISmartSearch } from '../../../routes/applications/new-role/new-role.component';
 import { DomainsFacadeService } from '../../services/domains-facade/domains-facade.service';
+import { ISmartSearch } from './models/smart-search.interface';
 
 @Component({
   selector: 'app-smart-search',

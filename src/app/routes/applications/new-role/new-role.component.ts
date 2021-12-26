@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { IRole, NamespaceType, PreconditionType } from 'iam-client-lib';
+import { NamespaceType, PreconditionType } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { delay, take } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -19,6 +19,7 @@ import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
 import { RoleCreationService } from './services/role-creation.service';
+import { ISmartSearch } from '../../../shared/components/smart-search/models/smart-search.interface';
 
 export enum ENSPrefixes {
   Roles = 'roles',
@@ -51,11 +52,6 @@ export interface RolesFields {
   label: string;
   validation: string;
   actions: string;
-}
-
-export interface ISmartSearch {
-  role: IRole;
-  searchType: string;
 }
 
 @Component({
