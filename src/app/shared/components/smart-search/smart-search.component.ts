@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { SearchType } from 'iam-client-lib';
@@ -29,8 +28,7 @@ export class SmartSearchComponent implements AfterViewInit {
 
   public filteredOptions: Observable<any[]>;
 
-  constructor(private route: Router,
-              private iamService: IamService) {
+  constructor(private iamService: IamService) {
   }
 
   controlHasError(errorType: string) {
