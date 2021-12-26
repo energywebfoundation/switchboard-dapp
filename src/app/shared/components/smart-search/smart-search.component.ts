@@ -3,8 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { SearchType } from 'iam-client-lib';
-import { IamService } from '../../services/iam.service';
 import { ISmartSearch } from '../../../routes/applications/new-role/new-role.component';
+import { DomainsFacadeService } from '../../services/domains-facade/domains-facade.service';
 
 @Component({
   selector: 'app-smart-search',
@@ -28,7 +28,7 @@ export class SmartSearchComponent implements AfterViewInit {
 
   public filteredOptions: Observable<any[]>;
 
-  constructor(private iamService: IamService) {
+  constructor(private domainsFacade: DomainsFacadeService) {
   }
 
   controlHasError(errorType: string) {
@@ -91,7 +91,7 @@ export class SmartSearchComponent implements AfterViewInit {
 
         if (word.length > 2) {
           word = word.toLowerCase();
-          retVal = await this.iamService.domainsService.getENSTypesBySearchPhrase(
+          retVal = await this.domainsFacade.getENSTypesBySearchPhrase(
             word,
             this.fieldName === 'rolePage' ? [SearchType.Role] : [SearchType.App, SearchType.Org]
           );
