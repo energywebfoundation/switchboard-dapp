@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
@@ -15,7 +15,7 @@ export class SmartSearchComponent implements AfterViewInit {
   @Input() searchText: FormControl;
   @Input() placeholderSearch: string;
   @Input() fieldName: string;
-  @Input() searchType = '';
+  @Input() searchType: 'default' | 'restrictions' = 'default';
 
   @Output() searchTextEvent: EventEmitter<ISmartSearch> = new EventEmitter();
 
@@ -28,7 +28,8 @@ export class SmartSearchComponent implements AfterViewInit {
 
   public filteredOptions: Observable<any[]>;
 
-  constructor(private domainsFacade: DomainsFacadeService) {
+  constructor(private domainsFacade: DomainsFacadeService,
+              private cdRef: ChangeDetectorRef) {
   }
 
   controlHasError(errorType: string) {
@@ -52,11 +53,14 @@ export class SmartSearchComponent implements AfterViewInit {
   }
 
   updateSearchTxtFieldValue(event: any) {
+    console.log(this.searchText.value);
     if (typeof this.searchText.value === 'string') {
       this.searchTxtFieldValue = this.searchText.value;
     } else {
       this.searchTxtFieldValue = this.searchText.value.option.value.namespace;
     }
+
+    this.cdRef.detectChanges();
   }
 
   addRole() {
