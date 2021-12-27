@@ -5,6 +5,7 @@ import { debounceTime, switchMap, tap } from 'rxjs/operators';
 import { ISmartSearch } from './models/smart-search.interface';
 import { truthy } from '@operators';
 import { SmartSearchService } from './services/smart-search.service';
+import { SmartSearchType } from './models/smart-search-type.enum';
 
 @Component({
   selector: 'app-smart-search',
@@ -14,7 +15,7 @@ import { SmartSearchService } from './services/smart-search.service';
 export class SmartSearchComponent implements AfterViewInit {
   @Input() searchText: FormControl;
   @Input() placeholderSearch: string;
-  @Input() type: 'default' | 'add' = 'default';
+  @Input() searchType: SmartSearchType = SmartSearchType.Default;
 
   @Output() searchTextEvent: EventEmitter<ISmartSearch> = new EventEmitter();
 
@@ -49,11 +50,11 @@ export class SmartSearchComponent implements AfterViewInit {
   }
 
   get isAdding(): boolean {
-    return this.type === 'add';
+    return this.searchType === SmartSearchType.Add;
   }
 
   get isDefault(): boolean {
-    return this.type === 'default';
+    return this.searchType === SmartSearchType.Default;
   }
 
   showButtons(): boolean {
@@ -66,7 +67,7 @@ export class SmartSearchComponent implements AfterViewInit {
     }
     this.searchTextEvent.emit({
       role: this.searchText.value,
-      searchType: this.type
+      searchType: this.searchType
     });
     this.clear();
   }

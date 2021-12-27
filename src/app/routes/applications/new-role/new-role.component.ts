@@ -20,6 +20,7 @@ import { SignerFacadeService } from '../../../shared/services/signer-facade/sign
 import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
 import { RoleCreationService } from './services/role-creation.service';
 import { ISmartSearch } from '../../../shared/components/smart-search/models/smart-search.interface';
+import { SmartSearchType } from '../../../shared/components/smart-search/models/smart-search-type.enum';
 
 export enum ENSPrefixes {
   Roles = 'roles',
@@ -320,7 +321,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   addRestriction(event: ISmartSearch) {
-    if (event.searchType === 'add') {
+    if (event.searchType === SmartSearchType.Add) {
       const enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions').value;
 
       if (enrolmentPreconditions.length) {
