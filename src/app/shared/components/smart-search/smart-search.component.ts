@@ -14,7 +14,7 @@ import { SmartSearchService } from './services/smart-search.service';
 export class SmartSearchComponent implements AfterViewInit {
   @Input() searchText: FormControl;
   @Input() placeholderSearch: string;
-  @Input() type: 'default' | 'restrictions' = 'default';
+  @Input() type: 'default' | 'add' = 'default';
 
   @Output() searchTextEvent: EventEmitter<ISmartSearch> = new EventEmitter();
 
