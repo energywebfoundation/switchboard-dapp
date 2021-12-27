@@ -32,8 +32,8 @@
                 <mat-form-field class="mt-2" appearance="outline">
                   <mat-select placeholder="Issuer Type" formControlName="issuerType"
                               (selectionChange)="issuerTypeChanged($event)" required>
-                    <mat-option *ngFor="let issuerType of IssuerType | keyvalue" [value]="issuerType.value">
-                      {{ issuerType.key }}</mat-option>
+                    <mat-option *ngFor="let issuerType of IssuerTypes" [value]="issuerType">
+                      {{ issuerType }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -155,11 +155,11 @@
               <span class="color-white mb-0">{{ roleForm?.value?.data?.issuer?.issuerType }}</span>
             </div>
             <mat-divider></mat-divider>
-            <div class="text-left my-3" *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.DID">
+            <div class="text-left my-3" *ngIf="isDIDType">
               <div class="label opacity-50 mb-2">Issuer List</div>
               <div class="color-white mb-0" *ngFor="let did of issuerList">{{ did }}</div>
             </div>
-            <div class="text-left my-3" *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.Role">
+            <div class="text-left my-3" *ngIf="isRoleType">
               <div class="label opacity-50 mb-2">Issuer Role Namespace</div>
               <span class="color-white mb-0">{{ roleForm?.value?.data?.issuer?.roleName?.namespace }}</span>
             </div>

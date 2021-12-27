@@ -21,6 +21,7 @@ import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/Domain
 import { RoleCreationService } from './services/role-creation.service';
 import { ISmartSearch } from '../../../shared/components/smart-search/models/smart-search.interface';
 import { SmartSearchType } from '../../../shared/components/smart-search/models/smart-search-type.enum';
+import { IssuerType } from './models/issuer-type.enum';
 
 export enum ENSPrefixes {
   Roles = 'roles',
@@ -69,10 +70,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  IssuerType = {
-    DID: 'DID',
-    Role: 'ROLE'
-  };
+  IssuerTypes = [
+    IssuerType.DID,
+    IssuerType.ROLE
+  ];
 
   public roleForm = this.fb.group({
     roleType: [null, Validators.required],
@@ -82,7 +83,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     data: this.fb.group({
       version: 1,
       issuer: this.fb.group({
-        issuerType: this.IssuerType.DID,
+        issuerType: IssuerType.DID,
         roleName: '',
         did: this.fb.array([])
       }),
@@ -133,11 +134,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   get isDIDType() {
-    return this.roleForm?.value?.data?.issuer?.issuerType === this.IssuerType.DID;
+    return this.roleForm?.value?.data?.issuer?.issuerType === IssuerType.DID;
   }
 
   get isRoleType() {
-    return this.roleForm?.value?.data?.issuer?.issuerType === this.IssuerType.Role;
+    return this.roleForm?.value?.data?.issuer?.issuerType === IssuerType.ROLE;
   }
 
   get issuerType() {
@@ -273,7 +274,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     // Clear Role
     this.roleForm.get('data').get('issuer').get('roleName').reset();
 
-    if (this.IssuerType.DID === data.value) {
+    if (IssuerType.DID === data.value) {
       // Set current user's DID
       this.issuerList.push(this.signerFacade.getDid());
     }
@@ -342,7 +343,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   proceedSettingIssuer(roleName) {
     this.roleForm.get('roleName').setValue(roleName);
-    this.roleForm.get('data').get('issuer').get('issuerType').setValue(this.IssuerType.DID);
+    this.roleForm.get('data').get('issuer').get('issuerType').setValue(IssuerType.DID);
     this.goNextStep();
   }
 

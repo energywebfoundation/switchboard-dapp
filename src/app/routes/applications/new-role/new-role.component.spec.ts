@@ -10,6 +10,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { PreconditionType } from 'iam-client-lib';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
+import { IssuerType } from './models/issuer-type.enum';
 
 describe('NewRoleComponent', () => {
   let component: NewRoleComponent;
@@ -161,9 +162,9 @@ describe('NewRoleComponent', () => {
       });
       spyOn(component.issuerGroup, 'reset');
       spyOn(component.roleForm.get('data').get('issuer').get('roleName'), 'reset');
-      component.IssuerType = {
-        DID: 'DID',
-        Role: 'Role'
+      component.IssuerTypes = {
+        DID: IssuerType.DID,
+        Role: IssuerType.ROLE
       };
     });
 
@@ -178,7 +179,7 @@ describe('NewRoleComponent', () => {
     });
 
     it('iIssuerType.DID === data.value', () => {
-      data = {value: component.IssuerType.DID};
+      data = {value: IssuerType.DID};
       component.issuerList = [];
 
       component.issuerTypeChanged(data);
