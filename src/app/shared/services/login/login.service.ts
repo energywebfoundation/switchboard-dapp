@@ -28,6 +28,8 @@ export const LOGIN_TOASTR_UNDERSTANDABLE_ERRORS: LoginError[] = [
   }
 ];
 
+export const WALLET_CONNECT_KEY = 'walletconnect';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -56,6 +58,7 @@ export class LoginService {
   clearSession() {
     localStorage.removeItem(PROVIDER_TYPE);
     localStorage.removeItem(PUBLIC_KEY);
+    localStorage.removeItem(WALLET_CONNECT_KEY);
   }
 
   getSession() {
