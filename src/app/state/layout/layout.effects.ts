@@ -5,6 +5,7 @@ import * as  LayoutActions from './layout.actions';
 import * as  LayoutSelectors from './layout.selectors';
 import { filter, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { AuthSelectors } from '@state';
 
 @Injectable()
 export class LayoutEffects {
@@ -12,11 +13,22 @@ export class LayoutEffects {
   redirectToReturnUrl$ = createEffect(() =>
     this.actions$.pipe(
       ofType(LayoutActions.redirect),
-      concatLatestFrom(() => this.store.select(LayoutSelectors.getRedirectUrl)
-      ),
+      concatLatestFrom(() => this.store.select(LayoutSelectors.getRedirectUrl)),
       filter(([, redirectUrl]) => redirectUrl !== ''),
       map(([, redirectUrl]) => {
         this.router.navigateByUrl(`${redirectUrl}`);
+        return LayoutActions.redirectSuccess();
+      })
+    )
+  );
+
+  redirectWhenUrlIsSetAndLoggedIn$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LayoutActions.setRedirectUrl),
+      concatLatestFrom(() => this.store.select(AuthSelectors.isUserLoggedIn)),
+      filter(([, isLoggedIn]) => isLoggedIn),
+      map(([{url},]) => {
+        this.router.navigateByUrl(`${url}`);
         return LayoutActions.redirectSuccess();
       })
     )
