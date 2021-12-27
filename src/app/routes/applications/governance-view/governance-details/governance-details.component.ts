@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NamespaceType, PreconditionType } from 'iam-client-lib';
 import { ListType } from '../../../../shared/constants/shared-constants';
@@ -27,7 +27,6 @@ export class GovernanceDetailsComponent {
 
   typeLabel: string;
   formData: any;
-  displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue', 'minDate', 'maxDate'];
 
   appList: any[];
   roleList: any[];
@@ -35,6 +34,14 @@ export class GovernanceDetailsComponent {
   preconditions = {};
   PreconditionTypes = PreconditionType;
   panelOpenState = false;
+
+  get requestorFields() {
+    return this.formData?.definition?.fields;
+  }
+
+  get issuerFields() {
+    return this.formData?.definition?.issuerFields;
+  }
 
   constructor(
     private iamService: IamService,
