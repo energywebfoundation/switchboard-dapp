@@ -19,7 +19,7 @@ export class SmartSearchComponent implements AfterViewInit {
   @Output() searchTextEvent: EventEmitter<ISmartSearch> = new EventEmitter();
 
   searchForm: FormGroup;
-  isAutolistLoading: boolean;
+  isLoadingList: boolean;
 
   public filteredOptions: Observable<any[]>;
 
@@ -34,9 +34,9 @@ export class SmartSearchComponent implements AfterViewInit {
     this.filteredOptions = this.searchText.valueChanges.pipe(
       truthy(),
       debounceTime(1200),
-      tap(() => this.isAutolistLoading = true),
+      tap(() => this.isLoadingList = true),
       switchMap((value: string) => this.smartSearchService.searchBy(value)),
-      tap(() => this.isAutolistLoading = false),
+      tap(() => this.isLoadingList = false),
     );
   }
 

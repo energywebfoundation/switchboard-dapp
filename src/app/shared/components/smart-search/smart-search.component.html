@@ -17,7 +17,7 @@
     </mat-option>
   </mat-autocomplete>
   <div matSuffix class="d-flex" *ngIf="showButtons()">
-    <ng-container *ngIf="!isAutolistLoading">
+    <ng-container *ngIf="!isLoadingList">
       <button mat-icon-button (click)="search()" class="searchButton">
         <mat-icon>search</mat-icon>
       </button>
@@ -29,6 +29,6 @@
         <mat-icon>close</mat-icon>
       </button>
     </ng-container>
-    <mat-spinner *ngIf="isAutolistLoading" diameter="21" class="color-white"></mat-spinner>
+    <mat-spinner *ngIf="isLoadingList" diameter="21" class="color-white"></mat-spinner>
   </div>
 </mat-form-field>
