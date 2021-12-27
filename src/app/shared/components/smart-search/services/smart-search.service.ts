@@ -14,7 +14,7 @@ export class SmartSearchService {
 
   searchBy(searchWord: string, types: SearchType[] = [SearchType.Role]): Observable<string[]> {
     const word = searchWord.trim();
-    if (word?.length > 2) {
+    if (word.length > 2) {
       return this.getListOfNamespaces(word.toLowerCase(), types);
     }
 
