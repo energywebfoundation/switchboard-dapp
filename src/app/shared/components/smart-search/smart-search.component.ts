@@ -14,7 +14,6 @@ import { SmartSearchService } from '../../smart-search/services/smart-search.ser
 export class SmartSearchComponent implements AfterViewInit {
   @Input() searchText: FormControl;
   @Input() placeholderSearch: string;
-  @Input() fieldName: string;
   @Input() searchType: 'default' | 'restrictions' = 'default';
 
   @Output() searchTextEvent: EventEmitter<ISmartSearch> = new EventEmitter();
@@ -54,21 +53,18 @@ export class SmartSearchComponent implements AfterViewInit {
   }
 
   addRole() {
-    const valid = this.searchText.valid;
-
-    if (valid) {
-      const searchText = this.searchText.value;
-      this.searchTextEvent.emit({
-        role: searchText,
-        searchType: this.searchType
-      });
-      this.clearSearchTxt();
+    if (this.searchText.invalid) {
+      return;
     }
+    this.searchTextEvent.emit({
+      role: this.searchText.value,
+      searchType: this.searchType
+    });
+    this.clearSearchTxt();
   }
 
   clearSearchTxt(): void {
-    this.searchText.setValue('');
-    this.searchText.setErrors(null);
+    this.searchText.reset();
   }
 
 }
