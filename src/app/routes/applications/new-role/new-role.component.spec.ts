@@ -162,10 +162,6 @@ describe('NewRoleComponent', () => {
       });
       spyOn(component.issuerGroup, 'reset');
       spyOn(component.roleForm.get('data').get('issuer').get('roleName'), 'reset');
-      component.IssuerTypes = {
-        DID: IssuerType.DID,
-        Role: IssuerType.ROLE
-      };
     });
 
     it('issuerList length > 0', () => {
