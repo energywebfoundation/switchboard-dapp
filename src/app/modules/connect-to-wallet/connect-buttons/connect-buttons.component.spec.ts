@@ -4,12 +4,15 @@ import { ConnectButtonsComponent } from './connect-buttons.component';
 import { DebugElement } from '@angular/core';
 import { getElement } from '@tests';
 import { ProviderType } from 'iam-client-lib';
+import { MetamaskProviderService } from '../../../shared/services/metamask-provider/metamask-provider.service';
 
 describe('ConnectButtonsComponent', () => {
   let component: ConnectButtonsComponent;
   let fixture: ComponentFixture<ConnectButtonsComponent>;
   let hostDebug;
   let connectToSpy;
+  let metamaskProviderServiceSpy = jasmine.createSpyObj(MetamaskProviderService, ['getFullNetworkName', 'importMetamaskConf']);
+
   const setup = (opt?: {
     metamaskPresent?: boolean,
     metamaskDisabled?: boolean
@@ -21,7 +24,10 @@ describe('ConnectButtonsComponent', () => {
   };
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ConnectButtonsComponent]
+      declarations: [ConnectButtonsComponent],
+      providers: [
+        {provide: MetamaskProviderService, useValue: metamaskProviderServiceSpy}
+      ]
     })
       .compileComponents();
   }));
@@ -40,21 +46,23 @@ describe('ConnectButtonsComponent', () => {
 
   it('should check metamask presence', () => {
     setup();
-    const {metamaskBtn, noVolta} = selectors(hostDebug);
+    const {metamaskBtn, wrongNetwork} = selectors(hostDebug);
 
     expect(metamaskBtn).toBeTruthy();
     expect(metamaskBtn.nativeElement.disabled).toBeFalsy();
-    expect(noVolta).toBeFalsy();
+    expect(wrongNetwork).toBeFalsy();
   });
 
   it('should display message about not connected to volta when user have metamask', () => {
+    metamaskProviderServiceSpy.getFullNetworkName.and.returnValue('Volta Network');
+
     setup({metamaskDisabled: true});
-    const {metamaskBtn, noVolta} = selectors(hostDebug);
+    const {metamaskBtn, wrongNetwork} = selectors(hostDebug);
 
     expect(metamaskBtn).toBeTruthy();
     expect(metamaskBtn.nativeElement.disabled).toBeTruthy();
-    expect(noVolta).toBeTruthy();
-    expect(noVolta.nativeElement.innerText).toContain('You are not connected to Volta Network.');
+    expect(wrongNetwork).toBeTruthy();
+    expect(wrongNetwork.nativeElement.innerText).toContain('You are not connected to Volta Network.');
   });
 
   it('should dispatch login action with Metamask when clicking on metamask button', () => {
@@ -101,7 +109,7 @@ const selectors = (hostDebug: DebugElement) => {
 
   return {
     metamaskBtn: getElement(hostDebug)('metamask'),
-    noVolta: getElement(hostDebug)('no-volta'),
+    wrongNetwork: getElement(hostDebug)('wrong-network'),
     mobileWalletBtn: getElement(hostDebug)('mobile-wallet'),
     ewKeyBtn: getElement(hostDebug)('ew-key'),
     azureBtn: getElement(hostDebug)('azure'),

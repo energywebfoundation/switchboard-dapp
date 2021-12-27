@@ -1,0 +1,25 @@
+.default-checkbox {
+  color: rgba(255, 255, 255, 0.5);
+
+  .mat-option {
+    color: currentColor;
+    background: transparent;
+
+    &:nth-child(odd) {
+      background: transparent;
+    }
+
+    .mat-active {
+      background: transparent;
+    }
+  }
+
+  .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color: currentColor;
+  }
+
+}
+
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background: transparent;
+}

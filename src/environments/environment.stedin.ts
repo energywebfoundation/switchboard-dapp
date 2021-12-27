@@ -2,8 +2,8 @@ import { constants } from './constants';
 
 export const environment = {
   production: true,
-  theme: 'default',
-  application: true,
+  theme: 'stedin',
+  application: false,
 
   rpcUrl: 'https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/',
   chainId: 73799,

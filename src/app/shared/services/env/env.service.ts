@@ -1,19 +1,25 @@
+import { environment } from '../../../../environments/environment';
+
 export class EnvService {
 
-  theme = 'default';
-  application = true;
-  staking = false;
+  theme = environment.theme;
+  application = environment.application;
 
-  rpcUrl = 'https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/';
-  chainId = 73799;
+  rpcUrl = environment.rpcUrl;
+  chainId = environment.chainId;
 
-  cacheServerUrl = 'https://identitycache-dev.energyweb.org/v1';
-  natsServerUrl = 'https://identityevents-dev.energyweb.org/';
-  kmsServerUrl = undefined;
-  stakingPoolFactoryAddress: string;
-  claimManagerAddress: string;
-  showAzureLoginOption: boolean;
-  natsEnvironmentName: string;
-  rootNamespace: string;
+  cacheServerUrl = environment.cacheServerUrl;
+  natsServerUrl = environment.natsServerUrl;
+  kmsServerUrl = environment.kmsServerUrl;
+  claimManagerAddress: string = environment.claimManagerAddress;
+  showAzureLoginOption: boolean = environment.showAzureLoginOption;
+  natsEnvironmentName: string = environment.natsEnvironmentName;
+  rootNamespace: string = environment.rootNamespace;
+
+  networkName: string = environment.networkName;
+  fullNetworkName: string = environment.fullNetworkName;
+  currencyName: string = environment.currencyName;
+  currencySymbol: string = environment.currencySymbol;
+  blockExplorerUrl: string = environment.blockExplorerUrl;
 
 }
