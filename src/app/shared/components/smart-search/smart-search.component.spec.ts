@@ -72,4 +72,8 @@ describe('SmartSearchComponent', () => {
 
     expect(input.value).toEqual('role');
   }));
+
+  it('should emit event when adding role', () => {
+
+  });
 });

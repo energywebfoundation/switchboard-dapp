@@ -320,14 +320,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   addRestriction(event: ISmartSearch) {
-    if (event.searchType === 'restrictions') {
+    if (event.searchType === 'add') {
       const enrolmentPreconditions = this.roleForm.get('data').get('enrolmentPreconditions').value;
 
       if (enrolmentPreconditions.length) {
-        enrolmentPreconditions[0].conditions.push(event.role.namespace);
+        enrolmentPreconditions[0].conditions.push(event.role);
       } else {
         this.roleForm.get('data').patchValue({
-          enrolmentPreconditions: [{type: PreconditionType.Role, conditions: [event.role.namespace]}]
+          enrolmentPreconditions: [{type: PreconditionType.Role, conditions: [event.role]}]
         });
       }
 
