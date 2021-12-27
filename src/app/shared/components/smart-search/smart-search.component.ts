@@ -1,11 +1,10 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
-import { SearchType } from 'iam-client-lib';
-import { DomainsFacadeService } from '../../services/domains-facade/domains-facade.service';
+import { debounceTime, switchMap, tap } from 'rxjs/operators';
 import { ISmartSearch } from './models/smart-search.interface';
 import { truthy } from '@operators';
+import { SmartSearchService } from '../../smart-search/services/smart-search.service';
 
 @Component({
   selector: 'app-smart-search',
@@ -21,14 +20,11 @@ export class SmartSearchComponent implements AfterViewInit {
   @Output() searchTextEvent: EventEmitter<ISmartSearch> = new EventEmitter();
 
   searchForm: FormGroup;
-  isAutolistLoading = {
-    requests: [],
-    value: false
-  };
+  isAutolistLoading: boolean;
 
   public filteredOptions: Observable<any[]>;
 
-  constructor(private domainsFacade: DomainsFacadeService,) {
+  constructor(private smartSearchService: SmartSearchService) {
   }
 
   controlHasError(errorType: string) {
@@ -39,7 +35,9 @@ export class SmartSearchComponent implements AfterViewInit {
     this.filteredOptions = this.searchText.valueChanges.pipe(
       truthy(),
       debounceTime(1200),
-      switchMap(async (value: string) => await this._filterOrgsAndApps(value))
+      tap(() => this.isAutolistLoading = true),
+      switchMap((value: string) => this.smartSearchService.searchBy(value)),
+      tap(() => this.isAutolistLoading = false),
     );
   }
 
@@ -73,30 +71,4 @@ export class SmartSearchComponent implements AfterViewInit {
     this.searchText.setErrors(null);
   }
 
-  private async _filterOrgsAndApps(keyword: any): Promise<string[]> {
-    let retVal = [];
-    this.isAutolistLoading.value = true;
-    try {
-      if (keyword) {
-        let word;
-        if (this.fieldName === 'rolePage') {
-          (!keyword.trim && keyword.namespace) ? word = keyword.namespace :
-            word = keyword.trim();
-        }
-
-        if (word?.length > 2) {
-          word = word.toLowerCase();
-          retVal = (await this.domainsFacade.getENSTypesBySearchPhrase(
-            word,
-            this.fieldName === 'rolePage' ? [SearchType.Role] : [SearchType.App, SearchType.Org]
-          )).map((item) => item.namespace);
-          this.isAutolistLoading.value = false;
-        }
-      }
-    } catch (e) {
-      console.error(e);
-      this.isAutolistLoading.value = false;
-    }
-    return retVal;
-  }
 }

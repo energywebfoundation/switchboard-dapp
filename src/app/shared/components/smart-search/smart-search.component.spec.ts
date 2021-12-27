@@ -7,14 +7,15 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { DomainsFacadeService } from '../../services/domains-facade/domains-facade.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { getElement } from '@tests';
+import { SmartSearchService } from '../../smart-search/services/smart-search.service';
+import { of } from 'rxjs';
 
 describe('SmartSearchComponent', () => {
   let component: SmartSearchComponent;
   let fixture: ComponentFixture<SmartSearchComponent>;
-  const domainsFacadeSpy = jasmine.createSpyObj(DomainsFacadeService, ['getENSTypesBySearchPhrase']);
+  const smartSearchServiceSpy = jasmine.createSpyObj(SmartSearchService, ['searchBy']);
   let hostDebug: DebugElement;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -27,7 +28,7 @@ describe('SmartSearchComponent', () => {
         MatAutocompleteModule,
         NoopAnimationsModule
       ],
-      providers: [{provide: DomainsFacadeService, useValue: domainsFacadeSpy}],
+      providers: [{provide: SmartSearchService, useValue: smartSearchServiceSpy}],
       schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
@@ -46,7 +47,7 @@ describe('SmartSearchComponent', () => {
   });
 
   it('should update displayed value', fakeAsync(() => {
-    domainsFacadeSpy.getENSTypesBySearchPhrase.and.returnValue(Promise.resolve([]));
+    smartSearchServiceSpy.searchBy.and.returnValue(of([]));
     const control = new FormControl('');
     component.searchText = control;
 
@@ -62,7 +63,7 @@ describe('SmartSearchComponent', () => {
   }));
 
   it('should set default value to input', fakeAsync(() => {
-    domainsFacadeSpy.getENSTypesBySearchPhrase.and.returnValue(Promise.resolve([]));
+    smartSearchServiceSpy.searchBy.and.returnValue(of([]));
     component.searchText = new FormControl('role');
     fixture.detectChanges();
 
