@@ -21,12 +21,12 @@ export class SmartSearchComponent implements AfterViewInit {
   searchForm: FormGroup;
   isLoadingList: boolean;
 
-  public filteredOptions: Observable<any[]>;
+  public filteredOptions: Observable<string[]>;
 
   constructor(private smartSearchService: SmartSearchService) {
   }
 
-  controlHasError(errorType: string) {
+  controlHasError(errorType: string): boolean {
     return this.searchText.hasError(errorType);
   }
 
@@ -40,19 +40,19 @@ export class SmartSearchComponent implements AfterViewInit {
     );
   }
 
-  displayFn(selected: string) {
+  displayFn(selected: string): string {
     return selected ? selected : '';
   }
 
-  search() {
+  search(): void {
     this.searchText.updateValueAndValidity();
   }
 
-  get isAdding() {
+  get isAdding(): boolean {
     return this.type === 'add';
   }
 
-  get isDefault() {
+  get isDefault(): boolean {
     return this.type === 'default';
   }
 
@@ -60,7 +60,7 @@ export class SmartSearchComponent implements AfterViewInit {
     return this.searchText.value?.trim()?.length > 2;
   }
 
-  addRole() {
+  addRole(): void {
     if (this.searchText.invalid) {
       return;
     }
