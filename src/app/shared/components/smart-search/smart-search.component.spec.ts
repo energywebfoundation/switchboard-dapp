@@ -8,9 +8,10 @@ import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { getElement } from '@tests';
+import { dispatchInputEvent, getElement } from '@tests';
 import { SmartSearchService } from './services/smart-search.service';
 import { of } from 'rxjs';
+import { SmartSearchType } from './models/smart-search-type.enum';
 
 describe('SmartSearchComponent', () => {
   let component: SmartSearchComponent;
@@ -57,9 +58,9 @@ describe('SmartSearchComponent', () => {
     control.patchValue('role');
     fixture.detectChanges();
     tick(1200);
-    const input = getElement(hostDebug)('smart-search-input').nativeElement;
+    const {smartSearchInput} = selectors(hostDebug);
 
-    expect(input.value).toEqual('role');
+    expect(smartSearchInput.value).toEqual('role');
   }));
 
   it('should set default value to input', fakeAsync(() => {
@@ -68,12 +69,40 @@ describe('SmartSearchComponent', () => {
     fixture.detectChanges();
 
     tick(1200);
-    const input = getElement(hostDebug)('smart-search-input').nativeElement;
+    const {smartSearchInput} = selectors(hostDebug);
 
-    expect(input.value).toEqual('role');
+    expect(smartSearchInput.value).toEqual('role');
   }));
 
-  it('should emit event when adding role', () => {
+  it('should emit event when adding role', fakeAsync(() => {
+    smartSearchServiceSpy.searchBy.and.returnValue(of(['namespace1', 'namespace2']));
+    component.searchType = SmartSearchType.Add;
+    component.searchText = new FormControl('');
+    const addSpyEvent = spyOn(component.add, 'emit');
+    fixture.detectChanges();
 
-  });
+    const {smartSearchInput} = selectors(hostDebug);
+
+    smartSearchInput.value = 'name';
+    dispatchInputEvent(smartSearchInput);
+    tick(1200);
+    fixture.detectChanges();
+
+    const {add} = selectors(hostDebug);
+    expect(add).toBeTruthy();
+
+    add.click();
+
+    expect(addSpyEvent).toHaveBeenCalledWith({role: 'name', searchType: SmartSearchType.Add});
+
+  }));
 });
+
+const selectors = (hostDebug) => {
+  return {
+    smartSearchInput: getElement(hostDebug)('smart-search-input')?.nativeElement,
+    clear: getElement(hostDebug)('clear')?.nativeElement,
+    add: getElement(hostDebug)('add')?.nativeElement,
+    search: getElement(hostDebug)('search')?.nativeElement,
+  };
+};

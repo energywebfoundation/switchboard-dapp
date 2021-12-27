@@ -17,7 +17,7 @@ export class SmartSearchComponent implements AfterViewInit {
   @Input() placeholderSearch: string;
   @Input() searchType: SmartSearchType = SmartSearchType.Default;
 
-  @Output() searchTextEvent: EventEmitter<ISmartSearch> = new EventEmitter();
+  @Output() add: EventEmitter<ISmartSearch> = new EventEmitter();
 
   searchForm: FormGroup;
   isLoadingList: boolean;
@@ -61,7 +61,7 @@ export class SmartSearchComponent implements AfterViewInit {
     if (this.searchText.invalid) {
       return;
     }
-    this.searchTextEvent.emit({
+    this.add.emit({
       role: this.searchText.value,
       searchType: this.searchType
     });
