@@ -1,10 +1,11 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { debounceTime, startWith, switchMap } from 'rxjs/operators';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { SearchType } from 'iam-client-lib';
 import { DomainsFacadeService } from '../../services/domains-facade/domains-facade.service';
 import { ISmartSearch } from './models/smart-search.interface';
+import { truthy } from '@operators';
 
 @Component({
   selector: 'app-smart-search',
@@ -19,7 +20,6 @@ export class SmartSearchComponent implements AfterViewInit {
 
   @Output() searchTextEvent: EventEmitter<ISmartSearch> = new EventEmitter();
 
-  searchTxtFieldValue: string;
   searchForm: FormGroup;
   isAutolistLoading = {
     requests: [],
@@ -28,8 +28,7 @@ export class SmartSearchComponent implements AfterViewInit {
 
   public filteredOptions: Observable<any[]>;
 
-  constructor(private domainsFacade: DomainsFacadeService,
-              private cdRef: ChangeDetectorRef) {
+  constructor(private domainsFacade: DomainsFacadeService,) {
   }
 
   controlHasError(errorType: string) {
@@ -38,29 +37,22 @@ export class SmartSearchComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.filteredOptions = this.searchText.valueChanges.pipe(
+      truthy(),
       debounceTime(1200),
-      startWith(''),
-      switchMap(async (value) => await this._filterOrgsAndApps(value))
+      switchMap(async (value: string) => await this._filterOrgsAndApps(value))
     );
   }
 
-  displayFn(selected: any) {
-    return selected && selected.namespace ? selected.namespace : '';
+  displayFn(selected: string) {
+    return selected ? selected : '';
   }
 
   async search() {
     this.searchText.updateValueAndValidity();
   }
 
-  updateSearchTxtFieldValue(event: any) {
-    console.log(this.searchText.value);
-    if (typeof this.searchText.value === 'string') {
-      this.searchTxtFieldValue = this.searchText.value;
-    } else {
-      this.searchTxtFieldValue = this.searchText.value.option.value.namespace;
-    }
-
-    this.cdRef.detectChanges();
+  showButtons(): boolean {
+    return this.searchText.value?.trim()?.length > 2;
   }
 
   addRole() {
@@ -77,12 +69,11 @@ export class SmartSearchComponent implements AfterViewInit {
   }
 
   clearSearchTxt(): void {
-    this.searchTxtFieldValue = '';
     this.searchText.setValue('');
     this.searchText.setErrors(null);
   }
 
-  private async _filterOrgsAndApps(keyword: any): Promise<any[]> {
+  private async _filterOrgsAndApps(keyword: any): Promise<string[]> {
     let retVal = [];
     this.isAutolistLoading.value = true;
     try {
@@ -93,12 +84,12 @@ export class SmartSearchComponent implements AfterViewInit {
             word = keyword.trim();
         }
 
-        if (word.length > 2) {
+        if (word?.length > 2) {
           word = word.toLowerCase();
-          retVal = await this.domainsFacade.getENSTypesBySearchPhrase(
+          retVal = (await this.domainsFacade.getENSTypesBySearchPhrase(
             word,
             this.fieldName === 'rolePage' ? [SearchType.Role] : [SearchType.App, SearchType.Org]
-          );
+          )).map((item) => item.namespace);
           this.isAutolistLoading.value = false;
         }
       }

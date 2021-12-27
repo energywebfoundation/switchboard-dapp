@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 
 import { SmartSearchComponent } from './smart-search.component';
 import { MatInputModule } from '@angular/material/input';
@@ -45,16 +45,30 @@ describe('SmartSearchComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('should update displayed value', () => {
-    const control = new FormControl('role');
+  it('should update displayed value', fakeAsync(() => {
+    domainsFacadeSpy.getENSTypesBySearchPhrase.and.returnValue(Promise.resolve([]));
+    const control = new FormControl('');
     component.searchText = control;
+
     fixture.detectChanges();
+    tick(1200);
 
     control.patchValue('role');
     fixture.detectChanges();
-
+    tick(1200);
     const input = getElement(hostDebug)('smart-search-input').nativeElement;
 
     expect(input.value).toEqual('role');
-  });
+  }));
+
+  it('should set default value to input', fakeAsync(() => {
+    domainsFacadeSpy.getENSTypesBySearchPhrase.and.returnValue(Promise.resolve([]));
+    component.searchText = new FormControl('role');
+    fixture.detectChanges();
+
+    tick(1200);
+    const input = getElement(hostDebug)('smart-search-input').nativeElement;
+
+    expect(input.value).toEqual('role');
+  }));
 });

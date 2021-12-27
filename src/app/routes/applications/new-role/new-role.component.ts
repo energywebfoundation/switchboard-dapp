@@ -428,7 +428,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     delete req.roleType;
 
     req.data.roleName = req.roleName;
-    req.data.issuer.roleName = req.data?.issuer?.roleName?.namespace;
 
     req.data.issuer.did = this.issuerList;
     req.data.fields = this.dataSource.data;
