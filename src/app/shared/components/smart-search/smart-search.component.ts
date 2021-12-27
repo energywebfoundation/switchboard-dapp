@@ -27,10 +27,6 @@ export class SmartSearchComponent implements AfterViewInit {
   constructor(private smartSearchService: SmartSearchService) {
   }
 
-  controlHasError(errorType: string): boolean {
-    return this.searchText.hasError(errorType);
-  }
-
   ngAfterViewInit(): void {
     this.filteredOptions = this.searchText.valueChanges.pipe(
       truthy(),
