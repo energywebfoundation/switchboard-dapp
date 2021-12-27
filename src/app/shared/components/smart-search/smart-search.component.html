@@ -21,11 +21,11 @@
       <button mat-icon-button (click)="search()" class="searchButton">
         <mat-icon>search</mat-icon>
       </button>
-      <button *ngIf="type === 'add'" [disabled]="!searchText.value.namespace" mat-icon-button
+      <button *ngIf="isAdding" [disabled]="!searchText.value" mat-icon-button
               (click)="addRole()">
         <mat-icon>add</mat-icon>
       </button>
-      <button *ngIf="type !== 'add'" mat-icon-button (click)="clearSearchTxt()">
+      <button *ngIf="isDefault" mat-icon-button (click)="clearSearchTxt()">
         <mat-icon>close</mat-icon>
       </button>
     </ng-container>

@@ -48,6 +48,14 @@ export class SmartSearchComponent implements AfterViewInit {
     this.searchText.updateValueAndValidity();
   }
 
+  get isAdding() {
+    return this.type === 'add';
+  }
+
+  get isDefault() {
+    return this.type === 'default';
+  }
+
   showButtons(): boolean {
     return this.searchText.value?.trim()?.length > 2;
   }
