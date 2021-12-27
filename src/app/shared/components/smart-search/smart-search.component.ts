@@ -68,10 +68,10 @@ export class SmartSearchComponent implements AfterViewInit {
       role: this.searchText.value,
       searchType: this.type
     });
-    this.clearSearchTxt();
+    this.clear();
   }
 
-  clearSearchTxt(): void {
+  clear(): void {
     this.searchText.reset();
   }
 
