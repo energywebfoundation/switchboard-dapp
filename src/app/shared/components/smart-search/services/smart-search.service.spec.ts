@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { SmartSearchService } from './smart-search.service';
-import { DomainsFacadeService } from '../../services/domains-facade/domains-facade.service';
+import { DomainsFacadeService } from '../../../services/domains-facade/domains-facade.service';
 
 describe('SmartSearchService', () => {
   let service: SmartSearchService;

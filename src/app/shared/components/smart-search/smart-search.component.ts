@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { debounceTime, switchMap, tap } from 'rxjs/operators';
 import { ISmartSearch } from './models/smart-search.interface';
 import { truthy } from '@operators';
-import { SmartSearchService } from '../../smart-search/services/smart-search.service';
+import { SmartSearchService } from './services/smart-search.service';
 
 @Component({
   selector: 'app-smart-search',

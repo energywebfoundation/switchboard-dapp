@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, of } from 'rxjs';
 import { SearchType } from 'iam-client-lib';
-import { DomainsFacadeService } from '../../services/domains-facade/domains-facade.service';
+import { DomainsFacadeService } from '../../../services/domains-facade/domains-facade.service';
 import { map } from 'rxjs/operators';
 
 @Injectable({

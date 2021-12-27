@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { getElement } from '@tests';
-import { SmartSearchService } from '../../smart-search/services/smart-search.service';
+import { SmartSearchService } from './services/smart-search.service';
 import { of } from 'rxjs';
 
 describe('SmartSearchComponent', () => {
