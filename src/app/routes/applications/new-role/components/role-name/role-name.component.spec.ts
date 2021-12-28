@@ -128,13 +128,13 @@ describe('RoleNameComponent', () => {
 
   it('should emits abort event with touched equal to true property', () => {
     const {roleName} = selectors(hostDebug);
-    const abortEvent = spyOn(component.abort, 'emit');
+    const abortEvent = spyOn(component.cancel, 'emit');
 
     roleName.value = 'role';
     dispatchInputEvent(roleName);
     fixture.detectChanges();
 
-    component.cancel();
+    component.cancelHandler();
     expect(abortEvent).toHaveBeenCalledWith({touched: true});
   });
 });

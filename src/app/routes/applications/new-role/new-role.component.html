@@ -17,7 +17,7 @@
           <app-role-name [roleType]="roleType"
                          [parentNamespace]="parentNamespace"
                          (proceed)="proceedSettingIssuer($event)"
-                         (abort)="confirmClose($event.touched)"></app-role-name>
+                         (cancel)="confirmClose($event.touched)"></app-role-name>
         </mat-step>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Set Role Issuers</ng-template>

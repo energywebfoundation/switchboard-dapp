@@ -15,7 +15,7 @@ export class RoleNameComponent {
   @Input() parentNamespace: string;
 
   @Output() proceed = new EventEmitter<string>();
-  @Output() abort = new EventEmitter<{ touched: boolean }>();
+  @Output() cancel = new EventEmitter<{ touched: boolean }>();
 
   form = new FormControl(
     '', [Validators.required, Validators.minLength(3), Validators.maxLength(256), isAlphanumericValidator]
@@ -38,8 +38,8 @@ export class RoleNameComponent {
     return isAlphaNumericOnly(event, includeDot);
   }
 
-  cancel(): void {
-    this.abort.emit({touched: this.form.touched});
+  cancelHandler(): void {
+    this.cancel.emit({touched: this.form.touched});
   }
 
   async next(): Promise<void> {
