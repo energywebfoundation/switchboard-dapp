@@ -26,7 +26,7 @@
               </div> -->
                 <div class="col-lg-12" formGroupName="data">
                   <mat-label class="ml-3 pl-1">Organization Image URL (Optional)</mat-label>
-                  <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                  <mat-form-field class="mt-2" appearance="outline">
                     <input matInput autocomplete="off" formControlName="logoUrl" type="text" maxlength="500"
                            pattern="https?://.*" placeholder="https://www.example.com/images/logo.png"/>
                     <mat-error>URL format is incorrect</mat-error>
@@ -38,13 +38,22 @@
               <div class="row">
                 <div class="col-lg-12" *ngIf="viewType !== ViewType.UPDATE">
                   <mat-label class="ml-3 pl-1">Organization Namespace</mat-label>
-                  <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                  <mat-form-field class="mt-2 multi-errors" appearance="outline">
 
                     <input matInput autocomplete="off" formControlName="orgName" type="text"
                            placeholder="Organization Namespace" required
                            oninput="this.value = this.value.toLowerCase()" appBlockPaste
-                           (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256"/>
-                    <mat-error>Organization Namespace is <strong>required</strong></mat-error>
+                           minlength="3" maxlength="256"/>
+                    <mat-error *ngIf="formHasError('orgName','required')">
+                      Organization Namespace is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="formHasError('orgName','minlength')">
+                      Organization Namespace need to have at least 3 characters.
+                    </mat-error>
+
+                    <mat-error *ngIf="formHasError('orgName','isAlphaNumericInvalid')">
+                      Organization Namespace can contain only alphanumeric characters.
+                    </mat-error>
 
                   </mat-form-field>
                 </div>
@@ -65,15 +74,20 @@
                 <ng-container formGroupName="data">
                   <div class="col-lg-12">
                     <mat-label class="ml-3 pl-1">Organization Name</mat-label>
-                    <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                    <mat-form-field class="mt-2" appearance="outline">
                       <input matInput autocomplete="off" formControlName="organizationName" type="text"
                              placeholder="Organization Name" minlength="3" maxlength="256"/>
-                      <mat-error>Organization Name is <strong>required</strong></mat-error>
+                      <mat-error *ngIf="formDataHasError('organizationName','required')">
+                        Organization Name is <strong>required</strong>
+                      </mat-error>
+                      <mat-error *ngIf="formDataHasError('organizationName','minlength')">
+                        Organization Name need to have at least 3 characters.
+                      </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-12">
                     <mat-label class="ml-3 pl-1">Website URL (Optional)</mat-label>
-                    <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                    <mat-form-field class="mt-2" appearance="outline">
                       <input matInput autocomplete="off" formControlName="websiteUrl" type="text" pattern="https?://.*"
                              placeholder="http://www.example.com" maxlength="500"/>
                       <mat-error>URL format is incorrect</mat-error>

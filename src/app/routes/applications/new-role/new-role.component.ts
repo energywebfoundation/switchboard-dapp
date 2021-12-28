@@ -15,7 +15,6 @@ import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
@@ -244,9 +243,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return this.roleForm.get(control).hasError(errorType);
   }
 
-  alphaNumericOnly(event: any, includeDot?: boolean) {
+  alphaNumericOnly(): void {
     this.isExistsRoleName = false;
-    return isAlphaNumericOnly(event, includeDot);
   }
 
   issuerTypeChanged(data: any) {

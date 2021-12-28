@@ -8,9 +8,9 @@ import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { isValidJsonFormatValidator } from '../../../utils/validators/json-format/is-valid-json-format.validator';
-import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 import { deepEqualObjects } from '../../../utils/functions/deep-equal-objects/deep-equal-objects';
 import { EnvService } from '../../../shared/services/env/env.service';
+import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 
 export const ViewType = {
   UPDATE: 'update',
@@ -32,10 +32,10 @@ export class NewOrganizationComponent {
   }
 
   public orgForm = this.fb.group({
-    orgName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    orgName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256), isAlphanumericValidator]],
     namespace: this.envService.rootNamespace,
     data: this.fb.group({
-      organizationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+      organizationName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256)]],
       logoUrl: ['', Validators.pattern('https?://.*')],
       websiteUrl: ['', Validators.pattern('https?://.*')],
       description: '',
@@ -128,12 +128,16 @@ export class NewOrganizationComponent {
     }
   }
 
-  isNextFormButtonDisabled() {
-    return this.isChecking || deepEqualObjects(this.defaultFormValues, this.orgForm.value) || this.orgForm.invalid;
+  formHasError(control: string, error: string): boolean {
+    return this.orgForm.get(control).hasError(error);
   }
 
-  alphaNumericOnly(event: KeyboardEvent) {
-    return isAlphaNumericOnly(event);
+  formDataHasError(control: string, error: string): boolean {
+    return this.orgForm.get('data').get(control).hasError(error);
+  }
+
+  isNextFormButtonDisabled() {
+    return this.isChecking || deepEqualObjects(this.defaultFormValues, this.orgForm.value) || this.orgForm.invalid;
   }
 
   async createNewOrg() {
