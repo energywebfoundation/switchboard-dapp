@@ -104,7 +104,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   private _requests = {};
 
   get roleType() {
-    return this.roleForm.value.roleType === RoleType.ORG ? 'Organization' : 'Application';
+    return this.roleForm.value.roleType;
   }
 
   get parentNamespace() {
