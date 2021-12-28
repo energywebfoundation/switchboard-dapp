@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Asset, Claim, IRoleDefinition, NamespaceType, PreconditionType, RegistrationTypes } from 'iam-client-lib';
+import { Asset, Claim, IRoleDefinition, NamespaceType, RegistrationTypes } from 'iam-client-lib';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
@@ -278,7 +278,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid } });
     } else {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/enrolment?notif=myEnrolments' } });
+      this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/enrolment?selectedTab=1'}});
     }
   }
 
@@ -389,7 +389,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid}});
           } else {
             // Navigate to My Enrolments Page
-            this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/enrolment?notif=myEnrolments'}});
+            this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/enrolment?selectedTab=1'}});
           }
       }
     } else {
