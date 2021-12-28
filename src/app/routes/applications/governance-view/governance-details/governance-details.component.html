@@ -46,9 +46,7 @@
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Role Type</div>
         <span class="color-white mb-0">
-          <ng-container *ngIf="formData?.definition?.roleType === RoleType.ORG"> Organization </ng-container>
-          <ng-container *ngIf="formData?.definition?.roleType === RoleType.APP"> Application </ng-container>
-          <ng-container *ngIf="formData?.definition?.roleType === RoleType.CUSTOM"> Custom </ng-container>
+           {{formData?.definition?.roleType | roleType}}
         </span>
       </div>
       <mat-divider></mat-divider>
