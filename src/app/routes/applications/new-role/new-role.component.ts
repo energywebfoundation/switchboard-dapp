@@ -104,9 +104,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   // Fields
   dataSource = new MatTableDataSource<IFieldDefinition>([]);
   issuerFields = new MatTableDataSource<IFieldDefinition>([]);
-  displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue'];
-  displayedColumns: string[] = [...this.displayedColumnsView, 'actions'];
-  isExistsRoleName = false;
   public ViewType = ViewType;
   viewType: string = ViewType.NEW;
   origData: any;
