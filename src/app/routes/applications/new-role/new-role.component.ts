@@ -40,15 +40,6 @@ export enum RoleTypeEnum {
   CUSTOM = 'custom'
 }
 
-const RoleTypeList = [{
-  label: 'Organization',
-  value: RoleType.ORG
-},
-  {
-    label: 'Application',
-    value: RoleType.APP
-  }];
-
 export interface RolesFields {
   type: string;
   label: string;
@@ -96,8 +87,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   public restrictionRoleControl = this.fb.control('');
   public isChecking = false;
-  public RoleType = RoleType;
-  public RoleTypeList = RoleTypeList;
   public ENSPrefixes = ENSPrefixes;
   public issuerList: string[] = [this.signerFacade.getDid()];
 
