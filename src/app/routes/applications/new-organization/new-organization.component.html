@@ -38,7 +38,7 @@
               <div class="row">
                 <div class="col-lg-12" *ngIf="viewType !== ViewType.UPDATE">
                   <mat-label class="ml-3 pl-1">Organization Namespace</mat-label>
-                  <mat-form-field class="mt-2" appearance="outline">
+                  <mat-form-field class="mt-2 multi-errors" appearance="outline">
 
                     <input matInput autocomplete="off" formControlName="orgName" type="text"
                            placeholder="Organization Namespace" required
