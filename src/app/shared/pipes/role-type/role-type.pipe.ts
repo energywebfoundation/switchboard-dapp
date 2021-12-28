@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { RoleTypeEnum } from '../../../new-role/new-role.component';
+import { RoleTypeEnum } from '../../../routes/applications/new-role/new-role.component';
 
 const roleTypeMap = new Map<RoleTypeEnum, string>()
   .set(RoleTypeEnum.APP, 'Application')

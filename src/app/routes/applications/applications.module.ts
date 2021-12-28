@@ -35,7 +35,6 @@ import { FilterComponent } from './filter/filter.component';
 import { CreateFieldsModule } from './new-role/components/create-fields/create-fields.module';
 import { DidBookModule } from '../../modules/did-book/did-book.module';
 import { RoleNameComponent } from './new-role/components/role-name/role-name.component';
-import { RoleTypePipe } from './new-role/pipes/role-type.pipe';
 import { IssuerDidListComponent } from './new-role/components/issuer-did-list/issuer-did-list.component';
 import { IssuerDidComponent } from './new-role/components/issuer-did/issuer-did.component';
 import { SearchIssuerRoleComponent } from './new-role/components/search-issuer-role/search-issuer-role.component';
@@ -65,7 +64,6 @@ const routes: Routes = [
     ActionsMenuComponent,
     TransactionsCompleteComponent,
     RoleNameComponent,
-    RoleTypePipe,
     IssuerDidListComponent,
     IssuerDidComponent,
     SearchIssuerRoleComponent,

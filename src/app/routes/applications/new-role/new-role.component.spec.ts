@@ -11,6 +11,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { PreconditionType } from 'iam-client-lib';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 import { IssuerType } from './models/issuer-type.enum';
+import { RoleTypePipe } from '../../../shared/pipes/role-type/role-type.pipe';
 
 describe('NewRoleComponent', () => {
   let component: NewRoleComponent;
@@ -38,7 +39,7 @@ describe('NewRoleComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NewRoleComponent],
+      declarations: [NewRoleComponent, RoleTypePipe],
       imports: [ReactiveFormsModule],
       providers: [
         provideMockStore(),

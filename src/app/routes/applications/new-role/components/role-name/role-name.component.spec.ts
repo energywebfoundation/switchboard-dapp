@@ -11,7 +11,7 @@ import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { dispatchInputEvent, getElement } from '@tests';
 import { RoleTypeEnum } from '../../new-role.component';
 import { By } from '@angular/platform-browser';
-import { RoleTypePipe } from '../../pipes/role-type.pipe';
+import { RoleTypePipe } from '../../../../../shared/pipes/role-type/role-type.pipe';
 
 describe('RoleNameComponent', () => {
   let component: RoleNameComponent;

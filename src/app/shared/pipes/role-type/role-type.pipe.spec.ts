@@ -1,5 +1,5 @@
 import { RoleTypePipe } from './role-type.pipe';
-import { RoleTypeEnum } from '../../../new-role/new-role.component';
+import { RoleTypeEnum } from '../../../routes/applications/new-role/new-role.component';
 
 describe('RoleTypePipe', () => {
 
