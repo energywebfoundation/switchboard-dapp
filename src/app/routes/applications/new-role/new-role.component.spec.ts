@@ -57,24 +57,10 @@ describe('NewRoleComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NewRoleComponent);
     component = fixture.componentInstance;
-    // fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should be run removeDid', () => {
-    const i = 1;
-    component.issuerList = ['1', '2', '3'];
-    component.removeDid(i);
-
-    expect(component.issuerList).toEqual(['1', '3']);
-
-    component.issuerList = ['1'];
-    component.removeDid(0);
-
-    expect(component.issuerList).toEqual(['1']);
   });
 
   it('should be run removePreconditionRole', () => {
@@ -101,50 +87,6 @@ describe('NewRoleComponent', () => {
     const resultSecond = component.displayFn(selectedSecond);
     expect(resultFirst).toBe('value');
     expect(resultSecond).toBe('');
-  });
-
-  describe('should be run addDid', () => {
-    it('addDid: newIssuer === issuerGroup', () => {
-      const newIssuer = 'test value';
-      component.issuerList = [newIssuer];
-      component.issuerGroup = fb.group({
-        newIssuer
-      });
-
-      component.addDid();
-
-      expect(toastrSpy.error).toHaveBeenCalled();
-    });
-
-    it('addDid: newIssuer !== issuerGroup', () => {
-      const newIssuer = 'test value';
-      const issuer = 'issuerGroup value';
-      component.issuerList = [issuer];
-      component.issuerGroup = fb.group({
-        newIssuer
-      });
-      spyOn(component.issuerGroup.get('newIssuer'), 'reset');
-
-      component.addDid();
-
-      expect(component.issuerList[1]).toBe(newIssuer);
-      expect(component.issuerGroup.get('newIssuer').reset).toHaveBeenCalled();
-    });
-
-    it('addDid: newIssuer is empty', () => {
-      const newIssuer = '    ';
-      const issuer = 'issuerGroup value';
-      component.issuerList = [issuer];
-      component.issuerGroup = fb.group({
-        newIssuer
-      });
-      spyOn(component.issuerGroup.get('newIssuer'), 'reset');
-
-      component.addDid();
-
-      expect(component.issuerGroup.get('newIssuer').reset).not.toHaveBeenCalled();
-      expect(toastrSpy.error).toHaveBeenCalled();
-    });
   });
 
   describe('should be run issuerTypeChanged', () => {

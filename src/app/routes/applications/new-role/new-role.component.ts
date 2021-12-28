@@ -165,7 +165,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
     this._init(this.data);
   }
 
@@ -255,14 +254,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return retVal;
   }
 
-  controlHasError(control: string, errorType: string) {
-    return this.roleForm.get(control).hasError(errorType);
-  }
-
-  issuer(control: string, errorType: string) {
-    return this.roleForm.get('data').get('issuer').get('roleName').hasError(errorType);
-  }
-
   issuerTypeChanged(data: any) {
     this.issuerGroup.reset();
 
@@ -284,37 +275,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     this.stepper.steps.toArray()[this.stepper.selectedIndex - 1].editable = true;
     this.stepper.previous();
     this.stepper.selected.completed = false;
-  }
-
-  addDid() {
-    const newIssuerDid = this.issuerGroup.get('newIssuer').value.trim();
-
-    if (!newIssuerDid) {
-      this.toastr.error('Issuer DID is empty.', this.TOASTR_HEADER);
-      return;
-    }
-
-    // Check if duplicate
-    let exists = false;
-    for (let i = 0; i < this.issuerList.length; i++) {
-      if (this.issuerList[i] === newIssuerDid) {
-        exists = true;
-        break;
-      }
-    }
-
-    if (!exists) {
-      this.issuerList.push(newIssuerDid);
-      this.issuerGroup.get('newIssuer').reset();
-    } else {
-      this.toastr.error('Item exists.', 'Issuer DID');
-    }
-  }
-
-  removeDid(i: number) {
-    if (this.issuerList.length > 1) {
-      this.issuerList.splice(i, 1);
-    }
   }
 
   issuerFieldsChangeHandler(data) {
