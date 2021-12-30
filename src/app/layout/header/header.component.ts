@@ -3,8 +3,6 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 import { AssetHistoryEventType, ClaimEventType, NamespaceType } from 'iam-client-lib';
-
-import { SettingsService } from '../../core/settings/settings.service';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { IamService } from '../../shared/services/iam.service';
 import { NotificationService } from '../../shared/services/notification.service';
@@ -72,7 +70,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private router: Router,
               private toastr: SwitchboardToastrService,
               private notifService: NotificationService,
-              public settings: SettingsService, public dialog: MatDialog,
+              public dialog: MatDialog,
               private store: Store<UserClaimState>,
               private loginService: LoginService,
               private didBookService: DidBookService) {
@@ -387,10 +385,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isLoadingNotif = false;
       await this._initNotificationAndTasksListeners();
     }
-  }
-
-  toggleCollapsedSideabar() {
-    this.settings.toggleLayoutSetting('isCollapsed');
   }
 
   logout() {
