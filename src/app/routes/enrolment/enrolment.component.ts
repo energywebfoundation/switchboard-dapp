@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 import { Store } from '@ngrx/store';
 import { SettingsSelectors } from '@state';
+import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 
 @Component({
   selector: 'app-enrolment',
@@ -36,15 +37,20 @@ export class EnrolmentComponent implements AfterViewInit {
   };
 
   public isMyEnrolmentShown = false;
-  isExperimentalEnabled$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
+  isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
   private _queryParamSelectedTabInit = false;
+
+  get issuesRoles(): boolean {
+    return this.issuanceVCService.hasRoles();
+  }
 
   constructor(private activeRoute: ActivatedRoute,
               private notificationService: NotificationService,
               private urlParamService: UrlParamService,
               private router: Router,
               private dialog: MatDialog,
-              private store: Store) {
+              private store: Store,
+              private issuanceVCService: IssuanceVcService) {
   }
 
   ngAfterViewInit(): void {
@@ -156,4 +162,5 @@ export class EnrolmentComponent implements AfterViewInit {
       }, 30);
     }
   }
+
 }

@@ -17,6 +17,10 @@ export class IssuanceVcService {
     this.getAllowedRoles();
   }
 
+  hasRoles(): boolean {
+    return this.roles.length > 0;
+  }
+
   create(data: { subject: string, claim: any }) {
     return this.iamService.issueClaim(data);
   }
