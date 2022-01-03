@@ -5,7 +5,7 @@ import * as  LayoutActions from './layout.actions';
 import * as  LayoutSelectors from './layout.selectors';
 import { filter, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { AuthSelectors } from '@state';
+import * as AuthSelectors from '../auth/auth.selectors';
 
 @Injectable()
 export class LayoutEffects {
