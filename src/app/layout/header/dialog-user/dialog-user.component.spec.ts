@@ -101,6 +101,7 @@ describe('DialogUserComponent', () => {
     fixture.detectChanges();
 
     birthdate.value = todayDate();
+    console.log(birthdate.value);
     dispatchEvent(birthdate);
 
     fixture.detectChanges();
@@ -123,5 +124,5 @@ const selectors = (hostDebug: DebugElement) => {
 
 const todayDate = () => {
   const date = new Date(Date.now());
-  return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 };
