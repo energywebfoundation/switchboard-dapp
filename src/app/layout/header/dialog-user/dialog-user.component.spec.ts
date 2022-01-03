@@ -101,7 +101,6 @@ describe('DialogUserComponent', () => {
     fixture.detectChanges();
 
     birthdate.value = todayDate();
-    console.log(birthdate.value);
     dispatchEvent(birthdate);
 
     fixture.detectChanges();
