@@ -29,11 +29,16 @@ module.exports = function (config) {
       dir: require('path').join(__dirname, './coverage/'),
       subdir: '.',
       reporters: [
-        { type: 'html' },
-        { type: 'text-summary' }
+        {type: 'html'},
+        {type: 'text-summary'}
       ]
     },
-    reporters: ['progress', 'kjhtml', 'coverage-istanbul'],
+    coverageIstanbulReporter: {
+      dir: require('path').join(__dirname, './coverage/ui'),
+      reports: ['html', 'lcovonly', 'text-summary'],
+      fixWebpackSourcePaths: true
+    },
+    reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
