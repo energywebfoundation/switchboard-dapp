@@ -87,6 +87,10 @@ export class IamService {
     return this.signerService.providerType;
   }
 
+  get isEthSigner() {
+    return this.signerService.isEthSigner;
+  }
+
   issueClaim(data: { subject: string; claim: any }) {
     return this.wrapWithLoadingService(this.claimsService.issueClaim(data));
   }
