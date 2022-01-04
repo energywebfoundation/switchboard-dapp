@@ -4,8 +4,10 @@
       <div class="col-xl-12">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
           <h4 class="color-white strong my-4">Issue Role</h4>
-          <button *ngIf="isExperimentalEnabled$ | async" mat-raised-button
-                  class="btn btn-primary btn-small mb-3 mb-lg-0" (click)="createVC()">Create VC
+          <button *ngIf="(isExperimental$ | async) && issuesRoles" mat-raised-button
+                  class="btn btn-primary btn-small mb-3 mb-lg-0"
+                  (click)="createVC()">
+            Create VC
           </button>
         </div>
         <div class="card card-default mb-3 pb-0">
