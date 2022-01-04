@@ -46,9 +46,7 @@
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Role Type</div>
         <span class="color-white mb-0">
-          <ng-container *ngIf="formData?.definition?.roleType === RoleType.ORG"> Organization </ng-container>
-          <ng-container *ngIf="formData?.definition?.roleType === RoleType.APP"> Application </ng-container>
-          <ng-container *ngIf="formData?.definition?.roleType === RoleType.CUSTOM"> Custom </ng-container>
+           {{formData?.definition?.roleType | roleType}}
         </span>
       </div>
       <mat-divider></mat-divider>
@@ -56,20 +54,20 @@
         <div class="label opacity-50 mb-2">Version</div>
         <span class="color-white mb-0"> {{ formData?.definition?.version }} </span>
       </div>
-      <ng-container *ngIf="formData?.definition?.issuer">
+      <ng-container *ngIf="issuer">
         <mat-divider></mat-divider>
         <div class="text-left my-3">
           <div class="label opacity-50 mb-2">Issuer Type</div>
-          <span class="color-white mb-0"> {{ formData?.definition?.issuer?.issuerType }} </span>
+          <span class="color-white mb-0"> {{ issuer?.issuerType }} </span>
         </div>
         <mat-divider></mat-divider>
-        <ng-container *ngIf="formData?.definition?.issuer?.issuerType === 'Role'">
+        <ng-container *ngIf="isRoleType">
           <div class="text-left my-3">
             <div class="label opacity-50 mb-2">Role</div>
-            <span class="color-white mb-0"> {{ formData?.definition?.issuer?.roleName }} </span>
+            <span class="color-white mb-0"> {{ issuer?.roleName }} </span>
           </div>
         </ng-container>
-        <ng-container *ngIf="formData?.definition?.issuer?.issuerType === 'DID'">
+        <ng-container *ngIf="isDIDType">
           <div class="text-left my-3">
             <div class="label opacity-50 mb-2">Issuer List</div>
             <div class="color-white mb-0" *ngFor="let did of formData?.definition?.issuer?.did"> {{ did }} </div>

@@ -49,6 +49,7 @@ import { CopyToClipboardModule } from './directives/copy-to-clipboard/copy-to-cl
 import { DidFormatMinifierModule } from './pipes/did-format-minifier/did-format-minifier.module';
 import { TableHeadingComponent } from './components/table-heading/table-heading.component';
 import { NoRecordsComponent } from './components/no-records/no-records.component';
+import { RoleTypePipe } from './pipes/role-type/role-type.pipe';
 
 
 const MATERIAL_MODULES = [
@@ -110,7 +111,8 @@ const MATERIAL_MODULES = [
     SmartSearchComponent,
     ReplaceUnderscorePipe,
     TableHeadingComponent,
-    NoRecordsComponent
+    NoRecordsComponent,
+    RoleTypePipe
   ],
   exports: [
     CommonModule,
@@ -129,7 +131,8 @@ const MATERIAL_MODULES = [
     CopyToClipboardModule,
     DidFormatMinifierModule,
     TableHeadingComponent,
-    NoRecordsComponent
+    NoRecordsComponent,
+    RoleTypePipe
   ],
   entryComponents: [MinifiedDidViewerDialogComponent]
 })

@@ -6,6 +6,7 @@ import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { RoleType } from '../../new-role/new-role.component';
 import { GovernanceViewComponent } from '../governance-view.component';
+import { IssuerType } from '../../new-role/models/issuer-type.enum';
 
 @Component({
   selector: 'app-governance-details',
@@ -41,6 +42,18 @@ export class GovernanceDetailsComponent {
 
   get issuerFields() {
     return this.formData?.definition?.issuerFields;
+  }
+
+  get isDIDType() {
+    return this.issuer?.issuerType === IssuerType.DID;
+  }
+
+  get isRoleType() {
+    return this.issuer?.issuerType === IssuerType.ROLE;
+  }
+
+  get issuer() {
+    return this.formData?.definition?.issuer;
   }
 
   constructor(
