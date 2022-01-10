@@ -174,12 +174,13 @@ export class IamService {
       }
     } catch (e) {
       console.error(e);
-      return {
+      throw {
         did: undefined,
         connected: false,
         userClosedModal: e.message === 'User closed modal',
         realtimeExchangeConnected: false,
         accountInfo: undefined,
+        message: e.message
       };
     }
     return {
