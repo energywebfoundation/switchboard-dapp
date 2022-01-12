@@ -59,7 +59,7 @@
     "core-js": "2.5.4",
     "fullcalendar": "3.9.0",
     "hammerjs": "^2.0.8",
-    "iam-client-lib": "^4.0.0-alpha.12",
+    "iam-client-lib": "^4.0.0-alpha.25",
     "modernizr": "3.7.1",
     "moment": "2.22.2",
     "ng-qrcode": "4.3.0",
