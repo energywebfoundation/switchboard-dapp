@@ -182,6 +182,12 @@ export class LoginService {
   private handleLoginErrors(e, navigateOnTimeout) {
     console.error(e);
     const swalConfig = swalLoginError(e.message);
+    if (e.message && this.isSessionActive()) {
+      this.loadingService.hide();
+      this.openSwal({
+        title: 'Ops!', text: 'Something went wrong :('
+      }, true);
+    }
     if (swalConfig) {
       // in some cases is displayed loader.
       this.loadingService.hide();
