@@ -10,6 +10,7 @@ export const environment = {
   cacheServerUrl: 'https://identitycache-dev.energyweb.org/v1',
   natsServerUrl: 'https://identityevents-dev.energyweb.org/',
   kmsServerUrl: undefined,
+  ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',
   claimManagerAddress: '0xC3dD7ED75779b33F5Cfb709E0aB02b71fbFA3210',
   showAzureLoginOption: true,
   natsEnvironmentName: 'ewf-dev',

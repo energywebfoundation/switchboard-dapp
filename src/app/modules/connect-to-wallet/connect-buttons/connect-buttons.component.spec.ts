@@ -5,6 +5,7 @@ import { DebugElement } from '@angular/core';
 import { getElement } from '@tests';
 import { ProviderType } from 'iam-client-lib';
 import { MetamaskProviderService } from '../../../shared/services/metamask-provider/metamask-provider.service';
+import { EkcSettingsService } from '../ekc-settings/services/ekc-settings.service';
 
 describe('ConnectButtonsComponent', () => {
   let component: ConnectButtonsComponent;
@@ -15,6 +16,9 @@ describe('ConnectButtonsComponent', () => {
     MetamaskProviderService,
     ['getFullNetworkName', 'importMetamaskConf']
   );
+  const ekcSettingsServiceSpy = jasmine.createSpyObj(EkcSettingsService, [
+    'edit',
+  ]);
 
   const setup = (opt?: {
     metamaskPresent?: boolean;
@@ -34,6 +38,7 @@ describe('ConnectButtonsComponent', () => {
             provide: MetamaskProviderService,
             useValue: metamaskProviderServiceSpy,
           },
+          { provide: EkcSettingsService, useValue: ekcSettingsServiceSpy },
         ],
       }).compileComponents();
     })
@@ -100,6 +105,15 @@ describe('ConnectButtonsComponent', () => {
     expect(connectToSpy).toHaveBeenCalledWith(ProviderType.EKC);
   });
 
+  it('should call method for editing ekc settings', () => {
+    component.showEkcOption = true;
+    fixture.detectChanges();
+    const { azureSettings } = selectors(hostDebug);
+    azureSettings.nativeElement.click();
+
+    expect(ekcSettingsServiceSpy.edit).toHaveBeenCalled();
+  });
+
   it('should not find metamask button when is not available', () => {
     component.metamaskPresent = false;
     const { metamaskBtn } = selectors(hostDebug);
@@ -123,5 +137,6 @@ const selectors = (hostDebug: DebugElement) => {
     mobileWalletBtn: getElement(hostDebug)('mobile-wallet'),
     ewKeyBtn: getElement(hostDebug)('ew-key'),
     azureBtn: getElement(hostDebug)('azure'),
+    azureSettings: getElement(hostDebug)('edit-azure-settings'),
   };
 };
