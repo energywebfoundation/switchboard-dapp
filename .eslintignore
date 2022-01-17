@@ -1,0 +1,7 @@
+dist/
+docs/
+node_modules
+build/
+*.d.ts
+patches/
+*.md
