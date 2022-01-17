@@ -8,13 +8,12 @@ import { CopyToClipboardModule } from '../../../shared/directives/copy-to-clipbo
 import { DidFormatMinifierModule } from '../../../shared/pipes/did-format-minifier/did-format-minifier.module';
 import { UserMenuTriggerComponent } from './user-menu-trigger/user-menu-trigger.component';
 
-
 @NgModule({
   declarations: [
     ConnectedNetworkComponent,
     UserDidComponent,
     UserNameComponent,
-    UserMenuTriggerComponent
+    UserMenuTriggerComponent,
   ],
   imports: [
     CommonModule,
@@ -26,8 +25,7 @@ import { UserMenuTriggerComponent } from './user-menu-trigger/user-menu-trigger.
     ConnectedNetworkComponent,
     UserDidComponent,
     UserNameComponent,
-    UserMenuTriggerComponent
-  ]
+    UserMenuTriggerComponent,
+  ],
 })
-export class UserMenuModule {
-}
+export class UserMenuModule {}

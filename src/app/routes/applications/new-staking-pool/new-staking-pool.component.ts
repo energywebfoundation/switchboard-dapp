@@ -11,40 +11,40 @@ interface IRoleOption {
   namespace: string;
 }
 
-const {parseEther} = utils;
+const { parseEther } = utils;
 
 @Component({
   selector: 'app-new-staking-pool',
   templateUrl: './new-staking-pool.component.html',
-  styleUrls: ['./new-staking-pool.component.scss']
+  styleUrls: ['./new-staking-pool.component.scss'],
 })
 export class NewStakingPoolComponent implements OnInit, OnDestroy {
   editor: Editor;
   form: FormGroup = this.fb.group({
     patrons: 'Yes',
-    revenue: ['', [Validators.required, Validators.min(0), Validators.max(1000)]],
+    revenue: [
+      '',
+      [Validators.required, Validators.min(0), Validators.max(1000)],
+    ],
     range: this.fb.group({
       start: ['', [Validators.required]],
-      end: ['', [Validators.required]]
+      end: ['', [Validators.required]],
     }),
     patronRoles: [[]],
     principal: ['', [Validators.required, Validators.min(100)]],
-    terms: [null]
+    terms: [null],
   });
 
   rolesOptions: IRoleOption[];
 
-  toolbar: Toolbar = [
-    ["bullet_list"],
-    ["link"],
+  toolbar: Toolbar = [['bullet_list'], ['link']];
 
-  ];
-
-  constructor(private stakingPoolService: StakingPoolService,
-              private fb: FormBuilder,
-              @Inject(MAT_DIALOG_DATA) public data: { namespace: string, owner: string },
-              private store: Store) {
-  }
+  constructor(
+    private stakingPoolService: StakingPoolService,
+    private fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: { namespace: string; owner: string },
+    private store: Store
+  ) {}
 
   ngOnInit() {
     this.getRolesList();
@@ -67,12 +67,15 @@ export class NewStakingPoolComponent implements OnInit, OnDestroy {
     if (this.isFormInvalid()) {
       return;
     }
-    this.store.dispatch(StakeActions.launchStakingPool({pool: this.createStakingPoolObject()}));
+    this.store.dispatch(
+      StakeActions.launchStakingPool({ pool: this.createStakingPoolObject() })
+    );
   }
 
   private getRolesList(): void {
-    this.stakingPoolService.getListOfOrganizationRoles(this.data.owner)
-      .subscribe((list: IRoleOption[]) => this.rolesOptions = list);
+    this.stakingPoolService
+      .getListOfOrganizationRoles(this.data.owner)
+      .subscribe((list: IRoleOption[]) => (this.rolesOptions = list));
   }
 
   private createStakingPoolObject(): IStakingPool {
@@ -83,13 +86,13 @@ export class NewStakingPoolComponent implements OnInit, OnDestroy {
       minStakingPeriod: this.getTimeInSeconds(),
       patronRoles: rawValues.patronRoles,
       principal: parseEther(rawValues.principal.toString()),
-      terms: rawValues.terms
+      terms: rawValues.terms,
     };
   }
 
   private getTimeInSeconds(): number {
-    const {start, end}: { start: Date, end: Date } = this.form.get('range').value;
+    const { start, end }: { start: Date; end: Date } =
+      this.form.get('range').value;
     return (end.getTime() - start.getTime()) / 1000;
   }
-
 }

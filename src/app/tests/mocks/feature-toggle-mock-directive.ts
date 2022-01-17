@@ -1,19 +1,24 @@
-import { Directive, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import {
+  Directive,
+  OnInit,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
 
 @Directive({
-  selector: '[appIsFeatureEnabled]'
+  selector: '[appIsFeatureEnabled]',
 })
 export class FeatureToggleMockDirective implements OnInit {
-
   private hasView = true;
 
-  constructor(private templateRef: TemplateRef<any>,
-              private vcr: ViewContainerRef) {
-  }
+  constructor(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private templateRef: TemplateRef<any>,
+    private vcr: ViewContainerRef
+  ) {}
 
   ngOnInit() {
     this.vcr.createEmbeddedView(this.templateRef);
     this.hasView = true;
   }
-
 }

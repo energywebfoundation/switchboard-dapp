@@ -8,7 +8,7 @@ describe('SignerFacadeService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{provide: IamService, useValue: {}}]
+      providers: [{ provide: IamService, useValue: {} }],
     });
     service = TestBed.inject(SignerFacadeService);
   });

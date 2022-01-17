@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
@@ -15,7 +21,7 @@ import { EnvService } from '../../../shared/services/env/env.service';
 @Component({
   selector: 'app-role-list',
   templateUrl: './role-list.component.html',
-  styleUrls: ['./role-list.component.scss']
+  styleUrls: ['./role-list.component.scss'],
 })
 export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
@@ -28,11 +34,12 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscription$ = new Subject();
 
-  constructor(private dialog: MatDialog,
-              private fb: FormBuilder,
-              private store: Store,
-              private envService: EnvService) {
-  }
+  constructor(
+    private dialog: MatDialog,
+    private fb: FormBuilder,
+    private store: Store,
+    private envService: EnvService
+  ) {}
 
   ngOnInit(): void {
     this.setData();
@@ -73,14 +80,16 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(RoleActions.getList());
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   viewDetails(data: any) {
     this.dialog.open(GovernanceViewComponent, {
-      width: '600px', data: {
+      width: '600px',
+      data: {
         type: ListType.ROLE,
-        definition: data
+        definition: data,
       },
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
   }
 
@@ -89,14 +98,20 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   filter(filters): void {
-    this.store.dispatch(RoleActions.updateFilters({filters, namespace: this.envService.rootNamespace}));
+    this.store.dispatch(
+      RoleActions.updateFilters({
+        filters,
+        namespace: this.envService.rootNamespace,
+      })
+    );
   }
 
   private setData(): void {
-    this.store.select(RoleSelectors.getFilteredList).pipe(
-      takeUntil(this.subscription$)
-    ).subscribe((list) => {
-      this.dataSource.data = list;
-    });
+    this.store
+      .select(RoleSelectors.getFilteredList)
+      .pipe(takeUntil(this.subscription$))
+      .subscribe((list) => {
+        this.dataSource.data = list;
+      });
   }
 }

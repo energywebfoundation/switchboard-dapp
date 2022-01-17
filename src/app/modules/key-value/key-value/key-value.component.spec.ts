@@ -12,14 +12,15 @@ describe('KeyValueComponent', () => {
   let fixture: ComponentFixture<KeyValueComponent>;
   let hostDebug: DebugElement;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [KeyValueComponent],
-      imports: [MatIconTestingModule, MatButtonModule],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [KeyValueComponent],
+        imports: [MatIconTestingModule, MatButtonModule],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(KeyValueComponent);
@@ -33,7 +34,7 @@ describe('KeyValueComponent', () => {
   });
 
   it('should display form and hide show btn when clicking on show form button', () => {
-    let {showForm} = getSelectors(hostDebug);
+    let { showForm } = getSelectors(hostDebug);
 
     showForm.click();
     fixture.detectChanges();
@@ -47,7 +48,7 @@ describe('KeyValueComponent', () => {
 
   it('should add element to list and emit event', () => {
     const updatedListSpy = spyOn(component.updatedList, 'emit');
-    const pair = {key: 'key', value: 'value'};
+    const pair = { key: 'key', value: 'value' };
 
     component.addHandler(pair);
 
@@ -57,7 +58,7 @@ describe('KeyValueComponent', () => {
 
   it('should remove element from list and emit event', () => {
     const updatedListSpy = spyOn(component.updatedList, 'emit');
-    const pair = {key: 'key', value: 'value'};
+    const pair = { key: 'key', value: 'value' };
 
     component.pairsList = [pair];
 
@@ -67,5 +68,5 @@ describe('KeyValueComponent', () => {
 });
 
 const getSelectors = (hostDebug) => ({
-  showForm: getElement(hostDebug)('show-form')?.nativeElement
+  showForm: getElement(hostDebug)('show-form')?.nativeElement,
 });

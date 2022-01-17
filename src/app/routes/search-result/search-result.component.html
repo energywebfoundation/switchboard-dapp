@@ -1,7 +1,17 @@
 <div class="drawer-container" #searchResultDrawer>
-  <mat-drawer-container class="h-100 bg-transparent" autosize [hasBackdrop]="false">
-    <mat-drawer mode="side" [opened]="opened" [mode]="(screenWidth > 840) ? 'side' : 'over'" #drawer position="end"
-                class="p-3 color-white">
+  <mat-drawer-container
+    class="h-100 bg-transparent"
+    autosize
+    [hasBackdrop]="false"
+  >
+    <mat-drawer
+      mode="side"
+      [opened]="opened"
+      [mode]="screenWidth > 840 ? 'side' : 'over'"
+      #drawer
+      position="end"
+      class="p-3 color-white"
+    >
       <!-- NOTE: added padding-top because of scrolling issue -->
       <div class="d-flex flex-column side-panel">
         <!-- NOTE: This component is shared with Governance List - View Org/App/Roles -->
@@ -10,80 +20,168 @@
             <mat-icon>close</mat-icon>
           </button>
         </div>
-        <app-governance-details class="side-panel-content" *ngIf="data" [isEmbedded]="true" [origData]="data"
-                                [requestedClaims]="requestedClaims" #detailView>
+        <app-governance-details
+          class="side-panel-content"
+          *ngIf="data"
+          [isEmbedded]="true"
+          [origData]="data"
+          [requestedClaims]="requestedClaims"
+          #detailView
+        >
         </app-governance-details>
       </div>
     </mat-drawer>
     <mat-drawer-content>
       <div class="d-flex align-items-center justify-content-center w-100">
-        <form class="search-field search-field-results px-0 px-md-2 pb-0 py-md-2" [formGroup]="searchForm">
+        <form
+          class="search-field search-field-results px-0 px-md-2 pb-0 py-md-2"
+          [formGroup]="searchForm"
+        >
           <mat-form-field class="md-search" appearance="outline">
-            <input type="text" placeholder="Search" aria-label="Search" matInput formControlName="searchTxt"
-                   (keyup.enter)="search()" (input)="updateSearchTxtFieldValue($event)" autocomplete="off">
-            <div matSuffix class="d-flex" *ngIf="searchForm?.value?.searchTxt?.trim()?.length > 2">
+            <input
+              type="text"
+              placeholder="Search"
+              aria-label="Search"
+              matInput
+              formControlName="searchTxt"
+              (keyup.enter)="search()"
+              (input)="updateSearchTxtFieldValue($event)"
+              autocomplete="off"
+            />
+            <div
+              matSuffix
+              class="d-flex"
+              *ngIf="searchForm?.value?.searchTxt?.trim()?.length > 2"
+            >
               <ng-container *ngIf="!isAutolistLoading?.value">
-                <button mat-icon-button class="bg-transparent" (click)="search()">
+                <button
+                  mat-icon-button
+                  class="bg-transparent"
+                  (click)="search()"
+                >
                   <mat-icon>search</mat-icon>
                 </button>
-                <button mat-icon-button class="bg-transparent" (click)="clearSearchTxt()">
+                <button
+                  mat-icon-button
+                  class="bg-transparent"
+                  (click)="clearSearchTxt()"
+                >
                   <mat-icon>close</mat-icon>
                 </button>
               </ng-container>
-              <mat-spinner *ngIf="isAutolistLoading?.value" diameter="21" class="color-white"></mat-spinner>
+              <mat-spinner
+                *ngIf="isAutolistLoading?.value"
+                diameter="21"
+                class="color-white"
+              ></mat-spinner>
             </div>
           </mat-form-field>
-          <div class="d-flex flex-grow-1 justify-content-end align-items-center">
-            <mat-button-toggle-group multiple formControlName="filterType" class="btn-small mt-1 mb-4 float-right"
-                                     aria-label="Filter By">
+          <div
+            class="d-flex flex-grow-1 justify-content-end align-items-center"
+          >
+            <mat-button-toggle-group
+              multiple
+              formControlName="filterType"
+              class="btn-small mt-1 mb-4 float-right"
+              aria-label="Filter By"
+            >
               <mat-button-toggle [value]="FilterTypes.ORG">
-                <mat-icon svgIcon="organization-list-icon" class="mr-2"></mat-icon>
-                <span class="mr-1">Organization</span></mat-button-toggle>
+                <mat-icon
+                  svgIcon="organization-list-icon"
+                  class="mr-2"
+                ></mat-icon>
+                <span class="mr-1">Organization</span></mat-button-toggle
+              >
               <mat-button-toggle [value]="FilterTypes.APP">
-                <mat-icon svgIcon="application-list-icon" class="mr-2"></mat-icon>
-                <span class="mr-1">Application</span></mat-button-toggle>
+                <mat-icon
+                  svgIcon="application-list-icon"
+                  class="mr-2"
+                ></mat-icon>
+                <span class="mr-1">Application</span></mat-button-toggle
+              >
             </mat-button-toggle-group>
           </div>
         </form>
       </div>
-      <div class="container justify-content-center" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="flex-start">
+      <div
+        class="container justify-content-center"
+        fxLayout="row wrap"
+        fxLayoutGap="10px"
+        fxLayoutAlign="flex-start"
+      >
         <div class="my-3" *ngIf="!(filteredOptions | async)?.length">
           <div class="color-white">No record found.</div>
         </div>
-        <div fxFlex="0 1 calc(25% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
-             *ngFor="let item of (filteredOptions | async)">
-          <mat-card class="card-search-body p-0 mb-3 cursor-pointer" (click)="viewDetails(item, searchResultDrawer)">
+        <div
+          fxFlex="0 1 calc(25% - 32px)"
+          fxFlex.lt-md="0 1 calc(50% - 32px)"
+          fxFlex.lt-sm="100%"
+          *ngFor="let item of filteredOptions | async"
+        >
+          <mat-card
+            class="card-search-body p-0 mb-3 cursor-pointer"
+            (click)="viewDetails(item, searchResultDrawer)"
+          >
             <div class="img-container p-4">
               <!-- Placeholder Logo -->
               <ng-container *ngIf="!item?.definition?.logoUrl">
-                <div *ngIf="item?.definition?.orgName"
-                     style="background:url(../assets/img/no-organization-image.png)"
-                     class="img-wrapper px-2"></div>
-                <div *ngIf="item?.definition?.appName"
-                     style="background:url(../assets/img/no-application-image.png)"
-                     class="img-wrapper px-2"></div>
+                <div
+                  *ngIf="item?.definition?.orgName"
+                  style="
+                    background: url(../assets/img/no-organization-image.png);
+                  "
+                  class="img-wrapper px-2"
+                ></div>
+                <div
+                  *ngIf="item?.definition?.appName"
+                  style="
+                    background: url(../assets/img/no-application-image.png);
+                  "
+                  class="img-wrapper px-2"
+                ></div>
               </ng-container>
               <!-- Actual Logo -->
-              <div *ngIf="item?.definition?.logoUrl"
-                   [ngStyle]="{ 'background': 'url(' + item?.definition?.logoUrl + ')' }"
-                   class="img-wrapper px-2"></div>
+              <div
+                *ngIf="item?.definition?.logoUrl"
+                [ngStyle]="{
+                  background: 'url(' + item?.definition?.logoUrl + ')'
+                }"
+                class="img-wrapper px-2"
+              ></div>
             </div>
             <div class="p-3">
-              <h4>{{ item?.definition?.orgName ? item.definition?.orgName : item.definition?.appName }}</h4>
+              <h4>
+                {{
+                  item?.definition?.orgName
+                    ? item.definition?.orgName
+                    : item.definition?.appName
+                }}
+              </h4>
               <h5>{{ item?.namespace }}</h5>
-              <div class="d-block" style="height:60px; overflow-y: auto;">
+              <div class="d-block" style="height: 60px; overflow-y: auto">
                 <p *ngIf="item?.definition?.description?.trim().length">
-                  {{ item?.definition?.description }}</p>
+                  {{ item?.definition?.description }}
+                </p>
               </div>
-              <h5 *ngIf="item?.definition?.orgName" class="d-flex align-items-center mt-3">
-                <mat-icon class="mr-2" svgIcon="organization-list-icon"></mat-icon>
-                <span
-                    class="opacity-50">Organization</span>
+              <h5
+                *ngIf="item?.definition?.orgName"
+                class="d-flex align-items-center mt-3"
+              >
+                <mat-icon
+                  class="mr-2"
+                  svgIcon="organization-list-icon"
+                ></mat-icon>
+                <span class="opacity-50">Organization</span>
               </h5>
-              <h5 *ngIf="item?.definition?.appName" class="d-flex align-items-center mt-3">
-                <mat-icon class="mr-2" svgIcon="application-list-icon"></mat-icon>
-                <span
-                    class="opacity-50">Application</span>
+              <h5
+                *ngIf="item?.definition?.appName"
+                class="d-flex align-items-center mt-3"
+              >
+                <mat-icon
+                  class="mr-2"
+                  svgIcon="application-list-icon"
+                ></mat-icon>
+                <span class="opacity-50">Application</span>
               </h5>
             </div>
           </mat-card>

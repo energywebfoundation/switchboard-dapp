@@ -12,7 +12,7 @@ import { AssetDetailsActions, AssetDetailsSelectors } from '@state';
 @Component({
   selector: 'app-asset-enrolment-list',
   templateUrl: './asset-enrolment-list.component.html',
-  styleUrls: ['./asset-enrolment-list.component.scss']
+  styleUrls: ['./asset-enrolment-list.component.scss'],
 })
 export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   @ViewChild('enrolmentList') enrolmentList: EnrolmentListComponent;
@@ -26,16 +26,17 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
     all: 'none',
     pending: 'false',
     approved: 'true',
-    rejected: 'rejected'
+    rejected: 'rejected',
   };
   asset$ = this.store.select(AssetDetailsSelectors.getAssetDetails);
 
   private subscription$ = new Subject();
 
-  constructor(private activatedRoute: ActivatedRoute,
-              private urlService: UrlService,
-              private store: Store) {
-  }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private urlService: UrlService,
+    private store: Store
+  ) {}
 
   ngOnDestroy(): void {
     this.subscription$.next();
@@ -49,25 +50,29 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   private getAssetsWithClaims() {
     this.activatedRoute.params
       .pipe(
-        map(params => params.subject),
+        map((params) => params.subject),
         filter<string>(Boolean),
         take(1)
-      ).subscribe((assetId) => {
-      this.subject = assetId;
-      this.store.dispatch(AssetDetailsActions.getDetails({assetId}));
-    });
+      )
+      .subscribe((assetId) => {
+        this.subject = assetId;
+        this.store.dispatch(AssetDetailsActions.getDetails({ assetId }));
+      });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateEnrolmentList(e: any) {
     const value = e.value;
-    this.enrolmentList.getList(value === 'rejected',
-      value === 'true' ? true : value === 'false' ? false : undefined);
+    this.enrolmentList.getList(
+      value === 'rejected',
+      value === 'true' ? true : value === 'false' ? false : undefined
+    );
   }
 
   back() {
-    this.urlService.previous.pipe(
-      takeUntil(this.subscription$)
-    ).subscribe(url => this.navigateBackHandler(url));
+    this.urlService.previous
+      .pipe(takeUntil(this.subscription$))
+      .subscribe((url) => this.navigateBackHandler(url));
   }
 
   private navigateBackHandler(url: string): void {

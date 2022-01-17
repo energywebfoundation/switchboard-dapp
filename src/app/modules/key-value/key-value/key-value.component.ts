@@ -4,7 +4,7 @@ import { KeyValue } from '../key-value.interface';
 @Component({
   selector: 'app-key-value',
   templateUrl: './key-value.component.html',
-  styleUrls: ['./key-value.component.scss']
+  styleUrls: ['./key-value.component.scss'],
 })
 export class KeyValueComponent {
   @Output() updatedList = new EventEmitter();
@@ -38,5 +38,4 @@ export class KeyValueComponent {
     this.pairsList = [...list];
     this.updatedList.emit(this.pairsList);
   }
-
 }

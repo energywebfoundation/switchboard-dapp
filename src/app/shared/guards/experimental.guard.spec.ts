@@ -9,9 +9,7 @@ describe('ExperimentalGuard', () => {
   let store: MockStore;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        provideMockStore()
-      ]
+      providers: [provideMockStore()],
     });
     guard = TestBed.inject(ExperimentalGuard);
     store = TestBed.inject(MockStore);
@@ -23,7 +21,7 @@ describe('ExperimentalGuard', () => {
 
   it('should return true when experimental feature is enabled', (done) => {
     store.overrideSelector(SettingsSelectors.isExperimentalEnabled, true);
-    guard.canActivate().subscribe(v => {
+    guard.canActivate().subscribe((v) => {
       expect(v).toBeTrue();
       done();
     });
@@ -31,7 +29,7 @@ describe('ExperimentalGuard', () => {
 
   it('should return false when experimental feature is disabled', (done) => {
     store.overrideSelector(SettingsSelectors.isExperimentalEnabled, false);
-    guard.canActivate().subscribe(v => {
+    guard.canActivate().subscribe((v) => {
       expect(v).toBeFalse();
       done();
     });

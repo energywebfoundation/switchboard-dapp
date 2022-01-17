@@ -1,4 +1,7 @@
-<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
+<h4
+  mat-dialog-title
+  class="mb-0 d-flex justify-content-between align-items-center"
+>
   Remove {{ listType === ListType.ORG ? 'Organization' : 'Application' }}
   <button mat-icon-button (click)="closeDialog()">
     <mat-icon>close</mat-icon>
@@ -10,38 +13,61 @@
     <div class="row">
       <div class="w-100 card card-default d-flex shadow-none d-flex pt-3 mx-3">
         <div class="text-left my-3">
-          <div class="label opacity-50 mb-2">{{ listType === ListType.ORG ? 'Organization' : 'Application' }}
+          <div class="label opacity-50 mb-2">
+            {{ listType === ListType.ORG ? 'Organization' : 'Application' }}
             Namespace
           </div>
           <span class="color-white mb-0">{{ namespace }}</span>
         </div>
       </div>
-      <mat-vertical-stepper class="w-100" [linear]="true" #stepper *ngIf="steps?.length">
+      <mat-vertical-stepper
+        class="w-100"
+        [linear]="true"
+        #stepper
+        *ngIf="steps?.length"
+      >
         <ng-template matStepperIcon="edit">
           <mat-icon>check</mat-icon>
         </ng-template>
-        <mat-step [completed]="false" *ngFor="let step of steps; let i = index;">
+        <mat-step [completed]="false" *ngFor="let step of steps; let i = index">
           <ng-template matStepLabel>Delete Namespace</ng-template>
           <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3"
+          >
             <mat-icon>info</mat-icon>
             <span class="pb-2">{{ step.info }}</span>
           </div>
           <div
-              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3"
+          >
             <mat-icon class="px-2">notifications_none</mat-icon>
-            <span class="pl-3 pb-2">Please confirm this transaction in your connected Wallet.</span>
+            <span class="pl-3 pb-2"
+              >Please confirm this transaction in your connected Wallet.</span
+            >
           </div>
           <div class="d-flex justify-content-end mb-3">
-            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper.selectedIndex === i"
-                    (appRetryBtn)="retry()">Retry
+            <button
+              mat-stroked-button
+              class="btn btn-small mr-2"
+              (click)="closeDialog()"
+            >
+              Cancel
+            </button>
+            <button
+              mat-raised-button
+              class="btn btn-small btn-primary"
+              *ngIf="stepper.selectedIndex === i"
+              (appRetryBtn)="retry()"
+            >
+              Retry
             </button>
           </div>
         </mat-step>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Complete</ng-template>
-          <app-transactions-complete (completed)="closeDialog(true)"></app-transactions-complete>
+          <app-transactions-complete
+            (completed)="closeDialog(true)"
+          ></app-transactions-complete>
         </mat-step>
       </mat-vertical-stepper>
     </div>

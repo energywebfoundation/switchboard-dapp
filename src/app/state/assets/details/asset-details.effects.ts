@@ -8,26 +8,26 @@ import { of } from 'rxjs';
 
 @Injectable()
 export class AssetDetailsEffects {
-
   getAssetDetails$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AssetDetailsActions.getDetails),
-      switchMap(({assetId}) =>
+      switchMap(({ assetId }) =>
         this.iamService.getAssetById(assetId).pipe(
-          map(asset => AssetDetailsActions.getDetailsSuccess({asset})),
-          catchError(e => {
+          map((asset) => AssetDetailsActions.getDetailsSuccess({ asset })),
+          catchError((e) => {
             console.error(e);
-            return of(AssetDetailsActions.getDetailsFailure({error: e.message}));
+            return of(
+              AssetDetailsActions.getDetailsFailure({ error: e.message })
+            );
           })
         )
       )
     )
   );
 
-  constructor(private actions$: Actions,
-              private store: Store,
-              private iamService: IamService,
-  ) {
-  }
-
+  constructor(
+    private actions$: Actions,
+    private store: Store,
+    private iamService: IamService
+  ) {}
 }

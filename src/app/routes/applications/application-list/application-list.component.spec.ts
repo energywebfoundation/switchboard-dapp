@@ -20,28 +20,33 @@ describe('ApplicationListComponent', () => {
   let store: MockStore;
   const setup = () => {
     store.overrideSelector(ApplicationSelectors.getFilteredList, []);
-    store.overrideSelector(ApplicationSelectors.getFilters, {organization: '', application: '', role: ''});
+    store.overrideSelector(ApplicationSelectors.getFilters, {
+      organization: '',
+      application: '',
+      role: '',
+    });
     store.overrideSelector(ApplicationSelectors.isFilterVisible, false);
     fixture.detectChanges();
   };
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ApplicationListComponent],
-      imports: [ReactiveFormsModule],
-      providers: [
-        {provide: MatDialog, useValue: dialogSpy},
-        {provide: LoadingService, useValue: loadingServiceSpy},
-        {provide: SwitchboardToastrService, useValue: toastrSpy},
-        {provide: IamService, useValue: iamServiceSpy},
-        {provide: EnvService, useValue: {rootNamespace: 'iam.ewc'}},
-        provideMockStore()
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ApplicationListComponent],
+        imports: [ReactiveFormsModule],
+        providers: [
+          { provide: MatDialog, useValue: dialogSpy },
+          { provide: LoadingService, useValue: loadingServiceSpy },
+          { provide: SwitchboardToastrService, useValue: toastrSpy },
+          { provide: IamService, useValue: iamServiceSpy },
+          { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
+          provideMockStore(),
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
 
-    store = TestBed.inject(MockStore);
-  }));
+      store = TestBed.inject(MockStore);
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ApplicationListComponent);
@@ -57,36 +62,41 @@ describe('ApplicationListComponent', () => {
     it('should emit event with not nested organization and application ', () => {
       const eventSpy = spyOn(component.updateFilter, 'emit');
       setup();
-      component.viewRoles({namespace: `testapp.${NamespaceType.Application}.test.iam.ewc`});
+      component.viewRoles({
+        namespace: `testapp.${NamespaceType.Application}.test.iam.ewc`,
+      });
 
       expect(eventSpy).toHaveBeenCalledWith({
         listType: ListType.ROLE,
         organization: 'test',
-        application: 'testapp'
+        application: 'testapp',
       });
     });
 
     it('should emit event with nested organization and application', () => {
       const eventSpy = spyOn(component.updateFilter, 'emit');
       setup();
-      component.viewRoles({namespace: `testapp.${NamespaceType.Application}.suborg.test.iam.ewc`});
+      component.viewRoles({
+        namespace: `testapp.${NamespaceType.Application}.suborg.test.iam.ewc`,
+      });
 
       expect(eventSpy).toHaveBeenCalledWith({
         listType: ListType.ROLE,
         organization: 'suborg.test',
-        application: 'testapp'
+        application: 'testapp',
       });
     });
-
   });
 
   it('should dispatch updateFilters action when calling filter method', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     setup();
-    const filters = {organization: '123', application: 'test', role: ''};
+    const filters = { organization: '123', application: 'test', role: '' };
     component.filter(filters);
 
-    expect(dispatchSpy).toHaveBeenCalledWith(ApplicationActions.updateFilters({filters, namespace: 'iam.ewc'}));
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      ApplicationActions.updateFilters({ filters, namespace: 'iam.ewc' })
+    );
   });
 
   it('should refresh list after successful edition', () => {

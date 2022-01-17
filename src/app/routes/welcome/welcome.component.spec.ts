@@ -22,18 +22,14 @@ describe('WelcomeComponent', () => {
     mockActivatedRoute = new MockActivatedRoute();
     TestBed.configureTestingModule({
       declarations: [WelcomeComponent],
-      imports: [
-        MatButtonModule,
-        MatCardModule
-      ],
+      imports: [MatButtonModule, MatCardModule],
       providers: [
-        {provide: ActivatedRoute, useValue: mockActivatedRoute},
-        {provide: EnvService, useValue: {}},
-        provideMockStore()
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        { provide: EnvService, useValue: {} },
+        provideMockStore(),
       ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
     store = TestBed.inject(MockStore);
   });
@@ -52,27 +48,31 @@ describe('WelcomeComponent', () => {
   });
 
   it('should not set returnUrl when query param is different than returnUrl', () => {
-    mockActivatedRoute.testParams = {return: 'val'};
+    mockActivatedRoute.testParams = { return: 'val' };
     const dispatchSpy = spyOn(store, 'dispatch');
     fixture.detectChanges();
 
     component.login(ProviderType.MetaMask);
-    expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining({
-      provider: ProviderType.MetaMask,
-      returnUrl: undefined
-    }));
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        provider: ProviderType.MetaMask,
+        returnUrl: undefined,
+      })
+    );
   });
 
   it('should dispatch object containing returnUrl value.', () => {
-    mockActivatedRoute.testParams = {returnUrl: 'value'};
+    mockActivatedRoute.testParams = { returnUrl: 'value' };
     const dispatchSpy = spyOn(store, 'dispatch');
     fixture.detectChanges();
 
     component.login(ProviderType.MetaMask);
-    expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining({
-      provider: ProviderType.MetaMask,
-      returnUrl: 'value'
-    }));
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        provider: ProviderType.MetaMask,
+        returnUrl: 'value',
+      })
+    );
   });
 
   it('should dispatch login action when there is privateKey stored in localstorage', () => {
@@ -81,9 +81,13 @@ describe('WelcomeComponent', () => {
     });
     const dispatchSpy = spyOn(store, 'dispatch');
     fixture.detectChanges();
-    expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining(AuthActions.welcomeLogin({
-      provider: ProviderType.PrivateKey,
-      returnUrl: undefined
-    })));
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining(
+        AuthActions.welcomeLogin({
+          provider: ProviderType.PrivateKey,
+          returnUrl: undefined,
+        })
+      )
+    );
   });
 });

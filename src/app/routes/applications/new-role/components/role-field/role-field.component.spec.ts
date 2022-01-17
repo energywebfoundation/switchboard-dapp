@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 import { RoleFieldComponent } from './role-field.component';
@@ -7,27 +8,23 @@ import { RoleFieldComponent } from './role-field.component';
 describe('RoleFieldComponent', () => {
   let component: RoleFieldComponent;
   let fixture: ComponentFixture<RoleFieldComponent>;
-  let hostDebug: DebugElement;
-  let host: HTMLElement;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [RoleFieldComponent],
-      imports: [
-        MatButtonModule
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [RoleFieldComponent],
+        imports: [MatButtonModule],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleFieldComponent);
 
     component = fixture.componentInstance;
     component.fieldsList = [];
-    hostDebug = fixture.debugElement;
-    host = hostDebug.nativeElement;
+
     fixture.detectChanges();
   });
 
@@ -36,7 +33,7 @@ describe('RoleFieldComponent', () => {
   });
 
   it('should be run updateDataSource', () => {
-    const data = {value: 'testData'};
+    const data = { value: 'testData' };
     spyOn(component.updateData, 'emit');
 
     component.updateDataSource(data as any);
@@ -81,4 +78,3 @@ describe('RoleFieldComponent', () => {
     expect(component.showFieldsForm).toBe(true);
   });
 });
-

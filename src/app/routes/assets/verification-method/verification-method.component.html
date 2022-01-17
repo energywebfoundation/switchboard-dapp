@@ -1,4 +1,7 @@
-<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
+<h4
+  mat-dialog-title
+  class="mb-0 d-flex justify-content-between align-items-center"
+>
   <div class="d-flex flex-column">
     <span>Add Verification Method</span>
   </div>
@@ -9,29 +12,42 @@
 
 <div mat-dialog-content>
   <ng-container *ngIf="verificationsAmount > 0; else emptyList">
-    <div class="label color-white ml-1 pt-3 pl-2">{{verificationsAmount}} Verification Method(s)</div>
+    <div class="label color-white ml-1 pt-3 pl-2">
+      {{ verificationsAmount }} Verification Method(s)
+    </div>
     <div class="history-list pt-2">
-      <div class="history-list-item mb-3 p-2" *ngFor="let publicKey of dataSource">
-        <div class="d-flex flex-row justify-content-between align-items-center px-2">
+      <div
+        class="history-list-item mb-3 p-2"
+        *ngFor="let publicKey of dataSource"
+      >
+        <div
+          class="d-flex flex-row justify-content-between align-items-center px-2"
+        >
           <div class="d-flex align-items-center">
-            <mat-icon class="color-info list-icon pr-2" svgIcon="ethereum-bitcoin"></mat-icon>
+            <mat-icon
+              class="color-info list-icon pr-2"
+              svgIcon="ethereum-bitcoin"
+            ></mat-icon>
             <div class="flex-md-row">
               <div class="d-flex flex-row pl-2 align-items-baseline">
                 <h4 class="small font-weight-600 mb-1">TYPE</h4>
-                <span class="pl-2 f-14">{{ publicKey?.type | typeAlgorithm }}</span>
+                <span class="pl-2 f-14">{{
+                  publicKey?.type | typeAlgorithm
+                }}</span>
               </div>
               <div class="d-flex flex-row pl-2 align-items-baseline">
                 <h4 class="small font-weight-600 mb-1">Public Key</h4>
-                <span [matTooltip]="publicKey?.publicKeyHex"
-                      appCopyToClipboard
-                      [copyClipboard]="publicKey?.publicKeyHex"
-                      message="Public key"
-                      class="pl-2 f-14 cursor-pointer">
+                <span
+                  [matTooltip]="publicKey?.publicKeyHex"
+                  appCopyToClipboard
+                  [copyClipboard]="publicKey?.publicKeyHex"
+                  message="Public key"
+                  class="pl-2 f-14 cursor-pointer"
+                >
                   {{ publicKey?.publicKeyHex | didFormatMinifier }}
                 </span>
               </div>
             </div>
-
           </div>
           <!--                    <div class="d-flex align-items-center">-->
           <!--                        <button mat-icon-button aria-label="Delete" (click)="delete(verification)">-->
@@ -44,25 +60,49 @@
   </ng-container>
   <div class="history-list-item mb-3 p-2">
     <mat-form-field appearance="outline">
-      <input matInput [formControl]="publicKey" placeholder="Public Key"
-             data-qa-id="public-key"
-             autocomplete="off">
-      <mat-error *ngIf="publicKey.invalid">{{getPublicKeyErrorMsg()}} </mat-error>
+      <input
+        matInput
+        [formControl]="publicKey"
+        placeholder="Public Key"
+        data-qa-id="public-key"
+        autocomplete="off"
+      />
+      <mat-error *ngIf="publicKey.invalid"
+        >{{ getPublicKeyErrorMsg() }}
+      </mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline" floatPlaceholder="never">
-      <mat-select [formControl]="selectControl" placeholder="Select type" data-qa-id="select-type">
-        <mat-option [value]="option[1]" *ngFor="let option of selectOptions; let i = index"
-                    [attr.data-qa-id]="'select-option-'+i">
-          <mat-icon class="color-info pr-2" [svgIcon]="option[0].toLowerCase()"></mat-icon>
-          {{option[0]}}
+      <mat-select
+        [formControl]="selectControl"
+        placeholder="Select type"
+        data-qa-id="select-type"
+      >
+        <mat-option
+          [value]="option[1]"
+          *ngFor="let option of selectOptions; let i = index"
+          [attr.data-qa-id]="'select-option-' + i"
+        >
+          <mat-icon
+            class="color-info pr-2"
+            [svgIcon]="option[0].toLowerCase()"
+          ></mat-icon>
+          {{ option[0] }}
         </mat-option>
       </mat-select>
       <mat-error>Type is required.</mat-error>
     </mat-form-field>
     <div class="d-flex justify-content-end mb-2">
-      <button mat-stroked-button class="btn btn-small mr-2" (click)="close()">Close</button>
-      <button mat-raised-button [disabled]="isFormDisabled" class="btn btn-small btn-primary" data-qa-id="add-method"
-              (click)="add()">Add
+      <button mat-stroked-button class="btn btn-small mr-2" (click)="close()">
+        Close
+      </button>
+      <button
+        mat-raised-button
+        [disabled]="isFormDisabled"
+        class="btn btn-small btn-primary"
+        data-qa-id="add-method"
+        (click)="add()"
+      >
+        Add
       </button>
     </div>
   </div>
@@ -75,11 +115,13 @@
       </div>
     </div>
   </ng-template>
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                 [pageIndex]="pageIndex"
-                 [length]="verificationsAmount"
-                 [hidePageSize]="true"
-                 (page)="pageEvent($event)"
-                 showFirstLastButtons>
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20]"
+    [pageIndex]="pageIndex"
+    [length]="verificationsAmount"
+    [hidePageSize]="true"
+    (page)="pageEvent($event)"
+    showFirstLastButtons
+  >
   </mat-paginator>
 </div>

@@ -4,17 +4,9 @@ import { RolePreconditionListComponent } from './role-precondition-list.componen
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-
 @NgModule({
-  declarations: [
-    RolePreconditionListComponent
-  ],
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatTooltipModule
-  ],
-  exports: [RolePreconditionListComponent]
+  declarations: [RolePreconditionListComponent],
+  imports: [CommonModule, MatIconModule, MatTooltipModule],
+  exports: [RolePreconditionListComponent],
 })
-export class RolePreconditionListModule {
-}
+export class RolePreconditionListModule {}

@@ -11,23 +11,38 @@ export const routes = [
     component: LayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-      {path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)},
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+      },
       {
         path: 'governance',
-        loadChildren: () => import('./applications/applications.module').then(m => m.ApplicationsModule)
+        loadChildren: () =>
+          import('./applications/applications.module').then(
+            (m) => m.ApplicationsModule
+          ),
       },
       {
         path: 'assets',
-        loadChildren: () => import('./assets/assets.module').then(m => m.AssetsModule),
-        canActivate: [ExperimentalGuard]
+        loadChildren: () =>
+          import('./assets/assets.module').then((m) => m.AssetsModule),
+        canActivate: [ExperimentalGuard],
       },
-      {path: 'enrolment', loadChildren: () => import('./enrolment/enrolment.module').then(m => m.EnrolmentModule)},
+      {
+        path: 'enrolment',
+        loadChildren: () =>
+          import('./enrolment/enrolment.module').then((m) => m.EnrolmentModule),
+      },
       {
         path: 'search-result',
-        loadChildren: () => import('./search-result/search-result.module').then(m => m.SearchResultModule)
+        loadChildren: () =>
+          import('./search-result/search-result.module').then(
+            (m) => m.SearchResultModule
+          ),
       },
-    ]
+    ],
   },
   {
     path: 'enrol',
@@ -36,13 +51,16 @@ export const routes = [
   {
     path: 'welcome',
     children: [
-      {path: '', loadChildren: () => import('./welcome/welcome.module').then(m => m.WelcomeModule)}
-    ]
+      {
+        path: '',
+        loadChildren: () =>
+          import('./welcome/welcome.module').then((m) => m.WelcomeModule),
+      },
+    ],
   },
 
   // Not found
-  {path: '**', redirectTo: 'dashboard'}
-
+  { path: '**', redirectTo: 'dashboard' },
 ];
 
 @NgModule({
@@ -51,10 +69,9 @@ export const routes = [
       onSameUrlNavigation: 'reload',
       relativeLinkResolution: 'legacy',
       useHash: false,
-      preloadingStrategy: NoPreloading
+      preloadingStrategy: NoPreloading,
     }),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class RoutingModule {
-}
+export class RoutingModule {}

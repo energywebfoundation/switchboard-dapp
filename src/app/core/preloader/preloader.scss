@@ -1,10 +1,10 @@
 /* ========================================================================
    Component: preloader
  ========================================================================== */
-@import "../../shared/styles/bootstrap/_functions.scss";
-@import "../../shared/styles/bootstrap/_variables.scss";
-@import "../../shared/styles/bootstrap/_mixins";
-@import "../../shared/styles/app/variables";
+@import '../../shared/styles/bootstrap/_functions.scss';
+@import '../../shared/styles/bootstrap/_variables.scss';
+@import '../../shared/styles/bootstrap/_mixins';
+@import '../../shared/styles/app/variables';
 
 $preloader-wd: 200px;
 $preloader-hg: 65px;
@@ -23,7 +23,7 @@ $preloader-hg: 65px;
   // background-image: -o-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* Opera 11.10+ */
   // background-image: linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* W3C */
   z-index: 9999;
-  transition: opacity .65s;
+  transition: opacity 0.65s;
 }
 
 /*@noflip*/
@@ -62,7 +62,7 @@ $preloader-hg: 65px;
   display: block;
 
   .preloader-progress {
-    transition: transform .4s ease;
+    transition: transform 0.4s ease;
     transform: scale(0);
   }
 }

@@ -8,10 +8,7 @@ describe('IamService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        IamService,
-        {provide: EnvService, useValue: {}}
-      ]
+      providers: [IamService, { provide: EnvService, useValue: {} }],
     });
 
     service = TestBed.inject(IamService);

@@ -7,12 +7,13 @@ describe('RolePreconditionListComponent', () => {
   let component: RolePreconditionListComponent;
   let fixture: ComponentFixture<RolePreconditionListComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [RolePreconditionListComponent]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [RolePreconditionListComponent],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RolePreconditionListComponent);

@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 export const shouldEmit = (button, component, dialogSpy, prop) => {
   spyOn(component[prop], 'emit');
 
-  dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
+  dialogSpy.open.and.returnValue({ afterClosed: () => of(true) });
   button.click();
 
   expect(component[prop].emit).toHaveBeenCalled();
@@ -13,14 +13,15 @@ export const shouldEmit = (button, component, dialogSpy, prop) => {
 export const shouldNotEmit = (button, component, dialogSpy, prop) => {
   spyOn(component[prop], 'emit');
 
-  dialogSpy.open.and.returnValue({afterClosed: () => of(false)});
+  dialogSpy.open.and.returnValue({ afterClosed: () => of(false) });
   button.click();
 
   expect(component[prop].emit).not.toHaveBeenCalled();
 };
 
 export const actionSelectors = (hostDebug: DebugElement) => {
-  const getElement = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
+  const getElement = (id, postSelector = '') =>
+    hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
 
   return {
     viewBtn: getElement('view-roles')?.nativeElement,
@@ -32,6 +33,6 @@ export const actionSelectors = (hostDebug: DebugElement) => {
     viewAppsBtn: getElement('view-apps')?.nativeElement,
     copyStakingUrlBtn: getElement('copy-staking-url')?.nativeElement,
     createStakingPoolBtn: getElement('create-staking-pool')?.nativeElement,
-    getElement
+    getElement,
   };
 };

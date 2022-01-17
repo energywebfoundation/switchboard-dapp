@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
@@ -19,9 +28,11 @@ const MAX_TOOLTIP_SUBORG_ITEMS = 5;
 @Component({
   selector: 'app-organization-list',
   templateUrl: './organization-list.component.html',
-  styleUrls: ['./organization-list.component.scss']
+  styleUrls: ['./organization-list.component.scss'],
 })
-export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class OrganizationListComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
   @Output() updateFilter = new EventEmitter<any>();
 
   @ViewChild(MatSort) sort: MatSort;
@@ -29,18 +40,21 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
   dataSource = new MatTableDataSource([]);
   displayedColumns: string[] = ['logoUrl', 'name', 'namespace', 'actions'];
 
-  organizationHierarchy$ = this.store.select(OrganizationSelectors.getHierarchy).pipe(tap((hierarchy) => this.orgHierarchy = [...hierarchy]));
+  organizationHierarchy$ = this.store
+    .select(OrganizationSelectors.getHierarchy)
+    .pipe(tap((hierarchy) => (this.orgHierarchy = [...hierarchy])));
   orgHierarchy = [];
 
   private subscription$ = new Subject();
 
-  constructor(private loadingService: LoadingService,
-              private iamService: IamService,
-              private dialog: MatDialog,
-              private toastr: SwitchboardToastrService,
-              private store: Store,
-              private envService: EnvService) {
-  }
+  constructor(
+    private loadingService: LoadingService,
+    private iamService: IamService,
+    private dialog: MatDialog,
+    private toastr: SwitchboardToastrService,
+    private store: Store,
+    private envService: EnvService
+  ) {}
 
   ngOnInit() {
     this.setList();
@@ -65,26 +79,31 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
 
   viewDetails(data: any) {
     this.dialog.open(GovernanceViewComponent, {
-      width: '600px', data: {
+      width: '600px',
+      data: {
         type: ListType.ORG,
-        definition: data
+        definition: data,
       },
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
   }
 
   viewApps(data: any) {
     this.updateFilter.emit({
       listType: ListType.APP,
-      organization: data.namespace.split(`.${this.envService.rootNamespace}`)[0]
+      organization: data.namespace.split(
+        `.${this.envService.rootNamespace}`
+      )[0],
     });
   }
 
   viewRoles(data: any) {
     this.updateFilter.emit({
       listType: ListType.ROLE,
-      organization: data.namespace.split(`.${this.envService.rootNamespace}`)[0],
+      organization: data.namespace.split(
+        `.${this.envService.rootNamespace}`
+      )[0],
     });
   }
 
@@ -102,31 +121,36 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
 
     if (steps) {
       // Launch Remove Org / App Dialog
-      const isRemoved = this.dialog.open(RemoveOrgAppComponent, {
-        width: '600px', data: {
-          namespace: roleDefinition.namespace,
-          listType: ListType.ORG,
-          steps
-        },
-        maxWidth: '100%',
-        disableClose: true
-      }).afterClosed().toPromise();
+      const isRemoved = this.dialog
+        .open(RemoveOrgAppComponent, {
+          width: '600px',
+          data: {
+            namespace: roleDefinition.namespace,
+            listType: ListType.ORG,
+            steps,
+          },
+          maxWidth: '100%',
+          disableClose: true,
+        })
+        .afterClosed()
+        .toPromise();
 
       // Refresh the list after successful removal
       if (await isRemoved) {
-        this.store.dispatch(OrganizationActions.updateSelectedOrgAfterRemoval());
+        this.store.dispatch(
+          OrganizationActions.updateSelectedOrgAfterRemoval()
+        );
       }
-
     }
   }
 
   newSubOrg(parentOrg: any) {
-    this.store.dispatch(OrganizationActions.createSub({org: parentOrg}));
+    this.store.dispatch(OrganizationActions.createSub({ org: parentOrg }));
   }
 
   viewSubOrgs(element: any) {
-    if (element && ((element.subOrgs && element.subOrgs.length))) {
-      this.store.dispatch(OrganizationActions.setHistory({element}));
+    if (element && element.subOrgs && element.subOrgs.length) {
+      this.store.dispatch(OrganizationActions.setHistory({ element }));
     }
   }
 
@@ -137,7 +161,7 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
 
   goToInHierarchy(e: any, element) {
     e.preventDefault();
-    this.store.dispatch(OrganizationActions.setHistory({element}));
+    this.store.dispatch(OrganizationActions.setHistory({ element }));
   }
 
   getTooltip(element: any) {
@@ -151,12 +175,17 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
         retVal = 'Sub-Organization \n';
       }
 
-      while (count < MAX_TOOLTIP_SUBORG_ITEMS && count < element.subOrgs.length) {
+      while (
+        count < MAX_TOOLTIP_SUBORG_ITEMS &&
+        count < element.subOrgs.length
+      ) {
         retVal += `\n${element.subOrgs[count++].namespace}`;
       }
 
       if (element.subOrgs.length > MAX_TOOLTIP_SUBORG_ITEMS) {
-        retVal += `\n\n ... +${element.subOrgs.length - MAX_TOOLTIP_SUBORG_ITEMS} More`;
+        retVal += `\n\n ... +${
+          element.subOrgs.length - MAX_TOOLTIP_SUBORG_ITEMS
+        } More`;
       }
     }
 
@@ -164,11 +193,12 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   private setList(): void {
-    this.store.select(OrganizationSelectors.getList).pipe(
-      takeUntil(this.subscription$)
-    ).subscribe((list) => {
-      this.dataSource.data = list;
-    });
+    this.store
+      .select(OrganizationSelectors.getList)
+      .pipe(takeUntil(this.subscription$))
+      .subscribe((list) => {
+        this.dataSource.data = list;
+      });
   }
 
   private setupDatatable(): void {
@@ -192,12 +222,14 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
       returnSteps
     );
     try {
-      return returnSteps ?
-        await call :
-        [{
-          info: 'Confirm removal in your safe wallet',
-          next: async () => await call
-        }];
+      return returnSteps
+        ? await call
+        : [
+            {
+              info: 'Confirm removal in your safe wallet',
+              next: async () => await call,
+            },
+          ];
     } catch (e) {
       console.error(e);
       this.toastr.error(e, 'Delete Organization');

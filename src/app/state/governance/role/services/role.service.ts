@@ -4,12 +4,10 @@ import { IamService } from '../../../../shared/services/iam.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RoleService {
-
-  constructor(private iamService: IamService) {
-  }
+  constructor(private iamService: IamService) {}
 
   getRoleList(): Observable<IRole[]> {
     return this.iamService.wrapWithLoadingService<IRole[]>(

@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NewOrganizationComponent, ViewType } from '../../new-organization/new-organization.component';
+import {
+  NewOrganizationComponent,
+  ViewType,
+} from '../../new-organization/new-organization.component';
 import { NewApplicationComponent } from '../../new-application/new-application.component';
 import { NewRoleComponent } from '../../new-role/new-role.component';
 import { ListType } from '../../../../shared/constants/shared-constants';
@@ -12,10 +15,19 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-organization-actions',
   templateUrl: './organization-actions.component.html',
-  styleUrls: ['./organization-actions.component.scss']
+  styleUrls: ['./organization-actions.component.scss'],
 })
-export class OrganizationActionsComponent extends ActionBaseAbstract implements OnInit {
-  @Input() organization: { isProvider: boolean, namespace: string; owner: string; containsApps: boolean; containsRoles: boolean };
+export class OrganizationActionsComponent
+  extends ActionBaseAbstract
+  implements OnInit
+{
+  @Input() organization: {
+    isProvider: boolean;
+    namespace: string;
+    owner: string;
+    containsApps: boolean;
+    containsRoles: boolean;
+  };
   @Output() viewRoles = new EventEmitter();
   @Output() viewApps = new EventEmitter();
   @Output() organizationCreated = new EventEmitter();
@@ -53,16 +65,15 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
       data: {
         viewType: ViewType.NEW,
         organizationNamespace: this.organization.namespace,
-        owner: this.organization.owner
+        owner: this.organization.owner,
       },
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
 
-    dialogRef.afterClosed()
-      .pipe(
-        filter(Boolean)
-      )
+    dialogRef
+      .afterClosed()
+      .pipe(filter(Boolean))
       .subscribe(() => this.appCreated.emit(this.organization));
   }
 
@@ -73,32 +84,32 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
         viewType: ViewType.NEW,
         namespace: this.organization.namespace,
         listType: ListType.ORG,
-        owner: this.organization.owner
+        owner: this.organization.owner,
       },
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
 
-    dialogRef.afterClosed()
-      .pipe(
-        filter(Boolean)
-      )
+    dialogRef
+      .afterClosed()
+      .pipe(filter(Boolean))
       .subscribe(() => this.roleCreated.emit(this.organization));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   openStakingPool(element: any) {
     this.dialog.open(NewStakingPoolComponent, {
       data: element,
       width: '600px',
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
   }
 
   edit() {
     this.showEditComponent(NewOrganizationComponent, {
       viewType: ViewType.UPDATE,
-      origData: this.organization
+      origData: this.organization,
     });
   }
 
@@ -108,23 +119,22 @@ export class OrganizationActionsComponent extends ActionBaseAbstract implements 
       data: {
         namespace: this.organization.namespace,
         type: ListType.ORG,
-        owner: this.organization.owner
+        owner: this.organization.owner,
       },
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
 
-    dialogRef.afterClosed()
-      .pipe(
-        filter(Boolean)
-      )
+    dialogRef
+      .afterClosed()
+      .pipe(filter(Boolean))
       .subscribe(() => this.transferred.emit(this.organization));
   }
 
   delete() {
     this.deleteDialog({
       header: 'Remove Organization',
-      message: 'Do you wish to continue?'
+      message: 'Do you wish to continue?',
     });
   }
 

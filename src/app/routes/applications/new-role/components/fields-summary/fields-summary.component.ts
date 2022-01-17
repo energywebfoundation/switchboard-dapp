@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'app-fields-summary',
   templateUrl: './fields-summary.component.html',
   styleUrls: ['./fields-summary.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FieldsSummaryComponent {
   @Input() element;

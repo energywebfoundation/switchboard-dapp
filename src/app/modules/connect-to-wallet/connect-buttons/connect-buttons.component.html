@@ -1,30 +1,64 @@
 <div class="my-3 pb-1" *ngIf="showEkcOption">
-  <button mat-raised-button (click)="connectToEKC()" class="btn btn-connect btn-connect-azure w-100"
-          data-qa-id="azure" type="submit">
-    <img width="48px" height="40px" class="float-left pt-1 pl-1" src="assets/img/icons/azure-logo-icon.svg"/>
+  <button
+    mat-raised-button
+    (click)="connectToEKC()"
+    class="btn btn-connect btn-connect-azure w-100"
+    data-qa-id="azure"
+    type="submit"
+  >
+    <img
+      width="48px"
+      height="40px"
+      class="float-left pt-1 pl-1"
+      src="assets/img/icons/azure-logo-icon.svg"
+    />
     USE AZURE
   </button>
 </div>
 <div class="my-3">
-  <button mat-raised-button (click)="connectToWalletConnect()"
-          data-qa-id="mobile-wallet"
-          class="btn btn-connect btn-connect-wallet w-100" type="submit">
-    <img width="48px" height="40px" class="float-left pt-1 pl-1"
-         src="assets/img/icons/wallet-connect-icon.svg"/> USE MOBILE WALLET
+  <button
+    mat-raised-button
+    (click)="connectToWalletConnect()"
+    data-qa-id="mobile-wallet"
+    class="btn btn-connect btn-connect-wallet w-100"
+    type="submit"
+  >
+    <img
+      width="48px"
+      height="40px"
+      class="float-left pt-1 pl-1"
+      src="assets/img/icons/wallet-connect-icon.svg"
+    />
+    USE MOBILE WALLET
   </button>
 </div>
 <div class="mt-3 mb-3" *ngIf="metamaskPresent">
-  <button mat-raised-button (click)="connectToMetamask()"
-          data-qa-id="metamask"
-          [disabled]="metamaskDisabled"
-          class="btn btn-connect btn-connect-metamask w-100" type="submit">
-    <img width="48px" height="40px" class="float-left pt-1 ml-1"
-         src="assets/img/icons/metamask-logo.svg"/>
+  <button
+    mat-raised-button
+    (click)="connectToMetamask()"
+    data-qa-id="metamask"
+    [disabled]="metamaskDisabled"
+    class="btn btn-connect btn-connect-metamask w-100"
+    type="submit"
+  >
+    <img
+      width="48px"
+      height="40px"
+      class="float-left pt-1 ml-1"
+      src="assets/img/icons/metamask-logo.svg"
+    />
     USE METAMASK
   </button>
-  <div class="d-flex flex-column justify-content-center mt-1 text-center" *ngIf="metamaskDisabled"
-       data-qa-id="wrong-network">
-    <div class="opacity-50 pr-1">You are not connected to {{fullNetworkName}}.</div>
-    <a class="switch-network" (click)="importMetamaskConf()" target="_blank">Import configurations</a>
+  <div
+    class="d-flex flex-column justify-content-center mt-1 text-center"
+    *ngIf="metamaskDisabled"
+    data-qa-id="wrong-network"
+  >
+    <div class="opacity-50 pr-1">
+      You are not connected to {{ fullNetworkName }}.
+    </div>
+    <a class="switch-network" (click)="importMetamaskConf()" target="_blank"
+      >Import configurations</a
+    >
   </div>
 </div>

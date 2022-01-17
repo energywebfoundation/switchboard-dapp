@@ -8,9 +8,8 @@ xdescribe('TransferOwnershipComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TransferOwnershipComponent]
-    })
-      .compileComponents();
+      declarations: [TransferOwnershipComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

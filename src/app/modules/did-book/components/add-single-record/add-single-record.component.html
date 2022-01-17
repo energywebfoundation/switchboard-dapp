@@ -1,4 +1,7 @@
-<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
+<h4
+  mat-dialog-title
+  class="mb-0 d-flex justify-content-between align-items-center"
+>
   Add to DID Contact List
   <button mat-icon-button mat-dialog-close>
     <mat-icon>close</mat-icon>
@@ -7,6 +10,10 @@
 
 <div mat-dialog-content>
   <div class="mb-2 mt-4 mx-4 mx-lg-4 pb-3">
-    <app-did-book-form [did]="data.did" (cancel)="cancelHandler()" (add)="addHandler($event)"></app-did-book-form>
+    <app-did-book-form
+      [did]="data.did"
+      (cancel)="cancelHandler()"
+      (add)="addHandler($event)"
+    ></app-did-book-form>
   </div>
 </div>

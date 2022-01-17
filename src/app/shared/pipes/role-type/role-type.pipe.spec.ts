@@ -2,7 +2,6 @@ import { RoleTypePipe } from './role-type.pipe';
 import { RoleTypeEnum } from '../../../routes/applications/new-role/new-role.component';
 
 describe('RoleTypePipe', () => {
-
   let pipe: RoleTypePipe;
 
   beforeEach(() => {
@@ -26,6 +25,8 @@ describe('RoleTypePipe', () => {
   });
 
   it('should check if return Custom', () => {
-    expect(pipe.transform('Something' as RoleTypeEnum)).toEqual('Unsupported Role Type');
+    expect(pipe.transform('Something' as RoleTypeEnum)).toEqual(
+      'Unsupported Role Type'
+    );
   });
 });

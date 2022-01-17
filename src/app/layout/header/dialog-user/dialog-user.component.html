@@ -1,4 +1,7 @@
-<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
+<h4
+  mat-dialog-title
+  class="mb-0 d-flex justify-content-between align-items-center"
+>
   Update Identity
   <button mat-icon-button [mat-dialog-close]="true">
     <mat-icon>close</mat-icon>
@@ -11,37 +14,77 @@
       <div class="row">
         <div class="col-lg-12">
           <mat-label class="ml-3 pl-1">Name</mat-label>
-          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-            <input matInput formControlName="name" data-qa-id="dialog-input-name" placeholder="Name" maxlength="256"
-                   required autocomplete="off">
-            <mat-error *ngIf="profileForm.get('name').hasError('required')">Name is
-              <strong>required</strong></mat-error>
+          <mat-form-field
+            class="mt-2"
+            appearance="outline"
+            floatPlaceholder="never"
+          >
+            <input
+              matInput
+              formControlName="name"
+              data-qa-id="dialog-input-name"
+              placeholder="Name"
+              maxlength="256"
+              required
+              autocomplete="off"
+            />
+            <mat-error *ngIf="profileForm.get('name').hasError('required')"
+              >Name is <strong>required</strong></mat-error
+            >
           </mat-form-field>
         </div>
         <div class="col-lg-12">
           <mat-label class="ml-3 pl-1">Date of Birth</mat-label>
-          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-            <input [matDatepicker]="picker" data-qa-id="dialog-input-birthdate" [max]="maxDate"
-                   formControlName="birthdate" matInput required placeholder="Date of Birth"
-                   autocomplete="off">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-form-field
+            class="mt-2"
+            appearance="outline"
+            floatPlaceholder="never"
+          >
+            <input
+              [matDatepicker]="picker"
+              data-qa-id="dialog-input-birthdate"
+              [max]="maxDate"
+              formControlName="birthdate"
+              matInput
+              required
+              placeholder="Date of Birth"
+              autocomplete="off"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="profileForm.get('birthdate').hasError('required')">Date of birth is
+            <mat-error *ngIf="profileForm.get('birthdate').hasError('required')"
+              >Date of birth is
               <strong>required</strong>
             </mat-error>
-            <mat-error *ngIf="profileForm.get('birthdate')?.hasError('matDatepickerMax')">
-              Maximum allowed date is <strong>{{ maxDate | date}}</strong>
+            <mat-error
+              *ngIf="profileForm.get('birthdate')?.hasError('matDatepickerMax')"
+            >
+              Maximum allowed date is <strong>{{ maxDate | date }}</strong>
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-12">
           <mat-label class="ml-3 pl-1">Address</mat-label>
-          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                        <textarea formControlName="address" data-qa-id="dialog-input-address" matInput required
-                                  placeholder="Address"
-                                  maxlength="500" autocomplete="off"></textarea>
-            <mat-error *ngIf="profileForm.get('address').hasError('required')">Address is
-              <strong>required</strong></mat-error>
+          <mat-form-field
+            class="mt-2"
+            appearance="outline"
+            floatPlaceholder="never"
+          >
+            <textarea
+              formControlName="address"
+              data-qa-id="dialog-input-address"
+              matInput
+              required
+              placeholder="Address"
+              maxlength="500"
+              autocomplete="off"
+            ></textarea>
+            <mat-error *ngIf="profileForm.get('address').hasError('required')"
+              >Address is <strong>required</strong></mat-error
+            >
           </mat-form-field>
         </div>
       </div>
@@ -49,8 +92,14 @@
   </div>
 </div>
 <div mat-dialog-actions class="d-flex justify-content-center">
-  <button mat-raised-button class="btn btn-primary w-100" type="submit"
-          data-qa-id="submit"
-          [disabled]="disableSubmit()" (click)="save()">Update
+  <button
+    mat-raised-button
+    class="btn btn-primary w-100"
+    type="submit"
+    data-qa-id="submit"
+    [disabled]="disableSubmit()"
+    (click)="save()"
+  >
+    Update
   </button>
 </div>

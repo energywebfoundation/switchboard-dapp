@@ -13,18 +13,19 @@ import { ProviderType, PUBLIC_KEY, IS_ETH_SIGNER } from 'iam-client-lib';
 
 describe('LoginService', () => {
   let service: LoginService;
-  const iamListenerServiceSpy = jasmine.createSpyObj('IamListenerService', ['setListeners']);
+  const iamListenerServiceSpy = jasmine.createSpyObj('IamListenerService', [
+    'setListeners',
+  ]);
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       providers: [
         provideMockStore(),
-        {provide: ToastrService, useValue: toastrSpy},
-        {provide: LoadingService, useValue: loadingServiceSpy},
-        {provide: IamService, useValue: iamServiceSpy},
-        {provide: IamListenerService, useValue: iamListenerServiceSpy}
-      ]
+        { provide: ToastrService, useValue: toastrSpy },
+        { provide: LoadingService, useValue: loadingServiceSpy },
+        { provide: IamService, useValue: iamServiceSpy },
+        { provide: IamListenerService, useValue: iamListenerServiceSpy },
+      ],
     });
     service = TestBed.inject(LoginService);
   });
@@ -52,31 +53,55 @@ describe('LoginService', () => {
     const getSpy = jasmine.createSpy().and.returnValue(ProviderType.MetaMask);
     Object.defineProperty(IamService, 'providerType', {get: getSpy});
 
-    from(service.login()).subscribe(({success}) => {
-      expect(success).toBe(true);
-    });
-  }));
+      from(service.login()).subscribe(({ success }) => {
+        expect(success).toBe(true);
+      });
+    })
+  );
 
-  it('should return false when did is null', waitForAsync(() => {
-    iamServiceSpy.initializeConnection.and.returnValue(of({connected: true, userClosedModal: false}));
-    service.login().pipe(take(1)).subscribe(({success}) => {
-      expect(success).toBe(false);
-    });
-  }));
+  it(
+    'should return false when did is null',
+    waitForAsync(() => {
+      iamServiceSpy.initializeConnection.and.returnValue(
+        of({ connected: true, userClosedModal: false })
+      );
+      service
+        .login()
+        .pipe(take(1))
+        .subscribe(({ success }) => {
+          expect(success).toBe(false);
+        });
+    })
+  );
 
-  it('should display random error with toastr', waitForAsync(() => {
-    iamServiceSpy.initializeConnection.and.returnValue(throwError({message: 'Sample Error'}));
-    service.login().pipe(take(1)).subscribe(({success}) => {
-      expect(success).toBe(false);
-      expect(toastrSpy.error).toHaveBeenCalledWith('Sample Error');
-    });
-  }));
+  it(
+    'should display random error with toastr',
+    waitForAsync(() => {
+      iamServiceSpy.initializeConnection.and.returnValue(
+        throwError({ message: 'Sample Error' })
+      );
+      service
+        .login()
+        .pipe(take(1))
+        .subscribe(({ success }) => {
+          expect(success).toBe(false);
+          expect(toastrSpy.error).toHaveBeenCalledWith('Sample Error');
+        });
+    })
+  );
 
   it('should display error with toastr about pending notifications', () => {
-    iamServiceSpy.initializeConnection.and.returnValue(throwError({ message: 'Request of type \'wallet_requestPermissions\'' }));
-    service.login().pipe(take(1)).subscribe(({ success }) => {
-      expect(success).toBe(false);
-      expect(toastrSpy.error).toHaveBeenCalledWith('Please check if you do not have pending notifications in your wallet');
-    });
+    iamServiceSpy.initializeConnection.and.returnValue(
+      throwError({ message: "Request of type 'wallet_requestPermissions'" })
+    );
+    service
+      .login()
+      .pipe(take(1))
+      .subscribe(({ success }) => {
+        expect(success).toBe(false);
+        expect(toastrSpy.error).toHaveBeenCalledWith(
+          'Please check if you do not have pending notifications in your wallet'
+        );
+      });
   });
 });

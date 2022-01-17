@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { NewRoleComponent } from '../../new-role/new-role.component';
 import { ViewType } from '../../new-organization/new-organization.component';
 import { ListType } from '../../../../shared/constants/shared-constants';
@@ -11,7 +17,7 @@ import { filter } from 'rxjs/operators';
   selector: 'app-application-actions',
   templateUrl: './application-actions.component.html',
   styleUrls: ['./application-actions.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApplicationActionsComponent extends ActionBaseAbstract {
   @Input() application;
@@ -35,32 +41,31 @@ export class ApplicationActionsComponent extends ActionBaseAbstract {
         viewType: ViewType.NEW,
         namespace: this.application.namespace,
         listType: ListType.APP,
-        owner: this.application.owner
+        owner: this.application.owner,
       },
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
 
-    dialogRef.afterClosed()
-      .pipe(
-        filter(Boolean)
-      ).subscribe(() => {
-          this.roleCreated.emit();
+    dialogRef
+      .afterClosed()
+      .pipe(filter(Boolean))
+      .subscribe(() => {
+        this.roleCreated.emit();
       });
   }
 
   edit() {
     this.showEditComponent(NewApplicationComponent, {
       viewType: ViewType.UPDATE,
-      origData: this.application
+      origData: this.application,
     });
   }
 
   delete() {
     this.deleteDialog({
       header: 'Remove Application',
-      message: 'Do you wish to continue?'
+      message: 'Do you wish to continue?',
     });
   }
-
 }

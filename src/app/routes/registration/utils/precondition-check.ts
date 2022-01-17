@@ -2,7 +2,7 @@ import { Claim, PreconditionType } from 'iam-client-lib';
 import { RolePreconditionType } from '../models/role-precondition-type.enum';
 
 export interface EnrolmentPrecondition {
-  type: string,
+  type: string;
   conditions: string[];
 }
 
@@ -11,7 +11,10 @@ export interface PreconditionCheck {
   status: RolePreconditionType;
 }
 
-export const preconditionCheck = (preconditionList: EnrolmentPrecondition[], roleClaimList: Claim[]): [boolean, PreconditionCheck[]] => {
+export const preconditionCheck = (
+  preconditionList: EnrolmentPrecondition[],
+  roleClaimList: Claim[]
+): [boolean, PreconditionCheck[]] => {
   let retVal = true;
   let rolePreconditionList: PreconditionCheck[];
   if (preconditionList && preconditionList.length) {
@@ -21,13 +24,17 @@ export const preconditionCheck = (preconditionList: EnrolmentPrecondition[], rol
           // Check for Role Conditions
           rolePreconditionList = [];
 
+          // eslint-disable-next-line no-case-declarations
           const conditions = precondition.conditions;
           if (conditions) {
             for (const roleCondition of conditions) {
-              const status = getRoleConditionStatus(roleCondition, roleClaimList);
+              const status = getRoleConditionStatus(
+                roleCondition,
+                roleClaimList
+              );
               rolePreconditionList.push({
                 namespace: roleCondition,
-                status
+                status,
               });
 
               if (status !== RolePreconditionType.SYNCED) {

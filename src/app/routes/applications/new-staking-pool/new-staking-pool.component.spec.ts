@@ -19,13 +19,15 @@ import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import { launchStakingPool } from '../../../state/stake/stake.actions';
 import { NgxEditorModule } from 'ngx-editor';
 
-const {parseEther} = utils;
+const { parseEther } = utils;
 
 describe('NewStakingPoolComponent', () => {
   let component: NewStakingPoolComponent;
   let fixture: ComponentFixture<NewStakingPoolComponent>;
   let hostDebug: DebugElement;
-  const stakingPoolServiceStub = jasmine.createSpyObj('StakingPoolService', ['getListOfOrganizationRoles']);
+  const stakingPoolServiceStub = jasmine.createSpyObj('StakingPoolService', [
+    'getListOfOrganizationRoles',
+  ]);
   const namespace = 'test';
   let store: MockStore<UserClaimState>;
 
@@ -34,36 +36,39 @@ describe('NewStakingPoolComponent', () => {
     el.dispatchEvent(new Event('blur'));
   };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [NewStakingPoolComponent],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        NoopAnimationsModule,
-        MatInputModule,
-        MatRadioModule,
-        MatSelectModule,
-        NgxEditorModule
-      ],
-      providers: [
-        {provide: MAT_DIALOG_DATA, useValue: {namespace}},
-        {provide: StakingPoolService, useValue: stakingPoolServiceStub},
-        provideMockStore()
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [NewStakingPoolComponent],
+        imports: [
+          ReactiveFormsModule,
+          FormsModule,
+          MatDatepickerModule,
+          MatNativeDateModule,
+          NoopAnimationsModule,
+          MatInputModule,
+          MatRadioModule,
+          MatSelectModule,
+          NgxEditorModule,
+        ],
+        providers: [
+          { provide: MAT_DIALOG_DATA, useValue: { namespace } },
+          { provide: StakingPoolService, useValue: stakingPoolServiceStub },
+          provideMockStore(),
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+      store = TestBed.inject(MockStore);
     })
-      .compileComponents();
-    store = TestBed.inject(MockStore);
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NewStakingPoolComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
-    stakingPoolServiceStub.getListOfOrganizationRoles.and.returnValue(of([{name: 'test'}]));
+    stakingPoolServiceStub.getListOfOrganizationRoles.and.returnValue(
+      of([{ name: 'test' }])
+    );
     fixture.detectChanges();
   });
 
@@ -72,14 +77,14 @@ describe('NewStakingPoolComponent', () => {
   });
 
   it('should check if button is disabled when initializing', () => {
-    const {submit} = selectors(hostDebug);
+    const { submit } = selectors(hostDebug);
 
     expect(component.isFormInvalid).toBeTruthy();
     expect(submit.disabled).toBeTruthy();
   });
 
   it('should dispatch an action to launch staking pool when clicking on submit when form is valid', () => {
-    const {revenue, start, end, principal, getElement, patronRoles, submit} = selectors(hostDebug);
+    const { revenue, start, end, principal, submit } = selectors(hostDebug);
     const revenueAmount = 5;
     const dispatchSpy = spyOn(store, 'dispatch');
     revenue.value = revenueAmount;
@@ -107,14 +112,16 @@ describe('NewStakingPoolComponent', () => {
           patronRewardPortion: revenueAmount,
           patronRoles: [],
           principal: parseEther('105'),
-          terms: null
-        }
-      }));
+          terms: null,
+        },
+      })
+    );
   });
 });
 
 const selectors = (hostDebug: DebugElement) => {
-  const getElement = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
+  const getElement = (id, postSelector = '') =>
+    hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
 
   return {
     submit: getElement('submit').nativeElement,
@@ -123,10 +130,6 @@ const selectors = (hostDebug: DebugElement) => {
     end: getElement('end').nativeElement,
     patronRoles: getElement('patronRoles').nativeElement,
     principal: getElement('principal').nativeElement,
-    getElement
+    getElement,
   };
-};
-const todayDate = () => {
-  const date = new Date(Date.now());
-  return `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
 };

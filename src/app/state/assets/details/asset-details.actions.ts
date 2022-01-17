@@ -14,4 +14,3 @@ export const getDetailsFailure = createAction(
   '[ASSET DETAILS] Get Asset Details Failure',
   props<{ error: string }>()
 );
-

@@ -1,7 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NamespaceType } from 'iam-client-lib';
 import { ENSPrefixes } from 'src/app/routes/applications/new-role/new-role.component';
 
-export const filterBy = (data: any[], organization: string, application: string, role: string, namespace: string): any[] => {
+export const filterBy = (
+  data: any[],
+  organization: string,
+  application: string,
+  role: string,
+  namespace: string
+): any[] => {
   if (organization) {
     data = filterByOrg(data, organization, namespace);
   }
@@ -24,20 +31,24 @@ const filterByOrg = (data, organization, namespace) => {
     arr = arr[arr.length - 1].split(NamespaceType.Application);
 
     const org = arr[arr.length - 1];
-    return (org.toUpperCase().indexOf(organization.toUpperCase()) >= 0);
+    return org.toUpperCase().indexOf(organization.toUpperCase()) >= 0;
   });
 };
 
 const filterByApp = (data, application) => {
-  return data.filter((item: any) => filterByType(item, application, ENSPrefixes.Apps));
+  return data.filter((item: any) =>
+    filterByType(item, application, ENSPrefixes.Apps)
+  );
 };
 
 const filterByRole = (data, role) => {
-  return data.filter((item: any) => filterByType(item, role, ENSPrefixes.Roles));
+  return data.filter((item: any) =>
+    filterByType(item, role, ENSPrefixes.Roles)
+  );
 };
 
 const filterByType = (item, filterBy, type: ENSPrefixes) => {
   let arr = item.namespace.split(`.${type}.`);
   arr = arr[0].split('.');
-  return (arr[arr.length - 1].toUpperCase().indexOf(filterBy.toUpperCase()) >= 0);
+  return arr[arr.length - 1].toUpperCase().indexOf(filterBy.toUpperCase()) >= 0;
 };

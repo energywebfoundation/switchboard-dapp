@@ -9,35 +9,23 @@ import { DidBookHttpService } from './services/did-book-http.service';
 import { SelectDidComponent } from './components/select-did/select-did.component';
 import { AddSingleRecordComponent } from './components/add-single-record/add-single-record.component';
 
-
 @NgModule({
   declarations: [
     DidBookFormComponent,
     DidBookListComponent,
     DidBookComponent,
     SelectDidComponent,
-    AddSingleRecordComponent
+    AddSingleRecordComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule
-  ],
-  providers: [
-    DidBookService,
-    DidBookHttpService
-  ],
-  exports: [
-    DidBookComponent,
-    SelectDidComponent
-  ]
+  imports: [CommonModule, SharedModule],
+  providers: [DidBookService, DidBookHttpService],
+  exports: [DidBookComponent, SelectDidComponent],
 })
 export class DidBookModule {
   static forRoot(): ModuleWithProviders<DidBookModule> {
     return {
       ngModule: DidBookModule,
-      providers: [
-        DidBookService
-      ]
+      providers: [DidBookService],
     };
   }
 }

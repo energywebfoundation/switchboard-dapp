@@ -2,9 +2,9 @@ name: Deploy
 
 on:
   push:
-    branches: [ 'develop', 'master' ]
+    branches: ['develop', 'master']
   pull_request:
-    branches: [ 'develop', 'master' ]
+    branches: ['develop', 'master']
 
 jobs:
   cancel-previous:
@@ -85,4 +85,3 @@ jobs:
         with:
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
           ignore_missing: true
-

@@ -1,3 +1,3 @@
 module.exports = {
-  ...require("@energyweb/prettier-config"),
+  ...require('@energyweb/prettier-config'),
 };

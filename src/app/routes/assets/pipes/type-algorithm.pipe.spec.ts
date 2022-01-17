@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TypeAlgorithmPipe } from './type-algorithm.pipe';
 import { KeyTypesEnum } from '../models/keyTypesEnum';
 

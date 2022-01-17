@@ -7,40 +7,54 @@ import { map, switchMap } from 'rxjs/operators';
 import { OrganizationProvider } from '../models/organization-provider.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrganizationService {
-
-  constructor(private stakingService: StakingPoolServiceFacade,
-              private iamService: IamService) {
-  }
+  constructor(
+    private stakingService: StakingPoolServiceFacade,
+    private iamService: IamService
+  ) {}
 
   getOrganizationList() {
-    return this.iamService.wrapWithLoadingService(forkJoin([
-      this.iamService.getOrganizationsByOwner().pipe(
-        switchMap(organizations => this.isOrganizationOwner(organizations))),
-      this.stakingService.allServices()
-    ])
-      .pipe(
+    return this.iamService.wrapWithLoadingService(
+      forkJoin([
+        this.iamService
+          .getOrganizationsByOwner()
+          .pipe(
+            switchMap((organizations) =>
+              this.isOrganizationOwner(organizations)
+            )
+          ),
+        this.stakingService.allServices(),
+      ]).pipe(
         map(([organizations, providers]) => {
           const servicesNames = providers.map((service) => service.org);
-          return (organizations as IOrganization[]).map((org: IOrganization) => ({
-            ...org,
-            containsApps: org?.apps?.length > 0,
-            containsRoles: org?.roles?.length > 0,
-            isProvider: servicesNames.includes(org.namespace)
-          }));
-        }),
-      ));
+          return (organizations as IOrganization[]).map(
+            (org: IOrganization) => ({
+              ...org,
+              containsApps: org?.apps?.length > 0,
+              containsRoles: org?.roles?.length > 0,
+              isProvider: servicesNames.includes(org.namespace),
+            })
+          );
+        })
+      )
+    );
   }
 
   getHistory(namespace: string): Observable<OrganizationProvider> {
-    return this.iamService.wrapWithLoadingService(this.iamService.getOrgHistory(namespace)
-      .pipe(
+    return this.iamService.wrapWithLoadingService(
+      this.iamService.getOrgHistory(namespace).pipe(
         switchMap(async (organization: OrganizationProvider) => {
-          return {...organization, subOrgs: await this.isOrganizationOwner(organization.subOrgs).toPromise()};
+          return {
+            ...organization,
+            subOrgs: await this.isOrganizationOwner(
+              organization.subOrgs
+            ).toPromise(),
+          };
         })
-      ));
+      )
+    );
   }
 
   /**
@@ -51,12 +65,12 @@ export class OrganizationService {
     return forkJoin(
       (organizations as OrganizationProvider[]).map((org) =>
         this.iamService.isOwner(org.namespace).pipe(
-          map(isOwnedByCurrentUser => ({
-              ...org,
-              isOwnedByCurrentUser
-            })
-          )
+          map((isOwnedByCurrentUser) => ({
+            ...org,
+            isOwnedByCurrentUser,
+          }))
         )
-      ));
+      )
+    );
   }
 }

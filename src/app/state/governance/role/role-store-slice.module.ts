@@ -7,8 +7,7 @@ import { RoleEffects } from './role.effects';
 @NgModule({
   imports: [
     StoreModule.forFeature(role.USER_FEATURE_KEY, role.reducer),
-    EffectsModule.forFeature([RoleEffects])
+    EffectsModule.forFeature([RoleEffects]),
   ],
 })
-export class RoleStoreSliceModule {
-}
+export class RoleStoreSliceModule {}

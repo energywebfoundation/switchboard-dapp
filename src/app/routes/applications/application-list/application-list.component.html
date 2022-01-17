@@ -1,27 +1,53 @@
-<app-filter [isFilterShown]="isFilterVisible$ | async" [filters]="filters$ | async" [showAppFilter]="true"
-            [showOrgFilter]="true"
-            (filtersChange)="filter($event)"></app-filter>
+<app-filter
+  [isFilterShown]="isFilterVisible$ | async"
+  [filters]="filters$ | async"
+  [showAppFilter]="true"
+  [showOrgFilter]="true"
+  (filtersChange)="filter($event)"
+></app-filter>
 <div class="card card-default mb-3 pb-3">
-  <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDirection="asc">
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    matSortActive="name"
+    matSortDirection="asc"
+  >
     <!-- Logo Column -->
     <ng-container matColumnDef="logoUrl">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element" data-label="">
         <div class="d-flex justify-content-center justify-content-md-start">
           <ng-container *ngIf="!element?.definition?.logoUrl">
-            <img class="img-logo-list" src="../assets/img/no-application-image.png"/>
+            <img
+              class="img-logo-list"
+              src="../assets/img/no-application-image.png"
+            />
           </ng-container>
-          <img class="img-logo-list" [src]="element?.definition?.logoUrl" *ngIf="element?.definition?.logoUrl"/>
+          <img
+            class="img-logo-list"
+            [src]="element?.definition?.logoUrl"
+            *ngIf="element?.definition?.logoUrl"
+          />
         </div>
       </td>
     </ng-container>
 
     <!-- Name -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Application Name</th>
-      <td mat-cell *matCellDef="let element" data-label="Name" class="cursor-pointer">
-        <div class="d-flex flex-row justify-content-between justify-content-lg-start">
-          {{element?.definition?.appName}}
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Application Name
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        data-label="Name"
+        class="cursor-pointer"
+      >
+        <div
+          class="d-flex flex-row justify-content-between justify-content-lg-start"
+        >
+          {{ element?.definition?.appName }}
         </div>
       </td>
     </ng-container>
@@ -31,7 +57,9 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         <ng-container> Application Namespace</ng-container>
       </th>
-      <td mat-cell *matCellDef="let element" data-label="Namespace"> {{element.namespace}} </td>
+      <td mat-cell *matCellDef="let element" data-label="Namespace">
+        {{ element.namespace }}
+      </td>
     </ng-container>
 
     <!-- Actions Column -->
@@ -39,26 +67,35 @@
       <th mat-header-cell *matHeaderCellDef class="text-right"></th>
       <td mat-cell *matCellDef="let element">
         <app-actions-menu>
-          <button mat-menu-item class="btn-color-primary" (click)="viewDetails(element)">
+          <button
+            mat-menu-item
+            class="btn-color-primary"
+            (click)="viewDetails(element)"
+          >
             <mat-icon class="btn-color-primary">preview</mat-icon>
             <span>View Details</span>
           </button>
 
-          <app-application-actions [application]="element"
-                                   (viewRoles)="viewRoles(element)"
-                                   (roleCreated)="viewRoles(element)"
-                                   (edited)="edit()"
-                                   (deleteConfirmed)="remove(element)">
+          <app-application-actions
+            [application]="element"
+            (viewRoles)="viewRoles(element)"
+            (roleCreated)="viewRoles(element)"
+            (edited)="edit()"
+            (deleteConfirmed)="remove(element)"
+          >
           </app-application-actions>
         </app-actions-menu>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
   <!-- Shows when table is empty -->
-  <div class="d-flex justify-content-center align-items-center mt-4 mb-3" *ngIf="!dataSource?.data?.length">
+  <div
+    class="d-flex justify-content-center align-items-center mt-4 mb-3"
+    *ngIf="!dataSource?.data?.length"
+  >
     <div class="d-flex align-items-center no-record color-white">
       <mat-icon class="mr-2">info</mat-icon>
       <i>No Record Found</i>

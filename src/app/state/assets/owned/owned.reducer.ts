@@ -11,12 +11,15 @@ export interface OwnedState {
 
 export const initialState: OwnedState = {
   assets: [],
-  error: null
+  error: null,
 };
 
 const ownedReducer = createReducer(
   initialState,
-  on(OwnedActions.getOwnedAssetsSuccess, (state, {assets}) => ({...state, assets}))
+  on(OwnedActions.getOwnedAssetsSuccess, (state, { assets }) => ({
+    ...state,
+    assets,
+  }))
 );
 
 export function reducer(state: OwnedState | undefined, action: Action) {

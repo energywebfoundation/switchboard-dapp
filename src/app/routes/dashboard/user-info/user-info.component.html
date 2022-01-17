@@ -1,19 +1,33 @@
 <div class="text-center d-flex flex-column align-items-center m-4">
-  <img class="img-thumbnail rounded-circle" src="../assets/img/identity-image.png" width="64" height="64"
-       alt="identity image">
-  <h2 class="color-white mt-4 mb-0" data-qa-id="user-info-name"> {{ userName }} </h2>
+  <img
+    class="img-thumbnail rounded-circle"
+    src="../assets/img/identity-image.png"
+    width="64"
+    height="64"
+    alt="identity image"
+  />
+  <h2 class="color-white mt-4 mb-0" data-qa-id="user-info-name">
+    {{ userName }}
+  </h2>
   <ng-container *ngIf="accountDid; else fetching">
-    <div class="d-flex align-items-center opacity-50 text-truncate-middle did-wrapper"
-         data-qa-id="user-info-did"
-         appCopyToClipboard [copyClipboard]="accountDid" message="User Did"
-         matTooltip="Copy to clipboard">
-      <div>{{ accountDid | didFormatMinifier}}</div>
+    <div
+      class="d-flex align-items-center opacity-50 text-truncate-middle did-wrapper"
+      data-qa-id="user-info-did"
+      appCopyToClipboard
+      [copyClipboard]="accountDid"
+      message="User Did"
+      matTooltip="Copy to clipboard"
+    >
+      <div>{{ accountDid | didFormatMinifier }}</div>
       <mat-icon class="ml-2">content_copy</mat-icon>
     </div>
   </ng-container>
 
   <ng-template #fetching>
-    <div class="opacity-50 text-truncate-middle did-wrapper" *ngIf="!accountDid">
+    <div
+      class="opacity-50 text-truncate-middle did-wrapper"
+      *ngIf="!accountDid"
+    >
       Fetching decentralised identifier...
     </div>
   </ng-template>

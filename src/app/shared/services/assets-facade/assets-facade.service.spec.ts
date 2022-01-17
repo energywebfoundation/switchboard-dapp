@@ -11,9 +11,9 @@ describe('AssetsFacadeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        {provide: IamService, useValue: iamServiceSpy},
-        {provide: LoadingService, useValue: loadingServiceSpy}
-      ]
+        { provide: IamService, useValue: iamServiceSpy },
+        { provide: LoadingService, useValue: loadingServiceSpy },
+      ],
     });
     service = TestBed.inject(AssetsFacadeService);
   });

@@ -5,7 +5,7 @@ import { KeyValue } from '@angular/common';
   selector: 'app-fields',
   templateUrl: './fields.component.html',
   styleUrls: ['./fields.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FieldsComponent {
   @Input() title: string;

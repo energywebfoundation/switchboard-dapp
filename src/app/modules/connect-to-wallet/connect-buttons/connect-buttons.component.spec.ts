@@ -11,26 +11,33 @@ describe('ConnectButtonsComponent', () => {
   let fixture: ComponentFixture<ConnectButtonsComponent>;
   let hostDebug;
   let connectToSpy;
-  let metamaskProviderServiceSpy = jasmine.createSpyObj(MetamaskProviderService, ['getFullNetworkName', 'importMetamaskConf']);
+  const metamaskProviderServiceSpy = jasmine.createSpyObj(
+    MetamaskProviderService,
+    ['getFullNetworkName', 'importMetamaskConf']
+  );
 
   const setup = (opt?: {
-    metamaskPresent?: boolean,
-    metamaskDisabled?: boolean
+    metamaskPresent?: boolean;
+    metamaskDisabled?: boolean;
   }) => {
-    const options = {metamaskPresent: true, metamaskDisabled: false, ...opt};
+    const options = { metamaskPresent: true, metamaskDisabled: false, ...opt };
     component.metamaskPresent = options.metamaskPresent;
     component.metamaskDisabled = options.metamaskDisabled;
     fixture.detectChanges();
   };
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ConnectButtonsComponent],
-      providers: [
-        {provide: MetamaskProviderService, useValue: metamaskProviderServiceSpy}
-      ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ConnectButtonsComponent],
+        providers: [
+          {
+            provide: MetamaskProviderService,
+            useValue: metamaskProviderServiceSpy,
+          },
+        ],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConnectButtonsComponent);
@@ -46,7 +53,7 @@ describe('ConnectButtonsComponent', () => {
 
   it('should check metamask presence', () => {
     setup();
-    const {metamaskBtn, wrongNetwork} = selectors(hostDebug);
+    const { metamaskBtn, wrongNetwork } = selectors(hostDebug);
 
     expect(metamaskBtn).toBeTruthy();
     expect(metamaskBtn.nativeElement.disabled).toBeFalsy();
@@ -54,27 +61,31 @@ describe('ConnectButtonsComponent', () => {
   });
 
   it('should display message about not connected to volta when user have metamask', () => {
-    metamaskProviderServiceSpy.getFullNetworkName.and.returnValue('Volta Network');
+    metamaskProviderServiceSpy.getFullNetworkName.and.returnValue(
+      'Volta Network'
+    );
 
-    setup({metamaskDisabled: true});
-    const {metamaskBtn, wrongNetwork} = selectors(hostDebug);
+    setup({ metamaskDisabled: true });
+    const { metamaskBtn, wrongNetwork } = selectors(hostDebug);
 
     expect(metamaskBtn).toBeTruthy();
     expect(metamaskBtn.nativeElement.disabled).toBeTruthy();
     expect(wrongNetwork).toBeTruthy();
-    expect(wrongNetwork.nativeElement.innerText).toContain('You are not connected to Volta Network.');
+    expect(wrongNetwork.nativeElement.innerText).toContain(
+      'You are not connected to Volta Network.'
+    );
   });
 
   it('should dispatch login action with Metamask when clicking on metamask button', () => {
     setup();
-    const {metamaskBtn} = selectors(hostDebug);
+    const { metamaskBtn } = selectors(hostDebug);
     metamaskBtn.nativeElement.click();
 
     expect(connectToSpy).toHaveBeenCalledWith(ProviderType.MetaMask);
   });
 
   it('should dispatch login action with WalletConnect when clicking on wallet connect button', () => {
-    const {mobileWalletBtn} = selectors(hostDebug);
+    const { mobileWalletBtn } = selectors(hostDebug);
     mobileWalletBtn.nativeElement.click();
 
     expect(connectToSpy).toHaveBeenCalledWith(ProviderType.WalletConnect);
@@ -83,7 +94,7 @@ describe('ConnectButtonsComponent', () => {
   it('should dispatch login action with Azure when clicking on Use Azure button', () => {
     component.showEkcOption = true;
     fixture.detectChanges();
-    const {azureBtn} = selectors(hostDebug);
+    const { azureBtn } = selectors(hostDebug);
     azureBtn.nativeElement.click();
 
     expect(connectToSpy).toHaveBeenCalledWith(ProviderType.EKC);
@@ -91,7 +102,7 @@ describe('ConnectButtonsComponent', () => {
 
   it('should not find metamask button when is not available', () => {
     component.metamaskPresent = false;
-    const {metamaskBtn} = selectors(hostDebug);
+    const { metamaskBtn } = selectors(hostDebug);
 
     expect(metamaskBtn).toBeFalsy();
   });
@@ -99,14 +110,13 @@ describe('ConnectButtonsComponent', () => {
   it('should not display azureBtn when showing is set to false', () => {
     component.showEkcOption = false;
     fixture.detectChanges();
-    const {azureBtn} = selectors(hostDebug);
+    const { azureBtn } = selectors(hostDebug);
 
     expect(azureBtn).toBeNull();
   });
 });
 
 const selectors = (hostDebug: DebugElement) => {
-
   return {
     metamaskBtn: getElement(hostDebug)('metamask'),
     wrongNetwork: getElement(hostDebug)('wrong-network'),

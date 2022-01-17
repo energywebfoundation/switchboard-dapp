@@ -3,12 +3,10 @@ import { IamService } from '../iam.service';
 import { SearchType } from 'iam-client-lib/dist/src/modules/cacheClient/cacheClient.types';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DomainsFacadeService {
-
-  constructor(private iamService: IamService) {
-  }
+  constructor(private iamService: IamService) {}
 
   get domainsService() {
     return this.iamService.domainsService;
@@ -19,11 +17,11 @@ export class DomainsFacadeService {
   }
 
   async checkExistenceOfDomain(domain: string): Promise<boolean> {
-    return await this.domainsService.checkExistenceOfDomain({domain});
+    return await this.domainsService.checkExistenceOfDomain({ domain });
   }
 
   async isOwner(domain: string): Promise<boolean> {
-    return await this.domainsService.isOwner({domain});
+    return await this.domainsService.isOwner({ domain });
   }
 
   async getDIDsByRole(role: string): Promise<string[]> {

@@ -14,7 +14,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDatetimepickerModule, MatNativeDatetimeModule } from '@mat-datetimepicker/core';
+import {
+  MatDatetimepickerModule,
+  MatNativeDatetimeModule,
+} from '@mat-datetimepicker/core';
 
 const routes: Routes = [];
 
@@ -37,12 +40,8 @@ const routes: Routes = [];
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDatetimeModule,
-    MatDatetimepickerModule
+    MatDatetimepickerModule,
   ],
-  entryComponents: [
-    ConfirmationDialogComponent
-  ]
+  entryComponents: [ConfirmationDialogComponent],
 })
-export class WidgetsModule {
-}
-
+export class WidgetsModule {}

@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
 import { EnrolmentFormComponent } from './enrolment-form.component';
 
-
 @NgModule({
   imports: [
     SharedModule,
@@ -17,11 +16,7 @@ import { EnrolmentFormComponent } from './enrolment-form.component';
     MatButtonModule,
     MatDividerModule,
   ],
-  declarations: [
-    EnrolmentFormComponent
-  ],
-  exports: [EnrolmentFormComponent]
+  declarations: [EnrolmentFormComponent],
+  exports: [EnrolmentFormComponent],
 })
-
-export class EnrolmentFormModule {
-}
+export class EnrolmentFormModule {}

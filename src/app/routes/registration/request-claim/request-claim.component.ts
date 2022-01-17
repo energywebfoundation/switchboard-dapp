@@ -1,19 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Asset, Claim, IRoleDefinition, NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import {
+  Asset,
+  Claim,
+  IRoleDefinition,
+  NamespaceType,
+  RegistrationTypes,
+} from 'iam-client-lib';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { RoleType } from '../../applications/new-role/new-role.component';
 import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { SelectAssetDialogComponent } from '../select-asset-dialog/select-asset-dialog.component';
-import { SubjectElements, ViewColorsSetter } from '../models/view-colors-setter';
+import {
+  SubjectElements,
+  ViewColorsSetter,
+} from '../models/view-colors-setter';
 import swal from 'sweetalert';
 import {
   EnrolmentField,
   EnrolmentSubmission,
-  PredefinedRegistrationTypes
+  PredefinedRegistrationTypes,
 } from '../enrolment-form/enrolment-form.component';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { Store } from '@ngrx/store';
@@ -21,19 +31,22 @@ import { logout } from '../../../state/auth/auth.actions';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 import { filter, take } from 'rxjs/operators';
 import { AuthActions, SettingsSelectors } from '@state';
-import { PreconditionCheck, preconditionCheck } from '../utils/precondition-check';
+import {
+  PreconditionCheck,
+  preconditionCheck,
+} from '../utils/precondition-check';
 import { LoginService } from 'src/app/shared/services/login/login.service';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 const EnrolForType = {
   ME: 'me',
-  ASSET: 'asset'
+  ASSET: 'asset',
 };
 const SwalButtons = {
   VIEW_MY_ENROMENTS: 'viewMyEnrolments',
   ENROL_FOR_ASSET: 'enrolForAsset',
-  ENROL_FOR_MYSELF: 'enrolForSelf'
+  ENROL_FOR_MYSELF: 'enrolForSelf',
 };
 
 interface FormClaim extends Claim {
@@ -44,15 +57,14 @@ interface FormClaim extends Claim {
 @Component({
   selector: 'app-request-claim',
   templateUrl: './request-claim.component.html',
-  styleUrls: ['./request-claim.component.scss']
+  styleUrls: ['./request-claim.component.scss'],
 })
 export class RequestClaimComponent implements OnInit, SubjectElements {
-
   public EnrolForType = EnrolForType;
   public roleTypeForm = this.fb.group({
     roleType: '',
     enrolFor: EnrolForType.ME,
-    assetDid: ''
+    assetDid: '',
   });
 
   private registrationTypesOfRole: Record<string, Set<RegistrationTypes>>;
@@ -84,16 +96,17 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   private stayLoggedIn = false;
   private swalReference;
 
-  constructor(private fb: FormBuilder,
-              private route: Router,
-              private activeRoute: ActivatedRoute,
-              private loginService: LoginService,
-              private iamService: IamService,
-              private toastr: SwitchboardToastrService,
-              public dialog: MatDialog,
-              private loadingService: LoadingService,
-              private store: Store) {
-  }
+  constructor(
+    private fb: FormBuilder,
+    private route: Router,
+    private activeRoute: ActivatedRoute,
+    private loginService: LoginService,
+    private iamService: IamService,
+    private toastr: SwitchboardToastrService,
+    public dialog: MatDialog,
+    private loadingService: LoadingService,
+    private store: Store
+  ) {}
 
   @HostListener('window:beforeunload', ['$event'])
   public onPageUnload() {
@@ -117,14 +130,20 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   // TODO: check if everything is needed.
   isSubmitDisabled(): boolean {
-    return !this.roleTypeForm?.value?.roleType ||
+    return (
+      !this.roleTypeForm?.value?.roleType ||
       this.submitting ||
       !this.roleTypeForm?.valid ||
-      (this.roleTypeForm?.value?.enrolFor === EnrolForType.ASSET && !this.roleTypeForm?.value?.assetDid);
+      (this.roleTypeForm?.value?.enrolFor === EnrolForType.ASSET &&
+        !this.roleTypeForm?.value?.assetDid)
+    );
   }
 
   async ngOnInit() {
-    this.experimentalEnabled = await this.store.select(SettingsSelectors.isExperimentalEnabled).pipe(take<boolean>(1)).toPromise();
+    this.experimentalEnabled = await this.store
+      .select(SettingsSelectors.isExperimentalEnabled)
+      .pipe(take<boolean>(1))
+      .toPromise();
 
     this.activeRoute.queryParams.subscribe(async (params: any) => {
       this.cleanUpSwal();
@@ -150,23 +169,32 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
         try {
           // Get org/app definition
-          this.orgAppDetails = await this.iamService.domainsService.getDefinition({
-            type: this.roleType === RoleType.APP ? NamespaceType.Application : NamespaceType.Organization,
-            namespace: this.namespace
-          });
+          this.orgAppDetails =
+            await this.iamService.domainsService.getDefinition({
+              type:
+                this.roleType === RoleType.APP
+                  ? NamespaceType.Application
+                  : NamespaceType.Organization,
+              namespace: this.namespace,
+            });
 
           if (this.orgAppDetails) {
             this.updateColors(params);
 
             // Initialize Roles
             await this.initRoles();
-
           } else {
             // Display Error
             if (this.roleType === RoleType.APP) {
-              this.displayAlert('Application Details cannot be retrieved.', 'error');
+              this.displayAlert(
+                'Application Details cannot be retrieved.',
+                'error'
+              );
             } else {
-              this.displayAlert('Organization Details cannot be retrieved.', 'error');
+              this.displayAlert(
+                'Organization Details cannot be retrieved.',
+                'error'
+              );
             }
           }
         } catch (e) {
@@ -183,11 +211,17 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   private async getRegistrationTypesOfRoles() {
-    this.registrationTypesOfRole = await this.iamService.domainsService.registrationTypesOfRoles(this.roleList.map(role => role.namespace));
+    this.registrationTypesOfRole =
+      await this.iamService.domainsService.registrationTypesOfRoles(
+        this.roleList.map((role) => role.namespace)
+      );
   }
 
   private setPredefinedRegistrationTypes(params) {
-    this.predefinedRegTypes = {onChain: params?.onchain === 'true', offChain: params?.offchain === 'true'};
+    this.predefinedRegTypes = {
+      onChain: params?.onchain === 'true',
+      offChain: params?.offchain === 'true',
+    };
   }
 
   roleTypeSelected(e: any) {
@@ -202,13 +236,16 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   private setPreconditions(): void {
-    [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(this.selectedRole.enrolmentPreconditions, this.userRoleList);
+    [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(
+      this.selectedRole.enrolmentPreconditions,
+      this.userRoleList
+    );
   }
 
   async enrolForSelected(e: any) {
     this.roleTypeForm.patchValue({
       enrolType: '',
-      assetDid: ''
+      assetDid: '',
     });
     this.resetForm();
 
@@ -229,25 +266,36 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     if (enrolForm.registrationTypes.includes(RegistrationTypes.OffChain)) {
       issuerDids = await this.getIssuerDid();
       if (!(issuerDids && issuerDids.length > 0)) {
-        this.toastr.error('Cannot identify issuer for this role.', TOASTR_HEADER);
+        this.toastr.error(
+          'Cannot identify issuer for this role.',
+          TOASTR_HEADER
+        );
         this.loadingService.hide();
         return;
       }
     }
 
     this.submitting = true;
-    this.loadingService.show('Please confirm this transaction in your connected wallet.');
+    this.loadingService.show(
+      'Please confirm this transaction in your connected wallet.'
+    );
 
     try {
       await this.iamService.claimsService.createClaimRequest({
         issuer: issuerDids,
         claim: this.createClaim(enrolForm.fields),
-        subject: this.roleTypeForm.value.assetDid ? this.roleTypeForm.value.assetDid : undefined,
-        registrationTypes: enrolForm.registrationTypes
+        subject: this.roleTypeForm.value.assetDid
+          ? this.roleTypeForm.value.assetDid
+          : undefined,
+        registrationTypes: enrolForm.registrationTypes,
       } as any);
 
-      this.displayAlert('Request to enrol as ' + this.roleTypeForm.value.roleType.name.toUpperCase() + ' is submitted for review and approval.',
-        'success');
+      this.displayAlert(
+        'Request to enrol as ' +
+          this.roleTypeForm.value.roleType.name.toUpperCase() +
+          ' is submitted for review and approval.',
+        'success'
+      );
     } catch (e) {
       console.error('Enrolment Failed', e);
       this.toastr.error(e.message, TOASTR_HEADER);
@@ -275,10 +323,16 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   goToEnrolment() {
     if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], { queryParams: { returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid } });
+      this.route.navigate(['dashboard'], {
+        queryParams: {
+          returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid,
+        },
+      });
     } else {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/enrolment?selectedTab=1'}});
+      this.route.navigate(['dashboard'], {
+        queryParams: { returnUrl: '/enrolment?selectedTab=1' },
+      });
     }
   }
 
@@ -288,24 +342,27 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   selectAsset() {
-    const dialogRef = this.dialog.open(SelectAssetDialogComponent, {
-      width: '600px',
-      maxWidth: '100%',
-      disableClose: true,
-      data: {
-        assetDiD: this.roleTypeForm?.value?.assetDid
-      }
-    }).afterClosed().subscribe(async (res: Asset) => {
-      if (res) {
-        this.roleTypeForm.patchValue({
-          assetDid: res.id
-        });
+    const dialogRef = this.dialog
+      .open(SelectAssetDialogComponent, {
+        width: '600px',
+        maxWidth: '100%',
+        disableClose: true,
+        data: {
+          assetDiD: this.roleTypeForm?.value?.assetDid,
+        },
+      })
+      .afterClosed()
+      .subscribe(async (res: Asset) => {
+        if (res) {
+          this.roleTypeForm.patchValue({
+            assetDid: res.id,
+          });
 
-        // Initialize Roles
-        await this.initRoles();
-      }
-      dialogRef.unsubscribe();
-    });
+          // Initialize Roles
+          await this.initRoles();
+        }
+        dialogRef.unsubscribe();
+      });
   }
 
   private cleanUpSwal() {
@@ -320,7 +377,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     // because legacy role's had version format of '1.0.0'
     // but we version should be persisted as numbers
     const parseVersion = (version: string | number) => {
-      if (typeof (version) === 'string') {
+      if (typeof version === 'string') {
         return parseInt(version.split('.')[0], 10);
       }
       return version;
@@ -329,7 +386,8 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     return {
       fields: JSON.parse(JSON.stringify(fields)),
       claimType: this.selectedNamespace,
-      claimTypeVersion: parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION
+      claimTypeVersion:
+        parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION,
     };
   }
 
@@ -347,14 +405,14 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       others = this.orgAppDetails.others;
     }
 
-    this.callbackUrl = params.returnUrl || (others ? others.returnUrl : undefined);
+    this.callbackUrl =
+      params.returnUrl || (others ? others.returnUrl : undefined);
 
-    const viewColorsSetter = new ViewColorsSetter({...others, ...params});
+    const viewColorsSetter = new ViewColorsSetter({ ...others, ...params });
     viewColorsSetter.applyTo(this);
   }
 
   private async displayAlert(text: string, icon: string) {
-
     // Navigate to callback URL
     this.swalReference = swal(this.createSwalConfig(text, icon));
     const result = await this.swalReference;
@@ -363,7 +421,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         case SwalButtons.ENROL_FOR_MYSELF:
           this.roleTypeForm.patchValue({
             enrolFor: EnrolForType.ME,
-            enrolType: ''
+            enrolType: '',
           });
           await this.initRoles();
           break;
@@ -371,7 +429,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
           this.roleTypeForm.patchValue({
             enrolFor: EnrolForType.ASSET,
             enrolType: '',
-            assetDid: ''
+            assetDid: '',
           });
           this.resetForm();
           if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
@@ -386,15 +444,22 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             location.href = this.callbackUrl;
           } else if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
             // Navigate to My Enrolments Page
-            this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid}});
+            this.route.navigate(['dashboard'], {
+              queryParams: {
+                returnUrl:
+                  '/assets/enrolment/' + this.roleTypeForm.value.assetDid,
+              },
+            });
           } else {
             // Navigate to My Enrolments Page
-            this.route.navigate(['dashboard'], {queryParams: {returnUrl: '/enrolment?selectedTab=1'}});
+            this.route.navigate(['dashboard'], {
+              queryParams: { returnUrl: '/enrolment?selectedTab=1' },
+            });
           }
       }
     } else {
       this.roleTypeForm.patchValue({
-        enrolType: ''
+        enrolType: '',
       });
     }
   }
@@ -405,7 +470,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       text,
       icon,
       button: this.roleType === RoleType.APP ? 'Back to Application' : 'Back',
-      closeOnClickOutside: false
+      closeOnClickOutside: false,
     };
 
     // Hide button if callback url is not available
@@ -415,13 +480,13 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         if (icon !== 'success') {
           config['buttons'] = {
             [SwalButtons.VIEW_MY_ENROMENTS]: 'View My Enrolments',
-            [SwalButtons.ENROL_FOR_ASSET]: 'Enrol For My Asset'
+            [SwalButtons.ENROL_FOR_ASSET]: 'Enrol For My Asset',
           };
           if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
             config['buttons'] = {
               [SwalButtons.ENROL_FOR_MYSELF]: 'Enrol For Myself',
               [SwalButtons.ENROL_FOR_ASSET]: 'Choose Another Asset',
-              [SwalButtons.VIEW_MY_ENROMENTS]: 'View Asset Enrolments'
+              [SwalButtons.VIEW_MY_ENROMENTS]: 'View Asset Enrolments',
             };
           }
         } else if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
@@ -435,7 +500,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       }
     }
 
-    if (!this.experimentalEnabled && config && config['buttons'] && config['buttons'][SwalButtons.ENROL_FOR_ASSET]) {
+    if (
+      !this.experimentalEnabled &&
+      config &&
+      config['buttons'] &&
+      config['buttons'][SwalButtons.ENROL_FOR_ASSET]
+    ) {
       delete config['buttons'][SwalButtons.ENROL_FOR_ASSET];
     }
     return config;
@@ -444,13 +514,17 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   private isCorrectNamespace(params: any) {
     let retVal = false;
 
-    if (params.app &&
+    if (
+      params.app &&
       params.app.includes(`.${NamespaceType.Application}.`) &&
-      !params.app.includes(`.${NamespaceType.Role}.`)) {
+      !params.app.includes(`.${NamespaceType.Role}.`)
+    ) {
       retVal = true;
-    } else if (params.org &&
+    } else if (
+      params.org &&
       !params.org.includes(`.${NamespaceType.Application}.`) &&
-      !params.org.includes(`.${NamespaceType.Role}.`)) {
+      !params.org.includes(`.${NamespaceType.Role}.`)
+    ) {
       retVal = true;
     }
 
@@ -462,19 +536,22 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     if (this.loginService.isSessionActive()) {
       this.store.dispatch(AuthActions.reinitializeAuthForEnrol());
       // Set Loggedin Flag to true
-      this.isLoggedIn = await this.store.select(isUserLoggedIn).pipe(
-        filter<boolean>(Boolean),
-        take(1)
-      ).toPromise();
+      this.isLoggedIn = await this.store
+        .select(isUserLoggedIn)
+        .pipe(filter<boolean>(Boolean), take(1))
+        .toPromise();
     } else {
       this.loadingService.hide();
       // Launch Login Dialog
-      await this.dialog.open(ConnectToWalletDialogComponent, {
-        width: '434px',
-        panelClass: 'connect-to-wallet',
-        maxWidth: '100%',
-        disableClose: true
-      }).afterClosed().toPromise();
+      await this.dialog
+        .open(ConnectToWalletDialogComponent, {
+          width: '434px',
+          panelClass: 'connect-to-wallet',
+          maxWidth: '100%',
+          disableClose: true,
+        })
+        .afterClosed()
+        .toPromise();
 
       // Set Loggedin Flag to true
       this.isLoggedIn = true;
@@ -495,8 +572,8 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       if (claims && claims.length && this.userRoleList) {
         claims.map((item: any) => {
           this.userRoleList
-            .filter(userRole => item.claimType === userRole.claimType)
-            .map(userRole => {
+            .filter((userRole) => item.claimType === userRole.claimType)
+            .map((userRole) => {
               userRole.isSynced = true;
             });
         });
@@ -508,18 +585,25 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private async getNotEnrolledRoles() {
     let roleList = await this.iamService.domainsService.getRolesByNamespace({
-      parentType: this.roleType === RoleType.APP ? NamespaceType.Application : NamespaceType.Organization,
-      namespace: this.namespace
+      parentType:
+        this.roleType === RoleType.APP
+          ? NamespaceType.Application
+          : NamespaceType.Organization,
+      namespace: this.namespace,
     });
 
     if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
-      this.userRoleList = (await this.iamService.claimsService.getClaimsBySubject({
-        did: this.roleTypeForm.value.assetDid
-      })).filter((claim: Claim) => !claim.isRejected);
+      this.userRoleList = (
+        await this.iamService.claimsService.getClaimsBySubject({
+          did: this.roleTypeForm.value.assetDid,
+        })
+      ).filter((claim: Claim) => !claim.isRejected);
     } else {
-      this.userRoleList = (await this.iamService.claimsService.getClaimsByRequester({
-        did: this.iamService.signerService.did
-      })).filter((claim: Claim) => !claim.isRejected);
+      this.userRoleList = (
+        await this.iamService.claimsService.getClaimsByRequester({
+          did: this.iamService.signerService.did,
+        })
+      ).filter((claim: Claim) => !claim.isRejected);
     }
 
     if (roleList && roleList.length) {
@@ -527,15 +611,24 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         let retVal = true;
         const defaultRole = `${this.defaultRole}.${NamespaceType.Role}.${this.namespace}`;
         for (let i = 0; i < this.userRoleList.length; i++) {
-          if (role.namespace === this.userRoleList[i].claimType &&
+          if (
+            role.namespace === this.userRoleList[i].claimType &&
             // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
-            role.definition.version.toString().split('.')[0] === this.userRoleList[i].claimTypeVersion.toString().split('.')[0]) {
+            role.definition.version.toString().split('.')[0] ===
+              this.userRoleList[i].claimTypeVersion.toString().split('.')[0]
+          ) {
             if (role.namespace === defaultRole) {
               // Display Error
               if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
-                this.displayAlert('Your asset has already enrolled to this role.', 'error');
+                this.displayAlert(
+                  'Your asset has already enrolled to this role.',
+                  'error'
+                );
               } else {
-                this.displayAlert('You have already enrolled to this role.', 'error');
+                this.displayAlert(
+                  'You have already enrolled to this role.',
+                  'error'
+                );
               }
             }
             retVal = false;
@@ -563,7 +656,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         // Set Default Selected
         if (this.defaultRole) {
           this.roleList
-            .filter((role) => role.name.toUpperCase() === this.defaultRole.toUpperCase())
+            .filter(
+              (role) =>
+                role.name.toUpperCase() === this.defaultRole.toUpperCase()
+            )
             .map((role) => {
               this.selectedRole = role.definition;
               this.selectedNamespace = role.namespace;
@@ -575,8 +671,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             });
         }
       }
-    } catch (e) {
-      throw e;
     } finally {
       this.loadingService.hide();
     }
@@ -598,5 +692,4 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       this.fieldList = [];
     }
   }
-
 }

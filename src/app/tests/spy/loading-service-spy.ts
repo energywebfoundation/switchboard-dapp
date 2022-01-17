@@ -1,1 +1,4 @@
-export const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
+export const loadingServiceSpy = jasmine.createSpyObj('LoadingService', [
+  'show',
+  'hide',
+]);

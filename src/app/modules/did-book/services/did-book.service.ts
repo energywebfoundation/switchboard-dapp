@@ -10,32 +10,41 @@ const TOASTR_HEADER = 'DID Book';
 export class DidBookService {
   private list = new BehaviorSubject([]);
 
-  constructor(private httpDidBook: DidBookHttpService,
-              private toastr: SwitchboardToastrService) {
-  }
+  constructor(
+    private httpDidBook: DidBookHttpService,
+    private toastr: SwitchboardToastrService
+  ) {}
 
   getList$(): Observable<DidBookRecord[]> {
     return this.list.asObservable();
   }
 
   getList(): void {
-    this.httpDidBook.getList().subscribe((list: DidBookRecord[]) => this.list.next(list));
+    this.httpDidBook
+      .getList()
+      .subscribe((list: DidBookRecord[]) => this.list.next(list));
   }
 
   add(record: Partial<DidBookRecord>) {
-    this.httpDidBook.add(record).subscribe((newRecord: DidBookRecord) => {
+    this.httpDidBook.add(record).subscribe(
+      (newRecord: DidBookRecord) => {
         this.list.next([...this.list.value, newRecord]);
         this.toastr.success('New DID Address has been added', TOASTR_HEADER);
       },
-      error => this.toastr.error(error.message));
+      (error) => this.toastr.error(error.message)
+    );
   }
 
   delete(id: string) {
-    this.httpDidBook.delete(id).subscribe(() => {
+    this.httpDidBook.delete(id).subscribe(
+      () => {
         this.list.next(this.removeFromList(id));
-        this.toastr.success('DID Address has been successfully removed', TOASTR_HEADER);
+        this.toastr.success(
+          'DID Address has been successfully removed',
+          TOASTR_HEADER
+        );
       },
-      error => this.toastr.error(error.message)
+      (error) => this.toastr.error(error.message)
     );
   }
 

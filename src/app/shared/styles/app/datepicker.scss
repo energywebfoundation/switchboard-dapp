@@ -15,7 +15,8 @@
     border-radius: 0;
     box-shadow: 0 0 0 #000 !important;
 
-    &.btn-info.active, &.active {
+    &.btn-info.active,
+    &.active {
       background-color: $purple !important;
       > span {
         color: #fff !important;
@@ -36,5 +37,5 @@
 }
 // workaround for datepicker color styles
 [class] .btn-info[class] span.text-muted[class] {
-    color: #fff !important;
+  color: #fff !important;
 }

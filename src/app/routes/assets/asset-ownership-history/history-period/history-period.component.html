@@ -8,6 +8,9 @@
 </div>
 <div class="d-flex align-items-center" *ngIf="period?.relatedTo">
   <mat-icon class="color-success pr-2">account_circle</mat-icon>
-  <app-history-element class="d-flex flex-column pl-2" [element]="getBottomPart()">
+  <app-history-element
+    class="d-flex flex-column pl-2"
+    [element]="getBottomPart()"
+  >
   </app-history-element>
 </div>

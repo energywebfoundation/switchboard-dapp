@@ -4,19 +4,19 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 const ListType = {
   ORG: 'org',
   APP: 'app',
-  ROLE: 'role'
+  ROLE: 'role',
 };
 
 @Component({
   selector: 'app-governance-view',
   templateUrl: './governance-view.component.html',
-  styleUrls: ['./governance-view.component.scss']
+  styleUrls: ['./governance-view.component.scss'],
 })
 export class GovernanceViewComponent implements OnInit {
   typeLabel: string;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit() {
     switch (this.data.type) {
@@ -31,5 +31,4 @@ export class GovernanceViewComponent implements OnInit {
         break;
     }
   }
-
 }

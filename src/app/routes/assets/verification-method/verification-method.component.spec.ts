@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { VerificationMethodComponent } from './verification-method.component';
@@ -20,9 +21,10 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 describe('VerificationMethodComponent component tests', () => {
   let component: VerificationMethodComponent;
   let fixture: ComponentFixture<VerificationMethodComponent>;
-  const verificationServiceSpy = jasmine.createSpyObj('VerificationService',
-    ['getPublicKeys', 'updateDocumentAndReload']
-  );
+  const verificationServiceSpy = jasmine.createSpyObj('VerificationService', [
+    'getPublicKeys',
+    'updateDocumentAndReload',
+  ]);
   const matDialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
 
   const setUp = (documentData: any[]) => {
@@ -30,23 +32,23 @@ describe('VerificationMethodComponent component tests', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [VerificationMethodComponent, TypeAlgorithmPipe],
-      imports: [
-        DidFormatMinifierModule
-      ],
-      providers: [
-        {provide: MAT_DIALOG_DATA, useValue: {id: 1}},
-        {
-          provide: MatDialogRef, useValue: matDialogRefSpy
-        },
-        {provide: VerificationService, useValue: verificationServiceSpy},
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [VerificationMethodComponent, TypeAlgorithmPipe],
+        imports: [DidFormatMinifierModule],
+        providers: [
+          { provide: MAT_DIALOG_DATA, useValue: { id: 1 } },
+          {
+            provide: MatDialogRef,
+            useValue: matDialogRefSpy,
+          },
+          { provide: VerificationService, useValue: verificationServiceSpy },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(VerificationMethodComponent);
@@ -71,12 +73,12 @@ describe('VerificationMethodComponent component tests', () => {
 
   it('should set values when list have at least 6 elements', () => {
     const list = [
-      {type: KeyTypesEnum.Ethereum},
-      {type: KeyTypesEnum.Ethereum},
-      {type: KeyTypesEnum.Ethereum},
-      {type: KeyTypesEnum.Ethereum},
-      {type: KeyTypesEnum.Ethereum},
-      {type: KeyTypesEnum.Ethereum}
+      { type: KeyTypesEnum.Ethereum },
+      { type: KeyTypesEnum.Ethereum },
+      { type: KeyTypesEnum.Ethereum },
+      { type: KeyTypesEnum.Ethereum },
+      { type: KeyTypesEnum.Ethereum },
+      { type: KeyTypesEnum.Ethereum },
     ];
     setUp(list);
     expect(component.verificationsAmount).toBe(list.length);
@@ -87,16 +89,16 @@ describe('VerificationMethodComponent component tests', () => {
     setUp([]);
     expect(component.isFormDisabled).toBeTrue();
   });
-
 });
 
 describe('VerificationMethodComponent with html', () => {
   let component: VerificationMethodComponent;
   let fixture: ComponentFixture<VerificationMethodComponent>;
   let hostDebug: DebugElement;
-  const verificationServiceSpy = jasmine.createSpyObj('VerificationService',
-    ['getPublicKeys', 'updateDocumentAndReload']
-  );
+  const verificationServiceSpy = jasmine.createSpyObj('VerificationService', [
+    'getPublicKeys',
+    'updateDocumentAndReload',
+  ]);
   const matDialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
 
   const dispatchEvent = (el) => {
@@ -108,31 +110,33 @@ describe('VerificationMethodComponent with html', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [VerificationMethodComponent, TypeAlgorithmPipe],
-      imports: [
-        ReactiveFormsModule,
-        MatInputModule,
-        MatSelectModule,
-        MatFormFieldModule,
-        NoopAnimationsModule,
-        FormsModule,
-        MatIconTestingModule,
-        MatPaginatorModule,
-        DidFormatMinifierModule
-      ],
-      providers: [
-        {provide: MAT_DIALOG_DATA, useValue: {id: 1}},
-        {
-          provide: MatDialogRef, useValue: matDialogRefSpy
-        },
-        {provide: VerificationService, useValue: verificationServiceSpy},
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [VerificationMethodComponent, TypeAlgorithmPipe],
+        imports: [
+          ReactiveFormsModule,
+          MatInputModule,
+          MatSelectModule,
+          MatFormFieldModule,
+          NoopAnimationsModule,
+          FormsModule,
+          MatIconTestingModule,
+          MatPaginatorModule,
+          DidFormatMinifierModule,
+        ],
+        providers: [
+          { provide: MAT_DIALOG_DATA, useValue: { id: 1 } },
+          {
+            provide: MatDialogRef,
+            useValue: matDialogRefSpy,
+          },
+          { provide: VerificationService, useValue: verificationServiceSpy },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(VerificationMethodComponent);
@@ -174,8 +178,10 @@ describe('VerificationMethodComponent with html', () => {
       option.click();
       expect(component.isFormDisabled).toBeFalse();
     });
-
   });
 });
 
-const getElement = (hostDebug) => (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
+const getElement =
+  (hostDebug) =>
+  (id, postSelector = '') =>
+    hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));

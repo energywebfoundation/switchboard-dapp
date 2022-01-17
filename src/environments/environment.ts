@@ -25,7 +25,7 @@ export const environment = {
   currencySymbol: 'VT',
   blockExplorerUrl: 'https://volta-explorer.energyweb.org',
 
-  ...constants
+  ...constants,
 };
 
 /*

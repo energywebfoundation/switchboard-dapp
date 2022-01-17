@@ -5,15 +5,12 @@ import { Store } from '@ngrx/store';
 import { SettingsSelectors } from '@state';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExperimentalGuard implements CanActivate {
-
-  constructor(private store: Store) {
-  }
+  constructor(private store: Store) {}
 
   canActivate(): Observable<boolean> {
     return this.store.select(SettingsSelectors.isExperimentalEnabled);
   }
-
 }

@@ -4,7 +4,7 @@ import { BigNumber } from 'ethers';
 import { from } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StakingPoolFacade {
   private pool: StakingPoolService;

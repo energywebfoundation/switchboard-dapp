@@ -1,5 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
@@ -16,10 +21,10 @@ const TOASTR_HEADER = 'Enrolment Request';
 @Component({
   selector: 'app-view-requests',
   templateUrl: './view-requests.component.html',
-  styleUrls: ['./view-requests.component.scss']
+  styleUrls: ['./view-requests.component.scss'],
 })
 export class ViewRequestsComponent implements OnInit {
-  @ViewChild('issuerFields', {static: false}) requiredFields: EnrolmentForm;
+  @ViewChild('issuerFields', { static: false }) requiredFields: EnrolmentForm;
   listType: string;
   claim: any;
   fields = [];
@@ -28,22 +33,29 @@ export class ViewRequestsComponent implements OnInit {
   claimParams;
   fieldList = [];
 
-  constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              public dialog: MatDialog,
-              private iamService: IamService,
-              private toastr: SwitchboardToastrService,
-              private loadingService: LoadingService,
-              private store: Store<UserClaimState>,
-              private notifService: NotificationService) {
-  }
+  constructor(
+    public dialogRef: MatDialogRef<ViewRequestsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialog: MatDialog,
+    private iamService: IamService,
+    private toastr: SwitchboardToastrService,
+    private loadingService: LoadingService,
+    private store: Store<UserClaimState>,
+    private notifService: NotificationService
+  ) {}
 
   canAccept() {
-    return this.listType === 'issuer' && !this.claim?.isAccepted && !this.claim?.isRejected;
+    return (
+      this.listType === 'issuer' &&
+      !this.claim?.isAccepted &&
+      !this.claim?.isRejected
+    );
   }
 
   get isApproveDisabled() {
-    return Boolean(!this?.requiredFields?.isValid() && this.roleContainRequiredParams());
+    return Boolean(
+      !this?.requiredFields?.isValid() && this.roleContainRequiredParams()
+    );
   }
 
   roleContainRequiredParams() {
@@ -58,11 +70,13 @@ export class ViewRequestsComponent implements OnInit {
       await this.setIssuerFields();
       await this.setRequestorFields();
     }
-
   }
 
   async approve() {
-    this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
+    this.loadingService.show(
+      'Please confirm this transaction in your connected wallet.',
+      CancelButton.ENABLED
+    );
     try {
       const req = {
         requester: this.claim.requester,
@@ -70,7 +84,7 @@ export class ViewRequestsComponent implements OnInit {
         token: this.claim.token,
         subjectAgreement: this.claim.subjectAgreement,
         registrationTypes: this.claim.registrationTypes,
-        issuerFields: this.requiredFields?.fieldsData() || []
+        issuerFields: this.requiredFields?.fieldsData() || [],
       };
 
       await this.iamService.claimsService.issueClaimRequest(req);
@@ -86,41 +100,53 @@ export class ViewRequestsComponent implements OnInit {
   }
 
   reject() {
-    this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      maxHeight: '195px',
-      data: {
-        header: TOASTR_HEADER,
-        message: 'Are you sure to reject this request?',
-        isDiscardButton: false
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().subscribe(async (res: any) => {
-      if (res) {
-        this.loadingService.show();
-        try {
-          await this.iamService.claimsService.rejectClaimRequest({
-            id: this.claim.id,
-            requesterDID: this.claim.requester
-          });
-          this.notifService.decreasePendingApprovalCount();
-          this.toastr.success('Request is rejected successfully.', TOASTR_HEADER);
-          this.dialogRef.close(true);
-        } catch (e) {
-          console.error(e);
-        } finally {
-          this.loadingService.hide();
+    this.dialog
+      .open(ConfirmationDialogComponent, {
+        width: '400px',
+        maxHeight: '195px',
+        data: {
+          header: TOASTR_HEADER,
+          message: 'Are you sure to reject this request?',
+          isDiscardButton: false,
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(async (res: any) => {
+        if (res) {
+          this.loadingService.show();
+          try {
+            await this.iamService.claimsService.rejectClaimRequest({
+              id: this.claim.id,
+              requesterDID: this.claim.requester,
+            });
+            this.notifService.decreasePendingApprovalCount();
+            this.toastr.success(
+              'Request is rejected successfully.',
+              TOASTR_HEADER
+            );
+            this.dialogRef.close(true);
+          } catch (e) {
+            console.error(e);
+          } finally {
+            this.loadingService.hide();
+          }
         }
-      }
-    });
+      });
   }
 
   private async getRoleIssuerFields(namespace: string) {
     this.loadingService.show();
-    const definitions: any = await this.iamService.getRolesDefinition([namespace]);
+    const definitions: any = await this.iamService.getRolesDefinition([
+      namespace,
+    ]);
     const issuerFieldList = definitions[namespace]?.issuerFields;
-    if (issuerFieldList && Array.isArray(issuerFieldList) && issuerFieldList.length > 0) {
+    if (
+      issuerFieldList &&
+      Array.isArray(issuerFieldList) &&
+      issuerFieldList.length > 0
+    ) {
       this.fieldList = issuerFieldList;
     }
     this.loadingService.hide();
@@ -130,7 +156,9 @@ export class ViewRequestsComponent implements OnInit {
     if (this.claim.issuedToken) {
       const decoded = await this.decode(this.claim.issuedToken);
       if (decoded.claimData) {
-        this.issuerFields = decoded.claimData?.issuerFields ? decoded.claimData?.issuerFields : [];
+        this.issuerFields = decoded.claimData?.issuerFields
+          ? decoded.claimData?.issuerFields
+          : [];
       }
     }
   }
@@ -139,14 +167,16 @@ export class ViewRequestsComponent implements OnInit {
     if (this.claim.token) {
       const decoded = await this.decode(this.claim.token);
       if (decoded.claimData) {
-        this.fields = decoded.claimData?.fields ? decoded.claimData?.fields : [];
+        this.fields = decoded.claimData?.fields
+          ? decoded.claimData?.fields
+          : [];
       }
     }
   }
 
   private async decode(token): Promise<any> {
     return await this.iamService.didRegistry.decodeJWTToken({
-      token
+      token,
     });
   }
 }

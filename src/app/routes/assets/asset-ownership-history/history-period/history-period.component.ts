@@ -11,7 +11,7 @@ const ASSET_TRANSFERRED = 'ASSET_TRANSFERRED';
   selector: 'app-history-period',
   templateUrl: './history-period.component.html',
   styleUrls: ['./history-period.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HistoryPeriodComponent {
   @Input() period: Period;
@@ -23,12 +23,12 @@ export class HistoryPeriodComponent {
     if (this.period.type === ASSET_TRANSFERRED) {
       return {
         header: 'Offered from',
-        did: this.period.relatedTo
+        did: this.period.relatedTo,
       };
     }
     return {
       header: 'Owner',
-      did: this.period.emittedBy
+      did: this.period.emittedBy,
     };
   }
 
@@ -39,12 +39,12 @@ export class HistoryPeriodComponent {
     if (this.period.type === ASSET_TRANSFERRED) {
       return {
         header: 'Owner',
-        did: this.period.emittedBy
+        did: this.period.emittedBy,
       };
     }
     return {
       header: 'Offered to',
-      did: this.period.relatedTo
+      did: this.period.relatedTo,
     };
   }
 }

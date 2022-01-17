@@ -12,9 +12,8 @@ describe('HistoryElementComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [HistoryElementComponent, DidFormatMinifierPipe],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -29,7 +28,7 @@ describe('HistoryElementComponent', () => {
 
   it('should check if header text is always uppercase', () => {
     const headerText = 'header';
-    component.element = {header: headerText} as any;
+    component.element = { header: headerText, did: '' };
     fixture.detectChanges();
     expect(h4.textContent).toBe(headerText.toUpperCase());
   });

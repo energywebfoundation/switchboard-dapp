@@ -2,14 +2,16 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationService {
   private _pendingApproval: BehaviorSubject<number>;
   private _pendingDidDocSync: BehaviorSubject<number>;
   private _assetsOfferedToMe: BehaviorSubject<number>;
   private _pendingAssetDidDocSync: BehaviorSubject<number>;
-  private _pendingSyncCount$ = new BehaviorSubject<number | undefined>(undefined);
+  private _pendingSyncCount$ = new BehaviorSubject<number | undefined>(
+    undefined
+  );
   pendingSyncCount$ = this._pendingSyncCount$.asObservable();
 
   public initialized = false;
@@ -37,7 +39,12 @@ export class NotificationService {
     return this._pendingAssetDidDocSync.asObservable();
   }
 
-  initNotifCounts(pendingApproval: number, pendingDidDocSync: number, assetsOfferedToMe: number, pendingAssetDidDocSync: number) {
+  initNotifCounts(
+    pendingApproval: number,
+    pendingDidDocSync: number,
+    assetsOfferedToMe: number,
+    pendingAssetDidDocSync: number
+  ) {
     this._pendingApproval.next(pendingApproval);
     this._pendingDidDocSync.next(pendingDidDocSync);
     this._assetsOfferedToMe.next(assetsOfferedToMe);
@@ -69,11 +76,15 @@ export class NotificationService {
   }
 
   increasePendingAssetDidDocSyncCount() {
-    this._pendingAssetDidDocSync.next(this._pendingAssetDidDocSync.getValue() + 1);
+    this._pendingAssetDidDocSync.next(
+      this._pendingAssetDidDocSync.getValue() + 1
+    );
   }
 
   decreasePendingAssetDidDocSyncCount() {
-    this._pendingAssetDidDocSync.next(this._pendingAssetDidDocSync.getValue() - 1);
+    this._pendingAssetDidDocSync.next(
+      this._pendingAssetDidDocSync.getValue() - 1
+    );
   }
 
   setZeroToPendingDidDocSyncCount() {

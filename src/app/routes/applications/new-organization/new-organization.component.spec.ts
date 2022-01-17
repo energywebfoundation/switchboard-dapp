@@ -8,9 +8,8 @@ xdescribe('NewOrganizationComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NewOrganizationComponent]
-    })
-      .compileComponents();
+      declarations: [NewOrganizationComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

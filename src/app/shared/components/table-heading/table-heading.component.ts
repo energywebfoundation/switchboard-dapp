@@ -4,9 +4,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'app-table-heading',
   templateUrl: './table-heading.component.html',
   styleUrls: ['./table-heading.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableHeadingComponent {
   @Input() heading: string;
-
 }

@@ -7,15 +7,13 @@ const roleTypeMap = new Map<RoleTypeEnum, string>()
   .set(RoleTypeEnum.ORG, 'Organization');
 
 @Pipe({
-  name: 'roleType'
+  name: 'roleType',
 })
 export class RoleTypePipe implements PipeTransform {
-
-  transform(value: RoleTypeEnum, ...args: unknown[]): unknown {
+  transform(value: RoleTypeEnum): unknown {
     if (roleTypeMap.has(value)) {
       return roleTypeMap.get(value);
     }
     return 'Unsupported Role Type';
   }
-
 }

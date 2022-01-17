@@ -6,6 +6,7 @@ export const USER_FEATURE_KEY = 'user';
 export const USER_DATA_STORAGE_KEY = 'userData';
 
 export interface UserClaimState {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   didDocument: any;
   profile: Profile;
   error?: string | null;
@@ -20,21 +21,32 @@ export const initialState: UserClaimState = {
   didDocument: null,
   profile: null,
   error: '',
-  userData: null
+  userData: null,
 };
 
 const userReducer = createReducer(
   initialState,
-  on(userActions.setProfile, userActions.updateLocalStateUserClaims, (state, {profile}) => ({
-    ...state,
-    profile
-  })),
-  on(userActions.updateUserData, (state, {userData}) => {
+  on(
+    userActions.setProfile,
+    userActions.updateLocalStateUserClaims,
+    (state, { profile }) => ({
+      ...state,
+      profile,
+    })
+  ),
+  on(userActions.updateUserData, (state, { userData }) => {
     localStorage.setItem(USER_DATA_STORAGE_KEY, JSON.stringify(userData));
-    return {...state, userData};
+    return { ...state, userData };
   }),
-  on(userActions.clearUserClaim, (state) => ({...state, profile: null, didDocument: null})),
-  on(userActions.setDidDocument, (state, {didDocument}) => ({...state, didDocument}))
+  on(userActions.clearUserClaim, (state) => ({
+    ...state,
+    profile: null,
+    didDocument: null,
+  })),
+  on(userActions.setDidDocument, (state, { didDocument }) => ({
+    ...state,
+    didDocument,
+  }))
 );
 
 export function reducer(state: UserClaimState | undefined, action: Action) {

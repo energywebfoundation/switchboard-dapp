@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 declare namespace Cypress {
   interface Chainable {
     /**
@@ -21,7 +22,7 @@ declare namespace Cypress {
 Cypress.Commands.add('visitAssets', () => {
   cy.intercept({
     method: 'GET',
-    url: '**/assets/owner/*'
+    url: '**/assets/owner/*',
   }).as('getOwnerAssets');
   cy.dataQaId('Assets').click();
   cy.wait('@getOwnerAssets');
@@ -30,12 +31,12 @@ Cypress.Commands.add('visitAssets', () => {
 Cypress.Commands.add('registerAsset', () => {
   cy.dataQaId('register-asset').click();
   cy.dataQaId('dialog-register-asset').click();
-  cy.intercept({method: 'GET', url: '**/assets/*'}).as('registeredAsset');
-  cy.wait('@registeredAsset', {timeout: 30000});
+  cy.intercept({ method: 'GET', url: '**/assets/*' }).as('registeredAsset');
+  cy.wait('@registeredAsset', { timeout: 30000 });
 });
 
 Cypress.Commands.add('openEditAssetDialog', (id: number) => {
-  cy.dataQaId('menu-' + id).click({waitForAnimations: true, force: true});
-  cy.dataQaId('edit').click({force: true});
+  cy.dataQaId('menu-' + id).click({ waitForAnimations: true, force: true });
+  cy.dataQaId('edit').click({ force: true });
   cy.wait(500);
 });

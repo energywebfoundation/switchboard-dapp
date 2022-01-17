@@ -1,4 +1,8 @@
-import { getHierarchyLength, getLastHierarchyOrg } from './organization.selectors';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  getHierarchyLength,
+  getLastHierarchyOrg,
+} from './organization.selectors';
 
 describe('Organization Selectors', () => {
   describe('getLastHierarchyOrg', () => {

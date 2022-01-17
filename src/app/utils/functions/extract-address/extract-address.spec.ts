@@ -10,6 +10,8 @@ describe('extractAddress function', () => {
   });
 
   it('should return did address when passed a did', () => {
-    expect(extractAddress('did:ethr:0x' + stringWithLength(40))).toEqual('0x' + stringWithLength(40));
+    expect(extractAddress('did:ethr:0x' + stringWithLength(40))).toEqual(
+      '0x' + stringWithLength(40)
+    );
   });
 });

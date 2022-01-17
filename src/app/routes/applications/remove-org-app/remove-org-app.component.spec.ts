@@ -8,9 +8,8 @@ xdescribe('RemoveOrgAppComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [RemoveOrgAppComponent]
-    })
-      .compileComponents();
+      declarations: [RemoveOrgAppComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

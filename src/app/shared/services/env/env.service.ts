@@ -1,7 +1,6 @@
 import { environment } from '../../../../environments/environment';
 
 export class EnvService {
-
   theme = environment.theme;
   application = environment.application;
 
@@ -21,5 +20,4 @@ export class EnvService {
   currencyName: string = environment.currencyName;
   currencySymbol: string = environment.currencySymbol;
   blockExplorerUrl: string = environment.blockExplorerUrl;
-
 }
