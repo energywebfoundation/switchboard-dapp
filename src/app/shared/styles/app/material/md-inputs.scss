@@ -118,7 +118,6 @@ fieldset[disabled] .mda-radio input+em:before {
 }
 
 mat-label {
-  color: #FFF !important;
   font-family: 'Rajdhani', sans-serif !important;
   font-weight: 500;
 } 
@@ -126,22 +125,10 @@ mat-label {
 .mat-form-field {
   display: block !important;
   font-size: 16px !important;
-
-  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #B0ADDC;
-  }  
-  :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #B0ADDC;
-  }
-
 }
 
 .break-word {
   word-break: break-all;
-}
-
-.md-create.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-  background: #A567FF !important;
 }
 
 .search-title {
@@ -161,12 +148,6 @@ mat-label {
   }
 }
 
-.md-search.mat-form-field {
-  .mat-input-element {
-    color: #FFF;
-  }
-}
-
 .md-search.mat-form-field-prefix, .mat-form-field-suffix {
   color: rgba(255,255,255,0.5);
 }
@@ -175,54 +156,54 @@ mat-label {
   background: #343242;
 }
 
-.md-enroll.mat-form-field-appearance-outline .mat-form-field-outline {
-      background: rgba(255,255,255,0.03);
-      color: currentColor;
-  }
+// .md-enroll.mat-form-field-appearance-outline .mat-form-field-outline {
+//       background: rgba(255,255,255,0.03);
+//       color: currentColor;
+//   }
 
-.md-enroll.mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
-    color: currentColor !important;
-}
+// .md-enroll.mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
+//     color: currentColor !important;
+// }
 
-.md-enroll.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-    background: currentColor;
-}
+// .md-enroll.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+//     background: currentColor;
+// }
 
-.md-enroll.mat-input-element {
-  color: currentColor;
-  caret-color: currentColor;
-}
+// .md-enroll.mat-input-element {
+//   color: currentColor;
+//   caret-color: currentColor;
+// }
 
-.md-enroll.mat-option.mat-selected:not(.mat-option-disabled) {
-  color: #FFF;
-}
+// .md-enroll.mat-option.mat-selected:not(.mat-option-disabled) {
+//   color: #FFF;
+// }
 
 .line-height-filter {
   line-height: 1px !important;
 }
 
-.mat-search_icon-close, .mat-search_icon-search {
-  color: #33CBCB;
-}
+// .mat-search_icon-close, .mat-search_icon-search {
+//   color: #33CBCB;
+// }
 
 
-.md-enroll {
-  .mat-option {
-    color: currentColor;
-    background: currentColor;
+// .md-enroll {
+//   .mat-option {
+//     color: currentColor;
+//     background: currentColor;
   
-    &:nth-child(odd) {
-      background: currentColor;
-    }
+//     &:nth-child(odd) {
+//       background: currentColor;
+//     }
   
-    .mat-active {
-      background: currentColor;
-    }
-  }
-  .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
-    color: currentColor;
-  }
-}
+//     .mat-active {
+//       background: currentColor;
+//     }
+//   }
+//   .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+//     color: currentColor;
+//   }
+// }
 
 @include media-breakpoint-down(sm) {
   .mat-form-field, .form-control {
@@ -243,8 +224,6 @@ mat-label {
 .mat-input-element {
   position: relative;
   top: -4px;
-  color: #FFF;
-  caret-color: #FFF;
 }
 
 .mat-option {
@@ -271,53 +250,8 @@ mat-label {
   color: #ffffff;
 }
 
-.mat-select-arrow {
-  color: #FFF;
-}
-
 .mat-select-placeholder, .mat-placeholder {
   color: #B0ADDC;
-}
-
-.mat-datepicker-content {
-  background-color: #2a2937 !important;
-  color: rgba(255,255,255,.87) !important;
-}
-
-.mat-calendar-body-cell-content {
-  color: rgba(255,255,255,.87) !important;
-}
-
-.mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button, .mat-datepicker-toggle {
-  color: rgba(255,255,255,.54);
-}
-
-.mat-calendar-body-label {
-  color: rgba(255,255,255,.54) !important;
-}
-
-.mat-calendar-table-header-divider {
-  color: rgba(255,255,255,.38) !important;
-}
-
-.mat-calendar-arrow {
-  border-top-color: rgba(255,255,255,.54) !important;
-}
-
-.mat-calendar-table-header {
-  color: rgba(255,255,255,.38) !important;
-}
-
-.mat-calendar-body-today:not(.mat-calendar-body-selected) {
-  border-color: rgba(255,255,255,.38) !important;
-}
-
-.mat-calendar-body-selected {
-  background-color: #673ab7 !important;
-}
-
-.mat-calendar-table-header-divider::after {
-  background: rgba(255, 255, 255,.12);
 }
 
 .mat-select-panel {
@@ -344,22 +278,9 @@ mat-label {
       padding: 0.2em 0.2em !important;
   }
 
-  .mat-input-element {
-    color: #FFF;
-    font-size: 14px;
-  }
-
-  .mat-form-field-outline {
-    background: #181522 !important;
-    color: #554675;
-  }
 
   .mat-form-field-flex {
     padding: 0 .75em 0 .5em !important  ;
-  }
-
-  .mat-select-placeholder {
-    color: #9080bb !important;
   }
 
   .mat-select-value {
@@ -370,9 +291,6 @@ mat-label {
 .mat-filter-sort {
   .mat-form-field {
     font-size: 13px !important;
-  }
-  .mat-label {
-    color: #FFF;
   }
 
   .mat-form-field-wrapper {
@@ -389,21 +307,11 @@ mat-label {
 }
 
 .mat-input-element {
-  color: #FFF;
   font-size: 14px;
-}
-
-.mat-form-field-outline {
-  background: #181522 !important;
-  color: #554675;
 }
 
 .mat-form-field-flex {
   padding: 0 .75em 0.2em .5em !important  ;
-}
-
-.mat-select-placeholder {
-  color: #9080bb !important;
 }
 
 .mat-select-value {

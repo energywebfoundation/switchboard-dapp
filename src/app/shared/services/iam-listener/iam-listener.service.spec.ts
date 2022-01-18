@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
 import { IamListenerService } from './iam-listener.service';
-import { IamService } from '../iam.service';
+import { SignerFacadeService } from '../signer-facade/signer-facade.service';
 
 describe('IamListenerService', () => {
   let service: IamListenerService;
-  const iamSpy = jasmine.createSpyObj('iam', ['on']);
+  const signerFacadeSpy = jasmine.createSpyObj(SignerFacadeService, ['on']);
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        {provide: IamService, useValue: {iam: iamSpy}}
+        {provide: SignerFacadeService, useValue: signerFacadeSpy}
       ]
     });
     service = TestBed.inject(IamListenerService);
@@ -20,7 +20,8 @@ describe('IamListenerService', () => {
   });
 
   it('should call 3 events', () => {
-    service.setListeners(() => {});
-    expect(iamSpy.on).toHaveBeenCalledTimes(3);
+    service.setListeners(() => {
+    });
+    expect(signerFacadeSpy.on).toHaveBeenCalledTimes(3);
   });
 });

@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
@@ -9,6 +9,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
+import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.component';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -18,10 +19,14 @@ const TOASTR_HEADER = 'Enrolment Request';
   styleUrls: ['./view-requests.component.scss']
 })
 export class ViewRequestsComponent implements OnInit {
+  @ViewChild('issuerFields', {static: false}) requiredFields: EnrolmentForm;
   listType: string;
   claim: any;
   fields = [];
+  issuerFields = [];
   userDid$ = this.store.select(userSelectors.getDid);
+  claimParams;
+  fieldList = [];
 
   constructor(public dialogRef: MatDialogRef<ViewRequestsComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -33,40 +38,48 @@ export class ViewRequestsComponent implements OnInit {
               private notifService: NotificationService) {
   }
 
+  canAccept() {
+    return this.listType === 'issuer' && !this.claim?.isAccepted && !this.claim?.isRejected;
+  }
+
+  get isApproveDisabled() {
+    return Boolean(!this?.requiredFields?.isValid() && this.roleContainRequiredParams());
+  }
+
+  roleContainRequiredParams() {
+    return this.fieldList.length > 0;
+  }
+
   async ngOnInit() {
     this.listType = this.data.listType;
     this.claim = this.data.claimData;
-
-    if (this.claim && this.claim.token) {
-      const decoded: any = await this.iamService.iam.decodeJWTToken({
-        token: this.claim.token
-      });
-
-      if (decoded.claimData && decoded.claimData.fields) {
-        this.fields = decoded.claimData.fields;
-      }
+    await this.getRoleIssuerFields(this.claim.claimType);
+    if (this.claim) {
+      await this.setIssuerFields();
+      await this.setRequestorFields();
     }
+
   }
 
   async approve() {
     this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
-
     try {
       const req = {
         requester: this.claim.requester,
         id: this.claim.id,
         token: this.claim.token,
         subjectAgreement: this.claim.subjectAgreement,
-        registrationTypes: this.claim.registrationTypes
+        registrationTypes: this.claim.registrationTypes,
+        issuerFields: this.requiredFields?.fieldsData() || []
       };
 
-      await this.iamService.iam.issueClaimRequest(req);
+      await this.iamService.claimsService.issueClaimRequest(req);
 
       this.notifService.decreasePendingApprovalCount();
       this.toastr.success('Request is approved.', TOASTR_HEADER);
       this.dialogRef.close(true);
     } catch (e) {
-      this.toastr.error(e, TOASTR_HEADER);
+      this.toastr.error(e?.message, TOASTR_HEADER);
     } finally {
       this.loadingService.hide();
     }
@@ -87,7 +100,7 @@ export class ViewRequestsComponent implements OnInit {
       if (res) {
         this.loadingService.show();
         try {
-          await this.iamService.iam.rejectClaimRequest({
+          await this.iamService.claimsService.rejectClaimRequest({
             id: this.claim.id,
             requesterDID: this.claim.requester
           });
@@ -100,6 +113,40 @@ export class ViewRequestsComponent implements OnInit {
           this.loadingService.hide();
         }
       }
+    });
+  }
+
+  private async getRoleIssuerFields(namespace: string) {
+    this.loadingService.show();
+    const definitions: any = await this.iamService.getRolesDefinition([namespace]);
+    const issuerFieldList = definitions[namespace]?.issuerFields;
+    if (issuerFieldList && Array.isArray(issuerFieldList) && issuerFieldList.length > 0) {
+      this.fieldList = issuerFieldList;
+    }
+    this.loadingService.hide();
+  }
+
+  private async setIssuerFields() {
+    if (this.claim.issuedToken) {
+      const decoded = await this.decode(this.claim.issuedToken);
+      if (decoded.claimData) {
+        this.issuerFields = decoded.claimData?.issuerFields ? decoded.claimData?.issuerFields : [];
+      }
+    }
+  }
+
+  private async setRequestorFields() {
+    if (this.claim.token) {
+      const decoded = await this.decode(this.claim.token);
+      if (decoded.claimData) {
+        this.fields = decoded.claimData?.fields ? decoded.claimData?.fields : [];
+      }
+    }
+  }
+
+  private async decode(token): Promise<any> {
+    return await this.iamService.didRegistry.decodeJWTToken({
+      token
     });
   }
 }

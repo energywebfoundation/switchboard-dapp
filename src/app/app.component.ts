@@ -6,6 +6,7 @@ import { SettingsService } from './core/settings/settings.service';
 import { UrlService } from './shared/services/url-service/url.service';
 import { Store } from '@ngrx/store';
 import * as AuthActions from './state/auth/auth.actions';
+import { ThemesService } from './core/themes/themes.service';
 
 @Component({
   selector: 'app-root',
@@ -58,6 +59,7 @@ export class AppComponent implements OnInit {
               private matIconRegistry: MatIconRegistry,
               private domSanitizer: DomSanitizer,
               private urlHistoryService: UrlService,
+              private themeService: ThemesService,
               private store: Store) {
     this.matIconRegistry.addSvgIcon(
       'wallet-icon',
@@ -203,6 +205,14 @@ export class AppComponent implements OnInit {
     this.matIconRegistry.addSvgIcon(
       'create-staking-icon',
       this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/img/icons/create-staking-icon.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'sync-did-icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/img/icons/sync-did-icon.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'add-to-claimmanager-icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/img/icons/add-to-claim-manager-icon.svg')
     );
   }
 

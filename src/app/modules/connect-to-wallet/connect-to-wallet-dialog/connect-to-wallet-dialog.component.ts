@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { WalletProvider } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 import * as authSelectors from '../../../state/auth/auth.selectors';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../../../state/auth/auth.actions';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 @Component({
   selector: 'app-connect-to-wallet-dialog',
@@ -14,19 +15,17 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ConnectToWalletDialogComponent {
   disableMetamaskButton$ = this.store.select(authSelectors.isMetamaskDisabled);
   isMetamaskExtensionAvailable$ = this.store.select(authSelectors.isMetamaskPresent);
+  showEkcOption = this.envService.showAzureLoginOption;
 
-  constructor(private store: Store, @Inject(MAT_DIALOG_DATA) public data: { navigateOnTimeout: boolean }) {
+  constructor(private store: Store,
+              @Inject(MAT_DIALOG_DATA) public data: { navigateOnTimeout: boolean },
+              private envService: EnvService) {
   }
 
-  connectToWalletConnect() {
-    this.login(WalletProvider.WalletConnect);
-  }
-
-  connectToMetamask() {
-    this.login(WalletProvider.MetaMask);
-  }
-
-  private login(provider: WalletProvider) {
-    this.store.dispatch(AuthActions.loginViaDialog({provider, navigateOnTimeout: this.data?.navigateOnTimeout ?? true}));
+  login(provider: ProviderType) {
+    this.store.dispatch(AuthActions.loginViaDialog({
+      provider,
+      navigateOnTimeout: this.data?.navigateOnTimeout ?? true
+    }));
   }
 }

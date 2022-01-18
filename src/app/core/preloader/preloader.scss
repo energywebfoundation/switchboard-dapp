@@ -6,7 +6,6 @@
 @import "../../shared/styles/bootstrap/_mixins";
 @import "../../shared/styles/app/variables";
 
-$preloader-bg: #181423;
 $preloader-wd: 200px;
 $preloader-hg: 65px;
 
@@ -18,12 +17,11 @@ $preloader-hg: 65px;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: $preloader-bg;
-  background-image: -webkit-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* Chrome 10+, Saf5.1+ */
-  background-image: -moz-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* FF3.6+ */
-  background-image: -ms-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* IE10 */
-  background-image: -o-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* Opera 11.10+ */
-  background-image: linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* W3C */
+  // background-image: -webkit-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* Chrome 10+, Saf5.1+ */
+  // background-image: -moz-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* FF3.6+ */
+  // background-image: -ms-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* IE10 */
+  // background-image: -o-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* Opera 11.10+ */
+  // background-image: linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* W3C */
   z-index: 9999;
   transition: opacity .65s;
 }
@@ -35,12 +33,12 @@ $preloader-hg: 65px;
   left: 0;
   bottom: 0;
   right: 0;
-  width: $preloader-wd;
-  height: $preloader-hg;
+  // width: $preloader-wd;
+  // height: $preloader-hg;
   margin: auto;
   overflow: auto;
-  background-image: url(../../../assets/img/preloader/preloader.empty.png);
-  background-size: $preloader-wd $preloader-hg;
+  // background-image: url(../../../assets/img/preloader/preloader.empty.png);
+  // background-size: $preloader-wd $preloader-hg;
 }
 
 /*@noflip*/
@@ -50,8 +48,8 @@ $preloader-hg: 65px;
   left: 0;
   bottom: 0;
   min-width: 10px;
-  background-image: url(../../../assets/img/preloader/preloader.full.png);
-  background-size: $preloader-wd $preloader-hg;
+  // background-image: url(../../../assets/img/preloader/preloader.full.png);
+  // background-size: $preloader-wd $preloader-hg;
 }
 
 .preloader-hidden {

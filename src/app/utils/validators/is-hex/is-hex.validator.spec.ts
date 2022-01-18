@@ -59,6 +59,56 @@ describe('tests for isHexValidator', () => {
       expect(getFormErrors('0x' + stringWithLength(40), HexValidators.isEthAddress)).toEqual(null);
     });
   });
+
+  describe('tests for valid did', () => {
+    it('should return null if value is undefined', () => {
+      expect(getFormErrors(undefined, HexValidators.isDidValid)).toEqual(null);
+    });
+
+    it('should return invalidDid when did do not contains did prefix', () => {
+      expect(getFormErrors('0x' + stringWithLength(40), HexValidators.isDidValid)).toEqual({
+        invalidDid: true
+      });
+    });
+
+    it('should return invalidDid when passed value do not have colon after did', () => {
+      expect(getFormErrors('didethr:' + stringWithLength(40), HexValidators.isDidValid)).toEqual({
+        invalidDid: true
+      });
+    });
+
+    it('should return invalidDid when passed value do not have specified did method', () => {
+      expect(getFormErrors('did:' + stringWithLength(40), HexValidators.isDidValid)).toEqual({
+        invalidDid: true
+      });
+    });
+
+    it('should return invalidDid when ethereum address do not contains 0x', () => {
+      expect(getFormErrors('did:ethr:' + stringWithLength(40), HexValidators.isDidValid)).toEqual({
+        invalidDid: true
+      });
+    });
+
+    it('should return invalidDid when ethereum address contains less than 40 characters after 0x', () => {
+      expect(getFormErrors('did:ethr:0x' + stringWithLength(39), HexValidators.isDidValid)).toEqual({
+        invalidDid: true
+      });
+    });
+
+    it('should return invalidDid when ethereum address contains more than 40 characters after 0x', () => {
+      expect(getFormErrors('did:ethr:0x' + stringWithLength(41), HexValidators.isDidValid)).toEqual({
+        invalidDid: true
+      });
+    });
+
+    it('should return null when did is valid', () => {
+      expect(getFormErrors('did:ethr:0x' + stringWithLength(40), HexValidators.isDidValid)).toEqual(null);
+    });
+
+    it('should return null when did have method and method specified id', () => {
+      expect(getFormErrors('did:ethr:chainid:0x' + stringWithLength(40), HexValidators.isDidValid)).toEqual(null);
+    });
+  });
 });
 
 

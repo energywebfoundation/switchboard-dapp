@@ -15,7 +15,7 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./organization-actions.component.scss']
 })
 export class OrganizationActionsComponent extends ActionBaseAbstract implements OnInit {
-  @Input() organization: { isProvider: boolean, namespace: string; owner: string };
+  @Input() organization: { isProvider: boolean, namespace: string; owner: string; containsApps: boolean; containsRoles: boolean };
   @Output() viewRoles = new EventEmitter();
   @Output() viewApps = new EventEmitter();
   @Output() organizationCreated = new EventEmitter();

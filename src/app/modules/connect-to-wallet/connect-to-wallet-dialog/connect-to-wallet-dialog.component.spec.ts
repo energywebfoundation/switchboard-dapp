@@ -4,10 +4,9 @@ import { ConnectToWalletDialogComponent } from './connect-to-wallet-dialog.compo
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import * as authSelectors from '../../../state/auth/auth.selectors';
-import * as AuthActions from '../../../state/auth/auth.actions';
-import { By } from '@angular/platform-browser';
-import { WalletProvider } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 describe('ConnectToWalletDialogComponent', () => {
   let component: ConnectToWalletDialogComponent;
@@ -15,13 +14,12 @@ describe('ConnectToWalletDialogComponent', () => {
   let hostDebug: DebugElement;
   let store: MockStore;
 
-  const setup = (opt?: {
+  const setup = (options?: {
     metamaskPresent?: boolean,
     metamaskDisabled?: boolean
   }) => {
-    const options = {metamaskPresent: true, metamaskDisabled: false, ...opt};
-    store.overrideSelector(authSelectors.isMetamaskPresent, options.metamaskPresent);
-    store.overrideSelector(authSelectors.isMetamaskDisabled, options.metamaskDisabled);
+    store.overrideSelector(authSelectors.isMetamaskPresent, options?.metamaskPresent ?? true);
+    store.overrideSelector(authSelectors.isMetamaskDisabled, options?.metamaskDisabled ?? false);
     fixture.detectChanges();
   };
 
@@ -30,7 +28,8 @@ describe('ConnectToWalletDialogComponent', () => {
       declarations: [ConnectToWalletDialogComponent],
       providers: [
         provideMockStore(),
-        {provide: MAT_DIALOG_DATA, useValue: {navigateOnTimeout: true}}
+        {provide: MAT_DIALOG_DATA, useValue: {navigateOnTimeout: true}},
+        {provide: EnvService, useValue: {}}
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -46,68 +45,18 @@ describe('ConnectToWalletDialogComponent', () => {
 
   it('should create', () => {
     setup();
-
     expect(component).toBeTruthy();
   });
 
-  it('should check metamask presence', () => {
-    setup();
-    const {metamaskBtn, noVolta} = selectors(hostDebug);
-
-    expect(metamaskBtn).toBeTruthy();
-    expect(metamaskBtn.nativeElement.disabled).toBeFalsy();
-    expect(noVolta).toBeFalsy();
-  });
-
-  it('should display message about not connected to volta when user have metamask', () => {
-    setup({metamaskDisabled: true});
-    const {metamaskBtn, noVolta} = selectors(hostDebug);
-
-    expect(metamaskBtn).toBeTruthy();
-    expect(metamaskBtn.nativeElement.disabled).toBeTruthy();
-    expect(noVolta).toBeTruthy();
-    expect(noVolta.nativeElement.innerText).toContain('You are not connected to Volta Network.');
-  });
-
-  it('should dispatch login action with Metamask when clicking on metamask button', () => {
-    setup();
-    const {metamaskBtn} = selectors(hostDebug);
+  it('should dispatch action for login.', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
-    metamaskBtn.nativeElement.click();
+    fixture.detectChanges();
 
-    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.loginViaDialog({
-      provider: WalletProvider.MetaMask,
+    component.login(ProviderType.MetaMask);
+    expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining({
+      provider: ProviderType.MetaMask,
       navigateOnTimeout: true
     }));
   });
 
-  it('should dispatch login action with WalletConnect when clicking on wallet connect button', () => {
-    setup();
-    const {mobileWalletBtn} = selectors(hostDebug);
-    const dispatchSpy = spyOn(store, 'dispatch');
-    mobileWalletBtn.nativeElement.click();
-
-    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.loginViaDialog({
-      provider: WalletProvider.WalletConnect,
-      navigateOnTimeout: true
-    }));
-  });
-
-  it('should not find metamask button when is not available', () => {
-    setup({metamaskPresent: false});
-    const {metamaskBtn} = selectors(hostDebug);
-
-    expect(metamaskBtn).toBeFalsy();
-  });
 });
-const selectors = (hostDebug: DebugElement) => {
-  const getElement = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
-
-  return {
-    metamaskBtn: getElement('metamask'),
-    noVolta: getElement('no-volta'),
-    mobileWalletBtn: getElement('mobile-wallet'),
-    ewKeyBtn: getElement('ew-key'),
-    getElement
-  };
-};

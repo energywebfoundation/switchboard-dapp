@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
-import { GovernanceListComponent } from './governance-list/governance-list.component';
 import { ListType } from '../../shared/constants/shared-constants';
 import { IamService } from '../../shared/services/iam.service';
 import { UrlParamService } from '../../shared/services/url-param.service';
@@ -12,8 +11,11 @@ import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
-import { OrganizationActions, OrganizationSelectors } from '@state';
+import { ApplicationActions, OrganizationActions, OrganizationSelectors, RoleActions } from '@state';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
+import { ApplicationListComponent } from './application-list/application-list.component';
+import { RoleListComponent } from './role-list/role-list.component';
+import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
 
 @Component({
   selector: 'app-applications',
@@ -23,8 +25,8 @@ import { OrganizationListComponent } from './organization-list/organization-list
 export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('governanceTabGroup') governanceTabGroup: MatTabGroup;
   @ViewChild('listOrg') listOrg: OrganizationListComponent;
-  @ViewChild('listApp') listApp: GovernanceListComponent;
-  @ViewChild('listRole') listRole: GovernanceListComponent;
+  @ViewChild('listApp') listApp: ApplicationListComponent;
+  @ViewChild('listRole') listRole: RoleListComponent;
 
   hierarchyLength$ = this.store.select(OrganizationSelectors.getHierarchyLength);
   isSelectedOrgNotOwnedByUser$ = this.store.select(OrganizationSelectors.isSelectedOrgNotOwnedByUser);
@@ -67,6 +69,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription$.next();
     this.subscription$.complete();
+    this.cleanFilters();
   }
 
   openNewOrgComponent(): void {
@@ -100,12 +103,12 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.isIamEwcOwner = await this.iamService.iam.isOwner({
+    this.isIamEwcOwner = await this.iamService.domainsService.isOwner({
       domain: 'iam.ewc'
     });
   }
 
-  async showMe(i: any) {
+  showMe(i: MatTabChangeEvent) {
     // Preserve Selected Tab
     this.urlParamService.updateQueryParams(this.router, this.activatedRoute, {
       selectedTab: i.index
@@ -114,16 +117,14 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (i.index === 1) {
       // console.log('Showing App List');
       if (this.isAppShown) {
-        await this.listApp.getList(this.defaultFilterOptions.app);
-        this.defaultFilterOptions.app = undefined;
+        this.listApp.getList();
       } else {
         this.isAppShown = true;
       }
     } else if (i.index === 2) {
       // console.log('Showing Role List');
       if (this.isRoleShown) {
-        await this.listRole.getList(this.defaultFilterOptions.role);
-        this.defaultFilterOptions.role = undefined;
+        this.listRole.getList();
       } else {
         this.isRoleShown = true;
       }
@@ -139,30 +140,38 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.showFilter.org = !this.showFilter.org;
         break;
       case ListType.APP:
-        this.showFilter.app = !this.showFilter.app;
+        this.store.dispatch(ApplicationActions.toggleFilters());
         break;
       case ListType.ROLE:
-        this.showFilter.role = !this.showFilter.role;
+        this.store.dispatch(RoleActions.toggleFilters());
         break;
     }
   }
 
   updateFilter(filterOptions: any) {
-    // console.log('updateFilter', filterOptions);
     let tabIdx = 0;
     switch (filterOptions.listType) {
       case ListType.APP:
-        this.showFilter.app = true;
         tabIdx = 1;
-        this.defaultFilterOptions.app = filterOptions;
+        this.store.dispatch(ApplicationActions.updateFilters({
+          filters: filterOptions
+        }));
+        this.store.dispatch(ApplicationActions.showFilters());
         break;
       case ListType.ROLE:
-        this.showFilter.role = true;
         tabIdx = 2;
-        this.defaultFilterOptions.role = filterOptions;
+        this.store.dispatch(RoleActions.updateFilters({
+          filters: filterOptions
+        }));
+        this.store.dispatch(RoleActions.showFilters());
         break;
     }
 
     this.governanceTabGroup.selectedIndex = tabIdx;
+  }
+
+  private cleanFilters(): void {
+    this.store.dispatch(RoleActions.cleanUpFilters());
+    this.store.dispatch(ApplicationActions.cleanUpFilters());
   }
 }

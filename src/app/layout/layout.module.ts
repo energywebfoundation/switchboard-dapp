@@ -15,6 +15,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { environment } from '../../environments/environment';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { UserMenuModule } from './components/user-menu/user-menu.module';
+import { DidBookModule } from '../modules/did-book/did-book.module';
 
 @NgModule({
   imports: [
@@ -23,7 +25,9 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     MatMenuModule,
     NgxSpinnerModule,
     ClipboardModule,
-    UserIdleModule.forRoot({idle: environment.userIdle, timeout: environment.userIdle})
+    UserIdleModule.forRoot({idle: environment.userIdle, timeout: environment.userIdle}),
+    UserMenuModule,
+    DidBookModule.forRoot()
   ],
   providers: [],
   declarations: [

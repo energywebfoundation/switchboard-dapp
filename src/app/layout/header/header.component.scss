@@ -6,13 +6,8 @@ a:hover {
   background-color: initial;
 }
 
-.border-bottom-1 {
-  border-bottom: 1px solid #3c3b4c;
-}
-
 .header-notification-container {
   padding: 5px;
-  background-color: #2a2a37;
 }
 
 ::ng-deep .mat-menu-content:not(:empty) {
@@ -90,5 +85,21 @@ a:hover {
     mat-icon {
       color: #33CBCB;
     }
+  }
+}
+
+.experimental-warning {
+  position: absolute;
+  top: 18px;
+  right: 0;
+  color: var(--warning-color);
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  cursor: pointer;
+
+  @media (max-width: 991px) {
+    top: 4px;
+    right: 20px;
   }
 }

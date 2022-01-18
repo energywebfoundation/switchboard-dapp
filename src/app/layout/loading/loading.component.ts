@@ -20,11 +20,14 @@ export class LoadingComponent implements AfterViewInit {
   public isCancellable = false;
   public msg = '';
   public msgList: string[];
+  loaderColor: string;
 
   constructor(private spinner: NgxSpinnerService, private loadingService: LoadingService) {
   }
 
   ngAfterViewInit(): void {
+    setTimeout(() => this.loaderColor = getComputedStyle(document.documentElement)
+      .getPropertyValue('--loader-color'), 100);
     // Subscribe to cancellable event
     this.loadingService.isCancellable.subscribe((isCancellable: boolean) => {
       const $setTimeout = setTimeout(() => {
