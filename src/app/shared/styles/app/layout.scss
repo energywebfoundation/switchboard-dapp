@@ -95,11 +95,6 @@ body {
         }
     }
 
-    .logo-ew {
-        width: 150px;
-        height: auto;
-    }
-
     // Contains the main content
     .section-container {
         position: relative;
@@ -139,7 +134,7 @@ body {
     max-width: 1402px;
     border-top: 1px solid rgba(0, 0, 0, .15);
     margin-top: -1px;
-    margin-bottom: 100px;
+    margin-bottom: 0;
     margin-left: auto;
     margin-right: auto;
 
@@ -249,9 +244,9 @@ body {
         }
     }
 
-    .logo-ew {
-        width: 130px !important;
-    }
+    // .header-logo {
+    //     width: 130px !important;
+    // }
 
     ul.menu-top {
         background-color: rgb(21 17 31 / 95%);
@@ -273,7 +268,7 @@ body {
         }
 
         h6 {
-            font-size: 10px !important; 
+            font-size: 10px !important;
         }
        }
     }
@@ -317,7 +312,7 @@ body {
 
 .h-responsive {
     height: 100%;
-}  
+}
 
 // Toggle and collapsed behavior overrides
 @include media-breakpoint-down(sm) {
@@ -343,7 +338,7 @@ body {
 
     .h-responsive {
         height: 100vh;
-    }  
+    }
 
     .csstransforms3d {
 
@@ -506,7 +501,7 @@ body {
                 margin-left: $aside-wd-collapsed-text;
             }
         }
-    }  
+    }
 }
 
 // end collapsed variation with text
@@ -561,14 +556,6 @@ body {
             }
         }
     }
-}
-
-
-/* IE10+ hack: safari fix breaks ie so we need to target ie only to restore */
-
-_:-ms-lang(x),
-.layout-fixed .wrapper .aside-container .aside-inner {
-    position: static !important;
 }
 
 // Boxed layout (only for desktops)
@@ -627,20 +614,25 @@ _:-ms-lang(x),
     }
 }
 
-// Register Background 
+// Register Background
 
 .position-brand {
-    position: fixed; 
-    top: 0; 
+    position: fixed;
+    top: 0;
     z-index: 3;
 
-    img {
-        height: 44px;
-        width: auto;
-    }
+    // img {
+    //     height: 44px;
+    //     width: auto;
+    // }
+
+    // .welcome-header-logo {
+    //     height: 44px;
+    //     width: auto;
+    // }
 }
 
-@media (max-width: 991px) { 
+@media (max-width: 991px) {
     .position-brand {
         position: fixed;
         width: 100%;
@@ -676,13 +668,13 @@ _:-ms-lang(x),
         }
 
         h6 {
-            font-size: 10px !important; 
+            font-size: 10px !important;
         }
        }
     }
 }
 
-@media (max-width: 700px) { 
+@media (max-width: 700px) {
     .position-brand {
         position: fixed;
         width: 100%;
@@ -706,8 +698,6 @@ _:-ms-lang(x),
 
 
 .bg-register {
-    background-color: #181421;
-    background-image: url("/assets/img/bg-energy.svg");
     background-position: bottom;
     background-repeat: no-repeat;
     background-size: contain;
@@ -774,12 +764,12 @@ _:-ms-lang(x),
 }
 
 .welcome-footer {
-    background-color: transparent; 
+    background-color: transparent;
     position: fixed;
     bottom: 0;
-    height: 56px; 
+    height: 56px;
     width: 100%;
-    bottom: 33px; 
+    bottom: 33px;
     z-index: 2;
     margin: 0 24px;
 }
@@ -790,9 +780,7 @@ _:-ms-lang(x),
     width: 100%;
     height: 34px;
     font-size: 12px;
-    background-color: #382856;
     padding: 7px 24px;
-    color: rgba(255, 255, 255, 0.5);
 }
 
 /* width */
@@ -815,24 +803,4 @@ _:-ms-lang(x),
 ::-moz-scrollbar-track {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #8D7DB6; 
-    border-radius: 10px;
-}
-
-::-moz-scrollbar-thumb {
-    background: #8D7DB6; 
-    border-radius: 10px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #33CBCB; 
-}
-
-::-moz-scrollbar-thumb:hover {
-    background: #33CBCB; 
 }

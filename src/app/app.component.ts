@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -6,6 +6,7 @@ import { SettingsService } from './core/settings/settings.service';
 import { UrlService } from './shared/services/url-service/url.service';
 import { Store } from '@ngrx/store';
 import * as AuthActions from './state/auth/auth.actions';
+import { ThemesService } from './core/themes/themes.service';
 
 @Component({
   selector: 'app-root',
@@ -14,50 +15,11 @@ import * as AuthActions from './state/auth/auth.actions';
 })
 export class AppComponent implements OnInit {
 
-  @HostBinding('class.layout-fixed') get isFixed() {
-    return this.settings.getLayoutSetting('isFixed');
-  }
-
-  @HostBinding('class.aside-collapsed') get isCollapsed() {
-    return this.settings.getLayoutSetting('isCollapsed');
-  }
-
-  @HostBinding('class.layout-boxed') get isBoxed() {
-    return this.settings.getLayoutSetting('isBoxed');
-  }
-
-  @HostBinding('class.layout-fs') get useFullLayout() {
-    return this.settings.getLayoutSetting('useFullLayout');
-  }
-
-  @HostBinding('class.hidden-footer') get hiddenFooter() {
-    return this.settings.getLayoutSetting('hiddenFooter');
-  }
-
-  @HostBinding('class.layout-h') get horizontal() {
-    return this.settings.getLayoutSetting('horizontal');
-  }
-
-  @HostBinding('class.aside-float') get isFloat() {
-    return this.settings.getLayoutSetting('isFloat');
-  }
-
-  @HostBinding('class.offsidebar-open') get offsidebarOpen() {
-    return this.settings.getLayoutSetting('offsidebarOpen');
-  }
-
-  @HostBinding('class.aside-toggled') get asideToggled() {
-    return this.settings.getLayoutSetting('asideToggled');
-  }
-
-  @HostBinding('class.aside-collapsed-text') get isCollapsedText() {
-    return this.settings.getLayoutSetting('isCollapsedText');
-  }
-
   constructor(public settings: SettingsService,
               private matIconRegistry: MatIconRegistry,
               private domSanitizer: DomSanitizer,
               private urlHistoryService: UrlService,
+              private themeService: ThemesService,
               private store: Store) {
     this.matIconRegistry.addSvgIcon(
       'wallet-icon',
@@ -203,6 +165,14 @@ export class AppComponent implements OnInit {
     this.matIconRegistry.addSvgIcon(
       'create-staking-icon',
       this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/img/icons/create-staking-icon.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'sync-did-icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/img/icons/sync-did-icon.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'add-to-claimmanager-icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/img/icons/add-to-claim-manager-icon.svg')
     );
   }
 

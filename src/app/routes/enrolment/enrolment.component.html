@@ -2,15 +2,20 @@
   <mat-tab label="Enrolment Requests">
     <div class="row mx-0 mt-1">
       <div class="col-xl-12">
-        <div class="d-flex flex-column flex-md-row justify-content-md-start align-items-center">
-          <h4 class="color-white strong my-4">Enrolment Requests</h4>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+          <h4 class="color-white strong my-4">Issue Role</h4>
+          <button *ngIf="(isExperimental$ | async) && issuesRoles" mat-raised-button
+                  class="btn btn-primary btn-small mb-3 mb-lg-0"
+                  (click)="createVC()">
+            Create VC
+          </button>
         </div>
         <div class="card card-default mb-3 pb-0">
           <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
             <!-- Filter -->
             <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0">
               <!-- <div class="filter-label mr-1">Group by:</div> -->
-              <mat-form-field appearance="outline" floatPlaceholder="never" matTooltip="Filter by status"
+              <mat-form-field appearance="outline" matTooltip="Filter by status"
                               class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
                 <mat-select [formControl]="issuerDropdown" (selectionChange)="updateIssuerList($event)">
                   <mat-option [value]="dropdownValue.all">All</mat-option>
@@ -22,10 +27,21 @@
             </div>
 
             <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
-              <mat-form-field appearance="outline" floatPlaceholder="never"
+              <mat-form-field appearance="outline"
                               class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
                               matTooltip="Filter by namespace - Wildcard filtering, a short description?">
                 <input matInput placeholder="Namespace" [formControl]="namespaceControlIssuer">
+              </mat-form-field>
+            </div>
+            <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
+              <mat-form-field appearance="outline"
+                              class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
+                              matTooltip="Filter by did - it will search through Requestor DID and Asset Did">
+                <input matInput placeholder="DID" [formControl]="searchByDid">
+                <button matSuffix mat-icon-button class="qr-code" aria-label="Scan DID" appQrCodeScanner
+                        (scannedValue)="updateSearchByDidValue($event)">
+                  <mat-icon>qr_code_2</mat-icon>
+                </button>
               </mat-form-field>
             </div>
           </div>
@@ -34,6 +50,7 @@
               [accepted]="issuerListAccepted"
               #issuerList
               [namespaceFilterControl]="namespaceControlIssuer"
+              [didFilterControl]="searchByDid"
           ></app-enrolment-list>
         </div>
       </div>

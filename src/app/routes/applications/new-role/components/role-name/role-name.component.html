@@ -1,0 +1,49 @@
+<form>
+  <div
+      class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
+    <mat-icon>info</mat-icon>
+    <div class="d-flex flex-column">
+      <mat-label>{{roleType | roleType}}</mat-label>
+      <div class="f-14">{{ parentNamespace }}</div>
+    </div>
+  </div>
+  <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+    <div class="row">
+      <div class="col-lg-12">
+        <mat-label class="ml-3 pl-1">Role Name</mat-label>
+        <mat-form-field class="mt-2 multi-errors" appearance="outline">
+          <input matInput autocomplete="off" [formControl]="form" appBlockPaste type="text"
+                 placeholder="Role Name" required oninput="this.value = this.value.toLowerCase()"
+                 (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256"
+                 data-qa-id="role-name"/>
+          <mat-error *ngIf="controlHasError( 'required')">Role Name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="controlHasError( 'minlength')">Role Name need to have at least 3
+            characters.
+          </mat-error>
+          <mat-error *ngIf="controlHasError( 'isAlphaNumericInvalid')">Role Name can only contain
+            alphanumeric characters.
+          </mat-error>
+        </mat-form-field>
+        <mat-error *ngIf="existAndNotOwner">This name already exists. Please try another</mat-error>
+      </div>
+      <div *ngIf="form.value"
+           class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mx-3 mt-2 mb-3 w-100">
+        <div>
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="d-flex flex-column">
+          <mat-label>ENS Namespace</mat-label>
+          <div class="f-14" data-qa-id="role-namespace">{{ ensNamespace }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end mb-2">
+    <button mat-stroked-button class="btn btn-small mr-2" data-qa-id="cancel" (click)="cancelHandler()">Cancel</button>
+    <button mat-raised-button class="btn btn-small btn-primary" data-qa-id="proceed"
+            [disabled]="form.invalid"
+            (click)="next()">Next
+    </button>
+  </div>
+</form>

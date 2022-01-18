@@ -5,6 +5,11 @@ import { UrlParamService } from '../../shared/services/url-param.service';
 import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 import { MatTabGroup } from '@angular/material/tabs';
 import { NotificationService } from '../../shared/services/notification.service';
+import { MatDialog } from '@angular/material/dialog';
+import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
+import { Store } from '@ngrx/store';
+import { SettingsSelectors } from '@state';
+import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 
 @Component({
   selector: 'app-enrolment',
@@ -23,6 +28,7 @@ export class EnrolmentComponent implements AfterViewInit {
   enrolmentDropdown = new FormControl('none');
   namespaceControlIssuer = new FormControl(undefined);
   namespaceControlMyEnrolments = new FormControl(undefined);
+  searchByDid = new FormControl(undefined);
   public dropdownValue = {
     all: 'none',
     pending: 'false',
@@ -31,12 +37,20 @@ export class EnrolmentComponent implements AfterViewInit {
   };
 
   public isMyEnrolmentShown = false;
+  isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
   private _queryParamSelectedTabInit = false;
+
+  get issuesRoles(): boolean {
+    return this.issuanceVCService.hasRoles();
+  }
 
   constructor(private activeRoute: ActivatedRoute,
               private notificationService: NotificationService,
               private urlParamService: UrlParamService,
-              private router: Router) {
+              private router: Router,
+              private dialog: MatDialog,
+              private store: Store,
+              private issuanceVCService: IssuanceVcService) {
   }
 
   ngAfterViewInit(): void {
@@ -97,27 +111,37 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   updateEnrolmentList(e: any) {
-    // console.log('enrolement list');
     const value = e.value;
     this.enrolmentList.getList(value === 'rejected',
       value === 'true' ? true : value === 'false' ? false : undefined);
   }
 
   updateIssuerList(e: any) {
-    // console.log('issuer list');
     const value = e.value;
     this.issuerList.getList(value === 'rejected',
       value === 'true' ? true : value === 'false' ? false : undefined);
   }
 
-  private initDefault() {
+  updateSearchByDidValue(value) {
+    this.searchByDid.setValue(value.did);
+  }
+
+  createVC() {
+    this.dialog.open(NewIssueVcComponent, {
+      width: '600px',
+      maxWidth: '100%',
+      disableClose: true
+    });
+  }
+
+  private initDefault(index?: number) {
     if (!this._queryParamSelectedTabInit) {
       this.issuerListAccepted = false;
       this.asyncSetDropdownValue(this.dropdownValue.pending);
     }
 
     if (this.enrolmentTabGroup) {
-      this.enrolmentTabGroup.selectedIndex = 0;
+      this.enrolmentTabGroup.selectedIndex = index || 0;
     }
   }
 
@@ -138,4 +162,5 @@ export class EnrolmentComponent implements AfterViewInit {
       }, 30);
     }
   }
+
 }

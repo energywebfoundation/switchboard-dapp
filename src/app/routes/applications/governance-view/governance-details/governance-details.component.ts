@@ -1,11 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ENSNamespaceTypes, PreconditionTypes } from 'iam-client-lib';
+import { NamespaceType, PreconditionType } from 'iam-client-lib';
 import { ListType } from '../../../../shared/constants/shared-constants';
 import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { RoleType } from '../../new-role/new-role.component';
 import { GovernanceViewComponent } from '../governance-view.component';
+import { IssuerType } from '../../new-role/models/issuer-type.enum';
 
 @Component({
   selector: 'app-governance-details',
@@ -27,14 +28,33 @@ export class GovernanceDetailsComponent {
 
   typeLabel: string;
   formData: any;
-  displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue', 'minDate', 'maxDate'];
 
   appList: any[];
   roleList: any[];
 
   preconditions = {};
-  PreconditionTypes = PreconditionTypes;
+  PreconditionTypes = PreconditionType;
   panelOpenState = false;
+
+  get requestorFields() {
+    return this.formData?.definition?.fields;
+  }
+
+  get issuerFields() {
+    return this.formData?.definition?.issuerFields;
+  }
+
+  get isDIDType() {
+    return this.issuer?.issuerType === IssuerType.DID;
+  }
+
+  get isRoleType() {
+    return this.issuer?.issuerType === IssuerType.ROLE;
+  }
+
+  get issuer() {
+    return this.formData?.definition?.issuer;
+  }
 
   constructor(
     private iamService: IamService,
@@ -99,15 +119,13 @@ export class GovernanceDetailsComponent {
     this.appList = [];
     this.roleList = [];
 
-    let type = ENSNamespaceTypes.Application;
+    let type = NamespaceType.Application;
     if (this.data.type === ListType.ORG) {
-      type = ENSNamespaceTypes.Organization;
-      this.appList = await this.iamService.iam.getAppsByOrgNamespace({
-        namespace: this.formData.namespace
-      });
+      type = NamespaceType.Organization;
+      this.appList = await this.iamService.domainsService.getAppsOfOrg(this.formData.namespace);
     }
 
-    this.roleList = await this.iamService.iam.getRolesByNamespace({
+    this.roleList = await this.iamService.domainsService.getRolesByNamespace({
       parentType: type,
       namespace: this.formData.namespace
     });
@@ -146,7 +164,7 @@ export class GovernanceDetailsComponent {
 
   getQueryParams(listType: string, roleDefinition: any) {
     const name = roleDefinition.name;
-    const arr = roleDefinition.namespace.split(`.${ENSNamespaceTypes.Roles}.`);
+    const arr = roleDefinition.namespace.split(`.${NamespaceType.Role}.`);
     let namespace = '';
 
     if (arr.length > 1) {

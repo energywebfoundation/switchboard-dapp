@@ -12,143 +12,37 @@
         <ng-template matStepperIcon="edit">
           <mat-icon>check</mat-icon>
         </ng-template>
-        <mat-step [completed]="false" *ngIf="viewType !== ViewType.UPDATE">
-          <form [formGroup]="roleForm">
-            <ng-template matStepLabel>New Role</ng-template>
-            <div
-                class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
-              <mat-icon>info</mat-icon>
-              <div class="d-flex flex-column">
-                <mat-label>{{ (roleForm.value.roleType === RoleType.ORG) ? 'Organization'
-                    : 'Application' }}</mat-label>
-                <div class="f-14">{{ roleForm.value.parentNamespace }}</div>
-              </div>
-            </div>
-            <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-              <div class="row">
-                <div class="col-lg-12">
-                  <mat-label class="ml-3 pl-1">Role Name</mat-label>
-                  <mat-form-field class="mt-2 multi-errors" appearance="outline" floatPlaceholder="never">
-                    <input matInput autocomplete="off" formControlName="roleName" appBlockPaste type="text"
-                           placeholder="Role Name" required oninput="this.value = this.value.toLowerCase()"
-                           (keypress)="alphaNumericOnly($event)" minlength="3" maxlength="256"/>
-                    <mat-error *ngIf="controlHasError('roleName', 'required')">Role Name is <strong>required</strong>
-                    </mat-error>
-                    <mat-error *ngIf="controlHasError('roleName', 'minlength')">Role Name need to have at least 3
-                      characters.
-                    </mat-error>
-                    <mat-error *ngIf="controlHasError('roleName', 'isAlphaNumericInvalid')">Role Name can only contain
-                      alphanumeric characters.
-                    </mat-error>
-                  </mat-form-field>
-                  <mat-error *ngIf="isExistsRoleName">This name already exists. Please try another</mat-error>
-                </div>
-                <div *ngIf="roleForm.get('roleName').value"
-                     class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mx-3 mt-2 mb-3 w-100">
-                  <div>
-                    <mat-icon>check_circle</mat-icon>
-                  </div>
-                  <div class="d-flex flex-column">
-                    <mat-label>ENS Namespace</mat-label>
-                    <div class="f-14">{{ roleForm?.value?.roleName + '.' + ENSPrefixes.Roles + '.' +
-                    roleForm?.value?.parentNamespace }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="d-flex justify-content-end mb-2">
-              <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-              <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking"
-                      (click)="proceedSettingIssuer()">Next
-              </button>
-            </div>
-          </form>
+        <mat-step [completed]="false" *ngIf="isCreatingNew">
+          <ng-template matStepLabel>New Role</ng-template>
+          <app-role-name [roleType]="roleType"
+                         [parentNamespace]="parentNamespace"
+                         (proceed)="proceedSettingIssuer($event)"
+                         (cancel)="confirmClose($event.touched)"></app-role-name>
         </mat-step>
         <mat-step [completed]="false">
+          <ng-template matStepLabel>Set Role Issuers</ng-template>
+          <div *ngIf="!isCreatingNew"
+               class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3 mt-2">
+            <span class="pb-2">{{ namespace }}</span>
+          </div>
           <form [formGroup]="roleForm">
-            <ng-template matStepLabel>Set Role Issuers</ng-template>
             <ng-container formGroupName="data">
-              <div *ngIf="viewType === ViewType.UPDATE"
-                   class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
-                <span class="pb-2">{{ roleName + '.' + ENSPrefixes.Roles + '.' +
-                roleForm?.value?.parentNamespace }}</span>
-              </div>
               <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer">
                 <mat-label class="ml-3 pl-1">Issuer Type</mat-label>
-                <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+                <mat-form-field class="mt-2" appearance="outline">
                   <mat-select placeholder="Issuer Type" formControlName="issuerType"
                               (selectionChange)="issuerTypeChanged($event)" required>
-                    <mat-option *ngFor="let issuerType of IssuerType | keyvalue" [value]="issuerType.value">
-                      {{ issuerType.key }}</mat-option>
+                    <mat-option *ngFor="let issuerType of IssuerTypes" [value]="issuerType">
+                      {{ issuerType }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer"
-                   *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.DID">
-                <div>
-                  <div class="label color-white ml-1 pl-2 pb-2">1 Issuer(s)</div>
-                  <div
-                      class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3 w-100"
-                      *ngFor="let did of issuerList; let i = index">
-                    <div class="d-flex justify-content-between w-100">
-                      <div class="d-flex justify-content-start align-items-center flex-nowrap">
-                        <div class="pt-1">
-                          <mat-icon>check_circle</mat-icon>
-                        </div>
-                        <div class="color-white break-word">{{ did }}</div>
-                      </div>
-                      <div class="d-flex align-items-center pr-2">
-                        <button mat-icon-button matSuffix class="mat-primary icon-btn-small color-error"
-                                matTooltip="Remove" *ngIf="issuerList.length > 1" (click)="removeDid(i)">
-                          <mat-icon>delete</mat-icon>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="pt-2" [formGroup]="issuerGroup">
-                    <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
-                      <input matInput placeholder="Add Issuer DID (Optional)" autocomplete="off"
-                             formControlName="newIssuer" minlength="3" maxlength="256">
-                      <button matTooltip="Add Issuer" matSuffix mat-icon-button aria-label="Add" type="submit"
-                              (click)="addDid()" [disabled]="issuerGroup.invalid">
-                        <mat-icon>add</mat-icon>
-                      </button>
-                      <mat-error *ngIf="issuerGroup?.controls?.newIssuer?.errors?.invalidDid">DID format is invalid
-                      </mat-error>
-                    </mat-form-field>
-
-                    <!-- <div class="d-flex justify-content-end mb-2">
-                      <button mat-raised-button class="btn btn-small btn-primary" type="submit" (click)="addDid()"
-                        [disabled]="issuerGroup.invalid">Add</button>
-                    </div> -->
-                  </div>
-                </div>
+              <div *ngIf="isDIDType" class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+                <app-issuer-did [issuerList]="issuerList"></app-issuer-did>
               </div>
-              <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer"
-                   *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.Role">
-                <div class="row mt-2">
-                  <div class="col-lg-12">
-                    <div
-                        class="ml-3 card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-                      <mat-icon>notifications_none</mat-icon>
-                      <span class="pb-2">Issuer Role Namespace can be organization or application role.</span>
-                    </div>
-                    <mat-label class="ml-3 pl-1">Issuer Role Namespace</mat-label>
-                    <app-smart-search
-                        [placeholderSearch]="'Example:' + 'issuerrole.' + ENSPrefixes.Roles + '.myorg.iam.ewc'"
-                        [searchText]="roleForm.get('roleName')" [fieldName]="'rolePage'">
-                    </app-smart-search>
-                    <mat-error *ngIf="controlHasError('roleName', 'required')">Issuer Role Namespace is
-                      <strong>required</strong>
-                    </mat-error>
-                    <mat-error *ngIf="controlHasError('roleName', 'minlength')">Role Name need to have at least 3
-                      characters.
-                    </mat-error>
-                    <mat-error *ngIf="controlHasError('roleName', 'maxlength')">Role Name need to have at max 256
-                      characters.
-                    </mat-error>
-                  </div>
-                </div>
+              <div *ngIf="isRoleType" class="card card-default d-flex shadow-none d-flex pt-3 mb-3"
+                   formGroupName="issuer">
+                <app-search-issuer-role class="row mt-2" [role]="issuerRoleName"></app-search-issuer-role>
               </div>
             </ng-container>
             <div class="d-flex justify-content-end mb-2">
@@ -191,9 +85,9 @@
             <div class="row mt-2">
               <div class="col-lg-12">
                 <app-smart-search [placeholderSearch]="'Search Role Namespace (Optional)'"
-                                  [searchText]="restrictionRoleControl" [fieldName]="'rolePage'"
-                                  searchType="restrictions"
-                                  (searchTextEvent)="addRestriction($event)"></app-smart-search>
+                                  [searchText]="restrictionRoleControl"
+                                  searchType="add"
+                                  (add)="addRestriction($event)"></app-smart-search>
               </div>
             </div>
           </div>
@@ -206,31 +100,53 @@
         </mat-step>
 
         <mat-step [completed]="false">
-          <form [formGroup]="roleForm">
-            <ng-template matStepLabel>Set Fields</ng-template>
-
-            <app-role-field [fieldsForm]="fieldsForm" [dataSource]="dataSource" [isChecking]="isChecking"
-                            (cleanForm)="formResetHandler()" (updateData)="dataSourceChangeHandler($event)"
-                            (back)="back()"
-                            (proceed)="proceedConfirmDetails()">
-            </app-role-field>
-
-          </form>
+          <ng-template matStepLabel>Set Requestor Fields</ng-template>
+          <app-role-field [fieldsList]="dataSource.data"
+                          (updateData)="dataSourceChangeHandler($event)">
+          </app-role-field>
+          <div class="d-flex justify-content-end mb-2">
+            <button mat-stroked-button
+                    class="btn btn-small mr-2 back"
+                    data-qa-id="back"
+                    (click)="back()">
+              Back
+            </button>
+            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking"
+                    (click)="proceedConfirmDetails()">Next
+            </button>
+          </div>
         </mat-step>
+
+        <mat-step [completed]="false">
+          <ng-template matStepLabel>Set Issuer Fields</ng-template>
+          <app-role-field [fieldsList]="issuerFields.data"
+                          (updateData)="issuerFieldsChangeHandler($event)">
+          </app-role-field>
+          <div class="d-flex justify-content-end mb-2">
+            <button mat-stroked-button
+                    class="btn btn-small mr-2 back"
+                    data-qa-id="back"
+                    (click)="back()">
+              Back
+            </button>
+            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking"
+                    (click)="proceedConfirmDetails()">Next
+            </button>
+          </div>
+        </mat-step>
+
 
         <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Confirm Details</ng-template>
           <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Role Type</div>
-              <span class="color-white mb-0" *ngIf="roleForm?.value?.roleType === RoleType.ORG">Organization</span>
-              <span class="color-white mb-0" *ngIf="roleForm?.value?.roleType === RoleType.APP">Application</span>
+              <span class="color-white mb-0">{{roleForm?.value?.roleType | roleType}}</span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Role Namespace</div>
-              <span class="color-white mb-0">{{ roleForm?.value?.roleName + '.' + ENSPrefixes.Roles + '.' +
-              roleForm?.value?.parentNamespace }}</span>
+              <span class="color-white mb-0">{{ roleForm?.value?.roleName }}</span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
@@ -238,13 +154,13 @@
               <span class="color-white mb-0">{{ roleForm?.value?.data?.issuer?.issuerType }}</span>
             </div>
             <mat-divider></mat-divider>
-            <div class="text-left my-3" *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.DID">
+            <div class="text-left my-3" *ngIf="isDIDType">
               <div class="label opacity-50 mb-2">Issuer List</div>
               <div class="color-white mb-0" *ngFor="let did of issuerList">{{ did }}</div>
             </div>
-            <div class="text-left my-3" *ngIf="roleForm?.value?.data?.issuer?.issuerType === IssuerType.Role">
+            <div class="text-left my-3" *ngIf="isRoleType">
               <div class="label opacity-50 mb-2">Issuer Role Namespace</div>
-              <span class="color-white mb-0">{{ roleForm?.value?.data?.issuer?.roleName }}</span>
+              <span class="color-white mb-0">{{ roleForm?.value?.data?.issuer?.roleName?.namespace }}</span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
@@ -258,12 +174,26 @@
             </div>
             <mat-divider></mat-divider>
             <div class="text-left mt-3">
-              <div class="label opacity-50 mb-2">Fields</div>
+              <div class="label opacity-50 mb-2">Requestor Fields</div>
               <span class="color-white mb-0" *ngIf="!dataSource?.data?.length">None</span>
 
               <ng-container *ngIf="dataSource.data.length">
                 <div class="field-list">
                   <app-fields-summary *ngFor="let element of dataSource.data"
+                                      [element]="element"
+                                      class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block">
+                  </app-fields-summary>
+                </div>
+              </ng-container>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="text-left mt-3">
+              <div class="label opacity-50 mb-2">Issuer Required Fields</div>
+              <span class="color-white mb-0" *ngIf="!issuerFields?.data?.length">None</span>
+
+              <ng-container *ngIf="issuerFields.data.length">
+                <div class="field-list">
+                  <app-fields-summary *ngFor="let element of issuerFields.data"
                                       [element]="element"
                                       class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block">
                   </app-fields-summary>
@@ -302,16 +232,7 @@
         </ng-container>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Complete</ng-template>
-          <div
-              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>notifications_none</mat-icon>
-            <span class="pb-2">All transactions are completely processed.</span>
-          </div>
-          <div>
-            <div class="d-flex justify-content-end mb-2">
-              <button mat-raised-button class="btn btn-small btn-primary" (click)="closeDialog(true)">Complete</button>
-            </div>
-          </div>
+          <app-transactions-complete (completed)="closeDialog(true)"></app-transactions-complete>
         </mat-step>
       </mat-vertical-stepper>
     </div>

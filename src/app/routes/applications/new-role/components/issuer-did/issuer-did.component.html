@@ -1,0 +1,23 @@
+<div>
+  <div class="label color-white ml-1 pl-2 pb-2" data-qa-id="issuers-length">{{list.length}} Issuer(s)</div>
+  <app-issuer-did-list [list]="list" (remove)="removeIssuer($event)"></app-issuer-did-list>
+
+  <div class="pt-2">
+    <mat-form-field class="mt-2" appearance="outline">
+      <input matInput placeholder="Add Issuer DID (Optional)" autocomplete="off"
+             data-qa-id="did"
+             [formControl]="form" minlength="3" maxlength="256">
+      <button matTooltip="Add Issuer" matSuffix mat-icon-button aria-label="Add" type="submit"
+              data-qa-id="add-did"
+              (click)="addDid()" [disabled]="form.invalid">
+        <mat-icon>add</mat-icon>
+      </button>
+      <mat-error *ngIf="form.hasError('invalidDid')">
+        DID format is invalid
+      </mat-error>
+      <mat-error *ngIf="form.hasError('exist')">
+        This DID already exist on the list
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>

@@ -33,48 +33,45 @@ npm install
 ```
 
 Run the project locally:
+
 ```
 npm run start
 ```
+Building project depends on Angular environments.
 
-Build the project for production:
+Build the project for development environment:
+
 ```
 npm run build
 ```
 
+Build the project for stedin environment:
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Handling feature flags
-
-To hide functionality that shouldn't be visible on production environment we are using feature flags handled entirely on
-frontend side. This is done by flag in environment file named `featureVisible`.
-To hide some part of html code you should use directive `appIsFeatureEnabled` which works like `*ngIf` directive.
-For example:
-```angular2html
-<div *appIsFeatureEnabled>
-    Displayed or hidden functionality depending on 
-    featureVisible property in environment file
-</div>
 ```
-To prevent navigating to hidden routes you should use `FeatureToggleGuard` which extends CanActivate interface.
-Example:
-```angular2html
-{
-    path: 'path-example', 
-    canActivate: [FeatureToggleGuard], 
-    component: 'ExampleComponent'
-}
+npm run build-stedin
+```
+
+Build the project for staging environment:
+
+```
+npm run build-staging
+```
+
+Build the project for production:
+
+```
+npm run build-prod
 ```
 
 ## Active Maintainers
-- Mani H. (@manihagh)
-- Kim Honoridez (@kim-energyweb)
-- Davy Jones Castillo (@davycastillo)
+
+- Dawid Gil [@dawidgil](https://github.com/dawidgil)
+- Davy Jones Castillo [@davycastillo](https://github.com/davycastillo)
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of
+conduct, and the process for submitting pull requests to us.
 
 ## License
 

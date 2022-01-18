@@ -29,7 +29,9 @@
               <mat-select class="md-enroll" placeholder="Enrol For" formControlName="enrolFor"
                           (selectionChange)="enrolForSelected($event)">
                 <mat-option class="md-enroll" [ngStyle]="listColor" [value]="EnrolForType.ME">Myself</mat-option>
-                <mat-option class="md-enroll" [ngStyle]="listColor" [value]="EnrolForType.ASSET">My Asset</mat-option>
+                <mat-option *ngIf="experimentalEnabled" class="md-enroll" [ngStyle]="listColor"
+                            [value]="EnrolForType.ASSET">My Asset
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -63,25 +65,13 @@
 
       <!-- PRE-CHECK Error Messages-->
       <ng-container *ngIf="!isPrecheckSuccess && rolePreconditionList?.length">
-        <ng-container *ngFor="let precondition of rolePreconditionList">
-          <!-- Role is Approved but NOT SYNCED -->
-          <div *ngIf="isRolePreconditionApproved(precondition.status)"
-               matTooltip="Please sync this role to your DID Document."
-               class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-4">
-            <mat-icon>check_circle</mat-icon>
-            <span class="pb-2">{{  precondition.namespace }}</span>
-          </div>
-          <!-- Request is Pending or No Request at all -->
-          <div *ngIf="isRolePreconditionPending(precondition.status)" matTooltip="You don't have this role yet."
-               class="card card-warning d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-4">
-            <mat-icon>pending_actions</mat-icon>
-            <span class="pb-2">{{  precondition.namespace }}</span>
-          </div>
-        </ng-container>
+        <app-role-precondition-list [preconditionList]="rolePreconditionList"></app-role-precondition-list>
       </ng-container>
       <app-enrolment-form
           *ngIf="isPrecheckSuccess"
           [namespaceRegistrationRoles]="getNamespaceRegistrationRoles()"
+          [predefinedRegTypes]="predefinedRegTypes"
+          [showOffChain]="experimentalEnabled"
           [fieldList]="fieldList"
           [disabledSubmit]="isSubmitDisabled()"
           [txtboxColor]="txtboxColor"

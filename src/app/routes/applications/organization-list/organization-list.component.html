@@ -74,28 +74,23 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef class="text-right"></th>
       <td mat-cell *matCellDef="let element">
-        <div class="d-flex justify-content-end">
-          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action button list">
-            <mat-icon class="btn-color-primary">more_vert</mat-icon>
+        <app-actions-menu>
+          <button mat-menu-item class="btn-color-primary" (click)="viewDetails(element)">
+            <mat-icon class="btn-color-primary">preview</mat-icon>
+            <span>View Details</span>
           </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item class="btn-color-primary" (click)="viewDetails(element)">
-              <mat-icon class="btn-color-primary">preview</mat-icon>
-              <span>View Details</span>
-            </button>
 
-            <app-organization-actions *ngIf="element.isOwnedByCurrentUser" [organization]="element"
-                                      (organizationCreated)="newSubOrg(element)"
-                                      (viewApps)="viewApps(element)"
-                                      (viewRoles)="viewRoles(element)"
-                                      (appCreated)="viewApps(element)"
-                                      (roleCreated)="viewRoles(element)"
-                                      (edited)="edit()"
-                                      (transferred)="transferOwnership()"
-                                      (deleteConfirmed)="remove(element)">
-            </app-organization-actions>
-          </mat-menu>
-        </div>
+          <app-organization-actions *ngIf="element.isOwnedByCurrentUser" [organization]="element"
+                                    (organizationCreated)="newSubOrg(element)"
+                                    (viewApps)="viewApps(element)"
+                                    (viewRoles)="viewRoles(element)"
+                                    (appCreated)="viewApps(element)"
+                                    (roleCreated)="viewRoles(element)"
+                                    (edited)="edit()"
+                                    (transferred)="transferOwnership()"
+                                    (deleteConfirmed)="remove(element)">
+          </app-organization-actions>
+        </app-actions-menu>
       </td>
     </ng-container>
 

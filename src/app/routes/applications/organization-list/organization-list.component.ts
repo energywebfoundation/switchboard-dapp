@@ -8,10 +8,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
-import { filter, takeUntil, tap } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import { OrganizationActions, OrganizationSelectors } from '@state';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 const MAX_TOOLTIP_SUBORG_ITEMS = 5;
 
@@ -37,7 +38,8 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
               private iamService: IamService,
               private dialog: MatDialog,
               private toastr: SwitchboardToastrService,
-              private store: Store) {
+              private store: Store,
+              private envService: EnvService) {
   }
 
   ngOnInit() {
@@ -75,14 +77,14 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
   viewApps(data: any) {
     this.updateFilter.emit({
       listType: ListType.APP,
-      organization: data.namespace.split('.iam.ewc')[0]
+      organization: data.namespace.split(`.${this.envService.rootNamespace}`)[0]
     });
   }
 
   viewRoles(data: any) {
     this.updateFilter.emit({
       listType: ListType.ROLE,
-      organization: data.namespace.split('.iam.ewc')[0],
+      organization: data.namespace.split(`.${this.envService.rootNamespace}`)[0],
     });
   }
 
@@ -163,7 +165,6 @@ export class OrganizationListComponent implements OnInit, OnDestroy, AfterViewIn
 
   private setList(): void {
     this.store.select(OrganizationSelectors.getList).pipe(
-      filter((list) => list.length > 0),
       takeUntil(this.subscription$)
     ).subscribe((list) => {
       this.dataSource.data = list;

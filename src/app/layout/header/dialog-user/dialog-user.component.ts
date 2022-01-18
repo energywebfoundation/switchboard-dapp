@@ -5,8 +5,6 @@ import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import * as userActions from '../../../state/user-claim/user.actions';
-import { UserClaimState } from '../../../state/user-claim/user.reducer';
-import { Profile } from 'iam-client-lib';
 import { deepEqualObjects } from '../../../utils/functions/deep-equal-objects/deep-equal-objects';
 
 const MAJORITY_AGE = 18;
@@ -35,7 +33,7 @@ export class DialogUserComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private store: Store<UserClaimState>) {
+    private store: Store) {
   }
 
   ngOnDestroy() {
@@ -45,7 +43,7 @@ export class DialogUserComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.maxDate = this.getLegalAge();
-    this.store.select(userSelectors.getUserProfile)
+    this.store.select(userSelectors.getUserData)
       .pipe(takeUntil(this.destroy$))
       .subscribe(profile => {
         this.profileForm.patchValue({
@@ -65,10 +63,10 @@ export class DialogUserComponent implements OnInit, OnDestroy {
     if (this.profileForm.invalid) {
       return;
     }
-    this.store.dispatch(userActions.updateUserClaims({profile: this.getProfile()}));
+    this.store.dispatch(userActions.updateUserData({userData: this.getProfile()}));
   }
 
-  private getProfile(): Partial<Profile> {
+  private getProfile() {
     const profileData = this.profileForm.getRawValue();
     return {
       ...profileData,

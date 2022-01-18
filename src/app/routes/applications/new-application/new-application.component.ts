@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ENSNamespaceTypes } from 'iam-client-lib';
+import { NamespaceType } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ConfigService } from '../../../shared/services/config.service';
 import { IamService } from '../../../shared/services/iam.service';
@@ -12,7 +12,6 @@ import { MatStepper } from '@angular/material/stepper';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { isValidJsonFormatValidator } from '../../../utils/validators/json-format/is-valid-json-format.validator';
-import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 
 @Component({
   selector: 'app-new-application',
@@ -43,7 +42,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   public environment = environment;
   public isChecking = false;
   private _isLogoUrlValid = true;
-  public ENSPrefixes = ENSNamespaceTypes;
+  public ENSPrefixes = NamespaceType;
   public ViewType = ViewType;
 
   viewType: string = ViewType.NEW;
@@ -71,7 +70,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         this.origData = data.origData;
         this.TOASTR_HEADER = 'Update Application';
       } else if (this.viewType === ViewType.NEW && data.organizationNamespace) {
-        this.appForm.patchValue({orgNamespace: data.organizationNamespace});
+        this.appForm.patchValue({ orgNamespace: data.organizationNamespace });
       }
     }
   }
@@ -95,7 +94,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       }
 
       // Construct Organization
-      const arr = this.origData.namespace.split(ENSNamespaceTypes.Application);
+      const arr = this.origData.namespace.split(NamespaceType.Application);
 
       this.appForm.patchValue({
         orgNamespace: arr[1].substring(1),
@@ -111,10 +110,6 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
     }
   }
 
-  alphaNumericOnly(event: any) {
-    return isAlphaNumericOnly(event);
-  }
-
   async confirmOrgNamespace() {
     if (this.appForm.value.orgNamespace) {
       try {
@@ -122,19 +117,19 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         this.isChecking = true;
 
         // Check if organization namespace exists
-        let exists = await this.iamService.iam.checkExistenceOfDomain({
+        let exists = await this.iamService.domainsService.checkExistenceOfDomain({
           domain: this.appForm.value.orgNamespace
         });
 
         if (exists) {
           // Check if application sub-domain exists in this organization
-          exists = await this.iamService.iam.checkExistenceOfDomain({
+          exists = await this.iamService.domainsService.checkExistenceOfDomain({
             domain: `${this.ENSPrefixes.Application}.${this.appForm.value.orgNamespace}`
           });
 
           if (exists) {
             // check if user is authorized to create an app under the application namespace
-            const isOwner = await this.iamService.iam.isOwner({
+            const isOwner = await this.iamService.domainsService.isOwner({
               domain: this.appForm.value.orgNamespace
             });
 
@@ -195,13 +190,13 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
       // Check if app namespace is taken
       const orgData = this.appForm.value;
-      const exists = await this.iamService.iam.checkExistenceOfDomain({
+      const exists = await this.iamService.domainsService.checkExistenceOfDomain({
         domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
       });
 
       if (exists) {
         // If exists check if current user is the owner of this namespace and allow him/her to overwrite
-        const isOwner = await this.iamService.iam.isOwner({
+        const isOwner = await this.iamService.domainsService.isOwner({
           domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
         });
 
@@ -260,7 +255,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       const orgData = this.appForm.value;
 
       // Check if current user is the owner of this namespace and allow him/her to overwrite
-      const isOwner = await this.iamService.iam.isOwner({
+      const isOwner = await this.iamService.domainsService.isOwner({
         domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
       });
 
@@ -310,7 +305,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   }
 
   async confirmApp(skipNextStep?: boolean) {
-    const req = JSON.parse(JSON.stringify({...this.appForm.value, returnSteps: true}));
+    const req = JSON.parse(JSON.stringify({ ...this.appForm.value, returnSteps: true }));
 
     req.namespace = `${this.ENSPrefixes.Application}.${req.orgNamespace}`;
     delete req.orgNamespace;
@@ -385,10 +380,10 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   }
 
   private async proceedCreateSteps(req: any) {
-    const returnSteps = this.data.owner === this.iamService.iam.address;
-    req = {...req, returnSteps};
+    const returnSteps = this.data.owner === this.iamService.signerService.address;
+    req = { ...req, returnSteps };
     try {
-      const call = this.iamService.iam.createApplication(req);
+      const call = this.iamService.domainsService.createApplication(req);
       // Retrieve the steps to create an organization
       this.txs = returnSteps ?
         await call :
@@ -449,7 +444,7 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       this.txs = [
         {
           info: 'Setting up definitions',
-          next: async () => await this.iamService.iam.setRoleDefinition({
+          next: async () => await this.iamService.domainsService.setRoleDefinition({
             data: req.data,
             domain: newDomain
           })

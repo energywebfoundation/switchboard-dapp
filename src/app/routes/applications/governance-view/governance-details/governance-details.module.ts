@@ -5,9 +5,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { GovernanceViewComponent } from '../governance-view.component';
+import { FieldsDetailsComponent } from './fields-details/fields-details.component';
 
 @NgModule({
-  declarations: [GovernanceDetailsComponent, GovernanceViewComponent],
+  declarations: [GovernanceDetailsComponent, GovernanceViewComponent, FieldsDetailsComponent],
   imports: [
     SharedModule,
     MatCardModule,

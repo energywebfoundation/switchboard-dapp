@@ -8,7 +8,10 @@ import { IamService } from '../../../shared/services/iam.service';
 import { ToastrService } from 'ngx-toastr';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { PreconditionTypes } from 'iam-client-lib';
+import { PreconditionType } from 'iam-client-lib';
+import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
+import { IssuerType } from './models/issuer-type.enum';
+import { RoleTypePipe } from '../../../shared/pipes/role-type/role-type.pipe';
 
 describe('NewRoleComponent', () => {
   let component: NewRoleComponent;
@@ -24,7 +27,6 @@ describe('NewRoleComponent', () => {
       'error'
     ]);
   const iamSpy = jasmine.createSpyObj('iam', [
-    'getDid',
     'checkExistenceOfDomain',
     'isOwner',
     'getRoleDIDs',
@@ -33,9 +35,11 @@ describe('NewRoleComponent', () => {
     'getENSTypesBySearchPhrase'
   ]);
 
+  const signerFacadeSpy = jasmine.createSpyObj(SignerFacadeService, ['getDid']);
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NewRoleComponent],
+      declarations: [NewRoleComponent, RoleTypePipe],
       imports: [ReactiveFormsModule],
       providers: [
         provideMockStore(),
@@ -43,7 +47,8 @@ describe('NewRoleComponent', () => {
         {provide: ToastrService, useValue: toastrSpy},
         {provide: MatDialogRef, useValue: {}},
         {provide: MatDialog, useValue: matDialogSpy},
-        {provide: MAT_DIALOG_DATA, useValue: {}}
+        {provide: MAT_DIALOG_DATA, useValue: {}},
+        {provide: SignerFacadeService, useValue: signerFacadeSpy}
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -53,42 +58,10 @@ describe('NewRoleComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NewRoleComponent);
     component = fixture.componentInstance;
-    // fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should be run removeDid', () => {
-    const i = 1;
-    component.issuerList = ['1', '2', '3'];
-    component.removeDid(i);
-
-    expect(component.issuerList).toEqual(['1', '3']);
-
-    component.issuerList = ['1'];
-    component.removeDid(0);
-
-    expect(component.issuerList).toEqual(['1']);
-  });
-
-  it('should be run formResetHandler', () => {
-    spyOn(component.fieldsForm, 'reset');
-
-    component.formResetHandler();
-
-    expect(component.fieldsForm.reset).toHaveBeenCalled();
-  });
-
-  it('should be run clearSearchTxt', () => {
-    const testValue = 'roleForm';
-    const expectedResult = false;
-    component.roleControl = fb.control({testValue});
-
-    component.clearSearchTxt();
-
-    expect(component.roleControl.value).toBe('');
   });
 
   it('should be run removePreconditionRole', () => {
@@ -98,7 +71,7 @@ describe('NewRoleComponent', () => {
         enrolmentPreconditions:
           [
             [
-              {type: PreconditionTypes.Role, conditions: ['a', 'b', 'c', 'd']},
+              {type: PreconditionType.Role, conditions: ['a', 'b', 'c', 'd']},
             ]
           ]
       })
@@ -117,50 +90,6 @@ describe('NewRoleComponent', () => {
     expect(resultSecond).toBe('');
   });
 
-  describe('should be run addDid', () => {
-    it('addDid: newIssuer === issuerGroup', () => {
-      const newIssuer = 'test value';
-      component.issuerList = [newIssuer];
-      component.issuerGroup = fb.group({
-        newIssuer
-      });
-
-      component.addDid();
-
-      expect(toastrSpy.error).toHaveBeenCalled();
-    });
-
-    it('addDid: newIssuer !== issuerGroup', () => {
-      const newIssuer = 'test value';
-      const issuer = 'issuerGroup value';
-      component.issuerList = [issuer];
-      component.issuerGroup = fb.group({
-        newIssuer
-      });
-      spyOn(component.issuerGroup.get('newIssuer'), 'reset');
-
-      component.addDid();
-
-      expect(component.issuerList[1]).toBe(newIssuer);
-      expect(component.issuerGroup.get('newIssuer').reset).toHaveBeenCalled();
-    });
-
-    it('addDid: newIssuer is empty', () => {
-      const newIssuer = '    ';
-      const issuer = 'issuerGroup value';
-      component.issuerList = [issuer];
-      component.issuerGroup = fb.group({
-        newIssuer
-      });
-      spyOn(component.issuerGroup.get('newIssuer'), 'reset');
-
-      component.addDid();
-
-      expect(component.issuerGroup.get('newIssuer').reset).not.toHaveBeenCalled();
-      expect(toastrSpy.error).toHaveBeenCalled();
-    });
-  });
-
   describe('should be run issuerTypeChanged', () => {
     let data;
 
@@ -176,10 +105,6 @@ describe('NewRoleComponent', () => {
       });
       spyOn(component.issuerGroup, 'reset');
       spyOn(component.roleForm.get('data').get('issuer').get('roleName'), 'reset');
-      component.IssuerType = {
-        DID: 'DID',
-        Role: 'Role'
-      };
     });
 
     it('issuerList length > 0', () => {
@@ -193,7 +118,7 @@ describe('NewRoleComponent', () => {
     });
 
     it('iIssuerType.DID === data.value', () => {
-      data = {value: component.IssuerType.DID};
+      data = {value: IssuerType.DID};
       component.issuerList = [];
 
       component.issuerTypeChanged(data);
