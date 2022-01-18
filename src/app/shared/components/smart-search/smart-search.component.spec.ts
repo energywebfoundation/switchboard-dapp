@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
 
 import { SmartSearchComponent } from './smart-search.component';
 import { MatInputModule } from '@angular/material/input';
@@ -61,6 +61,7 @@ describe('SmartSearchComponent', () => {
     const {smartSearchInput} = selectors(hostDebug);
 
     expect(smartSearchInput.value).toEqual('role');
+    flush();
   }));
 
   it('should set default value to input', fakeAsync(() => {
@@ -72,6 +73,7 @@ describe('SmartSearchComponent', () => {
     const {smartSearchInput} = selectors(hostDebug);
 
     expect(smartSearchInput.value).toEqual('role');
+    flush();
   }));
 
   it('should emit event when adding role', fakeAsync(() => {
@@ -94,7 +96,7 @@ describe('SmartSearchComponent', () => {
     add.click();
 
     expect(addSpyEvent).toHaveBeenCalledWith({role: 'name', searchType: SmartSearchType.Add});
-
+    flush();
   }));
 });
 
