@@ -1,0 +1,59 @@
+<div class="text-left my-3">
+  <div class="label opacity-50 mb-2">{{title}}</div>
+  <span class="color-white mb-0" *ngIf="!data?.length">None</span>
+  <table mat-table [dataSource]="data" *ngIf="data?.length">
+
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef> Type</th>
+      <td mat-cell *matCellDef="let element" data-label="Type"> {{element.fieldType}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="label">
+      <th mat-header-cell *matHeaderCellDef> Label</th>
+      <td mat-cell *matCellDef="let element" data-label="Label"> {{element.label}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="required">
+      <th mat-header-cell *matHeaderCellDef> Required</th>
+      <td mat-cell *matCellDef="let element" data-label="Label"> {{element.required}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="minLength">
+      <th mat-header-cell *matHeaderCellDef> Min Length</th>
+      <td mat-cell *matCellDef="let element" data-label="Label"> {{element.minLength}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="maxLength">
+      <th mat-header-cell *matHeaderCellDef> Max Length</th>
+      <td mat-cell *matCellDef="let element" data-label="Label"> {{element.maxLength}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="pattern">
+      <th mat-header-cell *matHeaderCellDef> Pattern</th>
+      <td mat-cell *matCellDef="let element" data-label="Label"> {{element.pattern}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="minValue">
+      <th mat-header-cell *matHeaderCellDef> Min Value</th>
+      <td mat-cell *matCellDef="let element" data-label="Label"> {{element.minValue}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="maxValue">
+      <th mat-header-cell *matHeaderCellDef> Max Value</th>
+      <td mat-cell *matCellDef="let element" data-label="Label"> {{element.maxValue}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="minDate">
+      <th mat-header-cell *matHeaderCellDef> Min Date</th>
+      <td mat-cell *matCellDef="let element" data-label="Label"> {{element.minDate | date: 'M/d/yyyy'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="maxDate">
+      <th mat-header-cell *matHeaderCellDef> Max Date</th>
+      <td mat-cell *matCellDef="let element" data-label="Label"> {{element.maxDate | date: 'M/d/yyyy'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsView"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsView;"></tr>
+  </table>
+</div>

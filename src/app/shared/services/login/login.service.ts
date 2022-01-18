@@ -28,6 +28,8 @@ export const LOGIN_TOASTR_UNDERSTANDABLE_ERRORS: LoginError[] = [
   }
 ];
 
+export const WALLET_CONNECT_KEY = 'walletconnect';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -56,6 +58,7 @@ export class LoginService {
   clearSession() {
     localStorage.removeItem(PROVIDER_TYPE);
     localStorage.removeItem(PUBLIC_KEY);
+    localStorage.removeItem(WALLET_CONNECT_KEY);
   }
 
   getSession() {
@@ -179,6 +182,12 @@ export class LoginService {
   private handleLoginErrors(e, navigateOnTimeout) {
     console.error(e);
     const swalConfig = swalLoginError(e.message);
+    if (e.message && this.isSessionActive()) {
+      this.loadingService.hide();
+      this.openSwal({
+        title: 'Ops!', text: 'Something went wrong :('
+      }, true);
+    }
     if (swalConfig) {
       // in some cases is displayed loader.
       this.loadingService.hide();

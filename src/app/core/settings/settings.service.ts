@@ -9,22 +9,6 @@ export class SettingsService {
 
   constructor() {
 
-    // User Settings
-    // -----------------------------------
-    this.user = {
-      name: 'John',
-      job: 'ng-developer',
-      picture: 'assets/img/user/02.jpg'
-    };
-
-    // App Settings
-    // -----------------------------------
-    this.app = {
-      name: 'ewIAMSwitchboard',
-      description: 'Decentralized Identity and Access Management Switchboard',
-      year: ((new Date()).getFullYear())
-    };
-
     // Layout Settings
     // -----------------------------------
     this.layout = {

@@ -1,11 +1,11 @@
-import { AfterViewInit, Component, Input, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { debounceTime, startWith, switchMap } from 'rxjs/operators';
-import { NamespaceType, SearchType } from 'iam-client-lib';
-import { IamService } from '../../services/iam.service';
-import { ISmartSearch } from '../../../routes/applications/new-role/new-role.component';
+import { debounceTime, switchMap, tap } from 'rxjs/operators';
+import { ISmartSearch } from './models/smart-search.interface';
+import { truthy } from '@operators';
+import { SmartSearchService } from './services/smart-search.service';
+import { SmartSearchType } from './models/smart-search-type.enum';
 
 @Component({
   selector: 'app-smart-search',
@@ -15,95 +15,61 @@ import { ISmartSearch } from '../../../routes/applications/new-role/new-role.com
 export class SmartSearchComponent implements AfterViewInit {
   @Input() searchText: FormControl;
   @Input() placeholderSearch: string;
-  @Input() fieldName: string;
-  @Input() searchType = '';
+  @Input() searchType: SmartSearchType = SmartSearchType.Default;
 
-  @Output() searchTextEvent: EventEmitter<ISmartSearch> = new EventEmitter();
+  @Output() add: EventEmitter<ISmartSearch> = new EventEmitter();
 
-  searchTxtFieldValue: string;
   searchForm: FormGroup;
-  isAutolistLoading = {
-    requests: [],
-    value: false
-  };
+  isLoadingList: boolean;
 
-  public filteredOptions: Observable<any[]>;
+  public filteredOptions: Observable<string[]>;
 
-  constructor(private route: Router,
-              private iamService: IamService) {
-  }
-
-  controlHasError(errorType: string) {
-    return this.searchText.hasError(errorType);
+  constructor(private smartSearchService: SmartSearchService) {
   }
 
   ngAfterViewInit(): void {
     this.filteredOptions = this.searchText.valueChanges.pipe(
+      truthy(),
       debounceTime(1200),
-      startWith(''),
-      switchMap(async (value) => await this._filterOrgsAndApps(value))
+      tap(() => this.isLoadingList = true),
+      switchMap((value: string) => this.smartSearchService.searchBy(value)),
+      tap(() => this.isLoadingList = false),
     );
   }
 
-  displayFn(selected: any) {
-    return selected && selected.namespace ? selected.namespace : '';
+  displayFn(selected: string): string {
+    return selected ? selected : '';
   }
 
-  async search() {
+  search(): void {
     this.searchText.updateValueAndValidity();
   }
 
-  updateSearchTxtFieldValue(event: any) {
-    if (typeof this.searchText.value === 'string') {
-      this.searchTxtFieldValue = this.searchText.value;
-    } else {
-      this.searchTxtFieldValue = this.searchText.value.option.value.namespace;
+  get isAdding(): boolean {
+    return this.searchType === SmartSearchType.Add;
+  }
+
+  get isDefault(): boolean {
+    return this.searchType === SmartSearchType.Default;
+  }
+
+  showButtons(): boolean {
+    return this.searchText.value?.trim()?.length > 2;
+  }
+
+  addRole(): void {
+    if (this.searchText.invalid) {
+      return;
     }
+    this.add.emit({
+      role: this.searchText.value,
+      searchType: this.searchType
+    });
+    this.clear();
   }
 
-  addRole() {
-    const valid = this.searchText.valid;
-
-    if (valid) {
-      const searchText = this.searchText.value;
-      this.searchTextEvent.emit({
-        role: searchText,
-        searchType: this.searchType
-      });
-      this.clearSearchTxt();
-    }
+  clear(): void {
+    this.searchText.reset();
   }
 
-  clearSearchTxt(): void {
-    this.searchTxtFieldValue = '';
-    this.searchText.setValue('');
-    this.searchText.setErrors(null);
-  }
-
-  private async _filterOrgsAndApps(keyword: any): Promise<any[]> {
-    let retVal = [];
-    this.isAutolistLoading.value = true;
-    try {
-      if (keyword) {
-        let word;
-        if (this.fieldName === 'rolePage') {
-          (!keyword.trim && keyword.namespace) ? word = keyword.namespace :
-            word = keyword.trim();
-        }
-
-        if (word.length > 2) {
-          word = word.toLowerCase();
-          retVal = await this.iamService.domainsService.getENSTypesBySearchPhrase(
-            word,
-            this.fieldName === 'rolePage' ? [SearchType.Role] : [SearchType.App, SearchType.Org]
-          );
-          this.isAutolistLoading.value = false;
-        }
-      }
-    } catch (e) {
-      console.error(e);
-      this.isAutolistLoading.value = false;
-    }
-    return retVal;
-  }
 }

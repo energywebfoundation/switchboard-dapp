@@ -2,15 +2,15 @@ import { Component, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NamespaceType } from 'iam-client-lib';
 import { IamService } from '../../../shared/services/iam.service';
-import { environment } from '../../../../environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { isValidJsonFormatValidator } from '../../../utils/validators/json-format/is-valid-json-format.validator';
-import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
 import { deepEqualObjects } from '../../../utils/functions/deep-equal-objects/deep-equal-objects';
+import { EnvService } from '../../../shared/services/env/env.service';
+import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 
 export const ViewType = {
   UPDATE: 'update',
@@ -32,10 +32,10 @@ export class NewOrganizationComponent {
   }
 
   public orgForm = this.fb.group({
-    orgName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-    namespace: environment.orgNamespace,
+    orgName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256), isAlphanumericValidator]],
+    namespace: this.envService.rootNamespace,
     data: this.fb.group({
-      organizationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+      organizationName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256)]],
       logoUrl: ['', Validators.pattern('https?://.*')],
       websiteUrl: ['', Validators.pattern('https?://.*')],
       description: '',
@@ -66,7 +66,8 @@ export class NewOrganizationComponent {
     private loaderService: LoadingService,
     public dialogRef: MatDialogRef<NewOrganizationComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private envService: EnvService) {
     if (data && data.viewType && (data.origData || data.parentOrg)) {
       this.viewType = data.viewType;
       this.origData = data.origData;
@@ -127,12 +128,16 @@ export class NewOrganizationComponent {
     }
   }
 
-  isNextFormButtonDisabled() {
-    return this.isChecking || deepEqualObjects(this.defaultFormValues, this.orgForm.value) || this.orgForm.invalid;
+  formHasError(control: string, error: string): boolean {
+    return this.orgForm.get(control).hasError(error);
   }
 
-  alphaNumericOnly(event: KeyboardEvent) {
-    return isAlphaNumericOnly(event);
+  formDataHasError(control: string, error: string): boolean {
+    return this.orgForm.get('data').get(control).hasError(error);
+  }
+
+  isNextFormButtonDisabled() {
+    return this.isChecking || deepEqualObjects(this.defaultFormValues, this.orgForm.value) || this.orgForm.invalid;
   }
 
   async createNewOrg() {

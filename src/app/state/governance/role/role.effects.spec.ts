@@ -11,6 +11,7 @@ import { dialogSpy, toastrSpy } from '@tests';
 import { RoleService } from './services/role.service';
 import * as RoleActions from './role.actions';
 import { IRole } from 'iam-client-lib';
+import { EnvService } from '../../../shared/services/env/env.service';
 
 describe('RoleEffects', () => {
 
@@ -25,6 +26,7 @@ describe('RoleEffects', () => {
         RoleEffects,
         {provide: RoleService, useValue: roleServiceSpy},
         {provide: SwitchboardToastrService, useValue: toastrSpy},
+        {provide: EnvService, useValue: {rootNamespace: 'iam.ewc'}},
         {provide: MatDialog, useValue: dialogSpy},
         provideMockStore(),
         provideMockActions(() => actions$),
@@ -56,8 +58,8 @@ describe('RoleEffects', () => {
     roleServiceSpy.getRoleList.and.returnValue(of([{}, {}]));
 
     effects.getList$.subscribe(resultAction => {
-        expect(resultAction).toEqual(RoleActions.getListSuccess({list: [{}, {}] as IRole[]}));
-        done();
+      expect(resultAction).toEqual(RoleActions.getListSuccess({list: [{}, {}] as IRole[], namespace: 'iam.ewc'}));
+      done();
       }
     );
   });

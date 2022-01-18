@@ -8,7 +8,7 @@ export const getList = createAction(
 
 export const getListSuccess = createAction(
   '[ROLE] Get Role List Success',
-  props<{ list: IRole[] }>()
+  props<{ list: IRole[], namespace: string }>()
 );
 
 export const getListFailure = createAction(
@@ -18,7 +18,7 @@ export const getListFailure = createAction(
 
 export const updateFilters = createAction(
   '[ROLE] Update Filters',
-  props<{ filters: Filters }>()
+  props<{ filters: Filters, namespace: string }>()
 );
 
 export const toggleFilters = createAction(

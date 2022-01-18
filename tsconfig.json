@@ -33,6 +33,9 @@
       ],
       "@tests": [
         "src/app/tests/index"
+      ],
+      "@utils": [
+        "src/app/utils/index"
       ]
     }
   },

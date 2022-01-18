@@ -16,6 +16,7 @@ import { OrganizationListComponent } from './organization-list/organization-list
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { RoleListComponent } from './role-list/role-list.component';
 import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
+import { EnvService } from '../../shared/services/env/env.service';
 
 @Component({
   selector: 'app-applications',
@@ -55,7 +56,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
               private urlParamService: UrlParamService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
-              private store: Store) {
+              private store: Store,
+              private envService: EnvService) {
   }
 
   ngAfterViewInit(): void {
@@ -74,7 +76,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openNewOrgComponent(): void {
     if (!this.isIamEwcOwner) {
-      const namespace = 'orgcreator.apps.testorg.iam.ewc';
+      const namespace = 'orgcreator.apps.testorg.' + this.envService.rootNamespace;
       const roleName = 'orgowner';
       this.router.navigate([`enrol`], {queryParams: {roleName, app: namespace, stayLoggedIn: true}});
       return;
@@ -104,7 +106,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async ngOnInit() {
     this.isIamEwcOwner = await this.iamService.domainsService.isOwner({
-      domain: 'iam.ewc'
+      domain: this.envService.rootNamespace
     });
   }
 
@@ -154,14 +156,16 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       case ListType.APP:
         tabIdx = 1;
         this.store.dispatch(ApplicationActions.updateFilters({
-          filters: filterOptions
+          filters: filterOptions,
+          namespace: this.envService.rootNamespace
         }));
         this.store.dispatch(ApplicationActions.showFilters());
         break;
       case ListType.ROLE:
         tabIdx = 2;
         this.store.dispatch(RoleActions.updateFilters({
-          filters: filterOptions
+          filters: filterOptions,
+          namespace: this.envService.rootNamespace
         }));
         this.store.dispatch(RoleActions.showFilters());
         break;

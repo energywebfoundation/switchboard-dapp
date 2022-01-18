@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NamespaceType, PreconditionType } from 'iam-client-lib';
 import { ListType } from '../../../../shared/constants/shared-constants';
@@ -6,6 +6,7 @@ import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { RoleType } from '../../new-role/new-role.component';
 import { GovernanceViewComponent } from '../governance-view.component';
+import { IssuerType } from '../../new-role/models/issuer-type.enum';
 
 @Component({
   selector: 'app-governance-details',
@@ -27,7 +28,6 @@ export class GovernanceDetailsComponent {
 
   typeLabel: string;
   formData: any;
-  displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue', 'minDate', 'maxDate'];
 
   appList: any[];
   roleList: any[];
@@ -35,6 +35,26 @@ export class GovernanceDetailsComponent {
   preconditions = {};
   PreconditionTypes = PreconditionType;
   panelOpenState = false;
+
+  get requestorFields() {
+    return this.formData?.definition?.fields;
+  }
+
+  get issuerFields() {
+    return this.formData?.definition?.issuerFields;
+  }
+
+  get isDIDType() {
+    return this.issuer?.issuerType === IssuerType.DID;
+  }
+
+  get isRoleType() {
+    return this.issuer?.issuerType === IssuerType.ROLE;
+  }
+
+  get issuer() {
+    return this.formData?.definition?.issuer;
+  }
 
   constructor(
     private iamService: IamService,

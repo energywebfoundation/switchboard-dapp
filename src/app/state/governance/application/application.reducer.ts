@@ -27,16 +27,16 @@ export const initialState: ApplicationState = {
 
 const applicationReducer = createReducer(
   initialState,
-  on(ApplicationActions.getListSuccess, (state, {list}) => ({
+  on(ApplicationActions.getListSuccess, (state, {list, namespace}) => ({
     ...state,
     list: [...list],
-    filteredList: filterBy([...list], state.filters.organization, state.filters.application, state.filters.role)
+    filteredList: filterBy([...list], state.filters.organization, state.filters.application, state.filters.role, namespace)
   })),
 
-  on(ApplicationActions.updateFilters, (state, {filters}) => ({
+  on(ApplicationActions.updateFilters, (state, {filters, namespace}) => ({
     ...state,
     filters: {...filters},
-    filteredList: filterBy(state.list, filters.organization, filters.application, filters.role)
+    filteredList: filterBy(state.list, filters.organization, filters.application, filters.role, namespace)
   })),
   on(ApplicationActions.toggleFilters, (state) => ({...state, filterVisible: !state.filterVisible})),
   on(ApplicationActions.showFilters, (state) => ({...state, filterVisible: true})),
