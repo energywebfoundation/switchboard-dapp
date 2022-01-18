@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IamService, PROVIDER_TYPE } from '../iam.service';
 import { LoadingService } from '../loading.service';
 import { ToastrService } from 'ngx-toastr';
-import { AccountInfo, ProviderType, PUBLIC_KEY } from 'iam-client-lib';
+import { AccountInfo, ProviderType, PUBLIC_KEY, IS_ETH_SIGNER } from 'iam-client-lib';
 import SWAL from 'sweetalert';
 import { from, Observable, of } from 'rxjs';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
@@ -45,11 +45,16 @@ export class LoginService {
   }
 
   isSessionActive() {
-    return (Boolean(localStorage.getItem(PROVIDER_TYPE)) && Boolean(localStorage.getItem(PUBLIC_KEY)));
+    return (
+      Boolean(localStorage.getItem(PROVIDER_TYPE)) 
+      && Boolean(localStorage.getItem(PUBLIC_KEY)) 
+      && Boolean(localStorage.getItem(IS_ETH_SIGNER))
+      );
   }
 
   storeSession() {
     localStorage.setItem(PROVIDER_TYPE, this.iamService.providerType);
+    localStorage.setItem(IS_ETH_SIGNER, this.iamService.isEthSigner.toString());
     return from(this.iamService.getPublicKey()).pipe(
       map((key) => localStorage.setItem(PUBLIC_KEY, key)),
     );
@@ -59,6 +64,7 @@ export class LoginService {
     localStorage.removeItem(PROVIDER_TYPE);
     localStorage.removeItem(PUBLIC_KEY);
     localStorage.removeItem(WALLET_CONNECT_KEY);
+    localStorage.removeItem(IS_ETH_SIGNER);
   }
 
   getSession() {

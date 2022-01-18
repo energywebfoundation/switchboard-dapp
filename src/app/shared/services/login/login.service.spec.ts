@@ -9,7 +9,7 @@ import { IamListenerService } from '../iam-listener/iam-listener.service';
 import { from, of, throwError } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
-import { ProviderType, PUBLIC_KEY } from 'iam-client-lib';
+import { ProviderType, PUBLIC_KEY, IS_ETH_SIGNER } from 'iam-client-lib';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -34,7 +34,7 @@ describe('LoginService', () => {
   });
 
   it('should pass further value for isSessionActive', () => {
-    const localStore = {[PROVIDER_TYPE]: 'type', [PUBLIC_KEY]: 'public key'};
+    const localStore = {[PROVIDER_TYPE]: 'type', [PUBLIC_KEY]: 'public key', [IS_ETH_SIGNER]: true};
     spyOn(window.localStorage, 'getItem').and.callFake((key) =>
       key in localStore ? localStore[key] : null
     );
@@ -48,6 +48,7 @@ describe('LoginService', () => {
       userClosedModal: false
     }));
     iamServiceSpy.getPublicKey.and.returnValue(of('public key'));
+    iamServiceSpy.isEthSigner.and.returnValue(of('true'));
     const getSpy = jasmine.createSpy().and.returnValue(ProviderType.MetaMask);
     Object.defineProperty(IamService, 'providerType', {get: getSpy});
 
