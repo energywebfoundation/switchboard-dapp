@@ -96,7 +96,6 @@ describe('OrganizationListComponent', () => {
 
   it('should dispatch action for creating sub organization', () => {
     setUp();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const org = { namespace: 'foo' } as any;
     component.newSubOrg(org);
     expect(dispatchSpy).toHaveBeenCalledWith(

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestScheduler } from 'rxjs/testing';
 import { filterProviders } from './filter-providers';
 

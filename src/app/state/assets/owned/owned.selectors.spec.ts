@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as OwnedSelectors from './owned.selectors';
 
 describe('Owned Assets Selectors', () => {

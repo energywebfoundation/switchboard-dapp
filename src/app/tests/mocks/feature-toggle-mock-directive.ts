@@ -12,7 +12,6 @@ export class FeatureToggleMockDirective implements OnInit {
   private hasView = true;
 
   constructor(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private templateRef: TemplateRef<any>,
     private vcr: ViewContainerRef
   ) {}

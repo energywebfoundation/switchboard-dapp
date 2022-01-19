@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { updateHistory } from './update-history';
 
 describe('tests for updating history', () => {

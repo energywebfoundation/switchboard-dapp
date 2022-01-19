@@ -14,5 +14,24 @@ module.exports = {
       files: ['*.html'],
       extends: ['plugin:@angular-eslint/template/recommended'],
     },
+    {
+      files: ['*.spec.ts'],
+      rules: {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      files: ['**/tests/**/*.ts'],
+      rules: {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      files: ['**/cypress/**/*.ts'],
+      rules: {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-namespace": "off"
+      }
+    },
   ],
 };

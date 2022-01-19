@@ -58,7 +58,6 @@ describe('DialogUserComponent', () => {
       address: '123',
       birthdate: date.getTime(),
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     store.overrideSelector(userSelectors.getUserData, data as any);
     component.ngOnInit();
     fixture.detectChanges();

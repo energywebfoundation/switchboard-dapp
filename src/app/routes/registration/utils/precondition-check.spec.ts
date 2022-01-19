@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { preconditionCheck } from './precondition-check';
 import { RolePreconditionType } from '../models/role-precondition-type.enum';
 

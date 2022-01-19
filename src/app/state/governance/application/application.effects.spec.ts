@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ReplaySubject, throwError } from 'rxjs';

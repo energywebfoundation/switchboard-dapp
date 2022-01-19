@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getOrgHierarchy } from './get-org-hierarchy';
 
 describe('getOrgHierarchy', () => {
