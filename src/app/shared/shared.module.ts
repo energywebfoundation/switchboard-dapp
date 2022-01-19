@@ -127,8 +127,7 @@ const MATERIAL_MODULES = [
     TableHeadingComponent,
     NoRecordsComponent,
     RoleTypePipe,
-  ],
-  entryComponents: [MinifiedDidViewerDialogComponent],
+  ]
 })
 
 // https://github.com/ocombe/ng2-translate/issues/209

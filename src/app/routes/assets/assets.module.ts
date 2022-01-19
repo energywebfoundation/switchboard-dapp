@@ -68,13 +68,6 @@ const routes: Routes = [
     MatExpansionModule,
     ClipboardModule,
     QrCodeModule,
-  ],
-  entryComponents: [
-    NewAssetTypeComponent,
-    NewPassiveAssetComponent,
-    AssetOwnershipHistoryComponent,
-    EditAssetDialogComponent,
-    VerificationMethodComponent,
-  ],
+  ]
 })
 export class AssetsModule {}

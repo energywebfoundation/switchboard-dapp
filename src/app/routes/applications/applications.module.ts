@@ -86,13 +86,6 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     NgxEditorModule,
     CreateFieldsModule,
     DidBookModule,
-  ],
-  entryComponents: [
-    NewOrganizationComponent,
-    NewApplicationComponent,
-    NewRoleComponent,
-    TransferOwnershipComponent,
-    RemoveOrgAppComponent,
-  ],
+  ]
 })
 export class ApplicationsModule {}
