@@ -37,7 +37,7 @@
 
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        <ng-container> Asset DID</ng-container>
+        <ng-container>Asset DID</ng-container>
       </th>
       <td mat-cell *matCellDef="let element" data-label="Asset DID">
         {{ element.minifiedId }}
@@ -54,12 +54,12 @@
             aria-label="Use"
             (click)="selectAsset(element)"
           >
-            <mat-icon *ngIf="element['isSelected']" class="btn-color-primary"
-              >check_circle</mat-icon
-            >
-            <mat-icon *ngIf="!element['isSelected']" class="btn-color-primary"
-              >circle</mat-icon
-            >
+            <mat-icon *ngIf="element['isSelected']" class="btn-color-primary">
+              check_circle
+            </mat-icon>
+            <mat-icon *ngIf="!element['isSelected']" class="btn-color-primary">
+              circle
+            </mat-icon>
           </button>
         </div>
       </td>

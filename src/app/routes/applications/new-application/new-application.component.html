@@ -17,12 +17,9 @@
         </ng-template>
         <mat-step [completed]="false">
           <form [formGroup]="appForm">
-            <ng-template matStepLabel
-              >{{
-                viewType === ViewType.UPDATE ? 'Update' : 'New'
-              }}
-              Application</ng-template
-            >
+            <ng-template matStepLabel>
+              {{ viewType === ViewType.UPDATE ? 'Update' : 'New' }} Application
+            </ng-template>
             <div
               class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3"
             >
@@ -44,9 +41,9 @@
                   </div>
                 </div> -->
                 <div class="col-lg-12" formGroupName="data">
-                  <mat-label class="ml-3 pl-1"
-                    >Application Logo URL (Optional)</mat-label
-                  >
+                  <mat-label class="ml-3 pl-1">
+                    Application Logo URL (Optional)
+                  </mat-label>
                   <mat-form-field
                     class="mt-2"
                     appearance="outline"
@@ -90,7 +87,8 @@
                     <mat-error
                       *ngIf="appForm.get('appName').hasError('required')"
                     >
-                      Application Namespace is <strong>required</strong>
+                      Application Namespace is
+                      <strong>required</strong>
                     </mat-error>
                     <mat-error
                       *ngIf="appForm.get('appName').hasError('minlength')"
@@ -111,13 +109,15 @@
                   *ngIf="appForm.get('appName').value"
                   class="ml-3 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3"
                 >
-                  <span class="pb-2">{{
-                    appForm?.value?.appName +
-                      '.' +
-                      ENSPrefixes.Application +
-                      '.' +
-                      appForm?.value?.orgNamespace
-                  }}</span>
+                  <span class="pb-2">
+                    {{
+                      appForm?.value?.appName +
+                        '.' +
+                        ENSPrefixes.Application +
+                        '.' +
+                        appForm?.value?.orgNamespace
+                    }}
+                  </span>
                 </div>
                 <ng-container formGroupName="data">
                   <div class="col-lg-12">
@@ -136,16 +136,16 @@
                         minlength="3"
                         maxlength="256"
                       />
-                      <mat-error
-                        >Application Name is
-                        <strong>required</strong></mat-error
-                      >
+                      <mat-error>
+                        Application Name is
+                        <strong>required</strong>
+                      </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-12">
-                    <mat-label class="ml-3 pl-1"
-                      >Website URL (Optional)</mat-label
-                    >
+                    <mat-label class="ml-3 pl-1">
+                      Website URL (Optional)
+                    </mat-label>
                     <mat-form-field
                       class="mt-2"
                       appearance="outline"
@@ -164,9 +164,9 @@
                     </mat-form-field>
                   </div>
                   <div class="col-lg-12">
-                    <mat-label class="ml-3 pl-1"
-                      >Description (Optional)</mat-label
-                    >
+                    <mat-label class="ml-3 pl-1">
+                      Description (Optional)
+                    </mat-label>
                     <mat-form-field appearance="outline">
                       <textarea
                         matInput
@@ -177,9 +177,9 @@
                   </div>
                   <div class="col-lg-12">
                     <div class="d-flex justify-content-between">
-                      <mat-label class="ml-3 pl-1"
-                        >Others (JSON) (Optional)</mat-label
-                      >
+                      <mat-label class="ml-3 pl-1">
+                        Others (JSON) (Optional)
+                      </mat-label>
                       <div class="tooltip-wrapper">
                         <mat-icon
                           class="tooltip-color cursor-pointer"
@@ -259,41 +259,43 @@
             </div>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Application Namespace</div>
-              <span class="color-white mb-0">{{
-                appForm?.value?.appName +
-                  '.' +
-                  ENSPrefixes.Application +
-                  '.' +
-                  appForm?.value?.orgNamespace
-              }}</span>
+              <span class="color-white mb-0">
+                {{
+                  appForm?.value?.appName +
+                    '.' +
+                    ENSPrefixes.Application +
+                    '.' +
+                    appForm?.value?.orgNamespace
+                }}
+              </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Application Name</div>
-              <span class="color-white mb-0">{{
-                appForm?.value?.data?.applicationName
-              }}</span>
+              <span class="color-white mb-0">
+                {{ appForm?.value?.data?.applicationName }}
+              </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Website URL</div>
-              <span class="color-white mb-0">{{
-                appForm?.value?.data?.websiteUrl || 'None'
-              }}</span>
+              <span class="color-white mb-0">
+                {{ appForm?.value?.data?.websiteUrl || 'None' }}
+              </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Description</div>
-              <span class="color-white mb-0">{{
-                appForm?.value?.data?.description || 'None'
-              }}</span>
+              <span class="color-white mb-0">
+                {{ appForm?.value?.data?.description || 'None' }}
+              </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Others (JSON)</div>
-              <span class="color-white mb-0">{{
-                appForm?.value?.data?.others || 'None'
-              }}</span>
+              <span class="color-white mb-0">
+                {{ appForm?.value?.data?.others || 'None' }}
+              </span>
             </div>
           </div>
           <div>
@@ -329,9 +331,9 @@
               class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3"
             >
               <mat-icon class="px-2">notifications_none</mat-icon>
-              <span class="pl-3 pb-2"
-                >Please confirm this transaction in your connected Wallet.</span
-              >
+              <span class="pl-3 pb-2">
+                Please confirm this transaction in your connected Wallet.
+              </span>
             </div>
             <div class="d-flex justify-content-end mb-3">
               <button

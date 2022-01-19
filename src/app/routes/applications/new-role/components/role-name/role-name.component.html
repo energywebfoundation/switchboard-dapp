@@ -27,19 +27,20 @@
             maxlength="256"
             data-qa-id="role-name"
           />
-          <mat-error *ngIf="controlHasError('required')"
-            >Role Name is <strong>required</strong>
+          <mat-error *ngIf="controlHasError('required')">
+            Role Name is
+            <strong>required</strong>
           </mat-error>
-          <mat-error *ngIf="controlHasError('minlength')"
-            >Role Name need to have at least 3 characters.
+          <mat-error *ngIf="controlHasError('minlength')">
+            Role Name need to have at least 3 characters.
           </mat-error>
-          <mat-error *ngIf="controlHasError('isAlphaNumericInvalid')"
-            >Role Name can only contain alphanumeric characters.
+          <mat-error *ngIf="controlHasError('isAlphaNumericInvalid')">
+            Role Name can only contain alphanumeric characters.
           </mat-error>
         </mat-form-field>
-        <mat-error *ngIf="existAndNotOwner"
-          >This name already exists. Please try another</mat-error
-        >
+        <mat-error *ngIf="existAndNotOwner">
+          This name already exists. Please try another
+        </mat-error>
       </div>
       <div
         *ngIf="form.value"

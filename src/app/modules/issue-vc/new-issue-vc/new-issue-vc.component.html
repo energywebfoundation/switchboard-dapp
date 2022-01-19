@@ -35,12 +35,13 @@
               >
                 <mat-icon>qr_code_2</mat-icon>
               </button>
-              <mat-error *ngIf="getFormSubject().hasError('required')"
-                >Subject is <strong>required</strong>
+              <mat-error *ngIf="getFormSubject().hasError('required')">
+                Subject is
+                <strong>required</strong>
               </mat-error>
-              <mat-error *ngIf="getFormSubject().hasError('invalidDid')"
-                >Subject DID format is invalid</mat-error
-              >
+              <mat-error *ngIf="getFormSubject().hasError('invalidDid')">
+                Subject DID format is invalid
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -61,7 +62,8 @@
                   *ngFor="let role of possibleRolesToEnrol"
                   [value]="role"
                   [attr.data-qa-id]="role?.name"
-                  >{{ role?.name }}
+                >
+                  {{ role?.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -79,8 +81,7 @@
         [fieldList]="fieldList"
         [disabledSubmit]="isFormDisabled()"
         (submitForm)="create($event)"
-      >
-      </app-enrolment-form>
+      ></app-enrolment-form>
     </form>
   </div>
 </div>

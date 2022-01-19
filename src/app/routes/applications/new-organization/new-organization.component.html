@@ -17,12 +17,9 @@
         </ng-template>
         <mat-step [completed]="false">
           <form [formGroup]="orgForm">
-            <ng-template matStepLabel
-              >{{
-                viewType === ViewType.UPDATE ? 'Update' : 'New'
-              }}
-              Organization</ng-template
-            >
+            <ng-template matStepLabel>
+              {{ viewType === ViewType.UPDATE ? 'Update' : 'New' }} Organization
+            </ng-template>
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
               <div class="row mt-2">
                 <!-- <div class="col-lg-12">
@@ -33,9 +30,9 @@
                 </div>
               </div> -->
                 <div class="col-lg-12" formGroupName="data">
-                  <mat-label class="ml-3 pl-1"
-                    >Organization Image URL (Optional)</mat-label
-                  >
+                  <mat-label class="ml-3 pl-1">
+                    Organization Image URL (Optional)
+                  </mat-label>
                   <mat-form-field class="mt-2" appearance="outline">
                     <input
                       matInput
@@ -54,9 +51,9 @@
             <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
               <div class="row">
                 <div class="col-lg-12" *ngIf="viewType !== ViewType.UPDATE">
-                  <mat-label class="ml-3 pl-1"
-                    >Organization Namespace</mat-label
-                  >
+                  <mat-label class="ml-3 pl-1">
+                    Organization Namespace
+                  </mat-label>
                   <mat-form-field
                     class="mt-2 multi-errors"
                     appearance="outline"
@@ -74,7 +71,8 @@
                       maxlength="256"
                     />
                     <mat-error *ngIf="formHasError('orgName', 'required')">
-                      Organization Namespace is <strong>required</strong>
+                      Organization Namespace is
+                      <strong>required</strong>
                     </mat-error>
                     <mat-error *ngIf="formHasError('orgName', 'minlength')">
                       Organization Namespace need to have at least 3 characters.
@@ -90,9 +88,9 @@
                 </div>
 
                 <div class="col-lg-12" *ngIf="viewType === ViewType.UPDATE">
-                  <mat-label class="ml-3 pl-1"
-                    >Organization Namespace</mat-label
-                  >
+                  <mat-label class="ml-3 pl-1">
+                    Organization Namespace
+                  </mat-label>
                   <div
                     class="mt-2 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3"
                   >
@@ -106,11 +104,13 @@
                   "
                   class="mx-3 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3"
                 >
-                  <span class="pb-2">{{
-                    orgForm.get('orgName').value +
-                      '.' +
-                      orgForm?.value?.namespace
-                  }}</span>
+                  <span class="pb-2">
+                    {{
+                      orgForm.get('orgName').value +
+                        '.' +
+                        orgForm?.value?.namespace
+                    }}
+                  </span>
                   <!-- <mat-icon>check</mat-icon> -->
                 </div>
                 <ng-container formGroupName="data">
@@ -129,7 +129,8 @@
                       <mat-error
                         *ngIf="formDataHasError('organizationName', 'required')"
                       >
-                        Organization Name is <strong>required</strong>
+                        Organization Name is
+                        <strong>required</strong>
                       </mat-error>
                       <mat-error
                         *ngIf="
@@ -141,9 +142,9 @@
                     </mat-form-field>
                   </div>
                   <div class="col-lg-12">
-                    <mat-label class="ml-3 pl-1"
-                      >Website URL (Optional)</mat-label
-                    >
+                    <mat-label class="ml-3 pl-1">
+                      Website URL (Optional)
+                    </mat-label>
                     <mat-form-field class="mt-2" appearance="outline">
                       <input
                         matInput
@@ -158,9 +159,9 @@
                     </mat-form-field>
                   </div>
                   <div class="col-lg-12">
-                    <mat-label class="ml-3 pl-1"
-                      >Description (Optional)</mat-label
-                    >
+                    <mat-label class="ml-3 pl-1">
+                      Description (Optional)
+                    </mat-label>
                     <mat-form-field appearance="outline">
                       <textarea
                         matInput
@@ -171,9 +172,9 @@
                   </div>
                   <div class="col-lg-12">
                     <div class="d-flex justify-content-between">
-                      <mat-label class="ml-3 pl-1"
-                        >Others (JSON) (Optional)</mat-label
-                      >
+                      <mat-label class="ml-3 pl-1">
+                        Others (JSON) (Optional)
+                      </mat-label>
                       <div class="tooltip-wrapper">
                         <mat-icon
                           class="tooltip-color cursor-pointer"
@@ -253,37 +254,37 @@
             </div>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Organization Namespace</div>
-              <span class="color-white mb-0">{{
-                orgForm?.value?.orgName + '.' + orgForm?.value?.namespace
-              }}</span>
+              <span class="color-white mb-0">
+                {{ orgForm?.value?.orgName + '.' + orgForm?.value?.namespace }}
+              </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Organization Name</div>
-              <span class="color-white mb-0">{{
-                orgForm?.value?.data?.organizationName
-              }}</span>
+              <span class="color-white mb-0">
+                {{ orgForm?.value?.data?.organizationName }}
+              </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Website URL</div>
-              <span class="color-white mb-0">{{
-                orgForm?.value?.data?.websiteUrl || 'None'
-              }}</span>
+              <span class="color-white mb-0">
+                {{ orgForm?.value?.data?.websiteUrl || 'None' }}
+              </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Description</div>
-              <span class="color-white mb-0">{{
-                orgForm?.value?.data?.description || 'None'
-              }}</span>
+              <span class="color-white mb-0">
+                {{ orgForm?.value?.data?.description || 'None' }}
+              </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Others (JSON)</div>
-              <span class="color-white mb-0">{{
-                orgForm?.value?.data?.others || 'None'
-              }}</span>
+              <span class="color-white mb-0">
+                {{ orgForm?.value?.data?.others || 'None' }}
+              </span>
             </div>
           </div>
           <div>
@@ -319,9 +320,9 @@
               class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3"
             >
               <mat-icon class="px-2">notifications_none</mat-icon>
-              <span class="pl-3 pb-2"
-                >Please confirm this transaction in your connected Wallet.</span
-              >
+              <span class="pl-3 pb-2">
+                Please confirm this transaction in your connected Wallet.
+              </span>
             </div>
             <div class="d-flex justify-content-end mb-3">
               <button
@@ -344,8 +345,8 @@
         </ng-container>
 
         <mat-step [completed]="false">
-          <ng-template matStepLabel
-            >Organization
+          <ng-template matStepLabel>
+            Organization
             {{ viewType === ViewType.UPDATE ? 'Updated' : 'Created' }}
           </ng-template>
           <app-transactions-complete

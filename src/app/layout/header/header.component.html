@@ -35,8 +35,9 @@
           <mat-icon
             class="experimental-warning"
             matTooltip="This feature is experimental"
-            >report_problem</mat-icon
           >
+            report_problem
+          </mat-icon>
         </li>
       </ng-container>
       <li
@@ -114,7 +115,8 @@
         <mat-slide-toggle
           [checked]="isExperimentalEnabled$ | async"
           (change)="onExperimentalChange($event)"
-          >Enable experimental
+        >
+          Enable experimental
         </mat-slide-toggle>
       </li>
       <li class="nav-item dropdown dropdown-list" dropdown>
@@ -132,9 +134,9 @@
           <!-- notif count here -->
           <ng-container *ngIf="!isLoadingNotif">
             <em class="fas fa-tasks"></em>
-            <span class="badge badge-danger" *ngIf="tasks?.totalCount">{{
-              tasks?.totalCount
-            }}</span>
+            <span class="badge badge-danger" *ngIf="tasks?.totalCount">
+              {{ tasks?.totalCount }}
+            </span>
             <!-- <span class="badge badge-danger">2</span> -->
           </ng-container>
         </a>
@@ -168,7 +170,8 @@
                       <span
                         *ngIf="tasks?.assetsOfferedToMeCount"
                         class="badge badge-danger ml-2"
-                        >{{ tasks?.assetsOfferedToMeCount }}
+                      >
+                        {{ tasks?.assetsOfferedToMeCount }}
                       </span>
                     </div>
                   </div>
@@ -187,7 +190,8 @@
                       <span
                         *ngIf="tasks?.pendingApprovalCount"
                         class="badge badge-danger ml-2"
-                        >{{ tasks?.pendingApprovalCount }}
+                      >
+                        {{ tasks?.pendingApprovalCount }}
                       </span>
                     </div>
                   </div>
@@ -208,7 +212,8 @@
                       <span
                         *ngIf="tasks?.pendingAssetSyncCount"
                         class="badge badge-danger ml-2"
-                        >{{ tasks?.pendingAssetSyncCount }}
+                      >
+                        {{ tasks?.pendingAssetSyncCount }}
                       </span>
                     </div>
                   </div>
@@ -233,9 +238,9 @@
           dropdownToggle
         >
           <em class="icon-bell"></em>
-          <span class="badge badge-danger" *ngIf="notificationNewItems">{{
-            notificationNewItems
-          }}</span>
+          <span class="badge badge-danger" *ngIf="notificationNewItems">
+            {{ notificationNewItems }}
+          </span>
         </a>
         <ng-container *ngIf="notificationList?.length">
           <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
@@ -251,8 +256,9 @@
                     href="#"
                     (click)="clearSwitchboardToaster()"
                     class="color-primary"
-                    >Clear all</a
                   >
+                    Clear all
+                  </a>
                 </div>
 
                 <div class="list-group-item list-group-item-action">

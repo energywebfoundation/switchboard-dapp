@@ -49,7 +49,7 @@
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Requestor</div>
-              <span class="color-white mb-0"> {{ claim?.requester }} </span>
+              <span class="color-white mb-0">{{ claim?.requester }}</span>
             </div>
             <ng-container
               *ngIf="
@@ -60,13 +60,13 @@
               <mat-divider></mat-divider>
               <div class="text-left my-3">
                 <div class="label opacity-50 mb-2">Asset</div>
-                <span class="color-white mb-0"> {{ claim?.subject }} </span>
+                <span class="color-white mb-0">{{ claim?.subject }}</span>
               </div>
             </ng-container>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Issuer</div>
-              <span class="color-white mb-0"> {{ claim?.claimIssuer }} </span>
+              <span class="color-white mb-0">{{ claim?.claimIssuer }}</span>
             </div>
           </div>
         </div>
@@ -87,9 +87,9 @@
             class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3"
           >
             <mat-icon>info</mat-icon>
-            <span class="f-14"
-              >Role did not require any field for enrolment request.</span
-            >
+            <span class="f-14">
+              Role did not require any field for enrolment request.
+            </span>
           </div>
         </div>
         <div
@@ -102,8 +102,7 @@
               [fieldList]="fieldList"
               [showRegistrationTypes]="false"
               [showSubmit]="false"
-            >
-            </app-enrolment-form>
+            ></app-enrolment-form>
           </div>
         </div>
         <div
@@ -118,10 +117,10 @@
             class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3"
           >
             <mat-icon>info</mat-icon>
-            <span class="f-14"
-              >Two signatures are required in the event that both off-chain and
-              on-chain credentials are requested.</span
-            >
+            <span class="f-14">
+              Two signatures are required in the event that both off-chain and
+              on-chain credentials are requested.
+            </span>
           </div>
         </div>
       </div>

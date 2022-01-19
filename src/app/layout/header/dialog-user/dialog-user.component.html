@@ -28,9 +28,10 @@
               required
               autocomplete="off"
             />
-            <mat-error *ngIf="profileForm.get('name').hasError('required')"
-              >Name is <strong>required</strong></mat-error
-            >
+            <mat-error *ngIf="profileForm.get('name').hasError('required')">
+              Name is
+              <strong>required</strong>
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-12">
@@ -55,14 +56,17 @@
               [for]="picker"
             ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="profileForm.get('birthdate').hasError('required')"
-              >Date of birth is
+            <mat-error
+              *ngIf="profileForm.get('birthdate').hasError('required')"
+            >
+              Date of birth is
               <strong>required</strong>
             </mat-error>
             <mat-error
               *ngIf="profileForm.get('birthdate')?.hasError('matDatepickerMax')"
             >
-              Maximum allowed date is <strong>{{ maxDate | date }}</strong>
+              Maximum allowed date is
+              <strong>{{ maxDate | date }}</strong>
             </mat-error>
           </mat-form-field>
         </div>
@@ -82,9 +86,10 @@
               maxlength="500"
               autocomplete="off"
             ></textarea>
-            <mat-error *ngIf="profileForm.get('address').hasError('required')"
-              >Address is <strong>required</strong></mat-error
-            >
+            <mat-error *ngIf="profileForm.get('address').hasError('required')">
+              Address is
+              <strong>required</strong>
+            </mat-error>
           </mat-form-field>
         </div>
       </div>

@@ -30,7 +30,7 @@
     </div>
     <div class="text-left my-3">
       <div class="label opacity-50 mb-2">{{ typeLabel }} Namespace</div>
-      <span class="color-white mb-0"> {{ formData?.namespace }} </span>
+      <span class="color-white mb-0">{{ formData?.namespace }}</span>
     </div>
     <mat-divider></mat-divider>
     <div class="text-left my-3">
@@ -89,13 +89,13 @@
         <mat-divider></mat-divider>
         <div class="text-left my-3">
           <div class="label opacity-50 mb-2">Issuer Type</div>
-          <span class="color-white mb-0"> {{ issuer?.issuerType }} </span>
+          <span class="color-white mb-0">{{ issuer?.issuerType }}</span>
         </div>
         <mat-divider></mat-divider>
         <ng-container *ngIf="isRoleType">
           <div class="text-left my-3">
             <div class="label opacity-50 mb-2">Role</div>
-            <span class="color-white mb-0"> {{ issuer?.roleName }} </span>
+            <span class="color-white mb-0">{{ issuer?.roleName }}</span>
           </div>
         </ng-container>
         <ng-container *ngIf="isDIDType">
@@ -148,7 +148,7 @@
           (closed)="panelOpenState = false"
         >
           <mat-expansion-panel-header>
-            <mat-panel-title> Application List </mat-panel-title>
+            <mat-panel-title>Application List</mat-panel-title>
           </mat-expansion-panel-header>
           <div class="color-white mb-0" *ngIf="!appList?.length">None</div>
           <div
@@ -177,7 +177,7 @@
           (closed)="panelOpenState = false"
         >
           <mat-expansion-panel-header>
-            <mat-panel-title> Roles List </mat-panel-title>
+            <mat-panel-title>Roles List</mat-panel-title>
           </mat-expansion-panel-header>
           <div class="color-white mb-0" *ngIf="!roleList?.length">None</div>
           <div

@@ -48,9 +48,9 @@
       <form role="form" [formGroup]="roleTypeForm">
         <div class="row">
           <div class="col-lg-12">
-            <mat-label class="ml-3 pl-1" [ngStyle]="txtColor"
-              >Enrol For</mat-label
-            >
+            <mat-label class="ml-3 pl-1" [ngStyle]="txtColor">
+              Enrol For
+            </mat-label>
             <mat-form-field
               class="mt-2 md-enroll"
               appearance="outline"
@@ -67,14 +67,16 @@
                   class="md-enroll"
                   [ngStyle]="listColor"
                   [value]="EnrolForType.ME"
-                  >Myself</mat-option
                 >
+                  Myself
+                </mat-option>
                 <mat-option
                   *ngIf="experimentalEnabled"
                   class="md-enroll"
                   [ngStyle]="listColor"
                   [value]="EnrolForType.ASSET"
-                  >My Asset
+                >
+                  My Asset
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -94,16 +96,18 @@
               </button>
             </div>
             <div class="col-lg-12">
-              <mat-label class="ml-3 pl-1 pb-1" [ngStyle]="txtColor"
-                >Asset DID</mat-label
-              >
+              <mat-label class="ml-3 pl-1 pb-1" [ngStyle]="txtColor">
+                Asset DID
+              </mat-label>
               <div
                 [ngStyle]="txtColor"
                 class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex mt-2 pt-3 pb-2 mb-4 mr-3"
               >
-                <span class="pb-2 opacity-50">{{
-                  roleTypeForm?.value?.assetDid || 'Please select an asset.'
-                }}</span>
+                <span class="pb-2 opacity-50">
+                  {{
+                    roleTypeForm?.value?.assetDid || 'Please select an asset.'
+                  }}
+                </span>
               </div>
             </div>
           </ng-container>
@@ -133,8 +137,9 @@
                   [ngStyle]="listColor"
                   *ngFor="let role of roleList"
                   [value]="role"
-                  >{{ role.name }}</mat-option
                 >
+                  {{ role.name }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -158,8 +163,7 @@
         [txtColor]="txtColor"
         [btnColor]="btnColor"
         (submitForm)="submit($event)"
-      >
-      </app-enrolment-form>
+      ></app-enrolment-form>
       <button
         mat-raised-button
         class="btn btn-primary md-enroll w-100"

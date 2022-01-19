@@ -23,8 +23,9 @@
           </mat-option>
         </mat-autocomplete>
         <mat-error *ngIf="newOwnerDID?.errors?.required">
-          New Owner Address is <strong>required</strong></mat-error
-        >
+          New Owner Address is
+          <strong>required</strong>
+        </mat-error>
         <mat-error *ngIf="newOwnerDID?.errors?.invalidDid">
           DID format is invalid
         </mat-error>

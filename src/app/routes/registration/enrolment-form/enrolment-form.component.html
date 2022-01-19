@@ -89,7 +89,8 @@
             data-qa-id="label"
             class="ml-3 pl-1"
             *ngIf="fieldList[i].fieldType !== 'boolean'"
-            >{{ fieldList[i].label }}
+          >
+            {{ fieldList[i].label }}
             {{ fieldList[i].required ? '' : '(Optional)' }}
           </mat-label>
 
@@ -108,17 +109,17 @@
               placeholder="{{ fieldList[i].label }}"
               [formControl]="getControl(i)"
             />
-            <mat-error *ngIf="getControl(i)?.errors?.required"
-              >This field is required.
+            <mat-error *ngIf="getControl(i)?.errors?.required">
+              This field is required.
             </mat-error>
-            <mat-error *ngIf="getControl(i)?.errors?.minlength"
-              >Please input at least {{ fieldList[i].minLength }} characters.
+            <mat-error *ngIf="getControl(i)?.errors?.minlength">
+              Please input at least {{ fieldList[i].minLength }} characters.
             </mat-error>
-            <mat-error *ngIf="getControl(i)?.errors?.maxlength"
-              >Please input at most {{ fieldList[i].maxLength }} characters.
+            <mat-error *ngIf="getControl(i)?.errors?.maxlength">
+              Please input at most {{ fieldList[i].maxLength }} characters.
             </mat-error>
-            <mat-error *ngIf="getControl(i)?.errors?.pattern"
-              >Incorrect data format.
+            <mat-error *ngIf="getControl(i)?.errors?.pattern">
+              Incorrect data format.
             </mat-error>
           </mat-form-field>
 
@@ -137,14 +138,14 @@
               placeholder="{{ fieldList[i].label }}"
               [formControl]="getControl(i)"
             />
-            <mat-error *ngIf="getControl(i)?.errors?.required"
-              >This field is required.
+            <mat-error *ngIf="getControl(i)?.errors?.required">
+              This field is required.
             </mat-error>
-            <mat-error *ngIf="getControl(i)?.errors?.max"
-              >Max value is {{ fieldList[i].maxValue }}.
+            <mat-error *ngIf="getControl(i)?.errors?.max">
+              Max value is {{ fieldList[i].maxValue }}.
             </mat-error>
-            <mat-error *ngIf="getControl(i)?.errors?.min"
-              >Min value is {{ fieldList[i].minValue }}.
+            <mat-error *ngIf="getControl(i)?.errors?.min">
+              Min value is {{ fieldList[i].minValue }}.
             </mat-error>
           </mat-form-field>
 
@@ -171,8 +172,8 @@
               [for]="picker"
             ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="getControl(i)?.errors?.required"
-              >This field is required.
+            <mat-error *ngIf="getControl(i)?.errors?.required">
+              This field is required.
             </mat-error>
             <mat-error *ngIf="getControl(i)?.hasError('matDatepickerMin')">
               Minimum allowed date is {{ fieldList[i].minDate | date }}
@@ -189,13 +190,15 @@
             [attr.data-qa-id]="'field-' + i"
             [formControl]="getControl(i)"
             [ngStyle]="txtboxColor"
-            ><span
+          >
+            <span
               class="mb-3 d-inline-flex"
               data-qa-id="label"
               [ngStyle]="txtColor"
-              >{{ fieldList[i].label }}
-              {{ fieldList[i].required ? '' : '(Optional)' }}</span
             >
+              {{ fieldList[i].label }}
+              {{ fieldList[i].required ? '' : '(Optional)' }}
+            </span>
           </mat-checkbox>
         </div>
       </ng-container>
