@@ -20,6 +20,7 @@ export const environment = {
   currencyName: 'Volta Token',
   currencySymbol: 'VT',
   blockExplorerUrl: 'https://volta-explorer.energyweb.org',
+  SENTRY_ENVIRONMENT: 'develop',
 
   ...constants,
 };

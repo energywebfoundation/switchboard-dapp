@@ -20,4 +20,5 @@ export class EnvService {
   currencyName: string = environment.currencyName;
   currencySymbol: string = environment.currencySymbol;
   blockExplorerUrl: string = environment.blockExplorerUrl;
+  SENTRY_ENVIRONMENT: string = environment.SENTRY_ENVIRONMENT;
 }

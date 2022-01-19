@@ -20,6 +20,6 @@ export const environment = {
   currencyName: 'EWT',
   currencySymbol: 'EWT',
   blockExplorerUrl: 'https://explorer.energyweb.org',
-
+  SENTRY_ENVIRONMENT: 'production',
   ...constants,
 };
