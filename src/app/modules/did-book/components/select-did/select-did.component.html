@@ -14,9 +14,7 @@
           required
           maxlength="256" />
         <mat-autocomplete #auto="matAutocomplete">
-          <mat-option
-            *ngFor="let option of didBook$ | async"
-            [value]="option.did">
+          <mat-option *ngFor="let option of didBook$ | async" [value]="option.did">
             {{ option.label }}
           </mat-option>
         </mat-autocomplete>
@@ -24,21 +22,13 @@
           New Owner Address is
           <strong>required</strong>
         </mat-error>
-        <mat-error *ngIf="newOwnerDID?.errors?.invalidDid">
-          DID format is invalid
-        </mat-error>
+        <mat-error *ngIf="newOwnerDID?.errors?.invalidDid"> DID format is invalid</mat-error>
       </mat-form-field>
     </div>
     <div class="col-12" *ngIf="isNotKnownDid && newOwnerDID.valid">
       <div>
         Do you want to add this DID to your DID Book?
-        <button
-          mat-stroked-button
-          class="btn-small ml-2"
-          data-qa-id="add"
-          (click)="approveHandler()">
-          Yes
-        </button>
+        <button mat-stroked-button class="btn-small ml-2" data-qa-id="add" (click)="approveHandler()">Yes</button>
       </div>
     </div>
   </div>

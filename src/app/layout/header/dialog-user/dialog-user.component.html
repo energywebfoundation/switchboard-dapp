@@ -1,6 +1,4 @@
-<h4
-  mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center">
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
   Update Identity
   <button mat-icon-button [mat-dialog-close]="true">
     <mat-icon>close</mat-icon>
@@ -13,10 +11,7 @@
       <div class="row">
         <div class="col-lg-12">
           <mat-label class="ml-3 pl-1">Name</mat-label>
-          <mat-form-field
-            class="mt-2"
-            appearance="outline"
-            floatPlaceholder="never">
+          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
             <input
               matInput
               formControlName="name"
@@ -33,10 +28,7 @@
         </div>
         <div class="col-lg-12">
           <mat-label class="ml-3 pl-1">Date of Birth</mat-label>
-          <mat-form-field
-            class="mt-2"
-            appearance="outline"
-            floatPlaceholder="never">
+          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
             <input
               [matDatepicker]="picker"
               data-qa-id="dialog-input-birthdate"
@@ -46,19 +38,13 @@
               required
               placeholder="Date of Birth"
               autocomplete="off" />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error
-              *ngIf="profileForm.get('birthdate').hasError('required')">
+            <mat-error *ngIf="profileForm.get('birthdate').hasError('required')">
               Date of birth is
               <strong>required</strong>
             </mat-error>
-            <mat-error
-              *ngIf="
-                profileForm.get('birthdate')?.hasError('matDatepickerMax')
-              ">
+            <mat-error *ngIf="profileForm.get('birthdate')?.hasError('matDatepickerMax')">
               Maximum allowed date is
               <strong>{{ maxDate | date }}</strong>
             </mat-error>
@@ -66,10 +52,7 @@
         </div>
         <div class="col-lg-12">
           <mat-label class="ml-3 pl-1">Address</mat-label>
-          <mat-form-field
-            class="mt-2"
-            appearance="outline"
-            floatPlaceholder="never">
+          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
             <textarea
               formControlName="address"
               data-qa-id="dialog-input-address"

@@ -1,11 +1,5 @@
-<button
-  mat-menu-item
-  class="btn-color-primary"
-  data-qa-id="create-sub-org"
-  (click)="createSubOrganization()">
-  <mat-icon
-    class="btn-color-primary btn-action-3"
-    svgIcon="add-organization-icon"></mat-icon>
+<button mat-menu-item class="btn-color-primary" data-qa-id="create-sub-org" (click)="createSubOrganization()">
+  <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-organization-icon"></mat-icon>
   <span>Create Sub-Organization</span>
 </button>
 
@@ -15,9 +9,7 @@
   class="btn-color-primary"
   data-qa-id="view-apps"
   (click)="viewAppsHandler()">
-  <mat-icon
-    class="btn-color-primary btn-action-3"
-    svgIcon="view-application-icon"></mat-icon>
+  <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-application-icon"></mat-icon>
   <span>View Applications</span>
 </button>
 
@@ -27,51 +19,27 @@
   class="btn-color-primary"
   data-qa-id="view-roles"
   (click)="viewRolesHandler()">
-  <mat-icon
-    class="btn-color-primary btn-action-3"
-    svgIcon="view-role-icon"></mat-icon>
+  <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-role-icon"></mat-icon>
   <span>View Roles</span>
 </button>
 
-<button
-  mat-menu-item
-  class="btn-color-primary"
-  data-qa-id="create-app"
-  (click)="createApp()">
-  <mat-icon
-    class="btn-color-primary btn-action-3"
-    svgIcon="add-application-icon"></mat-icon>
+<button mat-menu-item class="btn-color-primary" data-qa-id="create-app" (click)="createApp()">
+  <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-application-icon"></mat-icon>
   <span>Create Application</span>
 </button>
 
-<button
-  mat-menu-item
-  class="btn-color-primary"
-  data-qa-id="create-role"
-  (click)="createRole()">
-  <mat-icon
-    class="btn-color-primary btn-action-3"
-    svgIcon="add-role-icon"></mat-icon>
+<button mat-menu-item class="btn-color-primary" data-qa-id="create-role" (click)="createRole()">
+  <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-role-icon"></mat-icon>
   <span>Create Role</span>
 </button>
 
-<button
-  mat-menu-item
-  class="btn-color-primary"
-  data-qa-id="edit"
-  (click)="edit()">
+<button mat-menu-item class="btn-color-primary" data-qa-id="edit" (click)="edit()">
   <mat-icon class="btn-color-primary">edit</mat-icon>
   <span>Edit</span>
 </button>
 
-<button
-  mat-menu-item
-  class="btn-color-primary"
-  data-qa-id="transfer-ownership"
-  (click)="transferOwnership()">
-  <mat-icon
-    class="btn-color-primary btn-action-1"
-    svgIcon="transfer-ownership-icon"></mat-icon>
+<button mat-menu-item class="btn-color-primary" data-qa-id="transfer-ownership" (click)="transferOwnership()">
+  <mat-icon class="btn-color-primary btn-action-1" svgIcon="transfer-ownership-icon"></mat-icon>
   <span>Transfer Ownership</span>
 </button>
 
@@ -83,18 +51,12 @@
     appCopyToClipboard
     message="Staking URL"
     [copyClipboard]="stakingUrl">
-    <mat-icon
-      class="btn-color-primary btn-action-3"
-      svgIcon="copy-url-icon"></mat-icon>
+    <mat-icon class="btn-color-primary btn-action-3" svgIcon="copy-url-icon"></mat-icon>
     <span>Copy Staking URL</span>
   </button>
 </ng-container>
 
-<button
-  mat-menu-item
-  class="btn-color-error"
-  data-qa-id="delete"
-  (click)="delete()">
+<button mat-menu-item class="btn-color-error" data-qa-id="delete" (click)="delete()">
   <mat-icon class="btn-color-error">delete_outline</mat-icon>
   <span>Delete</span>
 </button>

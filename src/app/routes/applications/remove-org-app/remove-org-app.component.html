@@ -1,6 +1,4 @@
-<h4
-  mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center">
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
   Remove {{ listType === ListType.ORG ? 'Organization' : 'Application' }}
   <button mat-icon-button (click)="closeDialog()">
     <mat-icon>close</mat-icon>
@@ -19,11 +17,7 @@
           <span class="color-white mb-0">{{ namespace }}</span>
         </div>
       </div>
-      <mat-vertical-stepper
-        class="w-100"
-        [linear]="true"
-        #stepper
-        *ngIf="steps?.length">
+      <mat-vertical-stepper class="w-100" [linear]="true" #stepper *ngIf="steps?.length">
         <ng-template matStepperIcon="edit">
           <mat-icon>check</mat-icon>
         </ng-template>
@@ -37,17 +31,10 @@
           <div
             class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
             <mat-icon class="px-2">notifications_none</mat-icon>
-            <span class="pl-3 pb-2">
-              Please confirm this transaction in your connected Wallet.
-            </span>
+            <span class="pl-3 pb-2"> Please confirm this transaction in your connected Wallet. </span>
           </div>
           <div class="d-flex justify-content-end mb-3">
-            <button
-              mat-stroked-button
-              class="btn btn-small mr-2"
-              (click)="closeDialog()">
-              Cancel
-            </button>
+            <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
             <button
               mat-raised-button
               class="btn btn-small btn-primary"
@@ -59,8 +46,7 @@
         </mat-step>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Complete</ng-template>
-          <app-transactions-complete
-            (completed)="closeDialog(true)"></app-transactions-complete>
+          <app-transactions-complete (completed)="closeDialog(true)"></app-transactions-complete>
         </mat-step>
       </mat-vertical-stepper>
     </div>

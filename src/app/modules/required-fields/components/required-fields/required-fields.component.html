@@ -8,15 +8,9 @@
           placeholder="{{ fieldList[i].name }}"
           [attr.data-qa-id]="'field-' + i"
           [formControl]="getControl(i)" />
-        <mat-icon matSuffix [matTooltip]="fieldList[i]?.description">
-          info
-        </mat-icon>
-        <mat-error *ngIf="getControl(i)?.errors?.required">
-          This field is required.
-        </mat-error>
-        <mat-error *ngIf="getControl(i)?.errors?.pattern">
-          Incorrect data format.
-        </mat-error>
+        <mat-icon matSuffix [matTooltip]="fieldList[i]?.description"> info</mat-icon>
+        <mat-error *ngIf="getControl(i)?.errors?.required"> This field is required.</mat-error>
+        <mat-error *ngIf="getControl(i)?.errors?.pattern"> Incorrect data format.</mat-error>
       </mat-form-field>
     </div>
   </ng-container>

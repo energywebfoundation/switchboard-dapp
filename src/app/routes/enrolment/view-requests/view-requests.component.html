@@ -1,6 +1,4 @@
-<h4
-  mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center">
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
   View Request
   <button mat-icon-button mat-dialog-close>
     <mat-icon>close</mat-icon>
@@ -16,21 +14,13 @@
             <div class="label color-white opacity-50 text-truncate-middle">
               {{ claim?.parentNamespace }}
             </div>
-            <div
-              class="btn-color-warn text-truncate-middle"
-              *ngIf="!claim?.isAccepted && !claim?.isRejected">
+            <div class="btn-color-warn text-truncate-middle" *ngIf="!claim?.isAccepted && !claim?.isRejected">
               Pending
             </div>
-            <div
-              class="btn-color-error text-truncate-middle"
-              *ngIf="!claim?.isAccepted && claim?.isRejected">
+            <div class="btn-color-error text-truncate-middle" *ngIf="!claim?.isAccepted && claim?.isRejected">
               Rejected
             </div>
-            <div
-              class="btn-color-success text-truncate-middle"
-              *ngIf="claim?.isAccepted">
-              Approved
-            </div>
+            <div class="btn-color-success text-truncate-middle" *ngIf="claim?.isAccepted">Approved</div>
           </div>
         </div>
 
@@ -47,11 +37,7 @@
               <div class="label opacity-50 mb-2">Requestor</div>
               <span class="color-white mb-0">{{ claim?.requester }}</span>
             </div>
-            <ng-container
-              *ngIf="
-                claim?.subject !== claim?.claimType &&
-                claim?.subject !== claim?.requester
-              ">
+            <ng-container *ngIf="claim?.subject !== claim?.claimType && claim?.subject !== claim?.requester">
               <mat-divider></mat-divider>
               <div class="text-left my-3">
                 <div class="label opacity-50 mb-2">Asset</div>
@@ -66,27 +52,16 @@
           </div>
         </div>
 
-        <app-fields
-          *ngIf="fields?.length"
-          title="Requestor fields"
-          [fieldsList]="fields"></app-fields>
-        <app-fields
-          *ngIf="issuerFields?.length"
-          title="Issuer fields"
-          [fieldsList]="issuerFields"></app-fields>
+        <app-fields *ngIf="fields?.length" title="Requestor fields" [fieldsList]="fields"></app-fields>
+        <app-fields *ngIf="issuerFields?.length" title="Issuer fields" [fieldsList]="issuerFields"></app-fields>
 
         <div class="col-lg-12 mt-2" *ngIf="!fields?.length">
-          <div
-            class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
+          <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
             <mat-icon>info</mat-icon>
-            <span class="f-14">
-              Role did not require any field for enrolment request.
-            </span>
+            <span class="f-14"> Role did not require any field for enrolment request. </span>
           </div>
         </div>
-        <div
-          class="col-lg-12 mt-2 mb-3"
-          *ngIf="canAccept() && roleContainRequiredParams()">
+        <div class="col-lg-12 mt-2 mb-3" *ngIf="canAccept() && roleContainRequiredParams()">
           <div class="card card-default mb-3 pb-0 shadow-none">
             <app-enrolment-form
               #issuerFields
@@ -97,17 +72,11 @@
         </div>
         <div
           class="col-lg-12 mt-2"
-          *ngIf="
-            claim?.registrationTypes?.length === 2 &&
-            (userDid$ | async) !== claim.requester &&
-            !claim.isAccepted
-          ">
-          <div
-            class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
+          *ngIf="claim?.registrationTypes?.length === 2 && (userDid$ | async) !== claim.requester && !claim.isAccepted">
+          <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
             <mat-icon>info</mat-icon>
             <span class="f-14">
-              Two signatures are required in the event that both off-chain and
-              on-chain credentials are requested.
+              Two signatures are required in the event that both off-chain and on-chain credentials are requested.
             </span>
           </div>
         </div>
@@ -123,11 +92,7 @@
       (click)="approve()">
       Approve
     </button>
-    <button
-      mat-raised-button
-      class="btn btn-secondary w-100 ml-0 mt-3 mx-3"
-      type="submit"
-      (click)="reject()">
+    <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit" (click)="reject()">
       Reject
     </button>
   </div>

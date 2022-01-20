@@ -1,13 +1,10 @@
 <div class="row mx-0 mt-1">
   <div class="col-xl-12">
-    <div
-      class="d-flex flex-row justify-content-start align-items-center mr-md-2">
+    <div class="d-flex flex-row justify-content-start align-items-center mr-md-2">
       <h4 class="color-white strong my-4">My Asset Enrolments</h4>
       <div></div>
     </div>
-    <div
-      class="card card-default mb-3 pb-0 shadow-none d-flex"
-      *ngIf="asset$ | async as asset">
+    <div class="card card-default mb-3 pb-0 shadow-none d-flex" *ngIf="asset$ | async as asset">
       <div class="d-flex flex-column align-items-center justify-content-center">
         <button
           mat-icon-button
@@ -17,16 +14,12 @@
           (click)="back()">
           <mat-icon class="color-primary">arrow_back</mat-icon>
         </button>
-        <img
-          class="img-logo-asset-enrolled my-2"
-          data-qa-id="logo"
-          [src]="asset.icon ? asset.icon : defaultLogo" />
+        <img class="img-logo-asset-enrolled my-2" data-qa-id="logo" [src]="asset.icon ? asset.icon : defaultLogo" />
         <h4 class="my-2" data-qa-id="name">
           {{ asset?.name ? asset.name : 'Asset Name' }}
         </h4>
       </div>
-      <div
-        class="d-flex flex-column flex-md-row justify-content-md-between mx-md-2">
+      <div class="d-flex flex-column flex-md-row justify-content-md-between mx-md-2">
         <div class="my-3">
           <div class="label opacity-50 mb-2 color-white">Created Date</div>
           <span class="color-white mb-0" data-qa-id="created-date">
@@ -54,19 +47,15 @@
       </div>
     </div>
     <div class="card card-default mb-3 pb-0">
-      <div
-        class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
+      <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
         <!-- Filter -->
-        <div
-          class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0">
+        <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0">
           <!-- <div class="filter-label mr-1">Group by:</div> -->
           <mat-form-field
             appearance="outline"
             floatPlaceholder="never"
             class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
-            <mat-select
-              [formControl]="enrolmentDropdown"
-              (selectionChange)="updateEnrolmentList($event)">
+            <mat-select [formControl]="enrolmentDropdown" (selectionChange)="updateEnrolmentList($event)">
               <mat-option [value]="dropdownValue.all">All</mat-option>
               <mat-option [value]="dropdownValue.pending">Pending</mat-option>
               <mat-option [value]="dropdownValue.approved">Approved</mat-option>
@@ -74,17 +63,13 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div
-          class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
+        <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
           <mat-form-field
             appearance="outline"
             floatPlaceholder="never"
             class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
             matTooltip="Filter by namespace - Wildcard filtering, a short description?">
-            <input
-              matInput
-              placeholder="Namespace"
-              [formControl]="namespaceControlIssuer" />
+            <input matInput placeholder="Namespace" [formControl]="namespaceControlIssuer" />
           </mat-form-field>
         </div>
       </div>

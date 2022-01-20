@@ -1,7 +1,4 @@
-<mat-tab-group
-  mat-align-tabs="start"
-  #governanceTabGroup
-  (selectedTabChange)="showMe($event)">
+<mat-tab-group mat-align-tabs="start" #governanceTabGroup (selectedTabChange)="showMe($event)">
   <mat-tab label="Organization Management">
     <div class="row mx-0 mt-1">
       <div class="col-xl-12">
@@ -23,9 +20,7 @@
             </button>
           </ng-template>
         </app-table-heading>
-        <app-organization-list
-          #listOrg
-          (updateFilter)="updateFilter($event)"></app-organization-list>
+        <app-organization-list #listOrg (updateFilter)="updateFilter($event)"></app-organization-list>
       </div>
     </div>
   </mat-tab>
@@ -34,16 +29,12 @@
     <div class="row mx-0 mt-1">
       <div class="col-xl-12">
         <app-table-heading heading="Application Management">
-          <button
-            (click)="toggleFilter(ListType.APP)"
-            class="btn mat-stroked-filter-button btn-small mb-lg-0 mr-2">
+          <button (click)="toggleFilter(ListType.APP)" class="btn mat-stroked-filter-button btn-small mb-lg-0 mr-2">
             Filter
           </button>
         </app-table-heading>
         <ng-container *ngIf="isAppShown">
-          <app-application-list
-            #listApp
-            (updateFilter)="updateFilter($event)"></app-application-list>
+          <app-application-list #listApp (updateFilter)="updateFilter($event)"></app-application-list>
         </ng-container>
       </div>
     </div>

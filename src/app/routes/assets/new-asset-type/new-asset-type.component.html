@@ -1,6 +1,4 @@
-<h4
-  mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center">
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
   Add New Asset Type
   <button mat-icon-button (click)="closeDialog()">
     <mat-icon>close</mat-icon>
@@ -13,10 +11,7 @@
       <div class="row">
         <div class="col-lg-12">
           <mat-label class="ml-3 pl-1">Name</mat-label>
-          <mat-form-field
-            class="mt-2"
-            appearance="outline"
-            floatPlaceholder="never">
+          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
             <input
               matInput
               autocomplete="off"
@@ -43,10 +38,7 @@
               </mat-icon>
             </div>
           </div>
-          <mat-form-field
-            class="mt-2"
-            appearance="outline"
-            floatPlaceholder="never">
+          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
             <input
               matInput
               autocomplete="off"
@@ -73,17 +65,8 @@
               </mat-icon>
             </div>
           </div>
-          <mat-form-field
-            class="mt-2"
-            appearance="outline"
-            floatPlaceholder="never">
-            <input
-              matInput
-              autocomplete="off"
-              formControlName="roleName"
-              type="text"
-              placeholder="Issuer"
-              required />
+          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
+            <input matInput autocomplete="off" formControlName="roleName" type="text" placeholder="Issuer" required />
             <mat-error>
               Issuer is
               <strong>required</strong>
@@ -103,10 +86,7 @@
               </mat-icon>
             </div>
           </div>
-          <mat-form-field
-            class="mt-2"
-            appearance="outline"
-            floatPlaceholder="never">
+          <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
             <input
               matInput
               autocomplete="off"
@@ -121,7 +101,5 @@
   </div>
 </div>
 <div mat-dialog-actions class="d-flex justify-content-center">
-  <button mat-raised-button class="btn btn-primary w-100" type="submit">
-    Create
-  </button>
+  <button mat-raised-button class="btn btn-primary w-100" type="submit">Create</button>
 </div>

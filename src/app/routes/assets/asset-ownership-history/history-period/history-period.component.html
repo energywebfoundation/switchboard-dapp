@@ -1,15 +1,11 @@
 <div class="d-flex align-items-center pt-1">
   <mat-icon class="color-info pr-2">account_circle</mat-icon>
-  <app-history-element
-    class="d-flex flex-column pl-2"
-    [element]="getTopPart()"></app-history-element>
+  <app-history-element class="d-flex flex-column pl-2" [element]="getTopPart()"></app-history-element>
 </div>
 <div class="border-vertical" *ngIf="period?.relatedTo">
   <mat-icon>arrow_drop_down</mat-icon>
 </div>
 <div class="d-flex align-items-center" *ngIf="period?.relatedTo">
   <mat-icon class="color-success pr-2">account_circle</mat-icon>
-  <app-history-element
-    class="d-flex flex-column pl-2"
-    [element]="getBottomPart()"></app-history-element>
+  <app-history-element class="d-flex flex-column pl-2" [element]="getBottomPart()"></app-history-element>
 </div>

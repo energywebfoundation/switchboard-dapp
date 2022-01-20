@@ -1,10 +1,5 @@
 <!-- START Search form-->
-<form
-  class="navbar-form"
-  role="search"
-  action="search.html"
-  [class.open]="visible"
-  (submit)="handleForm()">
+<form class="navbar-form" role="search" action="search.html" [class.open]="visible" (submit)="handleForm()">
   <div class="form-group">
     <input
       [(ngModel)]="term"

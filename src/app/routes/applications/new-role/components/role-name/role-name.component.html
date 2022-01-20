@@ -1,6 +1,5 @@
 <form>
-  <div
-    class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
+  <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
     <mat-icon>info</mat-icon>
     <div class="d-flex flex-column">
       <mat-label>{{ roleType | roleType }}</mat-label>
@@ -29,16 +28,12 @@
             Role Name is
             <strong>required</strong>
           </mat-error>
-          <mat-error *ngIf="controlHasError('minlength')">
-            Role Name need to have at least 3 characters.
-          </mat-error>
+          <mat-error *ngIf="controlHasError('minlength')"> Role Name need to have at least 3 characters.</mat-error>
           <mat-error *ngIf="controlHasError('isAlphaNumericInvalid')">
             Role Name can only contain alphanumeric characters.
           </mat-error>
         </mat-form-field>
-        <mat-error *ngIf="existAndNotOwner">
-          This name already exists. Please try another
-        </mat-error>
+        <mat-error *ngIf="existAndNotOwner"> This name already exists. Please try another</mat-error>
       </div>
       <div
         *ngIf="form.value"
@@ -54,13 +49,7 @@
     </div>
   </div>
   <div class="d-flex justify-content-end mb-2">
-    <button
-      mat-stroked-button
-      class="btn btn-small mr-2"
-      data-qa-id="cancel"
-      (click)="cancelHandler()">
-      Cancel
-    </button>
+    <button mat-stroked-button class="btn btn-small mr-2" data-qa-id="cancel" (click)="cancelHandler()">Cancel</button>
     <button
       mat-raised-button
       class="btn btn-small btn-primary"

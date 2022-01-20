@@ -1,6 +1,4 @@
-<h4
-  mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center">
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
   {{ viewType === ViewType.UPDATE ? 'Update' : 'Create' }} Role
   <button mat-icon-button (click)="closeDialog()">
     <mat-icon>close</mat-icon>
@@ -31,9 +29,7 @@
           </div>
           <form [formGroup]="roleForm">
             <ng-container formGroupName="data">
-              <div
-                class="card card-default d-flex shadow-none d-flex pt-3 mb-3"
-                formGroupName="issuer">
+              <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer">
                 <mat-label class="ml-3 pl-1">Issuer Type</mat-label>
                 <mat-form-field class="mt-2" appearance="outline">
                   <mat-select
@@ -41,43 +37,27 @@
                     formControlName="issuerType"
                     (selectionChange)="issuerTypeChanged($event)"
                     required>
-                    <mat-option
-                      *ngFor="let issuerType of IssuerTypes"
-                      [value]="issuerType">
+                    <mat-option *ngFor="let issuerType of IssuerTypes" [value]="issuerType">
                       {{ issuerType }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div
-                *ngIf="isDIDType"
-                class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+              <div *ngIf="isDIDType" class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
                 <app-issuer-did [issuerList]="issuerList"></app-issuer-did>
               </div>
               <div
                 *ngIf="isRoleType"
                 class="card card-default d-flex shadow-none d-flex pt-3 mb-3"
                 formGroupName="issuer">
-                <app-search-issuer-role
-                  class="row mt-2"
-                  [role]="issuerRoleName"></app-search-issuer-role>
+                <app-search-issuer-role class="row mt-2" [role]="issuerRoleName"></app-search-issuer-role>
               </div>
             </ng-container>
             <div class="d-flex justify-content-end mb-2">
-              <button
-                mat-stroked-button
-                class="btn btn-small mr-2"
-                *ngIf="origData"
-                (click)="closeDialog()">
+              <button mat-stroked-button class="btn btn-small mr-2" *ngIf="origData" (click)="closeDialog()">
                 Cancel
               </button>
-              <button
-                mat-stroked-button
-                class="btn btn-small mr-2"
-                *ngIf="!origData"
-                (click)="back()">
-                Back
-              </button>
+              <button mat-stroked-button class="btn btn-small mr-2" *ngIf="!origData" (click)="back()">Back</button>
               <button
                 mat-raised-button
                 class="btn btn-small btn-primary"
@@ -96,27 +76,19 @@
               class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
               <mat-icon>info</mat-icon>
               <span class="pl-2 pb-2">
-                Users must possess the roles as set in this Role Precondition
-                section before they can enrol to this role.
+                Users must possess the roles as set in this Role Precondition section before they can enrol to this
+                role.
               </span>
             </div>
-            <div
-              class="card-result mb-1"
-              *ngIf="
-                !roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions
-                  ?.length
-              ">
+            <div class="card-result mb-1" *ngIf="!roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions?.length">
               <div class="d-flex justify-content-between flex-row flex-nowrap">
-                <div class="color-white break-word">
-                  No role precondition set
-                </div>
+                <div class="color-white break-word">No role precondition set</div>
               </div>
             </div>
             <div
               class="card-result mb-1"
               *ngFor="
-                let rolePrecondition of roleForm?.value?.data
-                  ?.enrolmentPreconditions[0]?.conditions;
+                let rolePrecondition of roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions;
                 let i = index
               ">
               <div class="d-flex justify-content-between flex-row flex-nowrap">
@@ -144,12 +116,7 @@
             </div>
           </div>
           <div class="d-flex justify-content-end mb-2">
-            <button
-              mat-stroked-button
-              class="btn btn-small mr-2"
-              (click)="back()">
-              Back
-            </button>
+            <button mat-stroked-button class="btn btn-small mr-2" (click)="back()">Back</button>
             <button
               mat-raised-button
               class="btn btn-small btn-primary"
@@ -166,13 +133,7 @@
             [fieldsList]="dataSource.data"
             (updateData)="dataSourceChangeHandler($event)"></app-role-field>
           <div class="d-flex justify-content-end mb-2">
-            <button
-              mat-stroked-button
-              class="btn btn-small mr-2 back"
-              data-qa-id="back"
-              (click)="back()">
-              Back
-            </button>
+            <button mat-stroked-button class="btn btn-small mr-2 back" data-qa-id="back" (click)="back()">Back</button>
             <button
               mat-raised-button
               class="btn btn-small btn-primary"
@@ -189,13 +150,7 @@
             [fieldsList]="issuerFields.data"
             (updateData)="issuerFieldsChangeHandler($event)"></app-role-field>
           <div class="d-flex justify-content-end mb-2">
-            <button
-              mat-stroked-button
-              class="btn btn-small mr-2 back"
-              data-qa-id="back"
-              (click)="back()">
-              Back
-            </button>
+            <button mat-stroked-button class="btn btn-small mr-2 back" data-qa-id="back" (click)="back()">Back</button>
             <button
               mat-raised-button
               class="btn btn-small btn-primary"
@@ -244,32 +199,22 @@
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
-              <div class="label opacity-50 mb-2">
-                Restrictions (Role Preconditions)
-              </div>
+              <div class="label opacity-50 mb-2">Restrictions (Role Preconditions)</div>
               <div
                 class="color-white mb-0"
-                *ngIf="
-                  !roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions
-                    ?.length
-                ">
+                *ngIf="!roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions?.length">
                 None
               </div>
               <div
                 class="color-white mb-0"
-                *ngFor="
-                  let precondition of roleForm?.value?.data
-                    ?.enrolmentPreconditions[0]?.conditions
-                ">
+                *ngFor="let precondition of roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions">
                 {{ precondition }}
               </div>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left mt-3">
               <div class="label opacity-50 mb-2">Requestor Fields</div>
-              <span class="color-white mb-0" *ngIf="!dataSource?.data?.length">
-                None
-              </span>
+              <span class="color-white mb-0" *ngIf="!dataSource?.data?.length"> None </span>
 
               <ng-container *ngIf="dataSource.data.length">
                 <div class="field-list">
@@ -283,11 +228,7 @@
             <mat-divider></mat-divider>
             <div class="text-left mt-3">
               <div class="label opacity-50 mb-2">Issuer Required Fields</div>
-              <span
-                class="color-white mb-0"
-                *ngIf="!issuerFields?.data?.length">
-                None
-              </span>
+              <span class="color-white mb-0" *ngIf="!issuerFields?.data?.length"> None </span>
 
               <ng-container *ngIf="issuerFields.data.length">
                 <div class="field-list">
@@ -301,18 +242,8 @@
           </div>
           <div>
             <div class="d-flex justify-content-end mb-2">
-              <button
-                mat-stroked-button
-                class="btn btn-small mr-2"
-                (click)="back()">
-                Back
-              </button>
-              <button
-                mat-raised-button
-                class="btn btn-small btn-primary"
-                (click)="confirmRole()">
-                Next
-              </button>
+              <button mat-stroked-button class="btn btn-small mr-2" (click)="back()">Back</button>
+              <button mat-raised-button class="btn btn-small btn-primary" (click)="confirmRole()">Next</button>
             </div>
           </div>
         </mat-step>
@@ -327,17 +258,10 @@
             <div
               class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon>notifications_none</mat-icon>
-              <span class="pb-2">
-                Please confirm this transaction in your connected Wallet.
-              </span>
+              <span class="pb-2"> Please confirm this transaction in your connected Wallet. </span>
             </div>
             <div class="d-flex justify-content-end mb-3">
-              <button
-                mat-stroked-button
-                class="btn btn-small mr-2"
-                (click)="closeDialog()">
-                Cancel
-              </button>
+              <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
               <button
                 mat-raised-button
                 class="btn btn-small btn-primary"
@@ -350,8 +274,7 @@
         </ng-container>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Complete</ng-template>
-          <app-transactions-complete
-            (completed)="closeDialog(true)"></app-transactions-complete>
+          <app-transactions-complete (completed)="closeDialog(true)"></app-transactions-complete>
         </mat-step>
       </mat-vertical-stepper>
     </div>

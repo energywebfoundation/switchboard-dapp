@@ -1,13 +1,9 @@
 <form [formGroup]="filterForm">
-  <div
-    *ngIf="isFilterShown"
-    class="card card-filter d-flex justify-content-end pt-2 pb-3 mb-1">
+  <div *ngIf="isFilterShown" class="card card-filter d-flex justify-content-end pt-2 pb-3 mb-1">
     <div class="row">
       <div class="col-md-3" *ngIf="showOrgFilter">
         <mat-label class="color-white ml-2 pl-1">Organization</mat-label>
-        <mat-form-field
-          appearance="outline"
-          class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+        <mat-form-field appearance="outline" class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
           <input
             matInput
             autocomplete="off"
@@ -21,9 +17,7 @@
       </div>
       <div class="col-md-3" *ngIf="showAppFilter">
         <mat-label class="color-white ml-2 pl-1">Application</mat-label>
-        <mat-form-field
-          appearance="outline"
-          class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+        <mat-form-field appearance="outline" class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
           <input
             matInput
             autocomplete="off"
@@ -37,9 +31,7 @@
       </div>
       <div class="col-md-3" *ngIf="showRoleFilter">
         <mat-label class="color-white ml-2 pl-1">Role</mat-label>
-        <mat-form-field
-          appearance="outline"
-          class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+        <mat-form-field appearance="outline" class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
           <input
             matInput
             autocomplete="off"

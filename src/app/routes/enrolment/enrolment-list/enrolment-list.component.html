@@ -1,10 +1,5 @@
 <div class="mb-3">
-  <table
-    mat-table
-    [dataSource]="dataSource"
-    matSort
-    matSortActive="requestDate"
-    matSortDirection="desc">
+  <table mat-table [dataSource]="dataSource" matSort matSortActive="requestDate" matSortDirection="desc">
     <!-- Request Date -->
     <ng-container matColumnDef="requestDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Request Date</th>
@@ -25,9 +20,7 @@
 
     <!-- Role Namespace -->
     <ng-container matColumnDef="parentNamespace">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        Parent Namespace
-      </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Parent Namespace</th>
       <td mat-cell *matCellDef="let element" data-label="Parent Namespace">
         <ng-container>{{ element?.namespace }}</ng-container>
       </td>
@@ -65,31 +58,18 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
       <td mat-cell *matCellDef="let element" data-label="Status">
         <ng-container *ngIf="isAccepted(element)">
-          <div
-            class="d-flex flex-column align-items-md-center flex-md-row justify-content-between mr-2">
+          <div class="d-flex flex-column align-items-md-center flex-md-row justify-content-between mr-2">
             <div class="color-success">Approved</div>
             <div>
               <div class="mt-2 mt-md-2 mb-md-2" *ngIf="isPendingSync(element)">
-                <mat-icon
-                  class="color-warned icon-small mr-2"
-                  svgIcon="sync-did-icon"></mat-icon>
+                <mat-icon class="color-warned icon-small mr-2" svgIcon="sync-did-icon"></mat-icon>
                 <!-- Apply link to add to DID Document -->
-                <span
-                  class="color-white cursor-pointer"
-                  (click)="addToDidDoc(element)">
-                  Sync to DID Document
-                </span>
+                <span class="color-white cursor-pointer" (click)="addToDidDoc(element)"> Sync to DID Document </span>
               </div>
-              <div
-                class="mt-2 mt-md-2 mb-md-2"
-                *ngIf="element?.notSyncedOnChain">
-                <mat-icon
-                  class="color-warned icon-small mr-2"
-                  svgIcon="add-to-claimmanager-icon"></mat-icon>
+              <div class="mt-2 mt-md-2 mb-md-2" *ngIf="element?.notSyncedOnChain">
+                <mat-icon class="color-warned icon-small mr-2" svgIcon="add-to-claimmanager-icon"></mat-icon>
                 <!-- Apply link to add to Claim manager -->
-                <span
-                  class="color-white cursor-pointer"
-                  (click)="addToClaimManager(element)">
+                <span class="color-white cursor-pointer" (click)="addToClaimManager(element)">
                   Add to ClaimManager
                 </span>
               </div>
@@ -110,18 +90,12 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element">
         <div class="d-flex justify-content-end">
-          <button
-            mat-icon-button
-            [matMenuTriggerFor]="menu"
-            aria-label="Action button list">
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action button list">
             <mat-icon class="btn-color-primary">more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
             <!-- View Details -->
-            <button
-              mat-menu-item
-              class="btn-color-primary"
-              (click)="view(element)">
+            <button mat-menu-item class="btn-color-primary" (click)="view(element)">
               <mat-icon class="btn-color-primary">preview</mat-icon>
               <span>Preview</span>
             </button>
@@ -142,9 +116,7 @@
               class="btn-color-primary"
               (click)="addToClaimManager(element)"
               *ngIf="isAccepted(element) && element?.notSyncedOnChain">
-              <mat-icon
-                svgIcon="add-to-claimmanager-icon"
-                class="btn-color-primary"></mat-icon>
+              <mat-icon svgIcon="add-to-claimmanager-icon" class="btn-color-primary"></mat-icon>
               <span>Add to ClaimManager</span>
             </button>
 
@@ -153,11 +125,7 @@
               mat-menu-item
               class="btn-color-error"
               (click)="cancelClaimRequest(element)"
-              *ngIf="
-                listType !== ListType.ISSUER &&
-                !element?.isAccepted &&
-                !element?.isRejected
-              ">
+              *ngIf="listType !== ListType.ISSUER && !element?.isAccepted && !element?.isRejected">
               <mat-icon class="btn-color-error">highlight_off</mat-icon>
               <span>Cancel Claim Request</span>
             </button>
@@ -170,9 +138,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
   <!-- Shows when table is empty -->
-  <div
-    class="d-flex justify-content-center align-items-center mt-4 mb-3 pb-3"
-    *ngIf="!dataSource?.data?.length">
+  <div class="d-flex justify-content-center align-items-center mt-4 mb-3 pb-3" *ngIf="!dataSource?.data?.length">
     <div class="d-flex align-items-center no-record color-white">
       <mat-icon class="mr-2">info</mat-icon>
       <i>No Record Found</i>

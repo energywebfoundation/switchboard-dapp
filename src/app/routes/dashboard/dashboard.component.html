@@ -8,9 +8,7 @@
           [userName]="userName$ | async"
           [accountDid]="userDid$ | async"></app-user-info>
         <div class="d-flex align-items-center justify-content-center w-100">
-          <form
-            class="search-field px-0 px-md-2 pb-0 py-md-2"
-            [formGroup]="searchForm">
+          <form class="search-field px-0 px-md-2 pb-0 py-md-2" [formGroup]="searchForm">
             <mat-form-field class="md-search" appearance="outline">
               <input
                 type="text"
@@ -50,28 +48,16 @@
                   </div>
                 </mat-option>
               </mat-autocomplete>
-              <div
-                matSuffix
-                class="d-flex"
-                *ngIf="searchTxtFieldValue?.trim()?.length > 2">
+              <div matSuffix class="d-flex" *ngIf="searchTxtFieldValue?.trim()?.length > 2">
                 <ng-container *ngIf="!isAutolistLoading?.value">
-                  <button
-                    mat-icon-button
-                    class="bg-transparent"
-                    (click)="search()">
+                  <button mat-icon-button class="bg-transparent" (click)="search()">
                     <mat-icon>search</mat-icon>
                   </button>
-                  <button
-                    mat-icon-button
-                    class="bg-transparent"
-                    (click)="clearSearchTxt()">
+                  <button mat-icon-button class="bg-transparent" (click)="clearSearchTxt()">
                     <mat-icon>close</mat-icon>
                   </button>
                 </ng-container>
-                <mat-spinner
-                  *ngIf="isAutolistLoading?.value"
-                  diameter="21"
-                  class="color-white"></mat-spinner>
+                <mat-spinner *ngIf="isAutolistLoading?.value" diameter="21" class="color-white"></mat-spinner>
               </div>
             </mat-form-field>
           </form>

@@ -1,8 +1,5 @@
 <router-outlet></router-outlet>
-<mat-tab-group
-  mat-align-tabs="start"
-  #assetsTabGroup
-  (selectedTabChange)="showMe($event)">
+<mat-tab-group mat-align-tabs="start" #assetsTabGroup (selectedTabChange)="showMe($event)">
   <!-- MY ASSETS -->
   <mat-tab label="My Assets" data-qa-id="my-assets-tab">
     <div class="row mx-0 mt-1">
@@ -16,10 +13,7 @@
             Register Asset
           </button>
         </app-table-heading>
-        <app-asset-list
-          #listMyAssets
-          [listType]="AssetListType.MY_ASSETS"
-          [showDidFilter]="true"></app-asset-list>
+        <app-asset-list #listMyAssets [listType]="AssetListType.MY_ASSETS" [showDidFilter]="true"></app-asset-list>
       </div>
     </div>
   </mat-tab>
@@ -41,11 +35,8 @@
   <mat-tab label="Previously Owned Assets" data-qa-id="assets-prev-owned-tab">
     <div class="row mx-0 mt-1">
       <div class="col-xl-12">
-        <app-table-heading
-          heading="Previously Owned Assets"></app-table-heading>
-        <app-asset-list
-          #listPreviousAssets
-          [listType]="AssetListType.PREV_OWNED_ASSETS"></app-asset-list>
+        <app-table-heading heading="Previously Owned Assets"></app-table-heading>
+        <app-asset-list #listPreviousAssets [listType]="AssetListType.PREV_OWNED_ASSETS"></app-asset-list>
       </div>
     </div>
   </mat-tab>

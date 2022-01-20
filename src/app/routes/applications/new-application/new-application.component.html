@@ -1,6 +1,4 @@
-<h4
-  mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center">
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
   {{ viewType === ViewType.UPDATE ? 'Update' : 'Create' }} Application
   <button mat-icon-button (click)="closeDialog()">
     <mat-icon>close</mat-icon>
@@ -16,9 +14,7 @@
         </ng-template>
         <mat-step [completed]="false">
           <form [formGroup]="appForm">
-            <ng-template matStepLabel>
-              {{ viewType === ViewType.UPDATE ? 'Update' : 'New' }} Application
-            </ng-template>
+            <ng-template matStepLabel> {{ viewType === ViewType.UPDATE ? 'Update' : 'New' }} Application</ng-template>
             <div
               class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
               <mat-icon>info</mat-icon>
@@ -39,13 +35,8 @@
                   </div>
                 </div> -->
                 <div class="col-lg-12" formGroupName="data">
-                  <mat-label class="ml-3 pl-1">
-                    Application Logo URL (Optional)
-                  </mat-label>
-                  <mat-form-field
-                    class="mt-2"
-                    appearance="outline"
-                    floatPlaceholder="never">
+                  <mat-label class="ml-3 pl-1"> Application Logo URL (Optional)</mat-label>
+                  <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                     <input
                       matInput
                       autocomplete="off"
@@ -63,10 +54,7 @@
               <div class="row">
                 <div class="col-lg-12">
                   <mat-label class="ml-3 pl-1">Application Namespace</mat-label>
-                  <mat-form-field
-                    class="mt-2 multi-errors"
-                    appearance="outline"
-                    *ngIf="viewType !== ViewType.UPDATE">
+                  <mat-form-field class="mt-2 multi-errors" appearance="outline" *ngIf="viewType !== ViewType.UPDATE">
                     <input
                       matInput
                       autocomplete="off"
@@ -78,21 +66,15 @@
                       oninput="this.value = this.value.toLowerCase()"
                       minlength="3"
                       maxlength="256" />
-                    <mat-error
-                      *ngIf="appForm.get('appName').hasError('required')">
+                    <mat-error *ngIf="appForm.get('appName').hasError('required')">
                       Application Namespace is
                       <strong>required</strong>
                     </mat-error>
-                    <mat-error
-                      *ngIf="appForm.get('appName').hasError('minlength')">
+                    <mat-error *ngIf="appForm.get('appName').hasError('minlength')">
                       Application Namespace need to have at least 3 characters.
                     </mat-error>
-                    <mat-error
-                      *ngIf="
-                        appForm.get('appName').hasError('isAlphaNumericInvalid')
-                      ">
-                      Application Namespace can only contain alphanumeric
-                      characters.
+                    <mat-error *ngIf="appForm.get('appName').hasError('isAlphaNumericInvalid')">
+                      Application Namespace can only contain alphanumeric characters.
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -100,22 +82,13 @@
                   *ngIf="appForm.get('appName').value"
                   class="ml-3 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
                   <span class="pb-2">
-                    {{
-                      appForm?.value?.appName +
-                        '.' +
-                        ENSPrefixes.Application +
-                        '.' +
-                        appForm?.value?.orgNamespace
-                    }}
+                    {{ appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace }}
                   </span>
                 </div>
                 <ng-container formGroupName="data">
                   <div class="col-lg-12">
                     <mat-label class="ml-3 pl-1">Application Name</mat-label>
-                    <mat-form-field
-                      class="mt-2"
-                      appearance="outline"
-                      floatPlaceholder="never">
+                    <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                       <input
                         matInput
                         autocomplete="off"
@@ -131,13 +104,8 @@
                     </mat-form-field>
                   </div>
                   <div class="col-lg-12">
-                    <mat-label class="ml-3 pl-1">
-                      Website URL (Optional)
-                    </mat-label>
-                    <mat-form-field
-                      class="mt-2"
-                      appearance="outline"
-                      floatPlaceholder="never">
+                    <mat-label class="ml-3 pl-1"> Website URL (Optional)</mat-label>
+                    <mat-form-field class="mt-2" appearance="outline" floatPlaceholder="never">
                       <input
                         matInput
                         autocomplete="off"
@@ -150,21 +118,14 @@
                     </mat-form-field>
                   </div>
                   <div class="col-lg-12">
-                    <mat-label class="ml-3 pl-1">
-                      Description (Optional)
-                    </mat-label>
+                    <mat-label class="ml-3 pl-1"> Description (Optional)</mat-label>
                     <mat-form-field appearance="outline">
-                      <textarea
-                        matInput
-                        formControlName="description"
-                        maxlength="1500"></textarea>
+                      <textarea matInput formControlName="description" maxlength="1500"></textarea>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-12">
                     <div class="d-flex justify-content-between">
-                      <mat-label class="ml-3 pl-1">
-                        Others (JSON) (Optional)
-                      </mat-label>
+                      <mat-label class="ml-3 pl-1"> Others (JSON) (Optional)</mat-label>
                       <div class="tooltip-wrapper">
                         <mat-icon
                           class="tooltip-color cursor-pointer"
@@ -179,10 +140,7 @@
                       </div>
                     </div>
                     <mat-form-field appearance="outline">
-                      <textarea
-                        matInput
-                        formControlName="others"
-                        maxlength="2000"></textarea>
+                      <textarea matInput formControlName="others" maxlength="2000"></textarea>
                       <mat-error>Invalid JSON Format</mat-error>
                     </mat-form-field>
                   </div>
@@ -190,12 +148,7 @@
               </div>
             </div>
             <div class="d-flex justify-content-end mb-2">
-              <button
-                mat-stroked-button
-                class="btn btn-small mr-2"
-                (click)="closeDialog()">
-                Cancel
-              </button>
+              <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
               <button
                 mat-raised-button
                 class="btn btn-small btn-primary"
@@ -219,8 +172,7 @@
           <ng-template matStepLabel>Confirm Details</ng-template>
           <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
             <div class="d-flex justify-content-center">
-              <div
-                class="image-wrapper d-flex align-items-center justify-content-center mb-3">
+              <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
                 <img
                   class="img-logo"
                   src="../assets/img/no-application-image.png"
@@ -237,13 +189,7 @@
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Application Namespace</div>
               <span class="color-white mb-0">
-                {{
-                  appForm?.value?.appName +
-                    '.' +
-                    ENSPrefixes.Application +
-                    '.' +
-                    appForm?.value?.orgNamespace
-                }}
+                {{ appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace }}
               </span>
             </div>
             <mat-divider></mat-divider>
@@ -277,18 +223,8 @@
           </div>
           <div>
             <div class="d-flex justify-content-end mb-2">
-              <button
-                mat-stroked-button
-                class="btn btn-small mr-2"
-                (click)="cancelAppDetails()">
-                Back
-              </button>
-              <button
-                mat-raised-button
-                class="btn btn-small btn-primary"
-                (click)="confirmApp()">
-                Next
-              </button>
+              <button mat-stroked-button class="btn btn-small mr-2" (click)="cancelAppDetails()">Back</button>
+              <button mat-raised-button class="btn btn-small btn-primary" (click)="confirmApp()">Next</button>
             </div>
           </div>
         </mat-step>
@@ -304,17 +240,10 @@
             <div
               class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon class="px-2">notifications_none</mat-icon>
-              <span class="pl-3 pb-2">
-                Please confirm this transaction in your connected Wallet.
-              </span>
+              <span class="pl-3 pb-2"> Please confirm this transaction in your connected Wallet. </span>
             </div>
             <div class="d-flex justify-content-end mb-3">
-              <button
-                mat-stroked-button
-                class="btn btn-small mr-2"
-                (click)="closeDialog()">
-                Cancel
-              </button>
+              <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
               <button
                 mat-raised-button
                 class="btn btn-small btn-primary"
@@ -327,8 +256,7 @@
         </ng-container>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Complete</ng-template>
-          <app-transactions-complete
-            (completed)="closeDialog(true)"></app-transactions-complete>
+          <app-transactions-complete (completed)="closeDialog(true)"></app-transactions-complete>
         </mat-step>
       </mat-vertical-stepper>
     </div>

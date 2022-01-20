@@ -1,6 +1,4 @@
-<h4
-  mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center">
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
   Update DID Contact List
   <button mat-icon-button mat-dialog-close>
     <mat-icon>close</mat-icon>
@@ -11,9 +9,7 @@
     <app-did-book-form (add)="addHandler($event)"></app-did-book-form>
     <ng-container *ngIf="list$ | async as list">
       <div class="mb-4 mt-4">
-        <mat-form-field
-          appearance="outline"
-          class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
+        <mat-form-field appearance="outline" class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
           <input
             matInput
             autocomplete="off"
