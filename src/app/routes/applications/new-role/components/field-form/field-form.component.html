@@ -8,13 +8,11 @@
             placeholder="Type"
             formControlName="fieldType"
             required
-            data-qa-id="field-type"
-          >
+            data-qa-id="field-type">
             <mat-option
               *ngFor="let fieldType of FieldTypes; let i = index"
               [attr.data-qa-id]="fieldType"
-              [value]="fieldType"
-            >
+              [value]="fieldType">
               {{ fieldType | uppercase }}
             </mat-option>
           </mat-select>
@@ -34,8 +32,7 @@
             formControlName="label"
             maxlength="256"
             required
-            data-qa-id="field-label"
-          />
+            data-qa-id="field-label" />
           <mat-error>
             Label is
             <strong>required</strong>
@@ -46,8 +43,7 @@
     <div
       class="card card-default d-flex shadow-none px-0"
       *ngIf="isFieldTypeDefined()"
-      formGroupName="validation"
-    >
+      formGroupName="validation">
       <div class="pl-3 pb-2">
         <mat-label class="pl-1">Validation</mat-label>
       </div>
@@ -70,8 +66,7 @@
               placeholder="Min Length"
               autocomplete="off"
               data-qa-id="field-min-length"
-              formControlName="minLength"
-            />
+              formControlName="minLength" />
             <mat-error>
               Min Length must be greater than or equal to 0.
             </mat-error>
@@ -87,8 +82,7 @@
               placeholder="Max Length"
               autocomplete="off"
               data-qa-id="field-max-length"
-              formControlName="maxLength"
-            />
+              formControlName="maxLength" />
             <mat-error>Max Length must be greater than 0.</mat-error>
           </mat-form-field>
         </div>
@@ -101,8 +95,7 @@
               autocomplete="off"
               formControlName="pattern"
               data-qa-id="pattern"
-              maxlength="500"
-            />
+              maxlength="500" />
           </mat-form-field>
         </div>
       </ng-container>
@@ -117,8 +110,7 @@
               placeholder="Min Value"
               autocomplete="off"
               data-qa-id="field-min-value"
-              formControlName="minValue"
-            />
+              formControlName="minValue" />
           </mat-form-field>
         </div>
         <div class="px-0">
@@ -130,8 +122,7 @@
               placeholder="Max Value"
               autocomplete="off"
               data-qa-id="field-max-value"
-              formControlName="maxValue"
-            />
+              formControlName="maxValue" />
           </mat-form-field>
         </div>
       </ng-container>
@@ -146,12 +137,10 @@
               placeholder="Min Date"
               autocomplete="off"
               data-qa-id="field-min-date"
-              formControlName="minDate"
-            />
+              formControlName="minDate" />
             <mat-datepicker-toggle
               matSuffix
-              [for]="pickerMin"
-            ></mat-datepicker-toggle>
+              [for]="pickerMin"></mat-datepicker-toggle>
             <mat-datepicker #pickerMin></mat-datepicker>
           </mat-form-field>
         </div>
@@ -164,12 +153,10 @@
               placeholder="Max Date"
               autocomplete="off"
               data-qa-id="field-min-date"
-              formControlName="maxDate"
-            />
+              formControlName="maxDate" />
             <mat-datepicker-toggle
               matSuffix
-              [for]="pickerMax"
-            ></mat-datepicker-toggle>
+              [for]="pickerMax"></mat-datepicker-toggle>
             <mat-datepicker #pickerMax></mat-datepicker>
           </mat-form-field>
         </div>
@@ -186,8 +173,7 @@
           type="submit"
           (click)="add()"
           [disabled]="!fieldsForm.valid || !fieldsForm.dirty"
-          data-qa-id="add-field"
-        >
+          data-qa-id="add-field">
           Add
         </button>
       </ng-container>
@@ -197,8 +183,7 @@
         *ngIf="editMode"
         (click)="update()"
         [disabled]="!fieldsForm.valid"
-        data-qa-id="update-field"
-      >
+        data-qa-id="update-field">
         Update
       </button>
     </div>

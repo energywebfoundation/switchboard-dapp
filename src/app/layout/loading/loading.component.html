@@ -4,8 +4,7 @@
     size="medium"
     [color]="loaderColor"
     type="ball-spin-fade"
-    class="text-center"
-  >
+    class="text-center">
     <p class="loading-text mt-4" *ngIf="!msg && !msgList" data-qa-id="loading">
       Loading...
     </p>
@@ -22,8 +21,7 @@
       mat-stroked-button
       *ngIf="isCancellable"
       class="btn btn-small"
-      (click)="cancel()"
-    >
+      (click)="cancel()">
       Cancel
     </button>
   </ngx-spinner>

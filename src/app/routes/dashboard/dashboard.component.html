@@ -1,19 +1,16 @@
 <div
-  class="d-flex justify-content-center justify-content-lg-center align-items-lg-center align-items-center overflor-hidden"
->
+  class="d-flex justify-content-center justify-content-lg-center align-items-lg-center align-items-center overflor-hidden">
   <div class="row w-100 mx-0 justify-content-lg-center">
     <div class="col-xl-12">
       <div class="card bg-transparent mt-0 mb-3 py-2">
         <app-user-info
           class="d-flex align-items-center justify-content-center"
           [userName]="userName$ | async"
-          [accountDid]="userDid$ | async"
-        ></app-user-info>
+          [accountDid]="userDid$ | async"></app-user-info>
         <div class="d-flex align-items-center justify-content-center w-100">
           <form
             class="search-field px-0 px-md-2 pb-0 py-md-2"
-            [formGroup]="searchForm"
-          >
+            [formGroup]="searchForm">
             <mat-form-field class="md-search" appearance="outline">
               <input
                 type="text"
@@ -23,19 +20,16 @@
                 formControlName="searchTxt"
                 [matAutocomplete]="auto"
                 (keyup.enter)="search()"
-                (input)="updateSearchTxtFieldValue($event)"
-              />
+                (input)="updateSearchTxtFieldValue($event)" />
               <mat-autocomplete
                 #auto="matAutocomplete"
                 [displayWith]="displayFn"
-                (optionSelected)="onSelectedItem($event)"
-              >
+                (optionSelected)="onSelectedItem($event)">
                 <mat-option
                   *ngFor="let item of filteredOptions | async"
                   [value]="item"
                   class="d-flex align-items-start"
-                  style="height: 90px"
-                >
+                  style="height: 90px">
                   <ng-container *ngIf="item?.definition?.orgName">
                     <mat-icon svgIcon="organization-list-icon"></mat-icon>
                     <span class="search-title">
@@ -59,29 +53,25 @@
               <div
                 matSuffix
                 class="d-flex"
-                *ngIf="searchTxtFieldValue?.trim()?.length > 2"
-              >
+                *ngIf="searchTxtFieldValue?.trim()?.length > 2">
                 <ng-container *ngIf="!isAutolistLoading?.value">
                   <button
                     mat-icon-button
                     class="bg-transparent"
-                    (click)="search()"
-                  >
+                    (click)="search()">
                     <mat-icon>search</mat-icon>
                   </button>
                   <button
                     mat-icon-button
                     class="bg-transparent"
-                    (click)="clearSearchTxt()"
-                  >
+                    (click)="clearSearchTxt()">
                     <mat-icon>close</mat-icon>
                   </button>
                 </ng-container>
                 <mat-spinner
                   *ngIf="isAutolistLoading?.value"
                   diameter="21"
-                  class="color-white"
-                ></mat-spinner>
+                  class="color-white"></mat-spinner>
               </div>
             </mat-form-field>
           </form>
@@ -94,15 +84,13 @@
         image="assets-icon.png"
         title="Assets"
         [isExperimental]="isExperimental"
-        (click)="goToAssets()"
-      ></app-card>
+        (click)="goToAssets()"></app-card>
     </ng-container>
     <app-card
       class="col-6 col-md-3 col-lg-2"
       image="governance-icon.png"
       title="Governance"
-      (click)="goToGovernance()"
-    ></app-card>
+      (click)="goToGovernance()"></app-card>
     <!-- <app-card class="col-6 col-md-3 col-lg-2"
               image="services-icon.png"
               title="Services"
@@ -112,14 +100,12 @@
       class="col-6 col-md-3 col-lg-2"
       image="enrollment-icon.png"
       title="Enrolments"
-      (click)="goToEnrolment()"
-    ></app-card>
+      (click)="goToEnrolment()"></app-card>
     <app-card
       *appToggleApplication
       class="col-6 col-md-3 col-lg-2"
       image="applications-icon.png"
       title="Applications"
-      [comingSoon]="true"
-    ></app-card>
+      [comingSoon]="true"></app-card>
   </div>
 </div>

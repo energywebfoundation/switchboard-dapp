@@ -2,16 +2,14 @@
   <mat-drawer-container
     class="h-100 bg-transparent"
     autosize
-    [hasBackdrop]="false"
-  >
+    [hasBackdrop]="false">
     <mat-drawer
       mode="side"
       [opened]="opened"
       [mode]="screenWidth > 840 ? 'side' : 'over'"
       #drawer
       position="end"
-      class="p-3 color-white"
-    >
+      class="p-3 color-white">
       <!-- NOTE: added padding-top because of scrolling issue -->
       <div class="d-flex flex-column side-panel">
         <!-- NOTE: This component is shared with Governance List - View Org/App/Roles -->
@@ -26,16 +24,14 @@
           [isEmbedded]="true"
           [origData]="data"
           [requestedClaims]="requestedClaims"
-          #detailView
-        ></app-governance-details>
+          #detailView></app-governance-details>
       </div>
     </mat-drawer>
     <mat-drawer-content>
       <div class="d-flex align-items-center justify-content-center w-100">
         <form
           class="search-field search-field-results px-0 px-md-2 pb-0 py-md-2"
-          [formGroup]="searchForm"
-        >
+          [formGroup]="searchForm">
           <mat-form-field class="md-search" appearance="outline">
             <input
               type="text"
@@ -45,57 +41,48 @@
               formControlName="searchTxt"
               (keyup.enter)="search()"
               (input)="updateSearchTxtFieldValue($event)"
-              autocomplete="off"
-            />
+              autocomplete="off" />
             <div
               matSuffix
               class="d-flex"
-              *ngIf="searchForm?.value?.searchTxt?.trim()?.length > 2"
-            >
+              *ngIf="searchForm?.value?.searchTxt?.trim()?.length > 2">
               <ng-container *ngIf="!isAutolistLoading?.value">
                 <button
                   mat-icon-button
                   class="bg-transparent"
-                  (click)="search()"
-                >
+                  (click)="search()">
                   <mat-icon>search</mat-icon>
                 </button>
                 <button
                   mat-icon-button
                   class="bg-transparent"
-                  (click)="clearSearchTxt()"
-                >
+                  (click)="clearSearchTxt()">
                   <mat-icon>close</mat-icon>
                 </button>
               </ng-container>
               <mat-spinner
                 *ngIf="isAutolistLoading?.value"
                 diameter="21"
-                class="color-white"
-              ></mat-spinner>
+                class="color-white"></mat-spinner>
             </div>
           </mat-form-field>
           <div
-            class="d-flex flex-grow-1 justify-content-end align-items-center"
-          >
+            class="d-flex flex-grow-1 justify-content-end align-items-center">
             <mat-button-toggle-group
               multiple
               formControlName="filterType"
               class="btn-small mt-1 mb-4 float-right"
-              aria-label="Filter By"
-            >
+              aria-label="Filter By">
               <mat-button-toggle [value]="FilterTypes.ORG">
                 <mat-icon
                   svgIcon="organization-list-icon"
-                  class="mr-2"
-                ></mat-icon>
+                  class="mr-2"></mat-icon>
                 <span class="mr-1">Organization</span>
               </mat-button-toggle>
               <mat-button-toggle [value]="FilterTypes.APP">
                 <mat-icon
                   svgIcon="application-list-icon"
-                  class="mr-2"
-                ></mat-icon>
+                  class="mr-2"></mat-icon>
                 <span class="mr-1">Application</span>
               </mat-button-toggle>
             </mat-button-toggle-group>
@@ -106,8 +93,7 @@
         class="container justify-content-center"
         fxLayout="row wrap"
         fxLayoutGap="10px"
-        fxLayoutAlign="flex-start"
-      >
+        fxLayoutAlign="flex-start">
         <div class="my-3" *ngIf="!(filteredOptions | async)?.length">
           <div class="color-white">No record found.</div>
         </div>
@@ -115,12 +101,10 @@
           fxFlex="0 1 calc(25% - 32px)"
           fxFlex.lt-md="0 1 calc(50% - 32px)"
           fxFlex.lt-sm="100%"
-          *ngFor="let item of filteredOptions | async"
-        >
+          *ngFor="let item of filteredOptions | async">
           <mat-card
             class="card-search-body p-0 mb-3 cursor-pointer"
-            (click)="viewDetails(item, searchResultDrawer)"
-          >
+            (click)="viewDetails(item, searchResultDrawer)">
             <div class="img-container p-4">
               <!-- Placeholder Logo -->
               <ng-container *ngIf="!item?.definition?.logoUrl">
@@ -129,15 +113,13 @@
                   style="
                     background: url(../assets/img/no-organization-image.png);
                   "
-                  class="img-wrapper px-2"
-                ></div>
+                  class="img-wrapper px-2"></div>
                 <div
                   *ngIf="item?.definition?.appName"
                   style="
                     background: url(../assets/img/no-application-image.png);
                   "
-                  class="img-wrapper px-2"
-                ></div>
+                  class="img-wrapper px-2"></div>
               </ng-container>
               <!-- Actual Logo -->
               <div
@@ -145,8 +127,7 @@
                 [ngStyle]="{
                   background: 'url(' + item?.definition?.logoUrl + ')'
                 }"
-                class="img-wrapper px-2"
-              ></div>
+                class="img-wrapper px-2"></div>
             </div>
             <div class="p-3">
               <h4>
@@ -164,22 +145,18 @@
               </div>
               <h5
                 *ngIf="item?.definition?.orgName"
-                class="d-flex align-items-center mt-3"
-              >
+                class="d-flex align-items-center mt-3">
                 <mat-icon
                   class="mr-2"
-                  svgIcon="organization-list-icon"
-                ></mat-icon>
+                  svgIcon="organization-list-icon"></mat-icon>
                 <span class="opacity-50">Organization</span>
               </h5>
               <h5
                 *ngIf="item?.definition?.appName"
-                class="d-flex align-items-center mt-3"
-              >
+                class="d-flex align-items-center mt-3">
                 <mat-icon
                   class="mr-2"
-                  svgIcon="application-list-icon"
-                ></mat-icon>
+                  svgIcon="application-list-icon"></mat-icon>
                 <span class="opacity-50">Application</span>
               </h5>
             </div>

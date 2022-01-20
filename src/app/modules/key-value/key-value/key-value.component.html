@@ -5,8 +5,7 @@
     *ngIf="!formVisible"
     (click)="showForm()"
     matTooltip="Add key-value pair"
-    data-qa-id="show-form"
-  >
+    data-qa-id="show-form">
     <mat-icon class="btn-color-primary">add</mat-icon>
   </button>
 </div>
@@ -14,10 +13,8 @@
 <app-key-value-form
   *ngIf="formVisible"
   (cancel)="hideForm()"
-  (add)="addHandler($event)"
-></app-key-value-form>
+  (add)="addHandler($event)"></app-key-value-form>
 <app-key-value-list
   *ngIf="hasListElements()"
   [data]="pairsList"
-  (delete)="removeHandler($event)"
-></app-key-value-list>
+  (delete)="removeHandler($event)"></app-key-value-list>

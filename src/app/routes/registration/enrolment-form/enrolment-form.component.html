@@ -4,13 +4,11 @@
       class="pl-3 default-checkbox"
       data-qa-id="on-chain"
       formControlName="onChain"
-      [ngStyle]="txtboxColor"
-    >
+      [ngStyle]="txtboxColor">
       <span
         class="mb-3 d-inline-flex"
         [ngStyle]="txtColor"
-        matTooltip="A role recorded in a smart contract that can be read by other smart contracts"
-      >
+        matTooltip="A role recorded in a smart contract that can be read by other smart contracts">
         On-chain
       </span>
     </mat-checkbox>
@@ -19,13 +17,11 @@
       class="pl-3 default-checkbox"
       data-qa-id="off-chain"
       formControlName="offChain"
-      [ngStyle]="txtboxColor"
-    >
+      [ngStyle]="txtboxColor">
       <span
         class="mb-3 d-inline-flex"
         [ngStyle]="txtColor"
-        matTooltip="A JWT verifiable credential that can be presented"
-      >
+        matTooltip="A JWT verifiable credential that can be presented">
         Off-chain
       </span>
     </mat-checkbox>
@@ -33,8 +29,7 @@
     <!-- On-chain, warning -->
     <div
       *ngIf="isOnChainChecked"
-      class="card card-warning d-flex flex-row justify-content-start align-items-center shadow-none mb-3"
-    >
+      class="card card-warning d-flex flex-row justify-content-start align-items-center shadow-none mb-3">
       <mat-icon>report_problem</mat-icon>
       <div class="d-flex flex-column">
         <div class="f-14" [ngStyle]="txtColor">
@@ -49,8 +44,7 @@
         registrationTypesGroup.hasError('notEnoughCheckboxChecked') &&
         showOffChain
       "
-      data-qa-id="not-enough-checkbox-checked"
-    >
+      data-qa-id="not-enough-checkbox-checked">
       You need to pick at least one option.
     </mat-error>
 
@@ -59,8 +53,7 @@
         registrationTypesGroup.hasError('notEnoughCheckboxChecked') &&
         !showOffChain
       "
-      data-qa-id="not-enough-checkbox-checked"
-    >
+      data-qa-id="not-enough-checkbox-checked">
       You need to select on-chain option.
     </mat-error>
   </div>
@@ -72,8 +65,7 @@
         *ngFor="
           let field of enrolmentForm?.get('fields')?.controls;
           let i = index
-        "
-      >
+        ">
         <div
           [ngClass]="{
             'col-lg-12':
@@ -82,14 +74,12 @@
             'col-lg-6':
               fieldList[i].fieldType === 'number' ||
               fieldList[i].fieldType === 'date'
-          }"
-        >
+          }">
           <mat-label
             [ngStyle]="txtColor"
             data-qa-id="label"
             class="ml-3 pl-1"
-            *ngIf="fieldList[i].fieldType !== 'boolean'"
-          >
+            *ngIf="fieldList[i].fieldType !== 'boolean'">
             {{ fieldList[i].label }}
             {{ fieldList[i].required ? '' : '(Optional)' }}
           </mat-label>
@@ -101,14 +91,12 @@
             floatPlaceholder="never"
             *ngIf="fieldList[i].fieldType === 'text'"
             [attr.data-qa-id]="'field-' + i"
-            [ngStyle]="txtColor"
-          >
+            [ngStyle]="txtColor">
             <input
               matInput
               type="text"
               placeholder="{{ fieldList[i].label }}"
-              [formControl]="getControl(i)"
-            />
+              [formControl]="getControl(i)" />
             <mat-error *ngIf="getControl(i)?.errors?.required">
               This field is required.
             </mat-error>
@@ -130,14 +118,12 @@
             floatPlaceholder="never"
             *ngIf="fieldList[i].fieldType === 'number'"
             [attr.data-qa-id]="'field-' + i"
-            [ngStyle]="txtColor"
-          >
+            [ngStyle]="txtColor">
             <input
               matInput
               type="number"
               placeholder="{{ fieldList[i].label }}"
-              [formControl]="getControl(i)"
-            />
+              [formControl]="getControl(i)" />
             <mat-error *ngIf="getControl(i)?.errors?.required">
               This field is required.
             </mat-error>
@@ -156,8 +142,7 @@
             floatPlaceholder="never"
             *ngIf="fieldList[i].fieldType === 'date'"
             [attr.data-qa-id]="'field-' + i"
-            [ngStyle]="txtColor"
-          >
+            [ngStyle]="txtColor">
             <input
               [matDatepicker]="picker"
               [max]="fieldList[i].maxDate"
@@ -165,12 +150,10 @@
               matInput
               placeholder="{{ fieldList[i].label }}"
               autocomplete="off"
-              [formControl]="getControl(i)"
-            />
+              [formControl]="getControl(i)" />
             <mat-datepicker-toggle
               matSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
+              [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="getControl(i)?.errors?.required">
               This field is required.
@@ -189,13 +172,11 @@
             *ngIf="fieldList[i].fieldType === 'boolean'"
             [attr.data-qa-id]="'field-' + i"
             [formControl]="getControl(i)"
-            [ngStyle]="txtboxColor"
-          >
+            [ngStyle]="txtboxColor">
             <span
               class="mb-3 d-inline-flex"
               data-qa-id="label"
-              [ngStyle]="txtColor"
-            >
+              [ngStyle]="txtColor">
               {{ fieldList[i].label }}
               {{ fieldList[i].required ? '' : '(Optional)' }}
             </span>
@@ -214,8 +195,7 @@
       type="submit"
       (click)="submit()"
       [disabled]="disabledSubmit || enrolmentForm.invalid"
-      [ngStyle]="btnColor"
-    >
+      [ngStyle]="btnColor">
       Submit Request
     </button>
   </div>

@@ -8,8 +8,7 @@
           *ngIf="!showFieldsForm"
           (click)="showAddFieldForm()"
           matTooltip="Add field"
-          data-qa-id="show-field"
-        >
+          data-qa-id="show-field">
           <mat-icon class="btn-color-primary">add</mat-icon>
         </button>
       </div>
@@ -19,8 +18,7 @@
           [data]="fieldToEdit"
           (added)="addFieldHandler($event)"
           (updated)="updateFieldHandler($event)"
-          (canceled)="canceledHandler()"
-        ></app-field-form>
+          (canceled)="canceledHandler()"></app-field-form>
 
         <div class="field-list py-2" *ngIf="fieldsList?.length">
           <div
@@ -30,8 +28,7 @@
               let i = index;
               let first = first;
               let last = last
-            "
-          >
+            ">
             <div class="d-flex justify-content-end align-items-center pt-2">
               <div class="d-flex align-items-center">
                 <button
@@ -40,8 +37,7 @@
                   class="mat-primary"
                   *ngIf="!first"
                   matTooltip="Move up"
-                  (click)="moveUp(i)"
-                >
+                  (click)="moveUp(i)">
                   <mat-icon>arrow_circle_up</mat-icon>
                 </button>
                 <button
@@ -50,8 +46,7 @@
                   class="mat-primary"
                   *ngIf="!last"
                   matTooltip="Move down"
-                  (click)="moveDown(i)"
-                >
+                  (click)="moveDown(i)">
                   <mat-icon>arrow_circle_down</mat-icon>
                 </button>
 
@@ -61,8 +56,7 @@
                   class="mat-primary btn-color-primary"
                   matTooltip="Edit Fields"
                   (click)="editField(i)"
-                  data-qa-id="edit-field"
-                >
+                  data-qa-id="edit-field">
                   <mat-icon>edit</mat-icon>
                 </button>
                 <button
@@ -70,8 +64,7 @@
                   matSuffix
                   class="mat-primary color-error"
                   matTooltip="Delete"
-                  (click)="deleteField(i)"
-                >
+                  (click)="deleteField(i)">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
@@ -82,8 +75,7 @@
 
         <div
           class="d-flex justify-content-center align-items-center mb-4"
-          *ngIf="!fieldsList?.length"
-        >
+          *ngIf="!fieldsList?.length">
           <div class="d-flex align-items-center no-record color-white">
             <mat-icon class="mr-2 my-2">info</mat-icon>
             <i>Empty</i>

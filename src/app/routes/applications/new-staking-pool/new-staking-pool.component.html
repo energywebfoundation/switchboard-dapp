@@ -1,7 +1,6 @@
 <h4
   mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center"
->
+  class="mb-0 d-flex justify-content-between align-items-center">
   Create Staking Pool
   <button mat-icon-button [mat-dialog-close]="true">
     <mat-icon>close</mat-icon>
@@ -17,8 +16,7 @@
             <mat-label class="ml-3 pl-1">Accept Sponsors?</mat-label>
             <mat-icon
               class="f-16 cursor-pointer icon-color pt-1 ml-2"
-              matTooltip="Accept Sponsors?"
-            >
+              matTooltip="Accept Sponsors?">
               help_outline
             </mat-icon>
           </div>
@@ -32,24 +30,21 @@
             <mat-label class="ml-3 pl-1">Sponsor revenue share</mat-label>
             <mat-icon
               class="f-16 cursor-pointer icon-color pt-1 ml-2"
-              matTooltip="Sponsor revenue share"
-            >
+              matTooltip="Sponsor revenue share">
               help_outline
             </mat-icon>
           </div>
           <mat-form-field
             class="mt-2"
             appearance="outline"
-            floatPlaceholder="never"
-          >
+            floatPlaceholder="never">
             <input
               matInput
               autocomplete="off"
               data-qa-id="revenue"
               formControlName="revenue"
               type="number"
-              placeholder="Percentage %"
-            />
+              placeholder="Percentage %" />
             <mat-error *ngIf="form.get('revenue').hasError('required')">
               This field is
               <strong>required</strong>
@@ -61,8 +56,7 @@
             <mat-label class="ml-3 pl-1">Stake principal</mat-label>
             <mat-icon
               class="f-16 cursor-pointer icon-color pt-1 ml-2"
-              matTooltip="Stake put by service provider when pool is launched"
-            >
+              matTooltip="Stake put by service provider when pool is launched">
               help_outline
             </mat-icon>
           </div>
@@ -73,8 +67,7 @@
               data-qa-id="principal"
               formControlName="principal"
               type="number"
-              placeholder="Principal"
-            />
+              placeholder="Principal" />
             <mat-error *ngIf="form.get('principal').hasError('required')">
               This field is
               <strong>required</strong>
@@ -86,8 +79,7 @@
             <mat-label class="ml-3 pl-1">Allowed Patrons to Stake</mat-label>
             <mat-icon
               class="f-16 cursor-pointer icon-color pt-1 ml-2"
-              matTooltip="Select patron roles allowed to stake"
-            >
+              matTooltip="Select patron roles allowed to stake">
               help_outline
             </mat-icon>
           </div>
@@ -96,13 +88,11 @@
               placeholder="Patron Roles"
               formControlName="patronRoles"
               data-qa-id="patronRoles"
-              multiple
-            >
+              multiple>
               <mat-option
                 *ngFor="let role of rolesOptions"
                 [value]="role.namespace"
-                [attr.data-qa-id]="role.namespace"
-              >
+                [attr.data-qa-id]="role.namespace">
                 {{ role?.namespace }}
               </mat-option>
             </mat-select>
@@ -115,8 +105,7 @@
             </mat-label>
             <mat-icon
               class="f-16 cursor-pointer icon-color pt-1 ml-2"
-              matTooltip="Minimun amount of time to stake"
-            >
+              matTooltip="Minimun amount of time to stake">
               help_outline
             </mat-icon>
           </div>
@@ -125,33 +114,27 @@
               <mat-form-field
                 class="staking-date-picker mt-2 mr-1 pb-2"
                 appearance="outline"
-                floatPlaceholder="never"
-              >
+                floatPlaceholder="never">
                 <mat-date-range-input
                   formGroupName="range"
-                  [rangePicker]="picker"
-                >
+                  [rangePicker]="picker">
                   <input
                     matStartDate
                     formControlName="start"
                     data-qa-id="start"
-                    placeholder="Start Date"
-                  />
+                    placeholder="Start Date" />
                   <input
                     matEndDate
                     formControlName="end"
                     data-qa-id="end"
-                    placeholder="End Date"
-                  />
+                    placeholder="End Date" />
                 </mat-date-range-input>
                 <mat-datepicker-toggle
                   matSuffix
-                  [for]="picker"
-                ></mat-datepicker-toggle>
+                  [for]="picker"></mat-datepicker-toggle>
                 <mat-date-range-picker #picker></mat-date-range-picker>
                 <mat-error
-                  *ngIf="getRangeControlError('start', 'matStartDateInvalid')"
-                >
+                  *ngIf="getRangeControlError('start', 'matStartDateInvalid')">
                   Start Date is
                   <strong>invalid</strong>
                 </mat-error>
@@ -160,8 +143,7 @@
                   <strong>required</strong>
                 </mat-error>
                 <mat-error
-                  *ngIf="getRangeControlError('end', 'matEndDateInvalid')"
-                >
+                  *ngIf="getRangeControlError('end', 'matEndDateInvalid')">
                   End Date is
                   <strong>invalid</strong>
                 </mat-error>
@@ -178,8 +160,7 @@
             <mat-label class="ml-3 pl-1">Terms and Condition</mat-label>
             <mat-icon
               class="f-16 cursor-pointer icon-color pt-1 ml-2"
-              matTooltip="What to add in the Terms and Condition"
-            >
+              matTooltip="What to add in the Terms and Condition">
               help_outline
             </mat-icon>
           </div>
@@ -187,12 +168,10 @@
             <ngx-editor
               formControlName="terms"
               [editor]="editor"
-              placeholder="Terms and Condition"
-            ></ngx-editor>
+              placeholder="Terms and Condition"></ngx-editor>
             <ngx-editor-menu
               [editor]="editor"
-              [toolbar]="toolbar"
-            ></ngx-editor-menu>
+              [toolbar]="toolbar"></ngx-editor-menu>
           </div>
         </div>
       </div>
@@ -206,8 +185,7 @@
     data-qa-id="submit"
     class="btn btn-primary w-100"
     type="submit"
-    (click)="submit()"
-  >
+    (click)="submit()">
     Submit
   </button>
 </div>

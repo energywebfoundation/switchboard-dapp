@@ -2,29 +2,24 @@
   <div class="card card-default w-100 shadow-none d-flex pt-3">
     <div
       class="d-flex justify-content-center"
-      *ngIf="data?.type !== ListType.ROLE"
-    >
+      *ngIf="data?.type !== ListType.ROLE">
       <div
-        class="image-wrapper d-flex align-items-center justify-content-center mb-3"
-      >
+        class="image-wrapper d-flex align-items-center justify-content-center mb-3">
         <img
           class="img-logo"
           *ngIf="formData?.definition?.logoUrl"
-          src="{{ formData?.definition?.logoUrl }}"
-        />
+          src="{{ formData?.definition?.logoUrl }}" />
         <ng-container *ngIf="!formData?.definition?.logoUrl">
           <img
             class="img-logo"
             src="../assets/img/no-organization-image.png"
             height="48px"
-            *ngIf="data?.type === RoleType.ORG"
-          />
+            *ngIf="data?.type === RoleType.ORG" />
           <img
             class="img-logo"
             src="../assets/img/no-application-image.png"
             height="48px"
-            *ngIf="data?.type === RoleType.APP"
-          />
+            *ngIf="data?.type === RoleType.APP" />
         </ng-container>
       </div>
     </div>
@@ -103,8 +98,7 @@
             <div class="label opacity-50 mb-2">Issuer List</div>
             <div
               class="color-white mb-0"
-              *ngFor="let did of formData?.definition?.issuer?.did"
-            >
+              *ngFor="let did of formData?.definition?.issuer?.did">
               {{ did }}
             </div>
           </div>
@@ -117,26 +111,22 @@
         </div>
         <div
           class="color-white mb-0"
-          *ngIf="!preconditions[PreconditionTypes.Role]?.length"
-        >
+          *ngIf="!preconditions[PreconditionTypes.Role]?.length">
           None
         </div>
         <div
           class="color-white mb-0"
-          *ngFor="let precondition of preconditions[PreconditionTypes.Role]"
-        >
+          *ngFor="let precondition of preconditions[PreconditionTypes.Role]">
           {{ precondition }}
         </div>
       </div>
       <mat-divider></mat-divider>
       <app-fields-details
         [data]="requestorFields"
-        title="Requestor Fields"
-      ></app-fields-details>
+        title="Requestor Fields"></app-fields-details>
       <app-fields-details
         [data]="issuerFields"
-        title="Issuer Fields"
-      ></app-fields-details>
+        title="Issuer Fields"></app-fields-details>
     </ng-container>
     <ng-container *ngIf="isEmbedded && data?.type === ListType.ORG">
       <mat-divider></mat-divider>
@@ -145,22 +135,19 @@
           class="mt-2"
           [expanded]="true"
           (opened)="panelOpenState = true"
-          (closed)="panelOpenState = false"
-        >
+          (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
             <mat-panel-title>Application List</mat-panel-title>
           </mat-expansion-panel-header>
           <div class="color-white mb-0" *ngIf="!appList?.length">None</div>
           <div
             class="d-flex justify-content-between align-items-center border-bottom-list"
-            *ngFor="let app of appList"
-          >
+            *ngFor="let app of appList">
             <div>{{ app?.definition?.appName }}</div>
             <button
               mat-icon-button
               matTooltip="View Details"
-              (click)="viewDetails(app, ListType.APP)"
-            >
+              (click)="viewDetails(app, ListType.APP)">
               <mat-icon class="btn-color-primary">preview</mat-icon>
             </button>
           </div>
@@ -174,23 +161,20 @@
           class="mt-2"
           [expanded]="true"
           (opened)="panelOpenState = true"
-          (closed)="panelOpenState = false"
-        >
+          (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
             <mat-panel-title>Roles List</mat-panel-title>
           </mat-expansion-panel-header>
           <div class="color-white mb-0" *ngIf="!roleList?.length">None</div>
           <div
             class="d-flex justify-content-between align-items-center border-bottom-list"
-            *ngFor="let role of roleList"
-          >
+            *ngFor="let role of roleList">
             {{ role.name }}
             <div>
               <button
                 mat-icon-button
                 matTooltip="View Details"
-                (click)="viewDetails(role, ListType.ROLE)"
-              >
+                (click)="viewDetails(role, ListType.ROLE)">
                 <mat-icon class="btn-color-primary">preview</mat-icon>
               </button>
               <button
@@ -198,12 +182,10 @@
                 matTooltip="Enrol"
                 [routerLink]="['/enrol']"
                 [queryParams]="getQueryParams(data?.type, role)"
-                [disabled]="role?.isEnrolled"
-              >
+                [disabled]="role?.isEnrolled">
                 <mat-icon
                   class="btn-color-primary btn-action-3"
-                  svgIcon="add-role-icon"
-                ></mat-icon>
+                  svgIcon="add-role-icon"></mat-icon>
               </button>
             </div>
           </div>

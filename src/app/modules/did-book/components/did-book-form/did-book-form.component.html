@@ -8,8 +8,7 @@
         placeholder="Label"
         autocomplete="off"
         data-qa-id="label"
-        formControlName="label"
-      />
+        formControlName="label" />
       <mat-error>
         This field is
         <strong>required</strong>
@@ -26,8 +25,7 @@
         placeholder="DID"
         autocomplete="off"
         data-qa-id="did"
-        formControlName="did"
-      />
+        formControlName="did" />
       <mat-error>
         This field is
         <strong>required</strong>
@@ -41,8 +39,7 @@
       mat-stroked-button
       class="btn-small mr-2"
       data-qa-id="cancel"
-      (click)="reject()"
-    >
+      (click)="reject()">
       Cancel
     </button>
     <button
@@ -51,8 +48,7 @@
       type="submit"
       (click)="submit()"
       [disabled]="isFormInvalid"
-      data-qa-id="add"
-    >
+      data-qa-id="add">
       Add
     </button>
   </div>

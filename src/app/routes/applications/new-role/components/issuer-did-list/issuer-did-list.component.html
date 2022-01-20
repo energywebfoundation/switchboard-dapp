@@ -1,7 +1,6 @@
 <div
   class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3 w-100"
-  *ngFor="let did of list; let i = index"
->
+  *ngFor="let did of list; let i = index">
   <div class="d-flex justify-content-between w-100">
     <div class="d-flex justify-content-start align-items-center flex-nowrap">
       <div class="pt-1">
@@ -17,8 +16,7 @@
         [attr.data-qa-id]="'delete-did-' + i"
         matTooltip="Remove"
         *ngIf="list.length > 1"
-        (click)="removeDid(i)"
-      >
+        (click)="removeDid(i)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>

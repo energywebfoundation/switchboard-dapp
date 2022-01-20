@@ -12,13 +12,11 @@
           data-qa-id="owner"
           [matAutocomplete]="auto"
           required
-          maxlength="256"
-        />
+          maxlength="256" />
         <mat-autocomplete #auto="matAutocomplete">
           <mat-option
             *ngFor="let option of didBook$ | async"
-            [value]="option.did"
-          >
+            [value]="option.did">
             {{ option.label }}
           </mat-option>
         </mat-autocomplete>
@@ -38,8 +36,7 @@
           mat-stroked-button
           class="btn-small ml-2"
           data-qa-id="add"
-          (click)="approveHandler()"
-        >
+          (click)="approveHandler()">
           Yes
         </button>
       </div>

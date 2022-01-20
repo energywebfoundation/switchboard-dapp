@@ -1,8 +1,7 @@
 <mat-tab-group
   mat-align-tabs="start"
   #governanceTabGroup
-  (selectedTabChange)="showMe($event)"
->
+  (selectedTabChange)="showMe($event)">
   <mat-tab label="Organization Management">
     <div class="row mx-0 mt-1">
       <div class="col-xl-12">
@@ -11,8 +10,7 @@
             mat-raised-button
             class="btn btn-primary btn-small mb-3 mb-lg-0"
             *ngIf="(hierarchyLength$ | async) === 0; else subOrg"
-            (click)="openNewOrgComponent()"
-          >
+            (click)="openNewOrgComponent()">
             Create Organization
           </button>
           <ng-template #subOrg>
@@ -20,16 +18,14 @@
               mat-raised-button
               class="btn btn-primary btn-small mb-3 mb-lg-0"
               [disabled]="isSelectedOrgNotOwnedByUser$ | async"
-              (click)="createSubOrg()"
-            >
+              (click)="createSubOrg()">
               Create Sub-Organization
             </button>
           </ng-template>
         </app-table-heading>
         <app-organization-list
           #listOrg
-          (updateFilter)="updateFilter($event)"
-        ></app-organization-list>
+          (updateFilter)="updateFilter($event)"></app-organization-list>
       </div>
     </div>
   </mat-tab>
@@ -40,16 +36,14 @@
         <app-table-heading heading="Application Management">
           <button
             (click)="toggleFilter(ListType.APP)"
-            class="btn mat-stroked-filter-button btn-small mb-lg-0 mr-2"
-          >
+            class="btn mat-stroked-filter-button btn-small mb-lg-0 mr-2">
             Filter
           </button>
         </app-table-heading>
         <ng-container *ngIf="isAppShown">
           <app-application-list
             #listApp
-            (updateFilter)="updateFilter($event)"
-          ></app-application-list>
+            (updateFilter)="updateFilter($event)"></app-application-list>
         </ng-container>
       </div>
     </div>
@@ -60,8 +54,7 @@
         <app-table-heading heading="Role Management">
           <button
             (click)="toggleFilter(ListType.ROLE)"
-            class="btn mat-stroked-filter-button btn-small mb-3 mb-lg-0 mr-2"
-          >
+            class="btn mat-stroked-filter-button btn-small mb-3 mb-lg-0 mr-2">
             Filter
           </button>
         </app-table-heading>

@@ -2,8 +2,7 @@
 <ng-container *ngIf="organizationHierarchy$ | async as organizationHierarchy">
   <div
     class="d-flex align-items-center flex-wrap mb-2"
-    *ngIf="organizationHierarchy?.length"
-  >
+    *ngIf="organizationHierarchy?.length">
     <div class="d-flex align-items-center my-1">
       <div class="filter-list-item">
         <a href="#" (click)="cleanUpHierarchy($event)">
@@ -15,19 +14,16 @@
     <ng-container *ngFor="let orgItem of organizationHierarchy; let i = index">
       <div
         class="d-flex align-items-center my-1"
-        *ngIf="i !== organizationHierarchy?.length - 1"
-      >
+        *ngIf="i !== organizationHierarchy?.length - 1">
         <div class="filter-list-item">
           <img
             class="img-logo-list-sm mr-2"
             *ngIf="!orgItem?.definition?.logoUrl"
-            src="../assets/img/no-organization-image.png"
-          />
+            src="../assets/img/no-organization-image.png" />
           <img
             class="img-logo-list-sm mr-2"
             *ngIf="orgItem?.definition?.logoUrl"
-            [src]="orgItem?.definition?.logoUrl"
-          />
+            [src]="orgItem?.definition?.logoUrl" />
           <a href="#" (click)="goToInHierarchy($event, orgItem)">
             <span class="filter-link">{{ orgItem?.definition?.orgName }}</span>
           </a>
@@ -36,18 +32,15 @@
       </div>
       <div
         class="d-flex align-items-center my-1"
-        *ngIf="i === organizationHierarchy?.length - 1"
-      >
+        *ngIf="i === organizationHierarchy?.length - 1">
         <img
           class="img-logo-list-sm mr-2"
           *ngIf="!orgItem?.definition?.logoUrl"
-          src="../assets/img/no-organization-image.png"
-        />
+          src="../assets/img/no-organization-image.png" />
         <img
           class="img-logo-list-sm mr-2"
           *ngIf="orgItem?.definition?.logoUrl"
-          [src]="orgItem?.definition?.logoUrl"
-        />
+          [src]="orgItem?.definition?.logoUrl" />
         <span class="filter-link color-white opacity-50">
           {{ orgItem?.definition?.orgName }}
         </span>
@@ -63,8 +56,7 @@
     [dataSource]="dataSource"
     matSort
     matSortActive="name"
-    matSortDirection="asc"
-  >
+    matSortDirection="asc">
     <!-- Logo Column -->
     <ng-container matColumnDef="logoUrl">
       <th mat-header-cell *matHeaderCellDef></th>
@@ -73,14 +65,12 @@
           <ng-container *ngIf="!element?.definition?.logoUrl">
             <img
               class="img-logo-list"
-              src="../assets/img/no-organization-image.png"
-            />
+              src="../assets/img/no-organization-image.png" />
           </ng-container>
           <img
             class="img-logo-list"
             [src]="element?.definition?.logoUrl"
-            *ngIf="element?.definition?.logoUrl"
-          />
+            *ngIf="element?.definition?.logoUrl" />
         </div>
       </td>
     </ng-container>
@@ -95,11 +85,9 @@
         *matCellDef="let element"
         data-label="Name"
         (click)="viewSubOrgs(element)"
-        class="cursor-pointer"
-      >
+        class="cursor-pointer">
         <div
-          class="d-flex flex-row justify-content-between justify-content-lg-start"
-        >
+          class="d-flex flex-row justify-content-between justify-content-lg-start">
           <ng-container>{{ element?.definition?.orgName }}</ng-container>
           <ng-container *ngIf="element?.subOrgs && element?.subOrgs?.length">
             <div>
@@ -107,8 +95,7 @@
                 class="px-2 sub-btn"
                 matTooltipClass="multiline-tooltip"
                 matTooltip="{{ getTooltip(element) }}"
-                matTooltipPosition="below"
-              >
+                matTooltipPosition="below">
                 +{{ element?.subOrgs?.length || 0 }}
               </span>
             </div>
@@ -135,8 +122,7 @@
           <button
             mat-menu-item
             class="btn-color-primary"
-            (click)="viewDetails(element)"
-          >
+            (click)="viewDetails(element)">
             <mat-icon class="btn-color-primary">preview</mat-icon>
             <span>View Details</span>
           </button>
@@ -151,8 +137,7 @@
             (roleCreated)="viewRoles(element)"
             (edited)="edit()"
             (transferred)="transferOwnership()"
-            (deleteConfirmed)="remove(element)"
-          ></app-organization-actions>
+            (deleteConfirmed)="remove(element)"></app-organization-actions>
         </app-actions-menu>
       </td>
     </ng-container>
@@ -163,8 +148,7 @@
   <!-- Shows when table is empty -->
   <div
     class="d-flex justify-content-center align-items-center mt-4 mb-3"
-    *ngIf="!dataSource?.data?.length"
-  >
+    *ngIf="!dataSource?.data?.length">
     <div class="d-flex align-items-center no-record color-white">
       <mat-icon class="mr-2">info</mat-icon>
       <i>No Record Found</i>

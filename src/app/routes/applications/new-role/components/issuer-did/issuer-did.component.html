@@ -4,8 +4,7 @@
   </div>
   <app-issuer-did-list
     [list]="list"
-    (remove)="removeIssuer($event)"
-  ></app-issuer-did-list>
+    (remove)="removeIssuer($event)"></app-issuer-did-list>
 
   <div class="pt-2">
     <mat-form-field class="mt-2" appearance="outline">
@@ -16,8 +15,7 @@
         data-qa-id="did"
         [formControl]="form"
         minlength="3"
-        maxlength="256"
-      />
+        maxlength="256" />
       <button
         matTooltip="Add Issuer"
         matSuffix
@@ -26,8 +24,7 @@
         type="submit"
         data-qa-id="add-did"
         (click)="addDid()"
-        [disabled]="form.invalid"
-      >
+        [disabled]="form.invalid">
         <mat-icon>add</mat-icon>
       </button>
       <mat-error *ngIf="form.hasError('invalidDid')">

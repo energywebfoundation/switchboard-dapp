@@ -1,7 +1,6 @@
 <h4
   mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center"
->
+  class="mb-0 d-flex justify-content-between align-items-center">
   <div class="d-flex flex-column">
     <span>Add Verification Method</span>
   </div>
@@ -18,16 +17,13 @@
     <div class="history-list pt-2">
       <div
         class="history-list-item mb-3 p-2"
-        *ngFor="let publicKey of dataSource"
-      >
+        *ngFor="let publicKey of dataSource">
         <div
-          class="d-flex flex-row justify-content-between align-items-center px-2"
-        >
+          class="d-flex flex-row justify-content-between align-items-center px-2">
           <div class="d-flex align-items-center">
             <mat-icon
               class="color-info list-icon pr-2"
-              svgIcon="ethereum-bitcoin"
-            ></mat-icon>
+              svgIcon="ethereum-bitcoin"></mat-icon>
             <div class="flex-md-row">
               <div class="d-flex flex-row pl-2 align-items-baseline">
                 <h4 class="small font-weight-600 mb-1">TYPE</h4>
@@ -42,8 +38,7 @@
                   appCopyToClipboard
                   [copyClipboard]="publicKey?.publicKeyHex"
                   message="Public key"
-                  class="pl-2 f-14 cursor-pointer"
-                >
+                  class="pl-2 f-14 cursor-pointer">
                   {{ publicKey?.publicKeyHex | didFormatMinifier }}
                 </span>
               </div>
@@ -65,8 +60,7 @@
         [formControl]="publicKey"
         placeholder="Public Key"
         data-qa-id="public-key"
-        autocomplete="off"
-      />
+        autocomplete="off" />
       <mat-error *ngIf="publicKey.invalid">
         {{ getPublicKeyErrorMsg() }}
       </mat-error>
@@ -75,17 +69,14 @@
       <mat-select
         [formControl]="selectControl"
         placeholder="Select type"
-        data-qa-id="select-type"
-      >
+        data-qa-id="select-type">
         <mat-option
           [value]="option[1]"
           *ngFor="let option of selectOptions; let i = index"
-          [attr.data-qa-id]="'select-option-' + i"
-        >
+          [attr.data-qa-id]="'select-option-' + i">
           <mat-icon
             class="color-info pr-2"
-            [svgIcon]="option[0].toLowerCase()"
-          ></mat-icon>
+            [svgIcon]="option[0].toLowerCase()"></mat-icon>
           {{ option[0] }}
         </mat-option>
       </mat-select>
@@ -100,8 +91,7 @@
         [disabled]="isFormDisabled"
         class="btn btn-small btn-primary"
         data-qa-id="add-method"
-        (click)="add()"
-      >
+        (click)="add()">
         Add
       </button>
     </div>
@@ -121,6 +111,5 @@
     [length]="verificationsAmount"
     [hidePageSize]="true"
     (page)="pageEvent($event)"
-    showFirstLastButtons
-  ></mat-paginator>
+    showFirstLastButtons></mat-paginator>
 </div>

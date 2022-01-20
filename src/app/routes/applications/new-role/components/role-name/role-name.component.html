@@ -1,7 +1,6 @@
 <form>
   <div
-    class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3"
-  >
+    class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
     <mat-icon>info</mat-icon>
     <div class="d-flex flex-column">
       <mat-label>{{ roleType | roleType }}</mat-label>
@@ -25,8 +24,7 @@
             (keypress)="alphaNumericOnly($event)"
             minlength="3"
             maxlength="256"
-            data-qa-id="role-name"
-          />
+            data-qa-id="role-name" />
           <mat-error *ngIf="controlHasError('required')">
             Role Name is
             <strong>required</strong>
@@ -44,8 +42,7 @@
       </div>
       <div
         *ngIf="form.value"
-        class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mx-3 mt-2 mb-3 w-100"
-      >
+        class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex mx-3 mt-2 mb-3 w-100">
         <div>
           <mat-icon>check_circle</mat-icon>
         </div>
@@ -61,8 +58,7 @@
       mat-stroked-button
       class="btn btn-small mr-2"
       data-qa-id="cancel"
-      (click)="cancelHandler()"
-    >
+      (click)="cancelHandler()">
       Cancel
     </button>
     <button
@@ -70,8 +66,7 @@
       class="btn btn-small btn-primary"
       data-qa-id="proceed"
       [disabled]="form.invalid"
-      (click)="next()"
-    >
+      (click)="next()">
       Next
     </button>
   </div>

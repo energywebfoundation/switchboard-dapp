@@ -14,8 +14,7 @@
         *matCellDef="let element"
         [appMinifiedDidViewer]="element?.did"
         matTooltip="{{ element?.did }}"
-        matTooltipClass="tooltip-full-width"
-      >
+        matTooltipClass="tooltip-full-width">
         <ng-container>{{ element.did | didFormatMinifier }}</ng-container>
       </td>
     </ng-container>
@@ -30,8 +29,7 @@
             class="mat-primary icon-btn-small color-error"
             matTooltip="Remove"
             [attr.data-qa-id]="'remove-' + i"
-            (click)="remove(element.id)"
-          >
+            (click)="remove(element.id)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>

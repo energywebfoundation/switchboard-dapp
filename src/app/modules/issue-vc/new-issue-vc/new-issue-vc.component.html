@@ -1,7 +1,6 @@
 <h4
   mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center"
->
+  class="mb-0 d-flex justify-content-between align-items-center">
   Create VC
   <button mat-icon-button mat-dialog-close>
     <mat-icon>close</mat-icon>
@@ -23,16 +22,14 @@
                 maxlength="256"
                 data-qa-id="subject-did"
                 required
-                autocomplete="off"
-              />
+                autocomplete="off" />
               <button
                 *ngIf="!isDidPredefined()"
                 matSuffix
                 mat-icon-button
                 aria-label="Scan DID"
                 appQrCodeScanner
-                (scannedValue)="scannedValue($event.value)"
-              >
+                (scannedValue)="scannedValue($event.value)">
                 <mat-icon>qr_code_2</mat-icon>
               </button>
               <mat-error *ngIf="getFormSubject().hasError('required')">
@@ -50,19 +47,16 @@
             <mat-label class="ml-3 pl-1">Type</mat-label>
             <mat-form-field
               appearance="outline"
-              class="mr-0 mr-lg-0 mb-2 mb-lg-0"
-            >
+              class="mr-0 mr-lg-0 mb-2 mb-lg-0">
               <mat-select
                 formControlName="type"
                 placeholder="Select Type"
                 data-qa-id="select-type"
-                (selectionChange)="roleTypeSelected($event)"
-              >
+                (selectionChange)="roleTypeSelected($event)">
                 <mat-option
                   *ngFor="let role of possibleRolesToEnrol"
                   [value]="role"
-                  [attr.data-qa-id]="role?.name"
-                >
+                  [attr.data-qa-id]="role?.name">
                   {{ role?.name }}
                 </mat-option>
               </mat-select>
@@ -72,16 +66,16 @@
       </div>
       <ng-container *ngIf="!isPrecheckSuccess && rolePreconditionList?.length">
         <app-role-precondition-list
-          [preconditionList]="rolePreconditionList"
-        ></app-role-precondition-list>
+          [preconditionList]="
+            rolePreconditionList
+          "></app-role-precondition-list>
       </ng-container>
       <app-enrolment-form
         *ngIf="isPrecheckSuccess"
         [showRegistrationTypes]="false"
         [fieldList]="fieldList"
         [disabledSubmit]="isFormDisabled()"
-        (submitForm)="create($event)"
-      ></app-enrolment-form>
+        (submitForm)="create($event)"></app-enrolment-form>
     </form>
   </div>
 </div>

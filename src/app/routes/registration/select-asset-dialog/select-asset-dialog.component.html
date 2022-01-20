@@ -1,7 +1,6 @@
 <h4
   mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center"
->
+  class="mb-0 d-flex justify-content-between align-items-center">
   Select Asset
   <button mat-icon-button (click)="closeDialog()">
     <mat-icon>close</mat-icon>
@@ -17,8 +16,7 @@
         <div class="d-flex justify-content-center justify-content-md-start">
           <img
             class="img-logo-list"
-            src="../assets/img/assets-icons/solar-energy.svg"
-          />
+            src="../assets/img/assets-icons/solar-energy.svg" />
         </div>
       </td>
     </ng-container>
@@ -28,8 +26,7 @@
       <th mat-header-cell *matHeaderCellDef>Asset Name</th>
       <td mat-cell *matCellDef="let element" data-label="Name">
         <div
-          class="d-flex flex-row align-items-center justify-content-between justify-content-lg-start"
-        >
+          class="d-flex flex-row align-items-center justify-content-between justify-content-lg-start">
           <div class="text-blur">Asset Name</div>
         </div>
       </td>
@@ -52,8 +49,7 @@
           <button
             mat-icon-button
             aria-label="Use"
-            (click)="selectAsset(element)"
-          >
+            (click)="selectAsset(element)">
             <mat-icon *ngIf="element['isSelected']" class="btn-color-primary">
               check_circle
             </mat-icon>
@@ -69,15 +65,13 @@
     <tr
       class="cursor-pointer"
       mat-row
-      *matRowDef="let row; columns: displayedColumns"
-    ></tr>
+      *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
   <!-- Shows when table is empty -->
   <div
     class="d-flex justify-content-center align-items-center mt-4 mb-3"
-    *ngIf="!dataSource?.data?.length"
-  >
+    *ngIf="!dataSource?.data?.length">
     <div class="d-flex align-items-center no-record color-white">
       <mat-icon class="mr-2">info</mat-icon>
       <i>No Record Found</i>

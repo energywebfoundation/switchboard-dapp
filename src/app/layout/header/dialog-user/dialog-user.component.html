@@ -1,7 +1,6 @@
 <h4
   mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center"
->
+  class="mb-0 d-flex justify-content-between align-items-center">
   Update Identity
   <button mat-icon-button [mat-dialog-close]="true">
     <mat-icon>close</mat-icon>
@@ -17,8 +16,7 @@
           <mat-form-field
             class="mt-2"
             appearance="outline"
-            floatPlaceholder="never"
-          >
+            floatPlaceholder="never">
             <input
               matInput
               formControlName="name"
@@ -26,8 +24,7 @@
               placeholder="Name"
               maxlength="256"
               required
-              autocomplete="off"
-            />
+              autocomplete="off" />
             <mat-error *ngIf="profileForm.get('name').hasError('required')">
               Name is
               <strong>required</strong>
@@ -39,8 +36,7 @@
           <mat-form-field
             class="mt-2"
             appearance="outline"
-            floatPlaceholder="never"
-          >
+            floatPlaceholder="never">
             <input
               [matDatepicker]="picker"
               data-qa-id="dialog-input-birthdate"
@@ -49,22 +45,20 @@
               matInput
               required
               placeholder="Date of Birth"
-              autocomplete="off"
-            />
+              autocomplete="off" />
             <mat-datepicker-toggle
               matSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
+              [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error
-              *ngIf="profileForm.get('birthdate').hasError('required')"
-            >
+              *ngIf="profileForm.get('birthdate').hasError('required')">
               Date of birth is
               <strong>required</strong>
             </mat-error>
             <mat-error
-              *ngIf="profileForm.get('birthdate')?.hasError('matDatepickerMax')"
-            >
+              *ngIf="
+                profileForm.get('birthdate')?.hasError('matDatepickerMax')
+              ">
               Maximum allowed date is
               <strong>{{ maxDate | date }}</strong>
             </mat-error>
@@ -75,8 +69,7 @@
           <mat-form-field
             class="mt-2"
             appearance="outline"
-            floatPlaceholder="never"
-          >
+            floatPlaceholder="never">
             <textarea
               formControlName="address"
               data-qa-id="dialog-input-address"
@@ -84,8 +77,7 @@
               required
               placeholder="Address"
               maxlength="500"
-              autocomplete="off"
-            ></textarea>
+              autocomplete="off"></textarea>
             <mat-error *ngIf="profileForm.get('address').hasError('required')">
               Address is
               <strong>required</strong>
@@ -103,8 +95,7 @@
     type="submit"
     data-qa-id="submit"
     [disabled]="disableSubmit()"
-    (click)="save()"
-  >
+    (click)="save()">
     Update
   </button>
 </div>

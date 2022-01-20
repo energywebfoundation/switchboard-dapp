@@ -1,7 +1,6 @@
 <h4
   mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center"
->
+  class="mb-0 d-flex justify-content-between align-items-center">
   {{ viewType === ViewType.UPDATE ? 'Update' : 'Create' }} Role
   <button mat-icon-button (click)="closeDialog()">
     <mat-icon>close</mat-icon>
@@ -21,35 +20,30 @@
             [roleType]="roleType"
             [parentNamespace]="parentNamespace"
             (proceed)="proceedSettingIssuer($event)"
-            (cancel)="confirmClose($event.touched)"
-          ></app-role-name>
+            (cancel)="confirmClose($event.touched)"></app-role-name>
         </mat-step>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Set Role Issuers</ng-template>
           <div
             *ngIf="!isCreatingNew"
-            class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3 mt-2"
-          >
+            class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3 mt-2">
             <span class="pb-2">{{ namespace }}</span>
           </div>
           <form [formGroup]="roleForm">
             <ng-container formGroupName="data">
               <div
                 class="card card-default d-flex shadow-none d-flex pt-3 mb-3"
-                formGroupName="issuer"
-              >
+                formGroupName="issuer">
                 <mat-label class="ml-3 pl-1">Issuer Type</mat-label>
                 <mat-form-field class="mt-2" appearance="outline">
                   <mat-select
                     placeholder="Issuer Type"
                     formControlName="issuerType"
                     (selectionChange)="issuerTypeChanged($event)"
-                    required
-                  >
+                    required>
                     <mat-option
                       *ngFor="let issuerType of IssuerTypes"
-                      [value]="issuerType"
-                    >
+                      [value]="issuerType">
                       {{ issuerType }}
                     </mat-option>
                   </mat-select>
@@ -57,19 +51,16 @@
               </div>
               <div
                 *ngIf="isDIDType"
-                class="card card-default d-flex shadow-none d-flex pt-3 mb-3"
-              >
+                class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
                 <app-issuer-did [issuerList]="issuerList"></app-issuer-did>
               </div>
               <div
                 *ngIf="isRoleType"
                 class="card card-default d-flex shadow-none d-flex pt-3 mb-3"
-                formGroupName="issuer"
-              >
+                formGroupName="issuer">
                 <app-search-issuer-role
                   class="row mt-2"
-                  [role]="issuerRoleName"
-                ></app-search-issuer-role>
+                  [role]="issuerRoleName"></app-search-issuer-role>
               </div>
             </ng-container>
             <div class="d-flex justify-content-end mb-2">
@@ -77,24 +68,21 @@
                 mat-stroked-button
                 class="btn btn-small mr-2"
                 *ngIf="origData"
-                (click)="closeDialog()"
-              >
+                (click)="closeDialog()">
                 Cancel
               </button>
               <button
                 mat-stroked-button
                 class="btn btn-small mr-2"
                 *ngIf="!origData"
-                (click)="back()"
-              >
+                (click)="back()">
                 Back
               </button>
               <button
                 mat-raised-button
                 class="btn btn-small btn-primary"
                 [disabled]="isChecking"
-                (click)="proceedSettingRestriction()"
-              >
+                (click)="proceedSettingRestriction()">
                 Next
               </button>
             </div>
@@ -105,8 +93,7 @@
           <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
             <div class="label color-white ml-1 pb-2">Role Precondition</div>
             <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3"
-            >
+              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
               <mat-icon>info</mat-icon>
               <span class="pl-2 pb-2">
                 Users must possess the roles as set in this Role Precondition
@@ -118,8 +105,7 @@
               *ngIf="
                 !roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions
                   ?.length
-              "
-            >
+              ">
               <div class="d-flex justify-content-between flex-row flex-nowrap">
                 <div class="color-white break-word">
                   No role precondition set
@@ -132,8 +118,7 @@
                 let rolePrecondition of roleForm?.value?.data
                   ?.enrolmentPreconditions[0]?.conditions;
                 let i = index
-              "
-            >
+              ">
               <div class="d-flex justify-content-between flex-row flex-nowrap">
                 <div class="color-white break-word">{{ rolePrecondition }}</div>
                 <div class="d-inline-flex">
@@ -142,8 +127,7 @@
                     matSuffix
                     class="mat-primary icon-btn-small color-error"
                     matTooltip="Remove"
-                    (click)="removePreconditionRole(i)"
-                  >
+                    (click)="removePreconditionRole(i)">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>
@@ -155,8 +139,7 @@
                   [placeholderSearch]="'Search Role Namespace (Optional)'"
                   [searchText]="restrictionRoleControl"
                   searchType="add"
-                  (add)="addRestriction($event)"
-                ></app-smart-search>
+                  (add)="addRestriction($event)"></app-smart-search>
               </div>
             </div>
           </div>
@@ -164,16 +147,14 @@
             <button
               mat-stroked-button
               class="btn btn-small mr-2"
-              (click)="back()"
-            >
+              (click)="back()">
               Back
             </button>
             <button
               mat-raised-button
               class="btn btn-small btn-primary"
               [disabled]="isChecking"
-              (click)="proceedAddingFields()"
-            >
+              (click)="proceedAddingFields()">
               Next
             </button>
           </div>
@@ -183,23 +164,20 @@
           <ng-template matStepLabel>Set Requestor Fields</ng-template>
           <app-role-field
             [fieldsList]="dataSource.data"
-            (updateData)="dataSourceChangeHandler($event)"
-          ></app-role-field>
+            (updateData)="dataSourceChangeHandler($event)"></app-role-field>
           <div class="d-flex justify-content-end mb-2">
             <button
               mat-stroked-button
               class="btn btn-small mr-2 back"
               data-qa-id="back"
-              (click)="back()"
-            >
+              (click)="back()">
               Back
             </button>
             <button
               mat-raised-button
               class="btn btn-small btn-primary"
               [disabled]="isChecking"
-              (click)="proceedConfirmDetails()"
-            >
+              (click)="proceedConfirmDetails()">
               Next
             </button>
           </div>
@@ -209,23 +187,20 @@
           <ng-template matStepLabel>Set Issuer Fields</ng-template>
           <app-role-field
             [fieldsList]="issuerFields.data"
-            (updateData)="issuerFieldsChangeHandler($event)"
-          ></app-role-field>
+            (updateData)="issuerFieldsChangeHandler($event)"></app-role-field>
           <div class="d-flex justify-content-end mb-2">
             <button
               mat-stroked-button
               class="btn btn-small mr-2 back"
               data-qa-id="back"
-              (click)="back()"
-            >
+              (click)="back()">
               Back
             </button>
             <button
               mat-raised-button
               class="btn btn-small btn-primary"
               [disabled]="isChecking"
-              (click)="proceedConfirmDetails()"
-            >
+              (click)="proceedConfirmDetails()">
               Next
             </button>
           </div>
@@ -277,8 +252,7 @@
                 *ngIf="
                   !roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions
                     ?.length
-                "
-              >
+                ">
                 None
               </div>
               <div
@@ -286,8 +260,7 @@
                 *ngFor="
                   let precondition of roleForm?.value?.data
                     ?.enrolmentPreconditions[0]?.conditions
-                "
-              >
+                ">
                 {{ precondition }}
               </div>
             </div>
@@ -303,8 +276,7 @@
                   <app-fields-summary
                     *ngFor="let element of dataSource.data"
                     [element]="element"
-                    class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block"
-                  ></app-fields-summary>
+                    class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block"></app-fields-summary>
                 </div>
               </ng-container>
             </div>
@@ -313,8 +285,7 @@
               <div class="label opacity-50 mb-2">Issuer Required Fields</div>
               <span
                 class="color-white mb-0"
-                *ngIf="!issuerFields?.data?.length"
-              >
+                *ngIf="!issuerFields?.data?.length">
                 None
               </span>
 
@@ -323,8 +294,7 @@
                   <app-fields-summary
                     *ngFor="let element of issuerFields.data"
                     [element]="element"
-                    class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block"
-                  ></app-fields-summary>
+                    class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block"></app-fields-summary>
                 </div>
               </ng-container>
             </div>
@@ -334,15 +304,13 @@
               <button
                 mat-stroked-button
                 class="btn btn-small mr-2"
-                (click)="back()"
-              >
+                (click)="back()">
                 Back
               </button>
               <button
                 mat-raised-button
                 class="btn btn-small btn-primary"
-                (click)="confirmRole()"
-              >
+                (click)="confirmRole()">
                 Next
               </button>
             </div>
@@ -352,14 +320,12 @@
           <mat-step #customStep [editable]="false" [completed]="false">
             <ng-template matStepLabel>{{ step.info }}</ng-template>
             <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3"
-            >
+              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon>info</mat-icon>
               <span class="pb-2">{{ step.info }}</span>
             </div>
             <div
-              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3"
-            >
+              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon>notifications_none</mat-icon>
               <span class="pb-2">
                 Please confirm this transaction in your connected Wallet.
@@ -369,16 +335,14 @@
               <button
                 mat-stroked-button
                 class="btn btn-small mr-2"
-                (click)="closeDialog()"
-              >
+                (click)="closeDialog()">
                 Cancel
               </button>
               <button
                 mat-raised-button
                 class="btn btn-small btn-primary"
                 *ngIf="stepper?.selected === customStep"
-                (appRetryBtn)="retry()"
-              >
+                (appRetryBtn)="retry()">
                 Retry
               </button>
             </div>
@@ -387,8 +351,7 @@
         <mat-step [completed]="false">
           <ng-template matStepLabel>Complete</ng-template>
           <app-transactions-complete
-            (completed)="closeDialog(true)"
-          ></app-transactions-complete>
+            (completed)="closeDialog(true)"></app-transactions-complete>
         </mat-step>
       </mat-vertical-stepper>
     </div>

@@ -1,7 +1,6 @@
 <h4
   mat-dialog-title
-  class="mb-0 d-flex justify-content-between align-items-center"
->
+  class="mb-0 d-flex justify-content-between align-items-center">
   {{ viewType === ViewType.UPDATE ? 'Update' : 'Create' }} Application
   <button mat-icon-button (click)="closeDialog()">
     <mat-icon>close</mat-icon>
@@ -21,8 +20,7 @@
               {{ viewType === ViewType.UPDATE ? 'Update' : 'New' }} Application
             </ng-template>
             <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3"
-            >
+              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
               <mat-icon>info</mat-icon>
               <div class="d-flex flex-column">
                 <mat-label>ORGANIZATION</mat-label>
@@ -47,8 +45,7 @@
                   <mat-form-field
                     class="mt-2"
                     appearance="outline"
-                    floatPlaceholder="never"
-                  >
+                    floatPlaceholder="never">
                     <input
                       matInput
                       autocomplete="off"
@@ -56,8 +53,7 @@
                       type="text"
                       maxlength="500"
                       pattern="https?://.*"
-                      placeholder="https://www.example.com/images/logo.png"
-                    />
+                      placeholder="https://www.example.com/images/logo.png" />
                     <mat-error>URL format is incorrect</mat-error>
                   </mat-form-field>
                 </div>
@@ -70,8 +66,7 @@
                   <mat-form-field
                     class="mt-2 multi-errors"
                     appearance="outline"
-                    *ngIf="viewType !== ViewType.UPDATE"
-                  >
+                    *ngIf="viewType !== ViewType.UPDATE">
                     <input
                       matInput
                       autocomplete="off"
@@ -82,24 +77,20 @@
                       required
                       oninput="this.value = this.value.toLowerCase()"
                       minlength="3"
-                      maxlength="256"
-                    />
+                      maxlength="256" />
                     <mat-error
-                      *ngIf="appForm.get('appName').hasError('required')"
-                    >
+                      *ngIf="appForm.get('appName').hasError('required')">
                       Application Namespace is
                       <strong>required</strong>
                     </mat-error>
                     <mat-error
-                      *ngIf="appForm.get('appName').hasError('minlength')"
-                    >
+                      *ngIf="appForm.get('appName').hasError('minlength')">
                       Application Namespace need to have at least 3 characters.
                     </mat-error>
                     <mat-error
                       *ngIf="
                         appForm.get('appName').hasError('isAlphaNumericInvalid')
-                      "
-                    >
+                      ">
                       Application Namespace can only contain alphanumeric
                       characters.
                     </mat-error>
@@ -107,8 +98,7 @@
                 </div>
                 <div
                   *ngIf="appForm.get('appName').value"
-                  class="ml-3 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3"
-                >
+                  class="ml-3 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
                   <span class="pb-2">
                     {{
                       appForm?.value?.appName +
@@ -125,8 +115,7 @@
                     <mat-form-field
                       class="mt-2"
                       appearance="outline"
-                      floatPlaceholder="never"
-                    >
+                      floatPlaceholder="never">
                       <input
                         matInput
                         autocomplete="off"
@@ -134,8 +123,7 @@
                         type="text"
                         placeholder="Application Name"
                         minlength="3"
-                        maxlength="256"
-                      />
+                        maxlength="256" />
                       <mat-error>
                         Application Name is
                         <strong>required</strong>
@@ -149,8 +137,7 @@
                     <mat-form-field
                       class="mt-2"
                       appearance="outline"
-                      floatPlaceholder="never"
-                    >
+                      floatPlaceholder="never">
                       <input
                         matInput
                         autocomplete="off"
@@ -158,8 +145,7 @@
                         type="text"
                         pattern="https?://.*"
                         placeholder="http://www.example.com"
-                        maxlength="500"
-                      />
+                        maxlength="500" />
                       <mat-error>URL format is incorrect</mat-error>
                     </mat-form-field>
                   </div>
@@ -171,8 +157,7 @@
                       <textarea
                         matInput
                         formControlName="description"
-                        maxlength="1500"
-                      ></textarea>
+                        maxlength="1500"></textarea>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-12">
@@ -188,8 +173,7 @@
                           matTooltip="bgcolor&#13; A 6-digit hexadecimal color code. &#13;(example: #00771A) to customize background color of the enrolment page.&#13;&#13;
                       btncolor&#13; A 6-digit hexadecimal color code. &#13;(example: #00771A) to customize button color in the enrolment page.&#13;&#13;
                       txtcolor&#13; A 6-digit hexadecimal color code. &#13;(example: #00771A) to customize text color in the enrolment page.&#13;&#13;
-                      returnUrl&#13; After successful enrollment, the application will automatically redirect to the return URL."
-                        >
+                      returnUrl&#13; After successful enrollment, the application will automatically redirect to the return URL.">
                           info
                         </mat-icon>
                       </div>
@@ -198,8 +182,7 @@
                       <textarea
                         matInput
                         formControlName="others"
-                        maxlength="2000"
-                      ></textarea>
+                        maxlength="2000"></textarea>
                       <mat-error>Invalid JSON Format</mat-error>
                     </mat-form-field>
                   </div>
@@ -210,8 +193,7 @@
               <button
                 mat-stroked-button
                 class="btn btn-small mr-2"
-                (click)="closeDialog()"
-              >
+                (click)="closeDialog()">
                 Cancel
               </button>
               <button
@@ -219,8 +201,7 @@
                 class="btn btn-small btn-primary"
                 *ngIf="viewType !== ViewType.UPDATE"
                 [disabled]="isChecking"
-                (click)="createNewApp()"
-              >
+                (click)="createNewApp()">
                 Next
               </button>
               <button
@@ -228,8 +209,7 @@
                 class="btn btn-small btn-primary"
                 *ngIf="viewType === ViewType.UPDATE"
                 [disabled]="isChecking"
-                (click)="updateApp()"
-              >
+                (click)="updateApp()">
                 Next
               </button>
             </div>
@@ -240,21 +220,18 @@
           <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
             <div class="d-flex justify-content-center">
               <div
-                class="image-wrapper d-flex align-items-center justify-content-center mb-3"
-              >
+                class="image-wrapper d-flex align-items-center justify-content-center mb-3">
                 <img
                   class="img-logo"
                   src="../assets/img/no-application-image.png"
                   height="48px"
-                  *ngIf="!appForm?.value?.data?.logoUrl"
-                />
+                  *ngIf="!appForm?.value?.data?.logoUrl" />
                 <img
                   class="img-logo"
                   *ngIf="appForm?.value?.data?.logoUrl"
                   (error)="logoUrlError()"
                   (load)="logoUrlSuccess()"
-                  src="{{ appForm?.value?.data?.logoUrl }}"
-                />
+                  src="{{ appForm?.value?.data?.logoUrl }}" />
               </div>
             </div>
             <div class="text-left my-3">
@@ -303,15 +280,13 @@
               <button
                 mat-stroked-button
                 class="btn btn-small mr-2"
-                (click)="cancelAppDetails()"
-              >
+                (click)="cancelAppDetails()">
                 Back
               </button>
               <button
                 mat-raised-button
                 class="btn btn-small btn-primary"
-                (click)="confirmApp()"
-              >
+                (click)="confirmApp()">
                 Next
               </button>
             </div>
@@ -322,14 +297,12 @@
           <mat-step #customStep [editable]="false" [completed]="false">
             <ng-template matStepLabel>{{ step.info }}</ng-template>
             <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3"
-            >
+              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon>info</mat-icon>
               <span class="pb-2">{{ step.info }}</span>
             </div>
             <div
-              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3"
-            >
+              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon class="px-2">notifications_none</mat-icon>
               <span class="pl-3 pb-2">
                 Please confirm this transaction in your connected Wallet.
@@ -339,16 +312,14 @@
               <button
                 mat-stroked-button
                 class="btn btn-small mr-2"
-                (click)="closeDialog()"
-              >
+                (click)="closeDialog()">
                 Cancel
               </button>
               <button
                 mat-raised-button
                 class="btn btn-small btn-primary"
                 *ngIf="stepper?.selected === customStep"
-                (appRetryBtn)="retry()"
-              >
+                (appRetryBtn)="retry()">
                 Retry
               </button>
             </div>
@@ -357,8 +328,7 @@
         <mat-step [completed]="false">
           <ng-template matStepLabel>Complete</ng-template>
           <app-transactions-complete
-            (completed)="closeDialog(true)"
-          ></app-transactions-complete>
+            (completed)="closeDialog(true)"></app-transactions-complete>
         </mat-step>
       </mat-vertical-stepper>
     </div>

@@ -4,16 +4,14 @@
   [showAppFilter]="true"
   [showOrgFilter]="true"
   [showRoleFilter]="true"
-  (filtersChange)="filter($event)"
-></app-filter>
+  (filtersChange)="filter($event)"></app-filter>
 <div class="card card-default mb-3 pb-3">
   <table
     mat-table
     [dataSource]="dataSource"
     matSort
     matSortActive="name"
-    matSortDirection="asc"
-  >
+    matSortDirection="asc">
     <!-- Name -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Role Name</th>
@@ -21,11 +19,9 @@
         mat-cell
         *matCellDef="let element"
         data-label="Name"
-        class="cursor-pointer"
-      >
+        class="cursor-pointer">
         <div
-          class="d-flex flex-row justify-content-between justify-content-lg-start"
-        >
+          class="d-flex flex-row justify-content-between justify-content-lg-start">
           {{ element?.definition?.roleName }}
         </div>
       </td>
@@ -67,16 +63,14 @@
           <button
             mat-menu-item
             class="btn-color-primary"
-            (click)="viewDetails(element)"
-          >
+            (click)="viewDetails(element)">
             <mat-icon class="btn-color-primary">preview</mat-icon>
             <span>View Details</span>
           </button>
 
           <app-role-actions
             [role]="element"
-            (edited)="edit()"
-          ></app-role-actions>
+            (edited)="edit()"></app-role-actions>
         </app-actions-menu>
       </td>
     </ng-container>
@@ -87,8 +81,7 @@
   <!-- Shows when table is empty -->
   <div
     class="d-flex justify-content-center align-items-center mt-4 mb-3"
-    *ngIf="!dataSource?.data?.length"
-  >
+    *ngIf="!dataSource?.data?.length">
     <div class="d-flex align-items-center no-record color-white">
       <mat-icon class="mr-2">info</mat-icon>
       <i>No Record Found</i>

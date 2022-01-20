@@ -1,44 +1,37 @@
 <div class="w-100 h-responsive bg-color" [ngStyle]="bgColor">
   <div
     class="header-enroll bg-color d-flex justify-content-center justify-content-between position-fixed pl-4 py-2 w-100"
-    [ngStyle]="bgColor"
-  >
+    [ngStyle]="bgColor">
     <img
       src="{{ orgAppDetails?.logoUrl }}"
       height="48px"
-      *ngIf="orgAppDetails?.logoUrl"
-    />
+      *ngIf="orgAppDetails?.logoUrl" />
     <ng-container *ngIf="!orgAppDetails?.logoUrl">
       <img
         src="../assets/img/no-organization-image.png"
         height="48px"
-        *ngIf="isOrganization()"
-      />
+        *ngIf="isOrganization()" />
       <img
         src="../assets/img/no-application-image.png"
         height="48px"
-        *ngIf="isApplication()"
-      />
+        *ngIf="isApplication()" />
     </ng-container>
     <div>
       <button
         mat-button
         class="btn btn-small md-enroll px-4 mr-2"
         (click)="logout()"
-        *ngIf="isLoggedIn"
-      >
+        *ngIf="isLoggedIn">
         <div [ngStyle]="txtColor">Logout</div>
       </button>
     </div>
   </div>
   <div
-    class="d-flex justify-content-center flex-column align-items-center w-100"
-  >
+    class="d-flex justify-content-center flex-column align-items-center w-100">
     <div
       class="content-enroll d-flex txt-color justify-content-start justify-content-md-center align-items-md-center flex-column px-4 mb-1 w-100"
       [ngStyle]="txtColor"
-      *ngIf="isLoggedIn"
-    >
+      *ngIf="isLoggedIn">
       <h2 class="font-weight-600 mb-1">
         Enrol to {{ orgAppDetails?.appName || orgAppDetails?.orgName }}
       </h2>
@@ -55,43 +48,37 @@
               class="mt-2 md-enroll"
               appearance="outline"
               floatPlaceholder="never"
-              [ngStyle]="txtColor"
-            >
+              [ngStyle]="txtColor">
               <mat-select
                 class="md-enroll"
                 placeholder="Enrol For"
                 formControlName="enrolFor"
-                (selectionChange)="enrolForSelected($event)"
-              >
+                (selectionChange)="enrolForSelected($event)">
                 <mat-option
                   class="md-enroll"
                   [ngStyle]="listColor"
-                  [value]="EnrolForType.ME"
-                >
+                  [value]="EnrolForType.ME">
                   Myself
                 </mat-option>
                 <mat-option
                   *ngIf="experimentalEnabled"
                   class="md-enroll"
                   [ngStyle]="listColor"
-                  [value]="EnrolForType.ASSET"
-                >
+                  [value]="EnrolForType.ASSET">
                   My Asset
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
           <ng-container
-            *ngIf="roleTypeForm?.value?.enrolFor === EnrolForType.ASSET"
-          >
+            *ngIf="roleTypeForm?.value?.enrolFor === EnrolForType.ASSET">
             <div class="col-lg-12 mt-2 mb-4">
               <button
                 button
                 mat-raised-button
                 class="btn btn-primary md-enroll w-100"
                 [ngStyle]="btnColor"
-                (click)="selectAsset()"
-              >
+                (click)="selectAsset()">
                 Select Asset
               </button>
             </div>
@@ -101,8 +88,7 @@
               </mat-label>
               <div
                 [ngStyle]="txtColor"
-                class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex mt-2 pt-3 pb-2 mb-4 mr-3"
-              >
+                class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex mt-2 pt-3 pb-2 mb-4 mr-3">
                 <span class="pb-2 opacity-50">
                   {{
                     roleTypeForm?.value?.assetDid || 'Please select an asset.'
@@ -117,27 +103,23 @@
               roleTypeForm?.value?.enrolFor === EnrolForType.ME ||
               (roleTypeForm?.value?.enrolFor === EnrolForType.ASSET &&
                 roleTypeForm?.value?.assetDid)
-            "
-          >
+            ">
             <mat-label class="ml-3 pl-1" [ngStyle]="txtColor">Role</mat-label>
             <mat-form-field
               class="mt-2 md-enroll"
               appearance="outline"
               floatPlaceholder="never"
-              [ngStyle]="txtColor"
-            >
+              [ngStyle]="txtColor">
               <mat-select
                 class="md-enroll"
                 placeholder="Role"
                 formControlName="roleType"
-                (selectionChange)="roleTypeSelected($event)"
-              >
+                (selectionChange)="roleTypeSelected($event)">
                 <mat-option
                   class="md-enroll"
                   [ngStyle]="listColor"
                   *ngFor="let role of roleList"
-                  [value]="role"
-                >
+                  [value]="role">
                   {{ role.name }}
                 </mat-option>
               </mat-select>
@@ -149,8 +131,9 @@
       <!-- PRE-CHECK Error Messages-->
       <ng-container *ngIf="!isPrecheckSuccess && rolePreconditionList?.length">
         <app-role-precondition-list
-          [preconditionList]="rolePreconditionList"
-        ></app-role-precondition-list>
+          [preconditionList]="
+            rolePreconditionList
+          "></app-role-precondition-list>
       </ng-container>
       <app-enrolment-form
         *ngIf="isPrecheckSuccess"
@@ -162,8 +145,7 @@
         [txtboxColor]="txtboxColor"
         [txtColor]="txtColor"
         [btnColor]="btnColor"
-        (submitForm)="submit($event)"
-      ></app-enrolment-form>
+        (submitForm)="submit($event)"></app-enrolment-form>
       <button
         mat-raised-button
         class="btn btn-primary md-enroll w-100"
@@ -174,8 +156,7 @@
         [disabled]="
           roleTypeForm?.value?.enrolFor === EnrolForType.ASSET &&
           !roleTypeForm?.value?.assetDid
-        "
-      >
+        ">
         View
         {{
           roleTypeForm?.value?.enrolFor === EnrolForType.ASSET ? 'Asset' : 'My'
@@ -187,14 +168,12 @@
 
     <div class="footer-enroll">
       <div
-        class="d-flex justify-content-between align-items-center mx-3 mx-md-4 h-100"
-      >
+        class="d-flex justify-content-between align-items-center mx-3 mx-md-4 h-100">
         <div>
           <img
             src="assets/img/icons/ew-logo-white.png"
             width="98px"
-            height="auto"
-          />
+            height="auto" />
         </div>
         <div>
           <a class="color-white mx-2" href="#">Privacy Policy</a>

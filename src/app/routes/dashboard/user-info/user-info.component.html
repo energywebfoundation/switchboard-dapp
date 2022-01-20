@@ -4,8 +4,7 @@
     src="../assets/img/identity-image.png"
     width="64"
     height="64"
-    alt="identity image"
-  />
+    alt="identity image" />
   <h2 class="color-white mt-4 mb-0" data-qa-id="user-info-name">
     {{ userName }}
   </h2>
@@ -16,8 +15,7 @@
       appCopyToClipboard
       [copyClipboard]="accountDid"
       message="User Did"
-      matTooltip="Copy to clipboard"
-    >
+      matTooltip="Copy to clipboard">
       <div>{{ accountDid | didFormatMinifier }}</div>
       <mat-icon class="ml-2">content_copy</mat-icon>
     </div>
@@ -26,8 +24,7 @@
   <ng-template #fetching>
     <div
       class="opacity-50 text-truncate-middle did-wrapper"
-      *ngIf="!accountDid"
-    >
+      *ngIf="!accountDid">
       Fetching decentralised identifier...
     </div>
   </ng-template>

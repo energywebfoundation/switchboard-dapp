@@ -7,8 +7,7 @@
           type="text"
           placeholder="{{ fieldList[i].name }}"
           [attr.data-qa-id]="'field-' + i"
-          [formControl]="getControl(i)"
-        />
+          [formControl]="getControl(i)" />
         <mat-icon matSuffix [matTooltip]="fieldList[i]?.description">
           info
         </mat-icon>
