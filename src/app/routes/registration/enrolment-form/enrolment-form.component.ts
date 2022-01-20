@@ -1,5 +1,19 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
 import { IRoleDefinition, RegistrationTypes } from 'iam-client-lib';
 import { KeyValue } from '@angular/common';
@@ -31,20 +45,23 @@ export interface PredefinedRegistrationTypes {
 @Component({
   selector: 'app-enrolment-form',
   templateUrl: './enrolment-form.component.html',
-  styleUrls: ['./enrolment-form.component.scss']
+  styleUrls: ['./enrolment-form.component.scss'],
 })
 export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
   enrolmentForm: FormGroup = new FormGroup({
-    registrationTypes: new FormGroup({
-      offChain: new FormControl({value: false, disabled: false}),
-      onChain: new FormControl({value: true, disabled: false}),
-    }, requireCheckboxesToBeCheckedValidator()),
-    fields: new FormArray([])
+    registrationTypes: new FormGroup(
+      {
+        offChain: new FormControl({ value: false, disabled: false }),
+        onChain: new FormControl({ value: true, disabled: false }),
+      },
+      requireCheckboxesToBeCheckedValidator()
+    ),
+    fields: new FormArray([]),
   });
 
   @Input() showSubmit = true;
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
-  @Input() showRegistrationTypes: boolean = true;
+  @Input() showRegistrationTypes = true;
 
   @Input() set fieldList(list: IRoleDefinition['fields']) {
     this.fields = list;
@@ -67,8 +84,7 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
 
   private fields;
 
-  constructor(private cdRef: ChangeDetectorRef) {
-  }
+  constructor(private cdRef: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.setPredefinedFormatForCheckboxes();
@@ -89,7 +105,7 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
     this.submitForm.next({
       fields: this.buildEnrolmentFormFields(),
       registrationTypes: this.getRegistrationTypes(),
-      valid: this.isValid()
+      valid: this.isValid(),
     });
   }
 
@@ -108,31 +124,31 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
 
   private buildEnrolmentFormFields() {
     const values = this.enrolmentForm.value.fields;
-    return this.fieldList.map((field, index) => (
-      {
-        key: field.label,
-        value: values[index]
-      }
-    ));
+    return this.fieldList.map((field, index) => ({
+      key: field.label,
+      value: values[index],
+    }));
   }
 
   private updateEnrolmentForm(formArray: FormArray) {
     this.enrolmentForm.removeControl('fields');
     this.enrolmentForm.registerControl('fields', formArray);
-    this.registrationTypesGroup.reset(
-      {
-        offChain: {value: false, disabled: false},
-        onChain: {
-          value: true,
-          disabled: !this.namespaceRegistrationRoles?.has(RegistrationTypes.OnChain)
-        }
-      }
-    );
+    this.registrationTypesGroup.reset({
+      offChain: { value: false, disabled: false },
+      onChain: {
+        value: true,
+        disabled: !this.namespaceRegistrationRoles?.has(
+          RegistrationTypes.OnChain
+        ),
+      },
+    });
     this.cdRef.detectChanges();
   }
 
   getControl(id: number): FormControl {
-    return (this.enrolmentForm?.get('fields') as FormArray)?.controls[id] as FormControl;
+    return (this.enrolmentForm?.get('fields') as FormArray)?.controls[
+      id
+    ] as FormControl;
   }
 
   get registrationTypesGroup(): AbstractControl {
@@ -207,19 +223,16 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
       return;
     }
     if (this.predefinedRegTypes.onChain || this.predefinedRegTypes.offChain) {
-      this.registrationTypesGroup.reset(
-        {
-          offChain: {
-            value: Boolean(this.predefinedRegTypes.offChain),
-            disabled: true
-          },
-          onChain: {
-            value: Boolean(this.predefinedRegTypes.onChain),
-            disabled: true
-          }
-        }
-      );
+      this.registrationTypesGroup.reset({
+        offChain: {
+          value: Boolean(this.predefinedRegTypes.offChain),
+          disabled: true,
+        },
+        onChain: {
+          value: Boolean(this.predefinedRegTypes.onChain),
+          disabled: true,
+        },
+      });
     }
   }
-
 }

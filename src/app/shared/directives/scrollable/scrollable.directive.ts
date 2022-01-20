@@ -1,12 +1,12 @@
 import { OnInit, Directive, Input, ElementRef } from '@angular/core';
 
-declare var $: any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare let $: any;
 
 @Directive({
-  selector: '[appScrollable]'
+  selector: '[appScrollable]',
 })
 export class ScrollableDirective implements OnInit {
-
   @Input() height: number;
   defaultHeight = 250;
 
@@ -17,8 +17,7 @@ export class ScrollableDirective implements OnInit {
   ngOnInit() {
     // console.log("jjjjj2j");
     $(this.element.nativeElement).slimScroll({
-      height: (this.height || this.defaultHeight)
+      height: this.height || this.defaultHeight,
     });
   }
-
 }

@@ -3,81 +3,96 @@
  ========================================================================== */
 
 body {
-    font-family: 'Source Sans Pro', sans-serif;
-    color: $body-color;
-    font-size: 0.875rem; // 14px
+  font-family: 'Source Sans Pro', sans-serif;
+  color: $body-color;
+  font-size: 0.875rem; // 14px
 }
 
 a {
-    &:hover {
-        text-decoration: none;
-    }
+  &:hover {
+    text-decoration: none;
+  }
 }
 
-h1,h2,h3,h4 {
-    font-weight: normal;
-    letter-spacing: 0.25px;
-    font-family: 'Rajdhani', sans-serif;
+h1,
+h2,
+h3,
+h4 {
+  font-weight: normal;
+  letter-spacing: 0.25px;
+  font-family: 'Rajdhani', sans-serif;
 }
 
-h1,h2,h3,h4,h5
-.h1,.h2,.h3,.h4,.h5{
-    margin-bottom: 0.65625rem;
-    small {
-        font-size: 65%;
-    }
+h1,
+h2,
+h3,
+h4,
+h5 .h1,
+.h2,
+.h3,
+.h4,
+.h5 {
+  margin-bottom: 0.65625rem;
+  small {
+    font-size: 65%;
+  }
 }
 
-h1,.h1 {
-    font-size: 26px; // 34px
+h1,
+.h1 {
+  font-size: 26px; // 34px
 }
 
-h2,.h2 {
-    font-size: 1.7rem; // 30px
+h2,
+.h2 {
+  font-size: 1.7rem; // 30px
 }
 
-h3,.h3 {
-    font-size: 1.3125rem; // 21px
+h3,
+.h3 {
+  font-size: 1.3125rem; // 21px
 }
 
-h4,.h4 {
-    font-size: 1.125rem; // 18px
+h4,
+.h4 {
+  font-size: 1.125rem; // 18px
 
-    small {
-        line-height: 12px;
-        font-family: 'Source Sans Pro', sans-serif;
-        opacity: 0.6;
-        letter-spacing: 0.2px;
-    }
+  small {
+    line-height: 12px;
+    font-family: 'Source Sans Pro', sans-serif;
+    opacity: 0.6;
+    letter-spacing: 0.2px;
+  }
 }
 
-h5,.h5 {
-    font-size: .875rem;
+h5,
+.h5 {
+  font-size: 0.875rem;
 }
 
-h6,.h6 {
-    font-size: 1rem;
+h6,
+.h6 {
+  font-size: 1rem;
 }
 
 .f-14 {
-    font-size:14px;
+  font-size: 14px;
 }
 
-
 .f-16 {
-    font-size:16px;
+  font-size: 16px;
 }
 
 p {
-    margin-bottom: .65rem; // ~10px
+  margin-bottom: 0.65rem; // ~10px
 }
 
 .filter-link {
-    position: relative;
-    font-size: 12px;
-    top: -1px;
-    letter-spacing: 0.8px;
-    font-weight: 400;
+  position: relative;
+  font-size: 12px;
+  top: -1px;
+  letter-spacing: 0.8px;
+  font-weight: 400;
 }
 
 .article {
@@ -86,33 +101,34 @@ p {
 }
 
 .filter-label {
-    color: #9080bb;
-    font-weight: 400;
+  color: #9080bb;
+  font-weight: 400;
 }
 
 .font-weight-700 {
-    font-weight: 700;
+  font-weight: 700;
 }
 
 .font-weight-600 {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .strong {
-    font-weight: 700;
+  font-weight: 700;
 }
 
 .small {
-    font-size: 12px !important;
+  font-size: 12px !important;
 }
 
-
 @include media-breakpoint-down(sm) {
-    h2,.h2 {
-        font-size: 21px;
-    }
+  h2,
+  .h2 {
+    font-size: 21px;
+  }
 
-    h4,.h4  {
-        font-size: 16px !important;
-    }
+  h4,
+  .h4 {
+    font-size: 16px !important;
+  }
 }

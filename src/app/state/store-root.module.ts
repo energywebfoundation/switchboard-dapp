@@ -1,4 +1,4 @@
-import { NgModule, } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { rootReducer } from './root.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -14,19 +14,20 @@ import { ApplicationStoreSliceModule } from './governance/application/applicatio
 import { RoleStoreSliceModule } from './governance/role/role-store-slice.module';
 import { SettingsStoreSliceModule } from './settings/settings-store-slice.module';
 
-
 @NgModule({
   imports: [
     StoreModule.forRoot(rootReducer, {}),
-    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production,
+    }),
     EffectsModule.forRoot([UserEffects, StakeEffects, AuthEffects]),
     AssetsStoreSliceModule,
     OrganizationStoreSliceModule,
     LayoutStoreSliceModule,
     ApplicationStoreSliceModule,
     RoleStoreSliceModule,
-    SettingsStoreSliceModule
+    SettingsStoreSliceModule,
   ],
 })
-export class StoreRootModule {
-}
+export class StoreRootModule {}

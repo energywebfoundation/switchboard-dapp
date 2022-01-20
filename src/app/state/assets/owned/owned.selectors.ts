@@ -5,7 +5,7 @@ import { USER_FEATURE_KEY } from './owned.reducer';
 
 export const getOwnedState = createSelector(
   getAssetState,
-  state => state && state[USER_FEATURE_KEY]
+  (state) => state && state[USER_FEATURE_KEY]
 );
 
 export const getAssets = createSelector(
@@ -20,9 +20,7 @@ export const getOwnedAssets = createSelector(
     return assets?.map((asset) => ({
       ...asset,
       ...(assetsClaim && assetsClaim[asset.id]),
-      hasEnrolments: true
+      hasEnrolments: true,
     }));
   }
 );
-
-

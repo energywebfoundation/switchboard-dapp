@@ -20,9 +20,7 @@ import { IssueVcModule } from '../../modules/issue-vc/issue-vc.module';
 import { EnrolmentFormModule } from '../registration/enrolment-form/enrolment-form.module';
 import { FieldsComponent } from './fields/fields.component';
 
-const routes: Routes = [
-  {path: '', component: EnrolmentComponent}
-];
+const routes: Routes = [{ path: '', component: EnrolmentComponent }];
 
 @NgModule({
   declarations: [
@@ -30,7 +28,7 @@ const routes: Routes = [
     EnrolToRoleComponent,
     ViewRequestsComponent,
     ViewRoleComponent,
-    FieldsComponent
+    FieldsComponent,
   ],
   imports: [
     SharedModule,
@@ -48,9 +46,8 @@ const routes: Routes = [
     MatInputModule,
     QrCodeScannerModule,
     IssueVcModule,
-    EnrolmentFormModule
+    EnrolmentFormModule,
   ],
-  entryComponents: [ViewRequestsComponent, ViewRoleComponent]
+  entryComponents: [ViewRequestsComponent, ViewRoleComponent],
 })
-export class EnrolmentModule {
-}
+export class EnrolmentModule {}

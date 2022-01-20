@@ -51,7 +51,6 @@ import { TableHeadingComponent } from './components/table-heading/table-heading.
 import { NoRecordsComponent } from './components/no-records/no-records.component';
 import { RoleTypePipe } from './pipes/role-type/role-type.pipe';
 
-
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
   MatButtonModule,
@@ -96,11 +95,9 @@ const MATERIAL_MODULES = [
     TranslateModule,
     CopyToClipboardModule,
     DidFormatMinifierModule,
-    MATERIAL_MODULES
+    MATERIAL_MODULES,
   ],
-  providers: [
-    ColorsService
-  ],
+  providers: [ColorsService],
   declarations: [
     ScrollableDirective,
     PreventPasteDirective,
@@ -112,7 +109,7 @@ const MATERIAL_MODULES = [
     ReplaceUnderscorePipe,
     TableHeadingComponent,
     NoRecordsComponent,
-    RoleTypePipe
+    RoleTypePipe,
   ],
   exports: [
     CommonModule,
@@ -132,16 +129,16 @@ const MATERIAL_MODULES = [
     DidFormatMinifierModule,
     TableHeadingComponent,
     NoRecordsComponent,
-    RoleTypePipe
+    RoleTypePipe,
   ],
-  entryComponents: [MinifiedDidViewerDialogComponent]
+  entryComponents: [MinifiedDidViewerDialogComponent],
 })
 
 // https://github.com/ocombe/ng2-translate/issues/209
 export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
-      ngModule: SharedModule
+      ngModule: SharedModule,
     };
   }
 }

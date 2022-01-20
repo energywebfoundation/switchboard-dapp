@@ -8,24 +8,26 @@ import { filter, switchMap, take, tap } from 'rxjs/operators';
 
 @Injectable()
 export class SettingsEffects {
-
-  redirectFromAssetsToDashboard = createEffect(() =>
-    this.actions$
-      .pipe(
+  redirectFromAssetsToDashboard = createEffect(
+    () =>
+      this.actions$.pipe(
         ofType(SettingsActions.disableExperimental),
-        switchMap(() => this.urlService.current
-          .pipe(
+        switchMap(() =>
+          this.urlService.current.pipe(
             take(1),
             filter((url) => url.includes('assets')),
             tap(() => this.urlService.goTo('dashboard'))
           )
         )
-      ), {dispatch: false}
+      ),
+    { dispatch: false }
   );
 
-  constructor(private actions$: Actions,
-              private store: Store,
-              private urlService: UrlService) {
+  constructor(
+    private actions$: Actions,
+    private store: Store,
+    private urlService: UrlService
+  ) {
     this.enableExperimental();
   }
 

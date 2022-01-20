@@ -6,13 +6,13 @@ import { AssetService } from '../services/asset.service';
   selector: 'app-new-passive-asset',
   templateUrl: './new-passive-asset.component.html',
   styleUrls: ['./new-passive-asset.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewPassiveAssetComponent {
-
-  constructor(private dialogRef: MatDialogRef<NewPassiveAssetComponent>,
-              private assetsService: AssetService) {
-  }
+  constructor(
+    private dialogRef: MatDialogRef<NewPassiveAssetComponent>,
+    private assetsService: AssetService
+  ) {}
 
   registerAsset() {
     this.assetsService.register().subscribe(

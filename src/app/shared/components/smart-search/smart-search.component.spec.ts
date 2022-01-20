@@ -1,4 +1,11 @@
-import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  flush,
+  TestBed,
+  tick,
+  waitForAsync,
+} from '@angular/core/testing';
 
 import { SmartSearchComponent } from './smart-search.component';
 import { MatInputModule } from '@angular/material/input';
@@ -16,24 +23,29 @@ import { SmartSearchType } from './models/smart-search-type.enum';
 describe('SmartSearchComponent', () => {
   let component: SmartSearchComponent;
   let fixture: ComponentFixture<SmartSearchComponent>;
-  const smartSearchServiceSpy = jasmine.createSpyObj(SmartSearchService, ['searchBy']);
+  const smartSearchServiceSpy = jasmine.createSpyObj(SmartSearchService, [
+    'searchBy',
+  ]);
   let hostDebug: DebugElement;
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [SmartSearchComponent],
-      imports: [
-        MatInputModule,
-        ReactiveFormsModule,
-        MatIconTestingModule,
-        MatButtonModule,
-        MatAutocompleteModule,
-        NoopAnimationsModule
-      ],
-      providers: [{provide: SmartSearchService, useValue: smartSearchServiceSpy}],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [SmartSearchComponent],
+        imports: [
+          MatInputModule,
+          ReactiveFormsModule,
+          MatIconTestingModule,
+          MatButtonModule,
+          MatAutocompleteModule,
+          NoopAnimationsModule,
+        ],
+        providers: [
+          { provide: SmartSearchService, useValue: smartSearchServiceSpy },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SmartSearchComponent);
@@ -58,7 +70,7 @@ describe('SmartSearchComponent', () => {
     control.patchValue('role');
     fixture.detectChanges();
     tick(1200);
-    const {smartSearchInput} = selectors(hostDebug);
+    const { smartSearchInput } = selectors(hostDebug);
 
     expect(smartSearchInput.value).toEqual('role');
     flush();
@@ -70,39 +82,45 @@ describe('SmartSearchComponent', () => {
     fixture.detectChanges();
 
     tick(1200);
-    const {smartSearchInput} = selectors(hostDebug);
+    const { smartSearchInput } = selectors(hostDebug);
 
     expect(smartSearchInput.value).toEqual('role');
     flush();
   }));
 
   it('should emit event when adding role', fakeAsync(() => {
-    smartSearchServiceSpy.searchBy.and.returnValue(of(['namespace1', 'namespace2']));
+    smartSearchServiceSpy.searchBy.and.returnValue(
+      of(['namespace1', 'namespace2'])
+    );
     component.searchType = SmartSearchType.Add;
     component.searchText = new FormControl('');
     const addSpyEvent = spyOn(component.add, 'emit');
     fixture.detectChanges();
 
-    const {smartSearchInput} = selectors(hostDebug);
+    const { smartSearchInput } = selectors(hostDebug);
 
     smartSearchInput.value = 'name';
     dispatchInputEvent(smartSearchInput);
     tick(1200);
     fixture.detectChanges();
 
-    const {add} = selectors(hostDebug);
+    const { add } = selectors(hostDebug);
     expect(add).toBeTruthy();
 
     add.click();
 
-    expect(addSpyEvent).toHaveBeenCalledWith({role: 'name', searchType: SmartSearchType.Add});
+    expect(addSpyEvent).toHaveBeenCalledWith({
+      role: 'name',
+      searchType: SmartSearchType.Add,
+    });
     flush();
   }));
 });
 
 const selectors = (hostDebug) => {
   return {
-    smartSearchInput: getElement(hostDebug)('smart-search-input')?.nativeElement,
+    smartSearchInput:
+      getElement(hostDebug)('smart-search-input')?.nativeElement,
     clear: getElement(hostDebug)('clear')?.nativeElement,
     add: getElement(hostDebug)('add')?.nativeElement,
     search: getElement(hostDebug)('search')?.nativeElement,

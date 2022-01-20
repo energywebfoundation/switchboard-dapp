@@ -16,31 +16,31 @@ describe('OrganizationListComponent', () => {
   let store: MockStore;
   let dispatchSpy;
 
-  const setUp = (list = [], hierarchy = [],) => {
+  const setUp = (list = [], hierarchy = []) => {
     store.overrideSelector(OrganizationSelectors.getHierarchy, hierarchy);
     store.overrideSelector(OrganizationSelectors.getList, list);
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [OrganizationListComponent],
-      providers: [
-        {provide: MatDialog, useValue: {}},
-        {provide: LoadingService, useValue: {}},
-        {provide: IamService, useValue: {}},
-        {provide: SwitchboardToastrService, useValue: {}},
-        {provide: EnvService, useValue: {rootNamespace: 'iam.ewc'}},
-        provideMockStore()
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [OrganizationListComponent],
+        providers: [
+          { provide: MatDialog, useValue: {} },
+          { provide: LoadingService, useValue: {} },
+          { provide: IamService, useValue: {} },
+          { provide: SwitchboardToastrService, useValue: {} },
+          { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
+          provideMockStore(),
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+
+      store = TestBed.inject(MockStore);
+      dispatchSpy = spyOn(store, 'dispatch');
     })
-      .compileComponents();
-
-    store = TestBed.inject(MockStore);
-    dispatchSpy = spyOn(store, 'dispatch');
-
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(OrganizationListComponent);
@@ -53,7 +53,6 @@ describe('OrganizationListComponent', () => {
   });
 
   it('should set list to table datasource', () => {
-
     setUp([{}]);
     expect(dispatchSpy).toHaveBeenCalledWith(OrganizationActions.getList());
 
@@ -70,40 +69,51 @@ describe('OrganizationListComponent', () => {
     it('should check if element contains one sub org ', () => {
       setUp();
 
-      expect(component.getTooltip({subOrgs: [{namespace: 'foo'}]})).toContain('Sub-Organization \n\nfoo');
+      expect(
+        component.getTooltip({ subOrgs: [{ namespace: 'foo' }] })
+      ).toContain('Sub-Organization \n\nfoo');
     });
 
     it('should check if element contains 6 sub org', () => {
       setUp();
 
-      expect(component.getTooltip({
-        subOrgs: [
-          {namespace: 'foo1'},
-          {namespace: 'foo2'},
-          {namespace: 'foo3'},
-          {namespace: 'foo4'},
-          {namespace: 'foo5'},
-          {namespace: 'foo6'}
-        ]
-      }))
-        .toContain('Sub-Organizations \n\nfoo1\nfoo2\nfoo3\nfoo4\nfoo5\n\n ... +1 More');
+      expect(
+        component.getTooltip({
+          subOrgs: [
+            { namespace: 'foo1' },
+            { namespace: 'foo2' },
+            { namespace: 'foo3' },
+            { namespace: 'foo4' },
+            { namespace: 'foo5' },
+            { namespace: 'foo6' },
+          ],
+        })
+      ).toContain(
+        'Sub-Organizations \n\nfoo1\nfoo2\nfoo3\nfoo4\nfoo5\n\n ... +1 More'
+      );
     });
   });
 
   it('should dispatch action for creating sub organization', () => {
     setUp();
-    const org: any = {namespace: 'foo'};
+    const org = { namespace: 'foo' } as any;
     component.newSubOrg(org);
-    expect(dispatchSpy).toHaveBeenCalledWith(OrganizationActions.createSub({org}));
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      OrganizationActions.createSub({ org })
+    );
   });
 
   it('should dispatch action for updating selected organization after edit', () => {
     component.edit();
-    expect(dispatchSpy).toHaveBeenCalledWith(OrganizationActions.updateSelectedOrgAfterEdit());
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      OrganizationActions.updateSelectedOrgAfterEdit()
+    );
   });
 
   it('should dispatch action for updating selected organization after transferring organization', () => {
     component.transferOwnership();
-    expect(dispatchSpy).toHaveBeenCalledWith(OrganizationActions.updateSelectedOrgAfterTransfer());
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      OrganizationActions.updateSelectedOrgAfterTransfer()
+    );
   });
 });

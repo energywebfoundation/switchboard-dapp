@@ -8,13 +8,14 @@ describe('ConnectedNetworkComponent', () => {
   let component: ConnectedNetworkComponent;
   let fixture: ComponentFixture<ConnectedNetworkComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ConnectedNetworkComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ConnectedNetworkComponent],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConnectedNetworkComponent);

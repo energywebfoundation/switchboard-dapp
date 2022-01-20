@@ -15,24 +15,23 @@ describe('AssetEnrolmentListComponent', () => {
   let activatedRouteStub;
   let store: MockStore;
 
-  beforeEach(waitForAsync(() => {
-    activatedRouteStub = new MockActivatedRoute();
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([])
-      ],
-      declarations: [AssetEnrolmentListComponent],
-      providers: [
-        {provide: ActivatedRoute, useValue: activatedRouteStub},
-        {provide: UrlService, useValue: {}},
-        provideMockStore()
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      activatedRouteStub = new MockActivatedRoute();
+      TestBed.configureTestingModule({
+        imports: [RouterTestingModule.withRoutes([])],
+        declarations: [AssetEnrolmentListComponent],
+        providers: [
+          { provide: ActivatedRoute, useValue: activatedRouteStub },
+          { provide: UrlService, useValue: {} },
+          provideMockStore(),
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
 
-    store = TestBed.inject(MockStore);
-  }));
+      store = TestBed.inject(MockStore);
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AssetEnrolmentListComponent);
@@ -45,20 +44,25 @@ describe('AssetEnrolmentListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set subject and dispatch action for getting asset information', waitForAsync(() => {
-    store.overrideSelector(AssetDetailsSelectors.getAssetDetails, {});
-    activatedRouteStub.testParams = {subject: '123'};
-    const dispatchSpy = spyOn(store, 'dispatch');
+  it(
+    'should set subject and dispatch action for getting asset information',
+    waitForAsync(() => {
+      store.overrideSelector(AssetDetailsSelectors.getAssetDetails, {});
+      activatedRouteStub.testParams = { subject: '123' };
+      const dispatchSpy = spyOn(store, 'dispatch');
 
-    fixture.detectChanges();
+      fixture.detectChanges();
 
-    expect(component.subject).toBe('123');
-    expect(dispatchSpy).toHaveBeenCalledWith(AssetDetailsActions.getDetails({assetId: '123'}));
-  }));
+      expect(component.subject).toBe('123');
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        AssetDetailsActions.getDetails({ assetId: '123' })
+      );
+    })
+  );
 
   it('should not set subject and do not dispatch action when getting wrong params', () => {
     store.overrideSelector(AssetDetailsSelectors.getAssetDetails, {});
-    activatedRouteStub.testParams = {notSubject: '123'};
+    activatedRouteStub.testParams = { notSubject: '123' };
     const dispatchSpy = spyOn(store, 'dispatch');
 
     fixture.detectChanges();
@@ -69,17 +73,17 @@ describe('AssetEnrolmentListComponent', () => {
 
   it('should get only first subject from params', () => {
     store.overrideSelector(AssetDetailsSelectors.getAssetDetails, {});
-    activatedRouteStub.testParams = {subject: '123'};
+    activatedRouteStub.testParams = { subject: '123' };
     const dispatchSpy = spyOn(store, 'dispatch');
 
     fixture.detectChanges();
 
-    activatedRouteStub.testParams = {subject: '1'};
+    activatedRouteStub.testParams = { subject: '1' };
     fixture.detectChanges();
 
     expect(component.subject).toBe('123');
-    expect(dispatchSpy).toHaveBeenCalledWith(AssetDetailsActions.getDetails({assetId: '123'}));
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      AssetDetailsActions.getDetails({ assetId: '123' })
+    );
   });
-
-
 });

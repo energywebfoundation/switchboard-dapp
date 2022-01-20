@@ -2,9 +2,9 @@ name: Deploy
 
 on:
   push:
-    branches: [ 'develop', 'master' ]
+    branches: ['develop', 'master']
   pull_request:
-    branches: [ 'develop', 'master' ]
+    branches: ['develop', 'master']
 
 jobs:
   cancel-previous:
@@ -49,10 +49,6 @@ jobs:
           npm install
           envsubst < src/environments/constants.template.ts > src/environments/constants.ts
 
-      - name: Run Lint
-        run: |
-          npm run lint
-
       - name: Run Test
         run: |
           npm run test:headless
@@ -85,4 +81,3 @@ jobs:
         with:
           environment: ${{ secrets.SENTRY_STAGING_ENV }}
           ignore_missing: true
-

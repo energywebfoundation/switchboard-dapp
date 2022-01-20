@@ -26,18 +26,18 @@ export class HexValidators {
         return null;
       }
       return {
-        isHexInvalid: true
+        isHexInvalid: true,
       };
     };
-  };
+  }
 
   static isPublicKeyValid() {
     return HexValidators.isHex([SHORT_HEX, LONG_HEX]);
-  };
+  }
 
   static isEthAddress() {
     return HexValidators.isHex([ETHEREUM_ADDRESS]);
-  };
+  }
 
   static isDidValid() {
     return (control: AbstractControl) => {
@@ -49,11 +49,11 @@ export class HexValidators {
         return null;
       }
 
-      return {invalidDid: true};
+      return { invalidDid: true };
     };
   }
 }
 
 const isValidLength = (control: number, possibleLengths: number[]): boolean => {
-  return possibleLengths.map(v => v === control).some(v => v === true);
+  return possibleLengths.map((v) => v === control).some((v) => v === true);
 };

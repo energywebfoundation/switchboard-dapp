@@ -14,12 +14,13 @@ a:hover {
   padding: 0 !important;
 }
 
-.mt-2, .my-2 {
+.mt-2,
+.my-2 {
   margin-top: 0.6rem !important;
 }
 
 .topnavbar .navbar-nav > .nav-item > .nav-link.coming-soon {
-  color: #8B8A91;
+  color: #8b8a91;
   cursor: auto;
 }
 
@@ -71,7 +72,7 @@ a:hover {
   background-color: #1f1b2d;
   padding: 8px 12px;
   border-radius: 50px;
-  color: #FFF;
+  color: #fff;
   cursor: pointer;
 
   mat-icon {
@@ -83,7 +84,7 @@ a:hover {
 
   &:hover {
     mat-icon {
-      color: #33CBCB;
+      color: #33cbcb;
     }
   }
 }

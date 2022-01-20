@@ -6,7 +6,11 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { NewRoleComponent } from './new-role.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { ToastrService } from 'ngx-toastr';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { PreconditionType } from 'iam-client-lib';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
@@ -17,22 +21,15 @@ describe('NewRoleComponent', () => {
   let component: NewRoleComponent;
   let fixture: ComponentFixture<NewRoleComponent>;
   const fb = new FormBuilder();
-  const matDialogSpy = jasmine.createSpyObj('MatDialog',
-    [
-      'closeAll',
-    ]);
-  const toastrSpy = jasmine.createSpyObj('ToastrService',
-    [
-      'success',
-      'error'
-    ]);
+  const matDialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll']);
+  const toastrSpy = jasmine.createSpyObj('ToastrService', ['success', 'error']);
   const iamSpy = jasmine.createSpyObj('iam', [
     'checkExistenceOfDomain',
     'isOwner',
     'getRoleDIDs',
     'createRole',
     'setRoleDefinition',
-    'getENSTypesBySearchPhrase'
+    'getENSTypesBySearchPhrase',
   ]);
 
   const signerFacadeSpy = jasmine.createSpyObj(SignerFacadeService, ['getDid']);
@@ -43,16 +40,15 @@ describe('NewRoleComponent', () => {
       imports: [ReactiveFormsModule],
       providers: [
         provideMockStore(),
-        {provide: IamService, useValue: {iam: iamSpy}},
-        {provide: ToastrService, useValue: toastrSpy},
-        {provide: MatDialogRef, useValue: {}},
-        {provide: MatDialog, useValue: matDialogSpy},
-        {provide: MAT_DIALOG_DATA, useValue: {}},
-        {provide: SignerFacadeService, useValue: signerFacadeSpy}
+        { provide: IamService, useValue: { iam: iamSpy } },
+        { provide: ToastrService, useValue: toastrSpy },
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MatDialog, useValue: matDialogSpy },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: SignerFacadeService, useValue: signerFacadeSpy },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -68,21 +64,21 @@ describe('NewRoleComponent', () => {
     const index = 1;
     component.roleForm = fb.group({
       data: fb.group({
-        enrolmentPreconditions:
-          [
-            [
-              {type: PreconditionType.Role, conditions: ['a', 'b', 'c', 'd']},
-            ]
-          ]
-      })
+        enrolmentPreconditions: [
+          [{ type: PreconditionType.Role, conditions: ['a', 'b', 'c', 'd'] }],
+        ],
+      }),
     });
     component.removePreconditionRole(index);
-    expect(component.roleForm.get('data').get('enrolmentPreconditions').value[0].conditions).toEqual(['a', 'c', 'd']);
+    expect(
+      component.roleForm.get('data').get('enrolmentPreconditions').value[0]
+        .conditions
+    ).toEqual(['a', 'c', 'd']);
   });
 
   it('should be run displayFn', () => {
-    const selectedFirst = {namespace: 'value'};
-    const selectedSecond = {namespace: null};
+    const selectedFirst = { namespace: 'value' };
+    const selectedSecond = { namespace: null };
 
     const resultFirst = component.displayFn(selectedFirst);
     const resultSecond = component.displayFn(selectedSecond);
@@ -95,16 +91,19 @@ describe('NewRoleComponent', () => {
 
     beforeEach(() => {
       component.issuerGroup = fb.group({});
-      data = {value: 'test value'};
+      data = { value: 'test value' };
       component.roleForm = fb.group({
         data: fb.group({
           issuer: fb.group({
-            roleName: ''
-          })
-        })
+            roleName: '',
+          }),
+        }),
       });
       spyOn(component.issuerGroup, 'reset');
-      spyOn(component.roleForm.get('data').get('issuer').get('roleName'), 'reset');
+      spyOn(
+        component.roleForm.get('data').get('issuer').get('roleName'),
+        'reset'
+      );
     });
 
     it('issuerList length > 0', () => {
@@ -114,19 +113,22 @@ describe('NewRoleComponent', () => {
 
       expect(component.issuerGroup.reset).toHaveBeenCalled();
       expect(component.issuerList.length).toBe(0);
-      expect(component.roleForm.get('data').get('issuer').get('roleName').reset).toHaveBeenCalled();
+      expect(
+        component.roleForm.get('data').get('issuer').get('roleName').reset
+      ).toHaveBeenCalled();
     });
 
     it('iIssuerType.DID === data.value', () => {
-      data = {value: IssuerType.DID};
+      data = { value: IssuerType.DID };
       component.issuerList = [];
 
       component.issuerTypeChanged(data);
 
       expect(component.issuerGroup.reset).toHaveBeenCalled();
-      expect(component.roleForm.get('data').get('issuer').get('roleName').reset).toHaveBeenCalled();
+      expect(
+        component.roleForm.get('data').get('issuer').get('roleName').reset
+      ).toHaveBeenCalled();
       expect(component.issuerList.length).toBe(1);
     });
   });
-
 });

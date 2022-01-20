@@ -11,14 +11,15 @@ describe('KeyValueListComponent', () => {
   let component: KeyValueListComponent;
   let fixture: ComponentFixture<KeyValueListComponent>;
   let hostDebug: DebugElement;
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [KeyValueListComponent],
-      imports: [MatButtonModule, MatIconTestingModule, MatTableModule],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [KeyValueListComponent],
+        imports: [MatButtonModule, MatIconTestingModule, MatTableModule],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(KeyValueListComponent);
@@ -33,7 +34,7 @@ describe('KeyValueListComponent', () => {
 
   it('should emit event for removing element', () => {
     const spyDelete = spyOn(component.delete, 'emit');
-    component.data = [{key: 'key', value: 'value'}];
+    component.data = [{ key: 'key', value: 'value' }];
     fixture.detectChanges();
 
     const remove = getElement(hostDebug)('remove-0').nativeElement;

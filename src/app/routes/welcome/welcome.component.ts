@@ -7,31 +7,35 @@ import * as authSelectors from '../../state/auth/auth.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
 import { EnvService } from '../../shared/services/env/env.service';
 
-const {version} = require('../../../../package.json');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { version } = require('../../../../package.json');
 
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
-  styleUrls: ['./welcome.component.scss']
+  styleUrls: ['./welcome.component.scss'],
 })
 export class WelcomeComponent implements OnInit {
   disableMetamaskButton$ = this.store.select(authSelectors.isMetamaskDisabled);
-  isMetamaskExtensionAvailable$ = this.store.select(authSelectors.isMetamaskPresent);
+  isMetamaskExtensionAvailable$ = this.store.select(
+    authSelectors.isMetamaskPresent
+  );
   version: string = version;
   showEkcOption = this.envService.showAzureLoginOption;
 
-
   private _returnUrl;
 
-  constructor(private activeRoute: ActivatedRoute,
-              private envService: EnvService,
-              private store: Store) {
-  }
+  constructor(
+    private activeRoute: ActivatedRoute,
+    private envService: EnvService,
+    private store: Store
+  ) {}
 
   async ngOnInit() {
     this.tryToLoginWithPrivateKey();
     this.activeRoute.queryParams
       .pipe(filter((queryParams) => queryParams && queryParams.returnUrl))
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .subscribe((queryParams: any) => {
         this._returnUrl = queryParams.returnUrl;
       });
@@ -40,7 +44,9 @@ export class WelcomeComponent implements OnInit {
   }
 
   login(provider: ProviderType) {
-    this.store.dispatch(AuthActions.welcomeLogin({provider, returnUrl: this._returnUrl}));
+    this.store.dispatch(
+      AuthActions.welcomeLogin({ provider, returnUrl: this._returnUrl })
+    );
   }
 
   private tryToLoginWithPrivateKey() {

@@ -8,9 +8,8 @@ xdescribe('GovernanceDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GovernanceDetailsComponent]
-    })
-      .compileComponents();
+      declarations: [GovernanceDetailsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

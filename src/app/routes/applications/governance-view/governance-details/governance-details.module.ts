@@ -8,17 +8,12 @@ import { GovernanceViewComponent } from '../governance-view.component';
 import { FieldsDetailsComponent } from './fields-details/fields-details.component';
 
 @NgModule({
-  declarations: [GovernanceDetailsComponent, GovernanceViewComponent, FieldsDetailsComponent],
-  imports: [
-    SharedModule,
-    MatCardModule,
-    MatDividerModule,
-    MatInputModule
-  ],
-  exports: [
+  declarations: [
     GovernanceDetailsComponent,
-    GovernanceViewComponent
-  ]
+    GovernanceViewComponent,
+    FieldsDetailsComponent,
+  ],
+  imports: [SharedModule, MatCardModule, MatDividerModule, MatInputModule],
+  exports: [GovernanceDetailsComponent, GovernanceViewComponent],
 })
-export class GovernanceDetailsModule {
-}
+export class GovernanceDetailsModule {}

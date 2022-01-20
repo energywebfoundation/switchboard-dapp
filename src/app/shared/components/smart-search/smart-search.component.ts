@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, switchMap, tap } from 'rxjs/operators';
@@ -10,7 +16,7 @@ import { SmartSearchType } from './models/smart-search-type.enum';
 @Component({
   selector: 'app-smart-search',
   templateUrl: './smart-search.component.html',
-  styleUrls: ['./smart-search.component.scss']
+  styleUrls: ['./smart-search.component.scss'],
 })
 export class SmartSearchComponent implements AfterViewInit {
   @Input() searchText: FormControl;
@@ -24,16 +30,15 @@ export class SmartSearchComponent implements AfterViewInit {
 
   public filteredOptions: Observable<string[]>;
 
-  constructor(private smartSearchService: SmartSearchService) {
-  }
+  constructor(private smartSearchService: SmartSearchService) {}
 
   ngAfterViewInit(): void {
     this.filteredOptions = this.searchText.valueChanges.pipe(
       truthy(),
       debounceTime(1200),
-      tap(() => this.isLoadingList = true),
+      tap(() => (this.isLoadingList = true)),
       switchMap((value: string) => this.smartSearchService.searchBy(value)),
-      tap(() => this.isLoadingList = false),
+      tap(() => (this.isLoadingList = false))
     );
   }
 
@@ -63,7 +68,7 @@ export class SmartSearchComponent implements AfterViewInit {
     }
     this.add.emit({
       role: this.searchText.value,
-      searchType: this.searchType
+      searchType: this.searchType,
     });
     this.clear();
   }
@@ -71,5 +76,4 @@ export class SmartSearchComponent implements AfterViewInit {
   clear(): void {
     this.searchText.reset();
   }
-
 }

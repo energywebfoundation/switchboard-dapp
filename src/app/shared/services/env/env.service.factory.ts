@@ -11,7 +11,7 @@ export const EnvServiceFactory = () => {
   const browserWindowEnv = getBrowserEnv();
 
   for (const key in browserWindowEnv) {
-    if (browserWindowEnv.hasOwnProperty(key)) {
+    if (Object.hasOwnProperty.call(browserWindowEnv, key)) {
       env[key] = window['__env'][key];
     }
   }

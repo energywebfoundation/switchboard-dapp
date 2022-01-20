@@ -14,29 +14,16 @@
     "importHelpers": true,
     "skipLibCheck": true,
     "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/@types"],
     "inlineSources": true,
     "sourceRoot": "/",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "lib": ["es2018", "dom"],
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@state": [
-        "src/app/state/index"
-      ],
-      "@operators": [
-        "src/app/operators/index"
-      ],
-      "@tests": [
-        "src/app/tests/index"
-      ],
-      "@utils": [
-        "src/app/utils/index"
-      ]
+      "@state": ["src/app/state/index"],
+      "@operators": ["src/app/operators/index"],
+      "@tests": ["src/app/tests/index"],
+      "@utils": ["src/app/utils/index"]
     }
   },
   "angularCompilerOptions": {

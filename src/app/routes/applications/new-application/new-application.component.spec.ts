@@ -8,9 +8,8 @@ xdescribe('NewApplicationComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NewApplicationComponent]
-    })
-      .compileComponents();
+      declarations: [NewApplicationComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

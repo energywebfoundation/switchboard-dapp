@@ -3,7 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, Input } from '@angular/core';
 
 @Component({
-  template: '<p [appMinifiedDidViewer]="appMinifiedDidViewer">Testing Directives is awesome!</p>'
+  template:
+    '<p [appMinifiedDidViewer]="appMinifiedDidViewer">Testing Directives is awesome!</p>',
 })
 class TestComponent {
   @Input() appMinifiedDidViewer = false;
@@ -15,10 +16,7 @@ xdescribe('MinifiedDidViewerDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestComponent,
-        MinifiedDidViewerDirective
-      ]
+      declarations: [TestComponent, MinifiedDidViewerDirective],
     });
 
     fixture = TestBed.createComponent(TestComponent);

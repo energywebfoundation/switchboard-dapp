@@ -6,9 +6,7 @@ import detectMetamask from '@metamask/detect-provider';
   providedIn: 'root',
 })
 export class MetamaskProviderService {
-
-  constructor(private envService: EnvService) {
-  }
+  constructor(private envService: EnvService) {}
 
   getFullNetworkName() {
     return this.envService.fullNetworkName;
@@ -16,6 +14,7 @@ export class MetamaskProviderService {
 
   public async importMetamaskConf() {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const metamaskProvider: any = await detectMetamask({
         mustBeMetaMask: true,
       });

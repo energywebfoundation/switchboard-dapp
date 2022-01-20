@@ -11,8 +11,8 @@ export interface SubjectElements {
 }
 
 export class ViewColorsSetter {
-  constructor(private params: any) {
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(private params: any) {}
 
   applyTo(subject): void {
     if (this.params.bgcolor) {
@@ -42,8 +42,7 @@ export class ViewColorsSetter {
   }
 
   private setBgColor(subject, color): void {
-    subject.bgColor = {'background-color': `#${color}`};
+    subject.bgColor = { 'background-color': `#${color}` };
     subject.listColor['background-color'] = `#${color}`;
   }
-
 }

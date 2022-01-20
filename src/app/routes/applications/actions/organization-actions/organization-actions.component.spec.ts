@@ -5,7 +5,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { actionSelectors } from '../action-test.utils';
 import { of } from 'rxjs';
-import { NewOrganizationComponent, ViewType } from '../../new-organization/new-organization.component';
+import {
+  NewOrganizationComponent,
+  ViewType,
+} from '../../new-organization/new-organization.component';
 import { NewRoleComponent } from '../../new-role/new-role.component';
 import { ListType } from '../../../../shared/constants/shared-constants';
 import { ConfirmationDialogComponent } from '../../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -16,16 +19,18 @@ describe('OrganizationActionsComponent', () => {
   let fixture: ComponentFixture<OrganizationActionsComponent>;
   let hostDebug: DebugElement;
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [OrganizationActionsComponent, FeatureToggleMockDirective],
-      providers: [
-        {provide: MatDialog, useValue: dialogSpy}
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [
+          OrganizationActionsComponent,
+          FeatureToggleMockDirective,
+        ],
+        providers: [{ provide: MatDialog, useValue: dialogSpy }],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(OrganizationActionsComponent);
@@ -47,14 +52,14 @@ describe('OrganizationActionsComponent', () => {
     });
 
     it('should check if staking url is undefined when passed element without namespace', () => {
-      component.organization = {example: ''} as any;
+      component.organization = { example: '' } as any;
       fixture.detectChanges();
 
       expect(component.stakingUrl).toBeUndefined();
     });
 
     it('should generate stakingUrl when passing element with namespace', () => {
-      component.organization = {namespace: 'test'} as any;
+      component.organization = { namespace: 'test' } as any;
       fixture.detectChanges();
 
       expect(component.stakingUrl).toContain('/staking?org=test');
@@ -62,57 +67,66 @@ describe('OrganizationActionsComponent', () => {
   });
 
   it('should call ConfirmationDialogComponent with proper information', () => {
-    const element = {namespace: '', owner: ''} as any;
+    const element = { namespace: '', owner: '' } as any;
     component.organization = element;
     fixture.detectChanges();
-    const {editBtn} = actionSelectors(hostDebug);
+    const { editBtn } = actionSelectors(hostDebug);
     spyOn(component.edited, 'emit');
 
-    dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
+    dialogSpy.open.and.returnValue({ afterClosed: () => of(true) });
     editBtn.click();
 
-    expect(dialogSpy.open).toHaveBeenCalledWith(NewOrganizationComponent, jasmine.objectContaining({
-      data: {
-        viewType: ViewType.UPDATE,
-        origData: element
-      }
-    }));
+    expect(dialogSpy.open).toHaveBeenCalledWith(
+      NewOrganizationComponent,
+      jasmine.objectContaining({
+        data: {
+          viewType: ViewType.UPDATE,
+          origData: element,
+        },
+      })
+    );
   });
 
   it('should call NewRoleComponent with proper information', () => {
-    const element = {namespace: '', owner: ''} as any;
+    const element = { namespace: '', owner: '' } as any;
     component.organization = element;
     fixture.detectChanges();
-    const {createRoleBtn} = actionSelectors(hostDebug);
+    const { createRoleBtn } = actionSelectors(hostDebug);
     spyOn(component.roleCreated, 'emit');
 
-    dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
+    dialogSpy.open.and.returnValue({ afterClosed: () => of(true) });
     createRoleBtn.click();
 
-    expect(dialogSpy.open).toHaveBeenCalledWith(NewRoleComponent, jasmine.objectContaining({
-      data: {
-        viewType: ViewType.NEW,
-        namespace: element.namespace,
-        listType: ListType.ORG,
-        owner: element.owner
-      }
-    }));
+    expect(dialogSpy.open).toHaveBeenCalledWith(
+      NewRoleComponent,
+      jasmine.objectContaining({
+        data: {
+          viewType: ViewType.NEW,
+          namespace: element.namespace,
+          listType: ListType.ORG,
+          owner: element.owner,
+        },
+      })
+    );
   });
 
   it('should call ConfirmationDialogComponent with proper information', () => {
     component.organization = {} as any;
     fixture.detectChanges();
-    const {deleteBtn} = actionSelectors(hostDebug);
+    const { deleteBtn } = actionSelectors(hostDebug);
     spyOn(component.deleteConfirmed, 'emit');
 
-    dialogSpy.open.and.returnValue({afterClosed: () => of(true)});
+    dialogSpy.open.and.returnValue({ afterClosed: () => of(true) });
     deleteBtn.click();
 
-    expect(dialogSpy.open).toHaveBeenCalledWith(ConfirmationDialogComponent, jasmine.objectContaining({
-      data: {
-        header: 'Remove Organization',
-        message: 'Do you wish to continue?'
-      }
-    }));
+    expect(dialogSpy.open).toHaveBeenCalledWith(
+      ConfirmationDialogComponent,
+      jasmine.objectContaining({
+        data: {
+          header: 'Remove Organization',
+          message: 'Do you wish to continue?',
+        },
+      })
+    );
   });
 });

@@ -6,7 +6,7 @@ import { MenuService } from './menu.service';
 describe('Service: Menu', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [MenuService]
+      providers: [MenuService],
     });
   });
 

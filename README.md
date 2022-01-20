@@ -1,14 +1,12 @@
 # Switchboard dApp
-[![Build Status](https://travis-ci.com/energywebfoundation/switchboard-dapp.svg?token=vNERWfuroqqJygVa7Km9&branch=develop)](https://travis-ci.com/energywebfoundation/switchboard-dapp)
 
+[![Build Status](https://travis-ci.com/energywebfoundation/switchboard-dapp.svg?token=vNERWfuroqqJygVa7Km9&branch=develop)](https://travis-ci.com/energywebfoundation/switchboard-dapp)
 
 `Switchboard dApp` is a revolutionary decentralized application that allows management of identities, assets, applications, services and access controls with DIDs(Decentralised Identifiers) and VCs(Verifiable Credentials)
 
 ##
 
-
 ![Identity Creation](screenshots/switchboard.png)
-
 
 ## Getting Started
 
@@ -28,6 +26,7 @@ nodejs version 10+
 A step by step series of examples that tell you how to get a development env running
 
 Install dependencies:
+
 ```
 npm install
 ```
@@ -37,6 +36,7 @@ Run the project locally:
 ```
 npm run start
 ```
+
 Building project depends on Angular environments.
 
 Build the project for development environment:
@@ -70,8 +70,7 @@ npm run build-prod
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of
-conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## License
 

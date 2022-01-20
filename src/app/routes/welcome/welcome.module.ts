@@ -11,9 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-to-wallet.module';
 
-const routes: Routes = [
-  {path: '', component: WelcomeComponent}
-];
+const routes: Routes = [{ path: '', component: WelcomeComponent }];
 
 @NgModule({
   declarations: [WelcomeComponent],
@@ -28,8 +26,7 @@ const routes: Routes = [
     MatDividerModule,
     NgxSpinnerModule,
     LayoutModule,
-    ConnectToWalletModule
-  ]
+    ConnectToWalletModule,
+  ],
 })
-export class WelcomeModule {
-}
+export class WelcomeModule {}

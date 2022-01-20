@@ -3,18 +3,20 @@ describe('Asset functionality', () => {
     cy.login();
     cy.dataQaId('loading').should('not.exist');
   });
-  it('Should visit assets, register one and edit it\'s values', () => {
+  it("Should visit assets, register one and edit it's values", () => {
     cy.visitAssets();
 
     cy.registerAsset();
-    cy.wait('@getOwnerAssets', {timeout: 30000});
+    cy.wait('@getOwnerAssets', { timeout: 30000 });
     cy.wait(1000);
 
     cy.openEditAssetDialog(0);
 
     cy.insertValue('name', 'Custom asset name');
-    cy.insertValue('icon',
-      'https://spng.subpng.com/20180421/bie/kisspng-royal-dutch-shell-logo-natural-gas-shell-oil-compa-5adb85a3723d63.5812828415243360354679.jpg');
+    cy.insertValue(
+      'icon',
+      'https://spng.subpng.com/20180421/bie/kisspng-royal-dutch-shell-logo-natural-gas-shell-oil-compa-5adb85a3723d63.5812828415243360354679.jpg'
+    );
     cy.dataQaId('next').click();
     // cy.intercept({
     //   method: 'GET',

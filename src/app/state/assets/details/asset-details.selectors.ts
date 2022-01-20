@@ -5,7 +5,7 @@ import { getAssetState } from '../assets.reducer';
 
 export const getAssetDetailsState = createSelector(
   getAssetState,
-  state => state && state[USER_FEATURE_KEY]
+  (state) => state && state[USER_FEATURE_KEY]
 );
 
 export const getAsset = createSelector(
@@ -18,8 +18,6 @@ export const getAssetDetails = createSelector(
   getAllAssetsClaim,
   (asset, assetsClaim) => {
     const claim = assetsClaim && assetsClaim[asset?.id];
-    return {...asset, ...claim};
+    return { ...asset, ...claim };
   }
 );
-
-

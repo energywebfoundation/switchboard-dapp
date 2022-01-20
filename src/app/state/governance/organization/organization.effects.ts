@@ -6,7 +6,7 @@ import * as OrganizationActions from './organization.actions';
 import { Observable, of } from 'rxjs';
 import {
   NewOrganizationComponent,
-  ViewType
+  ViewType,
 } from '../../../routes/applications/new-organization/new-organization.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
@@ -17,16 +17,20 @@ import { OrganizationProvider } from './models/organization-provider.interface';
 
 @Injectable()
 export class OrganizationEffects {
-
   getList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrganizationActions.getList),
       switchMap(() => this.orgService.getOrganizationList()),
-      map((list: OrganizationProvider[]) => OrganizationActions.getListSuccess({list})),
+      map((list: OrganizationProvider[]) =>
+        OrganizationActions.getListSuccess({ list })
+      ),
       catchError((err) => {
         console.error(err);
-        this.toastr.error('Something went wrong while getting list of organizations', 'Organization');
-        return of(OrganizationActions.getListFailure({error: err.message}));
+        this.toastr.error(
+          'Something went wrong while getting list of organizations',
+          'Organization'
+        );
+        return of(OrganizationActions.getListFailure({ error: err.message }));
       })
     )
   );
@@ -34,24 +38,37 @@ export class OrganizationEffects {
   updateHistory$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrganizationActions.setHistory),
-      switchMap(({element}) => this.orgService.getHistory(element.namespace).pipe(
-        map((org) => {
-          if (org.subOrgs && org.subOrgs.length) {
-            return OrganizationActions.setHistorySuccess({
-              history: org.subOrgs as OrganizationProvider[],
-              element: org as OrganizationProvider
-            });
-          } else {
-            this.toastr.warning('Sub-Organization List is empty.', 'Sub-Organization');
-            return OrganizationActions.setHistorySuccess({history: [], element: null});
-          }
-        }),
-        catchError((e) => {
-          console.error(e);
-          this.toastr.error('An error has occured while retrieving the list.', 'Sub-Organization');
-          return of(OrganizationActions.setHistoryFailure({error: e.message}));
-        }),
-      ))
+      switchMap(({ element }) =>
+        this.orgService.getHistory(element.namespace).pipe(
+          map((org) => {
+            if (org.subOrgs && org.subOrgs.length) {
+              return OrganizationActions.setHistorySuccess({
+                history: org.subOrgs as OrganizationProvider[],
+                element: org as OrganizationProvider,
+              });
+            } else {
+              this.toastr.warning(
+                'Sub-Organization List is empty.',
+                'Sub-Organization'
+              );
+              return OrganizationActions.setHistorySuccess({
+                history: [],
+                element: null,
+              });
+            }
+          }),
+          catchError((e) => {
+            console.error(e);
+            this.toastr.error(
+              'An error has occured while retrieving the list.',
+              'Sub-Organization'
+            );
+            return of(
+              OrganizationActions.setHistoryFailure({ error: e.message })
+            );
+          })
+        )
+      )
     )
   );
 
@@ -61,7 +78,7 @@ export class OrganizationEffects {
       withLatestFrom(
         this.store.select(OrganizationSelectors.getLastHierarchyOrg)
       ),
-      map(([, org]) => OrganizationActions.createSub({org}))
+      map(([, org]) => OrganizationActions.createSub({ org }))
     )
   );
 
@@ -70,26 +87,29 @@ export class OrganizationEffects {
 
     return this.actions$.pipe(
       ofType(OrganizationActions.createSub),
-      map(({org}) => {
+      map(({ org }) => {
         organization = org;
-        return this.dialog.open(NewOrganizationComponent, {
-          width: '600px',
+        return this.dialog
+          .open(NewOrganizationComponent, {
+            width: '600px',
             data: {
               viewType: ViewType.NEW,
               parentOrg: JSON.parse(JSON.stringify(org)),
-              owner: org.owner
+              owner: org.owner,
             },
             maxWidth: '100%',
-            disableClose: true
-          }).afterClosed();
-        }),
-        switchMap((dialog: Observable<boolean>) => dialog.pipe(
+            disableClose: true,
+          })
+          .afterClosed();
+      }),
+      switchMap((dialog: Observable<boolean>) =>
+        dialog.pipe(
           truthy(),
-          map(() => OrganizationActions.setHistory({element: organization})))
+          map(() => OrganizationActions.setHistory({ element: organization }))
         )
-      );
-    }
-  );
+      )
+    );
+  });
 
   updateSelectedOrganizationAfterEdit$ = createEffect(() =>
     this.actions$.pipe(
@@ -99,7 +119,7 @@ export class OrganizationEffects {
       ),
       map(([, lastOrg]) => {
         if (lastOrg) {
-          return OrganizationActions.setHistory({element: lastOrg});
+          return OrganizationActions.setHistory({ element: lastOrg });
         }
         return OrganizationActions.getList();
       })
@@ -108,26 +128,28 @@ export class OrganizationEffects {
 
   updateSelectedOrganizationAfterTransfer$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(OrganizationActions.updateSelectedOrgAfterTransfer, OrganizationActions.updateSelectedOrgAfterRemoval),
+      ofType(
+        OrganizationActions.updateSelectedOrgAfterTransfer,
+        OrganizationActions.updateSelectedOrgAfterRemoval
+      ),
       withLatestFrom(
         this.store.select(OrganizationSelectors.getLastHierarchyOrg),
         this.store.select(OrganizationSelectors.getHierarchyLength)
       ),
       map(([, lastOrg, hierarchyLength]) => {
         if (hierarchyLength) {
-          return OrganizationActions.setHistory({element: lastOrg});
+          return OrganizationActions.setHistory({ element: lastOrg });
         }
         return OrganizationActions.getList();
       })
     )
   );
 
-  constructor(private actions$: Actions,
-              private store: Store,
-              private orgService: OrganizationService,
-              private dialog: MatDialog,
-              private toastr: SwitchboardToastrService
-  ) {
-  }
-
+  constructor(
+    private actions$: Actions,
+    private store: Store,
+    private orgService: OrganizationService,
+    private dialog: MatDialog,
+    private toastr: SwitchboardToastrService
+  ) {}
 }

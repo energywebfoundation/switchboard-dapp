@@ -3,28 +3,30 @@ import { MinifiedDidViewerDialogComponent } from './minified-did-viewer-dialog.c
 import { MatDialog } from '@angular/material/dialog';
 
 @Directive({
-  selector: '[appMinifiedDidViewer]'
+  selector: '[appMinifiedDidViewer]',
 })
 export class MinifiedDidViewerDirective {
   @Input() appMinifiedDidViewer: string;
 
-  constructor(private dialog: MatDialog) {
-  }
+  constructor(private dialog: MatDialog) {}
 
   @HostListener('click', ['$event'])
-  onClick(event: MouseEvent) {
+  onClick() {
     if (this.appMinifiedDidViewer) {
-      const viewDidDialog$ = this.dialog.open(MinifiedDidViewerDialogComponent, {
-        width: '420px',
-        maxHeight: '195px',
-        data: {
-          did: this.appMinifiedDidViewer
-        },
-        maxWidth: '100%',
-        disableClose: true
-      }).afterClosed().subscribe(() => {
-        viewDidDialog$.unsubscribe();
-      });
+      const viewDidDialog$ = this.dialog
+        .open(MinifiedDidViewerDialogComponent, {
+          width: '420px',
+          maxHeight: '195px',
+          data: {
+            did: this.appMinifiedDidViewer,
+          },
+          maxWidth: '100%',
+          disableClose: true,
+        })
+        .afterClosed()
+        .subscribe(() => {
+          viewDidDialog$.unsubscribe();
+        });
     }
   }
 }

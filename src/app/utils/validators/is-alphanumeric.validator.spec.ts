@@ -7,11 +7,15 @@ describe('tests for isAlphanumericValidator', () => {
   });
 
   it('should return true when value is only a whitespace', () => {
-    expect(isAlphanumericValidator(new FormControl(' '))).toEqual({isAlphaNumericInvalid: true});
+    expect(isAlphanumericValidator(new FormControl(' '))).toEqual({
+      isAlphaNumericInvalid: true,
+    });
   });
 
   it('should return true when value contains whitespace between characters', () => {
-    expect(isAlphanumericValidator(new FormControl('a b'))).toEqual({isAlphaNumericInvalid: true});
+    expect(isAlphanumericValidator(new FormControl('a b'))).toEqual({
+      isAlphaNumericInvalid: true,
+    });
   });
 
   it('should return null when passing a value without whitespaces', () => {
@@ -19,6 +23,8 @@ describe('tests for isAlphanumericValidator', () => {
   });
 
   it('should true when contains special characters', () => {
-    expect(isAlphanumericValidator(new FormControl('@!'))).toEqual({isAlphaNumericInvalid: true});
+    expect(isAlphanumericValidator(new FormControl('@!'))).toEqual({
+      isAlphaNumericInvalid: true,
+    });
   });
 });

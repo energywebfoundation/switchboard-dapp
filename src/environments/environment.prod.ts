@@ -21,5 +21,5 @@ export const environment = {
   currencySymbol: 'EWT',
   blockExplorerUrl: 'https://explorer.energyweb.org',
 
-  ...constants
+  ...constants,
 };

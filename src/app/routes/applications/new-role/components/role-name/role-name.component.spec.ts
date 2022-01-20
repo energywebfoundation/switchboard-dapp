@@ -16,26 +16,29 @@ import { RoleTypePipe } from '../../../../../shared/pipes/role-type/role-type.pi
 describe('RoleNameComponent', () => {
   let component: RoleNameComponent;
   let fixture: ComponentFixture<RoleNameComponent>;
-  const roleCreationServiceSpy = jasmine.createSpyObj(RoleCreationService, ['checkIfUserCanUseDomain']);
+  const roleCreationServiceSpy = jasmine.createSpyObj(RoleCreationService, [
+    'checkIfUserCanUseDomain',
+  ]);
   let hostDebug: DebugElement;
 
-  beforeEach(waitForAsync((() => {
-    TestBed.configureTestingModule({
-      declarations: [RoleNameComponent, RoleTypePipe],
-      imports: [
-        MatIconTestingModule,
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatInputModule,
-        NoopAnimationsModule
-      ],
-      providers: [
-        {provide: RoleCreationService, useValue: roleCreationServiceSpy}
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [RoleNameComponent, RoleTypePipe],
+        imports: [
+          MatIconTestingModule,
+          ReactiveFormsModule,
+          MatButtonModule,
+          MatInputModule,
+          NoopAnimationsModule,
+        ],
+        providers: [
+          { provide: RoleCreationService, useValue: roleCreationServiceSpy },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  })));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleNameComponent);
@@ -51,40 +54,46 @@ describe('RoleNameComponent', () => {
   });
 
   it('should check required field validation', () => {
-    const {roleName} = selectors(hostDebug);
+    const { roleName } = selectors(hostDebug);
 
     roleName.value = '';
     dispatchInputEvent(roleName);
     fixture.detectChanges();
 
-    const {matError} = selectors(hostDebug);
+    const { matError } = selectors(hostDebug);
     expect(matError.textContent).toContain('Role Name is required');
   });
   it('should check minimal length field validation', () => {
-    const {roleName} = selectors(hostDebug);
+    const { roleName } = selectors(hostDebug);
 
     roleName.value = '12';
     dispatchInputEvent(roleName);
     fixture.detectChanges();
 
-    const {matError} = selectors(hostDebug);
-    expect(matError.textContent).toContain('Role Name need to have at least 3 characters.');
+    const { matError } = selectors(hostDebug);
+    expect(matError.textContent).toContain(
+      'Role Name need to have at least 3 characters.'
+    );
   });
 
   it('should check if field contains only alphanumeric values', () => {
-    const {roleName} = selectors(hostDebug);
+    const { roleName } = selectors(hostDebug);
 
     roleName.value = 'ąść';
     dispatchInputEvent(roleName);
     fixture.detectChanges();
 
-    const {matError} = selectors(hostDebug);
-    expect(matError.textContent).toContain('Role Name can only contain alphanumeric characters.');
+    const { matError } = selectors(hostDebug);
+    expect(matError.textContent).toContain(
+      'Role Name can only contain alphanumeric characters.'
+    );
   });
 
   it('should display error message with already taken role name', async () => {
-    roleCreationServiceSpy.checkIfUserCanUseDomain.and.returnValue(Promise.resolve(false));
-    const {roleName} = selectors(hostDebug);
+    roleCreationServiceSpy.checkIfUserCanUseDomain.and.returnValue(
+      Promise.resolve(false)
+    );
+    const { roleName } = selectors(hostDebug);
 
     roleName.value = 'role';
     dispatchInputEvent(roleName);
@@ -97,25 +106,31 @@ describe('RoleNameComponent', () => {
     fixture.detectChanges();
 
     expect(component.existAndNotOwner).toBeTrue();
-    const {matError} = selectors(hostDebug);
-    expect(matError.textContent).toContain('This name already exists. Please try another');
+    const { matError } = selectors(hostDebug);
+    expect(matError.textContent).toContain(
+      'This name already exists. Please try another'
+    );
   });
 
   it('should display ens namespace', () => {
-    const {roleName} = selectors(hostDebug);
+    const { roleName } = selectors(hostDebug);
 
     roleName.value = 'example';
     dispatchInputEvent(roleName);
     fixture.detectChanges();
 
-    const {roleNamespace} = selectors(hostDebug);
+    const { roleNamespace } = selectors(hostDebug);
 
-    expect(roleNamespace.textContent).toContain('example.roles.namespace.iam.ewc');
+    expect(roleNamespace.textContent).toContain(
+      'example.roles.namespace.iam.ewc'
+    );
   });
 
   it('should check if emits proceed event', async () => {
-    roleCreationServiceSpy.checkIfUserCanUseDomain.and.returnValue(Promise.resolve(true));
-    const {roleName} = selectors(hostDebug);
+    roleCreationServiceSpy.checkIfUserCanUseDomain.and.returnValue(
+      Promise.resolve(true)
+    );
+    const { roleName } = selectors(hostDebug);
     const proceedEvent = spyOn(component.proceed, 'emit');
 
     roleName.value = 'role';
@@ -127,7 +142,7 @@ describe('RoleNameComponent', () => {
   });
 
   it('should emits abort event with touched equal to true property', () => {
-    const {roleName} = selectors(hostDebug);
+    const { roleName } = selectors(hostDebug);
     const abortEvent = spyOn(component.cancel, 'emit');
 
     roleName.value = 'role';
@@ -135,7 +150,7 @@ describe('RoleNameComponent', () => {
     fixture.detectChanges();
 
     component.cancelHandler();
-    expect(abortEvent).toHaveBeenCalledWith({touched: true});
+    expect(abortEvent).toHaveBeenCalledWith({ touched: true });
   });
 });
 
@@ -145,6 +160,6 @@ const selectors = (hostDebug) => {
     roleNamespace: getElement(hostDebug)('role-namespace')?.nativeElement,
     cancel: getElement(hostDebug)('cancel')?.nativeElement,
     next: getElement(hostDebug)('proceed')?.nativeElement,
-    matError: hostDebug.query(By.css(`mat-error`))?.nativeElement
+    matError: hostDebug.query(By.css(`mat-error`))?.nativeElement,
   };
 };

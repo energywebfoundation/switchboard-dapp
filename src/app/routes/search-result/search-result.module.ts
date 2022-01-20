@@ -20,9 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
-const routes: Routes = [
-  {path: '', component: SearchResultComponent}
-];
+const routes: Routes = [{ path: '', component: SearchResultComponent }];
 
 @NgModule({
   declarations: [SearchResultComponent],
@@ -47,8 +45,7 @@ const routes: Routes = [
     NgxSpinnerModule,
     GovernanceDetailsModule,
     FlexLayoutModule,
-    MatButtonToggleModule
-  ]
+    MatButtonToggleModule,
+  ],
 })
-export class SearchResultModule {
-}
+export class SearchResultModule {}

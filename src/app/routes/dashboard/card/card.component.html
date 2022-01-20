@@ -1,14 +1,16 @@
-<div class="card d-flex justify-content-center align-items-center py-3 mb-3"
-     [class.card-icon-disabled]="comingSoon"
-     [attr.data-qa-id]="title"
-     [class.card-icon]="!comingSoon">
+<div
+  class="card d-flex justify-content-center align-items-center py-3 mb-3"
+  [class.card-icon-disabled]="comingSoon"
+  [attr.data-qa-id]="title"
+  [class.card-icon]="!comingSoon">
   <div *ngIf="comingSoon" class="position-fixed d-flex align-items-center text-center">
     <h3 class="color-white opacity-50">Coming Soon</h3>
   </div>
-  <img class="img-dashboard mt-4 m-3 m-lg-4" [src]="iconUrl"
-       [class.opacity-01]="comingSoon"
-       [alt]="title + 'image'">
-  <h4 class="color-white mt-3 mb-4 my-lg-4" [class.opacity-01]="comingSoon">{{title}}</h4>
+  <img class="img-dashboard mt-4 m-3 m-lg-4" [src]="iconUrl" [class.opacity-01]="comingSoon" [alt]="title + 'image'" />
+  <h4 class="color-white mt-3 mb-4 my-lg-4" [class.opacity-01]="comingSoon">
+    {{ title }}
+  </h4>
 </div>
-<mat-icon *ngIf="isExperimental" class="experimental-warning" matTooltip="This feature is experimental">report_problem
+<mat-icon *ngIf="isExperimental" class="experimental-warning" matTooltip="This feature is experimental">
+  report_problem
 </mat-icon>

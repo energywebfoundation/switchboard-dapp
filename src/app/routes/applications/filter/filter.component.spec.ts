@@ -11,14 +11,15 @@ describe('FilterComponent', () => {
   let component: FilterComponent;
   let fixture: ComponentFixture<FilterComponent>;
   let hostDebug: DebugElement;
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [FilterComponent],
-      imports: [ReactiveFormsModule, MatInputModule, NoopAnimationsModule],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [FilterComponent],
+        imports: [ReactiveFormsModule, MatInputModule, NoopAnimationsModule],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FilterComponent);
@@ -43,7 +44,7 @@ describe('FilterComponent', () => {
     expect(eventSpy).toHaveBeenCalledWith({
       organization: '',
       role: '',
-      application: ''
+      application: '',
     });
   });
 
@@ -86,7 +87,11 @@ describe('FilterComponent', () => {
     orgInput.value = '123';
     dispatchInputEvent(orgInput);
 
-    expect(eventSpy).toHaveBeenCalledWith({organization: '123', application: '', role: ''});
+    expect(eventSpy).toHaveBeenCalledWith({
+      organization: '123',
+      application: '',
+      role: '',
+    });
   });
 
   it('should trim values before emitting', () => {
@@ -99,6 +104,10 @@ describe('FilterComponent', () => {
     orgInput.value = '123  ';
     dispatchInputEvent(orgInput);
 
-    expect(eventSpy).toHaveBeenCalledWith({organization: '123', application: '', role: ''});
+    expect(eventSpy).toHaveBeenCalledWith({
+      organization: '123',
+      application: '',
+      role: '',
+    });
   });
 });

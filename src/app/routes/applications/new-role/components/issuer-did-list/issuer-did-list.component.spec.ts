@@ -11,17 +11,15 @@ describe('IssuerDidListComponent', () => {
   let fixture: ComponentFixture<IssuerDidListComponent>;
   let hostDebug: DebugElement;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [IssuerDidListComponent],
-      imports: [
-        MatButtonModule,
-        NoopAnimationsModule
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [IssuerDidListComponent],
+        imports: [MatButtonModule, NoopAnimationsModule],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(IssuerDidListComponent);

@@ -5,7 +5,7 @@ import { FormControl } from '@angular/forms';
 @Component({
   selector: 'app-search-issuer-role',
   templateUrl: './search-issuer-role.component.html',
-  styleUrls: ['./search-issuer-role.component.scss']
+  styleUrls: ['./search-issuer-role.component.scss'],
 })
 export class SearchIssuerRoleComponent {
   @Input() role: FormControl;
@@ -13,5 +13,4 @@ export class SearchIssuerRoleComponent {
   get searchPlaceholder() {
     return `Example:issuerrole.${ENSPrefixes.Roles}.myorg.iam.ewc`;
   }
-
 }

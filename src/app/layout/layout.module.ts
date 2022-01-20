@@ -23,9 +23,12 @@ import { DidBookModule } from '../modules/did-book/did-book.module';
     MatMenuModule,
     NgxSpinnerModule,
     ClipboardModule,
-    UserIdleModule.forRoot({idle: environment.userIdle, timeout: environment.userIdle}),
+    UserIdleModule.forRoot({
+      idle: environment.userIdle,
+      timeout: environment.userIdle,
+    }),
     UserMenuModule,
-    DidBookModule.forRoot()
+    DidBookModule.forRoot(),
   ],
   providers: [],
   declarations: [
@@ -33,15 +36,14 @@ import { DidBookModule } from '../modules/did-book/did-book.module';
     HeaderComponent,
     NavsearchComponent,
     DialogUserComponent,
-    LoadingComponent
+    LoadingComponent,
   ],
   entryComponents: [DialogUserComponent],
   exports: [
     LayoutComponent,
     HeaderComponent,
     NavsearchComponent,
-    LoadingComponent
-  ]
+    LoadingComponent,
+  ],
 })
-export class LayoutModule {
-}
+export class LayoutModule {}

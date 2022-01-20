@@ -9,14 +9,18 @@ import { IssuerType } from '../models/issuer-type.enum';
 
 describe('RoleCreationService', () => {
   let service: RoleCreationService;
-  const domainsFacadeServiceSpy = jasmine.createSpyObj(DomainsFacadeService, ['isOwner', 'checkExistenceOfDomain', 'getDIDsByRole']);
+  const domainsFacadeServiceSpy = jasmine.createSpyObj(DomainsFacadeService, [
+    'isOwner',
+    'checkExistenceOfDomain',
+    'getDIDsByRole',
+  ]);
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        {provide: DomainsFacadeService, useValue: domainsFacadeServiceSpy},
-        {provide: SwitchboardToastrService, useValue: toastrSpy},
-        {provide: LoadingService, useValue: loadingServiceSpy}
-      ]
+        { provide: DomainsFacadeService, useValue: domainsFacadeServiceSpy },
+        { provide: SwitchboardToastrService, useValue: toastrSpy },
+        { provide: LoadingService, useValue: loadingServiceSpy },
+      ],
     });
     service = TestBed.inject(RoleCreationService);
   });
@@ -27,14 +31,18 @@ describe('RoleCreationService', () => {
 
   describe('checkIfUserCanUseDomain method', () => {
     it('should return true, when domain do not exist', async () => {
-      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(false));
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
+        Promise.resolve(false)
+      );
       const result = await service.checkIfUserCanUseDomain('domain');
 
       expect(result).toBeTrue();
     });
 
     it('should return true, when domain exist and user is the owner', async () => {
-      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(true));
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
+        Promise.resolve(true)
+      );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(true));
       const result = await service.checkIfUserCanUseDomain('domain');
 
@@ -42,7 +50,9 @@ describe('RoleCreationService', () => {
     });
 
     it('should return false, when domain exist and user is not the owner', async () => {
-      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(true));
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
+        Promise.resolve(true)
+      );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(false));
       const result = await service.checkIfUserCanUseDomain('domain');
 
@@ -50,7 +60,9 @@ describe('RoleCreationService', () => {
     });
 
     it('should catch error when is thrown by checkExistenceOfDomain', async () => {
-      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.reject('reason'));
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
+        Promise.reject('reason')
+      );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(false));
       const result = await service.checkIfUserCanUseDomain('domain');
 
@@ -59,7 +71,9 @@ describe('RoleCreationService', () => {
     });
 
     it('should catch error when is thrown by isOwner', async () => {
-      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(true));
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
+        Promise.resolve(true)
+      );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.reject('reason'));
       const result = await service.checkIfUserCanUseDomain('domain');
 
@@ -90,7 +104,9 @@ describe('RoleCreationService', () => {
     });
 
     it('should return false when role name do not exist', async () => {
-      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(false));
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
+        Promise.resolve(false)
+      );
       const result = await service.areIssuersValid(IssuerType.ROLE, 'role', []);
 
       expect(result).toBeFalse();
@@ -98,7 +114,9 @@ describe('RoleCreationService', () => {
     });
 
     it('should return false when name exist but do not contain roles in namespace', async () => {
-      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(true));
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
+        Promise.resolve(true)
+      );
       const result = await service.areIssuersValid(IssuerType.ROLE, 'role', []);
 
       expect(result).toBeFalse();
@@ -106,18 +124,34 @@ describe('RoleCreationService', () => {
     });
 
     it('should return false when role exist but do not contains approved users', async () => {
-      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(true));
-      domainsFacadeServiceSpy.getDIDsByRole.and.returnValue(Promise.resolve([]));
-      const result = await service.areIssuersValid(IssuerType.ROLE, 'role.roles.asd.iam.ewc', []);
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
+        Promise.resolve(true)
+      );
+      domainsFacadeServiceSpy.getDIDsByRole.and.returnValue(
+        Promise.resolve([])
+      );
+      const result = await service.areIssuersValid(
+        IssuerType.ROLE,
+        'role.roles.asd.iam.ewc',
+        []
+      );
 
       expect(result).toBeFalse();
       expect(toastrSpy.error).toHaveBeenCalled();
     });
 
     it('should return true when role exist and contains approved users', async () => {
-      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(Promise.resolve(true));
-      domainsFacadeServiceSpy.getDIDsByRole.and.returnValue(Promise.resolve(['did']));
-      const result = await service.areIssuersValid(IssuerType.ROLE, 'role.roles.asd.iam.ewc', []);
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
+        Promise.resolve(true)
+      );
+      domainsFacadeServiceSpy.getDIDsByRole.and.returnValue(
+        Promise.resolve(['did'])
+      );
+      const result = await service.areIssuersValid(
+        IssuerType.ROLE,
+        'role.roles.asd.iam.ewc',
+        []
+      );
 
       expect(result).toBeTrue();
       expect(toastrSpy.error).toHaveBeenCalled();

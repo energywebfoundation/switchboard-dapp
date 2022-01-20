@@ -9,12 +9,13 @@ describe('FieldsComponent', () => {
   let fixture: ComponentFixture<FieldsComponent>;
   let hostDebug: DebugElement;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [FieldsComponent]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [FieldsComponent],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FieldsComponent);
@@ -30,18 +31,18 @@ describe('FieldsComponent', () => {
 
   it('should check if title is displayed', () => {
     component.title = 'Example title';
-    component.fieldsList = [{key: 'key', value: 'value'}];
+    component.fieldsList = [{ key: 'key', value: 'value' }];
     fixture.detectChanges();
-    const {title} = getSelectors(hostDebug);
+    const { title } = getSelectors(hostDebug);
 
     expect(title.innerText).toContain(component.title);
   });
 
   it('should check if key and value are displayed', () => {
-    component.fieldsList = [{key: 'key', value: 'value'}];
+    component.fieldsList = [{ key: 'key', value: 'value' }];
     fixture.detectChanges();
 
-    const {firstKey, firstValue} = getSelectors(hostDebug);
+    const { firstKey, firstValue } = getSelectors(hostDebug);
 
     expect(firstKey.innerText).toContain(component.fieldsList[0].key);
     expect(firstValue.innerText).toContain(component.fieldsList[0].value);
@@ -53,5 +54,4 @@ const getSelectors = (hostDebug) => {
     firstKey: getElement(hostDebug)('field-list-key-0')?.nativeElement,
     firstValue: getElement(hostDebug)('field-list-value-0')?.nativeElement,
   };
-
 };

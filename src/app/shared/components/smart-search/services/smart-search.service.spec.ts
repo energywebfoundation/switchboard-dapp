@@ -5,12 +5,14 @@ import { DomainsFacadeService } from '../../../services/domains-facade/domains-f
 
 describe('SmartSearchService', () => {
   let service: SmartSearchService;
-  const domainsFacadeSpy = jasmine.createSpyObj(DomainsFacadeService, ['getENSTypesBySearchPhrase']);
+  const domainsFacadeSpy = jasmine.createSpyObj(DomainsFacadeService, [
+    'getENSTypesBySearchPhrase',
+  ]);
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        {provide: DomainsFacadeService, useValue: domainsFacadeSpy}
-      ]
+        { provide: DomainsFacadeService, useValue: domainsFacadeSpy },
+      ],
     });
     service = TestBed.inject(SmartSearchService);
   });
@@ -34,7 +36,9 @@ describe('SmartSearchService', () => {
   });
 
   it('should return not empty list when search word contains more than 2 characters', (done) => {
-    domainsFacadeSpy.getENSTypesBySearchPhrase.and.returnValue(Promise.resolve([{namespace: 'a'}, {namespace: 'b'}]));
+    domainsFacadeSpy.getENSTypesBySearchPhrase.and.returnValue(
+      Promise.resolve([{ namespace: 'a' }, { namespace: 'b' }])
+    );
     service.searchBy('abc').subscribe((v) => {
       expect(v.length).toEqual(2);
       done();

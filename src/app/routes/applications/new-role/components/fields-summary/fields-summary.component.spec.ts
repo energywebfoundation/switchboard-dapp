@@ -7,13 +7,14 @@ describe('FieldsSummaryComponent', () => {
   let component: FieldsSummaryComponent;
   let fixture: ComponentFixture<FieldsSummaryComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [FieldsSummaryComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [FieldsSummaryComponent],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FieldsSummaryComponent);
@@ -26,35 +27,35 @@ describe('FieldsSummaryComponent', () => {
   });
 
   it('should check if isText getter is true', () => {
-    component.element = {fieldType: 'text'};
+    component.element = { fieldType: 'text' };
     fixture.detectChanges();
 
     expect(component.isText).toBeTrue();
   });
 
   it('should check if isNumber getter is true', () => {
-    component.element = {fieldType: 'number'};
+    component.element = { fieldType: 'number' };
     fixture.detectChanges();
 
     expect(component.isNumber).toBeTrue();
   });
 
   it('should check if isDate getter is true', () => {
-    component.element = {fieldType: 'date'};
+    component.element = { fieldType: 'date' };
     fixture.detectChanges();
 
     expect(component.isDate).toBeTruthy();
   });
 
   it('should check if isBoolean getter is true', () => {
-    component.element = {fieldType: 'boolean'};
+    component.element = { fieldType: 'boolean' };
     fixture.detectChanges();
 
     expect(component.isBoolean).toBeTruthy();
   });
 
   it('should check if getters are false', () => {
-    component.element = {fieldType: 'differentType'};
+    component.element = { fieldType: 'differentType' };
     fixture.detectChanges();
 
     expect(component.isText).toBeFalse();

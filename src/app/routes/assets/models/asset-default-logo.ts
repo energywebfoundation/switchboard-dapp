@@ -1,1 +1,1 @@
-export const ASSET_DEFAULT_LOGO = '../assets/img/assets-icons/solar-energy.svg'
+export const ASSET_DEFAULT_LOGO = '../assets/img/assets-icons/solar-energy.svg';

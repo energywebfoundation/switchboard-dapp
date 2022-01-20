@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAction, props } from '@ngrx/store';
 import { ClaimData, Profile } from 'iam-client-lib';
 import { IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
 
-export const setUpUser = createAction('[User] Set Up User Data')
+export const setUpUser = createAction('[User] Set Up User Data');
 
 export const loadUserClaims = createAction('[User] Load User Claims');
 export const setProfile = createAction(
@@ -38,13 +39,9 @@ export const updateUserClaimsSuccess = createAction(
   props<{ profile: Partial<Profile> }>()
 );
 
-export const clearUserClaim = createAction(
-  '[User] Clear User Claim'
-);
+export const clearUserClaim = createAction('[User] Clear User Claim');
 
 export const setDidDocument = createAction(
   '[User] Set User Did Document',
   props<{ didDocument: any }>()
 );
-
-

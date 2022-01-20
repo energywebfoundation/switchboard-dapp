@@ -1,18 +1,28 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { FieldValidationService } from '../../../../../shared/services/field-validation.service';
 import { Subject } from 'rxjs';
 import { truthy } from '@operators';
 
-const FIELD_TYPES = [
-  'text', 'number', 'date', 'boolean'
-];
+const FIELD_TYPES = ['text', 'number', 'date', 'boolean'];
 
 @Component({
   selector: 'app-field-form',
   templateUrl: './field-form.component.html',
-  styleUrls: ['./field-form.component.scss']
+  styleUrls: ['./field-form.component.scss'],
 })
 export class FieldFormComponent implements OnInit, OnDestroy {
   @Input() data;
@@ -20,37 +30,50 @@ export class FieldFormComponent implements OnInit, OnDestroy {
   @Output() updated = new EventEmitter();
   @Output() canceled = new EventEmitter();
 
-  editMode: boolean = false;
+  editMode = false;
   FieldTypes = FIELD_TYPES;
   fieldsForm: FormGroup = this.fb.group({
     fieldType: ['', Validators.required],
     label: ['', Validators.required],
     validation: this.fb.group({
       required: undefined,
-      minLength: [undefined, {
-        validators: Validators.min(0),
-        updateOn: 'blur'
-      }],
-      maxLength: [undefined, {
-        validators: Validators.min(1),
-        updateOn: 'blur'
-      }],
+      minLength: [
+        undefined,
+        {
+          validators: Validators.min(0),
+          updateOn: 'blur',
+        },
+      ],
+      maxLength: [
+        undefined,
+        {
+          validators: Validators.min(1),
+          updateOn: 'blur',
+        },
+      ],
       pattern: undefined,
-      minValue: [undefined, {
-        updateOn: 'blur'
-      }],
-      maxValue: [undefined, {
-        updateOn: 'blur'
-      }],
+      minValue: [
+        undefined,
+        {
+          updateOn: 'blur',
+        },
+      ],
+      maxValue: [
+        undefined,
+        {
+          updateOn: 'blur',
+        },
+      ],
       minDate: undefined,
-      maxDate: undefined
-    })
+      maxDate: undefined,
+    }),
   });
   private subscription$ = new Subject();
 
-  constructor(private fb: FormBuilder,
-              private fieldValidationService: FieldValidationService) {
-  }
+  constructor(
+    private fb: FormBuilder,
+    private fieldValidationService: FieldValidationService
+  ) {}
 
   ngOnInit(): void {
     this._induceInt();
@@ -97,24 +120,17 @@ export class FieldFormComponent implements OnInit, OnDestroy {
     this.updated.emit(this._extractValidationObject(this.fieldsForm.value));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _extractValidationObject(value: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let retVal: any = value;
 
     if (value && value.fieldType) {
       let validation;
-      const {
-        required,
-        minLength,
-        maxLength,
-        pattern,
-        minValue,
-        maxValue,
-      } = value.validation;
+      const { required, minLength, maxLength, pattern, minValue, maxValue } =
+        value.validation;
 
-      let {
-        minDate,
-        maxDate
-      } = value.validation;
+      const { minDate, maxDate } = value.validation;
 
       switch (value.fieldType) {
         case 'text':
@@ -122,26 +138,26 @@ export class FieldFormComponent implements OnInit, OnDestroy {
             required,
             minLength,
             maxLength,
-            pattern
+            pattern,
           };
           break;
         case 'number':
           validation = {
             required,
             minValue,
-            maxValue
+            maxValue,
           };
           break;
         case 'date':
           validation = {
             required,
             minDate,
-            maxDate
+            maxDate,
           };
           break;
         case 'boolean':
           validation = {
-            required
+            required,
           };
           break;
         default:
@@ -159,7 +175,7 @@ export class FieldFormComponent implements OnInit, OnDestroy {
       this.editMode = true;
       const fieldKeys = Object.keys(this.data);
       const valueToPatch = {};
-      fieldKeys.map(fieldKey => {
+      fieldKeys.map((fieldKey) => {
         this.fieldsForm.get(fieldKey)?.setValue(this.data[fieldKey]);
         valueToPatch[fieldKey] = this.data[fieldKey];
       });
@@ -178,11 +194,10 @@ export class FieldFormComponent implements OnInit, OnDestroy {
 
   private parseIntControlValue(control: AbstractControl) {
     control.valueChanges
-      .pipe(
-        truthy(),
-        takeUntil(this.subscription$)
-      )
-      .subscribe(data => control.setValue(parseInt(data), {emitEvent: false}));
+      .pipe(truthy(), takeUntil(this.subscription$))
+      .subscribe((data) =>
+        control.setValue(parseInt(data), { emitEvent: false })
+      );
   }
 
   private _induceRanges() {
@@ -204,5 +219,4 @@ export class FieldFormComponent implements OnInit, OnDestroy {
       this.fieldsForm.get('validation').get('maxDate')
     );
   }
-
 }

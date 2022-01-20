@@ -8,7 +8,6 @@ import { BigNumber } from 'ethers';
 import { NamespaceType } from 'iam-client-lib';
 import { DomainsFacadeService } from '../../../shared/services/domains-facade/domains-facade.service';
 
-
 export interface IStakingPool {
   org: string;
   minStakingPeriod: number | BigNumber;
@@ -19,26 +18,28 @@ export interface IStakingPool {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StakingPoolService {
-
-  constructor(private domainsFacade: DomainsFacadeService,
-              private sbToastr: SwitchboardToastrService,
-              private loadingService: LoadingService) {
-  }
+  constructor(
+    private domainsFacade: DomainsFacadeService,
+    private sbToastr: SwitchboardToastrService,
+    private loadingService: LoadingService
+  ) {}
 
   getListOfOrganizationRoles(org: string) {
     this.loadingService.show();
     return from(
       this.domainsFacade.getENSTypesByOwner({
         type: NamespaceType.Role,
-        owner: org
+        owner: org,
       })
     ).pipe(
-      catchError(err => {
+      catchError((err) => {
         console.error(err);
-        this.sbToastr.error('Error occurs while getting list of possible roles');
+        this.sbToastr.error(
+          'Error occurs while getting list of possible roles'
+        );
         return err;
       }),
       finalize(() => this.loadingService.hide())

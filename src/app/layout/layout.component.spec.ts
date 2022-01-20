@@ -11,11 +11,10 @@ xdescribe('LayoutComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [LayoutComponent],
       providers: [
-        {provide: UserIdleService, useClass: {}},
-        {provide: IamService, useClass: {}}
-      ]
-    })
-      .compileComponents();
+        { provide: UserIdleService, useClass: {} },
+        { provide: IamService, useClass: {} },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

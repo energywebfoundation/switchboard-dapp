@@ -11,19 +11,20 @@ describe('SearchIssuerRoleComponent', () => {
   let component: SearchIssuerRoleComponent;
   let fixture: ComponentFixture<SearchIssuerRoleComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [SearchIssuerRoleComponent],
-      providers: [
-        MatIconTestingModule,
-        MatFormFieldModule,
-        NoopAnimationsModule
-      ],
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [SearchIssuerRoleComponent],
+        providers: [
+          MatIconTestingModule,
+          MatFormFieldModule,
+          NoopAnimationsModule,
+        ],
 
-      schemas: [NO_ERRORS_SCHEMA]
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchIssuerRoleComponent);
@@ -36,6 +37,8 @@ describe('SearchIssuerRoleComponent', () => {
   });
 
   it('should check if placeholder is set', () => {
-    expect(component.searchPlaceholder).toEqual(`Example:issuerrole.${ENSPrefixes.Roles}.myorg.iam.ewc`);
+    expect(component.searchPlaceholder).toEqual(
+      `Example:issuerrole.${ENSPrefixes.Roles}.myorg.iam.ewc`
+    );
   });
 });

@@ -9,18 +9,18 @@ export interface SettingsState {
 }
 
 export const initialState: SettingsState = {
-  experimentalEnabled: false
+  experimentalEnabled: false,
 };
 
 const settingsReducer = createReducer(
   initialState,
   on(SettingsActions.enableExperimental, (state) => {
     SettingsStorage.toggleExperimental('true');
-    return {...state, experimentalEnabled: true};
+    return { ...state, experimentalEnabled: true };
   }),
   on(SettingsActions.disableExperimental, (state) => {
     SettingsStorage.toggleExperimental('false');
-    return {...state, experimentalEnabled: false};
+    return { ...state, experimentalEnabled: false };
   })
 );
 

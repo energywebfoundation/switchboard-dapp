@@ -1,5 +1,8 @@
-<div class="d-flex align-items-center justify-content-center did-wrapper mx-2 px-3 mb-2"
-     appCopyToClipboard [copyClipboard]="did" message="User Did">
-  <div class="f-14" data-qa-id="menu-did">{{did | didFormatMinifier}}</div>
+<div
+  class="d-flex align-items-center justify-content-center did-wrapper mx-2 px-3 mb-2"
+  appCopyToClipboard
+  [copyClipboard]="did"
+  message="User Did">
+  <div class="f-14" data-qa-id="menu-did">{{ did | didFormatMinifier }}</div>
   <mat-icon class="ml-2 color-white">content_copy</mat-icon>
 </div>

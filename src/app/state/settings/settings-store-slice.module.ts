@@ -7,8 +7,7 @@ import { reducer, USER_FEATURE_KEY } from './settings.reducer';
 @NgModule({
   imports: [
     StoreModule.forFeature(USER_FEATURE_KEY, reducer),
-    EffectsModule.forFeature([SettingsEffects])
+    EffectsModule.forFeature([SettingsEffects]),
   ],
 })
-export class SettingsStoreSliceModule {
-}
+export class SettingsStoreSliceModule {}

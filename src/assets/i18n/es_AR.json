@@ -1,24 +1,24 @@
 {
-    "header": {
-        "search": {
-            "PLACEHOLDER": "Escribe y presiona enter.."
-        }
-    },
-    "offsidebar": {
-        "setting": {
-            "SETTINGS": "Configuración"
-        }
-    },
-    "sidebar": {
-        "WELCOME": "Bienvenido",
-        "heading": {
-            "HEADER": "Cabecera Menu"
-        },
-        "nav": {
-            "SINGLEVIEW": "Vista Simple"
-        }
-    },
-    "dashboard": {
-        "WELCOME": "Bienvenido"
+  "header": {
+    "search": {
+      "PLACEHOLDER": "Escribe y presiona enter.."
     }
+  },
+  "offsidebar": {
+    "setting": {
+      "SETTINGS": "Configuración"
+    }
+  },
+  "sidebar": {
+    "WELCOME": "Bienvenido",
+    "heading": {
+      "HEADER": "Cabecera Menu"
+    },
+    "nav": {
+      "SINGLEVIEW": "Vista Simple"
+    }
+  },
+  "dashboard": {
+    "WELCOME": "Bienvenido"
+  }
 }

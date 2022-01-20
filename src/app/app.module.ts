@@ -1,5 +1,10 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
-import { APP_INITIALIZER, ErrorHandler, NgModule, Provider, } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ErrorHandler,
+  NgModule,
+  Provider,
+} from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -67,7 +72,7 @@ if (environment.SENTRY_DNS) {
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
-    StoreRootModule
+    StoreRootModule,
   ],
   providers,
   bootstrap: [AppComponent],

@@ -8,9 +8,8 @@ describe('EnrolToRoleComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [EnrolToRoleComponent]
-    })
-      .compileComponents();
+      declarations: [EnrolToRoleComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

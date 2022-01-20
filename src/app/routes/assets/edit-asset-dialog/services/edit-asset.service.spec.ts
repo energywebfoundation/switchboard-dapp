@@ -11,16 +11,18 @@ import { of, throwError } from 'rxjs';
 
 describe('EditAssetService', () => {
   let service: EditAssetService;
-  let claimsFacadeSpy = jasmine.createSpyObj(ClaimsFacadeService, ['createSelfSignedClaim']);
+  const claimsFacadeSpy = jasmine.createSpyObj(ClaimsFacadeService, [
+    'createSelfSignedClaim',
+  ]);
   let mockStore: MockStore;
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        {provide: ClaimsFacadeService, useValue: claimsFacadeSpy},
+        { provide: ClaimsFacadeService, useValue: claimsFacadeSpy },
         provideMockStore(),
-        {provide: SwitchboardToastrService, useValue: toastrSpy},
-        {provide: MatDialogRef, useValue: dialogSpy},
-      ]
+        { provide: SwitchboardToastrService, useValue: toastrSpy },
+        { provide: MatDialogRef, useValue: dialogSpy },
+      ],
     });
     service = TestBed.inject(EditAssetService);
     mockStore = TestBed.inject(MockStore);
@@ -31,10 +33,12 @@ describe('EditAssetService', () => {
   });
 
   it('should check if getProfile returns profile from store', (done) => {
-    mockStore.overrideSelector(UserClaimSelectors.getUserProfile, {assetProfiles: {}});
+    mockStore.overrideSelector(UserClaimSelectors.getUserProfile, {
+      assetProfiles: {},
+    });
 
     service.getProfile().subscribe((profile) => {
-      expect(profile).toEqual({assetProfiles: {}});
+      expect(profile).toEqual({ assetProfiles: {} });
       done();
     });
   });
@@ -44,7 +48,9 @@ describe('EditAssetService', () => {
     const dispatchSpy = spyOn(mockStore, 'dispatch');
 
     service.update({}).subscribe((v) => {
-      expect(dispatchSpy).toHaveBeenCalledWith(UserClaimActions.updateLocalStateUserClaims({profile: {}}));
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        UserClaimActions.updateLocalStateUserClaims({ profile: {} })
+      );
       expect(toastrSpy.success).toHaveBeenCalled();
       expect(v).toBeTrue();
       done();
@@ -52,7 +58,9 @@ describe('EditAssetService', () => {
   });
 
   it('should check if error is thrown when updating', (done) => {
-    claimsFacadeSpy.createSelfSignedClaim.and.returnValue(throwError({message: 'error'}));
+    claimsFacadeSpy.createSelfSignedClaim.and.returnValue(
+      throwError({ message: 'error' })
+    );
 
     service.update({}).subscribe((v) => {
       expect(toastrSpy.error).toHaveBeenCalled();

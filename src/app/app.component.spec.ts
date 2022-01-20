@@ -12,32 +12,28 @@ import { ThemesService } from './core/themes/themes.service';
 
 describe('App: ewUIBoilerPlate', () => {
   beforeEach(() => {
-
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
     TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
+      declarations: [AppComponent],
       imports: [
         TranslateModule.forRoot(),
         CoreModule,
         LayoutModule,
         SharedModule,
-        RoutesModule
+        RoutesModule,
       ],
       providers: [
         provideMockStore(),
-        {provide: APP_BASE_HREF, useValue: '/'},
-        {provide: ThemesService, useValue: {}}
-      ]
+        { provide: APP_BASE_HREF, useValue: '/' },
+        { provide: ThemesService, useValue: {} },
+      ],
     });
   });
 
-  it('should create the app', (() => {
+  it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  }));
-
+  });
 });

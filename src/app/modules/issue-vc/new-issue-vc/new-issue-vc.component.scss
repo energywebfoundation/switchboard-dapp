@@ -1,7 +1,7 @@
 :host {
   ::ng-deep {
     .mat-input-element:disabled {
-      color: rgba(256, 256, 256, .38)
+      color: rgba(256, 256, 256, 0.38);
     }
   }
 }

@@ -4,7 +4,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'app-no-records',
   templateUrl: './no-records.component.html',
   styleUrls: ['./no-records.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NoRecordsComponent {
-}
+export class NoRecordsComponent {}

@@ -3,14 +3,22 @@
   <span>Create Sub-Organization</span>
 </button>
 
-<button mat-menu-item [disabled]="!organization?.containsApps" class="btn-color-primary" data-qa-id="view-apps"
-        (click)="viewAppsHandler()">
+<button
+  mat-menu-item
+  [disabled]="!organization?.containsApps"
+  class="btn-color-primary"
+  data-qa-id="view-apps"
+  (click)="viewAppsHandler()">
   <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-application-icon"></mat-icon>
   <span>View Applications</span>
 </button>
 
-<button mat-menu-item [disabled]="!organization?.containsRoles" class="btn-color-primary" data-qa-id="view-roles"
-        (click)="viewRolesHandler()">
+<button
+  mat-menu-item
+  [disabled]="!organization?.containsRoles"
+  class="btn-color-primary"
+  data-qa-id="view-roles"
+  (click)="viewRolesHandler()">
   <mat-icon class="btn-color-primary btn-action-3" svgIcon="view-role-icon"></mat-icon>
   <span>View Roles</span>
 </button>
@@ -36,8 +44,13 @@
 </button>
 
 <ng-container *ngIf="organization?.isProvider">
-  <button mat-menu-item class="btn-color-primary" data-qa-id="copy-staking-url" appCopyToClipboard
-          message="Staking URL" [copyClipboard]="stakingUrl">
+  <button
+    mat-menu-item
+    class="btn-color-primary"
+    data-qa-id="copy-staking-url"
+    appCopyToClipboard
+    message="Staking URL"
+    [copyClipboard]="stakingUrl">
     <mat-icon class="btn-color-primary btn-action-3" svgIcon="copy-url-icon"></mat-icon>
     <span>Copy Staking URL</span>
   </button>

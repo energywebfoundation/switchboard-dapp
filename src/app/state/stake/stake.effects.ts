@@ -16,7 +16,6 @@ import * as LayoutActions from '../layout/layout.actions';
 import { filterProviders } from './operators/filter-providers/filter-providers';
 import { EnvService } from '../../shared/services/env/env.service';
 
-
 @Injectable()
 export class StakeEffects {
   initStakingPoolService$ = createEffect(() =>
@@ -26,55 +25,63 @@ export class StakeEffects {
     )
   );
 
-  launchStakingPool$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(StakeActions.launchStakingPool),
-      tap(() => this.loadingService.show()),
-      switchMap(({pool}) =>
-        this.stakingService.launchStakingPool(pool)
-          .pipe(
+  launchStakingPool$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(StakeActions.launchStakingPool),
+        tap(() => this.loadingService.show()),
+        switchMap(({ pool }) =>
+          this.stakingService.launchStakingPool(pool).pipe(
             map(() => {
-              this.toastr.success(`You successfully created a staking pool for ${pool.org}`);
+              this.toastr.success(
+                `You successfully created a staking pool for ${pool.org}`
+              );
               this.dialog.closeAll();
             }),
-            catchError(err => {
+            catchError((err) => {
               console.error(err);
               this.toastr.error('Error occurs while creating staking pool');
               return err;
             }),
             finalize(() => this.loadingService.hide())
           )
-      )
-    ), {dispatch: false}
+        )
+      ),
+    { dispatch: false }
   );
 
-
-  getAllServices$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(StakeActions.getAllServices),
-        tap(() => this.loadingService.show('Loading list of providers')),
-        switchMap(() => {
-          return combineLatest([
-              this.stakingService.allServices(),
-              from(this.iamService.domainsService.getENSTypesBySearchPhrase(this.envService.rootNamespace, [SearchType.Org])),
-            ]
-          ).pipe(
-            filterProviders(),
-            map((providers: Provider[]) => StakeActions.getAllServicesSuccess({providers})),
-            finalize(() => this.loadingService.hide())
-          );
-        }),
-      )
+  getAllServices$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StakeActions.getAllServices),
+      tap(() => this.loadingService.show('Loading list of providers')),
+      switchMap(() => {
+        return combineLatest([
+          this.stakingService.allServices(),
+          from(
+            this.iamService.domainsService.getENSTypesBySearchPhrase(
+              this.envService.rootNamespace,
+              [SearchType.Org]
+            )
+          ),
+        ]).pipe(
+          filterProviders(),
+          map((providers: Provider[]) =>
+            StakeActions.getAllServicesSuccess({ providers })
+          ),
+          finalize(() => this.loadingService.hide())
+        );
+      })
+    )
   );
 
-  constructor(private actions$: Actions,
-              private store: Store<StakeState>,
-              private iamService: IamService,
-              private loadingService: LoadingService,
-              private toastr: ToastrService,
-              private dialog: MatDialog,
-              private stakingService: StakingPoolServiceFacade,
-              private envService: EnvService) {
-  }
+  constructor(
+    private actions$: Actions,
+    private store: Store<StakeState>,
+    private iamService: IamService,
+    private loadingService: LoadingService,
+    private toastr: ToastrService,
+    private dialog: MatDialog,
+    private stakingService: StakingPoolServiceFacade,
+    private envService: EnvService
+  ) {}
 }

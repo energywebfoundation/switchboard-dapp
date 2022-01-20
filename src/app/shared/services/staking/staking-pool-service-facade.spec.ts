@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { StakingPoolServiceFacade } from './staking-pool-service-facade';
 
-
 xdescribe('StakingService', () => {
   let service: StakingPoolServiceFacade;
 

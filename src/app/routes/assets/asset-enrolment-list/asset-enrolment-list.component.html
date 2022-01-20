@@ -4,20 +4,26 @@
       <h4 class="color-white strong my-4">My Asset Enrolments</h4>
       <div></div>
     </div>
-    <div class="card card-default mb-3 pb-0 shadow-none d-flex" *ngIf="(asset$ | async) as asset">
+    <div class="card card-default mb-3 pb-0 shadow-none d-flex" *ngIf="asset$ | async as asset">
       <div class="d-flex flex-column align-items-center justify-content-center">
-        <button mat-icon-button class="btn-back-position" data-qa-id="back" matTooltip="Back to My Assets"
-                (click)="back()">
+        <button
+          mat-icon-button
+          class="btn-back-position"
+          data-qa-id="back"
+          matTooltip="Back to My Assets"
+          (click)="back()">
           <mat-icon class="color-primary">arrow_back</mat-icon>
         </button>
-        <img class="img-logo-asset-enrolled my-2" data-qa-id="logo" [src]="asset.icon ? asset.icon : defaultLogo">
-        <h4 class="my-2" data-qa-id="name">{{asset?.name ? asset.name : 'Asset Name'}}</h4>
+        <img class="img-logo-asset-enrolled my-2" data-qa-id="logo" [src]="asset.icon ? asset.icon : defaultLogo" />
+        <h4 class="my-2" data-qa-id="name">
+          {{ asset?.name ? asset.name : 'Asset Name' }}
+        </h4>
       </div>
       <div class="d-flex flex-column flex-md-row justify-content-md-between mx-md-2">
         <div class="my-3">
           <div class="label opacity-50 mb-2 color-white">Created Date</div>
           <span class="color-white mb-0" data-qa-id="created-date">
-            {{asset?.createdAt | date: 'MM/dd/yyyy HH:mm:ss'}}
+            {{ asset?.createdAt | date: 'MM/dd/yyyy HH:mm:ss' }}
           </span>
         </div>
         <div class="my-3">
@@ -29,13 +35,13 @@
         <div class="my-3">
           <div class="label opacity-50 mb-2 color-white">Offered To</div>
           <span class="color-white mb-0" data-qa-id="offered-to">
-            {{asset?.offeredTo ? asset?.offeredTo : '--'}}
+            {{ asset?.offeredTo ? asset?.offeredTo : '--' }}
           </span>
         </div>
         <div class="my-3">
           <div class="label opacity-50 mb-2 color-white">Last Updated Date</div>
           <span class="color-white mb-0" data-qa-id="last-updated">
-            {{asset?.updatedAt | date: 'MM/dd/yyyy HH:mm:ss'}}
+            {{ asset?.updatedAt | date: 'MM/dd/yyyy HH:mm:ss' }}
           </span>
         </div>
       </div>
@@ -45,8 +51,10 @@
         <!-- Filter -->
         <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0">
           <!-- <div class="filter-label mr-1">Group by:</div> -->
-          <mat-form-field appearance="outline" floatPlaceholder="never"
-                          class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+          <mat-form-field
+            appearance="outline"
+            floatPlaceholder="never"
+            class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
             <mat-select [formControl]="enrolmentDropdown" (selectionChange)="updateEnrolmentList($event)">
               <mat-option [value]="dropdownValue.all">All</mat-option>
               <mat-option [value]="dropdownValue.pending">Pending</mat-option>
@@ -56,18 +64,20 @@
           </mat-form-field>
         </div>
         <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
-          <mat-form-field appearance="outline" floatPlaceholder="never"
-                          class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
-                          matTooltip="Filter by namespace - Wildcard filtering, a short description?">
-            <input matInput placeholder="Namespace" [formControl]="namespaceControlIssuer">
+          <mat-form-field
+            appearance="outline"
+            floatPlaceholder="never"
+            class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
+            matTooltip="Filter by namespace - Wildcard filtering, a short description?">
+            <input matInput placeholder="Namespace" [formControl]="namespaceControlIssuer" />
           </mat-form-field>
         </div>
       </div>
-      <app-enrolment-list [listType]="'asset'"
-                          [subject]="subject"
-                          #enrolmentList
-                          [namespaceFilterControl]="namespaceControlIssuer">
-      </app-enrolment-list>
+      <app-enrolment-list
+        [listType]="'asset'"
+        [subject]="subject"
+        #enrolmentList
+        [namespaceFilterControl]="namespaceControlIssuer"></app-enrolment-list>
     </div>
   </div>
 </div>

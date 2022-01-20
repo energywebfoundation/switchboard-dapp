@@ -17,20 +17,21 @@ describe('IssuerDidComponent', () => {
   const stringWithLength = (length): string => {
     return new Array(length + 1).join('a');
   };
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [IssuerDidComponent],
-      imports: [
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatInputModule,
-        MatIconTestingModule,
-        NoopAnimationsModule
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [IssuerDidComponent],
+        imports: [
+          ReactiveFormsModule,
+          MatButtonModule,
+          MatInputModule,
+          MatIconTestingModule,
+          NoopAnimationsModule,
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(IssuerDidComponent);
@@ -47,30 +48,35 @@ describe('IssuerDidComponent', () => {
     component.issuerList = ['did:ethr:0x' + stringWithLength(40)];
     fixture.detectChanges();
 
-    const {didInput} = selectors(hostDebug);
+    const { didInput } = selectors(hostDebug);
     didInput.value = 'did:ethr:0x' + stringWithLength(40);
     dispatchInputEvent(didInput);
     fixture.detectChanges();
 
-    const {matError} = selectors(hostDebug);
-    expect(matError.textContent).toContain('This DID already exist on the list');
+    const { matError } = selectors(hostDebug);
+    expect(matError.textContent).toContain(
+      'This DID already exist on the list'
+    );
   });
 
   it('should display error message when element is not a did', () => {
     component.issuerList = ['did:ethr:0x' + stringWithLength(40)];
     fixture.detectChanges();
 
-    const {didInput} = selectors(hostDebug);
+    const { didInput } = selectors(hostDebug);
     didInput.value = 'did:ethr:0x';
     dispatchInputEvent(didInput);
     fixture.detectChanges();
 
-    const {matError} = selectors(hostDebug);
+    const { matError } = selectors(hostDebug);
     expect(matError.textContent).toContain('DID format is invalid');
   });
 
   it('should remove element from the list', () => {
-    component.issuerList = ['did:ethr:0x' + stringWithLength(40), 'did:ethr:0xb' + stringWithLength(39)];
+    component.issuerList = [
+      'did:ethr:0x' + stringWithLength(40),
+      'did:ethr:0xb' + stringWithLength(39),
+    ];
     fixture.detectChanges();
 
     component.removeIssuer(1);
@@ -81,12 +87,12 @@ describe('IssuerDidComponent', () => {
     component.issuerList = ['did:ethr:0x' + stringWithLength(40)];
     fixture.detectChanges();
 
-    const {didInput} = selectors(hostDebug);
+    const { didInput } = selectors(hostDebug);
     didInput.value = 'did:ethr:0xb' + stringWithLength(39);
     dispatchInputEvent(didInput);
     fixture.detectChanges();
 
-    const {addButton} = selectors(hostDebug);
+    const { addButton } = selectors(hostDebug);
     addButton.click();
 
     expect(component.list.length).toEqual(2);
@@ -98,6 +104,6 @@ const selectors = (hostDebug) => {
     didInput: getElement(hostDebug)('did')?.nativeElement,
     addButton: getElement(hostDebug)('add-did')?.nativeElement,
     issuersLength: getElement(hostDebug)('issuers-length')?.nativeElement,
-    matError: hostDebug.query(By.css(`mat-error`))?.nativeElement
+    matError: hostDebug.query(By.css(`mat-error`))?.nativeElement,
   };
 };

@@ -20,11 +20,10 @@
  * a global `Modernizr` object, and as classes on the `<html>` element. This
  * information allows you to progressively enhance your pages with a granular level
  * of control over the experience.
-*/
+ */
 
-;(function(window, document, undefined){
+(function (window, document, undefined) {
   var tests = [];
-  
 
   /**
    *
@@ -41,17 +40,17 @@
     // Any settings that don't work as separate modules
     // can go in here as configuration.
     _config: {
-      'classPrefix': '',
-      'enableClasses': true,
-      'enableJSClass': true,
-      'usePrefixes': true
+      classPrefix: '',
+      enableClasses: true,
+      enableJSClass: true,
+      usePrefixes: true,
     },
 
     // Queue of tests
     _q: [],
 
     // Stub these for people who are listening
-    on: function(test, cb) {
+    on: function (test, cb) {
       // I don't really think people should do this, but we can
       // safe guard it a bit.
       // -- NOTE:: this gets WAY overridden in src/addTest for actual async tests.
@@ -59,34 +58,29 @@
       // but the code to *disallow* sync tests in the real version of this
       // function is actually larger than this.
       var self = this;
-      setTimeout(function() {
+      setTimeout(function () {
         cb(self[test]);
       }, 0);
     },
 
-    addTest: function(name, fn, options) {
-      tests.push({name: name, fn: fn, options: options});
+    addTest: function (name, fn, options) {
+      tests.push({ name: name, fn: fn, options: options });
     },
 
-    addAsyncTest: function(fn) {
-      tests.push({name: null, fn: fn});
-    }
+    addAsyncTest: function (fn) {
+      tests.push({ name: null, fn: fn });
+    },
   };
 
-  
-
   // Fake some of Object.create so we can force non test results to be non "own" properties.
-  var Modernizr = function() {};
+  var Modernizr = function () {};
   Modernizr.prototype = ModernizrProto;
 
   // Leak modernizr globally when you `require` it rather than force it here.
   // Overwrite name so constructor name is nicer :D
   Modernizr = new Modernizr();
 
-  
-
   var classes = [];
-  
 
   /**
    * is returns a boolean if the typeof an obj is exactly type.
@@ -101,8 +95,6 @@
   function is(obj, type) {
     return typeof obj === type;
   }
-  ;
-
   /**
    * Run through all tests and detect their support in the current UA.
    *
@@ -132,17 +124,26 @@
         if (feature.name) {
           featureNames.push(feature.name.toLowerCase());
 
-          if (feature.options && feature.options.aliases && feature.options.aliases.length) {
+          if (
+            feature.options &&
+            feature.options.aliases &&
+            feature.options.aliases.length
+          ) {
             // Add all the aliases into the names list
-            for (aliasIdx = 0; aliasIdx < feature.options.aliases.length; aliasIdx++) {
-              featureNames.push(feature.options.aliases[aliasIdx].toLowerCase());
+            for (
+              aliasIdx = 0;
+              aliasIdx < feature.options.aliases.length;
+              aliasIdx++
+            ) {
+              featureNames.push(
+                feature.options.aliases[aliasIdx].toLowerCase()
+              );
             }
           }
         }
 
         // Run the test, or use the raw value if it's not a function
         result = is(feature.fn, 'function') ? feature.fn() : feature.fn;
-
 
         // Set each of the names on the Modernizr object
         for (nameIdx = 0; nameIdx < featureNames.length; nameIdx++) {
@@ -160,8 +161,13 @@
           } else {
             // cast to a Boolean, if not one already
             /* jshint -W053 */
-            if (Modernizr[featureNameSplit[0]] && !(Modernizr[featureNameSplit[0]] instanceof Boolean)) {
-              Modernizr[featureNameSplit[0]] = new Boolean(Modernizr[featureNameSplit[0]]);
+            if (
+              Modernizr[featureNameSplit[0]] &&
+              !(Modernizr[featureNameSplit[0]] instanceof Boolean)
+            ) {
+              Modernizr[featureNameSplit[0]] = new Boolean(
+                Modernizr[featureNameSplit[0]]
+              );
             }
 
             Modernizr[featureNameSplit[0]][featureNameSplit[1]] = result;
@@ -172,8 +178,6 @@
       }
     }
   }
-  ;
-
   /**
    * docElement is a convenience wrapper to grab the root element of the document
    *
@@ -182,7 +186,6 @@
    */
 
   var docElement = document.documentElement;
-  
 
   /**
    * A convenience helper to check if the document we are running in is an SVG document
@@ -192,7 +195,6 @@
    */
 
   var isSVG = docElement.nodeName.toLowerCase() === 'svg';
-  
 
   /**
    * setClasses takes an array of class names and adds them to the root element
@@ -222,12 +224,11 @@
     if (Modernizr._config.enableClasses) {
       // Add the new classes
       className += ' ' + classPrefix + classes.join(' ' + classPrefix);
-      isSVG ? docElement.className.baseVal = className : docElement.className = className;
+      isSVG
+        ? (docElement.className.baseVal = className)
+        : (docElement.className = className);
     }
-
   }
-
-  ;
 
   /**
    * createElement is a convenience wrapper around document.createElement. Since we
@@ -246,14 +247,17 @@
       // For this reason, we cannot call apply() as Object is not a Function.
       return document.createElement(arguments[0]);
     } else if (isSVG) {
-      return document.createElementNS.call(document, 'http://www.w3.org/2000/svg', arguments[0]);
+      return document.createElementNS.call(
+        document,
+        'http://www.w3.org/2000/svg',
+        arguments[0]
+      );
     } else {
       return document.createElement.apply(document, arguments);
     }
   }
 
-  ;
-/*!
+  /*!
 {
   "name": "Background Position Shorthand",
   "property": "bgpositionshorthand",
@@ -271,21 +275,20 @@
   }]
 }
 !*/
-/* DOC
+  /* DOC
 Detects if you can use the shorthand method to define multiple parts of an
 element's background-position simultaniously.
 
 eg `background-position: right 10px bottom 10px`
 */
 
-  Modernizr.addTest('bgpositionshorthand', function() {
+  Modernizr.addTest('bgpositionshorthand', function () {
     var elem = createElement('a');
     var eStyle = elem.style;
     var val = 'right 10px bottom 10px';
     eStyle.cssText = 'background-position: ' + val + ';';
-    return (eStyle.backgroundPosition === val);
+    return eStyle.backgroundPosition === val;
   });
-
 
   /**
    * If the browsers follow the spec, then they would expose vendor-specific style as:
@@ -304,12 +307,11 @@ eg `background-position: right 10px bottom 10px`
    */
 
   var omPrefixes = 'Moz O ms Webkit';
-  
 
-  var cssomPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.split(' ') : []);
+  var cssomPrefixes = ModernizrProto._config.usePrefixes
+    ? omPrefixes.split(' ')
+    : [];
   ModernizrProto._cssomPrefixes = cssomPrefixes;
-  
-
 
   /**
    * contains checks to see if a string contains another string
@@ -325,8 +327,6 @@ eg `background-position: right 10px bottom 10px`
     return !!~('' + str).indexOf(substr);
   }
 
-  ;
-
   /**
    * Create our "modernizr" element that we do most feature tests on.
    *
@@ -334,27 +334,23 @@ eg `background-position: right 10px bottom 10px`
    */
 
   var modElem = {
-    elem: createElement('modernizr')
+    elem: createElement('modernizr'),
   };
 
   // Clean up this element
-  Modernizr._q.push(function() {
+  Modernizr._q.push(function () {
     delete modElem.elem;
   });
 
-  
-
   var mStyle = {
-    style: modElem.elem.style
+    style: modElem.elem.style,
   };
 
   // kill ref for gc, must happen before mod.elem is removed, so we unshift on to
   // the front of the queue.
-  Modernizr._q.unshift(function() {
+  Modernizr._q.unshift(function () {
     delete mStyle.style;
   });
-
-  
 
   /**
    * getBody returns the body of a document, or an element that can stand in for
@@ -378,8 +374,6 @@ eg `background-position: right 10px bottom 10px`
 
     return body;
   }
-
-  ;
 
   /**
    * injectElementWithStyles injects an element with style element and some CSS rules
@@ -450,10 +444,7 @@ eg `background-position: right 10px bottom 10px`
     }
 
     return !!ret;
-
   }
-
-  ;
 
   /**
    * domToCSS takes a camelCase string and converts it to kebab-case
@@ -466,12 +457,12 @@ eg `background-position: right 10px bottom 10px`
    */
 
   function domToCSS(name) {
-    return name.replace(/([A-Z])/g, function(str, m1) {
-      return '-' + m1.toLowerCase();
-    }).replace(/^ms-/, '-ms-');
+    return name
+      .replace(/([A-Z])/g, function (str, m1) {
+        return '-' + m1.toLowerCase();
+      })
+      .replace(/^ms-/, '-ms-');
   }
-  ;
-
   /**
    * nativeTestProps allows for us to use native feature detection functionality if available.
    * some prefixed form, or false, in the case of an unsupported rule
@@ -505,14 +496,17 @@ eg `background-position: right 10px bottom 10px`
         conditionText.push('(' + domToCSS(props[i]) + ':' + value + ')');
       }
       conditionText = conditionText.join(' or ');
-      return injectElementWithStyles('@supports (' + conditionText + ') { #modernizr { position: absolute; } }', function(node) {
-        return getComputedStyle(node, null).position == 'absolute';
-      });
+      return injectElementWithStyles(
+        '@supports (' +
+          conditionText +
+          ') { #modernizr { position: absolute; } }',
+        function (node) {
+          return getComputedStyle(node, null).position == 'absolute';
+        }
+      );
     }
     return undefined;
   }
-  ;
-
   /**
    * cssToDOM takes a kebab-case string and converts it to camelCase
    * e.g. box-sizing -> boxSizing
@@ -524,12 +518,12 @@ eg `background-position: right 10px bottom 10px`
    */
 
   function cssToDOM(name) {
-    return name.replace(/([a-z])-([a-z])/g, function(str, m1, m2) {
-      return m1 + m2.toUpperCase();
-    }).replace(/^-/, '');
+    return name
+      .replace(/([a-z])-([a-z])/g, function (str, m1, m2) {
+        return m1 + m2.toUpperCase();
+      })
+      .replace(/^-/, '');
   }
-  ;
-
   // testProps is a generic CSS / DOM property test.
 
   // In testing support for a given CSS property, it's legit to test:
@@ -588,12 +582,10 @@ eg `background-position: right 10px bottom 10px`
       }
 
       if (mStyle.style[prop] !== undefined) {
-
         // If value to test has been passed in, do a set-and-check test.
         // 0 (integer) is a valid property value, so check that `value` isn't
         // undefined, rather than just checking it's truthy.
         if (!skipValueTest && !is(value, 'undefined')) {
-
           // Needs a try catch block because of old IE. This is slow, but will
           // be avoided in most cases because `skipValueTest` will be used.
           try {
@@ -621,8 +613,6 @@ eg `background-position: right 10px bottom 10px`
     return false;
   }
 
-  ;
-
   /**
    * List of JavaScript DOM values used for tests
    *
@@ -641,9 +631,10 @@ eg `background-position: right 10px bottom 10px`
    * ```
    */
 
-  var domPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.toLowerCase().split(' ') : []);
+  var domPrefixes = ModernizrProto._config.usePrefixes
+    ? omPrefixes.toLowerCase().split(' ')
+    : [];
   ModernizrProto._domPrefixes = domPrefixes;
-  
 
   /**
    * fnBind is a super small [bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) polyfill.
@@ -656,12 +647,10 @@ eg `background-position: right 10px bottom 10px`
    */
 
   function fnBind(fn, that) {
-    return function() {
+    return function () {
       return fn.apply(that, arguments);
     };
   }
-
-  ;
 
   /**
    * testDOMProps is a generic DOM property test; if a browser supports
@@ -678,7 +667,6 @@ eg `background-position: right 10px bottom 10px`
 
     for (var i in props) {
       if (props[i] in obj) {
-
         // return the property name as a string
         if (elem === false) {
           return props[i];
@@ -699,8 +687,6 @@ eg `background-position: right 10px bottom 10px`
     return false;
   }
 
-  ;
-
   /**
    * testPropsAll tests a list of DOM properties we want to check against.
    * We specify literally ALL possible (known and/or likely) properties on
@@ -716,9 +702,10 @@ eg `background-position: right 10px bottom 10px`
    * @param {boolean} [skipValueTest] - An boolean representing if you want to test if value sticks when set
    */
   function testPropsAll(prop, prefixed, elem, value, skipValueTest) {
-
     var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1),
-    props = (prop + ' ' + cssomPrefixes.join(ucProp + ' ') + ucProp).split(' ');
+      props = (prop + ' ' + cssomPrefixes.join(ucProp + ' ') + ucProp).split(
+        ' '
+      );
 
     // did they call .prefixed('boxSizing') or are we just testing a prop?
     if (is(prefixed, 'string') || is(prefixed, 'undefined')) {
@@ -726,7 +713,7 @@ eg `background-position: right 10px bottom 10px`
 
       // otherwise, they called .prefixed('requestAnimationFrame', window[, elem])
     } else {
-      props = (prop + ' ' + (domPrefixes).join(ucProp + ' ') + ucProp).split(' ');
+      props = (prop + ' ' + domPrefixes.join(ucProp + ' ') + ucProp).split(' ');
       return testDOMProps(props, prefixed, elem);
     }
   }
@@ -737,8 +724,6 @@ eg `background-position: right 10px bottom 10px`
   // Note that the property names must be provided in the camelCase variant.
   // Modernizr.testAllProps('boxSizing')
   ModernizrProto.testAllProps = testPropsAll;
-
-  
 
   /**
    * testAllProps determines whether a given CSS property is supported in the browser
@@ -781,8 +766,8 @@ eg `background-position: right 10px bottom 10px`
     return testPropsAll(prop, undefined, undefined, value, skipValueTest);
   }
   ModernizrProto.testAllProps = testAllProps;
-  
-/*!
+
+  /*!
 {
   "name": "Background Position XY",
   "property": "bgpositionxy",
@@ -798,15 +783,18 @@ eg `background-position: right 10px bottom 10px`
   }]
 }
 !*/
-/* DOC
+  /* DOC
 Detects the ability to control an element's background position using css
 */
 
-  Modernizr.addTest('bgpositionxy', function() {
-    return testAllProps('backgroundPositionX', '3px', true) && testAllProps('backgroundPositionY', '5px', true);
+  Modernizr.addTest('bgpositionxy', function () {
+    return (
+      testAllProps('backgroundPositionX', '3px', true) &&
+      testAllProps('backgroundPositionY', '5px', true)
+    );
   });
 
-/*!
+  /*!
 {
   "name": "Background Repeat",
   "property": ["bgrepeatspace", "bgrepeatround"],
@@ -825,7 +813,7 @@ Detects the ability to control an element's background position using css
   }]
 }
 !*/
-/* DOC
+  /* DOC
 Detects the ability to use round and space as properties for background-repeat
 */
 
@@ -833,7 +821,7 @@ Detects the ability to use round and space as properties for background-repeat
   Modernizr.addTest('bgrepeatround', testAllProps('backgroundRepeat', 'round'));
   Modernizr.addTest('bgrepeatspace', testAllProps('backgroundRepeat', 'space'));
 
-/*!
+  /*!
 {
   "name": "Background Size Cover",
   "property": "bgsizecover",
@@ -849,7 +837,7 @@ Detects the ability to use round and space as properties for background-repeat
   // Must test value, as this specifically tests the `cover` value
   Modernizr.addTest('bgsizecover', testAllProps('backgroundSize', 'cover'));
 
-/*!
+  /*!
 {
   "name": "Border Radius",
   "property": "borderradius",
@@ -865,7 +853,7 @@ Detects the ability to use round and space as properties for background-repeat
 
   Modernizr.addTest('borderradius', testAllProps('borderRadius', '0px', true));
 
-/*!
+  /*!
 {
   "name": "CSS Animations",
   "property": "cssanimations",
@@ -879,12 +867,11 @@ Detects the ability to use round and space as properties for background-repeat
   }]
 }
 !*/
-/* DOC
+  /* DOC
 Detects whether or not elements can be animated using CSS
 */
 
   Modernizr.addTest('cssanimations', testAllProps('animationName', 'a', true));
-
 
   /**
    * List of property values to set for css tests. See ticket #21
@@ -918,13 +905,14 @@ Detects whether or not elements can be animated using CSS
    * ```
    */
 
-  var prefixes = (ModernizrProto._config.usePrefixes ? ' -webkit- -moz- -o- -ms- '.split(' ') : []);
+  var prefixes = ModernizrProto._config.usePrefixes
+    ? ' -webkit- -moz- -o- -ms- '.split(' ')
+    : [];
 
   // expose these for the plugin API. Look in the source for how to join() them against your input
   ModernizrProto._prefixes = prefixes;
 
-  
-/*!
+  /*!
 {
   "name": "CSS Calc",
   "property": "csscalc",
@@ -934,7 +922,7 @@ Detects whether or not elements can be animated using CSS
   "authors": ["@calvein"]
 }
 !*/
-/* DOC
+  /* DOC
 Method of allowing calculated values for length units. For example:
 
 ```css
@@ -944,7 +932,7 @@ Method of allowing calculated values for length units. For example:
 ```
 */
 
-  Modernizr.addTest('csscalc', function() {
+  Modernizr.addTest('csscalc', function () {
     var prop = 'width:';
     var value = 'calc(10px);';
     var el = createElement('a');
@@ -954,7 +942,7 @@ Method of allowing calculated values for length units. For example:
     return !!el.style.length;
   });
 
-/*!
+  /*!
 {
   "name": "CSS Transforms",
   "property": "csstransforms",
@@ -963,13 +951,14 @@ Method of allowing calculated values for length units. For example:
 }
 !*/
 
-  Modernizr.addTest('csstransforms', function() {
+  Modernizr.addTest('csstransforms', function () {
     // Android < 3.0 is buggy, so we sniff and blacklist
     // http://git.io/hHzL7w
-    return navigator.userAgent.indexOf('Android 2.') === -1 &&
-           testAllProps('transform', 'scale(1)', true);
+    return (
+      navigator.userAgent.indexOf('Android 2.') === -1 &&
+      testAllProps('transform', 'scale(1)', true)
+    );
   });
-
 
   /**
    * testStyles injects an element with style element and some CSS rules
@@ -1028,9 +1017,9 @@ Method of allowing calculated values for length units. For example:
    *
    */
 
-  var testStyles = ModernizrProto.testStyles = injectElementWithStyles;
-  
-/*!
+  var testStyles = (ModernizrProto.testStyles = injectElementWithStyles);
+
+  /*!
 {
   "name": "CSS Supports",
   "property": "supports",
@@ -1054,7 +1043,7 @@ Method of allowing calculated values for length units. For example:
   var oldSyntax = 'supportsCSS' in window;
   Modernizr.addTest('supports', newSyntax || oldSyntax);
 
-/*!
+  /*!
 {
   "name": "CSS Transforms 3D",
   "property": "csstransforms3d",
@@ -1066,7 +1055,7 @@ Method of allowing calculated values for length units. For example:
 }
 !*/
 
-  Modernizr.addTest('csstransforms3d', function() {
+  Modernizr.addTest('csstransforms3d', function () {
     var ret = !!testAllProps('perspective', '1px', true);
     var usePrefix = Modernizr._config.usePrefixes;
 
@@ -1091,7 +1080,7 @@ Method of allowing calculated values for length units. For example:
 
       mq += '{#modernizr{width:7px;height:18px;margin:0;padding:0;border:0}}';
 
-      testStyles(defaultStyle + mq, function(elem) {
+      testStyles(defaultStyle + mq, function (elem) {
         ret = elem.offsetWidth === 7 && elem.offsetHeight === 18;
       });
     }
@@ -1099,7 +1088,7 @@ Method of allowing calculated values for length units. For example:
     return ret;
   });
 
-/*!
+  /*!
 {
   "name": "CSS Transform Style preserve-3d",
   "property": "preserve3d",
@@ -1114,13 +1103,16 @@ Method of allowing calculated values for length units. For example:
   }]
 }
 !*/
-/* DOC
+  /* DOC
 Detects support for `transform-style: preserve-3d`, for getting a proper 3D perspective on elements.
 */
 
-  Modernizr.addTest('preserve3d', testAllProps('transformStyle', 'preserve-3d'));
+  Modernizr.addTest(
+    'preserve3d',
+    testAllProps('transformStyle', 'preserve-3d')
+  );
 
-/*!
+  /*!
 {
   "name": "CSS Transitions",
   "property": "csstransitions",
@@ -1131,7 +1123,7 @@ Detects support for `transform-style: preserve-3d`, for getting a proper 3D pers
 
   Modernizr.addTest('csstransitions', testAllProps('transition', 'all', true));
 
-/*!
+  /*!
 {
   "name": "Flexbox (tweener)",
   "property": "flexboxtweener",
@@ -1147,7 +1139,7 @@ Detects support for `transform-style: preserve-3d`, for getting a proper 3D pers
 
   Modernizr.addTest('flexboxtweener', testAllProps('flexAlign', 'end', true));
 
-/*!
+  /*!
 {
   "name": "@font-face",
   "property": "fontface",
@@ -1176,27 +1168,37 @@ Detects support for `transform-style: preserve-3d`, for getting a proper 3D pers
 }
 !*/
 
-  var blacklist = (function() {
+  var blacklist = (function () {
     var ua = navigator.userAgent;
     var wkvers = ua.match(/applewebkit\/([0-9]+)/gi) && parseFloat(RegExp.$1);
     var webos = ua.match(/w(eb)?osbrowser/gi);
-    var wppre8 = ua.match(/windows phone/gi) && ua.match(/iemobile\/([0-9])+/gi) && parseFloat(RegExp.$1) >= 9;
+    var wppre8 =
+      ua.match(/windows phone/gi) &&
+      ua.match(/iemobile\/([0-9])+/gi) &&
+      parseFloat(RegExp.$1) >= 9;
     var oldandroid = wkvers < 533 && ua.match(/android/gi);
     return webos || oldandroid || wppre8;
-  }());
+  })();
   if (blacklist) {
     Modernizr.addTest('fontface', false);
   } else {
-    testStyles('@font-face {font-family:"font";src:url("https://")}', function(node, rule) {
-      var style = document.getElementById('smodernizr');
-      var sheet = style.sheet || style.styleSheet;
-      var cssText = sheet ? (sheet.cssRules && sheet.cssRules[0] ? sheet.cssRules[0].cssText : sheet.cssText || '') : '';
-      var bool = /src/i.test(cssText) && cssText.indexOf(rule.split(' ')[0]) === 0;
-      Modernizr.addTest('fontface', bool);
-    });
+    testStyles(
+      '@font-face {font-family:"font";src:url("https://")}',
+      function (node, rule) {
+        var style = document.getElementById('smodernizr');
+        var sheet = style.sheet || style.styleSheet;
+        var cssText = sheet
+          ? sheet.cssRules && sheet.cssRules[0]
+            ? sheet.cssRules[0].cssText
+            : sheet.cssText || ''
+          : '';
+        var bool =
+          /src/i.test(cssText) && cssText.indexOf(rule.split(' ')[0]) === 0;
+        Modernizr.addTest('fontface', bool);
+      }
+    );
   }
-;
-/*!
+  /*!
 {
   "name": "SVG",
   "property": "svg",
@@ -1215,12 +1217,16 @@ Detects support for `transform-style: preserve-3d`, for getting a proper 3D pers
   ]
 }
 !*/
-/* DOC
+  /* DOC
 Detects support for SVG in `<embed>` or `<object>` elements.
 */
 
-  Modernizr.addTest('svg', !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect);
-
+  Modernizr.addTest(
+    'svg',
+    !!document.createElementNS &&
+      !!document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+        .createSVGRect
+  );
 
   /**
    * hasOwnProp is a shim for hasOwnProperty that is needed for Safari 2.0 support
@@ -1236,27 +1242,30 @@ Detects support for SVG in `<embed>` or `<object>` elements.
   // hasOwnProperty shim by kangax needed for Safari 2.0 support
   var hasOwnProp;
 
-  (function() {
-    var _hasOwnProperty = ({}).hasOwnProperty;
+  (function () {
+    var _hasOwnProperty = {}.hasOwnProperty;
     /* istanbul ignore else */
     /* we have no way of testing IE 5.5 or safari 2,
      * so just assume the else gets hit */
-    if (!is(_hasOwnProperty, 'undefined') && !is(_hasOwnProperty.call, 'undefined')) {
-      hasOwnProp = function(object, property) {
+    if (
+      !is(_hasOwnProperty, 'undefined') &&
+      !is(_hasOwnProperty.call, 'undefined')
+    ) {
+      hasOwnProp = function (object, property) {
         return _hasOwnProperty.call(object, property);
       };
-    }
-    else {
-      hasOwnProp = function(object, property) { /* yes, this can give false positives/negatives, but most of the time we don't care about those */
-        return ((property in object) && is(object.constructor.prototype[property], 'undefined'));
+    } else {
+      hasOwnProp = function (object, property) {
+        /* yes, this can give false positives/negatives, but most of the time we don't care about those */
+        return (
+          property in object &&
+          is(object.constructor.prototype[property], 'undefined')
+        );
       };
     }
   })();
 
-  
-
-
-   // _l tracks listeners for async tests, as well as tests that execute after the initial run
+  // _l tracks listeners for async tests, as well as tests that execute after the initial run
   ModernizrProto._l = {};
 
   /**
@@ -1283,7 +1292,7 @@ Detects support for SVG in `<embed>` or `<object>` elements.
    * ```
    */
 
-  ModernizrProto.on = function(feature, cb) {
+  ModernizrProto.on = function (feature, cb) {
     // Create the list of listeners if it doesn't exist
     if (!this._l[feature]) {
       this._l[feature] = [];
@@ -1295,7 +1304,7 @@ Detects support for SVG in `<embed>` or `<object>` elements.
     // If it's already been resolved, trigger it on next tick
     if (Modernizr.hasOwnProperty(feature)) {
       // Next Tick
-      setTimeout(function() {
+      setTimeout(function () {
         Modernizr._trigger(feature, Modernizr[feature]);
       }, 0);
     }
@@ -1314,7 +1323,7 @@ Detects support for SVG in `<embed>` or `<object>` elements.
    * result of a feature detection function
    */
 
-  ModernizrProto._trigger = function(feature, res) {
+  ModernizrProto._trigger = function (feature, res) {
     if (!this._l[feature]) {
       return;
     }
@@ -1322,7 +1331,7 @@ Detects support for SVG in `<embed>` or `<object>` elements.
     var cbs = this._l[feature];
 
     // Force async
-    setTimeout(function() {
+    setTimeout(function () {
       var i, cb;
       for (i = 0; i < cbs.length; i++) {
         cb = cbs[i];
@@ -1404,15 +1413,13 @@ Detects support for SVG in `<embed>` or `<object>` elements.
    */
 
   function addTest(feature, test) {
-
     if (typeof feature == 'object') {
       for (var key in feature) {
         if (hasOwnProp(feature, key)) {
-          addTest(key, feature[ key ]);
+          addTest(key, feature[key]);
         }
       }
     } else {
-
       feature = feature.toLowerCase();
       var featureNameSplit = feature.split('.');
       var last = Modernizr[featureNameSplit[0]];
@@ -1439,8 +1446,13 @@ Detects support for SVG in `<embed>` or `<object>` elements.
       } else {
         // cast to a Boolean, if not one already
         /* jshint -W053 */
-        if (Modernizr[featureNameSplit[0]] && !(Modernizr[featureNameSplit[0]] instanceof Boolean)) {
-          Modernizr[featureNameSplit[0]] = new Boolean(Modernizr[featureNameSplit[0]]);
+        if (
+          Modernizr[featureNameSplit[0]] &&
+          !(Modernizr[featureNameSplit[0]] instanceof Boolean)
+        ) {
+          Modernizr[featureNameSplit[0]] = new Boolean(
+            Modernizr[featureNameSplit[0]]
+          );
         }
 
         Modernizr[featureNameSplit[0]][featureNameSplit[1]] = test;
@@ -1448,7 +1460,9 @@ Detects support for SVG in `<embed>` or `<object>` elements.
 
       // Set a single class (either `feature` or `no-feature`)
       /* jshint -W041 */
-      setClasses([(!!test && test != false ? '' : 'no-') + featureNameSplit.join('-')]);
+      setClasses([
+        (!!test && test != false ? '' : 'no-') + featureNameSplit.join('-'),
+      ]);
       /* jshint +W041 */
 
       // Trigger the event
@@ -1459,13 +1473,11 @@ Detects support for SVG in `<embed>` or `<object>` elements.
   }
 
   // After all the tests are run, add self to the Modernizr prototype
-  Modernizr._q.push(function() {
+  Modernizr._q.push(function () {
     ModernizrProto.addTest = addTest;
   });
 
-  
-
-/*!
+  /*!
 {
   "name": "SVG as an <img> tag source",
   "property": "svgasimg",
@@ -1479,7 +1491,6 @@ Detects support for SVG in `<embed>` or `<object>` elements.
 }
 !*/
 
-
   // Original Async test by Stu Cox
   // https://gist.github.com/chriscoyier/8774501
 
@@ -1489,8 +1500,13 @@ Detects support for SVG in `<embed>` or `<object>` elements.
   // Note http://www.w3.org/TR/SVG11/feature#Image is *supposed* to represent
   // support for the `<image>` tag in SVG, not an SVG file linked from an `<img>`
   // tag in HTML – but it’s a heuristic which works
-  Modernizr.addTest('svgasimg', document.implementation.hasFeature('http://www.w3.org/TR/SVG11/feature#Image', '1.1'));
-
+  Modernizr.addTest(
+    'svgasimg',
+    document.implementation.hasFeature(
+      'http://www.w3.org/TR/SVG11/feature#Image',
+      '1.1'
+    )
+  );
 
   /**
    * Object.prototype.toString can be used with every object and allows you to
@@ -1502,9 +1518,9 @@ Detects support for SVG in `<embed>` or `<object>` elements.
    * @returns {function} An abstracted toString function
    */
 
-  var toStringFn = ({}).toString;
-  
-/*!
+  var toStringFn = {}.toString;
+
+  /*!
 {
   "name": "SVG clip paths",
   "property": "svgclippaths",
@@ -1515,18 +1531,24 @@ Detects support for SVG in `<embed>` or `<object>` elements.
   }]
 }
 !*/
-/* DOC
+  /* DOC
 Detects support for clip paths in SVG (only, not on HTML content).
 
 See [this discussion](https://github.com/Modernizr/Modernizr/issues/213) regarding applying SVG clip paths to HTML content.
 */
 
-  Modernizr.addTest('svgclippaths', function() {
-    return !!document.createElementNS &&
-      /SVGClipPath/.test(toStringFn.call(document.createElementNS('http://www.w3.org/2000/svg', 'clipPath')));
+  Modernizr.addTest('svgclippaths', function () {
+    return (
+      !!document.createElementNS &&
+      /SVGClipPath/.test(
+        toStringFn.call(
+          document.createElementNS('http://www.w3.org/2000/svg', 'clipPath')
+        )
+      )
+    );
   });
 
-/*!
+  /*!
 {
   "name": "SVG filters",
   "property": "svgfilters",
@@ -1542,17 +1564,17 @@ See [this discussion](https://github.com/Modernizr/Modernizr/issues/213) regardi
 !*/
 
   // Should fail in Safari: https://stackoverflow.com/questions/9739955/feature-detecting-support-for-svg-filters.
-  Modernizr.addTest('svgfilters', function() {
+  Modernizr.addTest('svgfilters', function () {
     var result = false;
     try {
-      result = 'SVGFEColorMatrixElement' in window &&
+      result =
+        'SVGFEColorMatrixElement' in window &&
         SVGFEColorMatrixElement.SVG_FECOLORMATRIX_TYPE_SATURATE == 2;
-    }
-    catch (e) {}
+    } catch (e) {}
     return result;
   });
 
-/*!
+  /*!
 {
   "name": "SVG foreignObject",
   "property": "svgforeignobject",
@@ -1563,16 +1585,25 @@ See [this discussion](https://github.com/Modernizr/Modernizr/issues/213) regardi
   }]
 }
 !*/
-/* DOC
+  /* DOC
 Detects support for foreignObject tag in SVG.
 */
 
-  Modernizr.addTest('svgforeignobject', function() {
-    return !!document.createElementNS &&
-      /SVGForeignObject/.test(toStringFn.call(document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject')));
+  Modernizr.addTest('svgforeignobject', function () {
+    return (
+      !!document.createElementNS &&
+      /SVGForeignObject/.test(
+        toStringFn.call(
+          document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'foreignObject'
+          )
+        )
+      )
+    );
   });
 
-/*!
+  /*!
 {
   "name": "Inline SVG",
   "property": "inlinesvg",
@@ -1589,17 +1620,21 @@ Detects support for foreignObject tag in SVG.
   "knownBugs": ["False negative on some Chromia browsers."]
 }
 !*/
-/* DOC
+  /* DOC
 Detects support for inline SVG in HTML (not within XHTML).
 */
 
-  Modernizr.addTest('inlinesvg', function() {
+  Modernizr.addTest('inlinesvg', function () {
     var div = createElement('div');
     div.innerHTML = '<svg/>';
-    return (typeof SVGRect != 'undefined' && div.firstChild && div.firstChild.namespaceURI) == 'http://www.w3.org/2000/svg';
+    return (
+      (typeof SVGRect != 'undefined' &&
+        div.firstChild &&
+        div.firstChild.namespaceURI) == 'http://www.w3.org/2000/svg'
+    );
   });
 
-/*!
+  /*!
 {
   "name": "SVG SMIL animation",
   "property": "smil",
@@ -1613,12 +1648,18 @@ Detects support for inline SVG in HTML (not within XHTML).
 !*/
 
   // SVG SMIL animation
-  Modernizr.addTest('smil', function() {
-    return !!document.createElementNS &&
-      /SVGAnimate/.test(toStringFn.call(document.createElementNS('http://www.w3.org/2000/svg', 'animate')));
+  Modernizr.addTest('smil', function () {
+    return (
+      !!document.createElementNS &&
+      /SVGAnimate/.test(
+        toStringFn.call(
+          document.createElementNS('http://www.w3.org/2000/svg', 'animate')
+        )
+      )
+    );
   });
 
-/*!
+  /*!
 {
   "name": "Local Storage",
   "property": "localstorage",
@@ -1654,7 +1695,7 @@ Detects support for inline SVG in HTML (not within XHTML).
   //   www.quirksmode.org/dom/html5.html
   // But IE8 doesn't support either with local files
 
-  Modernizr.addTest('localstorage', function() {
+  Modernizr.addTest('localstorage', function () {
     var mod = 'modernizr';
     try {
       localStorage.setItem(mod, mod);
@@ -1665,7 +1706,7 @@ Detects support for inline SVG in HTML (not within XHTML).
     }
   });
 
-/*!
+  /*!
 {
   "name": "Session Storage",
   "property": "sessionstorage",
@@ -1679,7 +1720,7 @@ Detects support for inline SVG in HTML (not within XHTML).
   // Just FWIW: IE8 Compat mode supports these features completely:
   //   www.quirksmode.org/dom/html5.html
   // But IE8 doesn't support either with local files
-  Modernizr.addTest('sessionstorage', function() {
+  Modernizr.addTest('sessionstorage', function () {
     var mod = 'modernizr';
     try {
       sessionStorage.setItem(mod, mod);
@@ -1690,7 +1731,7 @@ Detects support for inline SVG in HTML (not within XHTML).
     }
   });
 
-/*!
+  /*!
 {
   "name": "Web SQL Database",
   "property": "websqldatabase",
@@ -1703,7 +1744,7 @@ Detects support for inline SVG in HTML (not within XHTML).
   // It doesn't anymore.
   Modernizr.addTest('websqldatabase', 'openDatabase' in window);
 
-/*!
+  /*!
 {
   "name": "CSS Multiple Backgrounds",
   "caniuse": "multibackgrounds",
@@ -1716,15 +1757,14 @@ Detects support for inline SVG in HTML (not within XHTML).
   // and then querying the style.background property value for the number of
   // occurrences of "url(" is a reliable method for detecting ACTUAL support for this!
 
-  Modernizr.addTest('multiplebgs', function() {
+  Modernizr.addTest('multiplebgs', function () {
     var style = createElement('a').style;
     style.cssText = 'background:url(https://),url(https://),red url(https://)';
 
     // If the UA supports multiple backgrounds, there should be three occurrences
     // of the string "url(" in the return value for elemStyle.background
-    return (/(url\s*\(.*?){3}/).test(style.background);
+    return /(url\s*\(.*?){3}/.test(style.background);
   });
-
 
   // Run each test
   testRunner();
@@ -1742,8 +1782,4 @@ Detects support for inline SVG in HTML (not within XHTML).
 
   // Leak Modernizr namespace
   window.Modernizr = Modernizr;
-
-
-;
-
 })(window, document);

@@ -6,13 +6,11 @@ import { Filters } from '../models/filters';
 
 export const USER_FEATURE_KEY = 'role';
 
-
 export interface RoleState {
   list: IRole[];
   filteredList: IRole[];
   filters: Filters;
   filterVisible: boolean;
-
 }
 
 export const initialState: RoleState = {
@@ -21,30 +19,45 @@ export const initialState: RoleState = {
   filters: {
     organization: '',
     application: '',
-    role: ''
+    role: '',
   },
   filterVisible: false,
 };
 
 const roleReducer = createReducer(
   initialState,
-  on(RoleActions.getListSuccess, (state, {list, namespace}) => ({
+  on(RoleActions.getListSuccess, (state, { list, namespace }) => ({
     ...state,
     list: [...list],
-    filteredList: filterBy([...list], state.filters.organization, state.filters.application, state.filters.role, namespace)
+    filteredList: filterBy(
+      [...list],
+      state.filters.organization,
+      state.filters.application,
+      state.filters.role,
+      namespace
+    ),
   })),
 
-  on(RoleActions.updateFilters, (state, {filters, namespace}) => ({
+  on(RoleActions.updateFilters, (state, { filters, namespace }) => ({
     ...state,
-    filters: {...filters},
-    filteredList: filterBy(state.list, filters.organization, filters.application, filters.role, namespace)
+    filters: { ...filters },
+    filteredList: filterBy(
+      state.list,
+      filters.organization,
+      filters.application,
+      filters.role,
+      namespace
+    ),
   })),
-  on(RoleActions.toggleFilters, (state) => ({...state, filterVisible: !state.filterVisible})),
-  on(RoleActions.showFilters, (state) => ({...state, filterVisible: true})),
+  on(RoleActions.toggleFilters, (state) => ({
+    ...state,
+    filterVisible: !state.filterVisible,
+  })),
+  on(RoleActions.showFilters, (state) => ({ ...state, filterVisible: true })),
   on(RoleActions.cleanUpFilters, (state) => ({
     ...state,
     ...clearFilters(state),
-    filterVisible: false
+    filterVisible: false,
   }))
 );
 
@@ -52,11 +65,10 @@ export const clearFilters = (state) => ({
   filters: {
     organization: '',
     application: '',
-    role: ''
+    role: '',
   },
-  filteredList: state.list
+  filteredList: state.list,
 });
-
 
 export function reducer(state: RoleState | undefined, action: Action) {
   return roleReducer(state, action);

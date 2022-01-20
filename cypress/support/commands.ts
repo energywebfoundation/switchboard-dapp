@@ -73,12 +73,14 @@ Cypress.Commands.add('dataQaId', (id: string) => {
 });
 
 Cypress.Commands.add('login', () => {
-  cy.visit('/',
-    {
-      onBeforeLoad(win: Cypress.AUTWindow) {
-        win.localStorage.setItem('PrivateKey', '28571bc941b15e77960c148b8e0c5df05c2cecb43b899b2fb6eaf991f8eade5b');
-      }
-    });
+  cy.visit('/', {
+    onBeforeLoad(win: Cypress.AUTWindow) {
+      win.localStorage.setItem(
+        'PrivateKey',
+        '28571bc941b15e77960c148b8e0c5df05c2cecb43b899b2fb6eaf991f8eade5b'
+      );
+    },
+  });
 
   cy.intercept('**/login').as('getLogin');
   // cy.intercept({method: 'GET', url: '**/DID/*'}, {fixture: 'did/cached-did.json'});
@@ -86,11 +88,11 @@ Cypress.Commands.add('login', () => {
 });
 
 Cypress.Commands.add('waitUntilLoaderDisappear', () => {
-  cy.get('.loading-text', {timeout: 30000}).should('not.be.visible');
+  cy.get('.loading-text', { timeout: 30000 }).should('not.be.visible');
 });
 
 Cypress.Commands.add('insertValue', (id: string, value: string) => {
-  return cy.dataQaId(id).type(value, {force: true});
+  return cy.dataQaId(id).type(value, { force: true });
 });
 
 Cypress.Commands.add('matError', () => {

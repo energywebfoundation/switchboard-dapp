@@ -7,17 +7,21 @@ import { LoadingService } from '../loading.service';
 import { finalize } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClaimsFacadeService {
+  constructor(
+    private iamService: IamService,
+    private loadingService: LoadingService
+  ) {}
 
-  constructor(private iamService: IamService,
-              private loadingService: LoadingService) {
-  }
-
-  createSelfSignedClaim(data: { data: ClaimData; subject?: string; }) {
-    this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
-    return from(this.iamService.claimsService.createSelfSignedClaim(data))
-      .pipe(finalize(() => this.loadingService.hide()));
+  createSelfSignedClaim(data: { data: ClaimData; subject?: string }) {
+    this.loadingService.show(
+      'Please confirm this transaction in your connected wallet.',
+      CancelButton.ENABLED
+    );
+    return from(this.iamService.claimsService.createSelfSignedClaim(data)).pipe(
+      finalize(() => this.loadingService.hide())
+    );
   }
 }

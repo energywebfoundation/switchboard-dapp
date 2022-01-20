@@ -5,7 +5,7 @@ import { HexValidators, ListValidator } from '@utils';
 @Component({
   selector: 'app-issuer-did',
   templateUrl: './issuer-did.component.html',
-  styleUrls: ['./issuer-did.component.scss']
+  styleUrls: ['./issuer-did.component.scss'],
 })
 export class IssuerDidComponent {
   @Input() set issuerList(value: string[]) {
@@ -36,7 +36,9 @@ export class IssuerDidComponent {
   }
 
   private setValidators(): void {
-    this.form.setValidators([HexValidators.isDidValid(), ListValidator.stringExist(this.list)]);
+    this.form.setValidators([
+      HexValidators.isDidValid(),
+      ListValidator.stringExist(this.list),
+    ]);
   }
-
 }
