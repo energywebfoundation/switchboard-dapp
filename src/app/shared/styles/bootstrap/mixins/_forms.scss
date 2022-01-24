@@ -10,6 +10,8 @@
 //
 // Example usage: change the default blue border and shadow to white for better
 // contrast against a dark gray background.
+@use "sass:math";
+
 @mixin form-control-focus() {
   &:focus {
     color: $input-focus-color;
@@ -99,8 +101,7 @@
           $icon
             $custom-select-bg
             no-repeat
-            $custom-select-feedback-icon-position /
-            $custom-select-feedback-icon-size;
+            math.div($custom-select-feedback-icon-position, $custom-select-feedback-icon-size);
       }
 
       &:focus {

@@ -113,7 +113,7 @@ hr {
   border: 1px solid $gray;
   background-color: #fff;
   @include media-breakpoint-up(md) {
-    padding: $jumbotron-padding ($jumbotron-padding/2);
+    padding: $jumbotron-padding ($jumbotron-padding*0.5);
   }
 }
 
