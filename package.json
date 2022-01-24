@@ -70,7 +70,7 @@
     "modernizr": "3.7.1",
     "moment": "2.22.2",
     "ng-qrcode": "4.3.0",
-    "ngx-bootstrap": "4.2.0",
+    "ngx-bootstrap": "^8.0.0",
     "ngx-editor": "9.0.2",
     "ngx-spinner": "^11.0.2",
     "ngx-toastr": "13.2.1",
