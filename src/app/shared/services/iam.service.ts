@@ -33,6 +33,7 @@ import { truthy } from '@operators';
 import { finalize, map } from 'rxjs/operators';
 import { EnvService } from './env/env.service';
 import { ChainConfig } from 'iam-client-lib/dist/src/config/chain.config';
+import { EkcSettingsService } from '../../modules/connect-to-wallet/ekc-settings/services/ekc-settings.service';
 
 export const PROVIDER_TYPE = 'ProviderType';
 
@@ -61,7 +62,8 @@ export class IamService {
 
   constructor(
     private loadingService: LoadingService,
-    private envService: EnvService
+    private envService: EnvService,
+    private ekcSettingsService: EkcSettingsService
   ) {
     // Set Cache Server
     setCacheConfig(envService.chainId, {
@@ -282,7 +284,7 @@ export class IamService {
       case ProviderType.Gnosis:
         return initWithGnosis(safeAppSdk);
       case ProviderType.EKC:
-        return initWithEKC();
+        return initWithEKC(this.ekcSettingsService.url);
     }
   }
 }
