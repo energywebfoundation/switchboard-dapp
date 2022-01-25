@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { TranslateModule } from '@ngx-translate/core';
 
 import { CoreModule } from './core/core.module';
 import { LayoutModule } from './layout/layout.module';
@@ -16,13 +15,7 @@ describe('App: ewUIBoilerPlate', () => {
 
     TestBed.configureTestingModule({
       declarations: [AppComponent],
-      imports: [
-        TranslateModule.forRoot(),
-        CoreModule,
-        LayoutModule,
-        SharedModule,
-        RoutesModule,
-      ],
+      imports: [CoreModule, LayoutModule, SharedModule, RoutesModule],
       providers: [
         provideMockStore(),
         { provide: APP_BASE_HREF, useValue: '/' },

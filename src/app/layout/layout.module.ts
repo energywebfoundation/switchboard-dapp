@@ -3,7 +3,6 @@ import { UserIdleModule } from 'angular-user-idle';
 
 import { LayoutComponent } from './layout.component';
 import { HeaderComponent } from './header/header.component';
-import { NavsearchComponent } from './header/navsearch/navsearch.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { DialogUserComponent } from './header/dialog-user/dialog-user.component';
@@ -34,16 +33,10 @@ import { DidBookModule } from '../modules/did-book/did-book.module';
   declarations: [
     LayoutComponent,
     HeaderComponent,
-    NavsearchComponent,
     DialogUserComponent,
     LoadingComponent,
   ],
   entryComponents: [DialogUserComponent],
-  exports: [
-    LayoutComponent,
-    HeaderComponent,
-    NavsearchComponent,
-    LoadingComponent,
-  ],
+  exports: [LayoutComponent, HeaderComponent, LoadingComponent],
 })
 export class LayoutModule {}
