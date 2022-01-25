@@ -14,7 +14,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { UserMenuModule } from './components/user-menu/user-menu.module';
 import { DidBookModule } from '../modules/did-book/did-book.module';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   imports: [
@@ -29,7 +28,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     }),
     UserMenuModule,
     DidBookModule.forRoot(),
-    BsDropdownModule,
   ],
   providers: [],
   declarations: [
