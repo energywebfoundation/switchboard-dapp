@@ -98,7 +98,6 @@
     "@cypress/schematic": "^1.5.1",
     "@energyweb/eslint-config": "^0.0.0",
     "@energyweb/prettier-config": "^0.0.0",
-    "@ngrx/schematics": "^10.1.2",
     "@types/codemirror": "0.0.67",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "2.0.3",
