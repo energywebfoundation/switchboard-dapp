@@ -49,10 +49,6 @@ jobs:
           npm install
           envsubst < src/environments/constants.template.ts > src/environments/constants.ts
 
-      - name: Run Test
-        run: |
-          npm run test:headless
-
       - name: Prepare for non-master branch
         if: github.ref != 'refs/heads/master'
         run: |
