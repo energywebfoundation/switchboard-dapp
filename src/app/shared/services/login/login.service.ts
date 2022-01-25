@@ -132,7 +132,8 @@ export class LoginService {
     });
   }
 
-  disconnect() {
+  disconnect(): void {
+    this.clearSession();
     this.iamService.closeConnection().subscribe(() => {
       location.reload();
     });
