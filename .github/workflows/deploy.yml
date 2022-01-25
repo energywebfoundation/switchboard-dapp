@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - uses: styfle/cancel-workflow-action@0.8.0
+      - uses: styfle/cancel-workflow-action@0.9.1
         with:
           access_token: ${{ github.token }}
 
@@ -61,7 +61,7 @@ jobs:
 
       - name: Deploy stedin
         if: github.ref == 'refs/heads/develop'
-        uses: burnett01/rsync-deployments@5.0
+        uses: burnett01/rsync-deployments@5.2
         with:
           switches: -r
           path: dist/*
@@ -71,7 +71,7 @@ jobs:
           remote_key: ${{ secrets.GH_SWITCHBOARD_SSH_KEY }}
 
       - name: Sentry Release Staging
-        uses: getsentry/action-release@v1.0.0
+        uses: getsentry/action-release@v1.1.6
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
