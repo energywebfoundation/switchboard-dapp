@@ -11,3 +11,4 @@ karma.conf.js
 karma-headless.conf.js
 .eslintrc.js
 eslint_report.json
+coverage/
