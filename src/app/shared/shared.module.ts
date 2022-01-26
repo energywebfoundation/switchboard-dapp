@@ -2,7 +2,6 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
 
 import { ColorsService } from './colors/colors.service';
 import { ScrollableDirective } from './directives/scrollable/scrollable.directive';
@@ -92,7 +91,6 @@ const MATERIAL_MODULES = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslateModule,
     CopyToClipboardModule,
     DidFormatMinifierModule,
     MATERIAL_MODULES,
@@ -115,7 +113,6 @@ const MATERIAL_MODULES = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslateModule,
     RouterModule,
     ScrollableDirective,
     PreventPasteDirective,
