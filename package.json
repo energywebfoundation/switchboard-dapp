@@ -30,7 +30,8 @@
     "cypress:run": "ng run switchboard-dapp:cypress-run --spec cypress/integration/ui/**/*.spec.ts",
     "cy:run:ci": "npm run ng serve",
     "precy:run:ci": "echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p",
-    "stedin:flags": "node scripts/stedin.js"
+    "stedin:flags": "node scripts/stedin.js",
+    "analyze": "ng build -- --statsJson=true && webpack-bundle-analyzer dist/stats.json"
   },
   "dependencies": {
     "@angular-builders/custom-webpack": "^13.0.0",
@@ -124,6 +125,6 @@
     "ts-node": "7.0.0",
     "typescript": "4.5.4",
     "webdriver-manager": "10.2.5",
-    "webpack-bundle-analyzer": "^3.9.0"
+    "webpack-bundle-analyzer": "^4.5.0"
   }
 }
