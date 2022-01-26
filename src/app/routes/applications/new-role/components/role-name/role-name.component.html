@@ -19,7 +19,7 @@
             type="text"
             placeholder="Role Name"
             required
-            oninput="this.value = this.value.toLowerCase()"
+            oninput="value = value.toLowerCase().replace(/\s+/g, '')"
             (keypress)="alphaNumericOnly($event)"
             minlength="3"
             maxlength="256"

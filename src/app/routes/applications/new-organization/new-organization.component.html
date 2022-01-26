@@ -52,7 +52,7 @@
                       type="text"
                       placeholder="Organization Namespace"
                       required
-                      oninput="this.value = this.value.toLowerCase()"
+                      oninput="value = value.toLowerCase().replace(/\s+/g, '')"
                       appBlockPaste
                       minlength="3"
                       maxlength="256" />

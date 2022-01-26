@@ -61,9 +61,9 @@
                       formControlName="appName"
                       type="text"
                       appBlockPaste
+                      oninput="value = value.toLowerCase().replace(/\s+/g, '')"
                       placeholder="Application Namespace"
                       required
-                      oninput="this.value = this.value.toLowerCase()"
                       minlength="3"
                       maxlength="256" />
                     <mat-error *ngIf="appForm.get('appName').hasError('required')">
@@ -82,7 +82,10 @@
                   *ngIf="appForm.get('appName').value"
                   class="ml-3 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
                   <span class="pb-2">
-                    {{ appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace }}
+                    {{
+                      appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace
+                        | lowercase
+                    }}
                   </span>
                 </div>
                 <ng-container formGroupName="data">

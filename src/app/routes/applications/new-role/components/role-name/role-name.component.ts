@@ -23,7 +23,7 @@ export class RoleNameComponent {
     Validators.maxLength(256),
     isAlphanumericValidator,
   ]);
-  existAndNotOwner;
+  existAndNotOwner = false;
 
   constructor(private roleCreationService: RoleCreationService) {}
 
@@ -37,10 +37,9 @@ export class RoleNameComponent {
     return this.form.hasError(errorType);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   alphaNumericOnly(event: any, includeDot?: boolean): boolean {
     this.existAndNotOwner = false;
-    return isAlphaNumericOnly(event, includeDot);
+    return true;
   }
 
   cancelHandler(): void {
