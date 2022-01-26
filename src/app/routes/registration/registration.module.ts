@@ -31,6 +31,5 @@ const routes: Routes = [];
     RolePreconditionListModule,
   ],
   declarations: [RequestClaimComponent, SelectAssetDialogComponent],
-  entryComponents: [SelectAssetDialogComponent],
 })
 export class RegistrationModule {}

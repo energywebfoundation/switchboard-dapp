@@ -87,12 +87,5 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     CreateFieldsModule,
     DidBookModule,
   ],
-  entryComponents: [
-    NewOrganizationComponent,
-    NewApplicationComponent,
-    NewRoleComponent,
-    TransferOwnershipComponent,
-    RemoveOrgAppComponent,
-  ],
 })
 export class ApplicationsModule {}

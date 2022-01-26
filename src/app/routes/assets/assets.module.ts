@@ -69,12 +69,5 @@ const routes: Routes = [
     ClipboardModule,
     QrCodeModule,
   ],
-  entryComponents: [
-    NewAssetTypeComponent,
-    NewPassiveAssetComponent,
-    AssetOwnershipHistoryComponent,
-    EditAssetDialogComponent,
-    VerificationMethodComponent,
-  ],
 })
 export class AssetsModule {}

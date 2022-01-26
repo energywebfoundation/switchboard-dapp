@@ -56,7 +56,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v2-beta
         with:
-          node-version: '10.22.0'
+          node-version: '16.10.0'
           registry-url: https://registry.npmjs.org/
       - name: Cache node modules
         uses: actions/cache@v2

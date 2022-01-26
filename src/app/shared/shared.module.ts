@@ -49,6 +49,7 @@ import { DidFormatMinifierModule } from './pipes/did-format-minifier/did-format-
 import { TableHeadingComponent } from './components/table-heading/table-heading.component';
 import { NoRecordsComponent } from './components/no-records/no-records.component';
 import { RoleTypePipe } from './pipes/role-type/role-type.pipe';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -94,6 +95,7 @@ const MATERIAL_MODULES = [
     CopyToClipboardModule,
     DidFormatMinifierModule,
     MATERIAL_MODULES,
+    BsDropdownModule,
   ],
   providers: [ColorsService],
   declarations: [
@@ -127,8 +129,8 @@ const MATERIAL_MODULES = [
     TableHeadingComponent,
     NoRecordsComponent,
     RoleTypePipe,
+    BsDropdownModule,
   ],
-  entryComponents: [MinifiedDidViewerDialogComponent],
 })
 
 // https://github.com/ocombe/ng2-translate/issues/209

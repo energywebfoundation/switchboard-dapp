@@ -48,6 +48,5 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
     IssueVcModule,
     EnrolmentFormModule,
   ],
-  entryComponents: [ViewRequestsComponent, ViewRoleComponent],
 })
 export class EnrolmentModule {}

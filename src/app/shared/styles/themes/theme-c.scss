@@ -1,9 +1,9 @@
 // Stedin Theme
 
 // Bootstrap
-@import '../bootstrap/functions';
-@import '../bootstrap/variables';
-@import '../bootstrap/mixins';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
 @import '../app/variables';
 @import '../app/material/colors';
 

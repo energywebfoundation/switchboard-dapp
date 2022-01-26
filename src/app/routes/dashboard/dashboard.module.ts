@@ -44,8 +44,6 @@ const routes: Routes = [{ path: '', component: DashboardComponent }];
     WidgetsModule,
     NgxSpinnerModule,
   ],
-  entryComponents: [],
-
   declarations: [DashboardComponent, UserInfoComponent, CardComponent],
 })
 export class DashboardModule {}
