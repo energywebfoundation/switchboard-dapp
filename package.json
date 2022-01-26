@@ -34,7 +34,6 @@
     "analyze": "ng build -- --statsJson=true && webpack-bundle-analyzer dist/stats.json"
   },
   "dependencies": {
-    "@angular-builders/custom-webpack": "^13.0.0",
     "@angular/animations": "13.1.3",
     "@angular/cdk": "13.1.3",
     "@angular/common": "13.1.3",
@@ -83,6 +82,7 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "^13.0.0",
     "@angular-devkit/build-angular": "13.1.4",
     "@angular-devkit/core": "13.1.4",
     "@angular-eslint/builder": "^13.0.1",
