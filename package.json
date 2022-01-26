@@ -116,7 +116,6 @@
     "karma-jasmine-html-reporter": "^1.7.0",
     "karma-read-json": "1.1.0",
     "karma-typescript": "5.5.3",
-    "loaders.css": "0.1.2",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "patch-package": "^6.4.7",
     "prettier": "^2.5.1",
