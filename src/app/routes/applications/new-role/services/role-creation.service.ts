@@ -61,17 +61,6 @@ export class RoleCreationService {
           TOASTR_HEADER
         );
         return false;
-      } else {
-        // Check if there are approved users to issue the claim
-        const did = await this.domainsFacade.getDIDsByRole(issuerRoleName);
-
-        if (!did || !did.length) {
-          this.toastrService.error(
-            'Issuer Role has no approved users.',
-            TOASTR_HEADER
-          );
-          return false;
-        }
       }
     }
 
