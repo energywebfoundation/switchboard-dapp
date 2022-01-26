@@ -40,7 +40,7 @@ const routes: Routes = [];
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDatetimeModule,
-    MatDatetimepickerModule
+    MatDatetimepickerModule,
   ],
 })
 export class WidgetsModule {}

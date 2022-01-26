@@ -68,6 +68,6 @@ const routes: Routes = [
     MatExpansionModule,
     ClipboardModule,
     QrCodeModule,
-  ]
+  ],
 })
 export class AssetsModule {}

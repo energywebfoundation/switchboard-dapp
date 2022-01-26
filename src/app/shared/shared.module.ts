@@ -95,7 +95,7 @@ const MATERIAL_MODULES = [
     CopyToClipboardModule,
     DidFormatMinifierModule,
     MATERIAL_MODULES,
-    BsDropdownModule
+    BsDropdownModule,
   ],
   providers: [ColorsService],
   declarations: [
@@ -129,8 +129,8 @@ const MATERIAL_MODULES = [
     TableHeadingComponent,
     NoRecordsComponent,
     RoleTypePipe,
-    BsDropdownModule
-  ]
+    BsDropdownModule,
+  ],
 })
 
 // https://github.com/ocombe/ng2-translate/issues/209

@@ -28,11 +28,8 @@ const routes: Routes = [];
     LayoutModule,
     ConnectToWalletModule,
     EnrolmentFormModule,
-    RolePreconditionListModule
+    RolePreconditionListModule,
   ],
-  declarations: [
-    RequestClaimComponent,
-    SelectAssetDialogComponent
-  ],
+  declarations: [RequestClaimComponent, SelectAssetDialogComponent],
 })
 export class RegistrationModule {}
