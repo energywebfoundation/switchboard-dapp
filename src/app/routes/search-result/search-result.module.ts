@@ -7,7 +7,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 import { GovernanceDetailsModule } from '../applications/governance-view/governance-details/governance-details.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
@@ -44,7 +43,6 @@ const routes: Routes = [{ path: '', component: SearchResultComponent }];
     MatSidenavModule,
     NgxSpinnerModule,
     GovernanceDetailsModule,
-    FlexLayoutModule,
     MatButtonToggleModule,
   ],
 })

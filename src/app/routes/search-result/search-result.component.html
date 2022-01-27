@@ -67,16 +67,12 @@
           </div>
         </form>
       </div>
-      <div class="container justify-content-center" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="flex-start">
+      <div class="d-flex container justify-content-center flex-wrap flex-row flex-start">
         <div class="my-3" *ngIf="!(filteredOptions | async)?.length">
           <div class="color-white">No record found.</div>
         </div>
-        <div
-          fxFlex="0 1 calc(25% - 32px)"
-          fxFlex.lt-md="0 1 calc(50% - 32px)"
-          fxFlex.lt-sm="100%"
-          *ngFor="let item of filteredOptions | async">
-          <mat-card class="card-search-body p-0 mb-3 cursor-pointer" (click)="viewDetails(item, searchResultDrawer)">
+        <div *ngFor="let item of filteredOptions | async" class="card-width">
+          <mat-card class="card-search-body p-0 mb-3 cursor-pointer ml-2" (click)="viewDetails(item, searchResultDrawer)">
             <div class="img-container p-4">
               <!-- Placeholder Logo -->
               <ng-container *ngIf="!item?.definition?.logoUrl">
