@@ -58,7 +58,6 @@
             "scripts": [
               "src/app/core/preloader/preloader.js",
               "node_modules/moment/min/moment-with-locales.min.js",
-              "node_modules/fullcalendar/dist/fullcalendar.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -213,8 +212,7 @@
             ],
             "scripts": [
               "src/app/core/preloader/preloader.js",
-              "node_modules/moment/min/moment-with-locales.min.js",
-              "node_modules/fullcalendar/dist/fullcalendar.js"
+              "node_modules/moment/min/moment-with-locales.min.js"
             ]
           }
         },

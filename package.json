@@ -62,7 +62,6 @@
     "bootstrap": "4.3.1",
     "codemirror": "5.58.2",
     "core-js": "2.5.4",
-    "fullcalendar": "3.9.0",
     "hammerjs": "^2.0.8",
     "iam-client-lib": "^4.0.2-alpha.5",
     "modernizr": "3.7.1",
