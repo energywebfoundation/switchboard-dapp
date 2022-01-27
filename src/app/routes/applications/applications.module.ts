@@ -39,9 +39,7 @@ import { IssuerDidListComponent } from './new-role/components/issuer-did-list/is
 import { IssuerDidComponent } from './new-role/components/issuer-did/issuer-did.component';
 import { SearchIssuerRoleComponent } from './new-role/components/search-issuer-role/search-issuer-role.component';
 
-const routes: Routes = [
-  {path: '', component: ApplicationsComponent}
-];
+const routes: Routes = [{ path: '', component: ApplicationsComponent }];
 
 @NgModule({
   declarations: [
@@ -87,15 +85,7 @@ const routes: Routes = [
     MatExpansionModule,
     NgxEditorModule,
     CreateFieldsModule,
-    DidBookModule
+    DidBookModule,
   ],
-  entryComponents: [
-    NewOrganizationComponent,
-    NewApplicationComponent,
-    NewRoleComponent,
-    TransferOwnershipComponent,
-    RemoveOrgAppComponent
-  ]
 })
-export class ApplicationsModule {
-}
+export class ApplicationsModule {}

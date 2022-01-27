@@ -14,10 +14,9 @@ interface DataAsset extends Asset {
 @Component({
   selector: 'app-select-asset-dialog',
   templateUrl: './select-asset-dialog.component.html',
-  styleUrls: ['./select-asset-dialog.component.scss']
+  styleUrls: ['./select-asset-dialog.component.scss'],
 })
 export class SelectAssetDialogComponent implements OnInit {
-
   dataSource: MatTableDataSource<Asset> = new MatTableDataSource([]);
   displayedColumns: string[] = ['logo', 'name', 'id', 'actions'];
 
@@ -26,19 +25,26 @@ export class SelectAssetDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<SelectAssetDialogComponent>,
     private loadingService: LoadingService,
     private iamService: IamService,
-    private toastr: SwitchboardToastrService) {
-  }
+    private toastr: SwitchboardToastrService
+  ) {}
 
   async ngOnInit(): Promise<void> {
     try {
       this.loadingService.show();
-      this.dataSource.data = (await this.iamService.assetsService.getOwnedAssets()).map((data: DataAsset) => {
-        data.minifiedId = `${data.id.substr(0, 15)}...${data.id.substr(data.id.length - 5)}`;
-        return {...data, isSelected: this.data.assetDiD === data.id};
+      this.dataSource.data = (
+        await this.iamService.assetsService.getOwnedAssets()
+      ).map((data: DataAsset) => {
+        data.minifiedId = `${data.id.substr(0, 15)}...${data.id.substr(
+          data.id.length - 5
+        )}`;
+        return { ...data, isSelected: this.data.assetDiD === data.id };
       });
     } catch (e) {
       console.error(e);
-      this.toastr.show('Asset list could not be retrieved at this time.', 'System Error');
+      this.toastr.show(
+        'Asset list could not be retrieved at this time.',
+        'System Error'
+      );
     } finally {
       this.loadingService.hide();
     }
@@ -48,7 +54,7 @@ export class SelectAssetDialogComponent implements OnInit {
     this.dialogRef.close(asset);
   }
 
-  closeDialog(asset?: Asset) {
+  closeDialog() {
     this.dialogRef.close();
   }
 }

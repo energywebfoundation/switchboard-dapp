@@ -10,6 +10,7 @@ export const environment = {
   cacheServerUrl: 'https://identitycache.energyweb.org/v1',
   natsServerUrl: 'https://identityevents.energyweb.org/',
   kmsServerUrl: 'https://kms.energyweb.org/connect/new',
+  ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',
   claimManagerAddress: '0x23b026631A6f265d17CFee8aa6ced1B244f3920C',
   showAzureLoginOption: false,
   natsEnvironmentName: 'ewf-prod',
@@ -20,6 +21,6 @@ export const environment = {
   currencyName: 'EWT',
   currencySymbol: 'EWT',
   blockExplorerUrl: 'https://explorer.energyweb.org',
-
-  ...constants
+  SENTRY_ENVIRONMENT: 'production',
+  ...constants,
 };

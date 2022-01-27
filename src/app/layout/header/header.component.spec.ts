@@ -17,17 +17,16 @@ xdescribe('HeaderComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [HeaderComponent],
       providers: [
-        {provide: IamService, useValue: {}},
-        {provide: Router, useValue: {}},
-        {provide: SwitchboardToastrService, useValue: {}},
-        {provide: NotificationService, useValue: {}},
-        {provide: MatDialog, useValue: {}},
-        {provide: LoginService, useValue: {}},
-        provideMockStore()
+        { provide: IamService, useValue: {} },
+        { provide: Router, useValue: {} },
+        { provide: SwitchboardToastrService, useValue: {} },
+        { provide: NotificationService, useValue: {} },
+        { provide: MatDialog, useValue: {} },
+        { provide: LoginService, useValue: {} },
+        provideMockStore(),
       ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {

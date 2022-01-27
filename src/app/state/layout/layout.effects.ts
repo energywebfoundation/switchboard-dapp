@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import * as  LayoutActions from './layout.actions';
-import * as  LayoutSelectors from './layout.selectors';
+import * as LayoutActions from './layout.actions';
+import * as LayoutSelectors from './layout.selectors';
 import { filter, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import * as AuthSelectors from '../auth/auth.selectors';
 
 @Injectable()
 export class LayoutEffects {
-
   redirectToReturnUrl$ = createEffect(() =>
     this.actions$.pipe(
       ofType(LayoutActions.redirect),
@@ -27,15 +26,16 @@ export class LayoutEffects {
       ofType(LayoutActions.setRedirectUrl),
       concatLatestFrom(() => this.store.select(AuthSelectors.isUserLoggedIn)),
       filter(([, isLoggedIn]) => isLoggedIn),
-      map(([{url},]) => {
+      map(([{ url }]) => {
         this.router.navigateByUrl(`${url}`);
         return LayoutActions.redirectSuccess();
       })
     )
   );
 
-  constructor(private actions$: Actions,
-              private store: Store,
-              private router: Router) {
-  }
+  constructor(
+    private actions$: Actions,
+    private store: Store,
+    private router: Router
+  ) {}
 }

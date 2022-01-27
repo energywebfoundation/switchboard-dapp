@@ -10,11 +10,16 @@ $editor-height: 100px;
   }
 
   .mat-radio-button.mat-radio-checked .mat-radio-outer-circle {
-    border-color: #33CBCB !important;
+    border-color: #33cbcb !important;
   }
 
-  .mat-radio-button .mat-radio-inner-circle, .mat-radio-button .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple), .mat-radio-button.mat-radio-checked .mat-radio-persistent-ripple, .mat-radio-button:active .mat-radio-persistent-ripple {
-    background-color: #33CBCB !important;
+  .mat-radio-button .mat-radio-inner-circle,
+  .mat-radio-button
+    .mat-radio-ripple
+    .mat-ripple-element:not(.mat-radio-persistent-ripple),
+  .mat-radio-button.mat-radio-checked .mat-radio-persistent-ripple,
+  .mat-radio-button:active .mat-radio-persistent-ripple {
+    background-color: #33cbcb !important;
   }
 
   .mat-date-range-input-separator {
@@ -37,16 +42,19 @@ $editor-height: 100px;
     padding: 0.5em 0.5em 1.1em 0.5em;
   }
 
-  .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+  .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy)
+    .mat-form-field-suffix
+    .mat-icon-button {
     top: 1.5px;
   }
 
-  .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+  .staking-date-picker.mat-form-field:not(.mat-form-field-appearance-legacy)
+    .mat-form-field-suffix
+    .mat-icon-button {
     background-color: transparent;
   }
 
   .editor {
-
     .NgxEditor {
       border: none;
       border-radius: 0;
@@ -92,7 +100,6 @@ $editor-height: 100px;
     .CodeMirror {
       height: auto;
       margin-bottom: 0.7rem;
-
 
       pre {
         white-space: pre !important;

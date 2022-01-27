@@ -5,14 +5,15 @@ import { DomainsFacadeService } from '../../../services/domains-facade/domains-f
 import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SmartSearchService {
+  constructor(private domainsFacade: DomainsFacadeService) {}
 
-  constructor(private domainsFacade: DomainsFacadeService) {
-  }
-
-  searchBy(searchWord: string, types: SearchType[] = [SearchType.Role]): Observable<string[]> {
+  searchBy(
+    searchWord: string,
+    types: SearchType[] = [SearchType.Role]
+  ): Observable<string[]> {
     const word = searchWord.trim();
     if (word.length > 2) {
       return this.getListOfNamespaces(word.toLowerCase(), types);
@@ -22,13 +23,8 @@ export class SmartSearchService {
   }
 
   private getListOfNamespaces(word: string, types: SearchType[]) {
-    return from(
-      this.domainsFacade.getENSTypesBySearchPhrase(
-        word,
-        types
-      )
-    ).pipe(
-      map((v) => v.map(item => item.namespace))
+    return from(this.domainsFacade.getENSTypesBySearchPhrase(word, types)).pipe(
+      map((v) => v.map((item) => item.namespace))
     );
   }
 }

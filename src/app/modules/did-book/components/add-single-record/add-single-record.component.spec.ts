@@ -9,20 +9,21 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 describe('AddSingleRecordComponent', () => {
   let component: AddSingleRecordComponent;
   let fixture: ComponentFixture<AddSingleRecordComponent>;
-  let didBookServiceSpy = jasmine.createSpyObj(DidBookService, ['add']);
+  const didBookServiceSpy = jasmine.createSpyObj(DidBookService, ['add']);
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [AddSingleRecordComponent],
-      providers: [
-        {provide: DidBookService, useValue: didBookServiceSpy},
-        {provide: MatDialogRef, useValue: dialogSpy},
-        {provide: MAT_DIALOG_DATA, useValue: {did: 'did'}}
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [AddSingleRecordComponent],
+        providers: [
+          { provide: DidBookService, useValue: didBookServiceSpy },
+          { provide: MatDialogRef, useValue: dialogSpy },
+          { provide: MAT_DIALOG_DATA, useValue: { did: 'did' } },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AddSingleRecordComponent);
@@ -35,7 +36,7 @@ describe('AddSingleRecordComponent', () => {
   });
 
   it('should add record and close dialog', () => {
-    component.addHandler({did: 'did', label: 'label'});
+    component.addHandler({ did: 'did', label: 'label' });
     expect(didBookServiceSpy.add).toHaveBeenCalled();
     expect(dialogSpy.close).toHaveBeenCalled();
   });

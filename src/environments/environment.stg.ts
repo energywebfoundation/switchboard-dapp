@@ -10,6 +10,7 @@ export const environment = {
   cacheServerUrl: 'https://identitycache-staging.energyweb.org/v1',
   natsServerUrl: 'https://identityevents-staging.energyweb.org/',
   kmsServerUrl: 'https://kms.energyweb.org/connect/new',
+  ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',
   claimManagerAddress: '0xC3dD7ED75779b33F5Cfb709E0aB02b71fbFA3210',
   showAzureLoginOption: true,
   natsEnvironmentName: 'ewf-dev',
@@ -20,6 +21,6 @@ export const environment = {
   currencyName: 'Volta Token',
   currencySymbol: 'VT',
   blockExplorerUrl: 'https://volta-explorer.energyweb.org',
-
-  ...constants
+  SENTRY_ENVIRONMENT: 'staging',
+  ...constants,
 };

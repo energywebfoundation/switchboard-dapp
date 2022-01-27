@@ -1,15 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import { ExpiredRequestError } from '../errors/errors';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class IamRequestService {
   private _counter = 0;
   private _queue = {};
-
-  constructor() {
-  }
 
   async enqueue(request: any, params?: any[]): Promise<any> {
     const counter = ++this._counter;
@@ -29,8 +27,6 @@ export class IamRequestService {
       } else {
         throw new ExpiredRequestError('Expired Request');
       }
-    } catch (e) {
-      throw(e);
     } finally {
       delete this._queue[`${counter}`];
     }

@@ -17,9 +17,9 @@
   .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
     color: currentColor;
   }
-
 }
 
-:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
   background: transparent;
 }

@@ -11,20 +11,21 @@ describe('RequiredFieldsComponent', () => {
   let component: RequiredFieldsComponent;
   let fixture: ComponentFixture<RequiredFieldsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [RequiredFieldsComponent],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        NoopAnimationsModule,
-        MatIconTestingModule
-      ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [RequiredFieldsComponent],
+        imports: [
+          ReactiveFormsModule,
+          FormsModule,
+          MatFormFieldModule,
+          MatInputModule,
+          NoopAnimationsModule,
+          MatIconTestingModule,
+        ],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RequiredFieldsComponent);

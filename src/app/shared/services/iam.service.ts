@@ -33,6 +33,7 @@ import { truthy } from '@operators';
 import { finalize, map } from 'rxjs/operators';
 import { EnvService } from './env/env.service';
 import { ChainConfig } from 'iam-client-lib/dist/src/config/chain.config';
+import { EkcSettingsService } from '../../modules/connect-to-wallet/ekc-settings/services/ekc-settings.service';
 
 export const PROVIDER_TYPE = 'ProviderType';
 
@@ -47,7 +48,7 @@ export type InitializeData = {
 };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class IamService {
   signerService: SignerService;
@@ -61,7 +62,8 @@ export class IamService {
 
   constructor(
     private loadingService: LoadingService,
-    private envService: EnvService
+    private envService: EnvService,
+    private ekcSettingsService: EkcSettingsService
   ) {
     // Set Cache Server
     setCacheConfig(envService.chainId, {
@@ -87,18 +89,30 @@ export class IamService {
     return this.signerService.providerType;
   }
 
+  get isEthSigner() {
+    return this.signerService.isEthSigner;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   issueClaim(data: { subject: string; claim: any }) {
     return this.wrapWithLoadingService(this.claimsService.issueClaim(data));
   }
 
   getClaimsBySubject(did: string) {
-    return from(this.claimsService.getClaimsBySubject({
-      did
-    })).pipe(map(claims => claims.filter((claim) => !claim.isRejected)));
+    return from(
+      this.claimsService.getClaimsBySubject({
+        did,
+      })
+    ).pipe(map((claims) => claims.filter((claim) => !claim.isRejected)));
   }
 
   getAllowedRolesByIssuer(): Observable<IRole[]> {
-    return this.wrapWithLoadingService(this.domainsService.getAllowedRolesByIssuer(this.signerService.did) as any as Promise<IRole[]>);
+    return this.wrapWithLoadingService(
+      this.domainsService.getAllowedRolesByIssuer(
+        this.signerService.did
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) as any as Promise<IRole[]>
+    );
   }
 
   getRolesDefinition(namespaces: string[]) {
@@ -110,15 +124,17 @@ export class IamService {
   }
 
   getUserClaims(did?: string) {
-    return from(this.claimsService.getUserClaims({did}));
+    return from(this.claimsService.getUserClaims({ did }));
   }
 
-  createSelfSignedClaim(
-    {data, subject}: {
-      data: ClaimData;
-      subject?: string;
-    }) {
-    return from(this.claimsService.createSelfSignedClaim({data, subject}));
+  createSelfSignedClaim({
+    data,
+    subject,
+  }: {
+    data: ClaimData;
+    subject?: string;
+  }) {
+    return from(this.claimsService.createSelfSignedClaim({ data, subject }));
   }
 
   deleteOrganization(namespace: string, returnSteps: boolean) {
@@ -136,8 +152,8 @@ export class IamService {
 
   getAssetById(id) {
     return this.wrapWithLoadingService(
-      this.assetsService.getAssetById({id}),
-      {message: 'Getting selected asset data...'}
+      this.assetsService.getAssetById({ id }),
+      { message: 'Getting selected asset data...' }
     );
   }
 
@@ -145,13 +161,14 @@ export class IamService {
     return from(this.signerService.closeConnection()).pipe(truthy());
   }
 
-  async initializeConnection({providerType, initCacheServer = true, createDocument = true}: LoginOptions) {
+  async initializeConnection({
+    providerType,
+    initCacheServer = true,
+    createDocument = true,
+  }: LoginOptions) {
     try {
-      const {
-        signerService,
-        messagingService,
-        connectToCacheServer,
-      } = await this.initSignerService(providerType);
+      const { signerService, messagingService, connectToCacheServer } =
+        await this.initSignerService(providerType);
       this.signerService = signerService;
       this.messagingService = messagingService;
       if (initCacheServer) {
@@ -160,14 +177,14 @@ export class IamService {
           stakingPoolService,
           assetsService,
           connectToDidRegistry,
-          cacheClient
+          cacheClient,
         } = await connectToCacheServer();
         this.domainsService = domainsService;
         this.stakingService = stakingPoolService;
         this.assetsService = assetsService;
         this.cacheClient = cacheClient;
         if (createDocument) {
-          const {didRegistry, claimsService} = await connectToDidRegistry();
+          const { didRegistry, claimsService } = await connectToDidRegistry();
           this.didRegistry = didRegistry;
           this.claimsService = claimsService;
         }
@@ -180,7 +197,7 @@ export class IamService {
         userClosedModal: e.message === 'User closed modal',
         realtimeExchangeConnected: false,
         accountInfo: undefined,
-        message: e.message
+        message: e.message,
       };
     }
     return {
@@ -214,7 +231,7 @@ export class IamService {
   }
 
   isOwner(namespace: string) {
-    return from(this.domainsService.isOwner({domain: namespace}));
+    return from(this.domainsService.isOwner({ domain: namespace }));
   }
 
   getOrganizationsByOwner() {
@@ -251,16 +268,14 @@ export class IamService {
     return chainConfig;
   }
 
-  private async initSignerService(
-    providerType: ProviderType,
-  ) {
+  private async initSignerService(providerType: ProviderType) {
     switch (providerType) {
       case ProviderType.MetaMask:
         return initWithMetamask();
       case ProviderType.WalletConnect:
         return initWithWalletConnect();
       case ProviderType.EwKeyManager:
-        return initWithKms({kmsServerUrl: this.envService.kmsServerUrl});
+        return initWithKms({ kmsServerUrl: this.envService.kmsServerUrl });
       case ProviderType.PrivateKey:
         return initWithPrivateKeySigner(
           localStorage.getItem('PrivateKey'),
@@ -269,7 +284,7 @@ export class IamService {
       case ProviderType.Gnosis:
         return initWithGnosis(safeAppSdk);
       case ProviderType.EKC:
-        return initWithEKC();
+        return initWithEKC(this.ekcSettingsService.url);
     }
   }
 }

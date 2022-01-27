@@ -5,11 +5,5 @@ export const setRedirectUrl = createAction(
   props<{ url: string }>()
 );
 
-export const redirect = createAction(
-  '[LAYOUT] Redirect'
-);
-export const redirectSuccess = createAction(
-  '[LAYOUT] Redirect Success'
-);
-
-
+export const redirect = createAction('[LAYOUT] Redirect');
+export const redirectSuccess = createAction('[LAYOUT] Redirect Success');

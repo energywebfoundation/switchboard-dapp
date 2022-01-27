@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, Inject, OnDestroy, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ExpiredRequestError } from '../../../shared/errors/errors';
 import { IamRequestService } from '../../../shared/services/iam-request.service';
@@ -6,7 +12,11 @@ import { IamService } from '../../../shared/services/iam.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { Subject } from 'rxjs';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
@@ -17,13 +27,13 @@ const TOASTR_HEADER = 'Transfer Ownership';
 const ListType = {
   ORG: 'org',
   APP: 'app',
-  ROLE: 'role'
+  ROLE: 'role',
 };
 
 @Component({
   selector: 'app-transfer-ownership',
   templateUrl: './transfer-ownership.component.html',
-  styleUrls: ['./transfer-ownership.component.scss']
+  styleUrls: ['./transfer-ownership.component.scss'],
 })
 export class TransferOwnershipComponent implements OnDestroy {
   destroy$ = new Subject();
@@ -31,7 +41,8 @@ export class TransferOwnershipComponent implements OnDestroy {
   private stepper: MatStepper;
 
   @ViewChild('stepper') set content(content: MatStepper) {
-    if (content) { // initially setter gets called with undefined
+    if (content) {
+      // initially setter gets called with undefined
       this.stepper = content;
     }
   }
@@ -49,19 +60,21 @@ export class TransferOwnershipComponent implements OnDestroy {
 
   private _currentIdx = 0;
 
-  constructor(private iamService: IamService,
-              private toastr: SwitchboardToastrService,
-              private iamRequestService: IamRequestService,
-              private loadingService: LoadingService,
-              private changeDetector: ChangeDetectorRef,
-              public dialogRef: MatDialogRef<TransferOwnershipComponent>,
-              public dialog: MatDialog,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(
+    private iamService: IamService,
+    private toastr: SwitchboardToastrService,
+    private iamRequestService: IamRequestService,
+    private loadingService: LoadingService,
+    private changeDetector: ChangeDetectorRef,
+    public dialogRef: MatDialogRef<TransferOwnershipComponent>,
+    public dialog: MatDialog,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     this.namespace = this.data.namespace;
     this.type = this.data.type;
     this.assetDid = this.data.assetDid;
   }
-
 
   didChangeHandler(e) {
     if (e.valid) {
@@ -76,22 +89,30 @@ export class TransferOwnershipComponent implements OnDestroy {
   }
 
   private async confirm(confirmationMsg: string, showDiscardButton?: boolean) {
-    return this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      maxHeight: '195px',
-      data: {
-        header: TOASTR_HEADER,
-        message: confirmationMsg,
-        isDiscardButton: showDiscardButton
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().toPromise();
+    return this.dialog
+      .open(ConfirmationDialogComponent, {
+        width: '400px',
+        maxHeight: '195px',
+        data: {
+          header: TOASTR_HEADER,
+          message: confirmationMsg,
+          isDiscardButton: showDiscardButton,
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .toPromise();
   }
 
   async closeDialog(isSuccess?: boolean) {
     if (this.didValid && !isSuccess) {
-      if (await this.confirm('There are unsaved changes. Do you wish to continue?', true)) {
+      if (
+        await this.confirm(
+          'There are unsaved changes. Do you wish to continue?',
+          true
+        )
+      ) {
         this.dialogRef.close(false);
       }
     } else {
@@ -117,13 +138,18 @@ export class TransferOwnershipComponent implements OnDestroy {
   }
 
   private async _transferOrgAppRole() {
-    if (await this.confirm('You will no longer be the owner of this namespace. Do you wish to continue?')) {
+    if (
+      await this.confirm(
+        'You will no longer be the owner of this namespace. Do you wish to continue?'
+      )
+    ) {
       this.loadingService.show();
-      const returnSteps = this.iamService.signerService.address === this.data.owner;
+      const returnSteps =
+        this.iamService.signerService.address === this.data.owner;
       const req = {
         namespace: this.namespace,
         newOwner: extractAddress(this.newOwnerDID),
-        returnSteps
+        returnSteps,
       };
 
       let call;
@@ -139,12 +165,14 @@ export class TransferOwnershipComponent implements OnDestroy {
             call = this.iamService.domainsService.changeRoleOwnership(req);
             break;
         }
-        this.mySteps = returnSteps ?
-          await call :
-          [{
-            info: 'Confirm transaction in your safe wallet',
-            next: async () => await call
-          }];
+        this.mySteps = returnSteps
+          ? await call
+          : [
+              {
+                info: 'Confirm transaction in your safe wallet',
+                next: async () => await call,
+              },
+            ];
 
         this.isProcessing = true;
         this.changeDetector.detectChanges();
@@ -155,7 +183,10 @@ export class TransferOwnershipComponent implements OnDestroy {
       } catch (e) {
         console.error(e);
         this.loadingService.hide();
-        this.toastr.error(e.message || 'Please contact system administrator.', TOASTR_HEADER);
+        this.toastr.error(
+          e.message || 'Please contact system administrator.',
+          TOASTR_HEADER
+        );
       }
     } else {
       this.dialogRef.close(false);
@@ -163,18 +194,28 @@ export class TransferOwnershipComponent implements OnDestroy {
   }
 
   private async _transferAsset() {
-    if (await this.confirm('You will no longer be the owner of this asset. Do you wish to continue?')) {
-      this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
+    if (
+      await this.confirm(
+        'You will no longer be the owner of this asset. Do you wish to continue?'
+      )
+    ) {
+      this.loadingService.show(
+        'Please confirm this transaction in your connected wallet.',
+        CancelButton.ENABLED
+      );
 
       try {
         await this.iamService.assetsService.offerAsset({
           assetDID: this.assetDid,
-          offerTo: extractAddress(this.newOwnerDID)
+          offerTo: extractAddress(this.newOwnerDID),
         });
         this.dialogRef.close(true);
       } catch (e) {
         console.error(e);
-        this.toastr.error(e.message || 'Please contact system administrator.', TOASTR_HEADER);
+        this.toastr.error(
+          e.message || 'Please contact system administrator.',
+          TOASTR_HEADER
+        );
       } finally {
         this.loadingService.hide();
       }
@@ -197,7 +238,10 @@ export class TransferOwnershipComponent implements OnDestroy {
         // Process the next step
         try {
           await this.iamRequestService.enqueue(step.next);
-          this.toastr.info(step.info, `Transaction Success (${index + 1}/${steps.length})`);
+          this.toastr.info(
+            step.info,
+            `Transaction Success (${index + 1}/${steps.length})`
+          );
 
           // Move to Complete Step
           this.stepper.selected.completed = true;
@@ -205,7 +249,10 @@ export class TransferOwnershipComponent implements OnDestroy {
         } catch (e) {
           if (!(e instanceof ExpiredRequestError)) {
             console.error('Transfer Ownership Error', e);
-            this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+            this.toastr.error(
+              e.message || 'Please contact system administrator.',
+              'System Error'
+            );
           }
           break;
         }

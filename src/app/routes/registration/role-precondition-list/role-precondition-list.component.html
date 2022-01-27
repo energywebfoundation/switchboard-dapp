@@ -1,14 +1,17 @@
 <ng-container *ngFor="let precondition of preconditionList">
   <!-- Role is Approved but NOT SYNCED -->
-  <div *ngIf="isApproved(precondition.status)"
-       matTooltip="Please sync this role to your DID Document."
-       class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-4">
+  <div
+    *ngIf="isApproved(precondition.status)"
+    matTooltip="Please sync this role to your DID Document."
+    class="card card-success d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-4">
     <mat-icon>check_circle</mat-icon>
     <span class="pb-2">{{ precondition.namespace }}</span>
   </div>
   <!-- Request is Pending or No Request at all -->
-  <div *ngIf="isPending(precondition.status)" matTooltip="You don't have this role yet."
-       class="card card-warning d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-4">
+  <div
+    *ngIf="isPending(precondition.status)"
+    matTooltip="You don't have this role yet."
+    class="card card-warning d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-4">
     <mat-icon>pending_actions</mat-icon>
     <span class="pb-2">{{ precondition.namespace }}</span>
   </div>

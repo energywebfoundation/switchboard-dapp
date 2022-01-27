@@ -1,14 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 
 @Injectable()
 export class SettingsService {
-
   private user: any;
   private app: any;
   private layout: any;
 
   constructor() {
-
     // Layout Settings
     // -----------------------------------
     this.layout = {
@@ -26,9 +25,8 @@ export class SettingsService {
       hiddenFooter: false,
       offsidebarOpen: false,
       asideToggled: false,
-      viewAnimation: 'ng-fadeInUp'
+      viewAnimation: 'ng-fadeInUp',
     };
-
   }
 
   getAppSetting(name) {
@@ -57,12 +55,11 @@ export class SettingsService {
 
   setLayoutSetting(name, value) {
     if (typeof this.layout[name] !== 'undefined') {
-      return this.layout[name] = value;
+      return (this.layout[name] = value);
     }
   }
 
   toggleLayoutSetting(name) {
     return this.setLayoutSetting(name, !this.getLayoutSetting(name));
   }
-
 }

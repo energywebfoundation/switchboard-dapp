@@ -30,10 +30,9 @@ import { DidQrCodeComponent } from './did-qr-code/did-qr-code.component';
 import { QrCodeModule } from 'ng-qrcode';
 
 const routes: Routes = [
-  {path: '', component: AssetsComponent},
-  {path: 'enrolment/:subject', component: AssetEnrolmentListComponent}
+  { path: '', component: AssetsComponent },
+  { path: 'enrolment/:subject', component: AssetEnrolmentListComponent },
 ];
-
 
 @NgModule({
   declarations: [
@@ -48,7 +47,7 @@ const routes: Routes = [
     HistoryElementComponent,
     HistoryPeriodComponent,
     TypeAlgorithmPipe,
-    DidQrCodeComponent
+    DidQrCodeComponent,
   ],
   imports: [
     CommonModule,
@@ -68,15 +67,7 @@ const routes: Routes = [
     GovernanceDetailsModule,
     MatExpansionModule,
     ClipboardModule,
-    QrCodeModule
+    QrCodeModule,
   ],
-  entryComponents: [
-    NewAssetTypeComponent,
-    NewPassiveAssetComponent,
-    AssetOwnershipHistoryComponent,
-    EditAssetDialogComponent,
-    VerificationMethodComponent
-  ]
 })
-export class AssetsModule {
-}
+export class AssetsModule {}

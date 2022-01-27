@@ -2,40 +2,39 @@ import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UrlParamService {
-
-  constructor() {
-  }
-
-  updateQueryParams(router: Router, activatedRoute: ActivatedRoute, queryParams: any, paramListToRemove?: string[]) {
+  updateQueryParams(
+    router: Router,
+    activatedRoute: ActivatedRoute,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    queryParams: any,
+    paramListToRemove?: string[]
+  ) {
     if (paramListToRemove) {
-      let params = JSON.parse(JSON.stringify(activatedRoute.snapshot.queryParams));
+      let params = JSON.parse(
+        JSON.stringify(activatedRoute.snapshot.queryParams)
+      );
       paramListToRemove.forEach((item) => {
         delete params[item];
       });
 
       params = {
         ...params,
-        ...queryParams
+        ...queryParams,
       };
 
       router.navigate([], {
         relativeTo: activatedRoute,
-        queryParams: params
+        queryParams: params,
       });
     } else {
       router.navigate([], {
         relativeTo: activatedRoute,
         queryParams,
-        queryParamsHandling: 'merge'
+        queryParamsHandling: 'merge',
       });
     }
-  }
-
-  removeQueryParams(router: Router, activatedRoute: ActivatedRoute, paramList: string[]) {
-
-
   }
 }

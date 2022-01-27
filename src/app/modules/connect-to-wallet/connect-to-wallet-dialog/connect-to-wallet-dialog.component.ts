@@ -10,22 +10,27 @@ import { EnvService } from '../../../shared/services/env/env.service';
   selector: 'app-connect-to-wallet-dialog',
   templateUrl: './connect-to-wallet-dialog.component.html',
   styleUrls: ['./connect-to-wallet-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConnectToWalletDialogComponent {
   disableMetamaskButton$ = this.store.select(authSelectors.isMetamaskDisabled);
-  isMetamaskExtensionAvailable$ = this.store.select(authSelectors.isMetamaskPresent);
+  isMetamaskExtensionAvailable$ = this.store.select(
+    authSelectors.isMetamaskPresent
+  );
   showEkcOption = this.envService.showAzureLoginOption;
 
-  constructor(private store: Store,
-              @Inject(MAT_DIALOG_DATA) public data: { navigateOnTimeout: boolean },
-              private envService: EnvService) {
-  }
+  constructor(
+    private store: Store,
+    @Inject(MAT_DIALOG_DATA) public data: { navigateOnTimeout: boolean },
+    private envService: EnvService
+  ) {}
 
   login(provider: ProviderType) {
-    this.store.dispatch(AuthActions.loginViaDialog({
-      provider,
-      navigateOnTimeout: this.data?.navigateOnTimeout ?? true
-    }));
+    this.store.dispatch(
+      AuthActions.loginViaDialog({
+        provider,
+        navigateOnTimeout: this.data?.navigateOnTimeout ?? true,
+      })
+    );
   }
 }

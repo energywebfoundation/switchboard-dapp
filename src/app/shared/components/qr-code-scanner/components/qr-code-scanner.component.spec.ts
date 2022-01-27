@@ -9,14 +9,15 @@ describe('QrCodeScannerComponent', () => {
   let component: QrCodeScannerComponent;
   let fixture: ComponentFixture<QrCodeScannerComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [QrCodeScannerComponent],
-      providers: [{provide: MatDialogRef, useValue: dialogSpy}],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [QrCodeScannerComponent],
+        providers: [{ provide: MatDialogRef, useValue: dialogSpy }],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(QrCodeScannerComponent);
@@ -30,8 +31,8 @@ describe('QrCodeScannerComponent', () => {
 
   it('should close dialog with passed did', () => {
     const did = 'did:ethr:example';
-    component.scanned({text: did});
+    component.scanned({ text: did });
 
-    expect(dialogSpy.close).toHaveBeenCalledWith({value: did});
+    expect(dialogSpy.close).toHaveBeenCalledWith({ value: did });
   });
 });

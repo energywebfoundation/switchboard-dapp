@@ -20,12 +20,12 @@ export class MockActivatedRoute {
     return this.innerTestParams;
   }
 
-  set testParams(params: {}) {
+  set testParams(params: object) {
     this.innerTestParams = params;
     this.subject.next(params);
   }
 
   get snapshot() {
-    return {params: this.testParams, queryParams: this.testParams};
+    return { params: this.testParams, queryParams: this.testParams };
   }
 }

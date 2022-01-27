@@ -2,7 +2,6 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
 
 import { ColorsService } from './colors/colors.service';
 import { ScrollableDirective } from './directives/scrollable/scrollable.directive';
@@ -50,7 +49,7 @@ import { DidFormatMinifierModule } from './pipes/did-format-minifier/did-format-
 import { TableHeadingComponent } from './components/table-heading/table-heading.component';
 import { NoRecordsComponent } from './components/no-records/no-records.component';
 import { RoleTypePipe } from './pipes/role-type/role-type.pipe';
-
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -93,14 +92,12 @@ const MATERIAL_MODULES = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslateModule,
     CopyToClipboardModule,
     DidFormatMinifierModule,
-    MATERIAL_MODULES
+    MATERIAL_MODULES,
+    BsDropdownModule,
   ],
-  providers: [
-    ColorsService
-  ],
+  providers: [ColorsService],
   declarations: [
     ScrollableDirective,
     PreventPasteDirective,
@@ -112,13 +109,12 @@ const MATERIAL_MODULES = [
     ReplaceUnderscorePipe,
     TableHeadingComponent,
     NoRecordsComponent,
-    RoleTypePipe
+    RoleTypePipe,
   ],
   exports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslateModule,
     RouterModule,
     ScrollableDirective,
     PreventPasteDirective,
@@ -132,16 +128,16 @@ const MATERIAL_MODULES = [
     DidFormatMinifierModule,
     TableHeadingComponent,
     NoRecordsComponent,
-    RoleTypePipe
+    RoleTypePipe,
+    BsDropdownModule,
   ],
-  entryComponents: [MinifiedDidViewerDialogComponent]
 })
 
 // https://github.com/ocombe/ng2-translate/issues/209
 export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
-      ngModule: SharedModule
+      ngModule: SharedModule,
     };
   }
 }

@@ -8,9 +8,8 @@ describe('NoRecordsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NoRecordsComponent]
-    })
-      .compileComponents();
+      declarations: [NoRecordsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

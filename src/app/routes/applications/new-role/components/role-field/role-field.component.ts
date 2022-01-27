@@ -5,7 +5,7 @@ import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/Domain
 @Component({
   selector: 'app-role-field',
   templateUrl: './role-field.component.html',
-  styleUrls: ['./role-field.component.scss']
+  styleUrls: ['./role-field.component.scss'],
 })
 export class RoleFieldComponent extends FieldsAbstract<IFieldDefinition> {
   @Input() fieldsList: IFieldDefinition[];
@@ -14,5 +14,4 @@ export class RoleFieldComponent extends FieldsAbstract<IFieldDefinition> {
   get fields() {
     return this.fieldsList;
   }
-
 }

@@ -9,17 +9,18 @@ describe('QrCodeComponent', () => {
   let component: DidQrCodeComponent;
   let fixture: ComponentFixture<DidQrCodeComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        {provide: MatDialogRef, useValue: dialogSpy},
-        {provide: MAT_DIALOG_DATA, useValue: {id: 'did:ethr:test'}}
-      ],
-      declarations: [DidQrCodeComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: MatDialogRef, useValue: dialogSpy },
+          { provide: MAT_DIALOG_DATA, useValue: { id: 'did:ethr:test' } },
+        ],
+        declarations: [DidQrCodeComponent],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DidQrCodeComponent);

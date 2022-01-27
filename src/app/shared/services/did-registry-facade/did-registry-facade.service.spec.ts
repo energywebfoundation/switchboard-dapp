@@ -9,9 +9,7 @@ describe('DidRegistryFacadeService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        {provide: IamService, useValue: iamServiceSpy}
-      ]
+      providers: [{ provide: IamService, useValue: iamServiceSpy }],
     });
     service = TestBed.inject(DidRegistryFacadeService);
   });

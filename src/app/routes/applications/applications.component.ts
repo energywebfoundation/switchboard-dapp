@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
@@ -11,7 +17,12 @@ import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
-import { ApplicationActions, OrganizationActions, OrganizationSelectors, RoleActions } from '@state';
+import {
+  ApplicationActions,
+  OrganizationActions,
+  OrganizationSelectors,
+  RoleActions,
+} from '@state';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { RoleListComponent } from './role-list/role-list.component';
@@ -21,7 +32,7 @@ import { EnvService } from '../../shared/services/env/env.service';
 @Component({
   selector: 'app-applications',
   templateUrl: './applications.component.html',
-  styleUrls: ['./applications.component.scss']
+  styleUrls: ['./applications.component.scss'],
 })
 export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('governanceTabGroup') governanceTabGroup: MatTabGroup;
@@ -29,8 +40,12 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('listApp') listApp: ApplicationListComponent;
   @ViewChild('listRole') listRole: RoleListComponent;
 
-  hierarchyLength$ = this.store.select(OrganizationSelectors.getHierarchyLength);
-  isSelectedOrgNotOwnedByUser$ = this.store.select(OrganizationSelectors.isSelectedOrgNotOwnedByUser);
+  hierarchyLength$ = this.store.select(
+    OrganizationSelectors.getHierarchyLength
+  );
+  isSelectedOrgNotOwnedByUser$ = this.store.select(
+    OrganizationSelectors.isSelectedOrgNotOwnedByUser
+  );
 
   isAppShown = false;
   isRoleShown = false;
@@ -40,32 +55,36 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   showFilter = {
     org: false,
     app: false,
-    role: false
+    role: false,
   };
   defaultFilterOptions = {
     app: undefined,
-    role: undefined
+    role: undefined,
   };
 
   ListType = ListType;
 
   private subscription$ = new Subject();
 
-  constructor(public dialog: MatDialog,
-              private iamService: IamService,
-              private urlParamService: UrlParamService,
-              private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private store: Store,
-              private envService: EnvService) {
-  }
+  constructor(
+    public dialog: MatDialog,
+    private iamService: IamService,
+    private urlParamService: UrlParamService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private store: Store,
+    private envService: EnvService
+  ) {}
 
   ngAfterViewInit(): void {
-    this.activatedRoute.queryParams.subscribe((params: any) => {
-      if (params && params.selectedTab) {
-        this.governanceTabGroup.selectedIndex = params.selectedTab;
-      }
-    }).unsubscribe();
+    this.activatedRoute.queryParams
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .subscribe((params: any) => {
+        if (params && params.selectedTab) {
+          this.governanceTabGroup.selectedIndex = params.selectedTab;
+        }
+      })
+      .unsubscribe();
   }
 
   ngOnDestroy(): void {
@@ -76,9 +95,12 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openNewOrgComponent(): void {
     if (!this.isIamEwcOwner) {
-      const namespace = 'orgcreator.apps.testorg.' + this.envService.rootNamespace;
+      const namespace =
+        'orgcreator.apps.testorg.' + this.envService.rootNamespace;
       const roleName = 'orgowner';
-      this.router.navigate([`enrol`], {queryParams: {roleName, app: namespace, stayLoggedIn: true}});
+      this.router.navigate([`enrol`], {
+        queryParams: { roleName, app: namespace, stayLoggedIn: true },
+      });
       return;
     }
 
@@ -86,12 +108,13 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       width: '600px',
       data: {},
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
 
-    dialogRef.afterClosed()
+    dialogRef
+      .afterClosed()
       .pipe(takeUntil(this.subscription$))
-      .subscribe(result => {
+      .subscribe((result) => {
         // console.log('The dialog was closed');
 
         if (result) {
@@ -106,14 +129,14 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async ngOnInit() {
     this.isIamEwcOwner = await this.iamService.domainsService.isOwner({
-      domain: this.envService.rootNamespace
+      domain: this.envService.rootNamespace,
     });
   }
 
   showMe(i: MatTabChangeEvent) {
     // Preserve Selected Tab
     this.urlParamService.updateQueryParams(this.router, this.activatedRoute, {
-      selectedTab: i.index
+      selectedTab: i.index,
     });
 
     if (i.index === 1) {
@@ -150,23 +173,28 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateFilter(filterOptions: any) {
     let tabIdx = 0;
     switch (filterOptions.listType) {
       case ListType.APP:
         tabIdx = 1;
-        this.store.dispatch(ApplicationActions.updateFilters({
-          filters: filterOptions,
-          namespace: this.envService.rootNamespace
-        }));
+        this.store.dispatch(
+          ApplicationActions.updateFilters({
+            filters: filterOptions,
+            namespace: this.envService.rootNamespace,
+          })
+        );
         this.store.dispatch(ApplicationActions.showFilters());
         break;
       case ListType.ROLE:
         tabIdx = 2;
-        this.store.dispatch(RoleActions.updateFilters({
-          filters: filterOptions,
-          namespace: this.envService.rootNamespace
-        }));
+        this.store.dispatch(
+          RoleActions.updateFilters({
+            filters: filterOptions,
+            namespace: this.envService.rootNamespace,
+          })
+        );
         this.store.dispatch(RoleActions.showFilters());
         break;
     }

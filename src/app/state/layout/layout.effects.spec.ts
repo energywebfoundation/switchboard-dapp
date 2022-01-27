@@ -12,16 +12,16 @@ import * as LayoutSelectors from './layout.selectors';
 import { AuthSelectors } from '@state';
 
 describe('LayoutEffects', () => {
-
   let actions$: ReplaySubject<any>;
   let effects: LayoutEffects;
   let store: MockStore<LayoutState>;
   const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         LayoutEffects,
-        {provide: Router, useValue: routerSpy},
+        { provide: Router, useValue: routerSpy },
         provideMockStore(),
         provideMockActions(() => actions$),
       ],
@@ -41,7 +41,7 @@ describe('LayoutEffects', () => {
       const redirectUrl = 'test';
       store.overrideSelector(LayoutSelectors.getRedirectUrl, redirectUrl);
 
-      effects.redirectToReturnUrl$.subscribe(resultAction => {
+      effects.redirectToReturnUrl$.subscribe((resultAction) => {
         expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(redirectUrl);
         expect(resultAction).toEqual(LayoutActions.redirectSuccess());
         done();
@@ -57,15 +57,14 @@ describe('LayoutEffects', () => {
     it('should redirect when redirectUrl is not an empty string', (done) => {
       const redirectUrl = 'test';
 
-      actions$.next(LayoutActions.setRedirectUrl({url: redirectUrl}));
+      actions$.next(LayoutActions.setRedirectUrl({ url: redirectUrl }));
       store.overrideSelector(AuthSelectors.isUserLoggedIn, true);
 
-      effects.redirectWhenUrlIsSetAndLoggedIn$.subscribe(resultAction => {
+      effects.redirectWhenUrlIsSetAndLoggedIn$.subscribe((resultAction) => {
         expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(redirectUrl);
         expect(resultAction).toEqual(LayoutActions.redirectSuccess());
         done();
       });
     });
   });
-
 });

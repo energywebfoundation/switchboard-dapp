@@ -8,9 +8,8 @@ xdescribe('AssetListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AssetListComponent]
-    })
-      .compileComponents();
+      declarations: [AssetListComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

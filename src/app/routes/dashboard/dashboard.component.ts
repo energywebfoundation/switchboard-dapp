@@ -1,10 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, Component } from '@angular/core';
 import { IamService } from '../../shared/services/iam.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from '../../shared/services/loading.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { debounceTime, filter, map, startWith, switchMap, take } from 'rxjs/operators';
+import {
+  debounceTime,
+  filter,
+  map,
+  startWith,
+  switchMap,
+  take,
+} from 'rxjs/operators';
 import { ProviderType, SearchType } from 'iam-client-lib';
 import { LoadingCount } from '../../shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
@@ -15,7 +23,7 @@ import { LayoutActions, SettingsSelectors } from '@state';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements AfterViewInit {
   private readonly walletProvider: ProviderType = undefined;
@@ -25,12 +33,14 @@ export class DashboardComponent implements AfterViewInit {
   searchTxtFieldValue: string;
   isAutolistLoading = {
     requests: [],
-    value: false
+    value: false,
   };
 
   userName$ = this.store.select(userSelectors.getUserName);
   userDid$ = this.store.select(userSelectors.getDid);
-  isExperimentalEnabled$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
+  isExperimentalEnabled$ = this.store.select(
+    SettingsSelectors.isExperimentalEnabled
+  );
 
   constructor(
     private iamService: IamService,
@@ -38,10 +48,11 @@ export class DashboardComponent implements AfterViewInit {
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService,
     private fb: FormBuilder,
-    private store: Store) {
+    private store: Store
+  ) {
     // Init Search
     this.searchForm = fb.group({
-      searchTxt: new FormControl('')
+      searchTxt: new FormControl(''),
     });
     this.filteredOptions = this.searchForm.get('searchTxt').valueChanges.pipe(
       debounceTime(1200),
@@ -51,20 +62,25 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.activeRoute.queryParams.pipe(
-      filter((queryParams) => queryParams?.returnUrl),
-      map((params) => params.returnUrl),
-      take(1),
-    ).subscribe((redirectUrl) => {
-      this.store.dispatch(LayoutActions.setRedirectUrl({ url: redirectUrl }));
-    });
+    this.activeRoute.queryParams
+      .pipe(
+        filter((queryParams) => queryParams?.returnUrl),
+        map((params) => params.returnUrl),
+        take(1)
+      )
+      .subscribe((redirectUrl) => {
+        this.store.dispatch(LayoutActions.setRedirectUrl({ url: redirectUrl }));
+      });
 
     this.store.dispatch(AuthActions.reinitializeAuth());
   }
 
   private async _filterOrgsAndApps(keyword: any): Promise<any[]> {
     let retVal = [];
-    this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.UP);
+    this.loadingService.updateLocalLoadingFlag(
+      this.isAutolistLoading,
+      LoadingCount.UP
+    );
 
     try {
       if (keyword) {
@@ -77,16 +93,20 @@ export class DashboardComponent implements AfterViewInit {
 
         if (word.length > 2) {
           word = word.toLowerCase();
-          retVal = await this.iamService.domainsService.getENSTypesBySearchPhrase(
-            word,
-            [SearchType.App, SearchType.Org]
-          );
+          retVal =
+            await this.iamService.domainsService.getENSTypesBySearchPhrase(
+              word,
+              [SearchType.App, SearchType.Org]
+            );
         }
       }
     } catch (e) {
       console.error(e);
     } finally {
-      this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.DOWN);
+      this.loadingService.updateLocalLoadingFlag(
+        this.isAutolistLoading,
+        LoadingCount.DOWN
+      );
     }
 
     return retVal;
@@ -99,7 +119,7 @@ export class DashboardComponent implements AfterViewInit {
   search(namespace?: string) {
     if (!this.isAutolistLoading.value) {
       this.route.navigate(['search-result'], {
-        queryParams: { keyword: this.searchTxtFieldValue, namespace }
+        queryParams: { keyword: this.searchTxtFieldValue, namespace },
       });
     }
   }
@@ -109,11 +129,13 @@ export class DashboardComponent implements AfterViewInit {
     this.search(event.option.value.namespace);
   }
 
+  // eslint-disable-next-line
   updateSearchTxtFieldValue(event: any) {
     if (typeof this.searchForm.value.searchTxt === 'string') {
       this.searchTxtFieldValue = this.searchForm.value.searchTxt;
     } else {
-      this.searchTxtFieldValue = this.searchForm.value.searchTxt.option.value.name;
+      this.searchTxtFieldValue =
+        this.searchForm.value.searchTxt.option.value.name;
     }
   }
 

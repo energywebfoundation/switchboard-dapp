@@ -3,8 +3,8 @@ import { EnvService } from '../../shared/services/env/env.service';
 
 @Injectable()
 export class ThemesService {
-
   readonly defaultTheme = 'default';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private styleTag: any;
 
   constructor(private env: EnvService) {
@@ -33,5 +33,4 @@ export class ThemesService {
 
     head.appendChild(this.styleTag);
   }
-
 }

@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Location } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UrlService {
   private previousUrl = new BehaviorSubject<string>(null);
@@ -19,14 +19,12 @@ export class UrlService {
     return this.currentUrl.asObservable();
   }
 
-  constructor(private router: Router,
-              private location: Location) {
-  }
+  constructor(private router: Router, private location: Location) {}
 
   init() {
-    this.router.events.pipe(
-      filter(e => e instanceof NavigationEnd)
-    ).subscribe((e: NavigationEnd) => this.updateHistory(e));
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe((e: NavigationEnd) => this.updateHistory(e));
   }
 
   goTo(url: string) {

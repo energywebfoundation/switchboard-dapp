@@ -1,4 +1,5 @@
-<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">Transfer Ownership
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
+  Transfer Ownership
   <button mat-icon-button (click)="closeDialog()">
     <mat-icon>close</mat-icon>
   </button>
@@ -8,22 +9,22 @@
   <!-- START: New Owner Form -->
   <ng-container *ngIf="!isProcessing">
     <div
-        class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3"
-        *ngIf="namespace">
+      class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3"
+      *ngIf="namespace">
       <mat-icon>info</mat-icon>
       <span class="pb-2">NAMESPACE: {{ namespace }}</span>
     </div>
     <div
-        class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3"
-        *ngIf="assetDid">
+      class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3"
+      *ngIf="assetDid">
       <mat-icon>info</mat-icon>
       <span class="pb-2">ASSET: {{ assetDid }}</span>
     </div>
     <app-select-did (didChange)="didChangeHandler($event)"></app-select-did>
     <div class="d-flex justify-content-end mb-3" *ngIf="!mySteps?.length">
       <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-      <button mat-raised-button class="btn btn-small btn-primary" (click)="submit()"
-              [disabled]="!didValid">Next
+      <button mat-raised-button class="btn btn-small btn-primary" (click)="submit()" [disabled]="!didValid">
+        Next
       </button>
     </div>
   </ng-container>
@@ -46,22 +47,26 @@
         <ng-template matStepperIcon="edit">
           <mat-icon>check</mat-icon>
         </ng-template>
-        <mat-step [completed]="false" *ngFor="let step of mySteps; let i = index;">
+        <mat-step [completed]="false" *ngFor="let step of mySteps; let i = index">
           <ng-template matStepLabel>Transfer Ownership</ng-template>
           <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
             <mat-icon>info</mat-icon>
             <span class="pb-2">{{ step.info }}</span>
           </div>
           <div
-              class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
+            class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
             <mat-icon class="px-2">notifications_none</mat-icon>
-            <span class="pl-3 pb-2">Please confirm this transaction in your connected Wallet.</span>
+            <span class="pl-3 pb-2"> Please confirm this transaction in your connected Wallet. </span>
           </div>
           <div class="d-flex justify-content-end mb-3">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-            <button mat-raised-button class="btn btn-small btn-primary" *ngIf="stepper.selectedIndex === i"
-                    (appRetryBtn)="retry()">Retry
+            <button
+              mat-raised-button
+              class="btn btn-small btn-primary"
+              *ngIf="stepper.selectedIndex === i"
+              (appRetryBtn)="retry()">
+              Retry
             </button>
           </div>
         </mat-step>

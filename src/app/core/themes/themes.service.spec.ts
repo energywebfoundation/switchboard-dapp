@@ -6,13 +6,13 @@ describe('Service: Themes', () => {
   let service: ThemesService;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ThemesService, {provide: EnvService, useValue: {}}]
+      providers: [ThemesService, { provide: EnvService, useValue: {} }],
     });
 
     service = TestBed.inject(ThemesService);
   });
 
-  it('should create', (() => {
+  it('should create', () => {
     expect(service).toBeTruthy();
-  }));
+  });
 });

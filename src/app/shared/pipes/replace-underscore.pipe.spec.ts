@@ -29,5 +29,4 @@ describe('ReplaceUnderscorePipe', () => {
   it('should return empty string if provided value is null', () => {
     expect(pipe.transform(null)).toBe('');
   });
-
 });

@@ -1,4 +1,3 @@
-
 .mda-checkbox,
 .mda-radio {
   position: relative;
@@ -26,7 +25,7 @@
   }
 
   // Checkbox
-  input[type="checkbox"]:checked + em:after {
+  input[type='checkbox']:checked + em:after {
     position: absolute;
     top: 2px;
     left: 6px;
@@ -40,7 +39,7 @@
     transform: rotate(45deg);
   }
   // Radio
-  input[type="radio"]:checked + em:after {
+  input[type='radio']:checked + em:after {
     content: ' ';
     position: absolute;
     top: 3px;
@@ -53,31 +52,31 @@
     border: 2px solid #fff;
   }
 
-  input[type="radio"]+em,
-  input[type="radio"]+em:before {
+  input[type='radio'] + em,
+  input[type='radio'] + em:before {
     border-radius: 50%;
   }
 }
 
 // Disable states
-.mda-checkbox input[disabled]+em:before,
-fieldset[disabled] .mda-checkbox input+em:before,
-.mda-radio input[disabled]+em:before,
-fieldset[disabled] .mda-radio input+em:before {
-  border-color: rgba(0,0,0,0.26);
+.mda-checkbox input[disabled] + em:before,
+fieldset[disabled] .mda-checkbox input + em:before,
+.mda-radio input[disabled] + em:before,
+fieldset[disabled] .mda-radio input + em:before {
+  border-color: rgba(0, 0, 0, 0.26);
 }
 // disable background color for icon
-.mda-checkbox input[disabled]:checked+em,
-.mda-radio input[disabled]:checked+em {
-  background-color: rgba(0,0,0,0.26);
+.mda-checkbox input[disabled]:checked + em,
+.mda-radio input[disabled]:checked + em {
+  background-color: rgba(0, 0, 0, 0.26);
 }
 
-.mda-radio input[disabled]:checked+em:after {
+.mda-radio input[disabled]:checked + em:after {
   background-color: transparent;
 }
 
-.mda-checkbox input[disabled]:checked+em:before {
-  background-color: rgba(0,0,0,0.26);
+.mda-checkbox input[disabled]:checked + em:before {
+  background-color: rgba(0, 0, 0, 0.26);
 }
 
 // Icon style
@@ -93,13 +92,13 @@ fieldset[disabled] .mda-radio input+em:before {
   line-height: 1;
   vertical-align: middle;
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     width: 18px;
     height: 100%;
-    border: 2px solid rgba(0,0,0,0.54);
+    border: 2px solid rgba(0, 0, 0, 0.54);
     border-radius: 2px;
-    @include transition(all .2s);
+    @include transition(all 0.2s);
   }
   // Empty box with not icons
   &.empty:after {
@@ -108,7 +107,7 @@ fieldset[disabled] .mda-radio input+em:before {
 }
 
 .mat-divider {
-  border-top-color: #D8D8D8 !important;
+  border-top-color: #d8d8d8 !important;
   opacity: 0.1;
 }
 
@@ -120,7 +119,7 @@ fieldset[disabled] .mda-radio input+em:before {
 mat-label {
   font-family: 'Rajdhani', sans-serif !important;
   font-weight: 500;
-} 
+}
 
 .mat-form-field {
   display: block !important;
@@ -134,7 +133,7 @@ mat-label {
 .search-title {
   font-size: 16px;
   font-weight: 600 !important;
-  font-family: "Rajdhani", sans-serif;
+  font-family: 'Rajdhani', sans-serif;
 }
 
 .search-preview {
@@ -148,8 +147,9 @@ mat-label {
   }
 }
 
-.md-search.mat-form-field-prefix, .mat-form-field-suffix {
-  color: rgba(255,255,255,0.5);
+.md-search.mat-form-field-prefix,
+.mat-form-field-suffix {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .mat-select-panel {
@@ -186,16 +186,15 @@ mat-label {
 //   color: #33CBCB;
 // }
 
-
 // .md-enroll {
 //   .mat-option {
 //     color: currentColor;
 //     background: currentColor;
-  
+
 //     &:nth-child(odd) {
 //       background: currentColor;
 //     }
-  
+
 //     .mat-active {
 //       background: currentColor;
 //     }
@@ -206,14 +205,15 @@ mat-label {
 // }
 
 @include media-breakpoint-down(sm) {
-  .mat-form-field, .form-control {
+  .mat-form-field,
+  .form-control {
     font-size: 14px !important;
   }
 }
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
-  background: rgba(255,255,255,0.03);
-  color: #52436E;
+  background: rgba(255, 255, 255, 0.03);
+  color: #52436e;
   border-radius: 5px;
 }
 
@@ -227,7 +227,7 @@ mat-label {
 }
 
 .mat-option {
-  color: #FFF;
+  color: #fff;
   background: #343242;
 
   &:nth-child(odd) {
@@ -236,12 +236,12 @@ mat-label {
 }
 
 .mat-option.mat-active {
-  color: #FFF;
-  background: #2A2837;
+  color: #fff;
+  background: #2a2837;
 }
 
 .mat-autocomplete-panel {
-  background: #2A2837;
+  background: #2a2837;
 }
 
 .mat-select-value {
@@ -250,8 +250,9 @@ mat-label {
   color: #ffffff;
 }
 
-.mat-select-placeholder, .mat-placeholder {
-  color: #B0ADDC;
+.mat-select-placeholder,
+.mat-placeholder {
+  color: #b0addc;
 }
 
 .mat-select-panel {
@@ -259,28 +260,27 @@ mat-label {
 }
 
 .mat-input-sort {
-    .mat-form-field {
-      font-size: 13px !important;
-    }
-    .mat-label {
-      color: #FFF;
-    }
-
-    .mat-form-field-wrapper {
-      padding-bottom: 0 !important;
-      margin: 0 !important;
-    }
-    .mat-form-field-appearance-outline .mat-form-field-wrapper {
-      margin: 0 0 !important;
-    }
-
-    .mat-form-field-infix {
-      padding: 0.2em 0.2em !important;
+  .mat-form-field {
+    font-size: 13px !important;
+  }
+  .mat-label {
+    color: #fff;
   }
 
+  .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+    margin: 0 !important;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0 0 !important;
+  }
+
+  .mat-form-field-infix {
+    padding: 0.2em 0.2em !important;
+  }
 
   .mat-form-field-flex {
-    padding: 0 .75em 0 .5em !important  ;
+    padding: 0 0.75em 0 0.5em !important  ;
   }
 
   .mat-select-value {
@@ -304,25 +304,26 @@ mat-label {
   .mat-form-field-infix {
     padding: 0.2em 0.2em !important;
     top: 1px !important;
-}
+  }
 
-.mat-input-element {
-  font-size: 14px;
-}
+  .mat-input-element {
+    font-size: 14px;
+  }
 
-.mat-form-field-flex {
-  padding: 0 .75em 0.2em .5em !important  ;
-}
+  .mat-form-field-flex {
+    padding: 0 0.75em 0.2em 0.5em !important  ;
+  }
 
-.mat-select-value {
-  font-size: 14px !important;
-}
+  .mat-select-value {
+    font-size: 14px !important;
+  }
 }
 
 .dropdown-menu {
   border-color: transparent !important;
 }
 
-.mat-calendar-body-in-range>.mat-calendar-body-comparison-identical, .mat-calendar-body-in-comparison-range.mat-calendar-body-in-range::after {
+.mat-calendar-body-in-range > .mat-calendar-body-comparison-identical,
+.mat-calendar-body-in-comparison-range.mat-calendar-body-in-range::after {
   background: #1d1c27;
 }

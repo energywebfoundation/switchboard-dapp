@@ -1,11 +1,18 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { KeyValue } from '../key-value.interface';
 
 @Component({
   selector: 'app-key-value-list',
   templateUrl: './key-value-list.component.html',
   styleUrls: ['./key-value-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KeyValueListComponent implements OnInit {
   @Input() data: KeyValue[];
@@ -34,5 +41,4 @@ export class KeyValueListComponent implements OnInit {
     }
     this.displayedColumns = defaultColumns;
   }
-
 }

@@ -8,9 +8,8 @@ xdescribe('DashboardComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [DashboardComponent]
-    })
-      .compileComponents();
+      declarations: [DashboardComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

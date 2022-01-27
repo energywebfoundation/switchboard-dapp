@@ -16,23 +16,28 @@ describe('DidBookComponent', () => {
   let component: DidBookComponent;
   let fixture: ComponentFixture<DidBookComponent>;
   let hostDebug: DebugElement;
-  const didBookServiceSpy = jasmine.createSpyObj(DidBookService, ['add', 'delete', 'getList$']);
+  const didBookServiceSpy = jasmine.createSpyObj(DidBookService, [
+    'add',
+    'delete',
+    'getList$',
+  ]);
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [DidBookComponent],
-      imports: [
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatButtonModule,
-        MatInputModule,
-        NoopAnimationsModule
-      ],
-      providers: [{provide: DidBookService, useValue: didBookServiceSpy}],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [DidBookComponent],
+        imports: [
+          ReactiveFormsModule,
+          MatFormFieldModule,
+          MatButtonModule,
+          MatInputModule,
+          NoopAnimationsModule,
+        ],
+        providers: [{ provide: DidBookService, useValue: didBookServiceSpy }],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DidBookComponent);
@@ -47,14 +52,19 @@ describe('DidBookComponent', () => {
   });
 
   it('should filter out from the list by label', (done) => {
-    didBookServiceSpy.getList$.and.returnValue(of([{label: 'label', did: ''}, {label: 'example', did: ''}]));
+    didBookServiceSpy.getList$.and.returnValue(
+      of([
+        { label: 'label', did: '' },
+        { label: 'example', did: '' },
+      ])
+    );
     fixture.detectChanges();
 
     const filter = getElement(hostDebug)('filter-did').nativeElement;
 
     component.list$.pipe(skip(1)).subscribe((list) => {
       expect(list.length).toEqual(1);
-      expect(list[0]).toEqual(jasmine.objectContaining({label: 'example'}));
+      expect(list[0]).toEqual(jasmine.objectContaining({ label: 'example' }));
       done();
     });
 

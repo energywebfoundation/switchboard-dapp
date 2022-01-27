@@ -8,31 +8,37 @@ import { SwitchboardToastrService } from '../../../../shared/services/switchboar
 import { ClaimsFacadeService } from '../../../../shared/services/claims-facade/claims-facade.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EditAssetService {
-
-  constructor(private claimFacade: ClaimsFacadeService,
-              private store: Store,
-              private toastr: SwitchboardToastrService) {
-  }
+  constructor(
+    private claimFacade: ClaimsFacadeService,
+    private store: Store,
+    private toastr: SwitchboardToastrService
+  ) {}
 
   getProfile(): Observable<Profile> {
     return this.store.select(UserClaimSelectors.getUserProfile).pipe(take(1));
   }
 
   update(profile: Profile) {
-    return this.claimFacade.createSelfSignedClaim({
-      data: {profile}
-    }).pipe(map(() => {
-        this.store.dispatch(UserClaimActions.updateLocalStateUserClaims({profile: profile}));
-        this.toastr.success('Successfully updated Asset data');
-        return true;
-      }),
-      catchError(error => {
-        console.error(error);
-        this.toastr.error(error?.message);
-        return of(false);
-      }));
+    return this.claimFacade
+      .createSelfSignedClaim({
+        data: { profile },
+      })
+      .pipe(
+        map(() => {
+          this.store.dispatch(
+            UserClaimActions.updateLocalStateUserClaims({ profile: profile })
+          );
+          this.toastr.success('Successfully updated Asset data');
+          return true;
+        }),
+        catchError((error) => {
+          console.error(error);
+          this.toastr.error(error?.message);
+          return of(false);
+        })
+      );
   }
 }

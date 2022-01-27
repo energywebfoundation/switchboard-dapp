@@ -11,12 +11,9 @@ describe('GovernanceViewComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [GovernanceViewComponent],
-      providers: [
-        {provide: MAT_DIALOG_DATA, useValue: {}}
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      providers: [{ provide: MAT_DIALOG_DATA, useValue: {} }],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {

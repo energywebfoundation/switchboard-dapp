@@ -4,6 +4,4 @@ class ExpiredRequestError extends Error {
   }
 }
 
-export {
-  ExpiredRequestError
-};
+export { ExpiredRequestError };

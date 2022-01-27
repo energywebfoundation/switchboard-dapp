@@ -1,4 +1,8 @@
 <h4 class="small font-weight-600 mb-1">{{ element?.header?.toUpperCase() }}</h4>
-<span style="font-size:16px;" [appMinifiedDidViewer]="element?.did"
-      matTooltip="{{element?.did}}"
-      matTooltipClass="tooltip-full-width"> {{ element?.did | didFormatMinifier }}</span>
+<span
+  style="font-size: 16px"
+  [appMinifiedDidViewer]="element?.did"
+  matTooltip="{{ element?.did }}"
+  matTooltipClass="tooltip-full-width">
+  {{ element?.did | didFormatMinifier }}
+</span>

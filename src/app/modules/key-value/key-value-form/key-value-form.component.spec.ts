@@ -9,14 +9,15 @@ describe('KeyValueFormComponent', () => {
   let component: KeyValueFormComponent;
   let fixture: ComponentFixture<KeyValueFormComponent>;
   let hostDebug: DebugElement;
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [KeyValueFormComponent],
-      imports: [ReactiveFormsModule],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [KeyValueFormComponent],
+        imports: [ReactiveFormsModule],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(KeyValueFormComponent);
@@ -31,7 +32,7 @@ describe('KeyValueFormComponent', () => {
 
   it('should not emit adding pair when form is invalid', () => {
     const addSpy = spyOn(component.add, 'emit');
-    const {add} = getSelectors(hostDebug);
+    const { add } = getSelectors(hostDebug);
     add.click();
     expect(add.disabled).toBeTrue();
     expect(addSpy).not.toHaveBeenCalled();
@@ -39,7 +40,7 @@ describe('KeyValueFormComponent', () => {
 
   it('should emit adding pair when form is valid', () => {
     const addSpy = spyOn(component.add, 'emit');
-    const {key, value, add} = getSelectors(hostDebug);
+    const { key, value, add } = getSelectors(hostDebug);
 
     key.value = 'test';
     dispatchInputEvent(key);
@@ -56,7 +57,7 @@ describe('KeyValueFormComponent', () => {
 
   it('should emit cancel when clicking on cancel button', () => {
     const cancelSpy = spyOn(component.cancel, 'emit');
-    const {cancel} = getSelectors(hostDebug);
+    const { cancel } = getSelectors(hostDebug);
     cancel.click();
 
     expect(cancelSpy).toHaveBeenCalled();

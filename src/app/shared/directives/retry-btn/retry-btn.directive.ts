@@ -1,14 +1,26 @@
-import { ElementRef, EventEmitter, HostBinding, HostListener, Output } from '@angular/core';
+import {
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Output,
+} from '@angular/core';
 import { Directive, OnDestroy } from '@angular/core';
 import { Subject, timer } from 'rxjs';
-import { mapTo, scan, startWith, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
+import {
+  mapTo,
+  scan,
+  startWith,
+  switchMap,
+  takeUntil,
+  takeWhile,
+} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../../routes/widgets/confirmation-dialog/confirmation-dialog.component';
 
-
 @Directive({
-  selector: '[appRetryBtn]'
+  selector: '[appRetryBtn]',
 })
 export class RetryBtnDirective implements OnDestroy {
   @HostBinding('disabled')
@@ -22,24 +34,28 @@ export class RetryBtnDirective implements OnDestroy {
   private _counter;
   private _destroy;
 
-  @HostListener('click', ['$event']) onClick($event) {
-    const confirm$ = this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      maxHeight: '195px',
-      data: {
-        header: 'Retry',
-        message: 'WARNING: Retry transaction request will cost extra tokens.',
-        isProceedButton: true
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().subscribe((res: any) => {
-      if (res) {
-        this._start();
-        this.appRetryBtn.emit();
-      }
-      confirm$.unsubscribe();
-    });
+  @HostListener('click', ['$event']) onClick() {
+    const confirm$ = this.dialog
+      .open(ConfirmationDialogComponent, {
+        width: '400px',
+        maxHeight: '195px',
+        data: {
+          header: 'Retry',
+          message: 'WARNING: Retry transaction request will cost extra tokens.',
+          isProceedButton: true,
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .subscribe((res: any) => {
+        if (res) {
+          this._start();
+          this.appRetryBtn.emit();
+        }
+        confirm$.unsubscribe();
+      });
   }
 
   constructor(private elementRef: ElementRef, private dialog: MatDialog) {
@@ -51,17 +67,18 @@ export class RetryBtnDirective implements OnDestroy {
     this._counter = new Subject();
     this._destroy = new Subject();
 
-    const counter$ = this._counter.pipe(
-      switchMap((endValue: number) => {
-        return timer(0, 1000).pipe(
-          mapTo(1),
-          startWith(endValue),
-          scan((accumulator: number, currentValue: number) => accumulator - 1),
-          takeWhile(this._notZero(this.count))
-        );
-      }),
-      takeUntil(this._destroy)
-    )
+    const counter$ = this._counter
+      .pipe(
+        switchMap((endValue: number) => {
+          return timer(0, 1000).pipe(
+            mapTo(1),
+            startWith(endValue),
+            scan((accumulator: number) => accumulator - 1),
+            takeWhile(this._notZero(this.count))
+          );
+        }),
+        takeUntil(this._destroy)
+      )
       .subscribe((newCount: number) => {
         this.count = newCount;
 
@@ -89,7 +106,8 @@ export class RetryBtnDirective implements OnDestroy {
     }
   }
 
+  // eslint-disable-next-line
   private _notZero(value: any) {
-    return value => value >= 0;
+    return (value) => value >= 0;
   }
 }

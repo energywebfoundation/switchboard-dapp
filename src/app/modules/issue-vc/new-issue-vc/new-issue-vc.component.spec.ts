@@ -17,7 +17,7 @@ class MockDialogData {
   did: string;
 
   get data() {
-    return {did: this.did};
+    return { did: this.did };
   }
 
   setDid(value) {
@@ -28,52 +28,57 @@ class MockDialogData {
 describe('NewIssueVCComponent', () => {
   let component: NewIssueVcComponent;
   let fixture: ComponentFixture<NewIssueVcComponent>;
-  const issuanceVcServiceSpy = jasmine.createSpyObj('IssuanceVcService', ['create', 'getNotEnrolledRoles']);
+  const issuanceVcServiceSpy = jasmine.createSpyObj('IssuanceVcService', [
+    'create',
+    'getNotEnrolledRoles',
+  ]);
   let mockDialogData;
   let hostDebug: DebugElement;
-  beforeEach(waitForAsync(() => {
-    mockDialogData = new MockDialogData();
-    TestBed.configureTestingModule({
-      declarations: [NewIssueVcComponent],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MatSelectModule,
-        MatFormFieldModule,
-        MatInputModule,
-        NoopAnimationsModule,
-        MatIconTestingModule
-      ],
-      providers: [
-        {provide: MAT_DIALOG_DATA, useValue: mockDialogData},
-        {provide: MatDialogRef, useValue: dialogSpy},
-        {provide: IssuanceVcService, useValue: issuanceVcServiceSpy},
-
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      mockDialogData = new MockDialogData();
+      TestBed.configureTestingModule({
+        declarations: [NewIssueVcComponent],
+        imports: [
+          ReactiveFormsModule,
+          FormsModule,
+          MatSelectModule,
+          MatFormFieldModule,
+          MatInputModule,
+          NoopAnimationsModule,
+          MatIconTestingModule,
+        ],
+        providers: [
+          { provide: MAT_DIALOG_DATA, useValue: mockDialogData },
+          { provide: MatDialogRef, useValue: dialogSpy },
+          { provide: IssuanceVcService, useValue: issuanceVcServiceSpy },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NewIssueVcComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
-    issuanceVcServiceSpy.getNotEnrolledRoles.and.returnValue(of([{
-      'name': 'role',
-      'namespace': 'role.roles.test.iam.ewc',
-      'definition': {
-        'issuer': {
-          'did': [
-            'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3'
-          ],
-          'issuerType': 'DID'
+    issuanceVcServiceSpy.getNotEnrolledRoles.and.returnValue(
+      of([
+        {
+          name: 'role',
+          namespace: 'role.roles.test.iam.ewc',
+          definition: {
+            issuer: {
+              did: ['did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3'],
+              issuerType: 'DID',
+            },
+            version: 2,
+            metadata: {},
+            roleName: 'issuerfields',
+          },
         },
-        'version': 2,
-        'metadata': {},
-        'roleName': 'issuerfields',
-      }
-    }]));
+      ])
+    );
   });
 
   it('should create', () => {
@@ -82,10 +87,12 @@ describe('NewIssueVCComponent', () => {
   });
 
   it('should disable did control when did is predefined', () => {
-    mockDialogData.setDid('did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89');
+    mockDialogData.setDid(
+      'did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89'
+    );
     fixture.detectChanges();
 
-    const {subjectDid} = getSelectors(hostDebug);
+    const { subjectDid } = getSelectors(hostDebug);
 
     expect(component.isDidPredefined()).toBeTrue();
     expect(subjectDid.disabled).toBeTrue();
@@ -95,14 +102,14 @@ describe('NewIssueVCComponent', () => {
     issuanceVcServiceSpy.create.and.returnValue(of());
     fixture.detectChanges();
 
-    const {subjectDid} = getSelectors(hostDebug);
+    const { subjectDid } = getSelectors(hostDebug);
 
     subjectDid.value = 'did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89';
     dispatchInputEvent(subjectDid);
 
     fixture.detectChanges();
 
-    const {selectType} = getSelectors(hostDebug);
+    const { selectType } = getSelectors(hostDebug);
     selectType.click();
     fixture.detectChanges();
 
@@ -115,21 +122,23 @@ describe('NewIssueVCComponent', () => {
   it('should not display role list when did is invalid', () => {
     fixture.detectChanges();
 
-    const {subjectDid} = getSelectors(hostDebug);
+    const { subjectDid } = getSelectors(hostDebug);
 
     subjectDid.value = 'invalid did';
     dispatchInputEvent(subjectDid);
 
     fixture.detectChanges();
 
-    const {selectType} = getSelectors(hostDebug);
+    const { selectType } = getSelectors(hostDebug);
 
     expect(component.isFormSubjectValid()).toBeFalse();
     expect(selectType).toBeFalsy();
   });
 
   it('should check if form is enabled when form is valid and precheck is true', () => {
-    component.getFormSubject().setValue('did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89');
+    component
+      .getFormSubject()
+      .setValue('did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89');
     component.getFormType().setValue('test');
     component.isPrecheckSuccess = true;
     fixture.detectChanges();
@@ -137,7 +146,9 @@ describe('NewIssueVCComponent', () => {
   });
 
   it('should check if form is disabled when precheck is false', () => {
-    component.getFormSubject().setValue('did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89');
+    component
+      .getFormSubject()
+      .setValue('did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89');
     component.getFormType().setValue('test');
     component.isPrecheckSuccess = false;
     fixture.detectChanges();
@@ -145,7 +156,9 @@ describe('NewIssueVCComponent', () => {
   });
 
   it('should check if form is disabled when did is incorrect', () => {
-    component.getFormSubject().setValue('did:ethr:0x925b597D2a6Ac8D4a1CA31Dd65a1904f0F2e89');
+    component
+      .getFormSubject()
+      .setValue('did:ethr:0x925b597D2a6Ac8D4a1CA31Dd65a1904f0F2e89');
     component.getFormType().setValue('test');
     component.isPrecheckSuccess = true;
     fixture.detectChanges();
@@ -158,7 +171,6 @@ describe('NewIssueVCComponent', () => {
     component.scannedValue(value);
     expect(component.getFormSubject().value).toEqual(value);
   });
-
 });
 
 const getSelectors = (hostDebug) => {

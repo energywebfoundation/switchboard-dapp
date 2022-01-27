@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AssetListType } from '../../shared/constants/shared-constants';
@@ -10,7 +11,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 @Component({
   selector: 'app-assets',
   templateUrl: './assets.component.html',
-  styleUrls: ['./assets.component.scss']
+  styleUrls: ['./assets.component.scss'],
 })
 export class AssetsComponent implements AfterViewInit {
   @ViewChild('assetsTabGroup') assetsTabGroup: MatTabGroup;
@@ -20,11 +21,12 @@ export class AssetsComponent implements AfterViewInit {
 
   AssetListType = AssetListType;
 
-  constructor(private dialog: MatDialog,
-              private urlParamService: UrlParamService,
-              private router: Router,
-              private activatedRoute: ActivatedRoute) {
-  }
+  constructor(
+    private dialog: MatDialog,
+    private urlParamService: UrlParamService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngAfterViewInit(): void {
     this.activatedRoute.queryParams.subscribe(async (queryParams: any) => {
@@ -52,12 +54,13 @@ export class AssetsComponent implements AfterViewInit {
 
   registerAsset() {
     const dialogRef = this.dialog.open(NewPassiveAssetComponent, {
-      width: '600px', data: {},
+      width: '600px',
+      data: {},
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.listMyAssets.getAssetList();
       }
@@ -66,9 +69,14 @@ export class AssetsComponent implements AfterViewInit {
 
   async showMe(i: any) {
     // Preserve Selected Tab
-    this.urlParamService.updateQueryParams(this.router, this.activatedRoute, {
-      selectedTab: i.index
-    }, ['notif']);
+    this.urlParamService.updateQueryParams(
+      this.router,
+      this.activatedRoute,
+      {
+        selectedTab: i.index,
+      },
+      ['notif']
+    );
 
     switch (i.index) {
       case 0:

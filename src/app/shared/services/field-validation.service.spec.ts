@@ -6,7 +6,7 @@ describe('FieldValidationService', () => {
   let service: FieldValidationService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({providers: [FieldValidationService]});
+    TestBed.configureTestingModule({ providers: [FieldValidationService] });
   });
 
   it('should be created', () => {

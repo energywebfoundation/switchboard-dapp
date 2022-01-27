@@ -17,26 +17,31 @@ describe('RoleListComponent', () => {
 
   const setup = (list?) => {
     store.overrideSelector(RoleSelectors.getFilteredList, list || []);
-    store.overrideSelector(RoleSelectors.getFilters, {organization: '', application: '', role: ''});
+    store.overrideSelector(RoleSelectors.getFilters, {
+      organization: '',
+      application: '',
+      role: '',
+    });
     store.overrideSelector(RoleSelectors.isFilterVisible, false);
     fixture.detectChanges();
   };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [RoleListComponent],
-      imports: [ReactiveFormsModule],
-      providers: [
-        {provide: MatDialog, useValue: dialogSpy},
-        {provide: EnvService, useValue: {rootNamespace: 'iam.ewc'}},
-        provideMockStore()
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [RoleListComponent],
+        imports: [ReactiveFormsModule],
+        providers: [
+          { provide: MatDialog, useValue: dialogSpy },
+          { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
+          provideMockStore(),
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
 
-    store = TestBed.inject(MockStore);
-  }));
+      store = TestBed.inject(MockStore);
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleListComponent);

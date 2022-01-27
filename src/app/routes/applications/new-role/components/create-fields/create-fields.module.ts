@@ -5,16 +5,13 @@ import { FieldsSummaryComponent } from '../fields-summary/fields-summary.compone
 import { RoleFieldComponent } from '../role-field/role-field.component';
 import { SharedModule } from '../../../../../shared/shared.module';
 
-
 @NgModule({
-  declarations: [FieldFormComponent, FieldsSummaryComponent, RoleFieldComponent],
-  imports: [
-    CommonModule,
-    SharedModule
+  declarations: [
+    FieldFormComponent,
+    FieldsSummaryComponent,
+    RoleFieldComponent,
   ],
-  exports: [
-    FieldFormComponent, FieldsSummaryComponent, RoleFieldComponent
-  ]
+  imports: [CommonModule, SharedModule],
+  exports: [FieldFormComponent, FieldsSummaryComponent, RoleFieldComponent],
 })
-export class CreateFieldsModule {
-}
+export class CreateFieldsModule {}

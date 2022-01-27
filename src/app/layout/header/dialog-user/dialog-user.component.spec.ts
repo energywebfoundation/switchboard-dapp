@@ -22,24 +22,23 @@ describe('DialogUserComponent', () => {
     el.dispatchEvent(new Event('blur'));
   };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [DialogUserComponent],
-      imports: [
-        ReactiveFormsModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        NoopAnimationsModule,
-        MatInputModule,
-      ],
-      providers: [
-        provideMockStore()
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [DialogUserComponent],
+        imports: [
+          ReactiveFormsModule,
+          MatDatepickerModule,
+          MatNativeDateModule,
+          NoopAnimationsModule,
+          MatInputModule,
+        ],
+        providers: [provideMockStore()],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+      store = TestBed.inject(MockStore);
     })
-      .compileComponents();
-    store = TestBed.inject(MockStore);
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DialogUserComponent);
@@ -57,13 +56,13 @@ describe('DialogUserComponent', () => {
     const data = {
       name: 'name',
       address: '123',
-      birthdate: date.getTime()
+      birthdate: date.getTime(),
     };
     store.overrideSelector(userSelectors.getUserData, data as any);
     component.ngOnInit();
     fixture.detectChanges();
 
-    const {name, birthdate, address} = selectors(hostDebug);
+    const { name, birthdate, address } = selectors(hostDebug);
 
     expect(name.value).toBe(data.name);
     expect(address.value).toBe(data.address);
@@ -75,7 +74,7 @@ describe('DialogUserComponent', () => {
   });
 
   it('should dispatch updateUserClaims action when submitting', () => {
-    const {name, birthdate, address, submit} = selectors(hostDebug);
+    const { name, birthdate, address, submit } = selectors(hostDebug);
     const dispatchSpy = spyOn(store, 'dispatch');
     component.ngOnInit();
     fixture.detectChanges();
@@ -96,7 +95,7 @@ describe('DialogUserComponent', () => {
   });
 
   it('should display error message for maximum allowed date', () => {
-    const {birthdate} = selectors(hostDebug);
+    const { birthdate } = selectors(hostDebug);
     component.ngOnInit();
     fixture.detectChanges();
 
@@ -110,14 +109,15 @@ describe('DialogUserComponent', () => {
 });
 
 const selectors = (hostDebug: DebugElement) => {
-  const getElement = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
+  const getElement = (id, postSelector = '') =>
+    hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
 
   return {
     submit: getElement('submit').nativeElement,
     name: getElement('dialog-input-name').nativeElement,
     birthdate: getElement('dialog-input-birthdate').nativeElement,
     address: getElement('dialog-input-address').nativeElement,
-    getElement
+    getElement,
   };
 };
 

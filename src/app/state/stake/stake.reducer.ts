@@ -9,12 +9,15 @@ export interface StakeState {
 }
 
 export const initialState: StakeState = {
-  providers: []
+  providers: [],
 };
 
 const stakeReducer = createReducer(
   initialState,
-  on(StakeActions.getAllServicesSuccess, (state, {providers}) => ({...state, providers}))
+  on(StakeActions.getAllServicesSuccess, (state, { providers }) => ({
+    ...state,
+    providers,
+  }))
 );
 
 export function reducer(state: StakeState | undefined, action: Action) {

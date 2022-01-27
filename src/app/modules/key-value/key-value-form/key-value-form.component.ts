@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { KeyValue } from '../key-value.interface';
 
@@ -6,7 +11,7 @@ import { KeyValue } from '../key-value.interface';
   selector: 'app-key-value-form',
   templateUrl: './key-value-form.component.html',
   styleUrls: ['./key-value-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KeyValueFormComponent {
   @Output() add = new EventEmitter<KeyValue>();
@@ -14,11 +19,10 @@ export class KeyValueFormComponent {
 
   form = this.fb.group({
     key: ['', [Validators.required]],
-    value: ['', [Validators.required]]
+    value: ['', [Validators.required]],
   });
 
-  constructor(private fb: FormBuilder) {
-  }
+  constructor(private fb: FormBuilder) {}
 
   get isFormInvalid() {
     return this.form.invalid;

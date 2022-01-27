@@ -15,28 +15,25 @@ describe('SearchResultComponent', () => {
   let component: SearchResultComponent;
   let fixture: ComponentFixture<SearchResultComponent>;
 
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [SearchResultComponent],
-      imports: [ReactiveFormsModule,
-        FormsModule,
-        MatButtonToggleModule
-      ],
+      imports: [ReactiveFormsModule, FormsModule, MatButtonToggleModule],
       providers: [
         {
-          provide: ActivatedRoute, useValue: {
-            queryParams: of()
-          }
+          provide: ActivatedRoute,
+          useValue: {
+            queryParams: of(),
+          },
         },
         {
-          provide: LoadingService, useValue: loadingServiceSpy
+          provide: LoadingService,
+          useValue: loadingServiceSpy,
         },
-        {provide: IamService, useValue: {}},
+        { provide: IamService, useValue: {} },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {

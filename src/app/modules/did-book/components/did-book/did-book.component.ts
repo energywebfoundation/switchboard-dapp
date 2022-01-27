@@ -9,20 +9,25 @@ import { DidBookRecord } from '../models/did-book-record';
   selector: 'app-did-book',
   templateUrl: './did-book.component.html',
   styleUrls: ['./did-book.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DidBookComponent implements OnInit {
   list$;
   filter = new FormControl('');
 
-  constructor(private didBookService: DidBookService) {
-  }
+  constructor(private didBookService: DidBookService) {}
 
   ngOnInit(): void {
-    this.list$ = combineLatest([this.didBookService.getList$(), this.filter.valueChanges.pipe(startWith(''))])
-      .pipe(map(([list, value]) =>
-        list.filter(el => el.label.toLowerCase().includes(value.toLowerCase()))
-      ));
+    this.list$ = combineLatest([
+      this.didBookService.getList$(),
+      this.filter.valueChanges.pipe(startWith('')),
+    ]).pipe(
+      map(([list, value]) =>
+        list.filter((el) =>
+          el.label.toLowerCase().includes(value.toLowerCase())
+        )
+      )
+    );
   }
 
   addHandler(record: Partial<DidBookRecord>) {
@@ -32,5 +37,4 @@ export class DidBookComponent implements OnInit {
   delete(id: string) {
     this.didBookService.delete(id);
   }
-
 }

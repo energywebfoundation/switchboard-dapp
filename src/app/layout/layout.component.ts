@@ -7,12 +7,10 @@ import swal from 'sweetalert';
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss']
+  styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent implements OnInit {
-
-  constructor(private userIdle: UserIdleService, private store: Store) {
-  }
+  constructor(private userIdle: UserIdleService, private store: Store) {}
 
   ngOnInit() {
     // Start watching for user inactivity
@@ -31,12 +29,12 @@ export class LayoutComponent implements OnInit {
       text: 'You have been idle for a while. Logging-out...',
       icon: 'error',
       button: 'Proceed',
-      closeOnClickOutside: false
+      closeOnClickOutside: false,
     };
 
     const result = await swal(config);
     if (result) {
-      this.store.dispatch(logoutWithRedirectUrl())
+      this.store.dispatch(logoutWithRedirectUrl());
     }
   }
 }

@@ -12,19 +12,20 @@ describe('DidBookFormComponent', () => {
   let component: DidBookFormComponent;
   let fixture: ComponentFixture<DidBookFormComponent>;
   let hostDebug;
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        NoopAnimationsModule
-      ],
-      declarations: [DidBookFormComponent]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          ReactiveFormsModule,
+          MatFormFieldModule,
+          MatInputModule,
+          MatButtonModule,
+          NoopAnimationsModule,
+        ],
+        declarations: [DidBookFormComponent],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DidBookFormComponent);
@@ -39,7 +40,7 @@ describe('DidBookFormComponent', () => {
 
   it('should not emit adding pair when form is invalid', () => {
     const addSpy = spyOn(component.add, 'emit');
-    const {add} = getSelectors(hostDebug);
+    const { add } = getSelectors(hostDebug);
     add.click();
     expect(add.disabled).toBeTrue();
     expect(addSpy).not.toHaveBeenCalled();
@@ -47,7 +48,7 @@ describe('DidBookFormComponent', () => {
 
   it('should emit adding pair when form is valid', () => {
     const addSpy = spyOn(component.add, 'emit');
-    const {label, did, add} = getSelectors(hostDebug);
+    const { label, did, add } = getSelectors(hostDebug);
 
     label.value = 'test';
     dispatchInputEvent(label);
@@ -65,7 +66,7 @@ describe('DidBookFormComponent', () => {
 
   it('should emit cancel when clicking on cancel button', () => {
     const cancelSpy = spyOn(component.cancel, 'emit');
-    const {cancel} = getSelectors(hostDebug);
+    const { cancel } = getSelectors(hostDebug);
     cancel.click();
 
     expect(cancelSpy).toHaveBeenCalled();

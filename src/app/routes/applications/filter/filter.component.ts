@@ -11,7 +11,7 @@ export interface FilteredData {
 @Component({
   selector: 'app-filter',
   templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.scss']
+  styleUrls: ['./filter.component.scss'],
 })
 export class FilterComponent {
   @Input() isFilterShown: boolean;
@@ -31,15 +31,18 @@ export class FilterComponent {
   filterForm = this.fb.group({
     organization: '',
     application: '',
-    role: ''
+    role: '',
   });
 
-  constructor(private fb: FormBuilder) {
-  }
+  constructor(private fb: FormBuilder) {}
 
   filter() {
-    this.filterForm.get('organization').setValue(this.filterForm.value.organization.trim());
-    this.filterForm.get('application').setValue(this.filterForm.value.application.trim());
+    this.filterForm
+      .get('organization')
+      .setValue(this.filterForm.value.organization.trim());
+    this.filterForm
+      .get('application')
+      .setValue(this.filterForm.value.application.trim());
     this.filterForm.get('role').setValue(this.filterForm.value.role.trim());
 
     this.filtersChange.emit(this.getFilters());
@@ -49,7 +52,7 @@ export class FilterComponent {
     this.filtersChange.emit({
       organization: '',
       application: '',
-      role: ''
+      role: '',
     });
   }
 
@@ -57,7 +60,7 @@ export class FilterComponent {
     return {
       organization: this.filterForm.value.organization,
       application: this.filterForm.value.application,
-      role: this.filterForm.value.role
+      role: this.filterForm.value.role,
     };
   }
 }

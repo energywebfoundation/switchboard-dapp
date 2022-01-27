@@ -1,4 +1,3 @@
-
 import './modernizr.js'; // 'npm run modernizr' to create this file
 
 import '../node_modules/codemirror/lib/codemirror.js';

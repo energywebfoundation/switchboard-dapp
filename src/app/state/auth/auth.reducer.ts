@@ -20,27 +20,37 @@ export const initialState: AuthState = {
   accountInfo: undefined,
   metamask: {
     present: true,
-    chainId: undefined
+    chainId: undefined,
   },
   defaultChainId: undefined,
-  loggedIn: false
+  loggedIn: false,
 };
 
 const authReducer = createReducer(
   initialState,
-  on(AuthActions.loginSuccess, (state, {accountInfo}) => ({...state, loggedIn: true, accountInfo})),
+  on(AuthActions.loginSuccess, (state, { accountInfo }) => ({
+    ...state,
+    loggedIn: true,
+    accountInfo,
+  })),
   on(AuthActions.logout, AuthActions.logoutWithRedirectUrl, (state) => ({
     ...state,
     loggedIn: false,
     walletProvider: undefined,
-    accountInfo: undefined
+    accountInfo: undefined,
   })),
-  on(AuthActions.setMetamaskLoginOptions, (state, {present, chainId}) => ({
-      ...state, metamask: {present, chainId}
-    })
-  ),
-  on(AuthActions.setProvider, (state, {walletProvider}) => ({...state, walletProvider})),
-  on(AuthActions.setDefaultChainId, (state, {defaultChainId}) => ({...state, defaultChainId})),
+  on(AuthActions.setMetamaskLoginOptions, (state, { present, chainId }) => ({
+    ...state,
+    metamask: { present, chainId },
+  })),
+  on(AuthActions.setProvider, (state, { walletProvider }) => ({
+    ...state,
+    walletProvider,
+  })),
+  on(AuthActions.setDefaultChainId, (state, { defaultChainId }) => ({
+    ...state,
+    defaultChainId,
+  }))
 );
 
 export function reducer(state: AuthState | undefined, action: Action) {

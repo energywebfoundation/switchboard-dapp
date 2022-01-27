@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NamespaceType } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -7,7 +14,11 @@ import { IamService } from '../../../shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
@@ -16,7 +27,7 @@ import { isValidJsonFormatValidator } from '../../../utils/validators/json-forma
 @Component({
   selector: 'app-new-application',
   templateUrl: './new-application.component.html',
-  styleUrls: ['./new-application.component.scss']
+  styleUrls: ['./new-application.component.scss'],
 })
 export class NewApplicationComponent implements OnInit, AfterViewInit {
   private stepper: MatStepper;
@@ -28,16 +39,38 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   }
 
   public appForm = this.fb.group({
-    orgNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-    appName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256), isAlphanumericValidator]],
+    orgNamespace: [
+      '',
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(256),
+      ]),
+    ],
+    appName: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(256),
+        isAlphanumericValidator,
+      ],
+    ],
     namespace: '',
     data: this.fb.group({
-      applicationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+      applicationName: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(256),
+        ]),
+      ],
       logoUrl: ['', Validators.pattern('https?://.*')],
       websiteUrl: ['', Validators.pattern('https?://.*')],
       description: '',
-      others: ['', isValidJsonFormatValidator]
-    })
+      others: ['', isValidJsonFormatValidator],
+    }),
   });
   public environment = environment;
   public isChecking = false;
@@ -55,14 +88,16 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   private _currentIdx = 0;
   private _requests = {};
 
-  constructor(private fb: FormBuilder,
-              private iamService: IamService,
-              private toastr: SwitchboardToastrService,
-              private spinner: NgxSpinnerService,
-              public dialogRef: MatDialogRef<NewApplicationComponent>,
-              public dialog: MatDialog,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              private configService: ConfigService) {
+  constructor(
+    private fb: FormBuilder,
+    private iamService: IamService,
+    private toastr: SwitchboardToastrService,
+    private spinner: NgxSpinnerService,
+    public dialogRef: MatDialogRef<NewApplicationComponent>,
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private configService: ConfigService
+  ) {
     if (data && data.viewType) {
       this.viewType = data.viewType;
 
@@ -104,8 +139,8 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
           logoUrl: def.logoUrl,
           websiteUrl: def.websiteUrl,
           description: def.description,
-          others
-        }
+          others,
+        },
       });
     }
   }
@@ -117,32 +152,42 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         this.isChecking = true;
 
         // Check if organization namespace exists
-        let exists = await this.iamService.domainsService.checkExistenceOfDomain({
-          domain: this.appForm.value.orgNamespace
-        });
+        let exists =
+          await this.iamService.domainsService.checkExistenceOfDomain({
+            domain: this.appForm.value.orgNamespace,
+          });
 
         if (exists) {
           // Check if application sub-domain exists in this organization
           exists = await this.iamService.domainsService.checkExistenceOfDomain({
-            domain: `${this.ENSPrefixes.Application}.${this.appForm.value.orgNamespace}`
+            domain: `${this.ENSPrefixes.Application}.${this.appForm.value.orgNamespace}`,
           });
 
           if (exists) {
             // check if user is authorized to create an app under the application namespace
             const isOwner = await this.iamService.domainsService.isOwner({
-              domain: this.appForm.value.orgNamespace
+              domain: this.appForm.value.orgNamespace,
             });
 
             if (!isOwner) {
-              this.toastr.error('You are not authorized to create an application in this organization.', this.TOASTR_HEADER);
+              this.toastr.error(
+                'You are not authorized to create an application in this organization.',
+                this.TOASTR_HEADER
+              );
               this.dialog.closeAll();
             }
           } else {
-            this.toastr.error('Application subdomain in this organization does not exist.', this.TOASTR_HEADER);
+            this.toastr.error(
+              'Application subdomain in this organization does not exist.',
+              this.TOASTR_HEADER
+            );
             this.dialog.closeAll();
           }
         } else {
-          this.toastr.error('Organization namespace does not exist.', this.TOASTR_HEADER);
+          this.toastr.error(
+            'Organization namespace does not exist.',
+            this.TOASTR_HEADER
+          );
           this.dialog.closeAll();
         }
       } catch (e) {
@@ -153,7 +198,10 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         this.spinner.hide();
       }
     } else {
-      this.toastr.error('Organization Namespace is missing.', this.TOASTR_HEADER);
+      this.toastr.error(
+        'Organization Namespace is missing.',
+        this.TOASTR_HEADER
+      );
       this.dialog.closeAll();
     }
   }
@@ -190,26 +238,34 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
       // Check if app namespace is taken
       const orgData = this.appForm.value;
-      const exists = await this.iamService.domainsService.checkExistenceOfDomain({
-        domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
-      });
+      const exists =
+        await this.iamService.domainsService.checkExistenceOfDomain({
+          domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`,
+        });
 
       if (exists) {
         // If exists check if current user is the owner of this namespace and allow him/her to overwrite
         const isOwner = await this.iamService.domainsService.isOwner({
-          domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
+          domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`,
         });
 
         if (!isOwner) {
           allowToProceed = false;
 
           // Do not allow to proceed if app namespace already exists
-          this.toastr.error('Application namespace already exists. You have no access rights to it.', this.TOASTR_HEADER);
+          this.toastr.error(
+            'Application namespace already exists. You have no access rights to it.',
+            this.TOASTR_HEADER
+          );
         } else {
           this.spinner.hide();
 
           // Prompt if user wants to overwrite this namespace
-          if (!await this.confirm('Application namespace already exists. Do you wish to continue?')) {
+          if (
+            !(await this.confirm(
+              'Application namespace already exists. Do you wish to continue?'
+            ))
+          ) {
             allowToProceed = false;
           } else {
             this.spinner.show();
@@ -234,7 +290,10 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
             this.stepper.next();
           } catch (e) {
             console.error(orgData.data.others, e);
-            this.toastr.error('Others must be in JSON format.', this.TOASTR_HEADER);
+            this.toastr.error(
+              'Others must be in JSON format.',
+              this.TOASTR_HEADER
+            );
           }
         }
       }
@@ -256,19 +315,26 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
       // Check if current user is the owner of this namespace and allow him/her to overwrite
       const isOwner = await this.iamService.domainsService.isOwner({
-        domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
+        domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`,
       });
 
       if (!isOwner) {
         allowToProceed = false;
 
         // Do not allow to proceed if app namespace already exists
-        this.toastr.error('You have no update rights to this namespace.', this.TOASTR_HEADER);
+        this.toastr.error(
+          'You have no update rights to this namespace.',
+          this.TOASTR_HEADER
+        );
       } else {
         this.spinner.hide();
 
         // Prompt if user wants to overwrite this namespace
-        if (!await this.confirm('You are updating details of this application. Do you wish to continue?')) {
+        if (
+          !(await this.confirm(
+            'You are updating details of this application. Do you wish to continue?'
+          ))
+        ) {
           allowToProceed = false;
         } else {
           this.spinner.show();
@@ -292,7 +358,10 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
             this.stepper.next();
           } catch (e) {
             console.error(orgData.data.others, e);
-            this.toastr.error('Others must be in JSON format.', this.TOASTR_HEADER);
+            this.toastr.error(
+              'Others must be in JSON format.',
+              this.TOASTR_HEADER
+            );
           }
         }
       }
@@ -305,7 +374,9 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   }
 
   async confirmApp(skipNextStep?: boolean) {
-    const req = JSON.parse(JSON.stringify({ ...this.appForm.value, returnSteps: true }));
+    const req = JSON.parse(
+      JSON.stringify({ ...this.appForm.value, returnSteps: true })
+    );
 
     req.namespace = `${this.ENSPrefixes.Application}.${req.orgNamespace}`;
     delete req.orgNamespace;
@@ -315,7 +386,10 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
 
     // Check if logoUrl resolves
     if (req.data.logoUrl && !this._isLogoUrlValid) {
-      this.toastr.error('Logo URL cannot be resolved. Please change it to a correct and valid image URL.', this.TOASTR_HEADER);
+      this.toastr.error(
+        'Logo URL cannot be resolved. Please change it to a correct and valid image URL.',
+        this.TOASTR_HEADER
+      );
       return;
     }
 
@@ -364,7 +438,10 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       // Make sure that the current step is not retried
       if (this._requests[`${requestIdx}`]) {
         this._currentIdx++;
-        this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.txs.length})`);
+        this.toastr.info(
+          step.info,
+          `Transaction Success (${this._currentIdx}/${this.txs.length})`
+        );
 
         // Remove 1st element
         steps.shift();
@@ -380,17 +457,20 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   }
 
   private async proceedCreateSteps(req: any) {
-    const returnSteps = this.data.owner === this.iamService.signerService.address;
+    const returnSteps =
+      this.data.owner === this.iamService.signerService.address;
     req = { ...req, returnSteps };
     try {
       const call = this.iamService.domainsService.createApplication(req);
       // Retrieve the steps to create an organization
-      this.txs = returnSteps ?
-        await call :
-        [{
-          info: 'Confirm transaction in your safe wallet',
-          next: async () => await call
-        }];
+      this.txs = returnSteps
+        ? await call
+        : [
+            {
+              info: 'Confirm transaction in your safe wallet',
+              next: async () => await call,
+            },
+          ];
       // Retrieve the steps to create an application
       this._requests[`${this._retryCount}`] = [...this.txs];
 
@@ -398,14 +478,19 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       await this.next(0);
     } catch (e) {
       console.error('New App Error', e);
-      this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+      this.toastr.error(
+        e.message || 'Please contact system administrator.',
+        'System Error'
+      );
     }
   }
 
   async retry() {
     if (this.viewType !== ViewType.UPDATE) {
       // Copy pending steps
-      this._requests[`${this._retryCount + 1}`] = [...this._requests[`${this._retryCount}`]];
+      this._requests[`${this._retryCount + 1}`] = [
+        ...this._requests[`${this._retryCount}`],
+      ];
 
       // Remove previous request
       delete this._requests[`${this._retryCount}`];
@@ -422,7 +507,10 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         }
       } catch (e) {
         console.error('New App Error', e);
-        this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+        this.toastr.error(
+          e.message || 'Please contact system administrator.',
+          'System Error'
+        );
       }
     } else {
       delete this._requests[`${this._retryCount++}`];
@@ -444,11 +532,12 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       this.txs = [
         {
           info: 'Setting up definitions',
-          next: async () => await this.iamService.domainsService.setRoleDefinition({
-            data: req.data,
-            domain: newDomain
-          })
-        }
+          next: async () =>
+            await this.iamService.domainsService.setRoleDefinition({
+              data: req.data,
+              domain: newDomain,
+            }),
+        },
       ];
 
       this._requests[`${retryCount}`] = [...this.txs];
@@ -459,28 +548,37 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       // Make sure that all steps are not yet complete
       if (this.stepper.selectedIndex !== 3 && retryCount === this._retryCount) {
         // Move to Complete Step
-        this.toastr.info('Set definition for application', 'Transaction Success');
+        this.toastr.info(
+          'Set definition for application',
+          'Transaction Success'
+        );
         this.stepper.selected.completed = true;
         this.stepper.next();
       }
     } catch (e) {
       console.error('Update App Error', e);
-      this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+      this.toastr.error(
+        e.message || 'Please contact system administrator.',
+        'System Error'
+      );
     }
   }
 
   private async confirm(confirmationMsg: string, isDiscardButton?: boolean) {
-    return this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      maxHeight: '195px',
-      data: {
-        header: this.TOASTR_HEADER,
-        message: confirmationMsg,
-        isDiscardButton
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().toPromise();
+    return this.dialog
+      .open(ConfirmationDialogComponent, {
+        width: '400px',
+        maxHeight: '195px',
+        data: {
+          header: this.TOASTR_HEADER,
+          message: confirmationMsg,
+          isDiscardButton,
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .toPromise();
   }
 
   async closeDialog(isSuccess?: boolean) {
@@ -491,9 +589,15 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
     } else {
       if (isSuccess) {
         if (this.origData) {
-          this.toastr.success('Application is successfully updated.', this.TOASTR_HEADER);
+          this.toastr.success(
+            'Application is successfully updated.',
+            this.TOASTR_HEADER
+          );
         } else {
-          this.toastr.success('Application is successfully created.', this.TOASTR_HEADER);
+          this.toastr.success(
+            'Application is successfully created.',
+            this.TOASTR_HEADER
+          );
         }
       }
       this.dialogRef.close(isSuccess);

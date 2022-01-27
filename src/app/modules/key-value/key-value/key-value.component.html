@@ -1,9 +1,11 @@
 <div class="d-flex justify-content-between align-items-center mb-2">
   <span class="label color-white opacity-50 pl-3">Key-Value pairs</span>
-  <button mat-icon-button *ngIf="!formVisible"
-          (click)="showForm()"
-          matTooltip="Add key-value pair"
-          data-qa-id="show-form">
+  <button
+    mat-icon-button
+    *ngIf="!formVisible"
+    (click)="showForm()"
+    matTooltip="Add key-value pair"
+    data-qa-id="show-form">
     <mat-icon class="btn-color-primary">add</mat-icon>
   </button>
 </div>

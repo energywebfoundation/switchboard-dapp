@@ -8,15 +8,19 @@ import { of, throwError } from 'rxjs';
 
 describe('DidBookService', () => {
   let service: DidBookService;
-  const didBookHttpServiceSpy = jasmine.createSpyObj(DidBookHttpService, ['getList', 'add', 'delete']);
+  const didBookHttpServiceSpy = jasmine.createSpyObj(DidBookHttpService, [
+    'getList',
+    'add',
+    'delete',
+  ]);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         DidBookService,
-        {provide: DidBookHttpService, useValue: didBookHttpServiceSpy},
-        {provide: SwitchboardToastrService, useValue: toastrSpy}
-      ]
+        { provide: DidBookHttpService, useValue: didBookHttpServiceSpy },
+        { provide: SwitchboardToastrService, useValue: toastrSpy },
+      ],
     });
     service = TestBed.inject(DidBookService);
   });
@@ -44,7 +48,9 @@ describe('DidBookService', () => {
   });
 
   it('should call toastr error when error occurs while adding a record', (done) => {
-    didBookHttpServiceSpy.add.and.returnValue(throwError({message: 'adding error'}));
+    didBookHttpServiceSpy.add.and.returnValue(
+      throwError({ message: 'adding error' })
+    );
     service.add({});
     service.getList$().subscribe(() => {
       expect(toastrSpy.error).toHaveBeenCalledWith('adding error');
@@ -53,7 +59,9 @@ describe('DidBookService', () => {
   });
 
   it('should remove element from the list', (done) => {
-    didBookHttpServiceSpy.getList.and.returnValue(of([{id: '1'}, {id: '2'}]));
+    didBookHttpServiceSpy.getList.and.returnValue(
+      of([{ id: '1' }, { id: '2' }])
+    );
     didBookHttpServiceSpy.delete.and.returnValue(of({}));
     service.getList();
     service.delete('1');
@@ -65,12 +73,13 @@ describe('DidBookService', () => {
   });
 
   it('should call toastr error when error occurs while removing a record', (done) => {
-    didBookHttpServiceSpy.delete.and.returnValue(throwError({message: 'removing error'}));
+    didBookHttpServiceSpy.delete.and.returnValue(
+      throwError({ message: 'removing error' })
+    );
     service.delete('');
     service.getList$().subscribe(() => {
       expect(toastrSpy.error).toHaveBeenCalledWith('removing error');
       done();
     });
   });
-
 });

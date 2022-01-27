@@ -1,31 +1,28 @@
 <mat-form-field class="md-search" appearance="outline">
-  <input type="text"
-         data-qa-id="smart-search-input"
-         [placeholder]="placeholderSearch"
-         matInput
-         [formControl]="searchText"
-         [matAutocomplete]="auto">
+  <input
+    type="text"
+    data-qa-id="smart-search-input"
+    [placeholder]="placeholderSearch"
+    matInput
+    [formControl]="searchText"
+    [matAutocomplete]="auto" />
 
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
     <mat-option *ngFor="let item of filteredOptions | async" [value]="item" class="d-flex align-items-start">
-      <div class=" d-flex flex-column">
+      <div class="d-flex flex-column">
         <span [attr.data-qa-id]="item">{{ item }}</span>
       </div>
     </mat-option>
   </mat-autocomplete>
   <div matSuffix class="d-flex" *ngIf="showButtons()">
     <ng-container *ngIf="!isLoadingList">
-      <button mat-icon-button (click)="search()" class="search-button"
-              data-qa-id="search">
+      <button mat-icon-button (click)="search()" class="search-button" data-qa-id="search">
         <mat-icon>search</mat-icon>
       </button>
-      <button *ngIf="isAdding" [disabled]="!searchText.value" mat-icon-button
-              data-qa-id="add"
-              (click)="addRole()">
+      <button *ngIf="isAdding" [disabled]="!searchText.value" mat-icon-button data-qa-id="add" (click)="addRole()">
         <mat-icon>add</mat-icon>
       </button>
-      <button *ngIf="isDefault" mat-icon-button (click)="clear()"
-              data-qa-id="clear">
+      <button *ngIf="isDefault" mat-icon-button (click)="clear()" data-qa-id="clear">
         <mat-icon>close</mat-icon>
       </button>
     </ng-container>

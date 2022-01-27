@@ -9,7 +9,8 @@ export interface AssetsState {
   [owned.USER_FEATURE_KEY]: owned.OwnedState;
 }
 
-export const getAssetState = createFeatureSelector<AssetsState>(USER_FEATURE_KEY);
+export const getAssetState =
+  createFeatureSelector<AssetsState>(USER_FEATURE_KEY);
 
 export const reducer = {
   [assetDetails.USER_FEATURE_KEY]: assetDetails.reducer,
