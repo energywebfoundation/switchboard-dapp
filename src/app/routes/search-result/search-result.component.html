@@ -72,7 +72,9 @@
           <div class="color-white">No record found.</div>
         </div>
         <div *ngFor="let item of filteredOptions | async" class="card-width">
-          <mat-card class="card-search-body p-0 mb-3 cursor-pointer ml-2" (click)="viewDetails(item, searchResultDrawer)">
+          <mat-card
+            class="card-search-body p-0 mb-3 cursor-pointer ml-2"
+            (click)="viewDetails(item, searchResultDrawer)">
             <div class="img-container p-4">
               <!-- Placeholder Logo -->
               <ng-container *ngIf="!item?.definition?.logoUrl">
