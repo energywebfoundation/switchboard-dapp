@@ -71,7 +71,6 @@
     "ngx-editor": "9.0.2",
     "ngx-spinner": "^11.0.2",
     "ngx-toastr": "13.2.1",
-    "popper.js": "1.14.3",
     "rxjs": "6.6.7",
     "simple-line-icons": "2.4.1",
     "sweetalert": "2.1.2",
