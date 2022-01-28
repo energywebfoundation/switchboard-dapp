@@ -108,6 +108,42 @@ describe('OrganizationEffects', () => {
         });
       })
     );
+    it(
+      'should filter not owned organizations',
+      waitForAsync(() => {
+        actions$.next(
+          OrganizationActions.setHistory({
+            element: { namespace: 'test' } as any,
+          })
+        );
+        organizationServiceSpy.getHistory.and.returnValue(
+          of({
+            namespace: 'test',
+            owner: '123',
+            subOrgs: [
+              { namespace: 'suborg', owner: '123' },
+              { namespace: 'suborg2', owner: '321' },
+            ],
+          })
+        );
+
+        effects.updateHistory$.subscribe((resultAction) => {
+          expect(resultAction).toEqual(
+            OrganizationActions.setHistorySuccess({
+              history: [{ namespace: 'suborg', owner: '123' } as any],
+              element: {
+                namespace: 'test',
+                owner: '123',
+                subOrgs: [
+                  { namespace: 'suborg', owner: '123' },
+                  { namespace: 'suborg2', owner: '321' },
+                ],
+              } as any,
+            })
+          );
+        });
+      })
+    );
 
     it(
       'should dispatch failure action',
