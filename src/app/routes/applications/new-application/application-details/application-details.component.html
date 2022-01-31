@@ -25,21 +25,21 @@
   <div class="text-left my-3">
     <div class="label opacity-50 mb-2">Website URL</div>
     <span class="color-white mb-0">
-      {{ data?.websiteUrl || 'None' }}
+      {{ data?.websiteUrl | defaultValue }}
     </span>
   </div>
   <mat-divider></mat-divider>
   <div class="text-left my-3">
     <div class="label opacity-50 mb-2">Description</div>
     <span class="color-white mb-0">
-      {{ data?.description || 'None' }}
+      {{ data?.description | defaultValue }}
     </span>
   </div>
   <mat-divider></mat-divider>
   <div class="text-left my-3">
     <div class="label opacity-50 mb-2">Others (JSON)</div>
     <span class="color-white mb-0">
-      {{ data?.others || 'None' }}
+      {{ data?.others | defaultValue }}
     </span>
   </div>
 </div>

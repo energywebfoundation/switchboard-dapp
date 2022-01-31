@@ -207,21 +207,21 @@
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Website URL</div>
               <span class="color-white mb-0">
-                {{ orgForm?.value?.data?.websiteUrl || 'None' }}
+                {{ orgForm?.value?.data?.websiteUrl | defaultValue }}
               </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Description</div>
               <span class="color-white mb-0">
-                {{ orgForm?.value?.data?.description || 'None' }}
+                {{ orgForm?.value?.data?.description | defaultValue }}
               </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Others (JSON)</div>
               <span class="color-white mb-0">
-                {{ orgForm?.value?.data?.others || 'None' }}
+                {{ orgForm?.value?.data?.others | defaultValue }}
               </span>
             </div>
           </div>

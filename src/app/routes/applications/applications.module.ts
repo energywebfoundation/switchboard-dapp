@@ -39,6 +39,7 @@ import { IssuerDidListComponent } from './new-role/components/issuer-did-list/is
 import { IssuerDidComponent } from './new-role/components/issuer-did/issuer-did.component';
 import { SearchIssuerRoleComponent } from './new-role/components/search-issuer-role/search-issuer-role.component';
 import { ApplicationDetailsComponent } from './new-application/application-details/application-details.component';
+import { DefaultValuePipe } from './pipes/default-value.pipe';
 
 const routes: Routes = [{ path: '', component: ApplicationsComponent }];
 
@@ -67,6 +68,7 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     IssuerDidComponent,
     SearchIssuerRoleComponent,
     ApplicationDetailsComponent,
+    DefaultValuePipe,
   ],
   imports: [
     CommonModule,
