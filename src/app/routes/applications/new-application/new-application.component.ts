@@ -10,7 +10,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { NamespaceType } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { IamService } from '../../../shared/services/iam.service';
-import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
 import {
@@ -74,7 +73,6 @@ export class NewApplicationComponent
       others: ['', isValidJsonFormatValidator],
     }),
   });
-  public environment = environment;
   public isChecking = false;
   private _isLogoUrlValid = true;
   public ENSPrefixes = NamespaceType;
