@@ -76,7 +76,6 @@ export class NewApplicationComponent
   });
   public isChecking = false;
   public isLogoUrlValid = true;
-  public ENSPrefixes = NamespaceType;
   public ViewType = ViewType;
 
   viewType: string = ViewType.NEW;
@@ -119,7 +118,7 @@ export class NewApplicationComponent
     return (
       this.applicationNamespaceControl.value +
       '.' +
-      this.ENSPrefixes.Application +
+      NamespaceType.Application +
       '.' +
       this.appForm?.value?.orgNamespace
     );
@@ -175,7 +174,7 @@ export class NewApplicationComponent
         if (exists) {
           // Check if application sub-domain exists in this organization
           exists = await this.iamService.domainsService.checkExistenceOfDomain({
-            domain: `${this.ENSPrefixes.Application}.${this.appForm.value.orgNamespace}`,
+            domain: `${NamespaceType.Application}.${this.appForm.value.orgNamespace}`,
           });
 
           if (exists) {
@@ -241,13 +240,13 @@ export class NewApplicationComponent
       const orgData = this.appForm.value;
       const exists =
         await this.iamService.domainsService.checkExistenceOfDomain({
-          domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`,
+          domain: `${orgData.appName}.${NamespaceType.Application}.${orgData.orgNamespace}`,
         });
 
       if (exists) {
         // If exists check if current user is the owner of this namespace and allow him/her to overwrite
         const isOwner = await this.iamService.domainsService.isOwner({
-          domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`,
+          domain: `${orgData.appName}.${NamespaceType.Application}.${orgData.orgNamespace}`,
         });
 
         if (!isOwner) {
@@ -316,7 +315,7 @@ export class NewApplicationComponent
 
       // Check if current user is the owner of this namespace and allow him/her to overwrite
       const isOwner = await this.iamService.domainsService.isOwner({
-        domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`,
+        domain: `${orgData.appName}.${NamespaceType.Application}.${orgData.orgNamespace}`,
       });
 
       if (!isOwner) {
@@ -379,7 +378,7 @@ export class NewApplicationComponent
       JSON.stringify({ ...this.appForm.value, returnSteps: true })
     );
 
-    req.namespace = `${this.ENSPrefixes.Application}.${req.orgNamespace}`;
+    req.namespace = `${NamespaceType.Application}.${req.orgNamespace}`;
     delete req.orgNamespace;
 
     req.data.appName = req.data.applicationName;
