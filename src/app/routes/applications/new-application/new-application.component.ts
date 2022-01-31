@@ -75,7 +75,7 @@ export class NewApplicationComponent
     }),
   });
   public isChecking = false;
-  private _isLogoUrlValid = true;
+  public isLogoUrlValid = true;
   public ENSPrefixes = NamespaceType;
   public ViewType = ViewType;
 
@@ -109,6 +109,20 @@ export class NewApplicationComponent
         this.appForm.patchValue({ orgNamespace: data.organizationNamespace });
       }
     }
+  }
+
+  get applicationNamespaceControl() {
+    return this.appForm.get('appName');
+  }
+
+  get namespace(): string {
+    return (
+      this.applicationNamespaceControl.value +
+      '.' +
+      this.ENSPrefixes.Application +
+      '.' +
+      this.appForm?.value?.orgNamespace
+    );
   }
 
   async ngAfterViewInit() {
@@ -205,14 +219,6 @@ export class NewApplicationComponent
       );
       this.dialog.closeAll();
     }
-  }
-
-  logoUrlError() {
-    this._isLogoUrlValid = false;
-  }
-
-  logoUrlSuccess() {
-    this._isLogoUrlValid = true;
   }
 
   cancelAppDetails() {
@@ -380,7 +386,7 @@ export class NewApplicationComponent
     delete req.data.applicationName;
 
     // Check if logoUrl resolves
-    if (req.data.logoUrl && !this._isLogoUrlValid) {
+    if (req.data.logoUrl && !this.isLogoUrlValid) {
       this.toastr.error(
         'Logo URL cannot be resolved. Please change it to a correct and valid image URL.',
         this.TOASTR_HEADER

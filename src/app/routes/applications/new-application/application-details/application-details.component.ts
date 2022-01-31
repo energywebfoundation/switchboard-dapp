@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-application-details',
@@ -14,4 +14,10 @@ export class ApplicationDetailsComponent {
     description: string;
     others: string;
   };
+
+  @Output() imageLoaded = new EventEmitter<boolean>();
+
+  imageEventHandler(value: boolean): void {
+    this.imageLoaded.emit(value);
+  }
 }

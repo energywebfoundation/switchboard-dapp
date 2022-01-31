@@ -60,31 +60,28 @@
                       formControlName="appName"
                       type="text"
                       appBlockPaste
-                      (input)="parseValue(appForm, appForm.get('appName').value)"
+                      (input)="parseValue(appForm, applicationNamespaceControl.value)"
                       placeholder="Application Namespace"
                       required
                       minlength="3"
                       maxlength="256" />
-                    <mat-error *ngIf="appForm.get('appName').hasError('required')">
+                    <mat-error *ngIf="applicationNamespaceControl.hasError('required')">
                       Application Namespace is
                       <strong>required</strong>
                     </mat-error>
-                    <mat-error *ngIf="appForm.get('appName').hasError('minlength')">
+                    <mat-error *ngIf="applicationNamespaceControl.hasError('minlength')">
                       Application Namespace need to have at least 3 characters.
                     </mat-error>
-                    <mat-error *ngIf="appForm.get('appName').hasError('isAlphaNumericInvalid')">
+                    <mat-error *ngIf="applicationNamespaceControl.hasError('isAlphaNumericInvalid')">
                       Application Namespace can only contain alphanumeric characters.
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div
-                  *ngIf="appForm.get('appName').value"
+                  *ngIf="applicationNamespaceControl.value"
                   class="ml-3 card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3">
                   <span class="pb-2">
-                    {{
-                      appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace
-                        | lowercase
-                    }}
+                    {{ namespace }}
                   </span>
                 </div>
                 <ng-container formGroupName="data">
@@ -172,8 +169,9 @@
         <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Confirm Details</ng-template>
           <app-application-details
-            [namespace]="appForm?.value?.appName + '.' + ENSPrefixes.Application + '.' + appForm?.value?.orgNamespace"
-            [data]="appForm?.value?.data"></app-application-details>
+            [namespace]="namespace"
+            [data]="appForm?.value?.data"
+            (imageLoaded)="isLogoUrlValid = $event"></app-application-details>
           <div>
             <div class="d-flex justify-content-end mb-2">
               <button mat-stroked-button class="btn btn-small mr-2" (click)="cancelAppDetails()">Back</button>
