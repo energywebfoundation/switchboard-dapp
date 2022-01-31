@@ -206,12 +206,6 @@ export class NewApplicationComponent
     }
   }
 
-  backToOrg() {
-    this.stepper.steps.first.editable = true;
-    this.stepper.previous();
-    this.stepper.selected.completed = false;
-  }
-
   logoUrlError() {
     this._isLogoUrlValid = false;
   }
