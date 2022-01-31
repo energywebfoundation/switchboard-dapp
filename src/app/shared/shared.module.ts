@@ -50,6 +50,7 @@ import { TableHeadingComponent } from './components/table-heading/table-heading.
 import { NoRecordsComponent } from './components/no-records/no-records.component';
 import { RoleTypePipe } from './pipes/role-type/role-type.pipe';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { QrCodeScannerModule } from './components/qr-code-scanner/qr-code-scanner.module';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -96,6 +97,7 @@ const MATERIAL_MODULES = [
     DidFormatMinifierModule,
     MATERIAL_MODULES,
     BsDropdownModule,
+    QrCodeScannerModule,
   ],
   providers: [ColorsService],
   declarations: [
@@ -130,6 +132,7 @@ const MATERIAL_MODULES = [
     NoRecordsComponent,
     RoleTypePipe,
     BsDropdownModule,
+    QrCodeScannerModule,
   ],
 })
 

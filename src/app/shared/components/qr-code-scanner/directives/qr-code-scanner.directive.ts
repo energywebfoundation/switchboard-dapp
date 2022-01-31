@@ -1,28 +1,58 @@
-import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { QrCodeScannerComponent } from '../components/qr-code-scanner.component';
 import { filter } from 'rxjs/operators';
+import { QrCodeData } from '../models/qr-code-data.interface';
+import { Observable } from 'rxjs';
+import { QrCodeScannerService } from '../services/qr-code-scanner.service';
 
 @Directive({
   selector: '[appQrCodeScanner]',
 })
 export class QrCodeScannerDirective {
-  @Output() scannedValue = new EventEmitter<{ value: string }>();
+  @Input() detect = false;
+  @Output() scannedValue = new EventEmitter<QrCodeData>();
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private qrCodeScannerService: QrCodeScannerService
+  ) {}
 
   @HostListener('click', ['$event'])
   onClick() {
-    this.dialog
-      .open(QrCodeScannerComponent, {
-        width: '500px',
-        maxHeight: '250px',
-        maxWidth: '100%',
-      })
+    const afterClosed = this.dialog
+      .open<QrCodeScannerComponent, unknown, QrCodeData>(
+        QrCodeScannerComponent,
+        {
+          width: '500px',
+          maxHeight: '250px',
+          maxWidth: '100%',
+        }
+      )
       .afterClosed()
-      .pipe(filter((v) => v?.value))
-      .subscribe((data: { value: string }) => {
-        this.scannedValue.emit(data);
-      });
+      .pipe(filter((data) => !!data?.did && !!data?.type));
+
+    this.handleScannedValue(afterClosed);
+    this.detectDefaultBehaviour(afterClosed);
+  }
+
+  private handleScannedValue(closed: Observable<QrCodeData>) {
+    closed
+      .pipe(filter(() => !this.detect))
+      .subscribe((data: QrCodeData) => this.scannedValue.emit(data));
+  }
+
+  private detectDefaultBehaviour(closed: Observable<QrCodeData>) {
+    closed
+      .pipe(filter(() => this.detect))
+      .subscribe((data: QrCodeData) =>
+        this.qrCodeScannerService.dataFactory(data)
+      );
   }
 }

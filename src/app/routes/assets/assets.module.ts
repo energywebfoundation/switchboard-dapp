@@ -26,8 +26,7 @@ import { HistoryElementComponent } from './asset-ownership-history/history-eleme
 import { HistoryPeriodComponent } from './asset-ownership-history/history-period/history-period.component';
 import { TypeAlgorithmPipe } from './pipes/type-algorithm.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { DidQrCodeComponent } from './did-qr-code/did-qr-code.component';
-import { QrCodeModule } from 'ng-qrcode';
+import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-code-scanner.module';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent },
@@ -47,7 +46,6 @@ const routes: Routes = [
     HistoryElementComponent,
     HistoryPeriodComponent,
     TypeAlgorithmPipe,
-    DidQrCodeComponent,
   ],
   imports: [
     CommonModule,
@@ -67,7 +65,7 @@ const routes: Routes = [
     GovernanceDetailsModule,
     MatExpansionModule,
     ClipboardModule,
-    QrCodeModule,
+    QrCodeScannerModule,
   ],
 })
 export class AssetsModule {}

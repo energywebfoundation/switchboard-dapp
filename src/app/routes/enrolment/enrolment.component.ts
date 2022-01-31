@@ -145,8 +145,8 @@ export class EnrolmentComponent implements AfterViewInit {
     );
   }
 
-  updateSearchByDidValue(value) {
-    this.searchByDid.setValue(value.did);
+  updateSearchByDidValue(value: string) {
+    this.searchByDid.setValue(value);
   }
 
   createVC() {

@@ -1,6 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
 import { APP_INITIALIZER, NgModule, Provider } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { LayoutModule } from './layout/layout.module';

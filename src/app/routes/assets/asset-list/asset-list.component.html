@@ -15,7 +15,7 @@
           class="qr-code"
           aria-label="Scan DID"
           appQrCodeScanner
-          (scannedValue)="updateSearchByDidValue($event)">
+          (scannedValue)="updateSearchByDidValue($event.did)">
           <mat-icon>qr_code_2</mat-icon>
         </button>
       </mat-form-field>
