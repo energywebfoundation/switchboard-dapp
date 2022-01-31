@@ -21,6 +21,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { isAlphanumericValidator, isValidJsonFormatValidator } from '@utils';
 import { CreationBaseAbstract } from '../utils/creation-base.abstract';
+import { isUrlValidator } from '../../../utils/validators/url/is-url.validator';
 
 @Component({
   selector: 'app-new-application',
@@ -67,8 +68,8 @@ export class NewApplicationComponent
           Validators.maxLength(256),
         ]),
       ],
-      logoUrl: ['', Validators.pattern('https?://.*')],
-      websiteUrl: ['', Validators.pattern('https?://.*')],
+      logoUrl: ['', isUrlValidator()],
+      websiteUrl: ['', isUrlValidator()],
       description: '',
       others: ['', isValidJsonFormatValidator],
     }),
