@@ -4,6 +4,8 @@ import { ENSPrefixes, RoleTypeEnum } from '../../new-role.component';
 import { FormControl, Validators } from '@angular/forms';
 import { isAlphanumericValidator } from '../../../../../utils/validators/is-alphanumeric.validator';
 import { RoleCreationService } from '../../services/role-creation.service';
+import { from } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-role-name',
@@ -17,13 +19,16 @@ export class RoleNameComponent {
   @Output() proceed = new EventEmitter<string>();
   @Output() cancel = new EventEmitter<{ touched: boolean }>();
 
-  form = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3),
-    Validators.maxLength(256),
-    isAlphanumericValidator,
-  ]);
-  existAndNotOwner = false;
+  form = new FormControl(
+    '',
+    [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(256),
+      isAlphanumericValidator,
+    ],
+    [this.canUseDomain()]
+  );
 
   constructor(private roleCreationService: RoleCreationService) {}
 
@@ -37,13 +42,19 @@ export class RoleNameComponent {
     return this.form.hasError(errorType);
   }
 
-  alphaNumericOnly(event: any, includeDot?: boolean): boolean {
-    this.existAndNotOwner = false;
-    return true;
-  }
-
   cancelHandler(): void {
     this.cancel.emit({ touched: this.form.touched });
+  }
+
+  canUseDomain() {
+    return () => {
+      return from(
+        this.roleCreationService.canUseDomain(this.ensNamespace)
+      ).pipe(
+        debounceTime(300),
+        map((res) => (res ? null : { domainExist: true }))
+      );
+    };
   }
 
   async next(): Promise<void> {
@@ -51,12 +62,6 @@ export class RoleNameComponent {
       return;
     }
 
-    const canProceed = await this.roleCreationService.checkIfUserCanUseDomain(
-      this.ensNamespace
-    );
-    this.existAndNotOwner = !canProceed;
-    if (canProceed) {
-      this.proceed.emit(this.form.value);
-    }
+    this.proceed.emit(this.form.value);
   }
 }

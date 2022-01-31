@@ -105,7 +105,6 @@ describe('RoleNameComponent', () => {
     // next.click();
     fixture.detectChanges();
 
-    expect(component.existAndNotOwner).toBeTrue();
     const { matError } = selectors(hostDebug);
     expect(matError.textContent).toContain(
       'This name already exists. Please try another'

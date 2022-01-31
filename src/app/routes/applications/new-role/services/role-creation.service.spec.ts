@@ -36,7 +36,7 @@ describe('RoleCreationService', () => {
       domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
         Promise.resolve(false)
       );
-      const result = await service.checkIfUserCanUseDomain('domain');
+      const result = await service.canUseDomain('domain');
 
       expect(result).toBeTrue();
     });
@@ -46,7 +46,7 @@ describe('RoleCreationService', () => {
         Promise.resolve(true)
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(true));
-      const result = await service.checkIfUserCanUseDomain('domain');
+      const result = await service.canUseDomain('domain');
 
       expect(result).toBeTrue();
     });
@@ -56,7 +56,7 @@ describe('RoleCreationService', () => {
         Promise.resolve(true)
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(false));
-      const result = await service.checkIfUserCanUseDomain('domain');
+      const result = await service.canUseDomain('domain');
 
       expect(result).toBeFalse();
     });
@@ -66,7 +66,7 @@ describe('RoleCreationService', () => {
         Promise.reject('reason')
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(false));
-      const result = await service.checkIfUserCanUseDomain('domain');
+      const result = await service.canUseDomain('domain');
 
       expect(result).toBeFalse();
       expect(toastrSpy.error).toHaveBeenCalled();
@@ -77,7 +77,7 @@ describe('RoleCreationService', () => {
         Promise.resolve(true)
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.reject('reason'));
-      const result = await service.checkIfUserCanUseDomain('domain');
+      const result = await service.canUseDomain('domain');
 
       expect(result).toBeFalse();
       expect(toastrSpy.error).toHaveBeenCalled();
