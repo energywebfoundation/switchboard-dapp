@@ -61,7 +61,7 @@
                       formControlName="appName"
                       type="text"
                       appBlockPaste
-                      oninput="value = value.toLowerCase().replace(/\s+/g, '')"
+                      (input)="parseValue(appForm, appForm.get('appName').value)"
                       placeholder="Application Namespace"
                       required
                       minlength="3"

@@ -9,7 +9,6 @@ import {
 import { FormBuilder, Validators } from '@angular/forms';
 import { NamespaceType } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ConfigService } from '../../../shared/services/config.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -20,16 +19,19 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { isValidJsonFormatValidator } from '../../../utils/validators/json-format/is-valid-json-format.validator';
+import { isAlphanumericValidator, isValidJsonFormatValidator } from '@utils';
+import { CreationBaseAbstract } from '../utils/creation-base.abstract';
 
 @Component({
   selector: 'app-new-application',
   templateUrl: './new-application.component.html',
   styleUrls: ['./new-application.component.scss'],
 })
-export class NewApplicationComponent implements OnInit, AfterViewInit {
+export class NewApplicationComponent
+  extends CreationBaseAbstract
+  implements OnInit, AfterViewInit
+{
   private stepper: MatStepper;
 
   @ViewChild('stepper') set content(content: MatStepper) {
@@ -95,9 +97,9 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private configService: ConfigService
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    super();
     if (data && data.viewType) {
       this.viewType = data.viewType;
 

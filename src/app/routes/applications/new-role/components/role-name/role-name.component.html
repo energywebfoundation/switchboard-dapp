@@ -19,7 +19,7 @@
             type="text"
             placeholder="Role Name"
             required
-            oninput="value = value.toLowerCase().replace(/\s+/g, '')"
+            (input)="parseValue(form, form.value)"
             minlength="3"
             maxlength="256"
             data-qa-id="role-name" />

@@ -1,18 +1,18 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { isAlphaNumericOnly } from '../../../../../utils/functions/is-alpha-numeric';
 import { ENSPrefixes, RoleTypeEnum } from '../../new-role.component';
-import { FormControl, Validators } from '@angular/forms';
-import { isAlphanumericValidator } from '../../../../../utils/validators/is-alphanumeric.validator';
+import { AbstractControl, FormControl, Validators } from '@angular/forms';
+import { isAlphanumericValidator, StringTransform } from '@utils';
 import { RoleCreationService } from '../../services/role-creation.service';
 import { from } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
+import { CreationBaseAbstract } from '../../../utils/creation-base.abstract';
 
 @Component({
   selector: 'app-role-name',
   templateUrl: './role-name.component.html',
   styleUrls: ['./role-name.component.scss'],
 })
-export class RoleNameComponent {
+export class RoleNameComponent extends CreationBaseAbstract {
   @Input() roleType: RoleTypeEnum;
   @Input() parentNamespace: string;
 
@@ -30,12 +30,20 @@ export class RoleNameComponent {
     [this.canUseDomain()]
   );
 
-  constructor(private roleCreationService: RoleCreationService) {}
+  constructor(private roleCreationService: RoleCreationService) {
+    super();
+  }
 
   get ensNamespace(): string {
     return (
       this.form.value + '.' + ENSPrefixes.Roles + '.' + this.parentNamespace
     );
+  }
+
+  parseValue(form: AbstractControl, value: string): void {
+    form.patchValue(StringTransform.removeWhiteSpaces(value.toLowerCase()), {
+      emitEvent: false,
+    });
   }
 
   controlHasError(errorType: string): boolean {

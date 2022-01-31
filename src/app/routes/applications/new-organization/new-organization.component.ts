@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Inject, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { NamespaceType } from 'iam-client-lib';
 import { IamService } from '../../../shared/services/iam.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -12,10 +12,10 @@ import {
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { isValidJsonFormatValidator } from '../../../utils/validators/json-format/is-valid-json-format.validator';
+import { isAlphanumericValidator, isValidJsonFormatValidator } from '@utils';
 import { deepEqualObjects } from '../../../utils/functions/deep-equal-objects/deep-equal-objects';
 import { EnvService } from '../../../shared/services/env/env.service';
-import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
+import { CreationBaseAbstract } from '../utils/creation-base.abstract';
 
 export const ViewType = {
   UPDATE: 'update',
@@ -27,7 +27,7 @@ export const ViewType = {
   templateUrl: './new-organization.component.html',
   styleUrls: ['./new-organization.component.scss'],
 })
-export class NewOrganizationComponent {
+export class NewOrganizationComponent extends CreationBaseAbstract {
   private stepper: MatStepper;
 
   @ViewChild('stepper') set content(content: MatStepper) {
@@ -89,6 +89,7 @@ export class NewOrganizationComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private envService: EnvService
   ) {
+    super();
     if (data && data.viewType && (data.origData || data.parentOrg)) {
       this.viewType = data.viewType;
       this.origData = data.origData;

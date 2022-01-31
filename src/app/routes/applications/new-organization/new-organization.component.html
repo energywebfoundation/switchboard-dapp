@@ -52,7 +52,7 @@
                       type="text"
                       placeholder="Organization Namespace"
                       required
-                      oninput="value = value.toLowerCase().replace(/\s+/g, '')"
+                      (input)="parseValue(orgForm, orgForm.get('orgName').value)"
                       appBlockPaste
                       minlength="3"
                       maxlength="256" />
