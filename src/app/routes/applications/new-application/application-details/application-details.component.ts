@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AppDomain, AppDomainDefinition } from '../models/app-domain';
 
 @Component({
   selector: 'app-application-details',
@@ -7,13 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ApplicationDetailsComponent {
   @Input() namespace: string;
-  @Input() data: {
-    applicationName: string;
-    logoUrl: string;
-    websiteUrl: string;
-    description: string;
-    others: string;
-  };
+  @Input() data: AppDomainDefinition
 
   @Output() imageLoaded = new EventEmitter<boolean>();
 

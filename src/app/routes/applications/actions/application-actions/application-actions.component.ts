@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewApplicationComponent } from '../../new-application/new-application.component';
 import { ActionBaseAbstract } from '../action-base.abstract';
 import { filter } from 'rxjs/operators';
+import { NamespaceType } from 'iam-client-lib';
 
 @Component({
   selector: 'app-application-actions',
@@ -56,9 +57,15 @@ export class ApplicationActionsComponent extends ActionBaseAbstract {
   }
 
   edit() {
+    const orgNamespace = this.application.namespace
+      .split(`.${NamespaceType.Application}.`)
+      .pop();
     this.showEditComponent(NewApplicationComponent, {
       viewType: ViewType.UPDATE,
-      origData: this.application,
+      data: {
+        ...this.application, orgNamespace,
+      },
+
     });
   }
 
