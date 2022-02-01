@@ -22,8 +22,4 @@ export class ApplicationDetailsComponent {
   imageEventHandler(value: boolean): void {
     this.imageLoaded.emit(value);
   }
-
-  get others() {
-    return JSON.stringify(this.data?.others);
-  }
 }

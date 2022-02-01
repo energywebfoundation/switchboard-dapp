@@ -11,7 +11,6 @@ import { NamespaceType } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { IamService } from '../../../shared/services/iam.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
-import { ViewType } from '../new-organization/new-organization.component';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -22,7 +21,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { isAlphanumericValidator, isValidJsonFormatValidator } from '@utils';
 import { CreationBaseAbstract } from '../utils/creation-base.abstract';
 import { isUrlValidator } from '../../../utils/validators/url/is-url.validator';
-import { AppCreationDefinition, AppDomain } from './models/app-domain';
+import { AppCreationDefinition, AppDomain, ViewType } from './models/app-domain';
 import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
@@ -44,7 +43,6 @@ export class NewApplicationComponent
 
   public isLogoUrlValid = true;
 
-  viewType: string = ViewType.NEW;
   origData: any;
   applicationData: AppCreationDefinition;
 
@@ -62,17 +60,19 @@ export class NewApplicationComponent
     private loadingService: LoadingService,
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data1: any
+    @Inject(MAT_DIALOG_DATA) public data: { viewType: ViewType, data: AppDomain, orgNamespace: string }
   ) {
     super();
-    if (data1 && data1.viewType) {
-      this.viewType = data1.viewType;
+    this.prepareOriginalData();
+  }
 
-      if (this.viewType === ViewType.UPDATE && data1.data) {
-        this.origData = data1.data;
+  private prepareOriginalData() {
+    if (this.data && this.data.viewType) {
+      if (this.isUpdating && this.data.data) {
+        this.origData = this.data.data;
         this.TOASTR_HEADER = 'Update Application';
-      } else if (this.viewType === ViewType.NEW && data1.orgNamespace) {
-        this.origData = { ...this.data1 };
+      } else if (this.data.orgNamespace) {
+        this.origData = { ...this.data };
       }
     }
   }
@@ -82,7 +82,7 @@ export class NewApplicationComponent
   }
 
   get isUpdating() {
-    return this.viewType === ViewType.UPDATE;
+    return this.data.viewType === ViewType.Update;
   }
 
   async ngAfterViewInit() {
@@ -281,7 +281,7 @@ export class NewApplicationComponent
       list[1].editable = false;
     }
 
-    if (this.viewType === ViewType.UPDATE) {
+    if (this.isUpdating) {
       this.proceedUpdateStep(req, skipNextStep);
     } else {
       this.proceedCreateSteps(req);
@@ -359,7 +359,7 @@ export class NewApplicationComponent
   }
 
   async retry() {
-    if (this.viewType !== ViewType.UPDATE) {
+    if (!this.isUpdating) {
       // Copy pending steps
       this._requests[`${this._retryCount + 1}`] = [
         ...this._requests[`${this._retryCount}`],

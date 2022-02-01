@@ -1,6 +1,6 @@
 import { IAppDefinition } from '@energyweb/iam-contracts';
 
-export interface AppDomainDefinition extends Omit<IAppDefinition, 'others'>{
+export interface AppDomainDefinition extends Omit<IAppDefinition, 'others'> {
   others?: string;
 }
 
@@ -16,4 +16,13 @@ export interface AppCreationDefinition {
   data: IAppDefinition;
   domain?: string;
   name?: string;
+}
+
+export enum ViewType {
+  Update = 'update',
+  New = 'new',
+}
+
+export interface ApplicationData extends AppDomain {
+  viewType: ViewType;
 }
