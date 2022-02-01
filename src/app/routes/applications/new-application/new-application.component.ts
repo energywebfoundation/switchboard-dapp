@@ -42,9 +42,7 @@ export class NewApplicationComponent
     }
   }
 
-  public isChecking = false;
   public isLogoUrlValid = true;
-  public ViewType = ViewType;
 
   viewType: string = ViewType.NEW;
   origData: any;
@@ -79,14 +77,6 @@ export class NewApplicationComponent
     }
   }
 
-  get data() {
-    return this.origData;
-  }
-
-  get applicationName() {
-    return '';
-  }
-
   get namespace(): string {
     return this.applicationData.domain;
   }
@@ -100,27 +90,26 @@ export class NewApplicationComponent
   }
 
   async confirmOrgNamespace() {
-    if (this.data.orgNamespace) {
+    if (this.origData.orgNamespace) {
       try {
         this.loadingService.show();
-        this.isChecking = true;
 
         // Check if organization namespace exists
         let exists =
           await this.iamService.domainsService.checkExistenceOfDomain({
-            domain: this.data.orgNamespace,
+            domain: this.origData.orgNamespace,
           });
 
         if (exists) {
           // Check if application sub-domain exists in this organization
           exists = await this.iamService.domainsService.checkExistenceOfDomain({
-            domain: `${NamespaceType.Application}.${this.data.orgNamespace}`,
+            domain: `${NamespaceType.Application}.${this.origData.orgNamespace}`,
           });
 
           if (exists) {
             // check if user is authorized to create an app under the application namespace
             const isOwner = await this.iamService.domainsService.isOwner({
-              domain: this.data.orgNamespace,
+              domain: this.origData.orgNamespace,
             });
 
             if (!isOwner) {
@@ -148,7 +137,6 @@ export class NewApplicationComponent
         this.toastr.error(e.message, 'System Error');
         this.dialog.closeAll();
       } finally {
-        this.isChecking = false;
         this.loadingService.hide();
       }
     } else {
@@ -171,7 +159,6 @@ export class NewApplicationComponent
 
   async createNewApp(data: AppCreationDefinition) {
     this.loadingService.show();
-    this.isChecking = true;
     this.applicationData = data;
 
     let allowToProceed = true;
@@ -215,14 +202,12 @@ export class NewApplicationComponent
       this.goNextStep();
     }
 
-    this.isChecking = false;
     this.loadingService.hide();
   }
 
   async updateApp(data: AppCreationDefinition) {
     this.applicationData = data;
     this.loadingService.show();
-    this.isChecking = true;
 
     let allowToProceed = true;
 
@@ -258,7 +243,6 @@ export class NewApplicationComponent
       this.goNextStep();
     }
 
-    this.isChecking = false;
     this.loadingService.hide();
   }
 
@@ -344,7 +328,7 @@ export class NewApplicationComponent
     req: AppCreationDefinition & { namespace: string }
   ) {
     const returnSteps =
-      this.data.owner === this.iamService.signerService.address;
+      this.origData.owner === this.iamService.signerService.address;
     try {
       const call = this.iamService.domainsService.createApplication({
         ...req,
