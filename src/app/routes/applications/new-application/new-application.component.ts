@@ -38,7 +38,9 @@ export class NewApplicationComponent
 
   public isLogoUrlValid = true;
 
-  origData: any;
+  get origData() {
+    return this.data;
+  }
   applicationData: AppCreationDefinition;
 
   private TOASTR_HEADER = 'Create New Application';
@@ -62,13 +64,8 @@ export class NewApplicationComponent
   }
 
   private prepareOriginalData() {
-    if (this.data && this.data.viewType) {
-      if (this.isUpdating && this.data) {
-        this.origData = this.data;
-        this.TOASTR_HEADER = 'Update Application';
-      } else if (this.data.orgNamespace) {
-        this.origData = { ...this.data };
-      }
+    if (this.data && this.data.viewType && this.isUpdating) {
+      this.TOASTR_HEADER = 'Update Application';
     }
   }
 
