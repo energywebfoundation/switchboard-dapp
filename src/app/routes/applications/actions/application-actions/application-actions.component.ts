@@ -62,10 +62,8 @@ export class ApplicationActionsComponent extends ActionBaseAbstract {
       .pop();
     this.showEditComponent(NewApplicationComponent, {
       viewType: ViewType.UPDATE,
-      data: {
-        ...this.application, orgNamespace,
-      },
-
+      ...this.application,
+      orgNamespace,
     });
   }
 

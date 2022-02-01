@@ -1,14 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { NamespaceType } from 'iam-client-lib';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { IamService } from '../../../shared/services/iam.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import {
@@ -18,10 +11,12 @@ import {
 } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { isAlphanumericValidator, isValidJsonFormatValidator } from '@utils';
 import { CreationBaseAbstract } from '../utils/creation-base.abstract';
-import { isUrlValidator } from '../../../utils/validators/url/is-url.validator';
-import { AppCreationDefinition, AppDomain, ViewType } from './models/app-domain';
+import {
+  AppCreationDefinition,
+  AppDomain,
+  ViewType,
+} from './models/app-domain';
 import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
@@ -60,7 +55,7 @@ export class NewApplicationComponent
     private loadingService: LoadingService,
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: { viewType: ViewType, data: AppDomain, orgNamespace: string }
+    @Inject(MAT_DIALOG_DATA) public data: AppDomain & { viewType: ViewType }
   ) {
     super();
     this.prepareOriginalData();
@@ -68,8 +63,8 @@ export class NewApplicationComponent
 
   private prepareOriginalData() {
     if (this.data && this.data.viewType) {
-      if (this.isUpdating && this.data.data) {
-        this.origData = this.data.data;
+      if (this.isUpdating && this.data) {
+        this.origData = this.data;
         this.TOASTR_HEADER = 'Update Application';
       } else if (this.data.orgNamespace) {
         this.origData = { ...this.data };
@@ -461,8 +456,8 @@ export class NewApplicationComponent
     }
   }
 
-  async closeDialog2(value: { touched: boolean }) {
-    if (value.touched) {
+  async closeDialog2(value: boolean) {
+    if (value) {
       if (await this.confirm('There are unsaved changes.', true)) {
         this.dialogRef.close(false);
       }

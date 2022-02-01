@@ -1,6 +1,6 @@
 <h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
   {{ isUpdating ? 'Update' : 'Create' }} Application
-  <button mat-icon-button (click)="closeDialog()">
+  <button mat-icon-button (click)="closeDialog2(true)">
     <mat-icon>close</mat-icon>
   </button>
 </h4>
@@ -17,7 +17,7 @@
           <app-application-creation-form
             [data]="origData"
             [isUpdating]="isUpdating"
-            (cancel)="closeDialog2($event)"
+            (cancel)="closeDialog2($event.touched)"
             (proceed)="update($event)"></app-application-creation-form>
         </mat-step>
         <mat-step [editable]="false" [completed]="false">
