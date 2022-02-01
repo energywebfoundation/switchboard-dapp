@@ -15,6 +15,7 @@ import { LoadingService } from '../../../shared/services/loading.service';
 import {
   deepEqualObjects,
   isAlphanumericValidator,
+  isUrlValidator,
   isValidJsonFormatValidator,
 } from '@utils';
 import { EnvService } from '../../../shared/services/env/env.service';
@@ -59,8 +60,8 @@ export class NewOrganizationComponent extends CreationBaseAbstract {
           Validators.maxLength(256),
         ],
       ],
-      logoUrl: ['', Validators.pattern('https?://.*')],
-      websiteUrl: ['', Validators.pattern('https?://.*')],
+      logoUrl: ['', isUrlValidator()],
+      websiteUrl: ['', isUrlValidator()],
       description: '',
       others: [undefined, isValidJsonFormatValidator],
     }),
