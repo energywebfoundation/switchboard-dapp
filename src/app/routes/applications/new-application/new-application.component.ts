@@ -23,6 +23,7 @@ import { isAlphanumericValidator, isValidJsonFormatValidator } from '@utils';
 import { CreationBaseAbstract } from '../utils/creation-base.abstract';
 import { isUrlValidator } from '../../../utils/validators/url/is-url.validator';
 import { AppCreationDefinition, AppDomain } from './models/app-domain';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-new-application',
@@ -60,7 +61,7 @@ export class NewApplicationComponent
     private fb: FormBuilder,
     private iamService: IamService,
     private toastr: SwitchboardToastrService,
-    private spinner: NgxSpinnerService,
+    private loadingService: LoadingService,
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data1: any
@@ -101,7 +102,7 @@ export class NewApplicationComponent
   async confirmOrgNamespace() {
     if (this.data.orgNamespace) {
       try {
-        this.spinner.show();
+        this.loadingService.show();
         this.isChecking = true;
 
         // Check if organization namespace exists
@@ -148,7 +149,7 @@ export class NewApplicationComponent
         this.dialog.closeAll();
       } finally {
         this.isChecking = false;
-        this.spinner.hide();
+        this.loadingService.hide();
       }
     } else {
       this.toastr.error(
@@ -169,7 +170,7 @@ export class NewApplicationComponent
   }
 
   async createNewApp(data: AppCreationDefinition) {
-    this.spinner.show();
+    this.loadingService.show();
     this.isChecking = true;
     this.applicationData = data;
 
@@ -195,7 +196,7 @@ export class NewApplicationComponent
           this.TOASTR_HEADER
         );
       } else {
-        this.spinner.hide();
+        this.loadingService.hide();
 
         // Prompt if user wants to overwrite this namespace
         if (
@@ -205,7 +206,7 @@ export class NewApplicationComponent
         ) {
           allowToProceed = false;
         } else {
-          this.spinner.show();
+          this.loadingService.show();
         }
       }
     }
@@ -215,12 +216,12 @@ export class NewApplicationComponent
     }
 
     this.isChecking = false;
-    this.spinner.hide();
+    this.loadingService.hide();
   }
 
   async updateApp(data: AppCreationDefinition) {
     this.applicationData = data;
-    this.spinner.show();
+    this.loadingService.show();
     this.isChecking = true;
 
     let allowToProceed = true;
@@ -239,7 +240,7 @@ export class NewApplicationComponent
         this.TOASTR_HEADER
       );
     } else {
-      this.spinner.hide();
+      this.loadingService.hide();
 
       // Prompt if user wants to overwrite this namespace
       if (
@@ -249,7 +250,7 @@ export class NewApplicationComponent
       ) {
         allowToProceed = false;
       } else {
-        this.spinner.show();
+        this.loadingService.show();
       }
     }
 
@@ -258,7 +259,7 @@ export class NewApplicationComponent
     }
 
     this.isChecking = false;
-    this.spinner.hide();
+    this.loadingService.hide();
   }
 
   async confirmApp(skipNextStep?: boolean) {
