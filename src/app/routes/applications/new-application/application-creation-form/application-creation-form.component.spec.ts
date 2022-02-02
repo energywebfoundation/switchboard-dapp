@@ -73,7 +73,7 @@ describe('ApplicationCreationFormComponent', () => {
           appName: 'application name',
           logoUrl: '',
           websiteUrl: '',
-          others: ''
+          others: '',
         },
       })
     );
@@ -117,7 +117,7 @@ describe('ApplicationCreationFormComponent', () => {
           appName: 'new application name',
           logoUrl: undefined,
           websiteUrl: undefined,
-          others: undefined
+          others: undefined,
         },
       })
     );

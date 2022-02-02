@@ -19,11 +19,15 @@ describe('ApplicationActionsComponent', () => {
   let component: ApplicationActionsComponent;
   let fixture: ComponentFixture<ApplicationActionsComponent>;
   let hostDebug: DebugElement;
-  let dialogSpy
-  const element = { namespace: 'namespace.iam.ewc', owner: '', containsRoles: true };
+  let dialogSpy;
+  const element = {
+    namespace: 'namespace.iam.ewc',
+    owner: '',
+    containsRoles: true,
+  };
   beforeEach(
     waitForAsync(() => {
-      dialogSpy= jasmine.createSpyObj('MatDialog', ['open']);
+      dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
       TestBed.configureTestingModule({
         declarations: [ApplicationActionsComponent],
         providers: [{ provide: MatDialog, useValue: dialogSpy }],
@@ -33,7 +37,6 @@ describe('ApplicationActionsComponent', () => {
   );
 
   beforeEach(() => {
-
     fixture = TestBed.createComponent(ApplicationActionsComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
@@ -69,9 +72,8 @@ describe('ApplicationActionsComponent', () => {
             viewType: ViewType.UPDATE,
             data: {
               ...element,
-              orgNamespace: element.namespace
+              orgNamespace: element.namespace,
             },
-
           },
         })
       );

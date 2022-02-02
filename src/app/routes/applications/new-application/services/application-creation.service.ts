@@ -5,26 +5,31 @@ import { LoadingService } from '../../../../shared/services/loading.service';
 import { DomainsFacadeService } from '../../../../shared/services/domains-facade/domains-facade.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApplicationCreationService {
+  constructor(
+    private toastr: SwitchboardToastrService,
+    private loadingService: LoadingService,
+    private domainsFacade: DomainsFacadeService
+  ) {}
 
-  constructor(private toastr: SwitchboardToastrService,
-              private loadingService: LoadingService,
-              private domainsFacade: DomainsFacadeService) { }
-
-  async isOrganizationNamespaceAvailable(namespace: string, header?: string): Promise<boolean> {
+  async isOrganizationNamespaceAvailable(
+    namespace: string,
+    header?: string
+  ): Promise<boolean> {
     if (namespace) {
       try {
         this.loadingService.show();
 
         // Check if organization namespace exists
-        let exists =
-          await this.domainsFacade.checkExistenceOfDomain(namespace);
+        let exists = await this.domainsFacade.checkExistenceOfDomain(namespace);
 
         if (exists) {
           // Check if application sub-domain exists in this organization
-          exists = await this.domainsFacade.checkExistenceOfDomain(`${NamespaceType.Application}.${namespace}`);
+          exists = await this.domainsFacade.checkExistenceOfDomain(
+            `${NamespaceType.Application}.${namespace}`
+          );
 
           if (exists) {
             // check if user is authorized to create an app under the application namespace
@@ -45,10 +50,7 @@ export class ApplicationCreationService {
             return false;
           }
         } else {
-          this.toastr.error(
-            'Organization namespace does not exist.',
-            header
-          );
+          this.toastr.error('Organization namespace does not exist.', header);
           return false;
         }
       } catch (e) {
@@ -58,10 +60,7 @@ export class ApplicationCreationService {
         this.loadingService.hide();
       }
     } else {
-      this.toastr.error(
-        'Organization Namespace is missing.',
-        header
-      );
+      this.toastr.error('Organization Namespace is missing.', header);
       return false;
     }
 

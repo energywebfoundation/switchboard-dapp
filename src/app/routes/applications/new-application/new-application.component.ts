@@ -12,13 +12,11 @@ import {
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { CreationBaseAbstract } from '../utils/creation-base.abstract';
-import {
-  AppCreationDefinition,
-  AppDomain,
-  ViewType,
-} from './models/app-domain';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ApplicationCreationService } from './services/application-creation.service';
+import { AppCreationDefinition } from './models/app-creation-definition.interface';
+import { ApplicationData } from './models/application-data.interface';
+import { ViewType } from './models/view-type.enum';
 
 @Component({
   selector: 'app-new-application',
@@ -59,7 +57,7 @@ export class NewApplicationComponent
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,
     private applicationCreationService: ApplicationCreationService,
-    @Inject(MAT_DIALOG_DATA) public data: AppDomain & { viewType: ViewType }
+    @Inject(MAT_DIALOG_DATA) public data: ApplicationData
   ) {
     super();
     this.prepareOriginalData();
@@ -84,7 +82,11 @@ export class NewApplicationComponent
   }
 
   async confirmOrgNamespace() {
-    const exist = await this.applicationCreationService.isOrganizationNamespaceAvailable(this.origData.orgNamespace, this.TOASTR_HEADER);
+    const exist =
+      await this.applicationCreationService.isOrganizationNamespaceAvailable(
+        this.origData.orgNamespace,
+        this.TOASTR_HEADER
+      );
     if (!exist) {
       this.dialog.closeAll();
     }

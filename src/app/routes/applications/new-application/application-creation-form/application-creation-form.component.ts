@@ -7,7 +7,8 @@ import {
 } from '@utils';
 import { CreationBaseAbstract } from '../../utils/creation-base.abstract';
 import { NamespaceType } from 'iam-client-lib';
-import { AppCreationDefinition, AppDomain } from '../models/app-domain';
+import { AppDomain } from '../models/app-domain.interface';
+import { AppCreationDefinition } from '../models/app-creation-definition.interface';
 
 @Component({
   selector: 'app-application-creation-form',
@@ -107,7 +108,12 @@ export class ApplicationCreationFormComponent
     }
     this.proceed.emit({
       domain: this.namespace,
-      data: {...this.appForm.value.data, others: this.appForm.value.data?.others ? JSON.parse(this.appForm.value.data?.others.trim()) : undefined},
+      data: {
+        ...this.appForm.value.data,
+        others: this.appForm.value.data?.others
+          ? JSON.parse(this.appForm.value.data?.others.trim())
+          : undefined,
+      },
       ...this.appForm.value,
     });
   }
