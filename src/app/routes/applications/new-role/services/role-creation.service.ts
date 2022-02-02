@@ -17,9 +17,7 @@ export class RoleCreationService {
     private toastrService: SwitchboardToastrService
   ) {}
 
-  async checkIfUserCanUseDomain(domain: string): Promise<boolean> {
-    this.loadingService.show('Checking existence of Domain...');
-    // Check if namespace is taken
+  async canUseDomain(domain: string): Promise<boolean> {
     try {
       const exists = await this.domainsFacade.checkExistenceOfDomain(domain);
       if (!exists) {
@@ -29,8 +27,6 @@ export class RoleCreationService {
     } catch (e) {
       this.toastrService.error(e?.message, TOASTR_HEADER);
       return false;
-    } finally {
-      this.loadingService.hide();
     }
   }
 
@@ -61,17 +57,6 @@ export class RoleCreationService {
           TOASTR_HEADER
         );
         return false;
-      } else {
-        // Check if there are approved users to issue the claim
-        const did = await this.domainsFacade.getDIDsByRole(issuerRoleName);
-
-        if (!did || !did.length) {
-          this.toastrService.error(
-            'Issuer Role has no approved users.',
-            TOASTR_HEADER
-          );
-          return false;
-        }
       }
     }
 
