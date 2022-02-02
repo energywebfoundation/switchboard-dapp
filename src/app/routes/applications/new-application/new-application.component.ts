@@ -18,6 +18,7 @@ import {
   ViewType,
 } from './models/app-domain';
 import { LoadingService } from '../../../shared/services/loading.service';
+import { ApplicationCreationService } from './services/application-creation.service';
 
 @Component({
   selector: 'app-new-application',
@@ -57,6 +58,7 @@ export class NewApplicationComponent
     private loadingService: LoadingService,
     public dialogRef: MatDialogRef<NewApplicationComponent>,
     public dialog: MatDialog,
+    private applicationCreationService: ApplicationCreationService,
     @Inject(MAT_DIALOG_DATA) public data: AppDomain & { viewType: ViewType }
   ) {
     super();
@@ -82,60 +84,8 @@ export class NewApplicationComponent
   }
 
   async confirmOrgNamespace() {
-    if (this.origData.orgNamespace) {
-      try {
-        this.loadingService.show();
-
-        // Check if organization namespace exists
-        let exists =
-          await this.iamService.domainsService.checkExistenceOfDomain({
-            domain: this.origData.orgNamespace,
-          });
-
-        if (exists) {
-          // Check if application sub-domain exists in this organization
-          exists = await this.iamService.domainsService.checkExistenceOfDomain({
-            domain: `${NamespaceType.Application}.${this.origData.orgNamespace}`,
-          });
-
-          if (exists) {
-            // check if user is authorized to create an app under the application namespace
-            const isOwner = await this.iamService.domainsService.isOwner({
-              domain: this.origData.orgNamespace,
-            });
-
-            if (!isOwner) {
-              this.toastr.error(
-                'You are not authorized to create an application in this organization.',
-                this.TOASTR_HEADER
-              );
-              this.dialog.closeAll();
-            }
-          } else {
-            this.toastr.error(
-              'Application subdomain in this organization does not exist.',
-              this.TOASTR_HEADER
-            );
-            this.dialog.closeAll();
-          }
-        } else {
-          this.toastr.error(
-            'Organization namespace does not exist.',
-            this.TOASTR_HEADER
-          );
-          this.dialog.closeAll();
-        }
-      } catch (e) {
-        this.toastr.error(e.message, 'System Error');
-        this.dialog.closeAll();
-      } finally {
-        this.loadingService.hide();
-      }
-    } else {
-      this.toastr.error(
-        'Organization Namespace is missing.',
-        this.TOASTR_HEADER
-      );
+    const exist = await this.applicationCreationService.isOrganizationNamespaceAvailable(this.origData.orgNamespace, this.TOASTR_HEADER);
+    if (!exist) {
       this.dialog.closeAll();
     }
   }

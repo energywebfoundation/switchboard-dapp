@@ -9,7 +9,7 @@ export interface AppDomain {
   definition?: AppDomainDefinition;
   domain?: string;
   name?: string;
-  owner: string;
+  owner?: string;
 }
 
 export interface AppCreationDefinition {
