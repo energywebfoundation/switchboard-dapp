@@ -7,11 +7,13 @@ describe('ApplicationDetailsComponent', () => {
   let component: ApplicationDetailsComponent;
   let fixture: ComponentFixture<ApplicationDetailsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ApplicationDetailsComponent, DefaultValuePipe],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ApplicationDetailsComponent, DefaultValuePipe],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ApplicationDetailsComponent);
