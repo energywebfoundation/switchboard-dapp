@@ -70,10 +70,8 @@ describe('ApplicationActionsComponent', () => {
         jasmine.objectContaining({
           data: {
             viewType: ViewType.UPDATE,
-            data: {
-              ...element,
-              orgNamespace: element.namespace,
-            },
+            ...element,
+            orgNamespace: element.namespace,
           },
         })
       );

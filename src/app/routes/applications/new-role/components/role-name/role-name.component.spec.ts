@@ -17,7 +17,7 @@ describe('RoleNameComponent', () => {
   let component: RoleNameComponent;
   let fixture: ComponentFixture<RoleNameComponent>;
   const roleCreationServiceSpy = jasmine.createSpyObj(RoleCreationService, [
-    'checkIfUserCanUseDomain',
+    'canUseDomain',
   ]);
   let hostDebug: DebugElement;
 
@@ -90,9 +90,7 @@ describe('RoleNameComponent', () => {
   });
 
   it('should display error message with already taken role name', async () => {
-    roleCreationServiceSpy.checkIfUserCanUseDomain.and.returnValue(
-      Promise.resolve(false)
-    );
+    roleCreationServiceSpy.canUseDomain.and.returnValue(Promise.resolve(false));
     const { roleName } = selectors(hostDebug);
 
     roleName.value = 'role';
@@ -126,9 +124,7 @@ describe('RoleNameComponent', () => {
   });
 
   it('should check if emits proceed event', async () => {
-    roleCreationServiceSpy.checkIfUserCanUseDomain.and.returnValue(
-      Promise.resolve(true)
-    );
+    roleCreationServiceSpy.canUseDomain.and.returnValue(Promise.resolve(true));
     const { roleName } = selectors(hostDebug);
     const proceedEvent = spyOn(component.proceed, 'emit');
 
