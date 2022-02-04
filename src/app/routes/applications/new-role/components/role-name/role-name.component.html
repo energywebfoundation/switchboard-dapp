@@ -19,8 +19,7 @@
             type="text"
             placeholder="Role Name"
             required
-            oninput="this.value = this.value.toLowerCase()"
-            (keypress)="alphaNumericOnly($event)"
+            (input)="parseValue(form, form.value)"
             minlength="3"
             maxlength="256"
             data-qa-id="role-name" />
@@ -33,7 +32,7 @@
             Role Name can only contain alphanumeric characters.
           </mat-error>
         </mat-form-field>
-        <mat-error *ngIf="existAndNotOwner"> This name already exists. Please try another</mat-error>
+        <mat-error *ngIf="controlHasError('domainExist')"> This name already exists. Please try another</mat-error>
       </div>
       <div
         *ngIf="form.value"

@@ -12,10 +12,14 @@ import {
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { isValidJsonFormatValidator } from '../../../utils/validators/json-format/is-valid-json-format.validator';
-import { deepEqualObjects } from '../../../utils/functions/deep-equal-objects/deep-equal-objects';
+import {
+  deepEqualObjects,
+  isAlphanumericValidator,
+  isUrlValidator,
+  isValidJsonFormatValidator,
+} from '@utils';
 import { EnvService } from '../../../shared/services/env/env.service';
-import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
+import { CreationBaseAbstract } from '../utils/creation-base.abstract';
 
 export const ViewType = {
   UPDATE: 'update',
@@ -27,7 +31,7 @@ export const ViewType = {
   templateUrl: './new-organization.component.html',
   styleUrls: ['./new-organization.component.scss'],
 })
-export class NewOrganizationComponent {
+export class NewOrganizationComponent extends CreationBaseAbstract {
   private stepper: MatStepper;
 
   @ViewChild('stepper') set content(content: MatStepper) {
@@ -56,8 +60,8 @@ export class NewOrganizationComponent {
           Validators.maxLength(256),
         ],
       ],
-      logoUrl: ['', Validators.pattern('https?://.*')],
-      websiteUrl: ['', Validators.pattern('https?://.*')],
+      logoUrl: ['', isUrlValidator()],
+      websiteUrl: ['', isUrlValidator()],
       description: '',
       others: [undefined, isValidJsonFormatValidator],
     }),
@@ -89,6 +93,7 @@ export class NewOrganizationComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private envService: EnvService
   ) {
+    super();
     if (data && data.viewType && (data.origData || data.parentOrg)) {
       this.viewType = data.viewType;
       this.origData = data.origData;

@@ -64,7 +64,7 @@ export class OrganizationActionsComponent
       width: '600px',
       data: {
         viewType: ViewType.NEW,
-        organizationNamespace: this.organization.namespace,
+        orgNamespace: this.organization.namespace,
         owner: this.organization.owner,
       },
       maxWidth: '100%',

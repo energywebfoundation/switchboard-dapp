@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { RoleCreationService } from './role-creation.service';
 import { DomainsFacadeService } from '../../../../shared/services/domains-facade/domains-facade.service';
 import { SwitchboardToastrService } from '../../../../shared/services/switchboard-toastr.service';
-import { loadingServiceSpy, toastrSpy } from '@tests';
+import { loadingServiceSpy } from '@tests';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { IssuerType } from '../models/issuer-type.enum';
 
@@ -14,7 +14,9 @@ describe('RoleCreationService', () => {
     'checkExistenceOfDomain',
     'getDIDsByRole',
   ]);
+  let toastrSpy;
   beforeEach(() => {
+    toastrSpy = jasmine.createSpyObj('ToastrService', ['success', 'error']);
     TestBed.configureTestingModule({
       providers: [
         { provide: DomainsFacadeService, useValue: domainsFacadeServiceSpy },
@@ -34,7 +36,7 @@ describe('RoleCreationService', () => {
       domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
         Promise.resolve(false)
       );
-      const result = await service.checkIfUserCanUseDomain('domain');
+      const result = await service.canUseDomain('domain');
 
       expect(result).toBeTrue();
     });
@@ -44,7 +46,7 @@ describe('RoleCreationService', () => {
         Promise.resolve(true)
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(true));
-      const result = await service.checkIfUserCanUseDomain('domain');
+      const result = await service.canUseDomain('domain');
 
       expect(result).toBeTrue();
     });
@@ -54,7 +56,7 @@ describe('RoleCreationService', () => {
         Promise.resolve(true)
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(false));
-      const result = await service.checkIfUserCanUseDomain('domain');
+      const result = await service.canUseDomain('domain');
 
       expect(result).toBeFalse();
     });
@@ -64,7 +66,7 @@ describe('RoleCreationService', () => {
         Promise.reject('reason')
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(false));
-      const result = await service.checkIfUserCanUseDomain('domain');
+      const result = await service.canUseDomain('domain');
 
       expect(result).toBeFalse();
       expect(toastrSpy.error).toHaveBeenCalled();
@@ -75,7 +77,7 @@ describe('RoleCreationService', () => {
         Promise.resolve(true)
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.reject('reason'));
-      const result = await service.checkIfUserCanUseDomain('domain');
+      const result = await service.canUseDomain('domain');
 
       expect(result).toBeFalse();
       expect(toastrSpy.error).toHaveBeenCalled();
@@ -123,29 +125,9 @@ describe('RoleCreationService', () => {
       expect(toastrSpy.error).toHaveBeenCalled();
     });
 
-    it('should return false when role exist but do not contains approved users', async () => {
+    it('should return true when role exist', async () => {
       domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
         Promise.resolve(true)
-      );
-      domainsFacadeServiceSpy.getDIDsByRole.and.returnValue(
-        Promise.resolve([])
-      );
-      const result = await service.areIssuersValid(
-        IssuerType.ROLE,
-        'role.roles.asd.iam.ewc',
-        []
-      );
-
-      expect(result).toBeFalse();
-      expect(toastrSpy.error).toHaveBeenCalled();
-    });
-
-    it('should return true when role exist and contains approved users', async () => {
-      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
-        Promise.resolve(true)
-      );
-      domainsFacadeServiceSpy.getDIDsByRole.and.returnValue(
-        Promise.resolve(['did'])
       );
       const result = await service.areIssuersValid(
         IssuerType.ROLE,
@@ -154,7 +136,7 @@ describe('RoleCreationService', () => {
       );
 
       expect(result).toBeTrue();
-      expect(toastrSpy.error).toHaveBeenCalled();
+      expect(toastrSpy.error).not.toHaveBeenCalled();
     });
   });
 });

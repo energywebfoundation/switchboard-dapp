@@ -38,6 +38,9 @@ import { RoleNameComponent } from './new-role/components/role-name/role-name.com
 import { IssuerDidListComponent } from './new-role/components/issuer-did-list/issuer-did-list.component';
 import { IssuerDidComponent } from './new-role/components/issuer-did/issuer-did.component';
 import { SearchIssuerRoleComponent } from './new-role/components/search-issuer-role/search-issuer-role.component';
+import { ApplicationDetailsComponent } from './new-application/application-details/application-details.component';
+import { DefaultValuePipe } from './pipes/default-value.pipe';
+import { ApplicationCreationFormComponent } from './new-application/application-creation-form/application-creation-form.component';
 
 const routes: Routes = [{ path: '', component: ApplicationsComponent }];
 
@@ -65,6 +68,9 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     IssuerDidListComponent,
     IssuerDidComponent,
     SearchIssuerRoleComponent,
+    ApplicationDetailsComponent,
+    DefaultValuePipe,
+    ApplicationCreationFormComponent,
   ],
   imports: [
     CommonModule,
