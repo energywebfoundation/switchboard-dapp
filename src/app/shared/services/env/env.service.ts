@@ -1,7 +1,6 @@
 import { environment } from '../../../../environments/environment';
 
 export class EnvService {
-
   theme = environment.theme;
   application = environment.application;
 
@@ -11,6 +10,7 @@ export class EnvService {
   cacheServerUrl = environment.cacheServerUrl;
   natsServerUrl = environment.natsServerUrl;
   kmsServerUrl = environment.kmsServerUrl;
+  ekcUrl = environment.ekcUrl;
   claimManagerAddress: string = environment.claimManagerAddress;
   showAzureLoginOption: boolean = environment.showAzureLoginOption;
   natsEnvironmentName: string = environment.natsEnvironmentName;
@@ -21,5 +21,5 @@ export class EnvService {
   currencyName: string = environment.currencyName;
   currencySymbol: string = environment.currencySymbol;
   blockExplorerUrl: string = environment.blockExplorerUrl;
-
+  SENTRY_ENVIRONMENT: string = environment.SENTRY_ENVIRONMENT;
 }

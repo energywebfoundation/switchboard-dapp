@@ -13,9 +13,7 @@ import { ConnectToWalletModule } from '../../modules/connect-to-wallet/connect-t
 import { EnrolmentFormModule } from './enrolment-form/enrolment-form.module';
 import { RolePreconditionListModule } from './role-precondition-list/role-precondition-list.module';
 
-
 const routes: Routes = [];
-
 
 @NgModule({
   imports: [
@@ -30,14 +28,8 @@ const routes: Routes = [];
     LayoutModule,
     ConnectToWalletModule,
     EnrolmentFormModule,
-    RolePreconditionListModule
+    RolePreconditionListModule,
   ],
-  declarations: [
-    RequestClaimComponent,
-    SelectAssetDialogComponent
-  ],
-  entryComponents: [SelectAssetDialogComponent],
+  declarations: [RequestClaimComponent, SelectAssetDialogComponent],
 })
-
-export class RegistrationModule {
-}
+export class RegistrationModule {}

@@ -15,9 +15,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "aot": true,
+            "customWebpackConfig": {
+              "path": "./extra-webpack.config.js"
+            },
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -32,8 +34,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/manifest.webmanifest",
-              "src/manifest.json",
-              "src/env.js"
+              "src/manifest.json"
             ],
             "styles": [
               "src/app/core/preloader/preloader.scss",
@@ -55,16 +56,15 @@
               }
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
               "src/app/core/preloader/preloader.js",
-              "node_modules/popper.js/dist/umd/popper.js",
-              "node_modules/bootstrap/js/dist/util.js",
-              "node_modules/bootstrap/js/dist/modal.js",
-              "node_modules/bootstrap/js/dist/dropdown.js",
-              "node_modules/bootstrap/js/dist/tooltip.js",
-              "node_modules/moment/min/moment-with-locales.min.js",
-              "node_modules/fullcalendar/dist/fullcalendar.js"
-            ]
+              "node_modules/moment/min/moment-with-locales.min.js"
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -78,7 +78,6 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -107,7 +106,6 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -154,7 +152,7 @@
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
             },
-            "develop": {
+            "development": {
               "budgets": [
                 {
                   "type": "anyComponentStyle",
@@ -168,10 +166,11 @@
                 }
               ]
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
             "browserTarget": "switchboard-dapp:build"
           },
@@ -192,8 +191,11 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/custom-webpack:karma",
           "options": {
+            "customWebpackConfig": {
+              "path": "./extra-webpack.config.js"
+            },
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
@@ -209,25 +211,16 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.js",
               "src/app/core/preloader/preloader.js",
-              "node_modules/popper.js/dist/umd/popper.js",
-              "node_modules/bootstrap/js/dist/util.js",
-              "node_modules/bootstrap/js/dist/modal.js",
-              "node_modules/bootstrap/js/dist/dropdown.js",
-              "node_modules/bootstrap/js/dist/tooltip.js",
-              "node_modules/moment/min/moment-with-locales.min.js",
-              "node_modules/fullcalendar/dist/fullcalendar.js"
+              "node_modules/moment/min/moment-with-locales.min.js"
             ]
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.component.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"],
+            "outputFile": "eslint_report.json"
           }
         },
         "e2e": {
@@ -262,6 +255,7 @@
   },
   "defaultProject": "switchboard-dapp",
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "defaultCollection": "@angular-eslint/schematics"
   }
 }

@@ -6,14 +6,13 @@ interface IRetryWhenWithDelay {
   delayDuration?: number;
 }
 
-export const retryWhenWithDelay = (
-  {
-    maxRetries = 5,
-    delayDuration = 2000
-  }: IRetryWhenWithDelay = {}) => {
+export const retryWhenWithDelay = ({
+  maxRetries = 5,
+  delayDuration = 2000,
+}: IRetryWhenWithDelay = {}) => {
   return (source: Observable<unknown>) => {
     return source.pipe(
-      retryWhen(errors => {
+      retryWhen((errors) => {
         let retries = 0;
         return errors.pipe(
           delay(delayDuration),
@@ -22,9 +21,9 @@ export const retryWhenWithDelay = (
               throw error;
             }
             return error;
-          }),
+          })
         );
-      }),
+      })
     );
   };
 };

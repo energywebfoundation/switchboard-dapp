@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,11 +10,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 import { Store } from '@ngrx/store';
 import { SettingsSelectors } from '@state';
+import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 
 @Component({
   selector: 'app-enrolment',
   templateUrl: './enrolment.component.html',
-  styleUrls: ['./enrolment.component.scss']
+  styleUrls: ['./enrolment.component.scss'],
 })
 export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
@@ -32,20 +34,26 @@ export class EnrolmentComponent implements AfterViewInit {
     all: 'none',
     pending: 'false',
     approved: 'true',
-    rejected: 'rejected'
+    rejected: 'rejected',
   };
 
   public isMyEnrolmentShown = false;
-  isExperimentalEnabled$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
+  isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
   private _queryParamSelectedTabInit = false;
 
-  constructor(private activeRoute: ActivatedRoute,
-              private notificationService: NotificationService,
-              private urlParamService: UrlParamService,
-              private router: Router,
-              private dialog: MatDialog,
-              private store: Store) {
+  get issuesRoles(): boolean {
+    return this.issuanceVCService.hasRoles();
   }
+
+  constructor(
+    private activeRoute: ActivatedRoute,
+    private notificationService: NotificationService,
+    private urlParamService: UrlParamService,
+    private router: Router,
+    private dialog: MatDialog,
+    private store: Store,
+    private issuanceVCService: IssuanceVcService
+  ) {}
 
   ngAfterViewInit(): void {
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
@@ -87,33 +95,54 @@ export class EnrolmentComponent implements AfterViewInit {
 
   showMe(i: any) {
     // Preserve Selected Tab
-    this.urlParamService.updateQueryParams(this.router, this.activeRoute, {
-      selectedTab: i.index
-    }, ['notif']);
+    this.urlParamService.updateQueryParams(
+      this.router,
+      this.activeRoute,
+      {
+        selectedTab: i.index,
+      },
+      ['notif']
+    );
 
     if (i.index === 1) {
       if (this.isMyEnrolmentShown) {
-        this.enrolmentList.getList(this.enrolmentDropdown.value === 'rejected',
-          this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
+        this.enrolmentList.getList(
+          this.enrolmentDropdown.value === 'rejected',
+          this.enrolmentDropdown.value === 'true'
+            ? true
+            : this.enrolmentDropdown.value === 'false'
+            ? false
+            : undefined
+        );
       } else {
         this.isMyEnrolmentShown = true;
       }
     } else {
-      this.issuerList.getList(this.enrolmentDropdown.value === 'rejected',
-        this.issuerDropdown.value === 'true' ? true : this.issuerDropdown.value === 'false' ? false : undefined);
+      this.issuerList.getList(
+        this.enrolmentDropdown.value === 'rejected',
+        this.issuerDropdown.value === 'true'
+          ? true
+          : this.issuerDropdown.value === 'false'
+          ? false
+          : undefined
+      );
     }
   }
 
   updateEnrolmentList(e: any) {
     const value = e.value;
-    this.enrolmentList.getList(value === 'rejected',
-      value === 'true' ? true : value === 'false' ? false : undefined);
+    this.enrolmentList.getList(
+      value === 'rejected',
+      value === 'true' ? true : value === 'false' ? false : undefined
+    );
   }
 
   updateIssuerList(e: any) {
     const value = e.value;
-    this.issuerList.getList(value === 'rejected',
-      value === 'true' ? true : value === 'false' ? false : undefined);
+    this.issuerList.getList(
+      value === 'rejected',
+      value === 'true' ? true : value === 'false' ? false : undefined
+    );
   }
 
   updateSearchByDidValue(value) {
@@ -124,7 +153,7 @@ export class EnrolmentComponent implements AfterViewInit {
     this.dialog.open(NewIssueVcComponent, {
       width: '600px',
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
   }
 
@@ -150,8 +179,14 @@ export class EnrolmentComponent implements AfterViewInit {
     if (this.enrolmentList) {
       const timeout$ = setTimeout(() => {
         this.enrolmentDropdown.setValue(value);
-        this.enrolmentList.getList(this.enrolmentDropdown.value === 'rejected',
-          this.enrolmentDropdown.value === 'true' ? true : this.enrolmentDropdown.value === 'false' ? false : undefined);
+        this.enrolmentList.getList(
+          this.enrolmentDropdown.value === 'rejected',
+          this.enrolmentDropdown.value === 'true'
+            ? true
+            : this.enrolmentDropdown.value === 'false'
+            ? false
+            : undefined
+        );
         clearTimeout(timeout$);
       }, 30);
     }

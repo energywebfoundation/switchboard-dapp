@@ -1,28 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NamespaceType } from 'iam-client-lib';
 import { IamService } from '../../../shared/services/iam.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { isValidJsonFormatValidator } from '../../../utils/validators/json-format/is-valid-json-format.validator';
-import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
-import { deepEqualObjects } from '../../../utils/functions/deep-equal-objects/deep-equal-objects';
+import {
+  deepEqualObjects,
+  isAlphanumericValidator,
+  isUrlValidator,
+  isValidJsonFormatValidator,
+} from '@utils';
 import { EnvService } from '../../../shared/services/env/env.service';
+import { CreationBaseAbstract } from '../utils/creation-base.abstract';
 
 export const ViewType = {
   UPDATE: 'update',
-  NEW: 'new'
+  NEW: 'new',
 };
 
 @Component({
   selector: 'app-new-organization',
   templateUrl: './new-organization.component.html',
-  styleUrls: ['./new-organization.component.scss']
+  styleUrls: ['./new-organization.component.scss'],
 })
-export class NewOrganizationComponent {
+export class NewOrganizationComponent extends CreationBaseAbstract {
   private stepper: MatStepper;
 
   @ViewChild('stepper') set content(content: MatStepper) {
@@ -32,15 +41,30 @@ export class NewOrganizationComponent {
   }
 
   public orgForm = this.fb.group({
-    orgName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
+    orgName: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(256),
+        isAlphanumericValidator,
+      ],
+    ],
     namespace: this.envService.rootNamespace,
     data: this.fb.group({
-      organizationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-      logoUrl: ['', Validators.pattern('https?://.*')],
-      websiteUrl: ['', Validators.pattern('https?://.*')],
+      organizationName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(256),
+        ],
+      ],
+      logoUrl: ['', isUrlValidator()],
+      websiteUrl: ['', isUrlValidator()],
       description: '',
-      others: [undefined, isValidJsonFormatValidator]
-    })
+      others: [undefined, isValidJsonFormatValidator],
+    }),
   });
   public isChecking = false;
   private _isLogoUrlValid = true;
@@ -67,7 +91,9 @@ export class NewOrganizationComponent {
     public dialogRef: MatDialogRef<NewOrganizationComponent>,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private envService: EnvService) {
+    private envService: EnvService
+  ) {
+    super();
     if (data && data.viewType && (data.origData || data.parentOrg)) {
       this.viewType = data.viewType;
       this.origData = data.origData;
@@ -80,7 +106,9 @@ export class NewOrganizationComponent {
       if (data.parentOrg) {
         this.orgForm.get('namespace').setValue(data.parentOrg.namespace);
       } else if (this._isSubOrg(this.origData)) {
-        this.orgForm.get('namespace').setValue(this._constructParentOrg(this.origData.namespace));
+        this.orgForm
+          .get('namespace')
+          .setValue(this._constructParentOrg(this.origData.namespace));
       }
       this.defaultFormValues = this.orgForm.value;
     }
@@ -122,18 +150,26 @@ export class NewOrganizationComponent {
           logoUrl: def.logoUrl,
           websiteUrl: def.websiteUrl,
           description: def.description,
-          others
-        }
+          others,
+        },
       });
     }
   }
 
-  isNextFormButtonDisabled() {
-    return this.isChecking || deepEqualObjects(this.defaultFormValues, this.orgForm.value) || this.orgForm.invalid;
+  formHasError(control: string, error: string): boolean {
+    return this.orgForm.get(control).hasError(error);
   }
 
-  alphaNumericOnly(event: KeyboardEvent) {
-    return isAlphaNumericOnly(event);
+  formDataHasError(control: string, error: string): boolean {
+    return this.orgForm.get('data').get(control).hasError(error);
+  }
+
+  isNextFormButtonDisabled() {
+    return (
+      this.isChecking ||
+      deepEqualObjects(this.defaultFormValues, this.orgForm.value) ||
+      this.orgForm.invalid
+    );
   }
 
   async createNewOrg() {
@@ -145,26 +181,34 @@ export class NewOrganizationComponent {
 
       // Check if org namespace is taken
       const orgData = this.orgForm.value;
-      const exists = await this.iamService.domainsService.checkExistenceOfDomain({
-        domain: `${orgData.orgName}.${orgData.namespace}`
-      });
+      const exists =
+        await this.iamService.domainsService.checkExistenceOfDomain({
+          domain: `${orgData.orgName}.${orgData.namespace}`,
+        });
 
       if (exists) {
         // If exists check if current user is the owner of this namespace and allow him/her to overwrite
         const isOwner = await this.iamService.domainsService.isOwner({
-          domain: `${orgData.orgName}.${orgData.namespace}`
+          domain: `${orgData.orgName}.${orgData.namespace}`,
         });
 
         if (!isOwner) {
           allowToProceed = false;
 
           // Do not allow to overwrite if user is not the owner
-          this.toastr.error('Organization namespace exists. You have no access rights to it.', this.TOASTR_HEADER);
+          this.toastr.error(
+            'Organization namespace exists. You have no access rights to it.',
+            this.TOASTR_HEADER
+          );
         } else {
           this.loaderService.hide();
 
           // Prompt if user wants to overwrite this namespace
-          if (!await this.confirm('Organization namespace already exists. Do you wish to continue?')) {
+          if (
+            !(await this.confirm(
+              'Organization namespace already exists. Do you wish to continue?'
+            ))
+          ) {
             allowToProceed = false;
           } else {
             this.loaderService.show();
@@ -193,19 +237,26 @@ export class NewOrganizationComponent {
 
       // If exists check if current user is the owner of this namespace and allow him/her to overwrite
       const isOwner = await this.iamService.domainsService.isOwner({
-        domain: `${orgData.orgName}.${orgData.namespace}`
+        domain: `${orgData.orgName}.${orgData.namespace}`,
       });
 
       if (!isOwner) {
         allowToProceed = false;
 
         // Do not allow to overwrite if user is not the owner
-        this.toastr.error('You have no update rights to this namespace.', this.TOASTR_HEADER);
+        this.toastr.error(
+          'You have no update rights to this namespace.',
+          this.TOASTR_HEADER
+        );
       } else {
         this.loaderService.hide();
 
         // Prompt if user wants to overwrite this namespace
-        if (!await this.confirm('You are updating details of this organization. Do you wish to continue?')) {
+        if (
+          !(await this.confirm(
+            'You are updating details of this organization. Do you wish to continue?'
+          ))
+        ) {
           allowToProceed = false;
         } else {
           this.loaderService.show();
@@ -244,13 +295,18 @@ export class NewOrganizationComponent {
   }
 
   async confirmOrg(skipNextStep?: boolean) {
-    const req = JSON.parse(JSON.stringify({ ...this.orgForm.value, returnSteps: true }));
+    const req = JSON.parse(
+      JSON.stringify({ ...this.orgForm.value, returnSteps: true })
+    );
     req.data.orgName = req.data.organizationName;
     delete req.data.organizationName;
 
     // Check if logoUrl resolves
     if (req.data.logoUrl && !this._isLogoUrlValid) {
-      this.toastr.error('Logo URL cannot be resolved. Please change it to a correct and valid image URL.', this.TOASTR_HEADER);
+      this.toastr.error(
+        'Logo URL cannot be resolved. Please change it to a correct and valid image URL.',
+        this.TOASTR_HEADER
+      );
       return;
     }
 
@@ -296,7 +352,10 @@ export class NewOrganizationComponent {
       // Make sure that the current step is not retried
       if (this._requests[`${requestIdx}`]) {
         this._currentIdx++;
-        this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.txs.length})`);
+        this.toastr.info(
+          step.info,
+          `Transaction Success (${this._currentIdx}/${this.txs.length})`
+        );
 
         // Remove 1st element
         steps.shift();
@@ -312,30 +371,37 @@ export class NewOrganizationComponent {
   }
 
   async proceedCreateSteps(req: any) {
-    req = {...req, returnSteps: this._returnSteps };
+    req = { ...req, returnSteps: this._returnSteps };
     try {
       const call = this.iamService.domainsService.createOrganization(req);
       // Retrieve the steps to create an organization
-      this.txs = this._returnSteps ?
-        await call :
-        [{
-          info: 'Confirm transaction in your safe wallet',
-          next: async () => await call
-        }];
+      this.txs = this._returnSteps
+        ? await call
+        : [
+            {
+              info: 'Confirm transaction in your safe wallet',
+              next: async () => await call,
+            },
+          ];
       this._requests[`${this._retryCount}`] = [...this.txs];
 
       // Process
       await this.next(0);
     } catch (e) {
       console.error('New Org Error', e);
-      this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+      this.toastr.error(
+        e.message || 'Please contact system administrator.',
+        'System Error'
+      );
     }
   }
 
   async retry() {
     if (this.viewType !== ViewType.UPDATE) {
       // Copy pending steps
-      this._requests[`${this._retryCount + 1}`] = [...this._requests[`${this._retryCount}`]];
+      this._requests[`${this._retryCount + 1}`] = [
+        ...this._requests[`${this._retryCount}`],
+      ];
 
       // Remove previous request
       delete this._requests[`${this._retryCount}`];
@@ -352,13 +418,15 @@ export class NewOrganizationComponent {
         }
       } catch (e) {
         console.error('New Org Error', e);
-        this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+        this.toastr.error(
+          e.message || 'Please contact system administrator.',
+          'System Error'
+        );
       }
     } else {
       delete this._requests[`${this._retryCount++}`];
       await this.confirmOrg(true);
     }
-
   }
 
   private async proceedUpdateStep(req: any, skipNextStep?: boolean) {
@@ -375,11 +443,12 @@ export class NewOrganizationComponent {
       this.txs = [
         {
           info: 'Setting up definitions',
-          next: async () => await this.iamService.domainsService.setRoleDefinition({
-            data: req.data,
-            domain: newDomain
-          })
-        }
+          next: async () =>
+            await this.iamService.domainsService.setRoleDefinition({
+              data: req.data,
+              domain: newDomain,
+            }),
+        },
       ];
 
       this._requests[`${retryCount}`] = [...this.txs];
@@ -390,13 +459,19 @@ export class NewOrganizationComponent {
       // Make sure that all steps are not yet complete
       if (this.stepper.selectedIndex !== 3 && retryCount === this._retryCount) {
         // Move to Complete Step
-        this.toastr.info('Set definition for organization', 'Transaction Success');
+        this.toastr.info(
+          'Set definition for organization',
+          'Transaction Success'
+        );
         this.stepper.selected.completed = true;
         this.stepper.next();
       }
     } catch (e) {
       console.error('Update Org Error', e);
-      this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+      this.toastr.error(
+        e.message || 'Please contact system administrator.',
+        'System Error'
+      );
     }
   }
 
@@ -414,17 +489,20 @@ export class NewOrganizationComponent {
   }
 
   private async confirm(confirmationMsg: string, isDiscardButton?: boolean) {
-    return this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      maxHeight: '195px',
-      data: {
-        header: this.TOASTR_HEADER,
-        message: confirmationMsg,
-        isDiscardButton
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().toPromise();
+    return this.dialog
+      .open(ConfirmationDialogComponent, {
+        width: '400px',
+        maxHeight: '195px',
+        data: {
+          header: this.TOASTR_HEADER,
+          message: confirmationMsg,
+          isDiscardButton,
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .toPromise();
   }
 
   async closeDialog(isSuccess?: boolean) {
@@ -435,9 +513,15 @@ export class NewOrganizationComponent {
     } else {
       if (isSuccess) {
         if (this.origData) {
-          this.toastr.success('Organization is successfully updated.', this.TOASTR_HEADER);
+          this.toastr.success(
+            'Organization is successfully updated.',
+            this.TOASTR_HEADER
+          );
         } else {
-          this.toastr.success('Organization is successfully created.', this.TOASTR_HEADER);
+          this.toastr.success(
+            'Organization is successfully created.',
+            this.TOASTR_HEADER
+          );
         }
       }
       this.dialogRef.close(isSuccess);

@@ -1,7 +1,8 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { OrganizationState, USER_FEATURE_KEY } from './organization.reducer';
 
-export const getOrganizationState = createFeatureSelector<OrganizationState>(USER_FEATURE_KEY);
+export const getOrganizationState =
+  createFeatureSelector<OrganizationState>(USER_FEATURE_KEY);
 
 export const getList = createSelector(
   getOrganizationState,
@@ -20,7 +21,7 @@ export const getLastHierarchyOrg = createSelector(
 
 export const getHierarchyLength = createSelector(
   getHierarchy,
-  hierarchy => hierarchy.length
+  (hierarchy) => hierarchy.length
 );
 
 export const isSelectedOrgNotOwnedByUser = createSelector(

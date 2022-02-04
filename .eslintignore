@@ -1,0 +1,13 @@
+dist/
+docs/
+node_modules
+build/
+*.d.ts
+patches/
+*.md
+src/assets/
+src/modernizr.js
+karma.conf.js
+karma-headless.conf.js
+.eslintrc.js
+eslint_report.json

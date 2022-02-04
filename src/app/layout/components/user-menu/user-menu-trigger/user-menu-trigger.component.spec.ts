@@ -9,13 +9,14 @@ describe('UserMenuTriggerComponent', () => {
   let fixture: ComponentFixture<UserMenuTriggerComponent>;
   let hostDebug: DebugElement;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [UserMenuTriggerComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [UserMenuTriggerComponent],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserMenuTriggerComponent);
@@ -37,4 +38,7 @@ describe('UserMenuTriggerComponent', () => {
     expect(user.innerText).toContain('user');
   });
 });
-const getElement = (hostDebug) => (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
+const getElement =
+  (hostDebug) =>
+  (id, postSelector = '') =>
+    hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));

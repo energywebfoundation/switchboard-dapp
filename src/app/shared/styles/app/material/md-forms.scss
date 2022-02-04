@@ -1,7 +1,6 @@
-
 .mda-form-group {
-    position: relative;
-    padding: 18px 0 24px 0
+  position: relative;
+  padding: 18px 0 24px 0;
 }
 
 .mda-form-control {
@@ -23,58 +22,57 @@
     border-color: $primary;
     border-bottom-width: 2px;
 
-    &~label {
-      top: 0!important;
-      font-size: .85em!important;
+    & ~ label {
+      top: 0 !important;
+      font-size: 0.85em !important;
       color: $primary;
       opacity: 1;
     }
   }
 
-  ~label {
+  ~ label {
     position: absolute;
     top: 0;
     left: 0;
     z-index: 0;
     display: inline-block;
-    font-size: .85em;
-    opacity: .5;
-    @include transition(all .2s ease);
+    font-size: 0.85em;
+    opacity: 0.5;
+    @include transition(all 0.2s ease);
   }
 
   &.disabled,
   &[disabled] {
-    opacity: .5;
+    opacity: 0.5;
   }
 
   // variant for dark background
   &.mda-form-light:focus,
   &.mda-form-light.focus {
     border-color: #fff;
-    &:focus~label,
-    &.focus~label {
-        color: #fff;
+    &:focus ~ label,
+    &.focus ~ label {
+      color: #fff;
     }
   }
-
 }
 
 // text area
 textarea.mda-form-control {
-    height: auto;
+  height: auto;
 }
 
 // Input messages
 .mda-form-msg {
-    display: block;
+  display: block;
   position: absolute;
   bottom: 0;
-  font-size: .85em;
+  font-size: 0.85em;
   line-height: 24px;
   font-weight: 300;
-  color: #90A4AE;
+  color: #90a4ae;
   &.right {
-    right: 0
+    right: 0;
   }
 }
 
@@ -82,42 +80,39 @@ textarea.mda-form-control {
 
 .form-validate {
   .mda-form-control {
-
     // Invalid input
     &.ng-dirty.ng-invalid {
       border-color: $danger;
-      &:focus~label,
-      &.focus~label,
-      &~.mda-form-msg {
-          color: $danger;
+      &:focus ~ label,
+      &.focus ~ label,
+      & ~ .mda-form-msg {
+        color: $danger;
       }
     }
     // Valid input
     &.ng-dirty.ng-valid,
     &.ng-dirty.ng-valid:focus {
-        border-color: $success;
-        &:focus~label,
-        &.focus~label {
-            color: $success;
-        }
+      border-color: $success;
+      &:focus ~ label,
+      &.focus ~ label {
+        color: $success;
+      }
     }
-
   }
 }
 
 // Float label
-.float-label  {
-  .mda-form-control~label {
+.float-label {
+  .mda-form-control ~ label {
     top: 20px;
     font-size: 1em;
   }
-  .mda-form-control.ng-not-empty~label,
-  .mda-form-control.ng-dirty~label,
-  .mda-form-control.has-value~label {
+  .mda-form-control.ng-not-empty ~ label,
+  .mda-form-control.ng-dirty ~ label,
+  .mda-form-control.has-value ~ label {
     top: 0;
-    font-size: .85em;
+    font-size: 0.85em;
   }
-
 }
 
 // Icons support
@@ -143,5 +138,5 @@ code {
   padding: 0.125em 0.35em;
   border-radius: 2px;
   background: rgba(0, 0, 0, 0.065);
-  color: #106CC8;
+  color: #106cc8;
 }

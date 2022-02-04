@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VerificationService } from './verification.service';
@@ -15,7 +16,7 @@ export interface PublicKey {
 @Component({
   selector: 'app-verification-method',
   templateUrl: './verification-method.component.html',
-  styleUrls: ['./verification-method.component.scss']
+  styleUrls: ['./verification-method.component.scss'],
 })
 export class VerificationMethodComponent implements OnInit {
   pageIndex = 0;
@@ -28,10 +29,11 @@ export class VerificationMethodComponent implements OnInit {
   selectOptions = Object.entries(KeyTypesEnum);
   private publicKeys;
 
-  constructor(private dialogRef: MatDialogRef<VerificationMethodComponent>,
-              @Inject(MAT_DIALOG_DATA) private dialogData: any,
-              private verificationService: VerificationService) {
-  }
+  constructor(
+    private dialogRef: MatDialogRef<VerificationMethodComponent>,
+    @Inject(MAT_DIALOG_DATA) private dialogData: any,
+    private verificationService: VerificationService
+  ) {}
 
   get isFormDisabled() {
     return !this.selectControl.value || !this.publicKey.valid;
@@ -55,7 +57,12 @@ export class VerificationMethodComponent implements OnInit {
       return;
     }
 
-    this.verificationService.updateDocumentAndReload(this.dialogData.id, this.publicKey.value, this.verificationsAmount)
+    this.verificationService
+      .updateDocumentAndReload(
+        this.dialogData.id,
+        this.publicKey.value,
+        this.verificationsAmount
+      )
       .subscribe((publicKeys) => {
         this.handleLoadedPublicKeys(publicKeys);
         this.clearControls();
@@ -87,16 +94,23 @@ export class VerificationMethodComponent implements OnInit {
     this.publicKeys = publicKeys;
     this.verificationsAmount = publicKeys.length;
     this.setDataSource();
-    this.publicKey.setValidators([Validators.required, HexValidators.isPublicKeyValid(), listContainsValidator(this.dataSource, 'publicKeyHex')]);
+    this.publicKey.setValidators([
+      Validators.required,
+      HexValidators.isPublicKeyValid(),
+      listContainsValidator(this.dataSource, 'publicKeyHex'),
+    ]);
   }
 
   private setDataSource(): void {
-    this.dataSource = this.publicKeys.slice(this.pageIndex * this.pageSize, (this.pageIndex + 1) * this.pageSize);
+    this.dataSource = this.publicKeys.slice(
+      this.pageIndex * this.pageSize,
+      (this.pageIndex + 1) * this.pageSize
+    );
   }
 
   private loadPublicKeys(): void {
-    this.verificationService.getPublicKeys(this.dialogData.id, true)
-      .subscribe(publicKeys => this.handleLoadedPublicKeys(publicKeys));
+    this.verificationService
+      .getPublicKeys(this.dialogData.id, true)
+      .subscribe((publicKeys) => this.handleLoadedPublicKeys(publicKeys));
   }
-
 }

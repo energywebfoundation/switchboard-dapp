@@ -1,11 +1,17 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { DidBookRecord } from '../models/did-book-record';
 
 @Component({
   selector: 'app-did-book-list',
   templateUrl: './did-book-list.component.html',
   styleUrls: ['./did-book-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DidBookListComponent {
   @Input() set list(value: DidBookRecord[]) {
@@ -14,7 +20,7 @@ export class DidBookListComponent {
     }
 
     this.data = value;
-  };
+  }
 
   get list() {
     return this.data;

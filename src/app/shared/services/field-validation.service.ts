@@ -3,13 +3,9 @@ import { AbstractControl } from '@angular/forms';
 import { filter } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FieldValidationService {
-
-  constructor() {
-  }
-
   /**
    * Checks if the number range is valid.
    *
@@ -21,9 +17,7 @@ export class FieldValidationService {
   numberRangeValid(from: number | undefined, to: number | undefined): boolean {
     let retVal = true;
 
-    if (from !== undefined &&
-      to !== undefined &&
-      from > to) {
+    if (from !== undefined && to !== undefined && from > to) {
       retVal = false;
     }
 
@@ -33,19 +27,31 @@ export class FieldValidationService {
   autoRangeControls(from: AbstractControl, to: AbstractControl) {
     if (from && to) {
       from.valueChanges
-        .pipe(filter(v => (to.value !== undefined && to.value !== null && from.value !== undefined && from.value !== null) && v > to.value))
-        .subscribe(v => to.setValue(v));
+        .pipe(
+          filter(
+            (v) =>
+              to.value !== undefined &&
+              to.value !== null &&
+              from.value !== undefined &&
+              from.value !== null &&
+              v > to.value
+          )
+        )
+        .subscribe((v) => to.setValue(v));
 
       to.valueChanges
-        .pipe(filter(v => (
-          from.value !== undefined &&
-          from.value !== null &&
-          to.value !== undefined &&
-          to.value !== null) &&
-          to.value &&
-          v < from.value)
+        .pipe(
+          filter(
+            (v) =>
+              from.value !== undefined &&
+              from.value !== null &&
+              to.value !== undefined &&
+              to.value !== null &&
+              to.value &&
+              v < from.value
+          )
         )
-        .subscribe(v => from.setValue(v));
+        .subscribe((v) => from.setValue(v));
     }
   }
 }

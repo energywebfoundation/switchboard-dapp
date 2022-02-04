@@ -8,13 +8,9 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
 
 @NgModule({
   imports: [],
-  providers: [
-    SettingsService,
-    ThemesService,
-    MenuService
-  ],
+  providers: [SettingsService, ThemesService, MenuService],
   declarations: [],
-  exports: []
+  exports: [],
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {

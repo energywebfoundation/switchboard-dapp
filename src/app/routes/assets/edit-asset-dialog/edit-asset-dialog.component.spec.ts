@@ -29,30 +29,34 @@ class MockDialogData {
 describe('EditAssetDialogComponent', () => {
   let component: EditAssetDialogComponent;
   let fixture: ComponentFixture<EditAssetDialogComponent>;
-  let editAssetServiceSpy = jasmine.createSpyObj(EditAssetService, ['getProfile', 'update']);
+  const editAssetServiceSpy = jasmine.createSpyObj(EditAssetService, [
+    'getProfile',
+    'update',
+  ]);
   let mockDialogData: MockDialogData;
   let hostDebug: DebugElement;
-  beforeEach(waitForAsync(() => {
-    mockDialogData = new MockDialogData();
-    TestBed.configureTestingModule({
-      declarations: [EditAssetDialogComponent],
-      imports: [
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatIconTestingModule,
-        NoopAnimationsModule
-      ],
-      providers: [
-        {provide: EditAssetService, useValue: editAssetServiceSpy},
-        {provide: MatDialogRef, useValue: dialogSpy},
-        {provide: MAT_DIALOG_DATA, useValue: mockDialogData}
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      mockDialogData = new MockDialogData();
+      TestBed.configureTestingModule({
+        declarations: [EditAssetDialogComponent],
+        imports: [
+          ReactiveFormsModule,
+          MatFormFieldModule,
+          MatInputModule,
+          MatButtonModule,
+          MatIconTestingModule,
+          NoopAnimationsModule,
+        ],
+        providers: [
+          { provide: EditAssetService, useValue: editAssetServiceSpy },
+          { provide: MatDialogRef, useValue: dialogSpy },
+          { provide: MAT_DIALOG_DATA, useValue: mockDialogData },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EditAssetDialogComponent);
@@ -69,35 +73,41 @@ describe('EditAssetDialogComponent', () => {
   it('should update form when claims contains specific asset', () => {
     const assetProfile = {
       name: 'example',
-      icon: 'https://'
+      icon: 'https://',
     };
     mockDialogData.setId('1');
-    editAssetServiceSpy.getProfile.and.returnValue(of({
-      assetProfiles: {
-        '1': assetProfile
-      }
-    }));
+    editAssetServiceSpy.getProfile.and.returnValue(
+      of({
+        assetProfiles: {
+          '1': assetProfile,
+        },
+      })
+    );
     fixture.detectChanges();
     expect(component.form.getRawValue()).toEqual(assetProfile);
   });
 
   it('should check if form have default values when asset to not have claim', () => {
     mockDialogData.setId('1');
-    editAssetServiceSpy.getProfile.and.returnValue(of({
-      assetProfiles: {}
-    }));
+    editAssetServiceSpy.getProfile.and.returnValue(
+      of({
+        assetProfiles: {},
+      })
+    );
     fixture.detectChanges();
-    expect(component.form.getRawValue()).toEqual({name: '', icon: ''});
+    expect(component.form.getRawValue()).toEqual({ name: '', icon: '' });
   });
 
   it('should call update method when form is valid', () => {
     mockDialogData.setId('1');
-    editAssetServiceSpy.getProfile.and.returnValue(of({
-      assetProfiles: {}
-    }));
+    editAssetServiceSpy.getProfile.and.returnValue(
+      of({
+        assetProfiles: {},
+      })
+    );
     editAssetServiceSpy.update.and.returnValue(of(true));
     fixture.detectChanges();
-    const {name, icon, submit} = getSelectors(hostDebug);
+    const { name, icon, submit } = getSelectors(hostDebug);
 
     name.value = 'name';
     dispatchInputEvent(name);
@@ -113,9 +123,9 @@ describe('EditAssetDialogComponent', () => {
       assetProfiles: {
         '1': {
           name: 'name',
-          icon: 'https://a'
-        }
-      }
+          icon: 'https://a',
+        },
+      },
     });
     expect(dialogSpy.close).toHaveBeenCalledWith(true);
   });
@@ -125,6 +135,6 @@ const getSelectors = (hostDebug) => {
   return {
     name: getElement(hostDebug)('name')?.nativeElement,
     icon: getElement(hostDebug)('icon')?.nativeElement,
-    submit: getElement(hostDebug)('next')?.nativeElement
+    submit: getElement(hostDebug)('next')?.nativeElement,
   };
 };

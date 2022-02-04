@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { RetryBtnDirective } from './retry-btn.directive';
 
 @Component({
-  template: '<p (appRetryBtn)="countRetry()">{{counter}}</p>'
+  template: '<p (appRetryBtn)="countRetry()">{{counter}}</p>',
 })
 class TestComponent {
   counter = 0;
@@ -19,10 +19,7 @@ xdescribe('RetryBtnDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        TestComponent,
-        RetryBtnDirective
-      ]
+      declarations: [TestComponent, RetryBtnDirective],
     });
 
     fixture = TestBed.createComponent(TestComponent);

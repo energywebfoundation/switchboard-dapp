@@ -1,14 +1,12 @@
 # Switchboard dApp
-[![Build Status](https://travis-ci.com/energywebfoundation/switchboard-dapp.svg?token=vNERWfuroqqJygVa7Km9&branch=develop)](https://travis-ci.com/energywebfoundation/switchboard-dapp)
 
+[![Build Status](https://travis-ci.com/energywebfoundation/switchboard-dapp.svg?token=vNERWfuroqqJygVa7Km9&branch=develop)](https://travis-ci.com/energywebfoundation/switchboard-dapp)
 
 `Switchboard dApp` is a revolutionary decentralized application that allows management of identities, assets, applications, services and access controls with DIDs(Decentralised Identifiers) and VCs(Verifiable Credentials)
 
 ##
 
-
 ![Identity Creation](screenshots/switchboard.png)
-
 
 ## Getting Started
 
@@ -28,27 +26,47 @@ nodejs version 10+
 A step by step series of examples that tell you how to get a development env running
 
 Install dependencies:
+
 ```
 npm install
 ```
 
 Run the project locally:
+
 ```
 npm run start
 ```
 
-Build the project for production:
+Building project depends on Angular environments.
+
+Build the project for development environment:
+
 ```
 npm run build
 ```
 
+Build the project for stedin environment:
 
-End with an example of getting some data out of the system or using it for a little demo
+```
+npm run build-stedin
+```
+
+Build the project for staging environment:
+
+```
+npm run build-staging
+```
+
+Build the project for production:
+
+```
+npm run build-prod
+```
 
 ## Active Maintainers
-- Mani H. (@manihagh)
-- Kim Honoridez (@kim-energyweb)
-- Davy Jones Castillo (@davycastillo)
+
+- Dawid Gil [@dawidgil](https://github.com/dawidgil)
+- Davy Jones Castillo [@davycastillo](https://github.com/davycastillo)
 
 ## Contributing
 

@@ -14,7 +14,7 @@ describe('parseStringToFloat function', () => {
   });
 
   it('should parse 1.0000001', () => {
-    expect(parseStringToFloat('1.0000001')).toEqual(1.00000);
+    expect(parseStringToFloat('1.0000001')).toEqual(1.0);
   });
 
   it('should parse 1.00001', () => {

@@ -21,11 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { CardComponent } from './card/card.component';
 
-
-const routes: Routes = [
-  {path: '', component: DashboardComponent}
-];
-
+const routes: Routes = [{ path: '', component: DashboardComponent }];
 
 @NgModule({
   imports: [
@@ -48,9 +44,6 @@ const routes: Routes = [
     WidgetsModule,
     NgxSpinnerModule,
   ],
-  entryComponents: [],
-
-  declarations: [DashboardComponent, UserInfoComponent, CardComponent]
+  declarations: [DashboardComponent, UserInfoComponent, CardComponent],
 })
-export class DashboardModule {
-}
+export class DashboardModule {}

@@ -1,0 +1,47 @@
+<div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+  <div class="d-flex justify-content-center">
+    <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
+      <img class="img-logo" src="../assets/img/no-application-image.png" height="48px" *ngIf="!data?.logoUrl" />
+      <img
+        class="img-logo"
+        *ngIf="data?.logoUrl"
+        (error)="imageEventHandler(false)"
+        (load)="imageEventHandler(true)"
+        src="{{ data?.logoUrl }}" />
+    </div>
+  </div>
+  <div class="text-left my-3">
+    <div class="label opacity-50 mb-2">Application Namespace</div>
+    <span class="color-white mb-0">
+      {{ namespace }}
+    </span>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="text-left my-3">
+    <div class="label opacity-50 mb-2">Application Name</div>
+    <span class="color-white mb-0">
+      {{ data?.appName }}
+    </span>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="text-left my-3">
+    <div class="label opacity-50 mb-2">Website URL</div>
+    <span class="color-white mb-0">
+      {{ data?.websiteUrl | defaultValue }}
+    </span>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="text-left my-3">
+    <div class="label opacity-50 mb-2">Description</div>
+    <span class="color-white mb-0">
+      {{ data?.description | defaultValue }}
+    </span>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="text-left my-3">
+    <div class="label opacity-50 mb-2">Others (JSON)</div>
+    <span class="color-white mb-0">
+      {{ data?.others | defaultValue }}
+    </span>
+  </div>
+</div>

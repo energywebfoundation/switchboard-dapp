@@ -1,4 +1,7 @@
-import { getHierarchyLength, getLastHierarchyOrg } from './organization.selectors';
+import {
+  getHierarchyLength,
+  getLastHierarchyOrg,
+} from './organization.selectors';
 
 describe('Organization Selectors', () => {
   describe('getLastHierarchyOrg', () => {

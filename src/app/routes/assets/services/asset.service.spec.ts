@@ -7,14 +7,17 @@ import { AssetService } from './asset.service';
 
 describe('AssetService', () => {
   let service: AssetService;
-  const iamServiceSpy = jasmine.createSpyObj('IamService', ['registerAsset', 'wrapWithLoadingService']);
+  const iamServiceSpy = jasmine.createSpyObj('IamService', [
+    'registerAsset',
+    'wrapWithLoadingService',
+  ]);
   const toastrSpy = jasmine.createSpyObj('ToastrService', ['error', 'success']);
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        {provide: ToastrService, useValue: toastrSpy},
-        {provide: IamService, useValue: iamServiceSpy}
-      ]
+        { provide: ToastrService, useValue: toastrSpy },
+        { provide: IamService, useValue: iamServiceSpy },
+      ],
     });
     service = TestBed.inject(AssetService);
     iamServiceSpy.wrapWithLoadingService.and.callFake((source) => source);

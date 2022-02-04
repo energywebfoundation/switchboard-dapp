@@ -7,8 +7,10 @@ import { of } from 'rxjs';
 
 @Component({
   template: `
-    <div data-qa-id="scanner" appQrCodeScanner (scannedValue)="scanned = true">scanner</div>
-  `
+    <div data-qa-id="scanner" appQrCodeScanner (scannedValue)="scanned = true">
+      scanner
+    </div>
+  `,
 })
 class TestComponent {
   scanned = false;
@@ -18,14 +20,15 @@ describe('QrCodeScannerDirective', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let hostDebug: DebugElement;
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [QrCodeScannerDirective, TestComponent],
-      providers: [{provide: MatDialog, useValue: dialogSpy}],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [QrCodeScannerDirective, TestComponent],
+        providers: [{ provide: MatDialog, useValue: dialogSpy }],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);
@@ -39,21 +42,21 @@ describe('QrCodeScannerDirective', () => {
   });
 
   it('should check if emits value', () => {
-    dialogSpy.open.and.returnValue({afterClosed: () => of({value: 'did'})});
+    dialogSpy.open.and.returnValue({ afterClosed: () => of({ value: 'did' }) });
     getElement(hostDebug)('scanner').nativeElement.click();
 
     expect(component.scanned).toBeTrue();
   });
 
   it('should not emits value when closing with null', () => {
-    dialogSpy.open.and.returnValue({afterClosed: () => of(null)});
+    dialogSpy.open.and.returnValue({ afterClosed: () => of(null) });
     getElement(hostDebug)('scanner').nativeElement.click();
 
     expect(component.scanned).toBeFalse();
   });
 
   it('should not emits value when closing with empty object', () => {
-    dialogSpy.open.and.returnValue({afterClosed: () => of({})});
+    dialogSpy.open.and.returnValue({ afterClosed: () => of({}) });
     getElement(hostDebug)('scanner').nativeElement.click();
 
     expect(component.scanned).toBeFalse();

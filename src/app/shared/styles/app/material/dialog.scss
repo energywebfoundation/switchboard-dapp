@@ -1,404 +1,413 @@
 .mat-dialog-container {
-    background: #2A2837;
-    padding: 0!important;
-    color: #FFF;
+  background: #2a2837;
+  padding: 0 !important;
+  color: #fff;
 
-    .mat-icon-button {
-        color: #7FADFF;
-
-    
-    }
+  .mat-icon-button {
+    color: #7fadff;
+  }
 }
 
 mat-datetimepicker-content {
-    background-color: #2d3358 !important;
+  background-color: #2d3358 !important;
 }
 
 .mat-datetimepicker-calendar-table-header {
-    color: rgba(255, 255, 255, 0.38) !important;
+  color: rgba(255, 255, 255, 0.38) !important;
 }
 
-.mat-datetimepicker-calendar-body-cell-content, .mat-datetimepicker-clock-cell {
-    color: #FFF !important;
-    font-size: 16px !important;
+.mat-datetimepicker-calendar-body-cell-content,
+.mat-datetimepicker-clock-cell {
+  color: #fff !important;
+  font-size: 16px !important;
 }
 
 .mat-datetimepicker-calendar-body-cell-content.mat-datetimepicker-calendar-body-today:not(.mat-datetimepicker-calendar-body-selected) {
-    border-color: #FFF !important;
+  border-color: #fff !important;
 }
 
 .mat-datetimepicker-clock {
-    background-color: #23294e !important;
+  background-color: #23294e !important;
 }
 
 .mat-datetimepicker-calendar-header {
-    background-color: #23294e !important;
+  background-color: #23294e !important;
 }
 
-.mat-datetimepicker-clock-center, .mat-datetimepicker-clock-hand, .mat-datetimepicker-clock-cell.mat-datetimepicker-clock-cell-selected {
-    background-color: #A466FF !important;
+.mat-datetimepicker-clock-center,
+.mat-datetimepicker-clock-hand,
+.mat-datetimepicker-clock-cell.mat-datetimepicker-clock-cell-selected {
+  background-color: #a466ff !important;
 }
 
-.mat-datetimepicker-calendar-next-button, .mat-datetimepicker-calendar-previous-button {
-    color: #7FADFF !important;
+.mat-datetimepicker-calendar-next-button,
+.mat-datetimepicker-calendar-previous-button {
+  color: #7fadff !important;
 }
 
 .mat-dialog-title {
-    padding: 10px 24px 10px 24px;
-    font-weight: 600;
-    font-family: 'Rajdhani', sans-serif;
+  padding: 10px 24px 10px 24px;
+  font-weight: 600;
+  font-family: 'Rajdhani', sans-serif;
 }
 
 .connect-to-wallet .mat-dialog-container {
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
-    border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+  border-radius: 5px;
 
-    .mat-dialog-title {
-        border-bottom: none !important;
-    }
+  .mat-dialog-title {
+    border-bottom: none !important;
+  }
 
-    .cdk-overlay-dark-backdrop {
-        background: rgba(24, 20, 32, 0) !important;
-    }
+  .cdk-overlay-dark-backdrop {
+    background: rgba(24, 20, 32, 0) !important;
+  }
 }
 
-.bg-status, .bg-type {
-    background-color: #3e3d4c;
-    padding: 8px 10px;
-    border-radius: 3px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.bg-status,
+.bg-type {
+  background-color: #3e3d4c;
+  padding: 8px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .mat-dialog-content {
-    padding: 0 24px !important;
-    margin: 0 !important;
+  padding: 0 24px !important;
+  margin: 0 !important;
 }
 
 @include media-breakpoint-down(xl) {
-    .mat-dialog-content {
-        max-height: 88vh !important;
-    }
+  .mat-dialog-content {
+    max-height: 88vh !important;
+  }
 }
 
 .ext-toaster {
-    height: auto !important;
+  height: auto !important;
 }
 
 @include media-breakpoint-down(sm) {
+  .connect-to-wallet .mat-dialog-container {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    height: auto !important;
+  }
 
-    .connect-to-wallet .mat-dialog-container {
-        background: transparent;
-        border: none;
-        box-shadow: none;
-        height: auto !important;
-    }
-
-    .mat-dialog-container {
-        height: 100vh !important;
-    }
-    .mat-dialog-content {
-        max-height: 90vh !important;
-    }
+  .mat-dialog-container {
+    height: 100vh !important;
+  }
+  .mat-dialog-content {
+    max-height: 90vh !important;
+  }
 }
 
 .cdk-overlay-dark-backdrop {
-    background: transparent;
+  background: transparent;
 }
 
 .mat-dialog-actions {
-    margin: 10px 0 !important;
-    padding: 20px 24px !important;
+  margin: 10px 0 !important;
+  padding: 20px 24px !important;
 }
 
 .timepicker-overlay {
-    z-index: 10000000 !important;
+  z-index: 10000000 !important;
 }
 
 .timepicker-backdrop-overlay {
-    z-index: 10000000 !important;
+  z-index: 10000000 !important;
 }
 .timepicker {
-.timepicker__header {
+  .timepicker__header {
     background-color: #26203a !important;
-}
+  }
 
-.timepicker__body {
+  .timepicker__body {
     background-color: #322b46 !important;
-}
+  }
 
-.timepicker__actions {
+  .timepicker__actions {
     justify-content: center !important;
     background-color: #161320 !important;
-}
+  }
 
-.timepicker-button {
+  .timepicker-button {
     border-radius: 50px !important;
     min-width: 100px !important;
     margin-right: 2px;
     margin-left: 2px;
-    >span {
-        font-size: 16px !important;
-        padding: 8px 16px !important;
-        letter-spacing: 0.33px;
-        text-transform: capitalize !important;
+    > span {
+      font-size: 16px !important;
+      padding: 8px 16px !important;
+      letter-spacing: 0.33px;
+      text-transform: capitalize !important;
     }
 
     &:hover {
-        background-color: #A466FF !important;
+      background-color: #a466ff !important;
     }
-}
+  }
 
-.clock-face {
+  .clock-face {
     background-color: #27213a !important;
-}
-    .clock-face__clock-hand {
-      background-color: #A466FF !important;
+  }
+  .clock-face__clock-hand {
+    background-color: #a466ff !important;
 
-      &::after {
-        background-color: #A466FF !important;
-      }
-
-      &::before {
-        border-color: #A466FF !important;
-      }
+    &::after {
+      background-color: #a466ff !important;
     }
 
-    .clock-face__number {
-      > span.active {
-        background-color: #A466FF !important;
-      }
+    &::before {
+      border-color: #a466ff !important;
     }
+  }
 
-    .clock-face__number > span{
-        color: #FFF !important;
+  .clock-face__number {
+    > span.active {
+      background-color: #a466ff !important;
     }
+  }
 
-    button:not(.timepicker-dial__item) {
-      color: #FFF !important;
-    }
+  .clock-face__number > span {
+    color: #fff !important;
+  }
+
+  button:not(.timepicker-dial__item) {
+    color: #fff !important;
+  }
 }
 
 .result-filter {
-    margin: 0 20px;
+  margin: 0 20px;
 }
 
 .dialog-result {
-    background-color: #24222F;
-    min-height: 300px;
-    border-radius: 5px;
-    padding: 20px;
-    margin: 0 20px;
+  background-color: #24222f;
+  min-height: 300px;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 0 20px;
 
-    .label-s {
-        font-size: 14px;
-        color: rgba(255,255,255,0.5);
-    }
+  .label-s {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+  }
 
-    .label-l {
-        font-size: 18px;
-        color: #FFF;
-    }
+  .label-l {
+    font-size: 18px;
+    color: #fff;
+  }
 }
 
 .dialog-result-user {
-    background-color: #171A3A;
-    border-radius: 5px;
-    padding: 20px;
-    margin: 0 20px;
+  background-color: #171a3a;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 0 20px;
 
-    .label-s {
-        font-size: 14px;
-        color: rgba(255,255,255,0.5);
-    }
+  .label-s {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+  }
 
-    .label-l {
-        font-size: 18px;
-        color: #FFF;
-    }
+  .label-l {
+    font-size: 18px;
+    color: #fff;
+  }
 }
 
 .mat-checkbox-frame {
-    border-color: currentColor;
+  border-color: currentColor;
 }
 
 .mat-checkbox-layout {
-    display: inline-block !important;
-    white-space: normal !important;
+  display: inline-block !important;
+  white-space: normal !important;
 }
 
 .mat-checkbox-layout .mat-checkbox-label {
-    letter-spacing: 0.2px;
+  letter-spacing: 0.2px;
 }
 
 mat-checkbox {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 .mat-checkbox-checked {
-    opacity: 1;
+  opacity: 1;
 }
 
-.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-    background: #A567FF;
+.mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background: #a567ff;
 }
 
-.mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element, .mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element {
-    background: #A567FF !important;
+.mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent
+  .mat-ripple-element,
+.mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent
+  .mat-ripple-element {
+  background: #a567ff !important;
 }
 
-.mat-stepper-horizontal, .mat-stepper-vertical {
-    background-color: transparent !important;
+.mat-stepper-horizontal,
+.mat-stepper-vertical {
+  background-color: transparent !important;
 }
 
 .mat-horizontal-content-container {
-    padding: 0 24px 0 24px !important;
-    border-top: 1px solid #172239;
+  padding: 0 24px 0 24px !important;
+  border-top: 1px solid #172239;
 }
 
 .mat-step-icon {
-    border-radius: 4px !important;
+  border-radius: 4px !important;
 }
 
 .mat-step-header .mat-step-label.mat-step-label-active {
-    font-size: 16px !important;
-    font-weight: 500;
-    letter-spacing: 0.2px !important;
-    opacity: 1;
-    font-family: 'Rajdhani', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 500;
+  letter-spacing: 0.2px !important;
+  opacity: 1;
+  font-family: 'Rajdhani', sans-serif !important;
 }
 
-
-.mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
-    font-size: 16px !important;
-    font-family: 'Rajdhani', sans-serif !important;
-    font-weight: 500;
+.mat-step-header .mat-step-label,
+.mat-step-header .mat-step-optional {
+  font-size: 16px !important;
+  font-family: 'Rajdhani', sans-serif !important;
+  font-weight: 500;
 }
 
-.mat-horizontal-stepper-header::after, .mat-horizontal-stepper-header::before, .mat-stepper-horizontal-line {
-    border-top-color: #7FADFF !important;
+.mat-horizontal-stepper-header::after,
+.mat-horizontal-stepper-header::before,
+.mat-stepper-horizontal-line {
+  border-top-color: #7fadff !important;
 }
 
 .mat-horizontal-stepper-header-container {
-    width: auto !important;
+  width: auto !important;
 }
 
 .image-wrapper {
-    height: 100px;
-    border-radius: 5px;
-    padding: 5px;
+  height: 100px;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .img-logo {
-    width: auto !important;
-    height: 100px;
-    background-size: contain;
+  width: auto !important;
+  height: 100px;
+  background-size: contain;
 }
 
 @media (max-width: 768px) {
-    .mat-horizontal-stepper-header-container {
-        width: auto !important;
-    }
+  .mat-horizontal-stepper-header-container {
+    width: auto !important;
+  }
 
-    .mat-dialog-actions {
-        border-top: 1px solid #172239;
-        margin: 10px 25px 0 25px !important;
-        padding: 20px 0 !important;
-    }
+  .mat-dialog-actions {
+    border-top: 1px solid #172239;
+    margin: 10px 25px 0 25px !important;
+    padding: 20px 0 !important;
+  }
 
-    .mat-stepper-horizontal-line {
-        display: none;
-    }
+  .mat-stepper-horizontal-line {
+    display: none;
+  }
 
-    // .mat-horizontal-stepper-header {
-    //     padding: 0 5px 0 10px !important;
-    // }
+  // .mat-horizontal-stepper-header {
+  //     padding: 0 5px 0 10px !important;
+  // }
 
-    .mat-step-text-label {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: normal;
-    }
+  .mat-step-text-label {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: normal;
+  }
 
-    .generate-qr-container {
-        img {
-            width: 280px;
-        }
+  .generate-qr-container {
+    img {
+      width: 280px;
     }
+  }
 }
 
 .backdrop-shadow {
-    background: rgba(38, 33, 51, .5);
+  background: rgba(38, 33, 51, 0.5);
 }
 
 .backdrop-hide-content {
-    background: #181424;
+  background: #181424;
 }
 
 // bootstrap modal {
-    .modal-content {
-        background: #000E28;
-        padding: 0 !important;
-        color: #FFF;
-    }
+.modal-content {
+  background: #000e28;
+  padding: 0 !important;
+  color: #fff;
+}
 
-    .modal-title {
-        color: #7FADFF;
-        padding: 15px 24px 15px 24px;
-        border-bottom: 1px solid #172239;
-        font-weight: 600;
-    }
+.modal-title {
+  color: #7fadff;
+  padding: 15px 24px 15px 24px;
+  border-bottom: 1px solid #172239;
+  font-weight: 600;
+}
 
-    .modal-footer {
-        border-top: 1px solid #172339;
-    }
+.modal-footer {
+  border-top: 1px solid #172339;
+}
 
-    .widget-empty {
-        border: 1px dashed #12162e !important;
-        border-radius: 3px;
-        padding: 0 120px;
-        height: 150px;
+.widget-empty {
+  border: 1px dashed #12162e !important;
+  border-radius: 3px;
+  padding: 0 120px;
+  height: 150px;
 
-        h4 {
-            font-weight: 400 !important;
-            font-size: 16px !important;
-            opacity: 0.3;
-        }
+  h4 {
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    opacity: 0.3;
+  }
 
-        mat-icon {
-            opacity: 0.2;
-        }
-    }
+  mat-icon {
+    opacity: 0.2;
+  }
+}
 
-    .warned-title {
-        font-size: 24px !important;
-        line-height: 1.2;
-        font-weight: 600 !important;
-    }
+.warned-title {
+  font-size: 24px !important;
+  line-height: 1.2;
+  font-weight: 600 !important;
+}
 
-    .warned-sub {
-        opacity: 0.6!important;
-    }
+.warned-sub {
+  opacity: 0.6 !important;
+}
 
-    .warned-wrapper {
-        width: 120px !important;
-        height: auto !important;
-    }
+.warned-wrapper {
+  width: 120px !important;
+  height: auto !important;
+}
 
-    .toast-container .ngx-toastr {
-        box-shadow: none !important;
+.toast-container .ngx-toastr {
+  box-shadow: none !important;
 
-        .toast-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 16px !important;
-            font-weight: 600;
-        }
-    }
+  .toast-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px !important;
+    font-weight: 600;
+  }
+}
 
-    .icon-dialog {
-        width: 64px;
-        height: 64px;
-    }    
+.icon-dialog {
+  width: 64px;
+  height: 64px;
+}

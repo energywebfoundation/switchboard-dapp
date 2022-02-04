@@ -10,14 +10,15 @@ describe('UserDidComponent', () => {
   let fixture: ComponentFixture<UserDidComponent>;
   let hostDebug: DebugElement;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [UserDidComponent],
-      imports: [DidFormatMinifierModule],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [UserDidComponent],
+        imports: [DidFormatMinifierModule],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserDidComponent);
@@ -41,4 +42,7 @@ describe('UserDidComponent', () => {
   });
 });
 
-const getElement = (hostDebug) => (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));
+const getElement =
+  (hostDebug) =>
+  (id, postSelector = '') =>
+    hostDebug.query(By.css(`[data-qa-id=${id}] ${postSelector}`));

@@ -8,8 +8,7 @@ import { OwnedEffects } from './owned/owned.effects';
 @NgModule({
   imports: [
     StoreModule.forFeature(assets.USER_FEATURE_KEY, assets.reducer),
-    EffectsModule.forFeature([AssetDetailsEffects, OwnedEffects])
+    EffectsModule.forFeature([AssetDetailsEffects, OwnedEffects]),
   ],
 })
-export class AssetsStoreSliceModule {
-}
+export class AssetsStoreSliceModule {}

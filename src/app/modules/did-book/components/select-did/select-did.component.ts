@@ -10,41 +10,45 @@ import { AddSingleRecordComponent } from '../add-single-record/add-single-record
 @Component({
   selector: 'app-select-did',
   templateUrl: './select-did.component.html',
-  styleUrls: ['./select-did.component.scss']
+  styleUrls: ['./select-did.component.scss'],
 })
 export class SelectDidComponent implements OnInit {
-  @Output() didChange = new EventEmitter<{ did: string, valid: boolean }>();
+  @Output() didChange = new EventEmitter<{ did: string; valid: boolean }>();
 
   didBook$;
-  newOwnerDID = new FormControl('', [Validators.required, HexValidators.isDidValid()]);
+  newOwnerDID = new FormControl('', [
+    Validators.required,
+    HexValidators.isDidValid(),
+  ]);
   isNotKnownDid: boolean;
 
-  constructor(private didBookServ: DidBookService,
-              private dialog: MatDialog) {
-  }
+  constructor(private didBookServ: DidBookService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.didBook$ = combineLatest([this.didBookServ.getList$(), this.newOwnerDID.valueChanges.pipe(startWith(''))])
-      .pipe(map(([list, value]) => {
-          const filteredList = list.filter(el =>
-            el.did.toLowerCase().includes(value.toLowerCase()) || el.label.toLowerCase().includes(value.toLowerCase())
-          );
-          this.isNotKnownDid = filteredList.length === 0;
-          return filteredList;
-        })
-      );
+    this.didBook$ = combineLatest([
+      this.didBookServ.getList$(),
+      this.newOwnerDID.valueChanges.pipe(startWith('')),
+    ]).pipe(
+      map(([list, value]) => {
+        const filteredList = list.filter(
+          (el) =>
+            el.did.toLowerCase().includes(value.toLowerCase()) ||
+            el.label.toLowerCase().includes(value.toLowerCase())
+        );
+        this.isNotKnownDid = filteredList.length === 0;
+        return filteredList;
+      })
+    );
 
-    this.newOwnerDID.valueChanges
-      .subscribe((did) => {
-        this.didChange.emit({did, valid: this.newOwnerDID.valid});
-      });
+    this.newOwnerDID.valueChanges.subscribe((did) => {
+      this.didChange.emit({ did, valid: this.newOwnerDID.valid });
+    });
   }
 
   approveHandler() {
     this.dialog.open(AddSingleRecordComponent, {
       width: '550px',
-      data: {did: this.newOwnerDID.value}
+      data: { did: this.newOwnerDID.value },
     });
   }
-
 }

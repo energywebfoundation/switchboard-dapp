@@ -10,7 +10,6 @@ export function isAlphanumericValidator(control: AbstractControl) {
     return null;
   }
   return {
-    isAlphaNumericInvalid: true
+    isAlphaNumericInvalid: true,
   };
-
 }

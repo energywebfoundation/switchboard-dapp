@@ -11,17 +11,18 @@ describe('NewPassiveAssetComponent', () => {
   let fixture: ComponentFixture<NewPassiveAssetComponent>;
   const dialogRefSpy = jasmine.createSpyObj(MatDialogRef, ['close']);
   const assetServiceSpy = jasmine.createSpyObj(AssetService, ['register']);
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [NewPassiveAssetComponent],
-      providers: [
-        {provide: MatDialogRef, useValue: dialogRefSpy},
-        {provide: AssetService, useValue: assetServiceSpy}
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [NewPassiveAssetComponent],
+        providers: [
+          { provide: MatDialogRef, useValue: dialogRefSpy },
+          { provide: AssetService, useValue: assetServiceSpy },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NewPassiveAssetComponent);

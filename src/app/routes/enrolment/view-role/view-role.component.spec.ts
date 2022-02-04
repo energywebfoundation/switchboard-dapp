@@ -12,9 +12,8 @@ describe('ViewRoleComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ViewRoleComponent],
       imports: [MatTableModule],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -18,32 +18,33 @@ describe('EnrolmentFormComponent', () => {
   let component: EnrolmentFormComponent;
   let fixture: ComponentFixture<EnrolmentFormComponent>;
   let hostDebug: DebugElement;
-  let host: HTMLElement;
-  const fieldSelector = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=field-${id}] ${postSelector}`));
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [EnrolmentFormComponent],
-      imports: [
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatCheckboxModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        NoopAnimationsModule
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  const fieldSelector = (id, postSelector = '') =>
+    hostDebug.query(By.css(`[data-qa-id=field-${id}] ${postSelector}`));
+
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [EnrolmentFormComponent],
+        imports: [
+          ReactiveFormsModule,
+          MatFormFieldModule,
+          MatInputModule,
+          MatButtonModule,
+          MatCheckboxModule,
+          MatDatepickerModule,
+          MatNativeDateModule,
+          NoopAnimationsModule,
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EnrolmentFormComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
-    host = hostDebug.nativeElement;
 
     component.namespaceRegistrationRoles = new Set<RegistrationTypes>()
       .add(RegistrationTypes.OnChain)
@@ -51,7 +52,6 @@ describe('EnrolmentFormComponent', () => {
     component.disabledSubmit = false;
     component.showOffChain = true;
   });
-
 
   it('should create', () => {
     component.fieldList = [];
@@ -64,7 +64,7 @@ describe('EnrolmentFormComponent', () => {
       component.fieldList = [];
       fixture.detectChanges();
 
-      const {submit, offChain, onChain, checkboxError} = getSelectors(hostDebug);
+      const { submit, offChain, onChain } = getSelectors(hostDebug);
 
       onChain.nativeElement.click();
       fixture.detectChanges();
@@ -80,74 +80,108 @@ describe('EnrolmentFormComponent', () => {
 
       fixture.detectChanges();
 
-      const {submit} = getSelectors(hostDebug);
+      const { submit } = getSelectors(hostDebug);
       expect(submit.nativeElement.disabled).toBeTruthy();
     });
 
     it('should have enabled submit button when only on-chain is selected', () => {
       component.fieldList = [];
 
-      const {submit, offChain, onChain} = getSelectors(hostDebug);
+      const { submit, offChain, onChain } = getSelectors(hostDebug);
       fixture.detectChanges();
 
       expect(component.enrolmentForm.valid).toBeTruthy();
-      expect(offChain.nativeElement.checked).toBeFalsy('off chain should be deselected');
-      expect(onChain.nativeElement.checked).toBeTruthy('on chain should be selected');
-      expect(submit.nativeElement.disabled).toBeFalsy('submit button should be enabled');
+      expect(offChain.nativeElement.checked).toBeFalsy(
+        'off chain should be deselected'
+      );
+      expect(onChain.nativeElement.checked).toBeTruthy(
+        'on chain should be selected'
+      );
+      expect(submit.nativeElement.disabled).toBeFalsy(
+        'submit button should be enabled'
+      );
     });
 
     it('should disable checkboxes when only onChain is predefined and set to true', () => {
       component.fieldList = [];
-      component.predefinedRegTypes = {onChain: true};
+      component.predefinedRegTypes = { onChain: true };
 
       fixture.detectChanges();
 
-      const {offChain, onChain} = getSelectors(hostDebug);
+      const { offChain, onChain } = getSelectors(hostDebug);
 
-      expect(offChain.nativeElement.checked).toBeFalsy('off chain should not be selected');
-      expect(offChain.nativeElement.disabled).toBeTruthy('off chain should be disabled');
-      expect(onChain.nativeElement.checked).toBeTruthy('on chain should be selected');
-      expect(onChain.nativeElement.disabled).toBeTruthy('on chain should be disabled');
+      expect(offChain.nativeElement.checked).toBeFalsy(
+        'off chain should not be selected'
+      );
+      expect(offChain.nativeElement.disabled).toBeTruthy(
+        'off chain should be disabled'
+      );
+      expect(onChain.nativeElement.checked).toBeTruthy(
+        'on chain should be selected'
+      );
+      expect(onChain.nativeElement.disabled).toBeTruthy(
+        'on chain should be disabled'
+      );
     });
 
     it('should disable checkboxes when only offChain is predefined and set to true', () => {
       component.fieldList = [];
-      component.predefinedRegTypes = {offChain: true};
+      component.predefinedRegTypes = { offChain: true };
 
       fixture.detectChanges();
 
-      const {offChain, onChain} = getSelectors(hostDebug);
+      const { offChain, onChain } = getSelectors(hostDebug);
 
-      expect(offChain.nativeElement.checked).toBeTruthy('off chain should be selected');
-      expect(offChain.nativeElement.disabled).toBeTruthy('off chain should be disabled');
-      expect(onChain.nativeElement.checked).toBeFalsy('on chain should not be selected');
-      expect(onChain.nativeElement.disabled).toBeTruthy('on chain should be disabled');
+      expect(offChain.nativeElement.checked).toBeTruthy(
+        'off chain should be selected'
+      );
+      expect(offChain.nativeElement.disabled).toBeTruthy(
+        'off chain should be disabled'
+      );
+      expect(onChain.nativeElement.checked).toBeFalsy(
+        'on chain should not be selected'
+      );
+      expect(onChain.nativeElement.disabled).toBeTruthy(
+        'on chain should be disabled'
+      );
     });
 
     it('should disable checkboxes when offChain and onChain are predefined and set to true', () => {
       component.fieldList = [];
-      component.predefinedRegTypes = {offChain: true, onChain: true};
+      component.predefinedRegTypes = { offChain: true, onChain: true };
 
       fixture.detectChanges();
 
-      const {offChain, onChain} = getSelectors(hostDebug);
+      const { offChain, onChain } = getSelectors(hostDebug);
 
-      expect(offChain.nativeElement.checked).toBeTruthy('off chain should be selected');
-      expect(offChain.nativeElement.disabled).toBeTruthy('off chain should be disabled');
-      expect(onChain.nativeElement.checked).toBeTruthy('on chain should be selected');
-      expect(onChain.nativeElement.disabled).toBeTruthy('on chain should be disabled');
+      expect(offChain.nativeElement.checked).toBeTruthy(
+        'off chain should be selected'
+      );
+      expect(offChain.nativeElement.disabled).toBeTruthy(
+        'off chain should be disabled'
+      );
+      expect(onChain.nativeElement.checked).toBeTruthy(
+        'on chain should be selected'
+      );
+      expect(onChain.nativeElement.disabled).toBeTruthy(
+        'on chain should be disabled'
+      );
     });
 
     it('should not disable checkboxes when offChain and onChain are predefined and set to false', () => {
       component.fieldList = [];
-      component.predefinedRegTypes = {offChain: false, onChain: false};
+      component.predefinedRegTypes = { offChain: false, onChain: false };
 
       fixture.detectChanges();
 
-      const {offChain, onChain} = getSelectors(hostDebug);
+      const { offChain, onChain } = getSelectors(hostDebug);
 
-      expect(offChain.nativeElement.disabled).toBeFalsy('off chain should not be disabled');
-      expect(onChain.nativeElement.disabled).toBeFalsy('on chain should not be disabled');
+      expect(offChain.nativeElement.disabled).toBeFalsy(
+        'off chain should not be disabled'
+      );
+      expect(onChain.nativeElement.disabled).toBeFalsy(
+        'on chain should not be disabled'
+      );
     });
 
     it('should not find submit button when showSubmit is false', () => {
@@ -155,21 +189,23 @@ describe('EnrolmentFormComponent', () => {
       component.showSubmit = false;
       fixture.detectChanges();
 
-      const {submit} = getSelectors(hostDebug);
+      const { submit } = getSelectors(hostDebug);
       expect(submit).toBeFalsy();
     });
   });
 
-
   describe('boolean field', () => {
-    const checkboxSelector = (id, postSelector = '') => hostDebug.query(By.css(`[data-qa-id=field-${id}] ${postSelector}`));
+    const checkboxSelector = (id, postSelector = '') =>
+      hostDebug.query(By.css(`[data-qa-id=field-${id}] ${postSelector}`));
     const checkboxLabel = (id) => checkboxSelector(id, '[data-qa-id=label]');
     it('should check if optional text is displayed when checkbox is optional', () => {
-      component.fieldList = [{
-        fieldType: 'boolean',
-        label: 'bbb',
-        required: null
-      }];
+      component.fieldList = [
+        {
+          fieldType: 'boolean',
+          label: 'bbb',
+          required: null,
+        },
+      ];
 
       fixture.detectChanges();
 
@@ -178,13 +214,15 @@ describe('EnrolmentFormComponent', () => {
     });
 
     it('should check checkbox when is required and not selected', () => {
-      component.fieldList = [{
-        fieldType: 'boolean',
-        label: 'bbb',
-        required: true
-      }];
+      component.fieldList = [
+        {
+          fieldType: 'boolean',
+          label: 'bbb',
+          required: true,
+        },
+      ];
 
-      const {submit} = getSelectors(hostDebug);
+      const { submit } = getSelectors(hostDebug);
       fixture.detectChanges();
 
       const label = checkboxLabel(0);
@@ -196,21 +234,20 @@ describe('EnrolmentFormComponent', () => {
   describe('date field', async () => {
     let dateInput;
     describe('field required', () => {
-
       beforeEach(() => {
         component.fieldList = [
           {
             fieldType: 'date',
             label: 'date',
-            required: true
-          }
+            required: true,
+          },
         ];
         dateInput = fieldSelector(0, 'input').nativeElement;
       });
 
       it('submit button should be disabled when date input is empty', () => {
         fixture.detectChanges();
-        const {submit} = getSelectors(hostDebug);
+        const { submit } = getSelectors(hostDebug);
 
         expect(submit.nativeElement.disabled).toBeTruthy();
       });
@@ -224,7 +261,6 @@ describe('EnrolmentFormComponent', () => {
 
         expect(dateError.textContent).toContain('This field is required');
       });
-
     });
 
     describe('field not required', () => {
@@ -233,15 +269,15 @@ describe('EnrolmentFormComponent', () => {
           {
             fieldType: 'date',
             label: 'date',
-            required: false
-          }
+            required: false,
+          },
         ];
         dateInput = fieldSelector(0, 'input').nativeElement;
       });
 
       it('should have enabled submit button', () => {
         fixture.detectChanges();
-        const {submit} = getSelectors(hostDebug);
+        const { submit } = getSelectors(hostDebug);
 
         expect(submit.nativeElement.disabled).toBeFalse();
       });
@@ -255,7 +291,7 @@ describe('EnrolmentFormComponent', () => {
             label: 'date',
             maxDate: new Date('2021-06-12T22:00:00.000Z'),
             minDate: new Date('2015-12-31T23:00:00.000Z'),
-          }
+          },
         ];
         dateInput = fieldSelector(0, 'input').nativeElement;
       });
@@ -294,8 +330,8 @@ describe('EnrolmentFormComponent', () => {
           maxLength: 5,
           minLength: 3,
           pattern: null,
-          required: true
-        }
+          required: true,
+        },
       ];
       field = fieldSelector(0, 'input').nativeElement;
     });
@@ -332,19 +368,20 @@ describe('EnrolmentFormComponent', () => {
 
       expect(error.textContent).toContain('Please input at least 3 characters');
     });
-
   });
 
   describe('number field', () => {
     let field;
     beforeEach(() => {
-      component.fieldList = [{
-        fieldType: 'number',
-        label: 'label',
-        maxValue: 10,
-        minValue: 2,
-        required: true
-      }];
+      component.fieldList = [
+        {
+          fieldType: 'number',
+          label: 'label',
+          maxValue: 10,
+          minValue: 2,
+          required: true,
+        },
+      ];
 
       field = fieldSelector(0, 'input').nativeElement;
     });
@@ -384,13 +421,15 @@ describe('EnrolmentFormComponent', () => {
 
   it('should have enabled submit button when registration types are removed and elements from fieldList are filled', () => {
     component.showRegistrationTypes = false;
-    component.fieldList = [{
-      fieldType: 'number',
-      label: 'label',
-      maxValue: 10,
-      minValue: 2,
-      required: true
-    }];
+    component.fieldList = [
+      {
+        fieldType: 'number',
+        label: 'label',
+        maxValue: 10,
+        minValue: 2,
+        required: true,
+      },
+    ];
 
     const field = fieldSelector(0, 'input').nativeElement;
 
@@ -399,10 +438,9 @@ describe('EnrolmentFormComponent', () => {
     dispatchInputEvent(field);
     fixture.detectChanges();
 
-    const {submit} = getSelectors(hostDebug);
+    const { submit } = getSelectors(hostDebug);
     expect(submit.nativeElement.disabled).toBeFalse();
   });
-
 });
 
 const getSelectors = (hostDebug: DebugElement) => {
@@ -410,6 +448,8 @@ const getSelectors = (hostDebug: DebugElement) => {
     submit: hostDebug.query(By.css('[data-qa-id=submit-request]')),
     offChain: hostDebug.query(By.css('[data-qa-id=off-chain] input')),
     onChain: hostDebug.query(By.css('[data-qa-id=on-chain] input')),
-    checkboxError: hostDebug.query(By.css('[data-qa-id=not-enough-checkbox-checked]'))
+    checkboxError: hostDebug.query(
+      By.css('[data-qa-id=not-enough-checkbox-checked]')
+    ),
   };
 };

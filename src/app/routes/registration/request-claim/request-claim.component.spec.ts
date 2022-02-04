@@ -8,9 +8,8 @@ xdescribe('RequestClaimComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [RequestClaimComponent]
-    })
-      .compileComponents();
+      declarations: [RequestClaimComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

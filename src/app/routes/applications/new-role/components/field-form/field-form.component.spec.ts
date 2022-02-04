@@ -14,24 +14,28 @@ describe('FieldFormComponent', () => {
   let component: FieldFormComponent;
   let fixture: ComponentFixture<FieldFormComponent>;
   let hostDebug: DebugElement;
-  const fieldValidationService = jasmine.createSpyObj('FieldFormComponent', ['numberRangeValid', 'autoRangeControls']);
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [FieldFormComponent],
-      imports: [
-        ReactiveFormsModule,
-        MatSelectModule,
-        NoopAnimationsModule,
-        MatInputModule,
-        MatCheckboxModule
-      ],
-      providers: [
-        {provide: FieldValidationService, useValue: fieldValidationService}
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  const fieldValidationService = jasmine.createSpyObj('FieldFormComponent', [
+    'numberRangeValid',
+    'autoRangeControls',
+  ]);
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [FieldFormComponent],
+        imports: [
+          ReactiveFormsModule,
+          MatSelectModule,
+          NoopAnimationsModule,
+          MatInputModule,
+          MatCheckboxModule,
+        ],
+        providers: [
+          { provide: FieldValidationService, useValue: fieldValidationService },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FieldFormComponent);
@@ -47,7 +51,7 @@ describe('FieldFormComponent', () => {
 
   it('should emit added after clicking added when defining label and boolean type', () => {
     fixture.detectChanges();
-    const {fieldType, fieldLabel} = getSelectors(hostDebug);
+    const { fieldType, fieldLabel } = getSelectors(hostDebug);
     const addedSpy = spyOn(component.added, 'emit');
     fieldLabel.value = 'Label';
     dispatchInputEvent(fieldLabel);
@@ -57,21 +61,23 @@ describe('FieldFormComponent', () => {
     getElement(hostDebug)('boolean').nativeElement.click();
     fixture.detectChanges();
 
-    const {addBtn} = getSelectors(hostDebug);
+    const { addBtn } = getSelectors(hostDebug);
 
     expect(addBtn.disabled).toBeFalse();
     addBtn.click();
 
-    expect(addedSpy).toHaveBeenCalledWith(jasmine.objectContaining({
-      fieldType: 'boolean',
-      label: 'Label',
-      required: null
-    }));
+    expect(addedSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        fieldType: 'boolean',
+        label: 'Label',
+        required: null,
+      })
+    );
   });
 
   it('should emit added after defining fields for text type', () => {
     fixture.detectChanges();
-    const {fieldType, fieldLabel} = getSelectors(hostDebug);
+    const { fieldType, fieldLabel } = getSelectors(hostDebug);
     const addedSpy = spyOn(component.added, 'emit');
     fieldLabel.value = 'Text Label';
     dispatchInputEvent(fieldLabel);
@@ -81,7 +87,7 @@ describe('FieldFormComponent', () => {
     getElement(hostDebug)('text').nativeElement.click();
     fixture.detectChanges();
 
-    const {addBtn, minLength, maxLength, pattern} = getSelectors(hostDebug);
+    const { addBtn, minLength, maxLength, pattern } = getSelectors(hostDebug);
 
     minLength.value = 1;
     dispatchInputEvent(minLength);
@@ -95,19 +101,21 @@ describe('FieldFormComponent', () => {
     expect(addBtn.disabled).toBeFalse();
     addBtn.click();
 
-    expect(addedSpy).toHaveBeenCalledWith(jasmine.objectContaining({
-      fieldType: 'text',
-      label: 'Text Label',
-      required: null,
-      minLength: 1,
-      maxLength: 3,
-      pattern: 'aa'
-    }));
+    expect(addedSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        fieldType: 'text',
+        label: 'Text Label',
+        required: null,
+        minLength: 1,
+        maxLength: 3,
+        pattern: 'aa',
+      })
+    );
   });
 
   it('should emit added after defining fields for number type', () => {
     fixture.detectChanges();
-    const {fieldType, fieldLabel} = getSelectors(hostDebug);
+    const { fieldType, fieldLabel } = getSelectors(hostDebug);
     const addedSpy = spyOn(component.added, 'emit');
     fieldLabel.value = 'Number Label';
     dispatchInputEvent(fieldLabel);
@@ -117,7 +125,7 @@ describe('FieldFormComponent', () => {
     getElement(hostDebug)('number').nativeElement.click();
     fixture.detectChanges();
 
-    const {addBtn, maxValue, minValue} = getSelectors(hostDebug);
+    const { addBtn, maxValue, minValue } = getSelectors(hostDebug);
 
     minValue.value = 1;
     dispatchInputEvent(minValue);
@@ -129,18 +137,20 @@ describe('FieldFormComponent', () => {
     expect(addBtn.disabled).toBeFalse();
     addBtn.click();
 
-    expect(addedSpy).toHaveBeenCalledWith(jasmine.objectContaining({
-      fieldType: 'number',
-      label: 'Number Label',
-      required: null,
-      maxValue: 3,
-      minValue: 1,
-    }));
+    expect(addedSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        fieldType: 'number',
+        label: 'Number Label',
+        required: null,
+        maxValue: 3,
+        minValue: 1,
+      })
+    );
   });
 
   it('should emit added after defining fields for date type', () => {
     fixture.detectChanges();
-    const {fieldType, fieldLabel} = getSelectors(hostDebug);
+    const { fieldType, fieldLabel } = getSelectors(hostDebug);
     const addedSpy = spyOn(component.added, 'emit');
     fieldLabel.value = 'Date Label';
     dispatchInputEvent(fieldLabel);
@@ -150,7 +160,7 @@ describe('FieldFormComponent', () => {
     getElement(hostDebug)('date').nativeElement.click();
     fixture.detectChanges();
 
-    const {addBtn, fieldRequired} = getSelectors(hostDebug);
+    const { addBtn, fieldRequired } = getSelectors(hostDebug);
 
     fieldRequired.click();
 
@@ -159,13 +169,15 @@ describe('FieldFormComponent', () => {
     expect(addBtn.disabled).toBeFalse();
     addBtn.click();
 
-    expect(addedSpy).toHaveBeenCalledWith(jasmine.objectContaining({
-      fieldType: 'date',
-      label: 'Date Label',
-      required: true,
-      minDate: null,
-      maxDate: null
-    }));
+    expect(addedSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        fieldType: 'date',
+        label: 'Date Label',
+        required: true,
+        minDate: null,
+        maxDate: null,
+      })
+    );
   });
 
   it('should update data depending on passed values', () => {
@@ -176,14 +188,23 @@ describe('FieldFormComponent', () => {
       required: true,
       minLength: 1,
       maxLength: 3,
-      pattern: 'aa'
+      pattern: 'aa',
     };
     fixture.detectChanges();
 
-    const {fieldLabel, fieldRequired, minLength, maxLength, pattern, updateBtn} = getSelectors(hostDebug);
+    const {
+      fieldLabel,
+      fieldRequired,
+      minLength,
+      maxLength,
+      pattern,
+      updateBtn,
+    } = getSelectors(hostDebug);
 
     expect(component.isText).toBeTrue();
-    expect(component.fieldsForm.get('validation').get('required').value).toBeTrue();
+    expect(
+      component.fieldsForm.get('validation').get('required').value
+    ).toBeTrue();
     expect(fieldLabel.value).toEqual('Text Label');
     expect(minLength.value).toEqual('1');
     expect(maxLength.value).toEqual('3');
@@ -202,7 +223,7 @@ describe('FieldFormComponent', () => {
       required: false,
       minLength: 1,
       maxLength: 3,
-      pattern: 'aa'
+      pattern: 'aa',
     });
   });
 });

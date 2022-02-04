@@ -5,7 +5,7 @@ import { PreconditionCheck } from '../utils/precondition-check';
 @Component({
   selector: 'app-role-precondition-list',
   templateUrl: './role-precondition-list.component.html',
-  styleUrls: ['./role-precondition-list.component.scss']
+  styleUrls: ['./role-precondition-list.component.scss'],
 })
 export class RolePreconditionListComponent {
   @Input() preconditionList: PreconditionCheck;
@@ -17,5 +17,4 @@ export class RolePreconditionListComponent {
   isPending(status: RolePreconditionType): boolean {
     return status === RolePreconditionType.PENDING;
   }
-
 }

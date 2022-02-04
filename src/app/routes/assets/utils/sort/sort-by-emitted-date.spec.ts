@@ -10,11 +10,15 @@ describe('sortByEmittedDate function', () => {
     const shouldBeSecondDate = new Date('2021-05-18T19:44:45.000Z');
     const shouldBeFirstDate = new Date('2021-05-18T19:43:40.000Z');
     const data = [
-      {emittedDate: shouldBeSecondDate},
-      {emittedDate: shouldBeFirstDate},
+      { emittedDate: shouldBeSecondDate },
+      { emittedDate: shouldBeFirstDate },
     ];
 
-    expect(sortByEmittedDate(data)[0]).toEqual(jasmine.objectContaining({emittedDate: shouldBeFirstDate}));
-    expect(sortByEmittedDate(data)[1]).toEqual(jasmine.objectContaining({emittedDate: shouldBeSecondDate}));
+    expect(sortByEmittedDate(data)[0]).toEqual(
+      jasmine.objectContaining({ emittedDate: shouldBeFirstDate })
+    );
+    expect(sortByEmittedDate(data)[1]).toEqual(
+      jasmine.objectContaining({ emittedDate: shouldBeSecondDate })
+    );
   });
 });

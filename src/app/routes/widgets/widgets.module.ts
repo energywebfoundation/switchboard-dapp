@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,7 +14,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDatetimepickerModule, MatNativeDatetimeModule } from '@mat-datetimepicker/core';
+import {
+  MatDatetimepickerModule,
+  MatNativeDatetimeModule,
+} from '@mat-datetimepicker/core';
 
 const routes: Routes = [];
 
@@ -37,12 +40,7 @@ const routes: Routes = [];
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDatetimeModule,
-    MatDatetimepickerModule
+    MatDatetimepickerModule,
   ],
-  entryComponents: [
-    ConfirmationDialogComponent
-  ]
 })
-export class WidgetsModule {
-}
-
+export class WidgetsModule {}

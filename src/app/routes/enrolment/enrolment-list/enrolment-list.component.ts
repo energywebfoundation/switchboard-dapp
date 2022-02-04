@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ClaimData, NamespaceType, RegistrationTypes } from 'iam-client-lib';
 import { take, takeUntil } from 'rxjs/operators';
@@ -8,7 +9,7 @@ import { LoadingService } from '../../../shared/services/loading.service';
 import { NotificationService } from '../../../shared/services/notification.service';
 import {
   ConfirmationDialogComponent,
-  ConfirmationDialogData
+  ConfirmationDialogData,
 } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewRequestsComponent } from '../view-requests/view-requests.component';
 import { MatSort } from '@angular/material/sort';
@@ -53,26 +54,28 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   private _iamSubscriptionId: number;
   private _shadowList = [];
 
-  constructor(private loadingService: LoadingService,
-              private iamService: IamService,
-              private dialog: MatDialog,
-              private toastr: SwitchboardToastrService,
-              private notifService: NotificationService,
-              private store: Store
-  ) {
-  }
+  constructor(
+    private loadingService: LoadingService,
+    private iamService: IamService,
+    private dialog: MatDialog,
+    private toastr: SwitchboardToastrService,
+    private notifService: NotificationService,
+    private store: Store
+  ) {}
 
   isAsset(element) {
-    return element?.subject !== element?.claimType && element?.subject !== element?.requester;
+    return (
+      element?.subject !== element?.claimType &&
+      element?.subject !== element?.requester
+    );
   }
 
   async ngOnInit() {
     // Subscribe to IAM events
-    this._iamSubscriptionId = await this.iamService.messagingService.subscribeTo(
-      {
+    this._iamSubscriptionId =
+      await this.iamService.messagingService.subscribeTo({
         messageHandler: this._handleMessage.bind(this),
-      }
-    );
+      });
 
     // Initialize table
     this.dataSource.sort = this.sort;
@@ -109,15 +112,18 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         'actions',
       ];
     } else {
-      this.store.select(SettingsSelectors.isExperimentalEnabled).subscribe((isExperimental: boolean) => {
-        this.displayedColumns = this.setDisplayedColumns(isExperimental);
-        this.dataSource.data = this.removeEnrollmentToAssets(this._shadowList, isExperimental);
-      });
-
+      this.store
+        .select(SettingsSelectors.isExperimentalEnabled)
+        .subscribe((isExperimental: boolean) => {
+          this.displayedColumns = this.setDisplayedColumns(isExperimental);
+          this.dataSource.data = this.removeEnrollmentToAssets(
+            this._shadowList,
+            isExperimental
+          );
+        });
     }
 
     this.setFilters();
-
   }
 
   async ngOnDestroy(): Promise<void> {
@@ -156,14 +162,16 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
           })
         );
       } else {
-        list = await Promise.all(this._getRejectedOnly(
-          isRejected,
-          isAccepted,
-          await this.iamService.claimsService.getClaimsByRequester({
-            did: this.iamService.signerService.did,
+        list = await Promise.all(
+          this._getRejectedOnly(
+            isRejected,
             isAccepted,
-          })
-        ).map((item) => this.checkForNotSyncedOnChain(item)));
+            await this.iamService.claimsService.getClaimsByRequester({
+              did: this.iamService.signerService.did,
+              isAccepted,
+            })
+          ).map((item) => this.checkForNotSyncedOnChain(item))
+        );
       }
 
       if (list && list.length) {
@@ -183,10 +191,17 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
 
     this._shadowList = list;
-    const isExperimental = await this.store.select(SettingsSelectors.isExperimentalEnabled).pipe(take<boolean>(1)).toPromise();
+    const isExperimental = await this.store
+      .select(SettingsSelectors.isExperimentalEnabled)
+      .pipe(take<boolean>(1))
+      .toPromise();
     this.dataSource.data = this.removeEnrollmentToAssets(
       this.filterByNamespace(
-        this.filterByDid(this._shadowList, this.didFilterControl?.value), this.namespaceFilterControl?.value), isExperimental);
+        this.filterByDid(this._shadowList, this.didFilterControl?.value),
+        this.namespaceFilterControl?.value
+      ),
+      isExperimental
+    );
     this.loadingService.hide();
   }
 
@@ -194,7 +209,11 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     if (item.registrationTypes.includes(RegistrationTypes.OnChain)) {
       return {
         ...item,
-        notSyncedOnChain: !(await this.iamService.claimsService.hasOnChainRole(this.iamService.signerService.did, item.claimType, parseInt(item.claimTypeVersion.toString(), 10)))
+        notSyncedOnChain: !(await this.iamService.claimsService.hasOnChainRole(
+          this.iamService.signerService.did,
+          item.claimType,
+          parseInt(item.claimTypeVersion.toString(), 10)
+        )),
       };
     }
     return item;
@@ -217,7 +236,12 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   isPendingSync(element) {
-    return (!this.viewedByIssuer() && !this.isSynced(element) && this.isOffChain(element)) && !this.isOnlyOnChain(element);
+    return (
+      !this.viewedByIssuer() &&
+      !this.isSynced(element) &&
+      this.isOffChain(element) &&
+      !this.isOnlyOnChain(element)
+    );
   }
 
   viewedByIssuer() {
@@ -225,7 +249,10 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   isOnlyOnChain(element) {
-    return element.registrationTypes.length === 1 && element.registrationTypes.includes(RegistrationTypes.OnChain);
+    return (
+      element.registrationTypes.length === 1 &&
+      element.registrationTypes.includes(RegistrationTypes.OnChain)
+    );
   }
 
   isOffChain(element) {
@@ -244,10 +271,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         disableClose: true,
       })
       .afterClosed()
-      .pipe(
-        truthy(),
-        takeUntil(this._subscription$)
-      )
+      .pipe(truthy(), takeUntil(this._subscription$))
       .subscribe(() => {
         this.getList(this.dynamicRejected, this.dynamicAccepted);
       });
@@ -255,18 +279,21 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   async addToDidDoc(element: any) {
     this.dialog
-      .open<ConfirmationDialogComponent, ConfirmationDialogData>(ConfirmationDialogComponent, {
-        width: '600px',
-        maxHeight: 'auto',
-        data: {
-          header: 'Sync credential to my DID document',
-          svgIcon: 'sync-did-icon',
-          message:
-            'It is currently necessary to sync the credential to your DID document in order to make it available. However, please note that this will make your role data public and permanent.',
-        },
-        maxWidth: '100%',
-        disableClose: true,
-      })
+      .open<ConfirmationDialogComponent, ConfirmationDialogData>(
+        ConfirmationDialogComponent,
+        {
+          width: '600px',
+          maxHeight: 'auto',
+          data: {
+            header: 'Sync credential to my DID document',
+            svgIcon: 'sync-did-icon',
+            message:
+              'It is currently necessary to sync the credential to your DID document in order to make it available. However, please note that this will make your role data public and permanent.',
+          },
+          maxWidth: '100%',
+          disableClose: true,
+        }
+      )
       .afterClosed()
       .pipe(truthy())
       .subscribe(() => this.syncClaimToDidDoc(element));
@@ -274,18 +301,21 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   async addToClaimManager(element: any) {
     this.dialog
-      .open<ConfirmationDialogComponent, ConfirmationDialogData>(ConfirmationDialogComponent, {
-        width: '600px',
-        maxHeight: 'auto',
-        data: {
-          header: 'Sync to Claim Manager',
-          svgIcon: 'add-to-claimmanager-icon',
-          message:
-            'It is necessary to register your role on-chain in order to make it available to verifying smart contracts. However, please note that this will make your role data permanently public.',
-        },
-        maxWidth: '100%',
-        disableClose: true,
-      })
+      .open<ConfirmationDialogComponent, ConfirmationDialogData>(
+        ConfirmationDialogComponent,
+        {
+          width: '600px',
+          maxHeight: 'auto',
+          data: {
+            header: 'Sync to Claim Manager',
+            svgIcon: 'add-to-claimmanager-icon',
+            message:
+              'It is necessary to register your role on-chain in order to make it available to verifying smart contracts. However, please note that this will make your role data permanently public.',
+          },
+          maxWidth: '100%',
+          disableClose: true,
+        }
+      )
       .afterClosed()
       .pipe(truthy())
       .subscribe(() => this.syncToClaimManager(element));
@@ -333,15 +363,22 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   private setFilters() {
     const controls = [
       this.store.select(SettingsSelectors.isExperimentalEnabled),
-      this.namespaceFilterControl ? this.namespaceFilterControl.valueChanges : of(''),
-      this.didFilterControl ? this.didFilterControl.valueChanges : of('')
+      this.namespaceFilterControl
+        ? this.namespaceFilterControl.valueChanges
+        : of(''),
+      this.didFilterControl ? this.didFilterControl.valueChanges : of(''),
     ];
     combineLatest(controls)
       .pipe(takeUntil(this._subscription$))
-      .subscribe(([isExperimental, namespace, did]: [boolean, string, string]) =>
-        this.dataSource.data = this.removeEnrollmentToAssets(
-          this.filterByNamespace(
-            this.filterByDid(this._shadowList, did), namespace), isExperimental)
+      .subscribe(
+        ([isExperimental, namespace, did]: [boolean, string, string]) =>
+          (this.dataSource.data = this.removeEnrollmentToAssets(
+            this.filterByNamespace(
+              this.filterByDid(this._shadowList, did),
+              namespace
+            ),
+            isExperimental
+          ))
       );
   }
 
@@ -372,18 +409,22 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   private async appendDidDocSyncStatus(list: any[]) {
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    const did = this.listType === EnrolmentListType.ASSET ? {did: this.subject} : undefined;
-    const claims: ClaimData[] = (await this.iamService.claimsService.getUserClaims(did))
-      .filter((item: ClaimData) => {
-        if (item && item.claimType) {
-          const arr = item.claimType.split('.');
-          if (arr.length > 1 && arr[1] === NamespaceType.Role) {
-            return true;
-          }
-          return false;
+    const did =
+      this.listType === EnrolmentListType.ASSET
+        ? { did: this.subject }
+        : undefined;
+    const claims: ClaimData[] = (
+      await this.iamService.claimsService.getUserClaims(did)
+    ).filter((item: ClaimData) => {
+      if (item && item.claimType) {
+        const arr = item.claimType.split('.');
+        if (arr.length > 1 && arr[1] === NamespaceType.Role) {
+          return true;
         }
         return false;
-      });
+      }
+      return false;
+    });
 
     if (claims && claims.length) {
       claims.forEach((item: ClaimData) => {
@@ -472,19 +513,22 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     if (!value) {
       return list;
     }
-    return list.filter((item) => item.subject.includes(value) || item.requester.includes(value));
+    return list.filter(
+      (item) => item.subject.includes(value) || item.requester.includes(value)
+    );
   }
 
   private filterByNamespace(list: any[], value: string) {
     if (!value) {
       return list;
     }
-    return list.filter((item) =>
-      item.namespace.includes(value)
-    );
+    return list.filter((item) => item.namespace.includes(value));
   }
 
-  private removeEnrollmentToAssets(list: any[], isExperimentalEnabled: boolean) {
+  private removeEnrollmentToAssets(
+    list: any[],
+    isExperimentalEnabled: boolean
+  ) {
     if (isExperimentalEnabled) {
       return list;
     }

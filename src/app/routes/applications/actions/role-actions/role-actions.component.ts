@@ -8,7 +8,7 @@ import { ActionBaseAbstract } from '../action-base.abstract';
 @Component({
   selector: 'app-role-actions',
   templateUrl: './role-actions.component.html',
-  styleUrls: ['./role-actions.component.scss']
+  styleUrls: ['./role-actions.component.scss'],
 })
 export class RoleActionsComponent extends ActionBaseAbstract implements OnInit {
   @Input() role;
@@ -26,18 +26,21 @@ export class RoleActionsComponent extends ActionBaseAbstract implements OnInit {
 
   edit() {
     this.showEditComponent(NewRoleComponent, {
-        viewType: ViewType.UPDATE,
-        origData: this.role
-      }
-    );
+      viewType: ViewType.UPDATE,
+      origData: this.role,
+    });
   }
 
   private generateEnrolmentUrl(): void {
     if (this.role?.definition?.roleType) {
-      this.enrolmentUrl = this.constructEnrolmentUrl(this.role.definition.roleType, this.role);
+      this.enrolmentUrl = this.constructEnrolmentUrl(
+        this.role.definition.roleType,
+        this.role
+      );
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private constructEnrolmentUrl(listType: string, roleDefinition: any) {
     const name = roleDefinition.name;
     const arr = roleDefinition.namespace.split(`.${NamespaceType.Role}.`);

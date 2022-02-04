@@ -7,8 +7,7 @@ import { OrganizationEffects } from './organization.effects';
 @NgModule({
   imports: [
     StoreModule.forFeature(organization.USER_FEATURE_KEY, organization.reducer),
-    EffectsModule.forFeature([OrganizationEffects])
+    EffectsModule.forFeature([OrganizationEffects]),
   ],
 })
-export class OrganizationStoreSliceModule {
-}
+export class OrganizationStoreSliceModule {}

@@ -1,23 +1,27 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SearchType } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { ListType, LoadingCount } from '../../shared/constants/shared-constants';
+import {
+  ListType,
+  LoadingCount,
+} from '../../shared/constants/shared-constants';
 import { IamService } from '../../shared/services/iam.service';
 import { LoadingService } from '../../shared/services/loading.service';
 import { GovernanceDetailsComponent } from '../applications/governance-view/governance-details/governance-details.component';
 
 const FilterTypes = {
   APP: 'App',
-  ORG: 'Org'
+  ORG: 'Org',
 };
 
 @Component({
   selector: 'app-search-result',
   templateUrl: './search-result.component.html',
-  styleUrls: ['./search-result.component.scss']
+  styleUrls: ['./search-result.component.scss'],
 })
 export class SearchResultComponent implements OnInit {
   @ViewChild('detailView') detailView: GovernanceDetailsComponent;
@@ -34,7 +38,7 @@ export class SearchResultComponent implements OnInit {
 
   isAutolistLoading = {
     requests: [],
-    value: false
+    value: false,
   };
 
   requestedClaims: any[];
@@ -44,8 +48,7 @@ export class SearchResultComponent implements OnInit {
     private loadingService: LoadingService,
     private fb: FormBuilder,
     private iamService: IamService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this._initList();
@@ -57,7 +60,7 @@ export class SearchResultComponent implements OnInit {
     // Initialize Search Field and Options
     this.searchForm = this.fb.group({
       searchTxt: new FormControl(''),
-      filterType: new FormControl([FilterTypes.ORG, FilterTypes.APP])
+      filterType: new FormControl([FilterTypes.ORG, FilterTypes.APP]),
     });
     this.filteredOptions = new BehaviorSubject([]);
     this.searchForm.valueChanges
@@ -109,18 +112,17 @@ export class SearchResultComponent implements OnInit {
   }
 
   private async _initView(namespace: string) {
-    const [
-      foundNamespace
-    ] = await this.iamService.domainsService.getENSTypesBySearchPhrase(
-      namespace,
-      [SearchType.App, SearchType.Org]
-    );
+    const [foundNamespace] =
+      await this.iamService.domainsService.getENSTypesBySearchPhrase(
+        namespace,
+        [SearchType.App, SearchType.Org]
+      );
     if (foundNamespace) {
       this.data = {
         type: (foundNamespace.definition as { orgName?: string }).orgName
           ? ListType.ORG
           : ListType.APP,
-        definition: foundNamespace
+        definition: foundNamespace,
       };
     }
   }
@@ -130,7 +132,10 @@ export class SearchResultComponent implements OnInit {
     listType: any
   ): Promise<any[]> {
     let retVal = [];
-    this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.UP);
+    this.loadingService.updateLocalLoadingFlag(
+      this.isAutolistLoading,
+      LoadingCount.UP
+    );
 
     try {
       if (keyword) {
@@ -143,16 +148,20 @@ export class SearchResultComponent implements OnInit {
 
         if (word.length > 2) {
           word = word.toLowerCase();
-          retVal = await this.iamService.domainsService.getENSTypesBySearchPhrase(
-            word,
-            listType
-          );
+          retVal =
+            await this.iamService.domainsService.getENSTypesBySearchPhrase(
+              word,
+              listType
+            );
         }
       }
     } catch (e) {
       console.error(e);
     } finally {
-      this.loadingService.updateLocalLoadingFlag(this.isAutolistLoading, LoadingCount.DOWN);
+      this.loadingService.updateLocalLoadingFlag(
+        this.isAutolistLoading,
+        LoadingCount.DOWN
+      );
     }
 
     return retVal;
@@ -165,7 +174,7 @@ export class SearchResultComponent implements OnInit {
           data.definition && data.definition.orgName
             ? ListType.ORG
             : ListType.APP,
-        definition: data
+        definition: data,
       };
       if (this.detailView) {
         await this.detailView.setData(this.data);
@@ -191,6 +200,7 @@ export class SearchResultComponent implements OnInit {
     return selected && selected.name ? selected.name : '';
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   search(namespace?: string) {
     this.opened = false;
     this._updateData(undefined);
@@ -201,12 +211,14 @@ export class SearchResultComponent implements OnInit {
     this.search(event.option.value.namespace);
   }
 
+  // eslint-disable-next-line
   updateSearchTxtFieldValue(event: any) {
     this.opened = false;
     if (typeof this.searchForm.value.searchTxt === 'string') {
       this.searchTxtFieldValue = this.searchForm.value.searchTxt;
     } else {
-      this.searchTxtFieldValue = this.searchForm.value.searchTxt.option.value.name;
+      this.searchTxtFieldValue =
+        this.searchForm.value.searchTxt.option.value.name;
     }
     this._updateData(undefined);
   }

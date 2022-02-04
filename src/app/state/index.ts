@@ -43,26 +43,20 @@ export {
   AssetDetailsSelectors,
   OwnedAssetsActions,
   OwnedAssetsSelectors,
-
   AuthActions,
   AuthSelectors,
-
   StakeActions,
   StakeSelectors,
-
   UserClaimActions,
   UserClaimSelectors,
-
   OrganizationActions,
   OrganizationSelectors,
   ApplicationActions,
   ApplicationSelectors,
   RoleActions,
   RoleSelectors,
-
   LayoutActions,
   LayoutSelectors,
-
   SettingsActions,
-  SettingsSelectors
+  SettingsSelectors,
 };

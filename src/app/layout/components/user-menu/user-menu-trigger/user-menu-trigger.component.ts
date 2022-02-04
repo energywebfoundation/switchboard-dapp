@@ -4,9 +4,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'app-user-menu-trigger',
   templateUrl: './user-menu-trigger.component.html',
   styleUrls: ['./user-menu-trigger.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserMenuTriggerComponent {
   @Input() userName: string;
-
 }

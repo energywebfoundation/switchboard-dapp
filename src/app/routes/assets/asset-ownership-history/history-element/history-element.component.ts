@@ -4,9 +4,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'app-history-element',
   templateUrl: './history-element.component.html',
   styleUrls: ['./history-element.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HistoryElementComponent {
-  @Input() element: { header: string, did: string };
-
+  @Input() element: { header: string; did: string };
 }

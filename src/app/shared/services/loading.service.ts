@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import { LoadingCount } from '../constants/shared-constants';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoadingService {
   private _isLoading: BehaviorSubject<number>;
@@ -50,7 +51,10 @@ export class LoadingService {
     this._isLoading.next(this._counter);
   }
 
-  updateLocalLoadingFlag(loadingObj: { requests: any[], value: boolean }, method: LoadingCount) {
+  updateLocalLoadingFlag(
+    loadingObj: { requests: any[]; value: boolean },
+    method: LoadingCount
+  ) {
     if (loadingObj && loadingObj.requests) {
       if (method === LoadingCount.UP) {
         loadingObj.requests.push(true);

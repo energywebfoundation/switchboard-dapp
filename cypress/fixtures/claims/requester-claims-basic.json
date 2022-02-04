@@ -4,9 +4,7 @@
     "requester": "did:ethr:0x405773818F6A1E2486f49CcdA2d4472C86dDB62d",
     "subject": "did:ethr:0x405773818F6A1E2486f49CcdA2d4472C86dDB62d",
     "claimType": "role.roles.test.iam.ewc",
-    "registrationTypes": [
-      "RegistrationTypes::OffChain"
-    ],
+    "registrationTypes": ["RegistrationTypes::OffChain"],
     "claimTypeVersion": "2.0.0",
     "token": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJkaWQiOiJkaWQ6ZXRocjoweEEwMjg3MjBCYzBjYzIyZDI5NkRDRDNhMjZFN0U4QUFlNzNjOUI2RjMiLCJzaWduZXIiOiJkaWQ6ZXRocjoweEEwMjg3MjBCYzBjYzIyZDI5NkRDRDNhMjZFN0U4QUFlNzNjOUI2RjMiLCJjbGFpbURhdGEiOnsiZmllbGRzIjpbeyJrZXkiOiJ0ZXN0IiwidmFsdWUiOnRydWV9XSwiY2xhaW1UeXBlIjoicm9sZS5yb2xlcy5kYXdpZGdpbC5pYW0uZXdjIiwiY2xhaW1UeXBlVmVyc2lvbiI6IjIuMC4wIn0sImlzcyI6ImRpZDpldGhyOjB4QTAyODcyMEJjMGNjMjJkMjk2RENEM2EyNkU3RThBQWU3M2M5QjZGMyIsInN1YiI6ImRpZDpldGhyOjB4QTAyODcyMEJjMGNjMjJkMjk2RENEM2EyNkU3RThBQWU3M2M5QjZGMyIsImlhdCI6MTYyMjU3OTE4ODUwNn0.MHhkYjEyNjEzNTMyMjg1Mjc1ZjRjMDcwYWZmOWU1NjRiMjg3MTEwNGE4MDgwNmM1ZWFhOTVmYWJjN2FhYTg1ODdjM2IxMzEwZDQxMGVkZTEyMmIxN2IwMzZlODlmZDZjMDU3ZGUzZmUyMzQ2NTc4ZmZmY2FkZTZiYjhiYmRkNWM5MzFj",
     "subjectAgreement": null,
@@ -23,9 +21,7 @@
     "requester": "did:ethr:0x405773818F6A1E2486f49CcdA2d4472C86dDB62d",
     "subject": "did:ethr:0x405773818F6A1E2486f49CcdA2d4472C86dDB62d",
     "claimType": "testingrole.roles.test.iam.ewc",
-    "registrationTypes": [
-      "RegistrationTypes::OffChain"
-    ],
+    "registrationTypes": ["RegistrationTypes::OffChain"],
     "claimTypeVersion": "5",
     "token": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJkaWQiOiJkaWQ6ZXRocjoweEEwMjg3MjBCYzBjYzIyZDI5NkRDRDNhMjZFN0U4QUFlNzNjOUI2RjMiLCJzaWduZXIiOiJkaWQ6ZXRocjoweEEwMjg3MjBCYzBjYzIyZDI5NkRDRDNhMjZFN0U4QUFlNzNjOUI2RjMiLCJjbGFpbURhdGEiOnsiZmllbGRzIjpbXSwiY2xhaW1UeXBlIjoidGVzdGluZ3JvbGUucm9sZXMuZGF3aWRnaWwuaWFtLmV3YyIsImNsYWltVHlwZVZlcnNpb24iOjV9LCJpc3MiOiJkaWQ6ZXRocjoweEEwMjg3MjBCYzBjYzIyZDI5NkRDRDNhMjZFN0U4QUFlNzNjOUI2RjMiLCJzdWIiOiJkaWQ6ZXRocjoweEEwMjg3MjBCYzBjYzIyZDI5NkRDRDNhMjZFN0U4QUFlNzNjOUI2RjMiLCJpYXQiOjE2MzEyNzE5MDg3ODN9.MHhhZTEyNDNjZTJjMmI0MzYwMmExZmQ3ZTgyYWNlY2NjZjViYjQ0YjVmMDlkYmMzZDBmNDlkMzhiYTlmMGNlMThjNjI2ZTkyMmYzODU2YjMxMTllNTA3MzgxNTk4NjVhNzIxZjllOTA3MTczYTFmZDdkYWVkN2EwMTAwZGI0ZTI3MTFi",
     "subjectAgreement": null,
@@ -42,9 +38,7 @@
     "requester": "did:ethr:0x405773818F6A1E2486f49CcdA2d4472C86dDB62d",
     "subject": "did:ethr:0x48F564bE53b6e408Df9c6391532a2Eb167c9497A",
     "claimType": "role.roles.test.iam.ewc",
-    "registrationTypes": [
-      "RegistrationTypes::OffChain"
-    ],
+    "registrationTypes": ["RegistrationTypes::OffChain"],
     "claimTypeVersion": "1.0.0",
     "token": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJkaWQiOiJkaWQ6ZXRocjoweDQ4RjU2NGJFNTNiNmU0MDhEZjljNjM5MTUzMmEyRWIxNjdjOTQ5N0EiLCJzaWduZXIiOiJkaWQ6ZXRocjoweEEwMjg3MjBCYzBjYzIyZDI5NkRDRDNhMjZFN0U4QUFlNzNjOUI2RjMiLCJjbGFpbURhdGEiOnsiZmllbGRzIjpbXSwiY2xhaW1UeXBlIjoicm9sZS5yb2xlcy5kYXdpZGdpbC5pYW0uZXdjIiwiY2xhaW1UeXBlVmVyc2lvbiI6IjEuMC4wIn0sImlzcyI6ImRpZDpldGhyOjB4QTAyODcyMEJjMGNjMjJkMjk2RENEM2EyNkU3RThBQWU3M2M5QjZGMyIsInN1YiI6ImRpZDpldGhyOjB4NDhGNTY0YkU1M2I2ZTQwOERmOWM2MzkxNTMyYTJFYjE2N2M5NDk3QSIsImlhdCI6MTYyMjE4NDI3MDM0M30.MHg4YWU4Nzk4MTczMTQwYjI4NDZiYTE4ODQzMzc5N2I3MjkwMWRiMTA4MzEyMzNjMzUzNDdmYWZiMDAzNzFmYzk3MjcwMGY2MmUwN2Y5ZjAyODEzOGM0YTA4NGI2MDBlN2Q1YjVhOTljNTkxNTE2MjM1Yjg2YjA1ODdkYjQxZGQzMTFj",
     "subjectAgreement": null,

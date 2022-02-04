@@ -12,17 +12,13 @@
 
 @import '~simple-line-icons/css/simple-line-icons.css';
 
-@import '~loaders.css/loaders.css';
-
 @import '~ngx-toastr/toastr';
-
-@import '~fullcalendar/dist/fullcalendar.min.css';
 
 @import '~codemirror/lib/codemirror.css';
 
 //== Bootstrap
-@import "./app/shared/styles/bootstrap.scss";
+@import './app/shared/styles/bootstrap.scss';
 //== Application
-@import "./app/shared/styles/app.scss";
+@import './app/shared/styles/app.scss';
 
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';

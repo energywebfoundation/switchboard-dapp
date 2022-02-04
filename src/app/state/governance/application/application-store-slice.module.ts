@@ -7,8 +7,7 @@ import { ApplicationEffects } from './application.effects';
 @NgModule({
   imports: [
     StoreModule.forFeature(application.USER_FEATURE_KEY, application.reducer),
-    EffectsModule.forFeature([ApplicationEffects])
+    EffectsModule.forFeature([ApplicationEffects]),
   ],
 })
-export class ApplicationStoreSliceModule {
-}
+export class ApplicationStoreSliceModule {}

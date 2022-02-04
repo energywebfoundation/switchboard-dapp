@@ -1,33 +1,32 @@
 <mat-form-field class="md-search" appearance="outline">
-  <input type="text"
-         [placeholder]="placeholderSearch"
-         matInput
-         [formControl]="searchText"
-         [matAutocomplete]="auto"
-         (input)="updateSearchTxtFieldValue($event)">
+  <input
+    type="text"
+    data-qa-id="smart-search-input"
+    [placeholder]="placeholderSearch"
+    matInput
+    [formControl]="searchText"
+    [matAutocomplete]="auto" />
 
-  <mat-error *ngIf="controlHasError('required')">Role Name is <strong>required</strong></mat-error>
-  <mat-error *ngIf="controlHasError('roleNotFound')">Role does not exist</mat-error>
-  <mat-error *ngIf="controlHasError('roleExist')">Role has already been added</mat-error>
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
     <mat-option *ngFor="let item of filteredOptions | async" [value]="item" class="d-flex align-items-start">
-      <div class=" d-flex flex-column">
-        <span>{{ item?.namespace }}</span>
+      <div class="d-flex flex-column">
+        <span [attr.data-qa-id]="item">{{ item }}</span>
       </div>
     </mat-option>
   </mat-autocomplete>
-  <div matSuffix class="d-flex" *ngIf="searchTxtFieldValue?.trim()?.length > 2">
-    <ng-container *ngIf="!isAutolistLoading?.value">
-      <button mat-icon-button (click)="search()" class="searchButton">
+  <div matSuffix class="d-flex" *ngIf="showButtons()">
+    <ng-container *ngIf="!isLoadingList">
+      <button mat-icon-button (click)="search()" class="search-button" data-qa-id="search">
         <mat-icon>search</mat-icon>
       </button>
-      <button *ngIf="searchType === 'restrictions'" [disabled]="!searchText.value.namespace" mat-icon-button (click)="addRole()">
+      <button *ngIf="isAdding" [disabled]="!searchText.value" mat-icon-button data-qa-id="add" (click)="addRole()">
         <mat-icon>add</mat-icon>
       </button>
-      <button *ngIf="searchType !== 'restrictions'" mat-icon-button (click)="clearSearchTxt()">
+      <button *ngIf="isDefault" mat-icon-button (click)="clear()" data-qa-id="clear">
         <mat-icon>close</mat-icon>
       </button>
     </ng-container>
-    <mat-spinner *ngIf="isAutolistLoading?.value" diameter="21" class="color-white"></mat-spinner>
+    <mat-spinner *ngIf="isLoadingList" diameter="21" class="color-white"></mat-spinner>
   </div>
+  <ng-content></ng-content>
 </mat-form-field>

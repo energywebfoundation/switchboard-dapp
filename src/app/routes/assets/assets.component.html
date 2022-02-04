@@ -5,8 +5,11 @@
     <div class="row mx-0 mt-1">
       <div class="col-xl-12">
         <app-table-heading heading="My Assets">
-          <button mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0" data-qa-id="register-asset"
-                  (click)="registerAsset()">
+          <button
+            mat-raised-button
+            class="btn btn-primary btn-small mb-3 mb-lg-0"
+            data-qa-id="register-asset"
+            (click)="registerAsset()">
             Register Asset
           </button>
         </app-table-heading>
@@ -20,8 +23,10 @@
     <div class="row mx-0 mt-1">
       <div class="col-xl-12">
         <app-table-heading heading="Assets Offered To Me"></app-table-heading>
-        <app-asset-list #listOfferedAssets [listType]="AssetListType.OFFERED_ASSETS"
-                        (selectTab)="setSelectedTab($event)"></app-asset-list>
+        <app-asset-list
+          #listOfferedAssets
+          [listType]="AssetListType.OFFERED_ASSETS"
+          (selectTab)="setSelectedTab($event)"></app-asset-list>
       </div>
     </div>
   </mat-tab>

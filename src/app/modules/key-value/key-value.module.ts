@@ -5,21 +5,13 @@ import { KeyValueFormComponent } from './key-value-form/key-value-form.component
 import { KeyValueListComponent } from './key-value-list/key-value-list.component';
 import { SharedModule } from '../../shared/shared.module';
 
-
 @NgModule({
   declarations: [
     KeyValueComponent,
     KeyValueFormComponent,
-    KeyValueListComponent
+    KeyValueListComponent,
   ],
-  imports: [
-    CommonModule,
-    SharedModule
-  ],
-  exports: [
-    KeyValueComponent,
-    KeyValueListComponent
-  ]
+  imports: [CommonModule, SharedModule],
+  exports: [KeyValueComponent, KeyValueListComponent],
 })
-export class KeyValueModule {
-}
+export class KeyValueModule {}

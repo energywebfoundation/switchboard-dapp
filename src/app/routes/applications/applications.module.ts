@@ -34,10 +34,15 @@ import { ActionsMenuComponent } from './actions/actions-menu/actions-menu.compon
 import { FilterComponent } from './filter/filter.component';
 import { CreateFieldsModule } from './new-role/components/create-fields/create-fields.module';
 import { DidBookModule } from '../../modules/did-book/did-book.module';
+import { RoleNameComponent } from './new-role/components/role-name/role-name.component';
+import { IssuerDidListComponent } from './new-role/components/issuer-did-list/issuer-did-list.component';
+import { IssuerDidComponent } from './new-role/components/issuer-did/issuer-did.component';
+import { SearchIssuerRoleComponent } from './new-role/components/search-issuer-role/search-issuer-role.component';
+import { ApplicationDetailsComponent } from './new-application/application-details/application-details.component';
+import { DefaultValuePipe } from './pipes/default-value.pipe';
+import { ApplicationCreationFormComponent } from './new-application/application-creation-form/application-creation-form.component';
 
-const routes: Routes = [
-  {path: '', component: ApplicationsComponent}
-];
+const routes: Routes = [{ path: '', component: ApplicationsComponent }];
 
 @NgModule({
   declarations: [
@@ -59,6 +64,13 @@ const routes: Routes = [
     FilterComponent,
     ActionsMenuComponent,
     TransactionsCompleteComponent,
+    RoleNameComponent,
+    IssuerDidListComponent,
+    IssuerDidComponent,
+    SearchIssuerRoleComponent,
+    ApplicationDetailsComponent,
+    DefaultValuePipe,
+    ApplicationCreationFormComponent,
   ],
   imports: [
     CommonModule,
@@ -79,15 +91,7 @@ const routes: Routes = [
     MatExpansionModule,
     NgxEditorModule,
     CreateFieldsModule,
-    DidBookModule
+    DidBookModule,
   ],
-  entryComponents: [
-    NewOrganizationComponent,
-    NewApplicationComponent,
-    NewRoleComponent,
-    TransferOwnershipComponent,
-    RemoveOrgAppComponent
-  ]
 })
-export class ApplicationsModule {
-}
+export class ApplicationsModule {}

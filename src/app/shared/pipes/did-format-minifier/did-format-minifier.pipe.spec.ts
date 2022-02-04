@@ -11,6 +11,8 @@ describe('DidFormatMinifierPipe', () => {
   });
 
   it('should minify passed did', () => {
-    expect(pipe.transform('did:ethr:12345678901234567890')).toEqual('did:ethr:123456...67890');
+    expect(pipe.transform('did:ethr:12345678901234567890')).toEqual(
+      'did:ethr:123456...67890'
+    );
   });
 });

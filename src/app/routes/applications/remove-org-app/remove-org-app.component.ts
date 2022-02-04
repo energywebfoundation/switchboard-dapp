@@ -11,13 +11,14 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 @Component({
   selector: 'app-remove-org-app',
   templateUrl: './remove-org-app.component.html',
-  styleUrls: ['./remove-org-app.component.scss']
+  styleUrls: ['./remove-org-app.component.scss'],
 })
 export class RemoveOrgAppComponent implements OnInit {
   private stepper: MatStepper;
 
   @ViewChild('stepper') set content(content: MatStepper) {
-    if (content) { // initially setter gets called with undefined
+    if (content) {
+      // initially setter gets called with undefined
       this.stepper = content;
     }
   }
@@ -27,6 +28,7 @@ export class RemoveOrgAppComponent implements OnInit {
 
   listType: string;
   namespace: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   steps: any[];
 
   private _currentIdx = 0;
@@ -37,7 +39,9 @@ export class RemoveOrgAppComponent implements OnInit {
     private loadingService: LoadingService,
     private iamRequestService: IamRequestService,
     public dialogRef: MatDialogRef<RemoveOrgAppComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     this.listType = data.listType;
     this.namespace = data.namespace;
     this.steps = data.steps;
@@ -62,7 +66,10 @@ export class RemoveOrgAppComponent implements OnInit {
         // Process the next step
         try {
           await this.iamRequestService.enqueue(step.next);
-          this.toastr.info(step.info, `Transaction Success (${index + 1}/${this.steps.length})`);
+          this.toastr.info(
+            step.info,
+            `Transaction Success (${index + 1}/${this.steps.length})`
+          );
 
           // Move to Complete Step
           this.stepper.selected.completed = true;
@@ -70,7 +77,10 @@ export class RemoveOrgAppComponent implements OnInit {
         } catch (e) {
           if (!(e instanceof ExpiredRequestError)) {
             console.error(this.TOASTR_HEADER, e);
-            this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+            this.toastr.error(
+              e.message || 'Please contact system administrator.',
+              'System Error'
+            );
           }
           break;
         }

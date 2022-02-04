@@ -12,7 +12,7 @@ export interface RequiredFields {
 @Component({
   selector: 'app-required-fields',
   templateUrl: './required-fields.component.html',
-  styleUrls: ['./required-fields.component.scss']
+  styleUrls: ['./required-fields.component.scss'],
 })
 export class RequiredFieldsComponent implements RequiredFields {
   @Input() set fieldList(list) {
@@ -25,7 +25,7 @@ export class RequiredFieldsComponent implements RequiredFields {
   }
 
   form = new FormGroup({
-    [FIELDS_CONTROL]: new FormArray([])
+    [FIELDS_CONTROL]: new FormArray([]),
   });
   private fields;
 
@@ -43,14 +43,21 @@ export class RequiredFieldsComponent implements RequiredFields {
 
   generateForm() {
     this.form.removeControl(FIELDS_CONTROL);
-    this.form.registerControl(FIELDS_CONTROL, new FormArray(this.createControls(this.fields)));
+    this.form.registerControl(
+      FIELDS_CONTROL,
+      new FormArray(this.createControls(this.fields))
+    );
   }
 
   getControl(id: number): FormControl {
-    return (this.form?.get(FIELDS_CONTROL) as FormArray)?.controls[id] as FormControl;
+    return (this.form?.get(FIELDS_CONTROL) as FormArray)?.controls[
+      id
+    ] as FormControl;
   }
 
-  private createControls(params: { name: string, pattern: string, description: string }[]) {
+  private createControls(
+    params: { name: string; pattern: string; description: string }[]
+  ) {
     return params.map((field) => {
       const control = new FormControl();
       control.setValidators(this.buildValidators(field));
@@ -68,10 +75,13 @@ export class RequiredFieldsComponent implements RequiredFields {
     return validations;
   }
 
-  private createRecordParams(values: string[], list: any[]): Record<string, string> {
+  private createRecordParams(
+    values: string[],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    list: any[]
+  ): Record<string, string> {
     return list.reduce((prev, next, index) => {
-      return {...prev, [next.name]: values[index]};
+      return { ...prev, [next.name]: values[index] };
     }, {});
   }
-
 }

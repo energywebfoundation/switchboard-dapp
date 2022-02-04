@@ -10,9 +10,8 @@ describe('ViewOrganizationComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ViewOrganizationComponent],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {

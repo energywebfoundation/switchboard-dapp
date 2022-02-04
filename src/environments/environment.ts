@@ -13,6 +13,7 @@ export const environment = {
   chainId: 73799,
   cacheServerUrl: 'https://identitycache-dev.energyweb.org/v1',
   natsServerUrl: 'https://identityevents-dev.energyweb.org/',
+  ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',
   kmsServerUrl: undefined,
   claimManagerAddress: '0xC3dD7ED75779b33F5Cfb709E0aB02b71fbFA3210',
   showAzureLoginOption: true,
@@ -24,8 +25,8 @@ export const environment = {
   currencyName: 'Volta Token',
   currencySymbol: 'VT',
   blockExplorerUrl: 'https://volta-explorer.energyweb.org',
-
-  ...constants
+  SENTRY_ENVIRONMENT: 'localhost',
+  ...constants,
 };
 
 /*
@@ -35,4 +36,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

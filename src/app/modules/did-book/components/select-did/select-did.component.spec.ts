@@ -19,27 +19,32 @@ describe('SelectDidComponent', () => {
   let component: SelectDidComponent;
   let fixture: ComponentFixture<SelectDidComponent>;
   let hostDebug: DebugElement;
-  const didBookServiceSpy = jasmine.createSpyObj(DidBookService, ['add', 'delete', 'getList$']);
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [SelectDidComponent],
-      imports: [
-        ReactiveFormsModule,
-        MatAutocompleteModule,
-        MatFormFieldModule,
-        MatButtonModule,
-        MatSelectModule,
-        MatInputModule,
-        NoopAnimationsModule
-      ],
-      providers: [
-        {provide: DidBookService, useValue: didBookServiceSpy},
-        {provide: MatDialog, useValue: dialogSpy}
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  const didBookServiceSpy = jasmine.createSpyObj(DidBookService, [
+    'add',
+    'delete',
+    'getList$',
+  ]);
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [SelectDidComponent],
+        imports: [
+          ReactiveFormsModule,
+          MatAutocompleteModule,
+          MatFormFieldModule,
+          MatButtonModule,
+          MatSelectModule,
+          MatInputModule,
+          NoopAnimationsModule,
+        ],
+        providers: [
+          { provide: DidBookService, useValue: didBookServiceSpy },
+          { provide: MatDialog, useValue: dialogSpy },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SelectDidComponent);
@@ -54,7 +59,12 @@ describe('SelectDidComponent', () => {
   });
 
   it('should get all elements from book', (done) => {
-    didBookServiceSpy.getList$.and.returnValue(of([{label: '', did: ''}, {label: '', did: ''}]));
+    didBookServiceSpy.getList$.and.returnValue(
+      of([
+        { label: '', did: '' },
+        { label: '', did: '' },
+      ])
+    );
     fixture.detectChanges();
     component.didBook$.subscribe((list) => {
       expect(list.length).toEqual(2);
@@ -63,14 +73,19 @@ describe('SelectDidComponent', () => {
   });
 
   it('should filter out from the list by label', (done) => {
-    didBookServiceSpy.getList$.and.returnValue(of([{label: 'label', did: ''}, {label: 'example', did: ''}]));
+    didBookServiceSpy.getList$.and.returnValue(
+      of([
+        { label: 'label', did: '' },
+        { label: 'example', did: '' },
+      ])
+    );
     fixture.detectChanges();
 
     const filter = getElement(hostDebug)('owner').nativeElement;
 
     component.didBook$.pipe(skip(1)).subscribe((list) => {
       expect(list.length).toEqual(1);
-      expect(list[0]).toEqual(jasmine.objectContaining({label: 'example'}));
+      expect(list[0]).toEqual(jasmine.objectContaining({ label: 'example' }));
       done();
     });
 
@@ -80,17 +95,22 @@ describe('SelectDidComponent', () => {
   });
 
   it('should filter out from the list by did', (done) => {
-    didBookServiceSpy.getList$.and.returnValue(of([{label: 'label', did: 'firstdid'}, {
-      label: 'example',
-      did: 'seconddid'
-    }]));
+    didBookServiceSpy.getList$.and.returnValue(
+      of([
+        { label: 'label', did: 'firstdid' },
+        {
+          label: 'example',
+          did: 'seconddid',
+        },
+      ])
+    );
     fixture.detectChanges();
 
     const filter = getElement(hostDebug)('owner').nativeElement;
 
     component.didBook$.pipe(skip(1)).subscribe((list) => {
       expect(list.length).toEqual(1);
-      expect(list[0]).toEqual({label: 'label', did: 'firstdid'});
+      expect(list[0]).toEqual({ label: 'label', did: 'firstdid' });
       done();
     });
 
@@ -100,7 +120,9 @@ describe('SelectDidComponent', () => {
   });
 
   it('should filter out all elements, the isNotKnownDid property should be truthy', (done) => {
-    didBookServiceSpy.getList$.and.returnValue(of([{label: 'label', did: ''}]));
+    didBookServiceSpy.getList$.and.returnValue(
+      of([{ label: 'label', did: '' }])
+    );
     fixture.detectChanges();
 
     const filter = getElement(hostDebug)('owner').nativeElement;

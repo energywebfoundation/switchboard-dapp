@@ -1,4 +1,4 @@
-<ng-container *ngIf="(userName$ | async) as userName">
+<ng-container *ngIf="userName$ | async as userName">
   <!-- START Top Navbar-->
   <nav class="navbar topnavbar" role="navigation">
     <!-- START navbar header-->
@@ -10,21 +10,23 @@
     </div>
     <ul class="menu-top navbar-nav mx-auto flex-row align-items-center" *ngIf="isNavMenuVisible">
       <ng-container *ngIf="isExperimentalEnabled$ | async">
-        <li class="nav-item position-relative" [ngClass]="{ 'active': currentNav.includes('assets') }"
-            data-qa-id="header-assets">
+        <li
+          class="nav-item position-relative"
+          [ngClass]="{ active: currentNav.includes('assets') }"
+          data-qa-id="header-assets">
           <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/assets">
             <div class="icon-footer-center">
-              <img src="../assets/img/icons/assets-icon.png" width="auto" height="21" alt="assets image">
+              <img src="../assets/img/icons/assets-icon.png" width="auto" height="21" alt="assets image" />
             </div>
             <h6 class="mb-0">Assets</h6>
           </a>
-          <mat-icon class="experimental-warning" matTooltip="This feature is experimental">report_problem</mat-icon>
+          <mat-icon class="experimental-warning" matTooltip="This feature is experimental"> report_problem</mat-icon>
         </li>
       </ng-container>
-      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('governance') }" data-qa-id="header-governance">
+      <li class="nav-item" [ngClass]="{ active: currentNav.includes('governance') }" data-qa-id="header-governance">
         <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/governance">
           <div class="icon-footer-center">
-            <img src="../assets/img/icons/governance-icon.png" width="auto" height="21" alt="Governance image">
+            <img src="../assets/img/icons/governance-icon.png" width="auto" height="21" alt="Governance image" />
           </div>
           <h6 class="mb-0">Governance</h6>
         </a>
@@ -37,30 +39,33 @@
               <h6 class="mb-0">Services</h6>
           </a>
       </li> -->
-      <li class="nav-item" [ngClass]="{ 'active': currentNav.includes('enrolment') }" data-qa-id="header-enrolment">
+      <li class="nav-item" [ngClass]="{ active: currentNav.includes('enrolment') }" data-qa-id="header-enrolment">
         <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/enrolment">
           <div class="icon-footer-center">
-            <img src="../assets/img/icons/enrollment-icon.png" width="auto" height="21" alt="Enrolments image">
+            <img src="../assets/img/icons/enrollment-icon.png" width="auto" height="21" alt="Enrolments image" />
           </div>
           <h6 class="mb-0">Enrolments</h6>
         </a>
       </li>
-      <li class="nav-item coming-soon" *appToggleApplication
-          [ngClass]="{ 'active': currentNav.includes('applications') }"
-          data-qa-id="header-applications">
+      <li
+        class="nav-item coming-soon"
+        *appToggleApplication
+        [ngClass]="{ active: currentNav.includes('applications') }"
+        data-qa-id="header-applications">
         <a class="nav-link d-lg-block d-xl-block coming-soon link-footer">
           <div class="icon-footer-center">
-            <img src="../assets/img/icons/applications-icon.png" width="auto" height="21" alt="Dashboard image">
+            <img src="../assets/img/icons/applications-icon.png" width="auto" height="21" alt="Dashboard image" />
           </div>
           <h6 class="mb-0">Applications</h6>
         </a>
       </li>
     </ul>
     <ul class="navbar-nav flex-row align-items-center profile-wrapper">
-      <li class="nav-item d-none d-xl-block mr-4"
-          matTooltip="Enabling experimental features will restart the application. You may experience some issues while using the experimental features.">
-        <mat-slide-toggle [checked]="isExperimentalEnabled$ | async" (change)="onExperimentalChange($event)">Enable
-          experimental
+      <li
+        class="nav-item d-none d-xl-block mr-4"
+        matTooltip="Enabling experimental features will restart the application. You may experience some issues while using the experimental features.">
+        <mat-slide-toggle [checked]="isExperimentalEnabled$ | async" (change)="onExperimentalChange($event)">
+          Enable experimental
         </mat-slide-toggle>
       </li>
       <li class="nav-item dropdown dropdown-list" dropdown>
@@ -75,20 +80,20 @@
           <!-- notif count here -->
           <ng-container *ngIf="!isLoadingNotif">
             <em class="fas fa-tasks"></em>
-            <span class="badge badge-danger" *ngIf="tasks?.totalCount">{{ tasks?.totalCount }}</span>
+            <span class="badge badge-danger" *ngIf="tasks?.totalCount">
+              {{ tasks?.totalCount }}
+            </span>
             <!-- <span class="badge badge-danger">2</span> -->
           </ng-container>
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
           <div class="dropdown-item">
             <div class="d-flex flex-grow-1 list-group header-notification-container">
-              <div
-                  class="d-flex justify-content-between pt-1 pb-3 px-3 mt-2 mb-2 align-items-center border-bottom-1">
+              <div class="d-flex justify-content-between pt-1 pb-3 px-3 mt-2 mb-2 align-items-center border-bottom-1">
                 <h4 class="mb-0 f-16 color-white">Tasks</h4>
                 <a href="#" class="color-primary d-none">Clear all</a>
               </div>
-              <a [routerLink]="['/assets']" routerLinkActive="active"
-                 [queryParams]="{notif: 'assetsOfferedToMe'}">
+              <a [routerLink]="['/assets']" routerLinkActive="active" [queryParams]="{ notif: 'assetsOfferedToMe' }">
                 <div class="list-group-item list-group-item-action">
                   <div class="media d-flex align-items-center cursor-pointer">
                     <div class="align-self-start mr-2">
@@ -96,9 +101,9 @@
                     </div>
                     <div class="media-body d-flex flex-row justify-content-between align-items-center">
                       <p class="m-0 pr-2 color-white">Accept the transfer of the Asset</p>
-                      <span *ngIf="tasks?.assetsOfferedToMeCount" class="badge badge-danger ml-2">{{
-                          tasks?.assetsOfferedToMeCount }}
-                                            </span>
+                      <span *ngIf="tasks?.assetsOfferedToMeCount" class="badge badge-danger ml-2">
+                        {{ tasks?.assetsOfferedToMeCount }}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -111,9 +116,9 @@
                     </div>
                     <div class="media-body d-flex flex-row justify-content-between align-items-center">
                       <p class="m-0 pr-2 color-white">For approval</p>
-                      <span *ngIf="tasks?.pendingApprovalCount" class="badge badge-danger ml-2">{{
-                          tasks?.pendingApprovalCount }}
-                                            </span>
+                      <span *ngIf="tasks?.pendingApprovalCount" class="badge badge-danger ml-2">
+                        {{ tasks?.pendingApprovalCount }}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -126,9 +131,9 @@
                     </div>
                     <div class="media-body d-flex flex-row justify-content-between align-items-center">
                       <p class="m-0 pr-2 color-white">Pending Sync to DID Document</p>
-                      <span *ngIf="tasks?.pendingAssetSyncCount" class="badge badge-danger ml-2">{{
-                          tasks?.pendingAssetSyncCount }}
-                                            </span>
+                      <span *ngIf="tasks?.pendingAssetSyncCount" class="badge badge-danger ml-2">
+                        {{ tasks?.pendingAssetSyncCount }}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -138,41 +143,38 @@
                   <div class="color-white no-record mt-3 mb-4"><i>No task</i></div>
               </div> -->
             </div>
-
           </div>
         </div>
-
       </li>
-      <li class="nav-item dropdown dropdown-list" dropdown *ngIf="notificationList$ | async as notificationList"
-          (onHidden)="onHiddenNotificationList()">
+      <li
+        class="nav-item dropdown dropdown-list"
+        dropdown
+        *ngIf="notificationList$ | async as notificationList"
+        (onHidden)="onHiddenNotificationList()">
         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret cursor-pointer" dropdownToggle>
           <em class="icon-bell"></em>
-          <span class="badge badge-danger" *ngIf="notificationNewItems">{{ notificationNewItems }}</span>
+          <span class="badge badge-danger" *ngIf="notificationNewItems">
+            {{ notificationNewItems }}
+          </span>
         </a>
         <ng-container *ngIf="notificationList?.length">
           <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
             <div class="dropdown-item">
-
               <div class="d-flex flex-grow-1 list-group header-notification-container">
-                <div
-                    class="d-flex justify-content-between pt-1 pb-3 px-3 mt-2 mb-2 align-items-center border-bottom-1">
+                <div class="d-flex justify-content-between pt-1 pb-3 px-3 mt-2 mb-2 align-items-center border-bottom-1">
                   <h4 class="mb-0 f-16 color-white">Notification</h4>
-                  <a href="#" (click)="clearSwitchboardToaster()" class="color-primary">Clear all</a>
+                  <a href="#" (click)="clearSwitchboardToaster()" class="color-primary"> Clear all </a>
                 </div>
 
                 <div class="list-group-item list-group-item-action">
-
-
-                  <div class="media d-flex align-items-center notification-item"
-                       *ngFor="let item of notificationList">
-                    <div class="notification-icon align-self-start mr-2  ngx-toastr" [ngClass]="item.type">
-                    </div>
+                  <div class="media d-flex align-items-center notification-item" *ngFor="let item of notificationList">
+                    <div class="notification-icon align-self-start mr-2 ngx-toastr" [ngClass]="item.type"></div>
                     <div class="media-body d-flex flex-row justify-content-between align-items-center">
-                      <p class="m-0 pr-2 color-white" [ngClass]="{'font-weight-bold': item.isNew}">{{item.message}}</p>
+                      <p class="m-0 pr-2 color-white" [ngClass]="{ 'font-weight-bold': item.isNew }">
+                        {{ item.message }}
+                      </p>
                     </div>
                   </div>
-
-
                 </div>
               </div>
             </div>
@@ -181,9 +183,12 @@
       </li>
 
       <li class="nav-item d-none d-md-block">
-        <a matTooltip="Help" class="nav-link" #fsbutton
-           href="https://energyweb.atlassian.net/wiki/spaces/SWITCH/pages/1712554033/Using+Switchboard"
-           target="_blank">
+        <a
+          matTooltip="Help"
+          class="nav-link"
+          #fsbutton
+          href="https://energyweb.atlassian.net/wiki/spaces/SWITCH/pages/1712554033/Using+Switchboard"
+          target="_blank">
           <em class="far fa-lg fa-question-circle"></em>
         </a>
       </li>
@@ -201,28 +206,38 @@
       <app-user-name [userName]="userName"></app-user-name>
       <app-user-did [did]="userDid$ | async"></app-user-did>
     </div>
-    <button class="color-link px-4 pb-2 border-bottom-1" mat-menu-item (click)="openDialogUser()"
-            data-qa-id="menu-update-identity">
+    <button
+      class="color-link px-4 pb-2 border-bottom-1"
+      mat-menu-item
+      (click)="openDialogUser()"
+      data-qa-id="menu-update-identity">
       Update Identity
     </button>
-    <button class="color-link px-4 pb-2 border-bottom-1" mat-menu-item (click)="openDidBook()"
-            data-qa-id="menu-did-book">
+    <button
+      class="color-link px-4 pb-2 border-bottom-1"
+      mat-menu-item
+      (click)="openDidBook()"
+      data-qa-id="menu-did-book">
       DID Book
     </button>
     <div class="d-block d-xl-none">
-      <div class="d-flex justify-content-between align-items-center my-1 px-4 py-2"
-           matTooltip="Enabling experimental features will restart the application. You may experience some issues while using the experimental features.">
+      <div
+        class="d-flex justify-content-between align-items-center my-1 px-4 py-2"
+        matTooltip="Enabling experimental features will restart the application. You may experience some issues while using the experimental features.">
         <div class="color-link">Experimental</div>
-        <mat-slide-toggle [checked]="isExperimentalEnabled$ | async"
-                          (change)="onExperimentalChange($event)"></mat-slide-toggle>
+        <mat-slide-toggle
+          [checked]="isExperimentalEnabled$ | async"
+          (change)="onExperimentalChange($event)"></mat-slide-toggle>
       </div>
     </div>
-    <button class="d-block d-md-none border-bottom-1 color-link px-4" mat-menu-item (click)="openDialogUser()"><a
+    <button class="d-block d-md-none border-bottom-1 color-link px-4" mat-menu-item (click)="openDialogUser()">
+      <a
         class="color-link"
         href="https://energyweb.atlassian.net/wiki/spaces/SWITCH/pages/1712554033/Using+Switchboard"
         target="_blank">
-      Help
-    </a></button>
-    <button class="color-link px-4" mat-menu-item (click)="logout()">Logout</button>
+        Help
+      </a>
+    </button>
+    <button class="color-link px-4" data-qa-id="menu-logout" mat-menu-item (click)="logout()">Logout</button>
   </mat-menu>
 </ng-container>

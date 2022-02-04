@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Asset, AssetHistoryEventType } from 'iam-client-lib';
 import { CancelButton } from '../../../layout/loading/loading.component';
@@ -10,7 +19,15 @@ import { TransferOwnershipComponent } from '../../applications/transfer-ownershi
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
 import { EditAssetDialogComponent } from '../edit-asset-dialog/edit-asset-dialog.component';
-import { distinctUntilChanged, filter, finalize, first, map, switchMap, takeUntil } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  finalize,
+  first,
+  map,
+  switchMap,
+  takeUntil,
+} from 'rxjs/operators';
 import { from, Observable, Subject } from 'rxjs';
 import { VerificationMethodComponent } from '../verification-method/verification-method.component';
 import { MatSort } from '@angular/material/sort';
@@ -33,11 +50,10 @@ export interface AssetList extends Asset {
   hasEnrolments: boolean;
 }
 
-
 @Component({
   selector: 'app-asset-list',
   templateUrl: './asset-list.component.html',
-  styleUrls: ['./asset-list.component.scss']
+  styleUrls: ['./asset-list.component.scss'],
 })
 export class AssetListComponent implements OnInit, OnDestroy {
   @Input() listType: number;
@@ -56,28 +72,31 @@ export class AssetListComponent implements OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
   private _shadowList;
 
-  constructor(private toastr: SwitchboardToastrService,
-              private dialog: MatDialog,
-              private iamService: IamService,
-              private notifService: NotificationService,
-              private loadingService: LoadingService,
-              private route: Router,
-              private store: Store) {
-
-  }
+  constructor(
+    private toastr: SwitchboardToastrService,
+    private dialog: MatDialog,
+    private iamService: IamService,
+    private notifService: NotificationService,
+    private loadingService: LoadingService,
+    private route: Router,
+    private store: Store
+  ) {}
 
   async ngOnDestroy(): Promise<void> {
     // Unsubscribe from IAM Events
-    await this.iamService.messagingService.unsubscribeFrom(this._iamSubscriptionId);
+    await this.iamService.messagingService.unsubscribeFrom(
+      this._iamSubscriptionId
+    );
     this.unsubscribe.next();
     this.unsubscribe.complete();
   }
 
   async ngOnInit(): Promise<void> {
     // Subscribe to IAM events
-    this._iamSubscriptionId = await this.iamService.messagingService.subscribeTo({
-      messageHandler: this._handleMessage.bind(this)
-    });
+    this._iamSubscriptionId =
+      await this.iamService.messagingService.subscribeTo({
+        messageHandler: this._handleMessage.bind(this),
+      });
 
     // Set Table Columns
     if (this.listType === AssetListType.OFFERED_ASSETS) {
@@ -117,33 +136,44 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   subscribeTo(source: Observable<AssetList[]>) {
-    return source.pipe(
-      finalize(() => this.loadingService.hide())
-    ).subscribe((data: AssetList[]) => {
-      this.dataSource.data = data;
-      this._shadowList = data;
-    }, error => {
-      console.error(error);
-      this.toastr.error(error.message || 'Could not retrieve list. Please contact system administrator.');
-    });
+    return source.pipe(finalize(() => this.loadingService.hide())).subscribe(
+      (data: AssetList[]) => {
+        this.dataSource.data = data;
+        this._shadowList = data;
+      },
+      (error) => {
+        console.error(error);
+        this.toastr.error(
+          error.message ||
+            'Could not retrieve list. Please contact system administrator.'
+        );
+      }
+    );
   }
 
   transferOwnership(type: any, data: Asset) {
-    const dialogRef = this.dialog.open(TransferOwnershipComponent, {
-      width: '600px', data: {
-        assetDid: data.id,
-        type,
-        owner: data.owner
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().subscribe((res: any) => {
-      if (res) {
-        this.toastr.success('Asset is offered successfully.', HEADER_TRANSFER_OWNERSHIP);
-        this.getAssetList();
-      }
-      dialogRef.unsubscribe();
-    });
+    const dialogRef = this.dialog
+      .open(TransferOwnershipComponent, {
+        width: '600px',
+        data: {
+          assetDid: data.id,
+          type,
+          owner: data.owner,
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        if (res) {
+          this.toastr.success(
+            'Asset is offered successfully.',
+            HEADER_TRANSFER_OWNERSHIP
+          );
+          this.getAssetList();
+        }
+        dialogRef.unsubscribe();
+      });
   }
 
   createVC(element) {
@@ -151,25 +181,40 @@ export class AssetListComponent implements OnInit, OnDestroy {
     this.dialog.open(NewIssueVcComponent, {
       width: '600px',
       data: {
-        did: element.id
+        did: element.id,
       },
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
   }
 
   async cancelAssetOffer(data: Asset) {
-    if (await this._confirm('The offered ownership of this asset will be cancelled.', HEADER_CANCEL_OWNERSHIP)) {
+    if (
+      await this._confirm(
+        'The offered ownership of this asset will be cancelled.',
+        HEADER_CANCEL_OWNERSHIP
+      )
+    ) {
       try {
-        this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
+        this.loadingService.show(
+          'Please confirm this transaction in your connected wallet.',
+          CancelButton.ENABLED
+        );
         await this.iamService.assetsService.cancelAssetOffer({
-          assetDID: data.id
+          assetDID: data.id,
         });
-        this.toastr.success('Offered ownership is cancelled successfully.', HEADER_CANCEL_OWNERSHIP);
+        this.toastr.success(
+          'Offered ownership is cancelled successfully.',
+          HEADER_CANCEL_OWNERSHIP
+        );
         this.getAssetList();
       } catch (e) {
         console.error(e);
-        this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_CANCEL_OWNERSHIP);
+        this.toastr.error(
+          e.message ||
+            'A system error has occured. Please contact system administrator.',
+          HEADER_CANCEL_OWNERSHIP
+        );
       } finally {
         this.loadingService.hide();
       }
@@ -177,18 +222,33 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   async approveAssetOffer(data: Asset) {
-    if (await this._confirm('You will become the owner of this asset.', HEADER_ACCEPT_OWNERSHIP)) {
+    if (
+      await this._confirm(
+        'You will become the owner of this asset.',
+        HEADER_ACCEPT_OWNERSHIP
+      )
+    ) {
       try {
-        this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
+        this.loadingService.show(
+          'Please confirm this transaction in your connected wallet.',
+          CancelButton.ENABLED
+        );
         await this.iamService.assetsService.acceptAssetOffer({
-          assetDID: data.id
+          assetDID: data.id,
         });
-        this.toastr.success('A new asset is added successfully to your list.', HEADER_ACCEPT_OWNERSHIP);
+        this.toastr.success(
+          'A new asset is added successfully to your list.',
+          HEADER_ACCEPT_OWNERSHIP
+        );
         this.notifService.decreaseAssetsOfferedToMeCount();
         this.selectTab.emit(0);
       } catch (e) {
         console.error(e);
-        this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_ACCEPT_OWNERSHIP);
+        this.toastr.error(
+          e.message ||
+            'A system error has occured. Please contact system administrator.',
+          HEADER_ACCEPT_OWNERSHIP
+        );
       } finally {
         this.loadingService.hide();
       }
@@ -196,18 +256,33 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   async rejectAssetOffer(data: Asset) {
-    if (await this._confirm('You are rejecting this offered asset.', HEADER_REJECT_OWNERSHIP)) {
+    if (
+      await this._confirm(
+        'You are rejecting this offered asset.',
+        HEADER_REJECT_OWNERSHIP
+      )
+    ) {
       try {
-        this.loadingService.show('Please confirm this transaction in your connected wallet.', CancelButton.ENABLED);
+        this.loadingService.show(
+          'Please confirm this transaction in your connected wallet.',
+          CancelButton.ENABLED
+        );
         await this.iamService.assetsService.rejectAssetOffer({
-          assetDID: data.id
+          assetDID: data.id,
         });
-        this.toastr.success('You have rejected an offered asset successfully.', HEADER_REJECT_OWNERSHIP);
+        this.toastr.success(
+          'You have rejected an offered asset successfully.',
+          HEADER_REJECT_OWNERSHIP
+        );
         this.getAssetList();
         this.notifService.decreaseAssetsOfferedToMeCount();
       } catch (e) {
         console.error(e);
-        this.toastr.error(e.message || 'A system error has occured. Please contact system administrator.', HEADER_REJECT_OWNERSHIP);
+        this.toastr.error(
+          e.message ||
+            'A system error has occured. Please contact system administrator.',
+          HEADER_REJECT_OWNERSHIP
+        );
       } finally {
         this.loadingService.hide();
       }
@@ -215,31 +290,36 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   viewOwnershipHistory(data: any) {
-    const dialogRef = this.dialog.open(AssetOwnershipHistoryComponent, {
-      width: '600px',
-      data: {
-        id: data.id
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().subscribe((res: any) => {
-      dialogRef.unsubscribe();
-    });
+    const dialogRef = this.dialog
+      .open(AssetOwnershipHistoryComponent, {
+        width: '600px',
+        data: {
+          id: data.id,
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(() => {
+        dialogRef.unsubscribe();
+      });
   }
 
   viewVerificationMethod(data: any) {
-    const dialogRef = this.dialog.open(VerificationMethodComponent, {
-      width: '600px',
-      data: {
-        id: data.id
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().subscribe((res: any) => {
-      dialogRef.unsubscribe();
-    });
+    const dialogRef = this.dialog
+      .open(VerificationMethodComponent, {
+        width: '600px',
+        data: {
+          id: data.id,
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(() => {
+        dialogRef.unsubscribe();
+      });
   }
-
 
   viewAssetEnrolments(data: Asset) {
     this.route.navigate(['assets/enrolment/' + data.id]);
@@ -250,14 +330,16 @@ export class AssetListComponent implements OnInit, OnDestroy {
       width: '600px',
       data,
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
 
-    this.subscribeTo(dialogRef.afterClosed().pipe(
-      first(),
-      filter(Boolean),
-      switchMap(() => this.assetListFactory())
-    ));
+    this.subscribeTo(
+      dialogRef.afterClosed().pipe(
+        first(),
+        filter(Boolean),
+        switchMap(() => this.assetListFactory())
+      )
+    );
   }
 
   generateQrCode(data: Asset) {
@@ -278,38 +360,41 @@ export class AssetListComponent implements OnInit, OnDestroy {
   private _checkDidControlChanges(): void {
     this.searchByDid.valueChanges
       .pipe(
-        distinctUntilChanged((prevValue, currentValue) => prevValue === currentValue),
+        distinctUntilChanged(
+          (prevValue, currentValue) => prevValue === currentValue
+        ),
         takeUntil(this.unsubscribe)
       )
-      .subscribe(value => this.updateListByDid(value));
+      .subscribe((value) => this.updateListByDid(value));
   }
 
   private updateListByDid(value: string): void {
     if (value) {
-      this.dataSource.data = this._shadowList.filter((item) => item.id.includes(value));
+      this.dataSource.data = this._shadowList.filter((item) =>
+        item.id.includes(value)
+      );
     } else {
       this.dataSource.data = this._shadowList;
     }
   }
 
   private getAssetsIds(assets: Asset[]): string[] {
-    return assets.map(asset => asset.id);
+    return assets.map((asset) => asset.id);
   }
 
   private assetListFactory(): Observable<AssetList[]> {
     if (this.listType === AssetListType.PREV_OWNED_ASSETS) {
       this.loadingService.show();
       return this.loadAssetList(
-        this.iamService.assetsService.getPreviouslyOwnedAssets({owner: this.iamService.signerService.did})
-      ).pipe(
-        this.mapEnrolments()
-      );
+        this.iamService.assetsService.getPreviouslyOwnedAssets({
+          owner: this.iamService.signerService.did,
+        })
+      ).pipe(this.mapEnrolments());
     } else if (this.listType === AssetListType.OFFERED_ASSETS) {
       this.loadingService.show();
-      return this.loadAssetList(this.iamService.assetsService.getOfferedAssets())
-        .pipe(
-          this.mapEnrolments()
-        );
+      return this.loadAssetList(
+        this.iamService.assetsService.getOfferedAssets()
+      ).pipe(this.mapEnrolments());
     } else {
       this.store.dispatch(OwnedAssetsActions.getOwnedAssets());
       return this.store.select(OwnedAssetsSelectors.getOwnedAssets);
@@ -319,10 +404,19 @@ export class AssetListComponent implements OnInit, OnDestroy {
   private mapEnrolments() {
     return (source: Observable<Asset[]>) => {
       return source.pipe(
-        switchMap((assets: Asset[]) => from(this.iamService.claimsService.getClaimsBySubjects(this.getAssetsIds(assets)))
-          .pipe(
-            map((claims) => claims.map(claim => claim.subject)),
-            map(claims => assets.map((asset) => ({...asset, hasEnrolments: claims.includes(asset.id)})))
+        switchMap((assets: Asset[]) =>
+          from(
+            this.iamService.claimsService.getClaimsBySubjects(
+              this.getAssetsIds(assets)
+            )
+          ).pipe(
+            map((claims) => claims.map((claim) => claim.subject)),
+            map((claims) =>
+              assets.map((asset) => ({
+                ...asset,
+                hasEnrolments: claims.includes(asset.id),
+              }))
+            )
           )
         )
       );
@@ -330,43 +424,48 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   private _handleMessage(message: any) {
-    if (message.type && (
-      (this.listType === AssetListType.OFFERED_ASSETS &&
+    if (
+      message.type &&
+      ((this.listType === AssetListType.OFFERED_ASSETS &&
         (message.type === AssetHistoryEventType.ASSET_OFFERED ||
           message.type === AssetHistoryEventType.ASSET_OFFER_CANCELED)) ||
-      (this.listType === AssetListType.MY_ASSETS &&
-        (message.type === AssetHistoryEventType.ASSET_TRANSFERRED ||
-          message.type === AssetHistoryEventType.ASSET_OFFER_REJECTED)) ||
-      (this.listType === AssetListType.PREV_OWNED_ASSETS && message.type === AssetHistoryEventType.ASSET_TRANSFERRED)
-    )) {
+        (this.listType === AssetListType.MY_ASSETS &&
+          (message.type === AssetHistoryEventType.ASSET_TRANSFERRED ||
+            message.type === AssetHistoryEventType.ASSET_OFFER_REJECTED)) ||
+        (this.listType === AssetListType.PREV_OWNED_ASSETS &&
+          message.type === AssetHistoryEventType.ASSET_TRANSFERRED))
+    ) {
       this.getAssetList();
     }
   }
 
   private async _confirm(confirmationMsg: string, header: string) {
-    return this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      maxHeight: '195px',
-      data: {
-        header,
-        message: confirmationMsg
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().toPromise();
+    return this.dialog
+      .open(ConfirmationDialogComponent, {
+        width: '400px',
+        maxHeight: '195px',
+        data: {
+          header,
+          message: confirmationMsg,
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .toPromise();
   }
 
   private loadAssetList(source: Promise<Asset[]> | Observable<Asset[]>) {
-    return from(source)
-      .pipe(
-        map((assets) => assets.map((item: any) => {
-            return ({
-              ...item,
-              createdDate: new Date(item.createdAt),
-              modifiedDate: new Date(item.updatedAt)
-            });
-          })
-        )
-      );
+    return from(source).pipe(
+      map((assets) =>
+        assets.map((item: any) => {
+          return {
+            ...item,
+            createdDate: new Date(item.createdAt),
+            modifiedDate: new Date(item.updatedAt),
+          };
+        })
+      )
+    );
   }
 }

@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NamespaceType, PreconditionType } from 'iam-client-lib';
 import { ListType } from '../../../../shared/constants/shared-constants';
@@ -6,11 +7,12 @@ import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { RoleType } from '../../new-role/new-role.component';
 import { GovernanceViewComponent } from '../governance-view.component';
+import { IssuerType } from '../../new-role/models/issuer-type.enum';
 
 @Component({
   selector: 'app-governance-details',
   templateUrl: './governance-details.component.html',
-  styleUrls: ['./governance-details.component.scss']
+  styleUrls: ['./governance-details.component.scss'],
 })
 export class GovernanceDetailsComponent {
   @Input() set origData(value: any) {
@@ -27,7 +29,6 @@ export class GovernanceDetailsComponent {
 
   typeLabel: string;
   formData: any;
-  displayedColumnsView: string[] = ['type', 'label', 'required', 'minLength', 'maxLength', 'pattern', 'minValue', 'maxValue', 'minDate', 'maxDate'];
 
   appList: any[];
   roleList: any[];
@@ -36,18 +37,40 @@ export class GovernanceDetailsComponent {
   PreconditionTypes = PreconditionType;
   panelOpenState = false;
 
+  get requestorFields() {
+    return this.formData?.definition?.fields;
+  }
+
+  get issuerFields() {
+    return this.formData?.definition?.issuerFields;
+  }
+
+  get isDIDType() {
+    return this.issuer?.issuerType === IssuerType.DID;
+  }
+
+  get isRoleType() {
+    return this.issuer?.issuerType === IssuerType.ROLE;
+  }
+
+  get issuer() {
+    return this.formData?.definition?.issuer;
+  }
+
   constructor(
     private iamService: IamService,
     private loadingService: LoadingService,
-    private dialog: MatDialog) {
-  }
+    private dialog: MatDialog
+  ) {}
 
   public async setData(data: any) {
     this.data = data;
 
     this.formData = JSON.parse(JSON.stringify(this.data.definition));
     if (this.formData.definition.others) {
-      this.formData.definition.others = JSON.stringify(this.formData.definition.others);
+      this.formData.definition.others = JSON.stringify(
+        this.formData.definition.others
+      );
     }
 
     switch (this.data.type) {
@@ -85,7 +108,8 @@ export class GovernanceDetailsComponent {
 
     if (this.formData.definition.enrolmentPreconditions) {
       // Init Preconditions
-      for (const precondition of this.formData.definition.enrolmentPreconditions) {
+      for (const precondition of this.formData.definition
+        .enrolmentPreconditions) {
         if (precondition.conditions) {
           this.preconditions[precondition.type] = precondition.conditions;
         }
@@ -102,12 +126,14 @@ export class GovernanceDetailsComponent {
     let type = NamespaceType.Application;
     if (this.data.type === ListType.ORG) {
       type = NamespaceType.Organization;
-      this.appList = await this.iamService.domainsService.getAppsOfOrg(this.formData.namespace);
+      this.appList = await this.iamService.domainsService.getAppsOfOrg(
+        this.formData.namespace
+      );
     }
 
     this.roleList = await this.iamService.domainsService.getRolesByNamespace({
       parentType: type,
-      namespace: this.formData.namespace
+      namespace: this.formData.namespace,
     });
     if (this.roleList && this.roleList.length) {
       this.roleList.forEach((item: any) => {
@@ -131,14 +157,14 @@ export class GovernanceDetailsComponent {
   }
 
   viewDetails(data: any, type: string) {
-    const dialogRef = this.dialog.open(GovernanceViewComponent, {
+    this.dialog.open(GovernanceViewComponent, {
       width: '600px',
       data: {
         type,
-        definition: data
+        definition: data,
       },
       maxWidth: '100%',
-      disableClose: true
+      disableClose: true,
     });
   }
 
@@ -153,7 +179,7 @@ export class GovernanceDetailsComponent {
 
     const retVal = {
       roleName: name,
-      stayLoggedIn: true
+      stayLoggedIn: true,
     };
     retVal[listType] = namespace;
 

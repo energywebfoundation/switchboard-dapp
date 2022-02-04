@@ -7,10 +7,15 @@ export function mapClaimsProfile() {
   return (source: Observable<(IServiceEndpoint & ClaimData)[]>) => {
     return source.pipe(
       map((claimsData: (IServiceEndpoint & ClaimData)[]) => {
-        const claimWithProfile = claimsData.filter(claim => !!claim.profile).reduce((prev, next) => {
-          const isPrevNewerClaim = prev.iat > next.iat;
-          return isPrevNewerClaim ? prev : next;
-        }, {iat: 0}) as IServiceEndpoint & ClaimData;
+        const claimWithProfile = claimsData
+          .filter((claim) => !!claim.profile)
+          .reduce(
+            (prev, next) => {
+              const isPrevNewerClaim = prev.iat > next.iat;
+              return isPrevNewerClaim ? prev : next;
+            },
+            { iat: 0 }
+          ) as IServiceEndpoint & ClaimData;
 
         return claimWithProfile.profile || {};
       })

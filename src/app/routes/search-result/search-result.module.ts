@@ -7,7 +7,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../../shared/shared.module';
 import { GovernanceDetailsModule } from '../applications/governance-view/governance-details/governance-details.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
@@ -20,9 +19,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
-const routes: Routes = [
-  {path: '', component: SearchResultComponent}
-];
+const routes: Routes = [{ path: '', component: SearchResultComponent }];
 
 @NgModule({
   declarations: [SearchResultComponent],
@@ -46,9 +43,7 @@ const routes: Routes = [
     MatSidenavModule,
     NgxSpinnerModule,
     GovernanceDetailsModule,
-    FlexLayoutModule,
-    MatButtonToggleModule
-  ]
+    MatButtonToggleModule,
+  ],
 })
-export class SearchResultModule {
-}
+export class SearchResultModule {}

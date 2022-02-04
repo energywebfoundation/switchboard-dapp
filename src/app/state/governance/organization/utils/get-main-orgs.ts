@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const getMainOrgs = ($getOrgList: any[]) => {
   const list = [];
   const subList = [];
@@ -23,7 +24,10 @@ export const getMainOrgs = ($getOrgList: any[]) => {
         for (const subOrg of arr) {
           let exists = false;
           for (const mainOrg of list) {
-            if (subOrg.namespace && subOrg.namespace.includes(mainOrg.namespace)) {
+            if (
+              subOrg.namespace &&
+              subOrg.namespace.includes(mainOrg.namespace)
+            ) {
               exists = true;
               break;
             }

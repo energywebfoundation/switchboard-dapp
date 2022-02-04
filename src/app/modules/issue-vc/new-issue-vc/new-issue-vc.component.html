@@ -13,15 +13,28 @@
           <div class="card card-default d-flex shadow-none pt-3 mb-3">
             <mat-label class="ml-3 pl-1">Subject</mat-label>
             <mat-form-field class="mt-2" appearance="outline">
-              <input matInput formControlName="subject" placeholder="DID that is receiving the credential"
-                     maxlength="256" data-qa-id="subject-did" required autocomplete="off">
-              <button *ngIf="!isDidPredefined()" matSuffix mat-icon-button aria-label="Scan DID" appQrCodeScanner
-                      (scannedValue)="scannedValue($event.value)">
+              <input
+                matInput
+                formControlName="subject"
+                placeholder="DID that is receiving the credential"
+                maxlength="256"
+                data-qa-id="subject-did"
+                required
+                autocomplete="off" />
+              <button
+                *ngIf="!isDidPredefined()"
+                matSuffix
+                mat-icon-button
+                aria-label="Scan DID"
+                appQrCodeScanner
+                (scannedValue)="scannedValue($event.value)">
                 <mat-icon>qr_code_2</mat-icon>
               </button>
-              <mat-error *ngIf="getFormSubject().hasError('required')">Subject is <strong>required</strong>
+              <mat-error *ngIf="getFormSubject().hasError('required')">
+                Subject is
+                <strong>required</strong>
               </mat-error>
-              <mat-error *ngIf="getFormSubject().hasError('invalidDid')">Subject DID format is invalid</mat-error>
+              <mat-error *ngIf="getFormSubject().hasError('invalidDid')"> Subject DID format is invalid</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -29,10 +42,13 @@
           <div class="card card-default d-flex shadow-none pt-3 mb-3">
             <mat-label class="ml-3 pl-1">Type</mat-label>
             <mat-form-field appearance="outline" class="mr-0 mr-lg-0 mb-2 mb-lg-0">
-              <mat-select formControlName="type" placeholder="Select Type" data-qa-id="select-type"
-                          (selectionChange)="roleTypeSelected($event)">
-                <mat-option *ngFor="let role of possibleRolesToEnrol" [value]="role"
-                            [attr.data-qa-id]="role?.name">{{role?.name}}
+              <mat-select
+                formControlName="type"
+                placeholder="Select Type"
+                data-qa-id="select-type"
+                (selectionChange)="roleTypeSelected($event)">
+                <mat-option *ngFor="let role of possibleRolesToEnrol" [value]="role" [attr.data-qa-id]="role?.name">
+                  {{ role?.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -43,12 +59,11 @@
         <app-role-precondition-list [preconditionList]="rolePreconditionList"></app-role-precondition-list>
       </ng-container>
       <app-enrolment-form
-          *ngIf="isPrecheckSuccess"
-          [showRegistrationTypes]="false"
-          [fieldList]="fieldList"
-          [disabledSubmit]="isFormDisabled()"
-          (submitForm)="create($event)">
-      </app-enrolment-form>
+        *ngIf="isPrecheckSuccess"
+        [showRegistrationTypes]="false"
+        [fieldList]="fieldList"
+        [disabledSubmit]="isFormDisabled()"
+        (submitForm)="create($event)"></app-enrolment-form>
     </form>
   </div>
 </div>

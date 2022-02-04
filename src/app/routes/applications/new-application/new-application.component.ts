@@ -1,25 +1,32 @@
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { NamespaceType } from 'iam-client-lib';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ConfigService } from '../../../shared/services/config.service';
 import { IamService } from '../../../shared/services/iam.service';
-import { environment } from 'src/environments/environment';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
-import { ViewType } from '../new-organization/new-organization.component';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { isValidJsonFormatValidator } from '../../../utils/validators/json-format/is-valid-json-format.validator';
-import { isAlphaNumericOnly } from '../../../utils/functions/is-alpha-numeric';
+import { CreationBaseAbstract } from '../utils/creation-base.abstract';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { ApplicationCreationService } from './services/application-creation.service';
+import { AppCreationDefinition } from './models/app-creation-definition.interface';
+import { ApplicationData } from './models/application-data.interface';
+import { ViewType } from './models/view-type.enum';
 
 @Component({
   selector: 'app-new-application',
   templateUrl: './new-application.component.html',
-  styleUrls: ['./new-application.component.scss']
+  styleUrls: ['./new-application.component.scss'],
 })
-export class NewApplicationComponent implements OnInit, AfterViewInit {
+export class NewApplicationComponent
+  extends CreationBaseAbstract
+  implements AfterViewInit
+{
   private stepper: MatStepper;
 
   @ViewChild('stepper') set content(content: MatStepper) {
@@ -28,26 +35,12 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public appForm = this.fb.group({
-    orgNamespace: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-    appName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(256), isAlphanumericValidator]],
-    namespace: '',
-    data: this.fb.group({
-      applicationName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(256)])],
-      logoUrl: ['', Validators.pattern('https?://.*')],
-      websiteUrl: ['', Validators.pattern('https?://.*')],
-      description: '',
-      others: ['', isValidJsonFormatValidator]
-    })
-  });
-  public environment = environment;
-  public isChecking = false;
-  private _isLogoUrlValid = true;
-  public ENSPrefixes = NamespaceType;
-  public ViewType = ViewType;
+  public isLogoUrlValid = true;
 
-  viewType: string = ViewType.NEW;
-  origData: any;
+  get origData() {
+    return this.data;
+  }
+  applicationData: AppCreationDefinition;
 
   private TOASTR_HEADER = 'Create New Application';
 
@@ -56,125 +49,47 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
   private _currentIdx = 0;
   private _requests = {};
 
-  constructor(private fb: FormBuilder,
-              private iamService: IamService,
-              private toastr: SwitchboardToastrService,
-              private spinner: NgxSpinnerService,
-              public dialogRef: MatDialogRef<NewApplicationComponent>,
-              public dialog: MatDialog,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              private configService: ConfigService) {
-    if (data && data.viewType) {
-      this.viewType = data.viewType;
+  constructor(
+    private fb: FormBuilder,
+    private iamService: IamService,
+    private toastr: SwitchboardToastrService,
+    private loadingService: LoadingService,
+    public dialogRef: MatDialogRef<NewApplicationComponent>,
+    public dialog: MatDialog,
+    private applicationCreationService: ApplicationCreationService,
+    @Inject(MAT_DIALOG_DATA) public data: ApplicationData
+  ) {
+    super();
+    this.prepareOriginalData();
+  }
 
-      if (this.viewType === ViewType.UPDATE && data.origData) {
-        this.origData = data.origData;
-        this.TOASTR_HEADER = 'Update Application';
-      } else if (this.viewType === ViewType.NEW && data.organizationNamespace) {
-        this.appForm.patchValue({ orgNamespace: data.organizationNamespace });
-      }
+  private prepareOriginalData() {
+    if (this.data && this.data.viewType && this.isUpdating) {
+      this.TOASTR_HEADER = 'Update Application';
     }
+  }
+
+  get namespace(): string {
+    return this.applicationData.domain;
+  }
+
+  get isUpdating() {
+    return this.data.viewType === ViewType.Update;
   }
 
   async ngAfterViewInit() {
     await this.confirmOrgNamespace();
   }
 
-  ngOnInit() {
-    this.initFormData();
-  }
-
-  private initFormData() {
-    if (this.origData) {
-      const def = this.origData.definition;
-      let others;
-
-      // Construct Others
-      if (def.others) {
-        others = JSON.stringify(def.others);
-      }
-
-      // Construct Organization
-      const arr = this.origData.namespace.split(NamespaceType.Application);
-
-      this.appForm.patchValue({
-        orgNamespace: arr[1].substring(1),
-        appName: this.origData.name,
-        data: {
-          applicationName: def.appName,
-          logoUrl: def.logoUrl,
-          websiteUrl: def.websiteUrl,
-          description: def.description,
-          others
-        }
-      });
-    }
-  }
-
-  alphaNumericOnly(event: any) {
-    return isAlphaNumericOnly(event);
-  }
-
   async confirmOrgNamespace() {
-    if (this.appForm.value.orgNamespace) {
-      try {
-        this.spinner.show();
-        this.isChecking = true;
-
-        // Check if organization namespace exists
-        let exists = await this.iamService.domainsService.checkExistenceOfDomain({
-          domain: this.appForm.value.orgNamespace
-        });
-
-        if (exists) {
-          // Check if application sub-domain exists in this organization
-          exists = await this.iamService.domainsService.checkExistenceOfDomain({
-            domain: `${this.ENSPrefixes.Application}.${this.appForm.value.orgNamespace}`
-          });
-
-          if (exists) {
-            // check if user is authorized to create an app under the application namespace
-            const isOwner = await this.iamService.domainsService.isOwner({
-              domain: this.appForm.value.orgNamespace
-            });
-
-            if (!isOwner) {
-              this.toastr.error('You are not authorized to create an application in this organization.', this.TOASTR_HEADER);
-              this.dialog.closeAll();
-            }
-          } else {
-            this.toastr.error('Application subdomain in this organization does not exist.', this.TOASTR_HEADER);
-            this.dialog.closeAll();
-          }
-        } else {
-          this.toastr.error('Organization namespace does not exist.', this.TOASTR_HEADER);
-          this.dialog.closeAll();
-        }
-      } catch (e) {
-        this.toastr.error(e.message, 'System Error');
-        this.dialog.closeAll();
-      } finally {
-        this.isChecking = false;
-        this.spinner.hide();
-      }
-    } else {
-      this.toastr.error('Organization Namespace is missing.', this.TOASTR_HEADER);
+    const exist =
+      await this.applicationCreationService.isOrganizationNamespaceAvailable(
+        this.origData.orgNamespace,
+        this.TOASTR_HEADER
+      );
+    if (!exist) {
       this.dialog.closeAll();
     }
-  }
-
-  backToOrg() {
-    this.stepper.steps.first.editable = true;
-    this.stepper.previous();
-    this.stepper.selected.completed = false;
-  }
-
-  logoUrlError() {
-    this._isLogoUrlValid = false;
-  }
-
-  logoUrlSuccess() {
-    this._isLogoUrlValid = true;
   }
 
   cancelAppDetails() {
@@ -186,141 +101,109 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
     this.stepper.selected.completed = false;
   }
 
-  async createNewApp() {
-    this.spinner.show();
-    this.isChecking = true;
+  async createNewApp(data: AppCreationDefinition) {
+    this.loadingService.show();
+    this.applicationData = data;
 
-    if (this.appForm.valid) {
-      let allowToProceed = true;
+    let allowToProceed = true;
 
-      // Check if app namespace is taken
-      const orgData = this.appForm.value;
-      const exists = await this.iamService.domainsService.checkExistenceOfDomain({
-        domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
-      });
+    // Check if app namespace is taken
+    const exists = await this.iamService.domainsService.checkExistenceOfDomain({
+      domain: data.domain,
+    });
 
-      if (exists) {
-        // If exists check if current user is the owner of this namespace and allow him/her to overwrite
-        const isOwner = await this.iamService.domainsService.isOwner({
-          domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
-        });
-
-        if (!isOwner) {
-          allowToProceed = false;
-
-          // Do not allow to proceed if app namespace already exists
-          this.toastr.error('Application namespace already exists. You have no access rights to it.', this.TOASTR_HEADER);
-        } else {
-          this.spinner.hide();
-
-          // Prompt if user wants to overwrite this namespace
-          if (!await this.confirm('Application namespace already exists. Do you wish to continue?')) {
-            allowToProceed = false;
-          } else {
-            this.spinner.show();
-          }
-        }
-      }
-
-      if (allowToProceed) {
-        if (!orgData.data.others || !orgData.data.others.trim()) {
-          // Let the user confirm the info before proceeding to the next step
-          this.stepper.selected.editable = false;
-          this.stepper.selected.completed = true;
-          this.stepper.next();
-        } else {
-          try {
-            // Check if others is in JSON Format
-            // console.info(JSON.parse(orgData.data.others));
-
-            // Let the user confirm the info before proceeding to the next step
-            this.stepper.selected.editable = false;
-            this.stepper.selected.completed = true;
-            this.stepper.next();
-          } catch (e) {
-            console.error(orgData.data.others, e);
-            this.toastr.error('Others must be in JSON format.', this.TOASTR_HEADER);
-          }
-        }
-      }
-    } else {
-      this.toastr.error('Form is invalid.', this.TOASTR_HEADER);
-    }
-
-    this.isChecking = false;
-    this.spinner.hide();
-  }
-
-  async updateApp() {
-    this.spinner.show();
-    this.isChecking = true;
-
-    if (this.appForm.valid) {
-      let allowToProceed = true;
-      const orgData = this.appForm.value;
-
-      // Check if current user is the owner of this namespace and allow him/her to overwrite
+    if (exists) {
+      // If exists check if current user is the owner of this namespace and allow him/her to overwrite
       const isOwner = await this.iamService.domainsService.isOwner({
-        domain: `${orgData.appName}.${this.ENSPrefixes.Application}.${orgData.orgNamespace}`
+        domain: data.domain,
       });
 
       if (!isOwner) {
         allowToProceed = false;
 
         // Do not allow to proceed if app namespace already exists
-        this.toastr.error('You have no update rights to this namespace.', this.TOASTR_HEADER);
+        this.toastr.error(
+          'Application namespace already exists. You have no access rights to it.',
+          this.TOASTR_HEADER
+        );
       } else {
-        this.spinner.hide();
+        this.loadingService.hide();
 
         // Prompt if user wants to overwrite this namespace
-        if (!await this.confirm('You are updating details of this application. Do you wish to continue?')) {
+        if (
+          !(await this.confirm(
+            'Application namespace already exists. Do you wish to continue?'
+          ))
+        ) {
           allowToProceed = false;
         } else {
-          this.spinner.show();
+          this.loadingService.show();
         }
       }
-
-      if (allowToProceed) {
-        if (!orgData.data.others || !orgData.data.others.trim()) {
-          // Let the user confirm the info before proceeding to the next step
-          this.stepper.selected.editable = false;
-          this.stepper.selected.completed = true;
-          this.stepper.next();
-        } else {
-          try {
-            // Check if others is in JSON Format
-            // console.info(JSON.parse(orgData.data.others));
-
-            // Let the user confirm the info before proceeding to the next step
-            this.stepper.selected.editable = false;
-            this.stepper.selected.completed = true;
-            this.stepper.next();
-          } catch (e) {
-            console.error(orgData.data.others, e);
-            this.toastr.error('Others must be in JSON format.', this.TOASTR_HEADER);
-          }
-        }
-      }
-    } else {
-      this.toastr.error('Form is invalid.', this.TOASTR_HEADER);
     }
 
-    this.isChecking = false;
-    this.spinner.hide();
+    if (allowToProceed) {
+      this.goNextStep();
+    }
+
+    this.loadingService.hide();
+  }
+
+  async updateApp(data: AppCreationDefinition) {
+    this.applicationData = data;
+    this.loadingService.show();
+
+    let allowToProceed = true;
+
+    // Check if current user is the owner of this namespace and allow him/her to overwrite
+    const isOwner = await this.iamService.domainsService.isOwner({
+      domain: data.domain,
+    });
+
+    if (!isOwner) {
+      allowToProceed = false;
+
+      // Do not allow to proceed if app namespace already exists
+      this.toastr.error(
+        'You have no update rights to this namespace.',
+        this.TOASTR_HEADER
+      );
+    } else {
+      this.loadingService.hide();
+
+      // Prompt if user wants to overwrite this namespace
+      if (
+        !(await this.confirm(
+          'You are updating details of this application. Do you wish to continue?'
+        ))
+      ) {
+        allowToProceed = false;
+      } else {
+        this.loadingService.show();
+      }
+    }
+
+    if (allowToProceed) {
+      this.goNextStep();
+    }
+
+    this.loadingService.hide();
   }
 
   async confirmApp(skipNextStep?: boolean) {
-    const req = JSON.parse(JSON.stringify({ ...this.appForm.value, returnSteps: true }));
+    const req = JSON.parse(
+      JSON.stringify({ ...this.applicationData, returnSteps: true })
+    );
 
-    req.namespace = `${this.ENSPrefixes.Application}.${req.orgNamespace}`;
+    req.namespace = `${NamespaceType.Application}.${req.orgNamespace}`;
     delete req.orgNamespace;
 
-    req.data.appName = req.data.applicationName;
-    delete req.data.applicationName;
-
     // Check if logoUrl resolves
-    if (req.data.logoUrl && !this._isLogoUrlValid) {
-      this.toastr.error('Logo URL cannot be resolved. Please change it to a correct and valid image URL.', this.TOASTR_HEADER);
+    if (req.data.logoUrl && !this.isLogoUrlValid) {
+      this.toastr.error(
+        'Logo URL cannot be resolved. Please change it to a correct and valid image URL.',
+        this.TOASTR_HEADER
+      );
       return;
     }
 
@@ -336,15 +219,13 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       delete req.data.others;
     }
 
-    // console.info('myreq', req);
-
     if (!skipNextStep) {
       // Set the second step to non-editable
       const list = this.stepper.steps.toArray();
       list[1].editable = false;
     }
 
-    if (this.viewType === ViewType.UPDATE) {
+    if (this.isUpdating) {
       this.proceedUpdateStep(req, skipNextStep);
     } else {
       this.proceedCreateSteps(req);
@@ -369,7 +250,10 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       // Make sure that the current step is not retried
       if (this._requests[`${requestIdx}`]) {
         this._currentIdx++;
-        this.toastr.info(step.info, `Transaction Success (${this._currentIdx}/${this.txs.length})`);
+        this.toastr.info(
+          step.info,
+          `Transaction Success (${this._currentIdx}/${this.txs.length})`
+        );
 
         // Remove 1st element
         steps.shift();
@@ -384,18 +268,26 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private async proceedCreateSteps(req: any) {
-    const returnSteps = this.data.owner === this.iamService.signerService.address;
-    req = { ...req, returnSteps };
+  private async proceedCreateSteps(
+    req: AppCreationDefinition & { namespace: string }
+  ) {
+    const returnSteps =
+      this.origData.owner === this.iamService.signerService.address;
     try {
-      const call = this.iamService.domainsService.createApplication(req);
+      const call = this.iamService.domainsService.createApplication({
+        ...req,
+        appName: req.name,
+        returnSteps,
+      });
       // Retrieve the steps to create an organization
-      this.txs = returnSteps ?
-        await call :
-        [{
-          info: 'Confirm transaction in your safe wallet',
-          next: async () => await call
-        }];
+      this.txs = returnSteps
+        ? await call
+        : [
+            {
+              info: 'Confirm transaction in your safe wallet',
+              next: async () => await call,
+            },
+          ];
       // Retrieve the steps to create an application
       this._requests[`${this._retryCount}`] = [...this.txs];
 
@@ -403,14 +295,19 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       await this.next(0);
     } catch (e) {
       console.error('New App Error', e);
-      this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+      this.toastr.error(
+        e.message || 'Please contact system administrator.',
+        'System Error'
+      );
     }
   }
 
   async retry() {
-    if (this.viewType !== ViewType.UPDATE) {
+    if (!this.isUpdating) {
       // Copy pending steps
-      this._requests[`${this._retryCount + 1}`] = [...this._requests[`${this._retryCount}`]];
+      this._requests[`${this._retryCount + 1}`] = [
+        ...this._requests[`${this._retryCount}`],
+      ];
 
       // Remove previous request
       delete this._requests[`${this._retryCount}`];
@@ -427,7 +324,10 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         }
       } catch (e) {
         console.error('New App Error', e);
-        this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+        this.toastr.error(
+          e.message || 'Please contact system administrator.',
+          'System Error'
+        );
       }
     } else {
       delete this._requests[`${this._retryCount++}`];
@@ -444,16 +344,16 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
         this.stepper.next();
       }
 
-      // Set Definition
-      const newDomain = `${req.appName}.${req.namespace}`;
+      const definition = {
+        data: req.data,
+        domain: req.domain,
+      };
       this.txs = [
         {
           info: 'Setting up definitions',
-          next: async () => await this.iamService.domainsService.setRoleDefinition({
-            data: req.data,
-            domain: newDomain
-          })
-        }
+          next: async () =>
+            await this.iamService.domainsService.setRoleDefinition(definition),
+        },
       ];
 
       this._requests[`${retryCount}`] = [...this.txs];
@@ -464,44 +364,75 @@ export class NewApplicationComponent implements OnInit, AfterViewInit {
       // Make sure that all steps are not yet complete
       if (this.stepper.selectedIndex !== 3 && retryCount === this._retryCount) {
         // Move to Complete Step
-        this.toastr.info('Set definition for application', 'Transaction Success');
+        this.toastr.info(
+          'Set definition for application',
+          'Transaction Success'
+        );
         this.stepper.selected.completed = true;
         this.stepper.next();
       }
     } catch (e) {
       console.error('Update App Error', e);
-      this.toastr.error(e.message || 'Please contact system administrator.', 'System Error');
+      this.toastr.error(
+        e.message || 'Please contact system administrator.',
+        'System Error'
+      );
     }
   }
 
   private async confirm(confirmationMsg: string, isDiscardButton?: boolean) {
-    return this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
-      maxHeight: '195px',
-      data: {
-        header: this.TOASTR_HEADER,
-        message: confirmationMsg,
-        isDiscardButton
-      },
-      maxWidth: '100%',
-      disableClose: true
-    }).afterClosed().toPromise();
+    return this.dialog
+      .open(ConfirmationDialogComponent, {
+        width: '400px',
+        maxHeight: '195px',
+        data: {
+          header: this.TOASTR_HEADER,
+          message: confirmationMsg,
+          isDiscardButton,
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .toPromise();
   }
 
-  async closeDialog(isSuccess?: boolean) {
-    if (this.appForm.touched && !isSuccess) {
+  update(data: AppCreationDefinition): void {
+    if (this.isUpdating) {
+      this.updateApp(data);
+    } else {
+      this.createNewApp(data);
+    }
+  }
+
+  async closeDialog2(value: boolean) {
+    if (value) {
       if (await this.confirm('There are unsaved changes.', true)) {
         this.dialogRef.close(false);
       }
-    } else {
-      if (isSuccess) {
-        if (this.origData) {
-          this.toastr.success('Application is successfully updated.', this.TOASTR_HEADER);
-        } else {
-          this.toastr.success('Application is successfully created.', this.TOASTR_HEADER);
-        }
-      }
-      this.dialogRef.close(isSuccess);
     }
+  }
+
+  async closeDialog(isSuccess?: boolean) {
+    if (isSuccess) {
+      if (this.origData) {
+        this.toastr.success(
+          'Application is successfully updated.',
+          this.TOASTR_HEADER
+        );
+      } else {
+        this.toastr.success(
+          'Application is successfully created.',
+          this.TOASTR_HEADER
+        );
+      }
+    }
+    this.dialogRef.close(isSuccess);
+  }
+
+  private goNextStep() {
+    this.stepper.selected.editable = false;
+    this.stepper.selected.completed = true;
+    this.stepper.next();
   }
 }

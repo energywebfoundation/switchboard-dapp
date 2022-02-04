@@ -3,7 +3,7 @@ import { safeAppSdk } from './gnosis.safe.service';
 import { SafeInfo } from '@gnosis.pm/safe-apps-sdk';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConfigService {
   public safeInfo: SafeInfo;

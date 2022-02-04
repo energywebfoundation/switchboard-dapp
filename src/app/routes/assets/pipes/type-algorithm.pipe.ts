@@ -2,11 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { KeyTypesEnum } from '../models/keyTypesEnum';
 
 @Pipe({
-  name: 'typeAlgorithm'
+  name: 'typeAlgorithm',
 })
 export class TypeAlgorithmPipe implements PipeTransform {
-
-  transform(value: string, ...args: unknown[]): unknown {
+  transform(value: string): unknown {
     if (!value) {
       return '';
     }
@@ -19,6 +18,6 @@ export class TypeAlgorithmPipe implements PipeTransform {
   getListOfKeys(value: string): string[] {
     return Object.entries(KeyTypesEnum)
       .filter((entry) => value.includes(entry[1]))
-      .map(entry => entry[0]);
+      .map((entry) => entry[0]);
   }
 }

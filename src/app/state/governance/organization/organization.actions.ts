@@ -1,9 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { OrganizationProvider } from './models/organization-provider.interface';
 
-export const getList = createAction(
-  '[ORG] Get Organization List'
-);
+export const getList = createAction('[ORG] Get Organization List');
 
 export const getListSuccess = createAction(
   '[ORG] Get Organization List Success',
@@ -22,7 +20,7 @@ export const setHistory = createAction(
 
 export const setHistorySuccess = createAction(
   '[ORG] Set Organization History Success',
-  props<{ history: OrganizationProvider[], element: OrganizationProvider }>()
+  props<{ history: OrganizationProvider[]; element: OrganizationProvider }>()
 );
 
 export const setHistoryFailure = createAction(
@@ -36,12 +34,10 @@ export const createSub = createAction(
 );
 
 export const createSubForParent = createAction(
-  '[ORG] Create Sub Organization For Parent',
+  '[ORG] Create Sub Organization For Parent'
 );
 
-export const cleanHierarchy = createAction(
-  '[ORG] Clean Hierarchy List',
-);
+export const cleanHierarchy = createAction('[ORG] Clean Hierarchy List');
 
 export const updateSelectedOrgAfterEdit = createAction(
   '[ORG] Update Selected Organization History After Edit'

@@ -14,10 +14,10 @@ describe('DidBookHttpService', () => {
     TestBed.configureTestingModule({
       providers: [
         DidBookHttpService,
-        {provide: HttpClient, useValue: httpSpy},
-        {provide: LoadingService, useValue: loadingServiceSpy},
-        {provide: EnvService, useValue: {}}
-      ]
+        { provide: HttpClient, useValue: httpSpy },
+        { provide: LoadingService, useValue: loadingServiceSpy },
+        { provide: EnvService, useValue: {} },
+      ],
     });
     service = TestBed.inject(DidBookHttpService);
   });

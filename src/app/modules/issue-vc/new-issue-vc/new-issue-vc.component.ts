@@ -3,7 +3,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { PreconditionCheck, preconditionCheck } from '../../../routes/registration/utils/precondition-check';
+import {
+  PreconditionCheck,
+  preconditionCheck,
+} from '../../../routes/registration/utils/precondition-check';
 import { filter, switchMap } from 'rxjs/operators';
 import { EnrolmentSubmission } from '../../../routes/registration/enrolment-form/enrolment-form.component';
 import { IRole } from 'iam-client-lib';
@@ -15,24 +18,25 @@ const DEFAULT_CLAIM_TYPE_VERSION = 1;
 @Component({
   selector: 'app-new-issue-vc',
   templateUrl: './new-issue-vc.component.html',
-  styleUrls: ['./new-issue-vc.component.scss']
+  styleUrls: ['./new-issue-vc.component.scss'],
 })
 export class NewIssueVcComponent implements OnInit {
   fieldList = [];
   form = this.fb.group({
     subject: ['', [Validators.required, HexValidators.isDidValid()]],
-    type: ['', [Validators.required]]
+    type: ['', [Validators.required]],
   });
   possibleRolesToEnrol: IRole[];
   selectedRoleDefinition: IRoleDefinition;
   isPrecheckSuccess: boolean;
   rolePreconditionList: PreconditionCheck[] = [];
 
-  constructor(private fb: FormBuilder,
-              @Inject(MAT_DIALOG_DATA) public data: { did: string },
-              public dialogRef: MatDialogRef<NewIssueVcComponent>,
-              private issuanceVcService: IssuanceVcService) {
-  }
+  constructor(
+    private fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: { did: string },
+    public dialogRef: MatDialogRef<NewIssueVcComponent>,
+    private issuanceVcService: IssuanceVcService
+  ) {}
 
   ngOnInit(): void {
     this.setDid();
@@ -48,7 +52,10 @@ export class NewIssueVcComponent implements OnInit {
   }
 
   private setPreconditions(): void {
-    [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(this.selectedRoleDefinition.enrolmentPreconditions, this.issuanceVcService.assetClaims);
+    [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(
+      this.selectedRoleDefinition.enrolmentPreconditions,
+      this.issuanceVcService.assetClaims
+    );
   }
 
   getFormSubject() {
@@ -68,7 +75,7 @@ export class NewIssueVcComponent implements OnInit {
   }
 
   scannedValue(did: string): void {
-    this.form.patchValue({subject: did});
+    this.form.patchValue({ subject: did });
   }
 
   isFormDisabled(): boolean {
@@ -79,21 +86,26 @@ export class NewIssueVcComponent implements OnInit {
     if (this.isFormDisabled() && e.valid) {
       return;
     }
-    this.issuanceVcService.create({subject: this.getFormSubject().value, claim: this.createClaim(e.fields)})
+    this.issuanceVcService
+      .create({
+        subject: this.getFormSubject().value,
+        claim: this.createClaim(e.fields),
+      })
       .subscribe(() => this.dialogRef.close());
   }
 
   private setPossibleRoles() {
-    this.getFormSubject().valueChanges
-      .pipe(
+    this.getFormSubject()
+      .valueChanges.pipe(
         filter(() => this.isFormSubjectValid()),
-        switchMap((did) => this.issuanceVcService.getNotEnrolledRoles(did)),
-      ).subscribe((list) => this.possibleRolesToEnrol = list);
+        switchMap((did) => this.issuanceVcService.getNotEnrolledRoles(did))
+      )
+      .subscribe((list) => (this.possibleRolesToEnrol = list));
   }
 
   private setDid() {
     if (this.data?.did) {
-      this.form.patchValue({subject: this.data.did});
+      this.form.patchValue({ subject: this.data.did });
       this.getFormSubject().disable();
     }
   }
@@ -101,7 +113,7 @@ export class NewIssueVcComponent implements OnInit {
   private createClaim(fields) {
     // TODO: Move this method to separate service and use it in request-claim component.
     const parseVersion = (version: string | number) => {
-      if (typeof (version) === 'string') {
+      if (typeof version === 'string') {
         return parseInt(version.split('.')[0], 10);
       }
       return version;
@@ -109,8 +121,10 @@ export class NewIssueVcComponent implements OnInit {
 
     return {
       claimType: this.getFormType().value.namespace,
-      claimTypeVersion: parseVersion(this.selectedRoleDefinition.version) || DEFAULT_CLAIM_TYPE_VERSION,
-      issuerFields: fields
+      claimTypeVersion:
+        parseVersion(this.selectedRoleDefinition.version) ||
+        DEFAULT_CLAIM_TYPE_VERSION,
+      issuerFields: fields,
     };
   }
 }
