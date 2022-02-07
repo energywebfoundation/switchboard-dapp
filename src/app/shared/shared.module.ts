@@ -48,7 +48,7 @@ import { CopyToClipboardModule } from './directives/copy-to-clipboard/copy-to-cl
 import { DidFormatMinifierModule } from './pipes/did-format-minifier/did-format-minifier.module';
 import { TableHeadingComponent } from './components/table-heading/table-heading.component';
 import { NoRecordsComponent } from './components/no-records/no-records.component';
-import { RoleTypePipe } from './pipes/role-type/role-type.pipe';
+import { DomainTypePipe } from './pipes/domain-type/domain-type.pipe';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 const MATERIAL_MODULES = [
@@ -109,7 +109,7 @@ const MATERIAL_MODULES = [
     ReplaceUnderscorePipe,
     TableHeadingComponent,
     NoRecordsComponent,
-    RoleTypePipe,
+    DomainTypePipe,
   ],
   exports: [
     CommonModule,
@@ -128,7 +128,7 @@ const MATERIAL_MODULES = [
     DidFormatMinifierModule,
     TableHeadingComponent,
     NoRecordsComponent,
-    RoleTypePipe,
+    DomainTypePipe,
     BsDropdownModule,
   ],
 })

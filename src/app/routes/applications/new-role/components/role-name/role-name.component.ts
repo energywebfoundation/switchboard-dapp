@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ENSPrefixes, RoleTypeEnum } from '../../new-role.component';
+import { ENSPrefixes, DomainTypeEnum } from '../../new-role.component';
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { isAlphanumericValidator, StringTransform } from '@utils';
 import { RoleCreationService } from '../../services/role-creation.service';
@@ -13,7 +13,7 @@ import { CreationBaseAbstract } from '../../../utils/creation-base.abstract';
   styleUrls: ['./role-name.component.scss'],
 })
 export class RoleNameComponent extends CreationBaseAbstract {
-  @Input() roleType: RoleTypeEnum;
+  @Input() roleType: DomainTypeEnum;
   @Input() parentNamespace: string;
 
   @Output() proceed = new EventEmitter<string>();

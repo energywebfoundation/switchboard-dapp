@@ -45,7 +45,7 @@ export const RoleType = {
   CUSTOM: 'custom',
 };
 
-export enum RoleTypeEnum {
+export enum DomainTypeEnum {
   ORG = 'org',
   APP = 'app',
   CUSTOM = 'custom',
