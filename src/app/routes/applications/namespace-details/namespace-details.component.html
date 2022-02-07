@@ -1,7 +1,7 @@
 <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
   <div class="d-flex justify-content-center">
     <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
-      <img class="img-logo" src="../assets/img/no-application-image.png" height="48px" *ngIf="!data?.logoUrl" />
+      <img class="img-logo" [src]="url" height="48px" *ngIf="!data?.logoUrl" />
       <img
         class="img-logo"
         *ngIf="data?.logoUrl"
@@ -11,16 +11,16 @@
     </div>
   </div>
   <div class="text-left my-3">
-    <div class="label opacity-50 mb-2">Application Namespace</div>
+    <div class="label opacity-50 mb-2">{{ type }} Namespace</div>
     <span class="color-white mb-0">
       {{ namespace }}
     </span>
   </div>
   <mat-divider></mat-divider>
   <div class="text-left my-3">
-    <div class="label opacity-50 mb-2">Application Name</div>
+    <div class="label opacity-50 mb-2">{{ type }} Name</div>
     <span class="color-white mb-0">
-      {{ data?.appName }}
+      {{ name }}
     </span>
   </div>
   <mat-divider></mat-divider>
