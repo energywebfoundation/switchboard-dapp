@@ -20,13 +20,7 @@
   </div>
   <!-- End Asset Ownership list Layout -->
 
-  <!-- Shows when table is empty -->
-  <div class="d-flex justify-content-center align-items-center mt-4 mb-3" *ngIf="!dataSource?.data?.length">
-    <div class="d-flex align-items-center no-record color-white">
-      <mat-icon class="mr-2">info</mat-icon>
-      <i>No Record Found</i>
-    </div>
-  </div>
+  <app-no-records *ngIf="!dataSource?.data?.length"></app-no-records>
   <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
   </mat-paginator> -->
 </div>

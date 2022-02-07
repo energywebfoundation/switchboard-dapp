@@ -75,14 +75,8 @@
       </button>
     </div>
   </div>
-  <!-- Shows when list is empty -->
   <ng-template #emptyList>
-    <div class="d-flex justify-content-center align-items-center mt-4 mb-3">
-      <div class="d-flex align-items-center no-record color-white">
-        <mat-icon class="mr-2">info</mat-icon>
-        <i>No Record Found</i>
-      </div>
-    </div>
+    <app-no-records></app-no-records>
   </ng-template>
   <mat-paginator
     [pageSizeOptions]="[5, 10, 20]"
