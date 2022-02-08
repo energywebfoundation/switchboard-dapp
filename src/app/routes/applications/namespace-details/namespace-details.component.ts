@@ -8,18 +8,24 @@ import {
 import { IAppDefinition } from '@energyweb/iam-contracts';
 
 @Component({
-  selector: 'app-application-details',
-  templateUrl: './application-details.component.html',
-  styleUrls: ['./application-details.component.scss'],
+  selector: 'app-namespace-details',
+  templateUrl: './namespace-details.component.html',
+  styleUrls: ['./namespace-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ApplicationDetailsComponent {
+export class NamespaceDetailsComponent {
   @Input() namespace: string;
+  @Input() name: string;
+  @Input() type: 'Application' | 'Organization';
   @Input() data: IAppDefinition;
 
   @Output() imageLoaded = new EventEmitter<boolean>();
 
   imageEventHandler(value: boolean): void {
     this.imageLoaded.emit(value);
+  }
+
+  get url() {
+    return `../assets/img/no-${this.type.toLowerCase()}-image.png`;
   }
 }

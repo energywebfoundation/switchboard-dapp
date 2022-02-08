@@ -1,23 +1,24 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ApplicationDetailsComponent } from './application-details.component';
-import { DefaultValuePipe } from '../../pipes/default-value.pipe';
+import { NamespaceDetailsComponent } from './namespace-details.component';
+import { DefaultValuePipe } from '../pipes/default-value.pipe';
 
 describe('ApplicationDetailsComponent', () => {
-  let component: ApplicationDetailsComponent;
-  let fixture: ComponentFixture<ApplicationDetailsComponent>;
+  let component: NamespaceDetailsComponent;
+  let fixture: ComponentFixture<NamespaceDetailsComponent>;
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [ApplicationDetailsComponent, DefaultValuePipe],
+        declarations: [NamespaceDetailsComponent, DefaultValuePipe],
       }).compileComponents();
     })
   );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApplicationDetailsComponent);
+    fixture = TestBed.createComponent(NamespaceDetailsComponent);
     component = fixture.componentInstance;
+    component.type = 'Organization';
     fixture.detectChanges();
   });
 
