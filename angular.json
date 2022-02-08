@@ -222,33 +222,6 @@
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"],
             "outputFile": "eslint_report.json"
           }
-        },
-        "e2e": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "switchboard-dapp:serve",
-            "watch": true,
-            "headless": false
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "switchboard-dapp:serve:production"
-            }
-          }
-        },
-        "cypress-run": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "switchboard-dapp:serve"
-          }
-        },
-        "cypress-open": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "switchboard-dapp:serve",
-            "watch": true,
-            "headless": false
-          }
         }
       }
     }
