@@ -43,10 +43,8 @@ export class OrganizationEffects {
           map((org) => {
             if (org.subOrgs && org.subOrgs.length) {
               return OrganizationActions.setHistorySuccess({
-                history: org.subOrgs.filter(
-                  (item) => item.owner === org.owner
-                ) as OrganizationProvider[],
-                element: org as OrganizationProvider,
+                history: org.subOrgs.filter((item) => item.owner === org.owner),
+                element: org,
               });
             } else {
               this.toastr.warning(
