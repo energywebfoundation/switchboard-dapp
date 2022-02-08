@@ -25,10 +25,6 @@
     "test:headless": "ng test --karma-config=karma-headless.conf.js",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "cypress:open": "ng run switchboard-dapp:cypress-open",
-    "cypress:run": "ng run switchboard-dapp:cypress-run --spec cypress/integration/ui/**/*.spec.ts",
-    "cy:run:ci": "npm run ng serve",
-    "precy:run:ci": "echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p",
     "stedin:flags": "node scripts/stedin.js",
     "analyze": "ng build -- --statsJson=true && webpack-bundle-analyzer dist/stats.json"
   },
@@ -88,7 +84,6 @@
     "@angular/cli": "13.1.4",
     "@angular/compiler-cli": "13.1.3",
     "@angular/language-service": "13.1.3",
-    "@cypress/schematic": "^1.5.1",
     "@energyweb/eslint-config": "^0.0.0",
     "@energyweb/prettier-config": "^0.0.0",
     "@types/codemirror": "0.0.67",
@@ -97,7 +92,6 @@
     "@types/node": "^12.20.42",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
-    "cypress": "8.5.0",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^8.3.0",
     "jasmine-core": "^4.0.0",
@@ -116,7 +110,6 @@
     "prettier": "^2.5.1",
     "ts-node": "7.0.0",
     "typescript": "4.5.4",
-    "webdriver-manager": "10.2.5",
     "webpack-bundle-analyzer": "^4.5.0"
   }
 }
