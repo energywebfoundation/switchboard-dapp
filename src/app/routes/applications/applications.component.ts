@@ -97,7 +97,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isIamEwcOwner) {
       const namespace =
         'orgcreator.apps.testorg.' + this.envService.rootNamespace;
-      const roleName = 'orgowner';
+      const roleName = 'org';
       this.router.navigate([`enrol`], {
         queryParams: { roleName, app: namespace, stayLoggedIn: true },
       });
