@@ -1,0 +1,13 @@
+@startuml ewf-ssi-container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(ewf_wallet_user, "EWF SSI Wallet User")
+
+AddRelTag("dashed", $lineStyle = DashedLine())
+
+System_Boundary(ewf_stack, "EWF SSI/IAM Stack") {
+  Container(ssi_agent, "EWF SSI Agent", "iam-cache-server & ssi-server", "Encapsulate SSI functions. See DIF FAQ for agent definition.")
+  Container(switchboard, "Switchboad", "angular dapp", "UI for Governance and SSI Wallet functions")
+}
+
+@enduml

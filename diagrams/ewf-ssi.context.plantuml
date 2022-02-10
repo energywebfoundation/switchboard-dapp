@@ -1,0 +1,21 @@
+@startuml ewf-ssi-container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(ewf_wallet_user, "EWF SSI Wallet User")
+Person(ewf_role_governance_user, "EWF Role Governance User")
+Person(other_stack_user, "Other SSI User")
+
+AddRelTag("dashed", $lineStyle = DashedLine())
+System(ewf_ssi_wallet, "EWF SSI Wallet", "")
+System(ewf_role_governance, "EWF SSI Governance", "")
+System(other_ssi_stack, "Other SSI Wallet")
+
+Rel(ewf_role_governance_user, ewf_role_governance, "Configures")
+Rel(ewf_wallet_user, ewf_ssi_wallet, "Operates")
+Rel(other_stack_user, other_ssi_stack, "Operates")
+Rel(ewf_ssi_wallet, other_ssi_stack, "Exchange Credentials")
+Rel(other_ssi_stack, ewf_ssi_wallet, "Exchange Credentials")
+Rel(ewf_ssi_wallet, ewf_role_governance, "Trusts")
+Rel(other_ssi_stack, ewf_role_governance, "Trusts")
+
+@enduml
