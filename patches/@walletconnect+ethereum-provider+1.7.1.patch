@@ -1,5 +1,5 @@
 diff --git a/node_modules/@walletconnect/ethereum-provider/dist/cjs/index.js b/node_modules/@walletconnect/ethereum-provider/dist/cjs/index.js
-index fe36b60..3741c6f 100644
+index fe36b60..e692845 100644
 --- a/node_modules/@walletconnect/ethereum-provider/dist/cjs/index.js
 +++ b/node_modules/@walletconnect/ethereum-provider/dist/cjs/index.js
 @@ -63,6 +63,8 @@ class WalletConnectProvider {
@@ -12,7 +12,7 @@ index fe36b60..3741c6f 100644
          });
      }
 diff --git a/node_modules/@walletconnect/ethereum-provider/dist/esm/index.js b/node_modules/@walletconnect/ethereum-provider/dist/esm/index.js
-index 136774d..923ece4 100644
+index 136774d..006e149 100644
 --- a/node_modules/@walletconnect/ethereum-provider/dist/esm/index.js
 +++ b/node_modules/@walletconnect/ethereum-provider/dist/esm/index.js
 @@ -55,6 +55,8 @@ class WalletConnectProvider {
