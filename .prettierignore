@@ -11,3 +11,4 @@ karma-headless.conf.js
 eslint_report.json
 coverage/
 .angular/
+package-lock.json
