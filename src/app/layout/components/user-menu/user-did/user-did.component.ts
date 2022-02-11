@@ -17,9 +17,9 @@ export class UserDidComponent {
   }
   get qrCodeData(): QrCodeData {
     return {
-      did: this.did,
       type: ScanType.User,
-      additionalData: {
+      data: {
+        did: this.did,
         label: userLocalStorage.parsed?.name,
       },
     };

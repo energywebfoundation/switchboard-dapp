@@ -31,8 +31,8 @@ export class QrCodeScannerService {
     }
   }
 
-  private handleUserQrCode(data: QrCodeData) {
-    if (this.didBookService.exist(data.did)) {
+  private handleUserQrCode(qrCodeData: QrCodeData) {
+    if (this.didBookService.exist(qrCodeData.data?.did)) {
       this.toastr.info('This user already exist in Your contact book');
       return;
     }
@@ -42,8 +42,8 @@ export class QrCodeScannerService {
       {
         width: '600px',
         data: {
-          did: data.did,
-          label: data?.additionalData?.label,
+          did: qrCodeData.data?.did,
+          label: qrCodeData?.data?.label,
         },
         maxWidth: '100%',
         disableClose: true,

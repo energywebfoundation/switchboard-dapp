@@ -40,8 +40,8 @@ export class DidBookListComponent {
   qrCodeData(element: DidBookRecord): QrCodeData {
     return {
       type: ScanType.User,
-      did: element.did,
-      additionalData: {
+      data: {
+        did: element.did,
         label: element.label,
       },
     };

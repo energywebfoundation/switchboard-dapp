@@ -31,14 +31,14 @@ describe('QrCodeScannerService', () => {
 
   it('should call toastr information when did already exsit in contact book', () => {
     didBookServiceSpy.exist.and.returnValue(true);
-    service.dataFactory({ type: ScanType.User, did: '123' });
+    service.dataFactory({ type: ScanType.User, data: { did: '123' } });
 
     expect(toastrSpy.info).toHaveBeenCalled();
   });
 
   it('should open did contact book component when did do not exist on the list', () => {
     didBookServiceSpy.exist.and.returnValue(false);
-    service.dataFactory({ type: ScanType.User, did: '123' });
+    service.dataFactory({ type: ScanType.User, data: { did: '123' } });
 
     expect(dialogSpy.open).toHaveBeenCalled();
   });
@@ -46,7 +46,7 @@ describe('QrCodeScannerService', () => {
   it('should display error when scanning not supported type', () => {
     spyOn(console, 'error');
 
-    service.dataFactory({ type: 'random Type' as any, did: '123' });
+    service.dataFactory({ type: 'random Type' as any, data: { did: '123' } });
 
     expect(console.error).toHaveBeenCalled();
   });

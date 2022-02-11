@@ -57,7 +57,7 @@ describe('QrCodeScannerDirective', () => {
 
   it('should check if emits value', () => {
     dialogSpy.open.and.returnValue({
-      afterClosed: () => of({ did: 'did', type: ScanType.Asset }),
+      afterClosed: () => of({ type: ScanType.Asset, data: { did: 'did' } }),
     });
     getElement(hostDebug)('scanner').nativeElement.click();
 

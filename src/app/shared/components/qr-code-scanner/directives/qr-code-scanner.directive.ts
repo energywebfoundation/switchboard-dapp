@@ -36,7 +36,7 @@ export class QrCodeScannerDirective {
         }
       )
       .afterClosed()
-      .pipe(filter((data) => !!data?.did && !!data?.type));
+      .pipe(filter((qrCodeData) => !!qrCodeData?.data && !!qrCodeData?.type));
 
     this.handleScannedValue(afterClosed);
     this.detectDefaultBehaviour(afterClosed);

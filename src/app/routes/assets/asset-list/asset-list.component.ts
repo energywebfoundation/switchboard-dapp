@@ -348,8 +348,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
     this.qrCodeService.open({
       header: 'Asset DID QR-Code',
       qrCodeData: {
-        did: data.id,
         type: ScanType.Asset,
+        data: {
+          did: data.id,
+        },
       },
     });
   }

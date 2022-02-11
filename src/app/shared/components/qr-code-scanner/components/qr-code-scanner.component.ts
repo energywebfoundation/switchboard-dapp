@@ -11,7 +11,6 @@ export class QrCodeScannerComponent {
   constructor(private dialogRef: MatDialogRef<QrCodeScannerComponent>) {}
 
   scanned(result: { text: string }) {
-    console.log(result);
     if (!result) {
       return;
     }
