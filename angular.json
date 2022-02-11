@@ -228,7 +228,6 @@
   },
   "defaultProject": "switchboard-dapp",
   "cli": {
-    "analytics": false,
-    "defaultCollection": "@angular-eslint/schematics"
+    "analytics": false
   }
 }

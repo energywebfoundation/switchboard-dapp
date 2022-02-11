@@ -27,7 +27,7 @@
                 mat-icon-button
                 aria-label="Scan DID"
                 appQrCodeScanner
-                (scannedValue)="scannedValue($event.value)">
+                (scannedValue)="scannedValue($event.data?.did)">
                 <mat-icon>qr_code_2</mat-icon>
               </button>
               <mat-error *ngIf="getFormSubject().hasError('required')">

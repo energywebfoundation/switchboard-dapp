@@ -82,4 +82,24 @@ describe('DidBookService', () => {
       done();
     });
   });
+
+  it('should return true when checking if did exist', () => {
+    didBookHttpServiceSpy.getList.and.returnValue(
+      of([{ did: '1' }, { did: '2' }])
+    );
+
+    service.getList();
+
+    expect(service.exist('1')).toBeTrue();
+  });
+
+  it('should return false when checking if did exist', () => {
+    didBookHttpServiceSpy.getList.and.returnValue(
+      of([{ did: '1' }, { did: '2' }])
+    );
+
+    service.getList();
+
+    expect(service.exist('3')).toBeFalse();
+  });
 });

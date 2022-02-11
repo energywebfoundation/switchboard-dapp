@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SearchResultComponent } from './search-result.component';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';

@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Service, IOrganization } from 'iam-client-lib';
+import { IOrganization, Service } from 'iam-client-lib';
 
 export function filterProviders() {
   return (source: Observable<[Service[], IOrganization[]]>) => {
