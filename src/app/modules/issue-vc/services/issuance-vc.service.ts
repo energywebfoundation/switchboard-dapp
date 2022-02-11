@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { finalize, map, tap } from 'rxjs/operators';
-import { Claim, IRole } from 'iam-client-lib';
+import { Claim, IRole, RegistrationTypes } from 'iam-client-lib';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -25,7 +25,10 @@ export class IssuanceVcService {
   }
 
   create(data: { subject: string; claim: any }) {
-    return this.iamService.issueClaim(data);
+    return this.iamService.issueClaim({
+      ...data,
+      registrationTypes: [RegistrationTypes.OffChain],
+    });
   }
 
   getNotEnrolledRoles(did): Observable<IRole[]> {

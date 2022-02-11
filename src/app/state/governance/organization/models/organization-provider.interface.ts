@@ -1,10 +1,9 @@
-import { Provider } from '../../../stake/models/provider.interface';
 import { IOrganization } from 'iam-client-lib';
 
-export interface OrganizationProvider extends Provider, IOrganization {
-  isProvider: boolean;
-  isOwnedByCurrentUser: boolean;
-  id: number;
-  containsApps: boolean;
-  containsRoles: boolean;
+export interface OrganizationProvider extends Omit<IOrganization, 'subOrgs'> {
+  isProvider?: boolean;
+  isOwnedByCurrentUser?: boolean;
+  subOrgs?: OrganizationProvider[];
+  containsApps?: boolean;
+  containsRoles?: boolean;
 }
