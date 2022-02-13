@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RolePreconditionType } from '../models/role-precondition-type.enum';
 import { PreconditionCheck } from '../utils/precondition-check';
 
@@ -6,9 +6,10 @@ import { PreconditionCheck } from '../utils/precondition-check';
   selector: 'app-role-precondition-list',
   templateUrl: './role-precondition-list.component.html',
   styleUrls: ['./role-precondition-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RolePreconditionListComponent {
-  @Input() preconditionList: PreconditionCheck;
+  @Input() preconditionList: PreconditionCheck[];
 
   isApproved(status: RolePreconditionType): boolean {
     return status === RolePreconditionType.APPROVED;
