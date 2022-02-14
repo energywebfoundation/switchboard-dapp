@@ -255,7 +255,7 @@
                 <span>Generate QR-Code</span>
               </button>
 
-              <button mat-menu-item class="btn-color-primary" (click)="createVC(element)">
+              <button mat-menu-item class="btn-color-primary" (click)="createVC(element)" *ngIf="issuesRoles">
                 <mat-icon class="btn-color-primary btn-action-3"> contact_page</mat-icon>
                 <span>Issue Claim to Asset</span>
               </button>

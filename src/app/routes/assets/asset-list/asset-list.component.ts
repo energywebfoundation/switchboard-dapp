@@ -41,6 +41,7 @@ import { Store } from '@ngrx/store';
 import { OwnedAssetsActions, OwnedAssetsSelectors } from '@state';
 import { QrCodeService } from '../../../shared/components/qr-code/services/qr-code.service';
 import { ScanType } from '../../../shared/components/qr-code-scanner/models/scan-type.enum';
+import { IssuanceVcService } from '../../../modules/issue-vc/services/issuance-vc.service';
 
 const HEADER_TRANSFER_OWNERSHIP = 'Transfer Ownership';
 const HEADER_CANCEL_OWNERSHIP = 'Cancel Offered Ownership';
@@ -81,7 +82,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private route: Router,
     private store: Store,
-    private qrCodeService: QrCodeService
+    private qrCodeService: QrCodeService,
+    private issuanceVCService: IssuanceVcService
   ) {}
 
   async ngOnDestroy(): Promise<void> {
@@ -255,6 +257,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
         this.loadingService.hide();
       }
     }
+  }
+
+  get issuesRoles(): boolean {
+    return this.issuanceVCService.hasRoles();
   }
 
   async rejectAssetOffer(data: Asset) {
