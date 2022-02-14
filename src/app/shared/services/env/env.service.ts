@@ -11,7 +11,6 @@ export class EnvService {
   natsServerUrl = environment.natsServerUrl;
   kmsServerUrl = environment.kmsServerUrl;
   ekcUrl = environment.ekcUrl;
-  claimManagerAddress: string = environment.claimManagerAddress;
   showAzureLoginOption: boolean = environment.showAzureLoginOption;
   natsEnvironmentName: string = environment.natsEnvironmentName;
   rootNamespace: string = environment.rootNamespace;

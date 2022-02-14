@@ -267,10 +267,6 @@ export class IamService {
       rpcUrl: this.envService.rpcUrl,
     };
 
-    if (this.envService.claimManagerAddress) {
-      chainConfig.claimManagerAddress = this.envService.claimManagerAddress;
-    }
-
     return chainConfig;
   }
 
