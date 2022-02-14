@@ -1,14 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
 
 @Component({
   selector: 'app-fields-details',
   templateUrl: './fields-details.component.html',
   styleUrls: ['./fields-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FieldsDetailsComponent {
   @Input() title: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @Input() data: any[];
+  @Input() data: IFieldDefinition[];
   displayedColumnsView: string[] = [
     'type',
     'label',

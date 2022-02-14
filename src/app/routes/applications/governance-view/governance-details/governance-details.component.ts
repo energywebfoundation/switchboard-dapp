@@ -8,6 +8,7 @@ import { LoadingService } from '../../../../shared/services/loading.service';
 import { RoleType } from '../../new-role/new-role.component';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { IssuerType } from '../../new-role/models/issuer-type.enum';
+import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
 
 @Component({
   selector: 'app-governance-details',
@@ -37,15 +38,15 @@ export class GovernanceDetailsComponent {
   PreconditionTypes = PreconditionType;
   panelOpenState = false;
 
-  get requestorFields() {
-    return this.formData?.definition?.fields;
+  get requestorFields(): IFieldDefinition[] {
+    return this.formData?.definition?.requestorFields || this.formData?.definition?.fields;
   }
 
-  get issuerFields() {
+  get issuerFields(): IFieldDefinition[] {
     return this.formData?.definition?.issuerFields;
   }
 
-  get isDIDType() {
+  get isDIDType(): boolean {
     return this.issuer?.issuerType === IssuerType.DID;
   }
 

@@ -15,6 +15,8 @@ import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.component';
+import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
+import { KeyValue } from '@angular/common';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -27,8 +29,8 @@ export class ViewRequestsComponent implements OnInit {
   @ViewChild('issuerFields', { static: false }) requiredFields: EnrolmentForm;
   listType: string;
   claim: any;
-  fields = [];
-  issuerFields = [];
+  requestorFields: KeyValue<string, string | number>[] = [];
+  issuerFields: KeyValue<string, string | number>[] = [];
   userDid$ = this.store.select(userSelectors.getDid);
   claimParams;
   fieldList = [];
@@ -167,11 +169,24 @@ export class ViewRequestsComponent implements OnInit {
     if (this.claim.token) {
       const decoded = await this.decode(this.claim.token);
       if (decoded.claimData) {
-        this.fields = decoded.claimData?.fields
-          ? decoded.claimData?.fields
-          : [];
+        this.requestorFields = this.getRequestorFields(decoded.claimData);
       }
     }
+  }
+
+  private getRequestorFields(data: {
+    requestorFields?: KeyValue<string, string | number>[];
+    fields?: KeyValue<string, string | number>[];
+  }): KeyValue<string, string | number>[] {
+    if (data?.requestorFields) {
+      return data.requestorFields;
+    }
+
+    if (data?.fields) {
+      return data.fields;
+    }
+
+    return [];
   }
 
   private async decode(token): Promise<any> {
