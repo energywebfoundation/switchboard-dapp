@@ -1,22 +1,7 @@
 <div class="row">
   <div class="card card-default w-100 shadow-none d-flex pt-3">
-    <div class="d-flex justify-content-center" *ngIf="data?.type !== ListType.ROLE">
-      <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
-        <img class="img-logo" *ngIf="formData?.definition?.logoUrl" src="{{ formData?.definition?.logoUrl }}" />
-        <ng-container *ngIf="!formData?.definition?.logoUrl">
-          <img
-            class="img-logo"
-            src="../assets/img/no-organization-image.png"
-            height="48px"
-            *ngIf="isOrganization" />
-          <img
-            class="img-logo"
-            src="../assets/img/no-application-image.png"
-            height="48px"
-            *ngIf="isApplication" />
-        </ng-container>
-      </div>
-    </div>
+    <!--    TODO: check how it looks like-->
+    <app-domain-image [url]="formData?.definition?.logoUrl" [type]="type"></app-domain-image>
     <div class="text-left my-3">
       <div class="label opacity-50 mb-2">{{ typeLabel }} Namespace</div>
       <span class="color-white mb-0">{{ formData?.namespace }}</span>

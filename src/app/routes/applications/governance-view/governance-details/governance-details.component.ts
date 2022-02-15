@@ -43,6 +43,10 @@ export class GovernanceDetailsComponent {
     );
   }
 
+  get type() {
+    return this.data?.type;
+  }
+
   get issuerFields(): IFieldDefinition[] {
     return this.formData?.definition?.issuerFields;
   }
