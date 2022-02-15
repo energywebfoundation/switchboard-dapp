@@ -5,7 +5,6 @@ import { NamespaceType, PreconditionType } from 'iam-client-lib';
 import { ListType } from '../../../../shared/constants/shared-constants';
 import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
-import { RoleType } from '../../new-role/new-role.component';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { IssuerType } from '../../new-role/models/issuer-type.enum';
 import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
@@ -26,7 +25,6 @@ export class GovernanceDetailsComponent {
   data: any;
 
   ListType = ListType;
-  RoleType = RoleType;
 
   typeLabel: string;
   formData: any;
@@ -39,7 +37,10 @@ export class GovernanceDetailsComponent {
   panelOpenState = false;
 
   get requestorFields(): IFieldDefinition[] {
-    return this.formData?.definition?.requestorFields || this.formData?.definition?.fields;
+    return (
+      this.formData?.definition?.requestorFields ||
+      this.formData?.definition?.fields
+    );
   }
 
   get issuerFields(): IFieldDefinition[] {
@@ -56,6 +57,18 @@ export class GovernanceDetailsComponent {
 
   get issuer() {
     return this.formData?.definition?.issuer;
+  }
+
+  get isApplication(): boolean {
+    return this.data?.type === ListType.APP;
+  }
+
+  get isRole(): boolean {
+    return this.data?.type === ListType.ROLE;
+  }
+
+  get isOrganization(): boolean {
+    return this.data?.type === ListType.ORG;
   }
 
   constructor(

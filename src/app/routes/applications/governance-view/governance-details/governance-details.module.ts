@@ -6,6 +6,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { FieldsDetailsComponent } from './fields-details/fields-details.component';
+import { ApplicationsModule } from '../../applications.module';
+import { DefaultValueModule } from '../../pipes/default-value.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +15,13 @@ import { FieldsDetailsComponent } from './fields-details/fields-details.componen
     GovernanceViewComponent,
     FieldsDetailsComponent,
   ],
-  imports: [SharedModule, MatCardModule, MatDividerModule, MatInputModule],
+  imports: [
+    SharedModule,
+    MatCardModule,
+    MatDividerModule,
+    MatInputModule,
+    DefaultValueModule
+  ],
   exports: [GovernanceDetailsComponent, GovernanceViewComponent],
 })
 export class GovernanceDetailsModule {}
