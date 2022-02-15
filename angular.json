@@ -194,10 +194,7 @@
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "scripts": [
-              "node_modules/moment/min/moment-with-locales.min.js"
-            ]
+            "karmaConfig": "karma.conf.js"
           }
         },
         "lint": {
