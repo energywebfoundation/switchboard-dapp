@@ -14,7 +14,7 @@ import {
 })
 export class DomainImageComponent {
   @Input() url: string;
-  @Input() type: 'organization' | 'application';
+  @Input() type: 'Organization' | 'Application';
 
   @Output() imageLoaded = new EventEmitter<boolean>();
 
@@ -23,6 +23,6 @@ export class DomainImageComponent {
   }
 
   get defaultUrl(): string {
-    return `../assets/img/no-${this.type}-image.png`;
+    return `../assets/img/no-${this.type.toLowerCase()}-image.png`;
   }
 }
