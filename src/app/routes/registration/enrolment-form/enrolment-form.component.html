@@ -5,7 +5,7 @@
         class="mb-3 d-inline-flex"
         [ngStyle]="txtColor"
         matTooltip="A role recorded in a smart contract that can be read by other smart contracts">
-        On-chain
+        Public
       </span>
     </mat-checkbox>
     <mat-checkbox
@@ -18,7 +18,7 @@
         class="mb-3 d-inline-flex"
         [ngStyle]="txtColor"
         matTooltip="A JWT verifiable credential that can be presented">
-        Off-chain
+        Private
       </span>
     </mat-checkbox>
 
@@ -29,7 +29,7 @@
       <mat-icon>report_problem</mat-icon>
       <div class="d-flex flex-column">
         <div class="f-14" [ngStyle]="txtColor">
-          On-chain role will be included in the blockchain history once the issuer approves the request.
+          Public credential will be included in the blockchain history once the issuer approves the request.
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
     <mat-error
       *ngIf="registrationTypesGroup.hasError('notEnoughCheckboxChecked') && !showOffChain"
       data-qa-id="not-enough-checkbox-checked">
-      You need to select on-chain option.
+      You need to select Public option.
     </mat-error>
   </div>
 
