@@ -39,30 +39,6 @@ $nav-header-bg: transparent;
 $nav-top-item: #fff;
 $nav-top-item-active: darken(#fff, 60%);
 
-// SIDEBAR
-
-$sidebar-bg: $aside-bg;
-
-$sidebar-item-color: #515253;
-$sidebar-item-color-active: $nav-top-bg;
-$sidebar-item-bg-active: darken($sidebar-bg, 3%);
-
-$sidebar-icon-color: inherits;
-$sidebar-icon-color-active: $nav-top-bg;
-$sidebar-icon-color-inactive: #9080ba;
-
-$sidebar-bullet-color: rgba(0, 0, 0, 0.25);
-$sidebar-bullet-color-active: $sidebar-icon-color-active;
-
-$sidebar-heading-color: #919da8;
-$sidebar-label-color: $sidebar-item-color;
-
-// OFFSIDEBAR
-
-$offsidebar-bg: #fff;
-$offsidebar-border-color: greyscale(darken($offsidebar-bg, 20%));
-$offsidebar-color: $body-color;
-
 /* ========================================================================
    Component: layout
  ========================================================================== */
@@ -183,95 +159,8 @@ ul.menu-top {
   background-size: 150px 38px;
 }
 
-/* ========================================================================
-   Component: sidebar
- ========================================================================== */
-.sidebar {
-  background-color: $sidebar-bg;
-
-  .nav-heading {
-    color: $sidebar-heading-color;
-  }
-}
-
-// Items
-.sidebar-nav {
-  > li {
-    > a,
-    > .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: $sidebar-icon-color-inactive;
-
-      &:focus,
-      &:hover {
-        color: $sidebar-item-color;
-      }
-
-      // Item icon
-      > em {
-        color: $sidebar-icon-color;
-      }
-    }
-
-    // Active item state
-    &.active,
-    &.open {
-      &,
-      > a,
-      > .nav-item,
-      .sidebar-nav {
-        background-color: $sidebar-item-bg-active;
-        color: $sidebar-item-color;
-      }
-
-      > .nav-item > em,
-      > a > em {
-        color: $sidebar-item-color;
-      }
-    }
-
-    &.active {
-      border-left-color: $sidebar-item-color;
-    }
-  }
-}
-
 .mat-menu-panel {
   background: #2a2837;
-}
-
-.sidebar-subnav {
-  background-color: $sidebar-bg;
-
-  > .sidebar-subnav-header {
-    color: $sidebar-item-color;
-  }
-
-  > li {
-    > a,
-    > .nav-item {
-      color: $sidebar-item-color;
-
-      &:focus,
-      &:hover {
-        color: $sidebar-item-color;
-      }
-    }
-
-    &.active {
-      > a,
-      > .nav-item {
-        color: $sidebar-icon-color-active;
-
-        &:after {
-          border-color: $sidebar-bullet-color-active;
-          background-color: $sidebar-bullet-color-active;
-        }
-      }
-    }
-  }
 }
 
 /* ========================================================================
