@@ -13,6 +13,8 @@ $preloader-bg: #181423;
   // Preloader css properties
   --preloader-bg: #{$preloader-bg};
   --preloader-bg-darker: #{darken($preloader-bg, 5%)};
+
+  --button-primary: #33cbcb;
 }
 
 // LAYOUT
@@ -533,7 +535,7 @@ tr.mat-row {
 }
 
 .mat-dialog-container .mat-icon-button:hover {
-  color: #33cbcb;
+  color: var(--button-primary);
 }
 
 .mat-dialog-actions {
@@ -651,7 +653,7 @@ mat-label {
 // Button
 
 .btn-primary {
-  background-color: #33cbcb;
+  background-color: var(--button-primary);
   color: #ffffff;
 
   &:hover {
@@ -661,7 +663,7 @@ mat-label {
 }
 
 .btn-color-primary {
-  color: #33cbcb;
+  color: var(--button-primary);
 }
 
 .btn-connect {
@@ -695,8 +697,8 @@ mat-label {
 }
 
 .mat-stroked-filter-button {
-  border-color: #33cbcb !important;
-  color: #33cbcb !important;
+  border-color: var(--button-primary) !important;
+  color: var(--button-primary) !important;
 
   &:hover {
     border-color: #5bd6d6 !important;
@@ -709,8 +711,8 @@ mat-label {
 }
 
 .mat-stroked-button {
-  border-color: #33cbcb !important;
-  color: #33cbcb !important;
+  border-color: var(--button-primary) !important;
+  color: var(--button-primary) !important;
   text-transform: uppercase;
 
   &:hover {
@@ -724,21 +726,21 @@ mat-label {
   color: #8677ae !important;
 
   &:hover {
-    border-color: #33cbcb !important;
-    color: #33cbcb !important;
+    border-color: var(--button-primary) !important;
+    color: var(--button-primary) !important;
   }
 }
 
 .mat-button-toggle-group {
-  border: solid 1px #33cbcb;
+  border: solid 1px var(--button-primary);
 }
 
 .mat-button-toggle {
-  color: #33cbcb !important;
+  color: var(--button-primary) !important;
 }
 
 .mat-button-toggle-checked {
-  background-color: #33cbcb;
+  background-color: var(--button-primary);
 }
 
 .mat-button-toggle-checked .mat-button-toggle-label-content {
@@ -746,7 +748,7 @@ mat-label {
 }
 
 .btn-color-primary {
-  color: #33cbcb !important;
+  color: var(--button-primary) !important;
 }
 
 .btn-color-disabled {
@@ -795,7 +797,7 @@ mat-label {
 .mat-form-field:not(.mat-form-field-appearance-legacy)
   .mat-form-field-suffix
   .mat-icon-button {
-  background-color: #33cbcb;
+  background-color: var(--button-primary);
   color: #fff;
 }
 
@@ -1046,7 +1048,7 @@ mat-label {
 
 .md-enroll.btn-primary {
   color: #fff;
-  background: #33cbcb;
+  background: var(--button-primary);
 }
 
 .md-enroll.mat-form-field-appearance-outline .mat-form-field-outline {
@@ -1175,8 +1177,8 @@ mat-label {
 .swal-button.swal-button--viewMyEnrolments,
 .swal-button--enrolForAsset {
   color: #fff !important;
-  background-color: #33cbcb;
-  border: 1px solid #33cbcb;
+  background-color: var(--button-primary);
+  border: 1px solid var(--button-primary);
 
   &:hover {
     background-color: #289b9b;
@@ -1208,14 +1210,14 @@ mat-label {
 }
 
 .swal-button--cancel {
-  color: #33cbcb;
-  border: 1px solid #33cbcb;
+  color: var(--button-primary);
+  border: 1px solid var(--button-primary);
   background-color: transparent;
 }
 .swal-button--confirm {
-  background-color: #33cbcb;
+  background-color: var(--button-primary);
   color: #fff;
-  border: 1px solid #33cbcb;
+  border: 1px solid var(--button-primary);
 }
 
 .swal-footer {
