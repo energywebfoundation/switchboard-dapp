@@ -15,11 +15,18 @@ $preloader-bg: #181423;
   --preloader-bg-darker: #{darken($preloader-bg, 5%)};
 
   --button-primary: #33cbcb;
+
+  --nav-primary: #9080ba;
+  --nav-primary-hover: #33cbcb;
+
+  --scrollbar: #8d7db6;
+  --scrollbar-hover: #33cbcb;
+
+  --content-bg: #181423;
 }
 
 // LAYOUT
 
-$content-bg: #181423;
 $aside-bg: #181423;
 
 // NAVBAR TOP
@@ -61,18 +68,18 @@ $offsidebar-color: $body-color;
  ========================================================================== */
 body,
 .wrapper .section-container {
-  background-color: $content-bg;
+  background-color: var(--content-bg);
 }
 
 .wrapper .aside-container {
-  background-color: $aside-bg;
+  background-color: var(--content-bg);
 }
 
 a {
   color: #33cbcb;
 
   &:hover {
-    color: #33cbcb;
+    color: var(--nav-primary-hover);
   }
 }
 
@@ -99,7 +106,7 @@ a {
 
   .navbar-nav > .nav-item > .nav-link,
   .navbar-nav > .nav-item.show > .nav-link {
-    color: #9080ba;
+    color: var(--nav-primary);
     &:hover,
     &:focus {
       color: $inverse;
@@ -115,15 +122,15 @@ a {
     &,
     &:hover,
     &:focus {
-      color: #33cbcb;
+      color: var(--nav-primary-hover);
       background-color: transparent;
     }
 
     @include media-breakpoint-up(lg) {
-      border-bottom: 1px solid #33cbcb;
+      border-bottom: 1px solid var(--nav-primary-hover);
     }
     @include media-breakpoint-down(sm) {
-      border-top: 1px solid #33cbcb;
+      border-top: 1px solid var(--nav-primary-hover);
     }
   }
 
@@ -445,7 +452,7 @@ tr.mat-row {
 }
 
 .mat-tab-label {
-  color: #9080ba;
+  color: var(--nav-primary);
 }
 
 .mat-tab-group.mat-primary .mat-ink-bar {
@@ -828,10 +835,10 @@ mat-label {
 
 .help-wrapper {
   .help-color {
-    color: #9080ba;
+    color: var(--nav-primary);
 
     &:hover {
-      color: #33cbcb;
+      color: var(--nav-primary-hover);
     }
   }
 }
@@ -872,22 +879,22 @@ mat-label {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #8d7db6;
+  background: var(--scrollbar);
   border-radius: 10px;
 }
 
 ::-moz-scrollbar-thumb {
-  background: #8d7db6;
+  background: var(--scrollbar);
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #33cbcb;
+  background: var(--scrollbar-hover);
 }
 
 ::-moz-scrollbar-thumb:hover {
-  background: #33cbcb;
+  background: var(--scrollbar-hover);
 }
 
 .border-bottom-1 {
