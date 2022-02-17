@@ -6,11 +6,16 @@
 @import '~bootstrap/scss/mixins';
 @import '../app/variables';
 @import '../app/material/colors';
-
+@import './preloader';
 // VARIABLES
+$preloader-bg: #ffd100;
 :root {
   --loader-color: #ffd100;
   --warning-color: #ff9614;
+
+  // Preloader css properties
+  --preloader-bg: #{$preloader-bg};
+  --preloader-bg-darker: #{darken($preloader-bg, 5%)};
 }
 // Cutoms Gray colors for theme
 $stedin-gray: #4d4d4d;
@@ -21,6 +26,7 @@ $stedin-gray-ultralight: #f0f0f0;
 // Custom brand colors for theme
 $stedin-yellow: #ffd100;
 $stedin-yellow-light: #ffe053;
+
 
 $stedin-blue: #62b5e5;
 $stedin-orange: #ff9614;

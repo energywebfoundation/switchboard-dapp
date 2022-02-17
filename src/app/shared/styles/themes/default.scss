@@ -4,17 +4,21 @@
 @import '~bootstrap/scss/mixins';
 @import '../app/variables';
 @import '../app/material/colors';
-
+@import './preloader';
+$preloader-bg: #181423;
 :root {
   --loader-color: #a567ff;
   --warning-color: #ffa500;
+
+  // Preloader css properties
+  --preloader-bg: #{$preloader-bg};
+  --preloader-bg-darker: #{darken($preloader-bg, 5%)};
 }
 
 // LAYOUT
 
 $content-bg: #181423;
 $aside-bg: #181423;
-$preloader-bg: #181423;
 
 // NAVBAR TOP
 
@@ -1223,43 +1227,11 @@ mat-label {
 }
 
 // Preloader
-
-.preloader {
-  background-color: #181423;
-}
-
-// Preloader
-.preloader {
-  background-color: $preloader-bg;
-  background-image: -webkit-linear-gradient(
-    90deg,
-    $preloader-bg 10%,
-    darken($preloader-bg, 5%) 90%
-  ); /* Chrome 10+, Saf5.1+ */
-  background-image: -moz-linear-gradient(
-    90deg,
-    $preloader-bg 10%,
-    darken($preloader-bg, 5%) 90%
-  ); /* FF3.6+ */
-  background-image: -ms-linear-gradient(
-    90deg,
-    $preloader-bg 10%,
-    darken($preloader-bg, 5%) 90%
-  ); /* IE10 */
-  background-image: -o-linear-gradient(
-    90deg,
-    $preloader-bg 10%,
-    darken($preloader-bg, 5%) 90%
-  ); /* Opera 11.10+ */
-  background-image: linear-gradient(
-    90deg,
-    $preloader-bg 10%,
-    darken($preloader-bg, 5%) 90%
-  ); /* W3C */
+.preloader-progress-bar {
+  background: url('/assets/img/preloader/preloader.empty.png') no-repeat;
 }
 
 .preloader-progress {
-  background: url('/assets/img/preloader/preloader.empty.png') no-repeat;
   width: 200px;
   height: 65.5px;
   background-size: 200px 65.5px;
