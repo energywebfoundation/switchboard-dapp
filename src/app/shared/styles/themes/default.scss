@@ -23,6 +23,8 @@ $preloader-bg: #181423;
   --scrollbar-hover: #33cbcb;
 
   --content-bg: #181423;
+
+  --menu-panel: #2a2837;
 }
 
 // LAYOUT
@@ -160,7 +162,7 @@ ul.menu-top {
 }
 
 .mat-menu-panel {
-  background: #2a2837;
+  background: var(--menu-panel);
 }
 
 /* ========================================================================
