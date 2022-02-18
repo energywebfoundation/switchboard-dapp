@@ -1,0 +1,43 @@
+.mat-dialog-content {
+  padding: 0 !important;
+}
+
+a:hover {
+  background-color: initial;
+}
+
+.header-notification-container {
+  padding: 5px;
+}
+
+::ng-deep .mat-menu-content:not(:empty) {
+  padding: 0 !important;
+}
+
+.mt-2,
+.my-2 {
+  margin-top: 0.6rem !important;
+}
+
+
+.notification {
+  &-item {
+    padding: 10px 0;
+  }
+
+  &-icon {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    border-radius: 100%;
+  }
+}
+
+.header-notification {
+  background-color: #2a2937;
+}
+
+.icon-bell {
+  color: #9080ba
+}
+

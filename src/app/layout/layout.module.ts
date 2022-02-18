@@ -14,6 +14,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { UserMenuModule } from './components/user-menu/user-menu.module';
 import { DidBookModule } from '../modules/did-book/did-book.module';
+import { UserNotificationsComponent } from './header/user-notifications/user-notifications.component';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { DidBookModule } from '../modules/did-book/did-book.module';
     HeaderComponent,
     DialogUserComponent,
     LoadingComponent,
+    UserNotificationsComponent,
   ],
   entryComponents: [DialogUserComponent],
   exports: [LayoutComponent, HeaderComponent, LoadingComponent],
