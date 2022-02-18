@@ -20,7 +20,7 @@ import { DefaultValueModule } from '../../pipes/default-value.module';
     MatCardModule,
     MatDividerModule,
     MatInputModule,
-    DefaultValueModule
+    DefaultValueModule,
   ],
   exports: [GovernanceDetailsComponent, GovernanceViewComponent],
 })

@@ -91,7 +91,7 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     NgxEditorModule,
     CreateFieldsModule,
     DidBookModule,
-    DefaultValueModule
+    DefaultValueModule,
   ],
 })
 export class ApplicationsModule {}

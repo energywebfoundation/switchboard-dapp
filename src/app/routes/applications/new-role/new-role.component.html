@@ -117,11 +117,7 @@
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="back()">Back</button>
-            <button
-              mat-raised-button
-              class="btn btn-small btn-primary"
-              [disabled]="isChecking"
-              (click)="goNextStep()">
+            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="goNextStep()">
               Next
             </button>
           </div>
@@ -134,11 +130,7 @@
             (updateData)="requestorFieldsChangeHandler($event)"></app-role-field>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2 back" data-qa-id="back" (click)="back()">Back</button>
-            <button
-              mat-raised-button
-              class="btn btn-small btn-primary"
-              [disabled]="isChecking"
-              (click)="goNextStep()">
+            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="goNextStep()">
               Next
             </button>
           </div>
@@ -151,11 +143,7 @@
             (updateData)="issuerFieldsChangeHandler($event)"></app-role-field>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2 back" data-qa-id="back" (click)="back()">Back</button>
-            <button
-              mat-raised-button
-              class="btn btn-small btn-primary"
-              [disabled]="isChecking"
-              (click)="goNextStep()">
+            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="goNextStep()">
               Next
             </button>
           </div>

@@ -6,6 +6,6 @@
       src="{{ url }}"
       (error)="imageEventHandler(false)"
       (load)="imageEventHandler(true)" />
-      <img *ngIf="!url" class="img-logo" [src]="defaultUrl" height="48px" />
+    <img *ngIf="!url" class="img-logo" [src]="defaultUrl" height="48px" />
   </div>
 </div>

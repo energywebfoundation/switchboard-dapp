@@ -52,7 +52,10 @@
           </div>
         </div>
 
-        <app-fields *ngIf="requestorFields?.length" title="Requestor fields" [fieldsList]="requestorFields"></app-fields>
+        <app-fields
+          *ngIf="requestorFields?.length"
+          title="Requestor fields"
+          [fieldsList]="requestorFields"></app-fields>
         <app-fields *ngIf="issuerFields?.length" title="Issuer fields" [fieldsList]="issuerFields"></app-fields>
 
         <div class="col-lg-12 mt-2" *ngIf="!requestorFields?.length">
