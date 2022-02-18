@@ -15,6 +15,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { UserMenuModule } from './components/user-menu/user-menu.module';
 import { DidBookModule } from '../modules/did-book/did-book.module';
 import { UserNotificationsComponent } from './header/user-notifications/user-notifications.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { UserNotificationsComponent } from './header/user-notifications/user-not
     }),
     UserMenuModule,
     DidBookModule.forRoot(),
+    MatBadgeModule,
   ],
   providers: [],
   declarations: [

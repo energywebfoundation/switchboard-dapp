@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./user-notifications.component.scss'],
 })
 export class UserNotificationsComponent implements OnInit {
-  @Input() notificationNewItems;
+  @Input() notificationNewItems: number;
   @Input() notificationList;
 
   @Output() clear = new EventEmitter();

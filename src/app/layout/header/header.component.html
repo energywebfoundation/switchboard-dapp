@@ -132,12 +132,13 @@
               </div> -->
         </div>
       </mat-menu>
-        <app-user-notifications
-          [notificationNewItems]="notificationNewItems"
-          [notificationList]="notificationList$ | async"
-          (closed)="onHiddenNotificationList()"
-          (clear)="clearSwitchboardToaster()">
-        </app-user-notifications>
+      <app-user-notifications
+        class="nav-item dropdown dropdown-list"
+        [notificationNewItems]="notificationNewItems"
+        [notificationList]="notificationList$ | async"
+        (closed)="onHiddenNotificationList()"
+        (clear)="clearSwitchboardToaster()">
+      </app-user-notifications>
 
       <li class="nav-item d-none d-md-block">
         <a

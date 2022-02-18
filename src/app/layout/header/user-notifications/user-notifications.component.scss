@@ -1,6 +1,3 @@
-.mat-dialog-content {
-  padding: 0 !important;
-}
 
 a:hover {
   background-color: initial;
@@ -10,28 +7,24 @@ a:hover {
   padding: 5px;
 }
 
-::ng-deep .mat-menu-content:not(:empty) {
+:host ::ng-deep .mat-menu-content:not(:empty) {
   padding: 0 !important;
 }
 
-.mt-2,
-.my-2 {
+.mt-2 {
   margin-top: 0.6rem !important;
 }
 
-
-.notification {
-  &-item {
+.notification-item {
     padding: 10px 0;
   }
 
-  &-icon {
+.notification-icon {
     width: 20px;
     height: 20px;
     background-size: contain;
     border-radius: 100%;
   }
-}
 
 .header-notification {
   background-color: #2a2937;
@@ -39,5 +32,10 @@ a:hover {
 
 .icon-bell {
   color: #9080ba
+}
+
+.nav-link {
+  padding: 1.1rem 0.95rem;
+  font-size: 0.85rem;
 }
 
