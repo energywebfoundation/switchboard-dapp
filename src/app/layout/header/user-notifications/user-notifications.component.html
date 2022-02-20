@@ -1,12 +1,10 @@
-<div class="nav-item" [matMenuTriggerFor]="menu" (menuClosed)="onHiddenNotificationList()">
-  <a class="nav-link cursor-pointer">
-    <em
-      class="icon-bell icon-color"
-      matBadgeColor="warn"
-      matBadgeSize="small"
-      [matBadgeHidden]="notificationNewItems === 0"
-      [matBadge]="notificationNewItems"></em>
-  </a>
+<div class="nav-link cursor-pointer" [matMenuTriggerFor]="menu" (menuClosed)="onHiddenNotificationList()">
+  <em
+    class="icon-bell icon-color"
+    matBadgeColor="warn"
+    matBadgeSize="small"
+    [matBadgeHidden]="notificationNewItems === 0"
+    [matBadge]="notificationNewItems"></em>
 </div>
 
 <mat-menu #menu="matMenu">
