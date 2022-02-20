@@ -405,15 +405,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.clearSwitchboardToaster();
+    this.clearToastr();
     this.store.dispatch(logoutWithRedirectUrl());
   }
 
-  clearSwitchboardToaster(): void {
+  clearToastr(): void {
     this.toastr.reset();
   }
 
-  onHiddenNotificationList(): void {
+  userNotifClosedHandler(): void {
     this.toastr.readAllItems();
   }
 }

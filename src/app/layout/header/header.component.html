@@ -56,13 +56,18 @@
           Enable experimental
         </mat-slide-toggle>
       </li>
-      <app-system-notifications [totalCount]="tasks?.totalCount" [isLoadingNotif]="isLoadingNotif"></app-system-notifications>
+      <app-system-notifications
+        [totalCount]="tasks?.totalCount"
+        [isLoadingNotif]="isLoadingNotif"
+        [pendingApprovalCount]="tasks.pendingApprovalCount"
+        [pendingAssetSyncCount]="tasks.pendingAssetSyncCount"
+        [assetsOfferedToMeCount]="tasks.assetsOfferedToMeCount"></app-system-notifications>
       <app-user-notifications
         class="nav-item dropdown dropdown-list"
         [notificationNewItems]="notificationNewItems"
         [notificationList]="notificationList$ | async"
-        (closed)="onHiddenNotificationList()"
-        (clear)="clearSwitchboardToaster()">
+        (closed)="userNotifClosedHandler()"
+        (clear)="clearToastr()">
       </app-user-notifications>
 
       <li class="nav-item d-none d-md-block">
