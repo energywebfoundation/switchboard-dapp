@@ -63,7 +63,6 @@
         [pendingAssetSyncCount]="tasks.pendingAssetSyncCount"
         [assetsOfferedToMeCount]="tasks.assetsOfferedToMeCount"></app-system-notifications>
       <app-user-notifications
-        class="nav-item dropdown dropdown-list"
         [notificationNewItems]="notificationNewItems"
         [notificationList]="notificationList$ | async"
         (closed)="userNotifClosedHandler()"

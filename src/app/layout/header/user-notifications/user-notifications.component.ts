@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-user-notifications',
@@ -6,6 +7,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./user-notifications.component.scss'],
 })
 export class UserNotificationsComponent implements OnInit {
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
+
+  closeIt() {
+    this.trigger.closeMenu();
+  }
   @Input() notificationNewItems: number;
   @Input() notificationList;
 
