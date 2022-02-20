@@ -16,6 +16,9 @@ import { UserMenuModule } from './components/user-menu/user-menu.module';
 import { DidBookModule } from '../modules/did-book/did-book.module';
 import { UserNotificationsComponent } from './header/user-notifications/user-notifications.component';
 import { MatBadgeModule } from '@angular/material/badge';
+import { SystemNotificationsComponent } from './header/system-notifications/system-notifications.component';
+import { NotificationContainerComponent } from './header/notification-container/notification-container.component';
+import { NotificationHeaderComponent } from './header/notification-header/notification-header.component';
 
 @NgModule({
   imports: [
@@ -39,6 +42,9 @@ import { MatBadgeModule } from '@angular/material/badge';
     DialogUserComponent,
     LoadingComponent,
     UserNotificationsComponent,
+    SystemNotificationsComponent,
+    NotificationContainerComponent,
+    NotificationHeaderComponent,
   ],
   entryComponents: [DialogUserComponent],
   exports: [LayoutComponent, HeaderComponent, LoadingComponent],

@@ -1,7 +1,7 @@
 <div class="nav-item" [matMenuTriggerFor]="menu" (menuClosed)="onHiddenNotificationList()">
   <a class="nav-link cursor-pointer">
     <em
-      class="icon-bell"
+      class="icon-bell icon-color"
       matBadgeColor="warn"
       matBadgeSize="small"
       [matBadgeHidden]="notificationNewItems === 0"
@@ -11,12 +11,8 @@
 
 <mat-menu #menu="matMenu">
   <ng-container *ngIf="notificationList?.length">
-    <div class="d-flex flex-grow-1 list-group header-notification-container">
-      <div class="d-flex justify-content-between pt-1 pb-3 px-3 mt-2 mb-2 align-items-center border-bottom-1">
-        <h4 class="mb-0 f-16 color-white">Notification</h4>
-        <a href="#" (click)="clearSwitchboardToaster()" class="color-primary"> Clear all </a>
-      </div>
-
+    <app-notification-container>
+      <app-notification-header title="Notification" (clear)="clearHandler()"></app-notification-header>
       <div class="list-group-item list-group-item-action border-0">
         <div class="media d-flex align-items-center notification-item" *ngFor="let item of notificationList">
           <div class="notification-icon align-self-start mr-2 ngx-toastr" [ngClass]="item.type"></div>
@@ -27,6 +23,6 @@
           </div>
         </div>
       </div>
-    </div>
+    </app-notification-container>
   </ng-container>
 </mat-menu>

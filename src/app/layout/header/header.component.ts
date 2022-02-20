@@ -83,8 +83,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private _iamSubscriptionId: number;
   private isInitNotificationCount = false;
 
-  @ViewChild('fsbutton', { static: true }) fsbutton; // the fullscreen button
-
   constructor(
     private iamService: IamService,
     private router: Router,
@@ -186,12 +184,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const ua = window.navigator.userAgent;
-    if (ua.indexOf('MSIE ') > 0 || !!ua.match(/Trident.*rv:11\./)) {
-      // Not supported under IE
-      this.fsbutton.nativeElement.style.display = 'none';
-    }
-
     this.store
       .select(userSelectors.getUserProfile)
       .pipe(filter(Boolean), takeUntil(this._subscription$))

@@ -18,7 +18,7 @@ export class UserNotificationsComponent implements OnInit {
   onHiddenNotificationList() {
     this.closed.emit();
   }
-  clearSwitchboardToaster() {
+  clearHandler() {
     this.clear.emit();
   }
 }
