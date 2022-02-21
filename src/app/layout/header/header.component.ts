@@ -34,9 +34,6 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  currentUserDid = 'did:ewc:';
-  currentUserRole = '';
-
   isNavMenuVisible = true;
 
   currentNav = '';
@@ -202,12 +199,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         await this._initPendingClaimsCount();
         this._calcTotalCount();
       });
-    // this._pendingSyncCountListener = this.notifService.pendingDidDocSync
-    //   .pipe(takeUntil(this._subscription$))
-    //   .subscribe(async () => {
-    //     await this._initApprovedClaimsForSyncCount();
-    //     this._calcTotalCount();
-    //   });
     this._assetsOfferedToMeCountListener = this.notifService.assetsOfferedToMe
       .pipe(takeUntil(this._subscription$))
       .subscribe(async () => {
@@ -304,21 +295,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async _initApprovedClaimsForSyncCount() {
-    // this._initZeroCheckerForPendingSyncCount();
-  }
-
-  // private _initZeroCheckerForPendingSyncCount(): void {
-  //   this.notifService.pendingSyncCount$
-  //     .pipe(
-  //       takeUntil(this._subscription$),
-  //       filter((count) => count === 0)
-  //     )
-  //     .subscribe(() => {
-  //       this._calcTotalCount();
-  //     });
-  // }
-
   private async _initAssetsOfferedToMeSyncCount() {
     this.tasks.assetsOfferedToMeCount = (
       await this.iamService.assetsService.getOfferedAssets()
@@ -338,7 +314,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private async _initNotificationsAndTasksCount() {
     try {
       await this._initPendingClaimsCount();
-      // await this._initApprovedClaimsForSyncCount();
       await this._initAssetsOfferedToMeSyncCount();
       await this._initApprovedClaimsForAssetSyncCount();
     } catch (e) {
