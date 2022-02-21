@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
+import { IFieldDefinition } from '@energyweb/iam-contracts';
 
 @Component({
   selector: 'app-fields-details',

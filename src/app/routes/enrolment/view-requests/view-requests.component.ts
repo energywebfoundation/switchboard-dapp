@@ -15,7 +15,6 @@ import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.component';
-import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
 import { KeyValue } from '@angular/common';
 
 const TOASTR_HEADER = 'Enrolment Request';
