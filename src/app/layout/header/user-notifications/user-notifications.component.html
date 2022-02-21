@@ -1,9 +1,9 @@
-<div class="nav-link cursor-pointer" [matMenuTriggerFor]="menu" (menuClosed)="onHiddenNotificationList()">
+<div class="nav-link cursor-pointer" [matMenuTriggerFor]="menu" (menuClosed)="menuCloseHandler()">
   <em
     class="icon-bell icon-color"
     matBadgeColor="warn"
     matBadgeSize="small"
-    [matBadgeHidden]="notificationNewItems === 0"
+    [matBadgeHidden]="!areNewNotifications()"
     [matBadge]="notificationNewItems"></em>
 </div>
 
@@ -12,7 +12,7 @@
     <app-notification-header
       title="Notification"
       (clear)="clearHandler()"
-      [showClear]="notificationNewItems !== 0"></app-notification-header>
+      [showClear]="areNewNotifications()"></app-notification-header>
     <ng-container *ngIf="notificationList?.length; else noNotifications">
       <div class="list-group-item list-group-item-action border-0">
         <div class="media d-flex align-items-center notification-item" *ngFor="let item of notificationList">

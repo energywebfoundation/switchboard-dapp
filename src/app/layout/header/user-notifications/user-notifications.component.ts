@@ -1,12 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-user-notifications',
   templateUrl: './user-notifications.component.html',
   styleUrls: ['./user-notifications.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserNotificationsComponent implements OnInit {
+export class UserNotificationsComponent {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
 
   closeIt() {
@@ -17,14 +25,15 @@ export class UserNotificationsComponent implements OnInit {
 
   @Output() clear = new EventEmitter();
   @Output() closed = new EventEmitter();
-  constructor() {}
 
-  ngOnInit(): void {}
-
-  onHiddenNotificationList() {
+  menuCloseHandler() {
     this.closed.emit();
   }
   clearHandler() {
     this.clear.emit();
+  }
+
+  areNewNotifications(): boolean {
+    return this.notificationNewItems !== 0;
   }
 }
