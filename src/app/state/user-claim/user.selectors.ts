@@ -1,10 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import {
-  USER_DATA_STORAGE_KEY,
-  USER_FEATURE_KEY,
-  UserClaimState,
-} from './user.reducer';
+import { USER_FEATURE_KEY, UserClaimState } from './user.reducer';
 import { Profile } from 'iam-client-lib';
+import { userLocalStorage } from '../../shared/utils/local-storage-wrapper';
 
 export const getUserState =
   createFeatureSelector<UserClaimState>(USER_FEATURE_KEY);
@@ -15,9 +12,7 @@ export const getUserProfile = createSelector(
 );
 
 export const getUserData = createSelector(getUserState, (state) =>
-  localStorage.getItem(USER_DATA_STORAGE_KEY)
-    ? JSON.parse(localStorage.getItem(USER_DATA_STORAGE_KEY))
-    : state?.userData
+  userLocalStorage.has ? userLocalStorage.parsed : state?.userData
 );
 
 export const getUserName = createSelector(getUserData, (state) =>

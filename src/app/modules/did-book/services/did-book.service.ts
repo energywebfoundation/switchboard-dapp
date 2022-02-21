@@ -8,7 +8,7 @@ const TOASTR_HEADER = 'DID Book';
 
 @Injectable()
 export class DidBookService {
-  private list = new BehaviorSubject([]);
+  private list = new BehaviorSubject<DidBookRecord[]>([]);
 
   constructor(
     private httpDidBook: DidBookHttpService,
@@ -46,6 +46,10 @@ export class DidBookService {
       },
       (error) => this.toastr.error(error.message)
     );
+  }
+
+  exist(did: string): boolean {
+    return this.list.getValue().some((item: DidBookRecord) => item.did === did);
   }
 
   private removeFromList(id) {

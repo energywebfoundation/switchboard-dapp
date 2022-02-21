@@ -5,7 +5,7 @@ import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import * as userActions from '../../../state/user-claim/user.actions';
-import { deepEqualObjects } from '../../../utils/functions/deep-equal-objects/deep-equal-objects';
+import { deepEqualObjects } from '@utils';
 
 const MAJORITY_AGE = 18;
 

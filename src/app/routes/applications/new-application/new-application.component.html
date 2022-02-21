@@ -22,11 +22,13 @@
         </mat-step>
         <mat-step [editable]="false" [completed]="false">
           <ng-template matStepLabel>Confirm Details</ng-template>
-          <app-application-details
+          <app-namespace-details
             *ngIf="applicationData"
             [namespace]="namespace"
+            [name]="applicationData?.data?.appName"
             [data]="applicationData.data"
-            (imageLoaded)="isLogoUrlValid = $event"></app-application-details>
+            type="Application"
+            (imageLoaded)="isLogoUrlValid = $event"></app-namespace-details>
           <div>
             <div class="d-flex justify-content-end mb-2">
               <button mat-stroked-button class="btn btn-small mr-2" (click)="cancelAppDetails()">Back</button>

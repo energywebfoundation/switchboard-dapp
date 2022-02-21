@@ -27,7 +27,7 @@
                 mat-icon-button
                 aria-label="Scan DID"
                 appQrCodeScanner
-                (scannedValue)="scannedValue($event.value)">
+                (scannedValue)="scannedValue($event.data?.did)">
                 <mat-icon>qr_code_2</mat-icon>
               </button>
               <mat-error *ngIf="getFormSubject().hasError('required')">
@@ -38,7 +38,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="col-lg-12" *ngIf="isFormSubjectValid()">
+        <div class="col-lg-12" *ngIf="displayType()">
           <div class="card card-default d-flex shadow-none pt-3 mb-3">
             <mat-label class="ml-3 pl-1">Type</mat-label>
             <mat-form-field appearance="outline" class="mr-0 mr-lg-0 mb-2 mb-lg-0">

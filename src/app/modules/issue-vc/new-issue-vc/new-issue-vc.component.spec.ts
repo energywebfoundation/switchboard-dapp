@@ -86,16 +86,17 @@ describe('NewIssueVCComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should disable did control when did is predefined', () => {
+  it('should disable did control when did is predefined and display list of roles', () => {
     mockDialogData.setDid(
       'did:ethr:0x925b597D2a6Ac864D4a1CA31Dd65a1904f0F2e89'
     );
     fixture.detectChanges();
 
-    const { subjectDid } = getSelectors(hostDebug);
+    const { subjectDid, selectType } = getSelectors(hostDebug);
 
     expect(component.isDidPredefined()).toBeTrue();
     expect(subjectDid.disabled).toBeTrue();
+    expect(selectType).toBeTruthy();
   });
 
   it('should create set did and role for new vc.', () => {

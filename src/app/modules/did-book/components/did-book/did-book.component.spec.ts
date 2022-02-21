@@ -11,6 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { DialogDataMock } from '../../../../tests/mocks/dialog-data-mock';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 describe('DidBookComponent', () => {
   let component: DidBookComponent;
@@ -21,9 +23,11 @@ describe('DidBookComponent', () => {
     'delete',
     'getList$',
   ]);
+  let dialogMock: DialogDataMock;
 
   beforeEach(
     waitForAsync(() => {
+      dialogMock = new DialogDataMock();
       TestBed.configureTestingModule({
         declarations: [DidBookComponent],
         imports: [
@@ -33,7 +37,10 @@ describe('DidBookComponent', () => {
           MatInputModule,
           NoopAnimationsModule,
         ],
-        providers: [{ provide: DidBookService, useValue: didBookServiceSpy }],
+        providers: [
+          { provide: DidBookService, useValue: didBookServiceSpy },
+          { provide: MAT_DIALOG_DATA, useValue: dialogMock },
+        ],
         schemas: [NO_ERRORS_SCHEMA],
       }).compileComponents();
     })
@@ -81,5 +88,19 @@ describe('DidBookComponent', () => {
   it('should delete record', () => {
     component.delete('1');
     expect(didBookServiceSpy.delete).toHaveBeenCalledWith('1');
+  });
+
+  it('should get predefined did', () => {
+    dialogMock.setData({ did: 'did' });
+    fixture.detectChanges();
+
+    expect(component.did).toEqual('did');
+  });
+
+  it('should get predefined label', () => {
+    dialogMock.setData({ label: 'Foo Bar' });
+    fixture.detectChanges();
+
+    expect(component.label).toEqual('Foo Bar');
   });
 });

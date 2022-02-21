@@ -1,4 +1,4 @@
-import { AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export function listContainsValidator<T>(
   source: T[],

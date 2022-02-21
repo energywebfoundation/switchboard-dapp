@@ -1,11 +1,12 @@
 import {
+  Directive,
   ElementRef,
   EventEmitter,
   HostBinding,
   HostListener,
+  OnDestroy,
   Output,
 } from '@angular/core';
-import { Directive, OnDestroy } from '@angular/core';
 import { Subject, timer } from 'rxjs';
 import {
   mapTo,

@@ -9,9 +9,9 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { dispatchInputEvent, getElement } from '@tests';
-import { RoleTypeEnum } from '../../new-role.component';
+import { DomainTypeEnum } from '../../new-role.component';
 import { By } from '@angular/platform-browser';
-import { RoleTypePipe } from '../../../../../shared/pipes/role-type/role-type.pipe';
+import { DomainTypePipe } from '../../../../../shared/pipes/domain-type/domain-type.pipe';
 
 describe('RoleNameComponent', () => {
   let component: RoleNameComponent;
@@ -24,7 +24,7 @@ describe('RoleNameComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [RoleNameComponent, RoleTypePipe],
+        declarations: [RoleNameComponent, DomainTypePipe],
         imports: [
           MatIconTestingModule,
           ReactiveFormsModule,
@@ -45,7 +45,7 @@ describe('RoleNameComponent', () => {
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
     component.parentNamespace = 'namespace.iam.ewc';
-    component.roleType = RoleTypeEnum.ORG;
+    component.roleType = DomainTypeEnum.ORG;
     fixture.detectChanges();
   });
 
@@ -63,6 +63,7 @@ describe('RoleNameComponent', () => {
     const { matError } = selectors(hostDebug);
     expect(matError.textContent).toContain('Role Name is required');
   });
+
   it('should check minimal length field validation', () => {
     const { roleName } = selectors(hostDebug);
 
@@ -110,6 +111,7 @@ describe('RoleNameComponent', () => {
   });
 
   it('should display ens namespace', () => {
+    roleCreationServiceSpy.canUseDomain.and.returnValue(Promise.resolve(true));
     const { roleName } = selectors(hostDebug);
 
     roleName.value = 'example';
@@ -137,6 +139,7 @@ describe('RoleNameComponent', () => {
   });
 
   it('should emits abort event with touched equal to true property', () => {
+    roleCreationServiceSpy.canUseDomain.and.returnValue(Promise.resolve(true));
     const { roleName } = selectors(hostDebug);
     const abortEvent = spyOn(component.cancel, 'emit');
 

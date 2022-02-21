@@ -7,7 +7,8 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { HexValidators } from '../../../../utils/validators/is-hex/is-hex.validator';
+import { HexValidators } from '@utils';
+import { DidBookRecord } from '../models/did-book-record';
 
 @Component({
   selector: 'app-did-book-form',
@@ -16,9 +17,10 @@ import { HexValidators } from '../../../../utils/validators/is-hex/is-hex.valida
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DidBookFormComponent implements OnInit {
-  @Input() did;
-  @Output() add = new EventEmitter();
-  @Output() cancel = new EventEmitter();
+  @Input() did: string;
+  @Input() label: string;
+  @Output() add = new EventEmitter<Partial<DidBookRecord>>();
+  @Output() cancel = new EventEmitter<Partial<DidBookRecord>>();
 
   form = this.fb.group({
     label: ['', [Validators.required]],
@@ -33,6 +35,7 @@ export class DidBookFormComponent implements OnInit {
 
   ngOnInit() {
     this.setPredefinedDid();
+    this.setPredefinedLabel();
   }
 
   submit() {
@@ -52,10 +55,15 @@ export class DidBookFormComponent implements OnInit {
     this.form.reset();
   }
 
-  private setPredefinedDid() {
+  private setPredefinedDid(): void {
     if (this.did) {
       this.form.patchValue({ did: this.did });
-      this.form.get('did').disable();
+    }
+  }
+
+  private setPredefinedLabel(): void {
+    if (this.label) {
+      this.form.patchValue({ label: this.label });
     }
   }
 }

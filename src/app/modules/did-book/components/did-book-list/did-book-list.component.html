@@ -32,6 +32,17 @@
             (click)="remove(element.id)">
             <mat-icon>delete</mat-icon>
           </button>
+          <button
+            mat-icon-button
+            matSuffix
+            class="mat-primary icon-btn-small color-error"
+            matTooltip="Show QR Code"
+            [attr.data-qa-id]="'qr-code-' + i"
+            appQrCode
+            header="Contact Data QR Code"
+            [data]="qrCodeData(element)">
+            <mat-icon class="ml-2 color-white" svgIcon="generate-qr-icon"></mat-icon>
+          </button>
         </div>
       </td>
     </ng-container>

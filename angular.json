@@ -38,6 +38,7 @@
             ],
             "styles": [
               "src/app/core/preloader/preloader.scss",
+              "node_modules/ngx-spinner/animations/ball-spin-fade.css",
               "src/styles.scss",
               {
                 "input": "src/app/shared/styles/themes/theme-a.scss",
@@ -158,12 +159,6 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb"
                 }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
-                }
               ]
             }
           },
@@ -199,21 +194,7 @@
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/manifest.webmanifest",
-              "src/manifest.json"
-            ],
-            "styles": [
-              "src/app/core/preloader/preloader.scss",
-              "src/styles.scss"
-            ],
-            "scripts": [
-              "src/app/core/preloader/preloader.js",
-              "node_modules/moment/min/moment-with-locales.min.js"
-            ]
+            "karmaConfig": "karma.conf.js"
           }
         },
         "lint": {
@@ -222,40 +203,12 @@
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"],
             "outputFile": "eslint_report.json"
           }
-        },
-        "e2e": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "switchboard-dapp:serve",
-            "watch": true,
-            "headless": false
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "switchboard-dapp:serve:production"
-            }
-          }
-        },
-        "cypress-run": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "switchboard-dapp:serve"
-          }
-        },
-        "cypress-open": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "switchboard-dapp:serve",
-            "watch": true,
-            "headless": false
-          }
         }
       }
     }
   },
   "defaultProject": "switchboard-dapp",
   "cli": {
-    "analytics": false,
-    "defaultCollection": "@angular-eslint/schematics"
+    "analytics": false
   }
 }

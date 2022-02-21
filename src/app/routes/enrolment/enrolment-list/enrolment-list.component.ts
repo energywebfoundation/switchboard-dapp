@@ -445,7 +445,9 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
     try {
       const retVal = await this.iamService.claimsService.publishPublicClaim({
-        token: element.issuedToken,
+        claim: {
+          token: element.issuedToken,
+        },
       });
 
       if (retVal) {

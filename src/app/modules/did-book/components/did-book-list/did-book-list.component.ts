@@ -6,6 +6,8 @@ import {
   Output,
 } from '@angular/core';
 import { DidBookRecord } from '../models/did-book-record';
+import { QrCodeData } from '../../../../shared/components/qr-code-scanner/models/qr-code-data.interface';
+import { ScanType } from '../../../../shared/components/qr-code-scanner/models/scan-type.enum';
 
 @Component({
   selector: 'app-did-book-list',
@@ -33,5 +35,15 @@ export class DidBookListComponent {
 
   remove(id: string) {
     this.delete.emit(id);
+  }
+
+  qrCodeData(element: DidBookRecord): QrCodeData {
+    return {
+      type: ScanType.User,
+      data: {
+        did: element.did,
+        label: element.label,
+      },
+    };
   }
 }
