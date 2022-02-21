@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { SwitchboardToastr } from '../../../shared/services/switchboard-toastr.service';
 
 @Component({
   selector: 'app-user-notifications',
@@ -16,7 +17,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 })
 export class UserNotificationsComponent {
   @Input() notificationNewItems: number;
-  @Input() notificationList;
+  @Input() notificationList: SwitchboardToastr[];
 
   @Output() clear = new EventEmitter();
   @Output() closed = new EventEmitter();
