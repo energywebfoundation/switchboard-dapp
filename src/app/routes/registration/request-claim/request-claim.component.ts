@@ -385,7 +385,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     };
 
     return {
-      fields: JSON.parse(JSON.stringify(fields)),
+      requestorFields: fields,
       claimType: this.selectedNamespace,
       claimTypeVersion:
         parseVersion(this.selectedRole.version) || DEFAULT_CLAIM_TYPE_VERSION,
