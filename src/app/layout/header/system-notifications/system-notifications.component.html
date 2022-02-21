@@ -5,7 +5,7 @@
       class="fas fa-tasks icon-color"
       matBadgeColor="warn"
       matBadgeSize="small"
-      [matBadgeHidden]="totalCount === 0"
+      [matBadgeHidden]="hideBadges()"
       [matBadge]="totalCount"></em>
   </ng-template>
 </div>

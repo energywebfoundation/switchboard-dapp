@@ -20,4 +20,8 @@ export class SystemNotificationsComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  hideBadges() {
+    return this.totalCount === 0;
+  }
 }
