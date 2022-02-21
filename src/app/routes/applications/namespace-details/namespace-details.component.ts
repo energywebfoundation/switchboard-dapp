@@ -24,8 +24,4 @@ export class NamespaceDetailsComponent {
   imageEventHandler(value: boolean): void {
     this.imageLoaded.emit(value);
   }
-
-  get url() {
-    return `../assets/img/no-${this.type.toLowerCase()}-image.png`;
-  }
 }

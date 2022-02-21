@@ -39,8 +39,8 @@ import { IssuerDidListComponent } from './new-role/components/issuer-did-list/is
 import { IssuerDidComponent } from './new-role/components/issuer-did/issuer-did.component';
 import { SearchIssuerRoleComponent } from './new-role/components/search-issuer-role/search-issuer-role.component';
 import { NamespaceDetailsComponent } from './namespace-details/namespace-details.component';
-import { DefaultValuePipe } from './pipes/default-value.pipe';
 import { ApplicationCreationFormComponent } from './new-application/application-creation-form/application-creation-form.component';
+import { DefaultValueModule } from './pipes/default-value.module';
 
 const routes: Routes = [{ path: '', component: ApplicationsComponent }];
 
@@ -69,7 +69,6 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     IssuerDidComponent,
     SearchIssuerRoleComponent,
     NamespaceDetailsComponent,
-    DefaultValuePipe,
     ApplicationCreationFormComponent,
   ],
   imports: [
@@ -92,6 +91,7 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     NgxEditorModule,
     CreateFieldsModule,
     DidBookModule,
+    DefaultValueModule,
   ],
 })
 export class ApplicationsModule {}

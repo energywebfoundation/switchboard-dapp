@@ -5,9 +5,9 @@ import { NamespaceType, PreconditionType } from 'iam-client-lib';
 import { ListType } from '../../../../shared/constants/shared-constants';
 import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
-import { RoleType } from '../../new-role/new-role.component';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { IssuerType } from '../../new-role/models/issuer-type.enum';
+import { IFieldDefinition } from '@energyweb/iam-contracts';
 
 @Component({
   selector: 'app-governance-details',
@@ -25,7 +25,6 @@ export class GovernanceDetailsComponent {
   data: any;
 
   ListType = ListType;
-  RoleType = RoleType;
 
   typeLabel: string;
   formData: any;
@@ -37,15 +36,22 @@ export class GovernanceDetailsComponent {
   PreconditionTypes = PreconditionType;
   panelOpenState = false;
 
-  get requestorFields() {
-    return this.formData?.definition?.fields;
+  get requestorFields(): IFieldDefinition[] {
+    return (
+      this.formData?.definition?.requestorFields ||
+      this.formData?.definition?.fields
+    );
   }
 
-  get issuerFields() {
+  get type() {
+    return this.data?.type;
+  }
+
+  get issuerFields(): IFieldDefinition[] {
     return this.formData?.definition?.issuerFields;
   }
 
-  get isDIDType() {
+  get isDIDType(): boolean {
     return this.issuer?.issuerType === IssuerType.DID;
   }
 
@@ -55,6 +61,18 @@ export class GovernanceDetailsComponent {
 
   get issuer() {
     return this.formData?.definition?.issuer;
+  }
+
+  get isApplication(): boolean {
+    return this.data?.type === ListType.APP;
+  }
+
+  get isRole(): boolean {
+    return this.data?.type === ListType.ROLE;
+  }
+
+  get isOrganization(): boolean {
+    return this.data?.type === ListType.ORG;
   }
 
   constructor(

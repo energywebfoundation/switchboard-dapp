@@ -51,6 +51,7 @@ import { NoRecordsComponent } from './components/no-records/no-records.component
 import { DomainTypePipe } from './pipes/domain-type/domain-type.pipe';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { QrCodeScannerModule } from './components/qr-code-scanner/qr-code-scanner.module';
+import { DomainImageComponent } from './components/domain-image/domain-image.component';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -112,6 +113,7 @@ const MATERIAL_MODULES = [
     TableHeadingComponent,
     NoRecordsComponent,
     DomainTypePipe,
+    DomainImageComponent,
   ],
   exports: [
     CommonModule,
@@ -133,6 +135,7 @@ const MATERIAL_MODULES = [
     DomainTypePipe,
     BsDropdownModule,
     QrCodeScannerModule,
+    DomainImageComponent,
   ],
 })
 

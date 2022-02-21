@@ -36,6 +36,7 @@ import {
   preconditionCheck,
 } from '../utils/precondition-check';
 import { LoginService } from 'src/app/shared/services/login/login.service';
+import { IFieldDefinition } from '@energyweb/iam-contracts';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -69,7 +70,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   private registrationTypesOfRole: Record<string, Set<RegistrationTypes>>;
 
-  public fieldList: IRoleDefinition['fields'];
+  public fieldList: IFieldDefinition[];
 
   public orgAppDetails: any;
   public roleList: any;
@@ -663,7 +664,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             .map((role) => {
               this.selectedRole = role.definition;
               this.selectedNamespace = role.namespace;
-              this.fieldList = this.selectedRole.fields || [];
+              this.fieldList =
+                this.selectedRole?.requestorFields ||
+                this.selectedRole?.fields ||
+                [];
               this.roleTypeForm.get('roleType').setValue(role);
 
               // Init Preconditions
