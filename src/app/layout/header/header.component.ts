@@ -89,7 +89,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private toastr: SwitchboardToastrService,
     private notifService: NotificationService,
     public dialog: MatDialog,
-    private store: Store<UserClaimState>,
+    private store: Store,
     private loginService: LoginService,
     private didBookService: DidBookService
   ) {
@@ -97,13 +97,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .select(AuthSelectors.isUserLoggedIn)
       .pipe(truthy(), takeUntil(this._subscription$))
       .subscribe(() => this.didBookService.getList());
-
-    if (localStorage.getItem('currentUser')) {
-      this.currentUserDid = JSON.parse(localStorage.getItem('currentUser')).did;
-      this.currentUserRole = JSON.parse(
-        localStorage.getItem('currentUser')
-      ).organizationType;
-    }
 
     this.router.events
       .pipe(
@@ -150,21 +143,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   openDialogUser(): void {
-    const dialogRef = this.dialog.open(DialogUserComponent, {
+    this.dialog.open(DialogUserComponent, {
       width: '440px',
-      data: {},
       maxWidth: '100%',
       disableClose: true,
     });
-
-    dialogRef
-      .afterClosed()
-      .pipe(takeUntil(this._subscription$))
-      .subscribe((result) => {
-        if (result) {
-          // Update User Name
-        }
-      });
   }
 
   openDidBook(): void {
