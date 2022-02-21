@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { IndividualConfig } from 'ngx-toastr/toastr/toastr-config';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 enum MessageType {
   error = 'toast-error',
@@ -28,6 +29,15 @@ export class SwitchboardToastrService {
 
   getMessageList(): Observable<SwitchboardToastr[]> {
     return this.messageList.asObservable();
+  }
+
+  newMessagesAmount(): Observable<number> {
+    return this.getMessageList().pipe(
+      map(
+        (items: SwitchboardToastr[]) =>
+          items.filter((item) => item.isNew).length
+      )
+    );
   }
 
   reset(): void {

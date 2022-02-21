@@ -7,9 +7,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SystemNotificationsComponent {
-  @Input() isLoadingNotif: boolean;
-  @Input() totalCount: number;
   @Input() assetsOfferedToMeCount: number;
   @Input() pendingAssetSyncCount: number;
   @Input() pendingApprovalCount: number;
+
+  get totalCount() {
+    return this.assetsOfferedToMeCount + this.pendingApprovalCount + this.pendingAssetSyncCount;
+  }
 }

@@ -24,4 +24,11 @@ export class ClaimsFacadeService {
       finalize(() => this.loadingService.hide())
     );
   }
+
+  getClaimsByIssuer() {
+    return this.iamService.claimsService.getClaimsByIssuer({
+      did: this.iamService.signerService.did,
+      isAccepted: false,
+    })
+  }
 }

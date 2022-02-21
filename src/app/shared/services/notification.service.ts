@@ -1,25 +1,57 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
+import { AssetsFacadeService } from './assets-facade/assets-facade.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class NotificationService {
-  private _pendingApproval: BehaviorSubject<number>;
-  private _pendingDidDocSync: BehaviorSubject<number>;
-  private _assetsOfferedToMe: BehaviorSubject<number>;
-  private _pendingAssetDidDocSync: BehaviorSubject<number>;
+export class NotificationService implements OnDestroy {
+  private _pendingApproval = new BehaviorSubject<number>(0);
+  private _pendingDidDocSync = new BehaviorSubject<number>(0);
+  private _assetsOfferedToMe = new BehaviorSubject<number>(0);
+  private _pendingAssetDidDocSync = new BehaviorSubject<number>(0);
   private _pendingSyncCount$ = new BehaviorSubject<number | undefined>(
     undefined
   );
 
   public initialized = false;
+  private destroy$ = new Subject<void>();
 
-  constructor() {
-    this._pendingApproval = new BehaviorSubject<number>(0);
+  constructor(
+    private claimsFacade: ClaimsFacadeService,
+    private assetsFacade: AssetsFacadeService
+  ) {
+    this._pendingApproval;
     this._pendingDidDocSync = new BehaviorSubject<number>(0);
     this._assetsOfferedToMe = new BehaviorSubject<number>(0);
     this._pendingAssetDidDocSync = new BehaviorSubject<number>(0);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private asd() {
+    // this.pendingApproval
+    //   .pipe(takeUntil(this._subscription$))
+    //   .subscribe(async () => {
+    //     await this._initPendingClaimsCount();
+    //     this._calcTotalCount();
+    //   });
+    // this.assetsOfferedToMe
+    //   .pipe(takeUntil(this._subscription$))
+    //   .subscribe(async () => {
+    //     await this._initAssetsOfferedToMeSyncCount();
+    //     this._calcTotalCount();
+    //   });
+    // this.pendingAssetDidDocSync
+    //   .pipe(takeUntil(this._subscription$))
+    //   .subscribe(async () => {
+    //     await this._initApprovedClaimsForAssetSyncCount();
+    //     this._calcTotalCount();
+    //   });
   }
 
   get pendingApproval() {
@@ -86,5 +118,15 @@ export class NotificationService {
 
   setZeroToPendingDidDocSyncCount() {
     this._pendingSyncCount$.next(0);
+  }
+
+  async _initPendingClaimsCount(): Promise<number> {
+    return (await this.claimsFacade.getClaimsByIssuer()).filter(
+      (item) => !item.isRejected
+    ).length;
+  }
+
+  async getOfferedAssetsCount(): Promise<number> {
+    return (await this.assetsFacade.getOfferedAssets()).length;
   }
 }

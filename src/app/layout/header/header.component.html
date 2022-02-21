@@ -57,13 +57,11 @@
         </mat-slide-toggle>
       </li>
       <app-system-notifications
-        [totalCount]="tasks?.totalCount"
-        [isLoadingNotif]="isLoadingNotif"
-        [pendingApprovalCount]="tasks.pendingApprovalCount"
+        [pendingApprovalCount]="pendingApprovalCount"
         [pendingAssetSyncCount]="tasks.pendingAssetSyncCount"
-        [assetsOfferedToMeCount]="tasks.assetsOfferedToMeCount"></app-system-notifications>
+        [assetsOfferedToMeCount]="assetsOfferedToMeCount"></app-system-notifications>
       <app-user-notifications
-        [notificationNewItems]="notificationNewItems"
+        [notificationNewItems]="notificationNewItems$ | async"
         [notificationList]="notificationList$ | async"
         (closed)="userNotifClosedHandler()"
         (clear)="clearToastr()">

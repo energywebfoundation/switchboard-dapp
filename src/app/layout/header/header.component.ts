@@ -38,6 +38,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentNav = '';
 
+  assetsOfferedToMeCount: number;
+  pendingApprovalCount: number;
   // Tasks
   tasks = {
     totalCount: 0,
@@ -51,25 +53,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     .select(userSelectors.getUserName)
     .pipe(map((value) => (value ? value : 'Manage Profile')));
   userDid$ = this.store.select(userSelectors.getDid);
-  notificationNewItems = 0;
-  notificationList$: Observable<SwitchboardToastr[]> = this.toastr
-    .getMessageList()
-    .pipe(
-      tap(
-        (items) =>
-          (this.notificationNewItems = items.filter(
-            (item) => item.isNew
-          ).length)
-      )
-    );
+  notificationNewItems$ = this.toastr.newMessagesAmount();
+  notificationList$: Observable<SwitchboardToastr[]> =
+    this.toastr.getMessageList();
   isExperimentalEnabled$ = this.store.select(
     SettingsSelectors.isExperimentalEnabled
   );
 
-  private _pendingApprovalCountListener: any;
-  private _pendingSyncCountListener: any;
-  private _assetsOfferedToMeCountListener: any;
-  private _pendingAssetSyncCountListener: any;
   private _subscription$ = new Subject();
   private _iamSubscriptionId: number;
   private isInitNotificationCount = false;
@@ -107,19 +97,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   async ngOnDestroy(): Promise<void> {
-    if (this._pendingSyncCountListener) {
-      this._pendingSyncCountListener.unsubscribe();
-    }
-    if (this._pendingApprovalCountListener) {
-      this._pendingApprovalCountListener.unsubscribe();
-    }
-    if (this._assetsOfferedToMeCountListener) {
-      this._assetsOfferedToMeCountListener.unsubscribe();
-    }
-    if (this._pendingAssetSyncCountListener) {
-      this._pendingAssetSyncCountListener.unsubscribe();
-    }
-
     this._subscription$.next();
     this._subscription$.complete();
 
@@ -174,16 +151,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _calcTotalCount() {
-    this.tasks.totalCount =
-      this.tasks.assetsOfferedToMeCount +
-      this.tasks.pendingAssetSyncCount +
-      this.tasks.pendingApprovalCount;
-    if (this.tasks.totalCount < 0) {
-      this.tasks.totalCount = 0;
-    }
-  }
-
   private async _initNotificationAndTasksListeners() {
     // Initialize Notif Counts
     this.notifService.initNotifCounts(
@@ -193,25 +160,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
 
     // Listen to Count Changes
-    this._pendingApprovalCountListener = this.notifService.pendingApproval
+    this.notifService.pendingApproval
       .pipe(takeUntil(this._subscription$))
       .subscribe(async () => {
         await this._initPendingClaimsCount();
-        this._calcTotalCount();
       });
-    this._assetsOfferedToMeCountListener = this.notifService.assetsOfferedToMe
+    this.notifService.assetsOfferedToMe
       .pipe(takeUntil(this._subscription$))
       .subscribe(async () => {
         await this._initAssetsOfferedToMeSyncCount();
-        this._calcTotalCount();
       });
-    this._pendingAssetSyncCountListener =
-      this.notifService.pendingAssetDidDocSync
-        .pipe(takeUntil(this._subscription$))
-        .subscribe(async () => {
-          await this._initApprovedClaimsForAssetSyncCount();
-          this._calcTotalCount();
-        });
+    this.notifService.pendingAssetDidDocSync
+      .pipe(takeUntil(this._subscription$))
+      .subscribe(async () => {
+        await this._initApprovedClaimsForAssetSyncCount();
+      });
 
     // Listen to External Messages
     this._iamSubscriptionId =
@@ -282,26 +245,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private async _initPendingClaimsCount() {
-    // Get Pending Claims to be Approved
-    const pendingClaimsList = (
-      await this.iamService.claimsService.getClaimsByIssuer({
-        did: this.iamService.signerService.did,
-        isAccepted: false,
-      })
-    ).filter((item) => !item.isRejected);
-    this.tasks.pendingApprovalCount = pendingClaimsList.length;
-    if (this.tasks.pendingApprovalCount < 0) {
-      this.tasks.pendingApprovalCount = 0;
-    }
+    this.pendingApprovalCount =
+      await this.notifService._initPendingClaimsCount();
   }
 
   private async _initAssetsOfferedToMeSyncCount() {
-    this.tasks.assetsOfferedToMeCount = (
-      await this.iamService.assetsService.getOfferedAssets()
-    ).length;
-    if (this.tasks.assetsOfferedToMeCount < 0) {
-      this.tasks.assetsOfferedToMeCount = 0;
-    }
+    this.assetsOfferedToMeCount =
+      await this.notifService.getOfferedAssetsCount();
   }
 
   private async _initApprovedClaimsForAssetSyncCount() {
@@ -312,17 +262,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private async _initNotificationsAndTasksCount() {
-    try {
-      await this._initPendingClaimsCount();
-      await this._initAssetsOfferedToMeSyncCount();
-      await this._initApprovedClaimsForAssetSyncCount();
-    } catch (e) {
-      console.error(e);
-      this.toastr.error(e);
-    } finally {
-      this.isLoadingNotif = false;
-      await this._initNotificationAndTasksListeners();
-    }
+    this.isLoadingNotif = false;
+    await this._initNotificationAndTasksListeners();
   }
 
   logout() {
