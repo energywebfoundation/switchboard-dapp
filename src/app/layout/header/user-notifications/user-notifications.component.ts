@@ -15,11 +15,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserNotificationsComponent {
-  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
-
-  closeIt() {
-    this.trigger.closeMenu();
-  }
   @Input() notificationNewItems: number;
   @Input() notificationList;
 
@@ -29,6 +24,7 @@ export class UserNotificationsComponent {
   menuCloseHandler() {
     this.closed.emit();
   }
+
   clearHandler() {
     this.clear.emit();
   }
