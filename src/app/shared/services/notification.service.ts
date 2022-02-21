@@ -12,7 +12,6 @@ export class NotificationService {
   private _pendingSyncCount$ = new BehaviorSubject<number | undefined>(
     undefined
   );
-  pendingSyncCount$ = this._pendingSyncCount$.asObservable();
 
   public initialized = false;
 
@@ -41,12 +40,10 @@ export class NotificationService {
 
   initNotifCounts(
     pendingApproval: number,
-    pendingDidDocSync: number,
     assetsOfferedToMe: number,
     pendingAssetDidDocSync: number
   ) {
     this._pendingApproval.next(pendingApproval);
-    this._pendingDidDocSync.next(pendingDidDocSync);
     this._assetsOfferedToMe.next(assetsOfferedToMe);
     this._pendingAssetDidDocSync.next(pendingAssetDidDocSync);
   }

@@ -49,12 +49,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     pendingApprovalCount: 0,
   };
 
-  // Notifications
-  notif = {
-    totalCount: 0,
-    pendingSyncCount: 0,
-  };
-
   isLoadingNotif = true;
   userName$ = this.store
     .select(userSelectors.getUserName)
@@ -184,14 +178,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private _calcTotalCount() {
-    this.notif.totalCount = this.notif.pendingSyncCount;
     this.tasks.totalCount =
       this.tasks.assetsOfferedToMeCount +
       this.tasks.pendingAssetSyncCount +
       this.tasks.pendingApprovalCount;
-    if (this.notif.totalCount < 0) {
-      this.notif.totalCount = 0;
-    }
     if (this.tasks.totalCount < 0) {
       this.tasks.totalCount = 0;
     }
@@ -201,7 +191,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // Initialize Notif Counts
     this.notifService.initNotifCounts(
       this.tasks.pendingApprovalCount,
-      this.notif.pendingSyncCount,
       this.tasks.assetsOfferedToMeCount,
       this.tasks.pendingAssetSyncCount
     );
@@ -213,12 +202,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
         await this._initPendingClaimsCount();
         this._calcTotalCount();
       });
-    this._pendingSyncCountListener = this.notifService.pendingDidDocSync
-      .pipe(takeUntil(this._subscription$))
-      .subscribe(async () => {
-        await this._initApprovedClaimsForSyncCount();
-        this._calcTotalCount();
-      });
+    // this._pendingSyncCountListener = this.notifService.pendingDidDocSync
+    //   .pipe(takeUntil(this._subscription$))
+    //   .subscribe(async () => {
+    //     await this._initApprovedClaimsForSyncCount();
+    //     this._calcTotalCount();
+    //   });
     this._assetsOfferedToMeCountListener = this.notifService.assetsOfferedToMe
       .pipe(takeUntil(this._subscription$))
       .subscribe(async () => {
@@ -316,45 +305,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private async _initApprovedClaimsForSyncCount() {
-    // Get Approved Claims
-    const approvedClaimsList =
-      await this.iamService.claimsService.getClaimsByRequester({
-        did: this.iamService.signerService.did,
-        isAccepted: true,
-      });
-
-    // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    let claims: any[] = await this.iamService.claimsService.getUserClaims();
-    claims = claims.filter((item: any) => {
-      if (item && item.claimType) {
-        const arr = item.claimType.split('.');
-        if (arr.length > 1 && arr[1] === NamespaceType.Role) {
-          return true;
-        }
-        return false;
-      } else {
-        return false;
-      }
-    });
-
-    this.notif.pendingSyncCount = approvedClaimsList.length - claims.length;
-    if (this.notif.pendingSyncCount < 0) {
-      this.notif.pendingSyncCount = 0;
-    }
-    this._initZeroCheckerForPendingSyncCount();
+    // this._initZeroCheckerForPendingSyncCount();
   }
 
-  private _initZeroCheckerForPendingSyncCount(): void {
-    this.notifService.pendingSyncCount$
-      .pipe(
-        takeUntil(this._subscription$),
-        filter((count) => count === 0)
-      )
-      .subscribe((count) => {
-        this.notif.pendingSyncCount = count;
-        this._calcTotalCount();
-      });
-  }
+  // private _initZeroCheckerForPendingSyncCount(): void {
+  //   this.notifService.pendingSyncCount$
+  //     .pipe(
+  //       takeUntil(this._subscription$),
+  //       filter((count) => count === 0)
+  //     )
+  //     .subscribe(() => {
+  //       this._calcTotalCount();
+  //     });
+  // }
 
   private async _initAssetsOfferedToMeSyncCount() {
     this.tasks.assetsOfferedToMeCount = (
@@ -375,7 +338,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private async _initNotificationsAndTasksCount() {
     try {
       await this._initPendingClaimsCount();
-      await this._initApprovedClaimsForSyncCount();
+      // await this._initApprovedClaimsForSyncCount();
       await this._initAssetsOfferedToMeSyncCount();
       await this._initApprovedClaimsForAssetSyncCount();
     } catch (e) {
