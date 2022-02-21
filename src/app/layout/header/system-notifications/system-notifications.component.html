@@ -1,14 +1,11 @@
-<div class="nav-link cursor-pointer" [matMenuTriggerFor]="menu">
-  <mat-spinner *ngIf="isLoadingNotif; else icon" diameter="21" class="color-white"></mat-spinner>
-  <ng-template #icon>
-    <em
-      class="fas fa-tasks icon-color"
-      matBadgeColor="warn"
-      matBadgeSize="small"
-      [matBadgeHidden]="hideBadges()"
-      [matBadge]="totalCount"></em>
-  </ng-template>
+<div *ngIf="isLoadingNotif; else icon" class="spinner">
+  <mat-spinner diameter="21" class="color-white"></mat-spinner>
 </div>
+<ng-template #icon>
+  <app-menu-notification-trigger [matMenuTriggerFor]="menu" [items]="totalCount" icon="fas fa-tasks">
+  </app-menu-notification-trigger>
+</ng-template>
+
 <mat-menu #menu="matMenu" xPosition="before">
   <app-notification-container>
     <app-notification-header title="Tasks" [showClear]="false"></app-notification-header>

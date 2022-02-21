@@ -1,11 +1,9 @@
-<div class="nav-link cursor-pointer" [matMenuTriggerFor]="menu" (menuClosed)="menuCloseHandler()">
-  <em
-    class="icon-bell icon-color"
-    matBadgeColor="warn"
-    matBadgeSize="small"
-    [matBadgeHidden]="!areNewNotifications()"
-    [matBadge]="notificationNewItems"></em>
-</div>
+<app-menu-notification-trigger
+  [matMenuTriggerFor]="menu"
+  [items]="notificationNewItems"
+  icon="icon-bell"
+  (menuClosed)="menuCloseHandler()">
+</app-menu-notification-trigger>
 
 <mat-menu #menu="matMenu">
   <app-notification-container>

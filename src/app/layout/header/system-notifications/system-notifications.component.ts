@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-system-notifications',
@@ -11,17 +6,10 @@ import {
   styleUrls: ['./system-notifications.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SystemNotificationsComponent implements OnInit {
+export class SystemNotificationsComponent {
   @Input() isLoadingNotif: boolean;
   @Input() totalCount: number;
   @Input() assetsOfferedToMeCount: number;
   @Input() pendingAssetSyncCount: number;
   @Input() pendingApprovalCount: number;
-  constructor() {}
-
-  ngOnInit(): void {}
-
-  hideBadges() {
-    return this.totalCount === 0;
-  }
 }

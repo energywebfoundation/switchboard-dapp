@@ -19,6 +19,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { SystemNotificationsComponent } from './header/system-notifications/system-notifications.component';
 import { NotificationContainerComponent } from './header/notification-container/notification-container.component';
 import { NotificationHeaderComponent } from './header/notification-header/notification-header.component';
+import { MenuNotificationTriggerComponent } from './header/menu-notification-trigger/menu-notification-trigger.component';
 
 @NgModule({
   imports: [
@@ -45,6 +46,7 @@ import { NotificationHeaderComponent } from './header/notification-header/notifi
     SystemNotificationsComponent,
     NotificationContainerComponent,
     NotificationHeaderComponent,
+    MenuNotificationTriggerComponent,
   ],
   entryComponents: [DialogUserComponent],
   exports: [LayoutComponent, HeaderComponent, LoadingComponent],
