@@ -3,7 +3,6 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
 import { Claim } from 'iam-client-lib';
-import { IamService } from './iam.service';
 import { EnrolmentListService } from './enrolment-list/enrolment-list.service';
 import { takeUntil } from 'rxjs/operators';
 
@@ -21,7 +20,6 @@ export class NotificationService implements OnDestroy {
   constructor(
     private claimsFacade: ClaimsFacadeService,
     private assetsFacade: AssetsFacadeService,
-    private iamService: IamService,
     private enrolmentListService: EnrolmentListService
   ) {
     this._pendingApproval;
@@ -68,11 +66,6 @@ export class NotificationService implements OnDestroy {
         await this.getOfferedAssetsCount();
       });
 
-    // Listen to External Messages
-    // this._iamSubscriptionId =
-    //   await this.iamService.messagingService.subscribeTo({
-    //     messageHandler: this._handleMessage.bind(this),
-    //   });
     this.initNotifCounts(
       await this._initPendingClaimsCount(),
       await this.getOfferedAssetsCount(),
