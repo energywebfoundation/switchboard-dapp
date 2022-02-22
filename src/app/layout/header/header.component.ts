@@ -41,8 +41,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   assetsOfferedToMeCount: number;
   pendingApprovalCount: number;
   pendingSyncToDIDCount: number;
+  assetsOfferedToMeCount$ = this.notifService.assetsOfferedToMe;
+  pendingApprovalCount$ = this.notifService.pendingApproval;
+  pendingSyncToDIDCount$ = this.notifService.pendingDidDocSync;
 
-  isLoadingNotif = true;
   userName$ = this.store
     .select(userSelectors.getUserName)
     .pipe(map((value) => (value ? value : 'Manage Profile')));
@@ -56,7 +58,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private _subscription$ = new Subject();
   private _iamSubscriptionId: number;
-  private isInitNotificationCount = false;
 
   constructor(
     private iamService: IamService,
@@ -132,51 +133,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.store
       .select(userSelectors.getUserProfile)
       .pipe(filter(Boolean), takeUntil(this._subscription$))
-      .subscribe(() => {
-        this._initNotificationsAndTasks();
+      .subscribe(async() => {
+        await this.notifService.init();
+        await this._initNotificationAndTasksListeners();
       });
-  }
-
-  private async _initApprovedClaimsForSyncCount() {
-    // Get Approved Claims
-    this.pendingSyncToDIDCount = await this.notifService.getPendingDidDocSync();
-  }
-
-  private _initNotificationsAndTasks() {
-    // Init Notif Count
-    if (!this.isInitNotificationCount) {
-      this._initNotificationsAndTasksCount();
-      this.isInitNotificationCount = true;
-    }
   }
 
   private async _initNotificationAndTasksListeners() {
-    // Initialize Notif Counts
-    this.notifService.initNotifCounts(
-      this.pendingApprovalCount,
-      this.assetsOfferedToMeCount,
-      this.pendingSyncToDIDCount
-    );
-
-    // Listen to Count Changes
-    this.notifService.pendingApproval
-      .pipe(takeUntil(this._subscription$))
-      .subscribe(async () => {
-        await this._initPendingClaimsCount();
-      });
-
-    this.notifService.pendingDidDocSync
-      .pipe(takeUntil(this._subscription$))
-      .subscribe(async () => {
-        await this._initApprovedClaimsForSyncCount();
-      });
-
-    this.notifService.assetsOfferedToMe
-      .pipe(takeUntil(this._subscription$))
-      .subscribe(async () => {
-        await this._initAssetsOfferedToMeSyncCount();
-      });
-
     // Listen to External Messages
     this._iamSubscriptionId =
       await this.iamService.messagingService.subscribeTo({
@@ -243,21 +206,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         );
         break;
     }
-  }
-
-  private async _initPendingClaimsCount() {
-    this.pendingApprovalCount =
-      await this.notifService._initPendingClaimsCount();
-  }
-
-  private async _initAssetsOfferedToMeSyncCount() {
-    this.assetsOfferedToMeCount =
-      await this.notifService.getOfferedAssetsCount();
-  }
-
-  private async _initNotificationsAndTasksCount() {
-    this.isLoadingNotif = false;
-    await this._initNotificationAndTasksListeners();
   }
 
   logout() {

@@ -57,9 +57,9 @@
         </mat-slide-toggle>
       </li>
       <app-system-notifications
-        [pendingApprovalCount]="pendingApprovalCount"
-        [pendingAssetSyncCount]="pendingSyncToDIDCount"
-        [assetsOfferedToMeCount]="assetsOfferedToMeCount"></app-system-notifications>
+        [pendingApprovalCount]="pendingApprovalCount$ | async"
+        [pendingAssetSyncCount]="pendingSyncToDIDCount$ | async"
+        [assetsOfferedToMeCount]="assetsOfferedToMeCount$ | async"></app-system-notifications>
       <app-user-notifications
         [notificationNewItems]="notificationNewItems$ | async"
         [notificationList]="notificationList$ | async"

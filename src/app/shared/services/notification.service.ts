@@ -1,22 +1,22 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
-import {
-  Claim,
-} from 'iam-client-lib';
+import { Claim } from 'iam-client-lib';
 import { IamService } from './iam.service';
 import { EnrolmentListService } from './enrolment-list/enrolment-list.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
-export class NotificationService {
+export class NotificationService implements OnDestroy {
   private _pendingApproval = new BehaviorSubject<number>(0);
   private _pendingDidDocSync = new BehaviorSubject<number>(0);
   private _assetsOfferedToMe = new BehaviorSubject<number>(0);
   private _pendingAssetDidDocSync = new BehaviorSubject<number>(0);
 
+  private destroy$ = new Subject<void>();
 
   constructor(
     private claimsFacade: ClaimsFacadeService,
@@ -29,6 +29,8 @@ export class NotificationService {
     this._assetsOfferedToMe = new BehaviorSubject<number>(0);
     this._pendingAssetDidDocSync = new BehaviorSubject<number>(0);
   }
+
+  ngOnDestroy() {}
 
   get pendingApproval() {
     return this._pendingApproval.asObservable();
@@ -44,6 +46,35 @@ export class NotificationService {
 
   get pendingAssetDidDocSync() {
     return this._pendingAssetDidDocSync.asObservable();
+  }
+
+  async init() {
+    this.pendingApproval.pipe(takeUntil(this.destroy$)).subscribe(async () => {
+      await this._initPendingClaimsCount();
+    });
+
+    this.pendingDidDocSync
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(async () => {
+        await this.getPendingDidDocSync();
+      });
+
+    this.assetsOfferedToMe
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(async () => {
+        await this.getOfferedAssetsCount();
+      });
+
+    // Listen to External Messages
+    // this._iamSubscriptionId =
+    //   await this.iamService.messagingService.subscribeTo({
+    //     messageHandler: this._handleMessage.bind(this),
+    //   });
+    this.initNotifCounts(
+      await this._initPendingClaimsCount(),
+      await this.getOfferedAssetsCount(),
+      await this.getPendingDidDocSync()
+    );
   }
 
   initNotifCounts(
