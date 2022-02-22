@@ -5,6 +5,7 @@ import { from } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
 import { finalize } from 'rxjs/operators';
+import { Claim } from 'iam-client-lib';
 
 @Injectable({
   providedIn: 'root',
@@ -30,5 +31,16 @@ export class ClaimsFacadeService {
       did: this.iamService.signerService.did,
       isAccepted: false,
     })
+  }
+
+  getClaimsByRequester(isAccepted = undefined): Promise<Claim[]> {
+    return this.iamService.claimsService.getClaimsByRequester({
+      did: this.iamService.signerService.did,
+      isAccepted
+    })
+  }
+
+  getUserClaims() {
+    return this.iamService.claimsService.getUserClaims();
   }
 }

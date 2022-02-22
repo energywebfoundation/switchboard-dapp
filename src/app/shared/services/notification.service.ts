@@ -2,6 +2,8 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
+import { ClaimData, NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import { IamService } from './iam.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +22,8 @@ export class NotificationService implements OnDestroy {
 
   constructor(
     private claimsFacade: ClaimsFacadeService,
-    private assetsFacade: AssetsFacadeService
+    private assetsFacade: AssetsFacadeService,
+    private iamService: IamService
   ) {
     this._pendingApproval;
     this._pendingDidDocSync = new BehaviorSubject<number>(0);
@@ -31,27 +34,6 @@ export class NotificationService implements OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  private asd() {
-    // this.pendingApproval
-    //   .pipe(takeUntil(this._subscription$))
-    //   .subscribe(async () => {
-    //     await this._initPendingClaimsCount();
-    //     this._calcTotalCount();
-    //   });
-    // this.assetsOfferedToMe
-    //   .pipe(takeUntil(this._subscription$))
-    //   .subscribe(async () => {
-    //     await this._initAssetsOfferedToMeSyncCount();
-    //     this._calcTotalCount();
-    //   });
-    // this.pendingAssetDidDocSync
-    //   .pipe(takeUntil(this._subscription$))
-    //   .subscribe(async () => {
-    //     await this._initApprovedClaimsForAssetSyncCount();
-    //     this._calcTotalCount();
-    //   });
   }
 
   get pendingApproval() {
@@ -73,11 +55,11 @@ export class NotificationService implements OnDestroy {
   initNotifCounts(
     pendingApproval: number,
     assetsOfferedToMe: number,
-    pendingAssetDidDocSync: number
+    pendingSyncToDID: number
   ) {
     this._pendingApproval.next(pendingApproval);
     this._assetsOfferedToMe.next(assetsOfferedToMe);
-    this._pendingAssetDidDocSync.next(pendingAssetDidDocSync);
+    this._pendingDidDocSync.next(pendingSyncToDID);
   }
 
   increasePendingApprovalCount() {
@@ -128,5 +110,77 @@ export class NotificationService implements OnDestroy {
 
   async getOfferedAssetsCount(): Promise<number> {
     return (await this.assetsFacade.getOfferedAssets()).length;
+  }
+
+  async getPendingDidDocSync(): Promise<number> {
+    let list: any[] = await Promise.all(
+      (await this.iamService.claimsService.getClaimsByRequester({
+          did: this.iamService.signerService.did,
+          isAccepted: true,
+        }))
+      .map((item) => this.checkForNotSyncedOnChain(item)));
+
+    if (list && list.length) {
+      for (const item of list) {
+        const arr = item.claimType.split(`.${NamespaceType.Role}.`);
+        item.roleName = arr[0];
+        item.requestDate = new Date(item.createdAt);
+      }
+
+        await this.appendDidDocSyncStatus(list);
+    }
+
+    return list.filter(item => this.isPendingSync(item)).length;
+  }
+
+  private async appendDidDocSyncStatus(list: any[]) {
+    // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
+    const claims: ClaimData[] = (
+      await this.iamService.claimsService.getUserClaims()
+    ).filter((item: ClaimData) => {
+      if (item && item.claimType) {
+        const arr = item.claimType.split('.');
+        if (arr.length > 1 && arr[1] === NamespaceType.Role) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    });
+
+    if (claims && claims.length) {
+      claims.forEach((item: ClaimData) => {
+        for (let i = 0; i < list.length; i++) {
+          if (item.claimType === list[i].claimType) {
+            list[i].isSynced = true;
+          }
+        }
+      });
+    }
+  }
+
+  async checkForNotSyncedOnChain(item) {
+    if (item.registrationTypes.includes(RegistrationTypes.OnChain)) {
+      return {
+        ...item,
+        notSyncedOnChain: !(await this.iamService.claimsService.hasOnChainRole(
+          this.iamService.signerService.did,
+          item.claimType,
+          parseInt(item.claimTypeVersion.toString(), 10)
+        )),
+      };
+    }
+    return item;
+  }
+
+  isPendingSync(element) {
+    return (
+      !element?.isSynced &&
+      element.registrationTypes.includes(RegistrationTypes.OffChain) &&
+      !(
+        element.registrationTypes.length === 1 &&
+        element.registrationTypes.includes(RegistrationTypes.OnChain)
+      )
+    );
   }
 }

@@ -58,7 +58,7 @@
       </li>
       <app-system-notifications
         [pendingApprovalCount]="pendingApprovalCount"
-        [pendingAssetSyncCount]="tasks.pendingAssetSyncCount"
+        [pendingAssetSyncCount]="pendingSyncToDIDCount"
         [assetsOfferedToMeCount]="assetsOfferedToMeCount"></app-system-notifications>
       <app-user-notifications
         [notificationNewItems]="notificationNewItems$ | async"

@@ -40,6 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   assetsOfferedToMeCount: number;
   pendingApprovalCount: number;
+  pendingSyncToDIDCount: number;
   // Tasks
   tasks = {
     totalCount: 0,
@@ -143,6 +144,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
   }
 
+  private async _initApprovedClaimsForSyncCount() {
+    // Get Approved Claims
+    this.pendingSyncToDIDCount = await this.notifService.getPendingDidDocSync();
+
+    // this.notif.pendingSyncCount = approvedClaimsList.length - claims.length;
+    // if (this.notif.pendingSyncCount < 0) {
+    //   this.notif.pendingSyncCount = 0;
+    // }
+    // this._initZeroCheckerForPendingSyncCount();
+  }
+
   private _initNotificationsAndTasks() {
     // Init Notif Count
     if (!this.isInitNotificationCount) {
@@ -154,9 +166,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private async _initNotificationAndTasksListeners() {
     // Initialize Notif Counts
     this.notifService.initNotifCounts(
-      this.tasks.pendingApprovalCount,
-      this.tasks.assetsOfferedToMeCount,
-      this.tasks.pendingAssetSyncCount
+      this.pendingApprovalCount,
+      this.assetsOfferedToMeCount,
+      this.pendingSyncToDIDCount
     );
 
     // Listen to Count Changes
@@ -165,6 +177,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe(async () => {
         await this._initPendingClaimsCount();
       });
+
+    this.notifService.pendingDidDocSync
+      .pipe(takeUntil(this._subscription$))
+      .subscribe(async () => {
+        await this._initApprovedClaimsForSyncCount();
+      });
+
     this.notifService.assetsOfferedToMe
       .pipe(takeUntil(this._subscription$))
       .subscribe(async () => {
