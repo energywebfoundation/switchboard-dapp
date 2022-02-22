@@ -30,17 +30,17 @@ export class ClaimsFacadeService {
     return this.iamService.claimsService.getClaimsByIssuer({
       did: this.iamService.signerService.did,
       isAccepted: false,
-    })
+    });
   }
 
-  getClaimsByRequester(isAccepted = undefined): Promise<Claim[]> {
+  getClaimsByRequester(isAccepted: boolean = undefined): Promise<Claim[]> {
     return this.iamService.claimsService.getClaimsByRequester({
       did: this.iamService.signerService.did,
-      isAccepted
-    })
+      isAccepted,
+    });
   }
 
-  getUserClaims() {
-    return this.iamService.claimsService.getUserClaims();
+  getUserClaims(did: string) {
+    return this.iamService.claimsService.getUserClaims({ did });
   }
 }

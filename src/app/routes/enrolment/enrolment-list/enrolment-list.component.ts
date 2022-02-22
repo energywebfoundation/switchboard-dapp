@@ -20,6 +20,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { truthy } from '@operators';
 import { Store } from '@ngrx/store';
 import { SettingsSelectors } from '@state';
+import { EnrolmentListService } from '../../../shared/services/enrolment-list/enrolment-list.service';
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
@@ -60,7 +61,8 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private toastr: SwitchboardToastrService,
     private notifService: NotificationService,
-    private store: Store
+    private store: Store,
+    private enrolmentListService: EnrolmentListService
   ) {}
 
   isAsset(element) {
@@ -182,7 +184,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         }
 
         if (this.listType !== EnrolmentListType.ISSUER) {
-          await this.appendDidDocSyncStatus(list);
+          list = await this.enrolmentListService.appendDidDocSyncStatus(list);
         }
       }
     } catch (e) {
@@ -238,9 +240,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   isPendingSync(element) {
     return (
       !this.viewedByIssuer() &&
-      !this.isSynced(element) &&
-      this.isOffChain(element) &&
-      !this.isOnlyOnChain(element)
+      this.enrolmentListService.isPendingSync(element)
     );
   }
 
@@ -407,36 +407,6 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async appendDidDocSyncStatus(list: any[]) {
-    // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    const did =
-      this.listType === EnrolmentListType.ASSET
-        ? { did: this.subject }
-        : undefined;
-    const claims: ClaimData[] = (
-      await this.iamService.claimsService.getUserClaims(did)
-    ).filter((item: ClaimData) => {
-      if (item && item.claimType) {
-        const arr = item.claimType.split('.');
-        if (arr.length > 1 && arr[1] === NamespaceType.Role) {
-          return true;
-        }
-        return false;
-      }
-      return false;
-    });
-
-    if (claims && claims.length) {
-      claims.forEach((item: ClaimData) => {
-        for (let i = 0; i < list.length; i++) {
-          if (item.claimType === list[i].claimType) {
-            list[i].isSynced = true;
-          }
-        }
-      });
-    }
-  }
-
   private async syncClaimToDidDoc(element: any) {
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.',
@@ -474,7 +444,6 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       CancelButton.ENABLED
     );
 
-    console.log(element);
     try {
       await this.iamService.claimsService.registerOnchain(element);
 
