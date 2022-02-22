@@ -30,7 +30,10 @@ export class NotificationService implements OnDestroy {
     this._pendingAssetDidDocSync = new BehaviorSubject<number>(0);
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   get pendingApproval() {
     return this._pendingApproval.asObservable();

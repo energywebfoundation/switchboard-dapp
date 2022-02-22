@@ -8,9 +8,8 @@ describe('MenuNotificationTriggerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MenuNotificationTriggerComponent ]
-    })
-    .compileComponents();
+      declarations: [MenuNotificationTriggerComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

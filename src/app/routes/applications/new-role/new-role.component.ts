@@ -24,9 +24,8 @@ import {
 } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
-import { isAlphanumericValidator } from '@utils';
+import { HexValidators, isAlphanumericValidator } from '@utils';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { HexValidators } from '@utils';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 import { IFieldDefinition } from '@energyweb/iam-contracts';
 import { RoleCreationService } from './services/role-creation.service';

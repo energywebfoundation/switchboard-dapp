@@ -45,7 +45,7 @@ describe('NotificationHeaderComponent', () => {
   });
 
   it('should emit event when clicking clear all', () => {
-    const dispatchSpy = spyOn(component.clear, 'emit')
+    const dispatchSpy = spyOn(component.clear, 'emit');
     fixture.detectChanges();
 
     const title = getElement(hostDebug)('notif-clear').nativeElement;
@@ -53,5 +53,5 @@ describe('NotificationHeaderComponent', () => {
     title.click();
 
     expect(dispatchSpy).toHaveBeenCalled();
-  })
+  });
 });

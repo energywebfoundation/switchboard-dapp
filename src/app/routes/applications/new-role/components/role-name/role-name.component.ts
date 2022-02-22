@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ENSPrefixes, DomainTypeEnum } from '../../new-role.component';
+import { DomainTypeEnum, ENSPrefixes } from '../../new-role.component';
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { isAlphanumericValidator, StringTransform } from '@utils';
 import { RoleCreationService } from '../../services/role-creation.service';

@@ -12,6 +12,10 @@ export class SystemNotificationsComponent {
   @Input() pendingApprovalCount: number;
 
   get totalCount() {
-    return this.assetsOfferedToMeCount + this.pendingApprovalCount + this.pendingAssetSyncCount;
+    return (
+      this.assetsOfferedToMeCount +
+      this.pendingApprovalCount +
+      this.pendingAssetSyncCount
+    );
   }
 }

@@ -1,21 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Event, NavigationEnd, Router } from '@angular/router';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
-import {
-  AssetHistoryEventType,
-  ClaimEventType,
-  NamespaceType,
-} from 'iam-client-lib';
+import { AssetHistoryEventType, ClaimEventType } from 'iam-client-lib';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { IamService } from '../../shared/services/iam.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { Observable, Subject } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import { Store } from '@ngrx/store';
-import { UserClaimState } from '../../state/user-claim/user.reducer';
 import {
   SwitchboardToastr,
   SwitchboardToastrService,
@@ -133,7 +128,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.store
       .select(userSelectors.getUserProfile)
       .pipe(filter(Boolean), takeUntil(this._subscription$))
-      .subscribe(async() => {
+      .subscribe(async () => {
         await this.notifService.init();
         await this._initNotificationAndTasksListeners();
       });

@@ -4,9 +4,7 @@ import {
   EventEmitter,
   Input,
   Output,
-  ViewChild,
 } from '@angular/core';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { SwitchboardToastr } from '../../../shared/services/switchboard-toastr.service';
 
 @Component({

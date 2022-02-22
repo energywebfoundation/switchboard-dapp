@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DidBookService } from '../../../../modules/did-book/services/did-book.service';
-import { Observable } from 'rxjs';
 import { QrCodeData } from '../models/qr-code-data.interface';
-import { filter } from 'rxjs/operators';
 import { ScanType } from '../models/scan-type.enum';
 import { DidBookComponent } from '../../../../modules/did-book/components/did-book/did-book.component';
 import { DidBookRecord } from '../../../../modules/did-book/components/models/did-book-record';

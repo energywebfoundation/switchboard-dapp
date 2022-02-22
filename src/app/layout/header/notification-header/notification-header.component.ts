@@ -1,9 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter, HostBinding,
+  EventEmitter,
+  HostBinding,
   Input,
-  Output
+  Output,
 } from '@angular/core';
 
 @Component({
@@ -13,7 +14,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationHeaderComponent {
-  @HostBinding('class') classes = 'pt-1 pb-3 px-3 mt-2 mb-2 border-bottom-1'
+  @HostBinding('class') classes = 'pt-1 pb-3 px-3 mt-2 mb-2 border-bottom-1';
   @Input() title: string;
   @Input() showClear = true;
 

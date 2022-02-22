@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ClaimData, NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import { NamespaceType, RegistrationTypes } from 'iam-client-lib';
 import { take, takeUntil } from 'rxjs/operators';
 import { combineLatest, of, Subject } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
@@ -239,8 +239,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   isPendingSync(element) {
     return (
-      !this.viewedByIssuer() &&
-      this.enrolmentListService.isPendingSync(element)
+      !this.viewedByIssuer() && this.enrolmentListService.isPendingSync(element)
     );
   }
 
