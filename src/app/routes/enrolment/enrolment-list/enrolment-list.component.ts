@@ -248,17 +248,6 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     return this.listType === EnrolmentListType.ISSUER;
   }
 
-  isOnlyOnChain(element) {
-    return (
-      element.registrationTypes.length === 1 &&
-      element.registrationTypes.includes(RegistrationTypes.OnChain)
-    );
-  }
-
-  isOffChain(element) {
-    return element.registrationTypes.includes(RegistrationTypes.OffChain);
-  }
-
   view(element: any) {
     this.dialog
       .open(ViewRequestsComponent, {
