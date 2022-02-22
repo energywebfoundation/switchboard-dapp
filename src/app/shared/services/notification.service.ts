@@ -1,12 +1,9 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
 import {
   Claim,
-  ClaimData,
-  NamespaceType,
-  RegistrationTypes,
 } from 'iam-client-lib';
 import { IamService } from './iam.service';
 import { EnrolmentListService } from './enrolment-list/enrolment-list.service';
@@ -14,17 +11,12 @@ import { EnrolmentListService } from './enrolment-list/enrolment-list.service';
 @Injectable({
   providedIn: 'root',
 })
-export class NotificationService implements OnDestroy {
+export class NotificationService {
   private _pendingApproval = new BehaviorSubject<number>(0);
   private _pendingDidDocSync = new BehaviorSubject<number>(0);
   private _assetsOfferedToMe = new BehaviorSubject<number>(0);
   private _pendingAssetDidDocSync = new BehaviorSubject<number>(0);
-  private _pendingSyncCount$ = new BehaviorSubject<number | undefined>(
-    undefined
-  );
 
-  public initialized = false;
-  private destroy$ = new Subject<void>();
 
   constructor(
     private claimsFacade: ClaimsFacadeService,
@@ -36,11 +28,6 @@ export class NotificationService implements OnDestroy {
     this._pendingDidDocSync = new BehaviorSubject<number>(0);
     this._assetsOfferedToMe = new BehaviorSubject<number>(0);
     this._pendingAssetDidDocSync = new BehaviorSubject<number>(0);
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   get pendingApproval() {
@@ -91,22 +78,6 @@ export class NotificationService implements OnDestroy {
 
   decreaseAssetsOfferedToMeCount() {
     this._assetsOfferedToMe.next(this._assetsOfferedToMe.getValue() - 1);
-  }
-
-  increasePendingAssetDidDocSyncCount() {
-    this._pendingAssetDidDocSync.next(
-      this._pendingAssetDidDocSync.getValue() + 1
-    );
-  }
-
-  decreasePendingAssetDidDocSyncCount() {
-    this._pendingAssetDidDocSync.next(
-      this._pendingAssetDidDocSync.getValue() - 1
-    );
-  }
-
-  setZeroToPendingDidDocSyncCount() {
-    this._pendingSyncCount$.next(0);
   }
 
   async _initPendingClaimsCount(): Promise<number> {
