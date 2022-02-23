@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { IndividualConfig } from 'ngx-toastr/toastr/toastr-config';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -21,11 +21,14 @@ export interface SwitchboardToastr {
 @Injectable({
   providedIn: 'root',
 })
-export class SwitchboardToastrService {
+export class SwitchboardToastrService implements OnDestroy {
   private readonly maxMessagesNumber = 20;
   private messageList = new BehaviorSubject<SwitchboardToastr[]>([]);
 
   constructor(private toastr: ToastrService) {}
+  ngOnDestroy() {
+    this.reset();
+  }
 
   getMessageList(): Observable<SwitchboardToastr[]> {
     return this.messageList.asObservable();
@@ -38,6 +41,10 @@ export class SwitchboardToastrService {
           items.filter((item) => item.isNew).length
       )
     );
+  }
+
+  areNewNotifications(): Observable<boolean> {
+    return this.newMessagesAmount().pipe(map (value => value !== 0));
   }
 
   reset(): void {

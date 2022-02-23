@@ -60,11 +60,7 @@
         [pendingApprovalCount]="pendingApprovalCount$ | async"
         [pendingAssetSyncCount]="pendingSyncToDIDCount$ | async"
         [assetsOfferedToMeCount]="assetsOfferedToMeCount$ | async"></app-system-notifications>
-      <app-user-notifications
-        [notificationNewItems]="notificationNewItems$ | async"
-        [notificationList]="notificationList$ | async"
-        (closed)="userNotifClosedHandler()"
-        (clear)="clearToastr()">
+      <app-user-notifications>
       </app-user-notifications>
 
       <li class="nav-item d-none d-md-block">

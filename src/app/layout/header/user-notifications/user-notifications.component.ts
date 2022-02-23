@@ -5,7 +5,11 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { SwitchboardToastr } from '../../../shared/services/switchboard-toastr.service';
+import {
+  SwitchboardToastr,
+  SwitchboardToastrService,
+} from '../../../shared/services/switchboard-toastr.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-user-notifications',
@@ -14,21 +18,18 @@ import { SwitchboardToastr } from '../../../shared/services/switchboard-toastr.s
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserNotificationsComponent {
-  @Input() notificationNewItems: number;
-  @Input() notificationList: SwitchboardToastr[];
+  notificationNewItems$ = this.toastr.newMessagesAmount();
+  notificationList$: Observable<SwitchboardToastr[]> =
+    this.toastr.getMessageList();
+  areNewNotifications$ = this.toastr.areNewNotifications();
 
-  @Output() clear = new EventEmitter();
-  @Output() closed = new EventEmitter();
+  constructor(private toastr: SwitchboardToastrService) {}
 
   menuCloseHandler() {
-    this.closed.emit();
+    this.toastr.readAllItems();
   }
 
-  clearHandler() {
-    this.clear.emit();
-  }
-
-  areNewNotifications(): boolean {
-    return this.notificationNewItems !== 0;
+  clearHandler(): void {
+    this.toastr.reset();
   }
 }

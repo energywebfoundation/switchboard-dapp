@@ -7,14 +7,10 @@ import { AssetHistoryEventType, ClaimEventType } from 'iam-client-lib';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { IamService } from '../../shared/services/iam.service';
 import { NotificationService } from '../../shared/services/notification.service';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import { Store } from '@ngrx/store';
-import {
-  SwitchboardToastr,
-  SwitchboardToastrService,
-} from '../../shared/services/switchboard-toastr.service';
 import { LoginService } from '../../shared/services/login/login.service';
 import { logoutWithRedirectUrl } from '../../state/auth/auth.actions';
 import { DidBookComponent } from '../../modules/did-book/components/did-book/did-book.component';
@@ -45,9 +41,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     .select(userSelectors.getUserName)
     .pipe(map((value) => (value ? value : 'Manage Profile')));
   userDid$ = this.store.select(userSelectors.getDid);
-  notificationNewItems$ = this.toastr.newMessagesAmount();
-  notificationList$: Observable<SwitchboardToastr[]> =
-    this.toastr.getMessageList();
   isExperimentalEnabled$ = this.store.select(
     SettingsSelectors.isExperimentalEnabled
   );
@@ -58,7 +51,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private iamService: IamService,
     private router: Router,
-    private toastr: SwitchboardToastrService,
     private notifService: NotificationService,
     public dialog: MatDialog,
     private store: Store,
@@ -69,14 +61,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.store
       .select(AuthSelectors.isUserLoggedIn)
       .pipe(truthy(), takeUntil(this._subscription$))
-      .subscribe(() => this.didBookService.getList());
+      .subscribe(async () => {
+        this.didBookService.getList();
+        await this.notifService.init();
+        await this.messageSubscriptionService.init();
+      });
 
     this.router.events
       .pipe(
         filter((event: Event) => event instanceof NavigationEnd),
         takeUntil(this._subscription$)
       )
-      .subscribe((event: any) => {
+      .subscribe((event: NavigationEnd) => {
         this.loginService.setDeepLink(event.url);
 
         this.isNavMenuVisible = event.url !== '/dashboard';
@@ -96,10 +92,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     await this.iamService.messagingService.unsubscribeFrom(
       this._iamSubscriptionId
     );
-  }
-
-  didCopied() {
-    this.toastr.success('User DID is copied to clipboard.');
   }
 
   openDialogUser(): void {
@@ -131,22 +123,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .select(userSelectors.getUserProfile)
       .pipe(filter(Boolean), takeUntil(this._subscription$))
       .subscribe(async () => {
-        await this.notifService.init();
-        await this.messageSubscriptionService.init();
+
       });
   }
 
-
   logout() {
-    this.clearToastr();
     this.store.dispatch(logoutWithRedirectUrl());
-  }
-
-  clearToastr(): void {
-    this.toastr.reset();
-  }
-
-  userNotifClosedHandler(): void {
-    this.toastr.readAllItems();
   }
 }

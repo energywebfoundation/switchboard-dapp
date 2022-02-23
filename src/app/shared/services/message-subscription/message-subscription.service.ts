@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { IamService } from '../iam.service';
 import { AssetHistoryEventType, ClaimEventType } from 'iam-client-lib';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
@@ -7,15 +7,20 @@ import { NotificationService } from '../notification.service';
 @Injectable({
   providedIn: 'root',
 })
-export class MessageSubscriptionService {
+export class MessageSubscriptionService implements OnDestroy {
+  private subscriptionId: number
   constructor(
     private iamService: IamService,
     private toastr: SwitchboardToastrService,
     private notifService: NotificationService
   ) {}
 
+  ngOnDestroy() {
+    this.iamService.messagingService.unsubscribeFrom(this.subscriptionId)
+  }
+
   async init() {
-    await this.iamService.messagingService.subscribeTo({
+    this.subscriptionId = await this.iamService.messagingService.subscribeTo({
       messageHandler: this.handleMessage.bind(this),
     });
   }
