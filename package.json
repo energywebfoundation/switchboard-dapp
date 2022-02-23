@@ -65,7 +65,6 @@
     "moment": "2.22.2",
     "ng-qrcode": "6.0.0",
     "ngx-bootstrap": "8.0.0",
-    "ngx-editor": "9.0.2",
     "ngx-spinner": "13.1.1",
     "ngx-toastr": "14.2.1",
     "rxjs": "6.6.7",

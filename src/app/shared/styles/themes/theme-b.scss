@@ -362,7 +362,6 @@ mat-drawer {
   background-color: #242330 !important;
 }
 
-.staking-card,
 .mat-card-actions {
   background: #242230;
 }
@@ -1221,64 +1220,6 @@ mat-label {
 
 .swal-overlay {
   background-color: rgba(16, 14, 22, 0.9) !important;
-}
-
-// Text Editor
-
-.editor {
-  border: 1px solid rgb(82, 67, 110);
-
-  &:focus-within {
-    border: 1px solid rgb(103, 58, 183);
-  }
-
-  .NgxEditor {
-    background: #1c1726;
-    color: white;
-
-    &__Placeholder::before {
-      font-size: 16px;
-    }
-
-    &__Popup {
-      color: white;
-      background: #1c1726;
-    }
-
-    &__MenuBar {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-      color: white;
-      background: #1c1726;
-    }
-
-    &__MenuItem {
-      background-color: #1c1726;
-
-      svg {
-        fill: #fff;
-      }
-
-      &:hover {
-        background-color: #1c1726;
-
-        svg {
-          fill: #33cbcb;
-        }
-      }
-
-      &.NgxEditor__MenuItem--Active {
-        background-color: #1c1726;
-
-        svg {
-          fill: #33cbcb;
-        }
-      }
-    }
-  }
-
-  .CodeMirror {
-    border: 1px solid #eee;
-  }
 }
 
 // Preloader

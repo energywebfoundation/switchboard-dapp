@@ -20,7 +20,6 @@ import { Router } from '@angular/router';
 import { LoadingService } from '../../shared/services/loading.service';
 import * as userActions from '../user-claim/user.actions';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
-import * as StakeActions from '../stake/stake.actions';
 import * as AuthSelectors from './auth.selectors';
 import { EnvService } from '../../shared/services/env/env.service';
 
@@ -139,7 +138,7 @@ export class AuthEffects {
   userSuccessfullyLoggedIn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginSuccess),
-      mergeMap(() => [userActions.setUpUser(), StakeActions.initStakingPool()])
+      map(() => userActions.setUpUser())
     )
   );
 

@@ -6,7 +6,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { AssetsStoreSliceModule } from './assets/assets-store-slice.module';
 import { UserEffects } from './user-claim/user.effects';
 import { AuthEffects } from './auth/auth.effects';
-import { StakeEffects } from './stake/stake.effects';
 import { environment } from 'src/environments/environment';
 import { OrganizationStoreSliceModule } from './governance/organization/organization-store-slice.module';
 import { LayoutStoreSliceModule } from './layout/layout-store-slice.module';
@@ -21,7 +20,7 @@ import { SettingsStoreSliceModule } from './settings/settings-store-slice.module
       maxAge: 25,
       logOnly: environment.production,
     }),
-    EffectsModule.forRoot([UserEffects, StakeEffects, AuthEffects]),
+    EffectsModule.forRoot([UserEffects, AuthEffects]),
     AssetsStoreSliceModule,
     OrganizationStoreSliceModule,
     LayoutStoreSliceModule,

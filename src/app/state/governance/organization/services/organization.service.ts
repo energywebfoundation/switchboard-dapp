@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { StakingPoolServiceFacade } from '../../../../shared/services/staking/staking-pool-service-facade';
 import { IamService } from '../../../../shared/services/iam.service';
 import { forkJoin, Observable } from 'rxjs';
 import { IOrganization } from 'iam-client-lib';
@@ -10,36 +9,30 @@ import { OrganizationProvider } from '../models/organization-provider.interface'
   providedIn: 'root',
 })
 export class OrganizationService {
-  constructor(
-    private stakingService: StakingPoolServiceFacade,
-    private iamService: IamService
-  ) {}
+  constructor(private iamService: IamService) {}
 
   getOrganizationList(): Observable<any[]> {
-    return this.iamService.wrapWithLoadingService(
-      forkJoin([
+    return this.iamService
+      .wrapWithLoadingService(
         this.iamService
           .getOrganizationsByOwner()
           .pipe(
             switchMap((organizations: IOrganization[]) =>
               this.isOrganizationOwner(organizations)
             )
-          ),
-        this.stakingService.allServices(),
-      ]).pipe(
-        map(([organizations, providers]) => {
-          const servicesNames = providers.map((service) => service.org);
+          )
+      )
+      .pipe(
+        map((organizations) => {
           return (organizations as IOrganization[]).map(
             (org: IOrganization) => ({
               ...org,
               containsApps: org?.apps?.length > 0,
               containsRoles: org?.roles?.length > 0,
-              isProvider: servicesNames.includes(org.namespace),
             })
           );
         })
-      )
-    );
+      );
   }
 
   getHistory(namespace: string): Observable<OrganizationProvider> {
