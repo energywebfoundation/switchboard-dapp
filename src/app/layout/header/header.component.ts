@@ -22,6 +22,7 @@ import { DidBookService } from '../../modules/did-book/services/did-book.service
 import { AuthSelectors, SettingsActions, SettingsSelectors } from '@state';
 import { truthy } from '@operators';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MessageSubscriptionService } from '../../shared/services/enrolment-list/message-subscription.service';
 
 @Component({
   selector: 'app-header',
@@ -62,7 +63,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private store: Store,
     private loginService: LoginService,
-    private didBookService: DidBookService
+    private didBookService: DidBookService,
+    private messageSubscriptionService: MessageSubscriptionService
   ) {
     this.store
       .select(AuthSelectors.isUserLoggedIn)
@@ -130,78 +132,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(filter(Boolean), takeUntil(this._subscription$))
       .subscribe(async () => {
         await this.notifService.init();
-        await this._initNotificationAndTasksListeners();
+        await this.messageSubscriptionService.init();
       });
   }
 
-  private async _initNotificationAndTasksListeners() {
-    // Listen to External Messages
-    this._iamSubscriptionId =
-      await this.iamService.messagingService.subscribeTo({
-        messageHandler: this._handleMessage.bind(this),
-      });
-  }
-
-  private _handleMessage(message: any) {
-    if (message.type) {
-      this._handleAssetEvents(message.type);
-      this._handleClaimEvents(message.type);
-    }
-  }
-
-  private _handleAssetEvents(type: string) {
-    switch (type) {
-      case AssetHistoryEventType.ASSET_OFFERED:
-        this.toastr.info('An asset is offered to you.', 'Asset Offered');
-        this.notifService.increaseAssetsOfferedToMeCount();
-        break;
-      case AssetHistoryEventType.ASSET_TRANSFERRED:
-        this.toastr.success(
-          'Your asset is successfully tranferred to a new owner.',
-          'Asset Transferred'
-        );
-        break;
-      case AssetHistoryEventType.ASSET_OFFER_CANCELED:
-        this.toastr.warning(
-          'An asset offered to you is cancelled by the owner.',
-          'Asset Offer Cancelled'
-        );
-        this.notifService.decreaseAssetsOfferedToMeCount();
-        break;
-      case AssetHistoryEventType.ASSET_OFFER_REJECTED:
-        this.toastr.warning(
-          'An asset you offered is rejected.',
-          'Asset Offer Rejected'
-        );
-        break;
-    }
-  }
-
-  private _handleClaimEvents(type: string) {
-    switch (type) {
-      case ClaimEventType.REQUEST_CREDENTIALS:
-        this.notifService.increasePendingApprovalCount();
-        this.toastr.info(
-          'A new enrolment request is waiting for your approval.',
-          'New Enrolment Request'
-        );
-        break;
-      case ClaimEventType.ISSUE_CREDENTIAL:
-        this.notifService.increasePendingDidDocSyncCount();
-        this.toastr.info(
-          'Your enrolment request is approved. ' +
-            'Please sync your approved claims in your DID Document.',
-          'Enrolment Approved'
-        );
-        break;
-      case ClaimEventType.REJECT_CREDENTIAL:
-        this.toastr.warning(
-          'Your enrolment request is rejected.',
-          'New Enrolment Request'
-        );
-        break;
-    }
-  }
 
   logout() {
     this.clearToastr();
