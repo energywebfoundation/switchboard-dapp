@@ -3,7 +3,6 @@ import { IamService } from '../iam.service';
 import { AssetHistoryEventType, ClaimEventType } from 'iam-client-lib';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
 import { NotificationService } from '../notification.service';
-import { MessagingFacadeService } from './messaging-facade.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,25 +10,24 @@ import { MessagingFacadeService } from './messaging-facade.service';
 export class MessageSubscriptionService {
   constructor(
     private iamService: IamService,
-    private messagingService: MessagingFacadeService,
     private toastr: SwitchboardToastrService,
     private notifService: NotificationService
   ) {}
 
   async init() {
-    await this.messagingService.subscribeTo({
-      messageHandler: this._handleMessage.bind(this),
+    await this.iamService.messagingService.subscribeTo({
+      messageHandler: this.handleMessage.bind(this),
     });
   }
 
-  private _handleMessage(message: any) {
+  private handleMessage(message: any) {
     if (message.type) {
-      this._handleAssetEvents(message.type);
-      this._handleClaimEvents(message.type);
+      this.handleAssetEvents(message.type);
+      this.handleClaimEvents(message.type);
     }
   }
 
-  private _handleAssetEvents(type: string) {
+  private handleAssetEvents(type: string) {
     switch (type) {
       case AssetHistoryEventType.ASSET_OFFERED:
         this.toastr.info('An asset is offered to you.', 'Asset Offered');
@@ -57,7 +55,7 @@ export class MessageSubscriptionService {
     }
   }
 
-  private _handleClaimEvents(type: string) {
+  private handleClaimEvents(type: string) {
     switch (type) {
       case ClaimEventType.REQUEST_CREDENTIALS:
         this.notifService.increasePendingApprovalCount();

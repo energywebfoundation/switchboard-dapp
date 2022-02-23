@@ -22,7 +22,7 @@ import { DidBookService } from '../../modules/did-book/services/did-book.service
 import { AuthSelectors, SettingsActions, SettingsSelectors } from '@state';
 import { truthy } from '@operators';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { MessageSubscriptionService } from '../../shared/services/enrolment-list/message-subscription.service';
+import { MessageSubscriptionService } from '../../shared/services/message-subscription/message-subscription.service';
 
 @Component({
   selector: 'app-header',
