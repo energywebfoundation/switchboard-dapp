@@ -7,7 +7,6 @@ import {
 import { NewApplicationComponent } from '../../new-application/new-application.component';
 import { NewRoleComponent } from '../../new-role/new-role.component';
 import { ListType } from '../../../../shared/constants/shared-constants';
-import { NewStakingPoolComponent } from '../../new-staking-pool/new-staking-pool.component';
 import { TransferOwnershipComponent } from '../../transfer-ownership/transfer-ownership.component';
 import { ActionBaseAbstract } from '../action-base.abstract';
 import { filter } from 'rxjs/operators';
@@ -17,10 +16,7 @@ import { filter } from 'rxjs/operators';
   templateUrl: './organization-actions.component.html',
   styleUrls: ['./organization-actions.component.scss'],
 })
-export class OrganizationActionsComponent
-  extends ActionBaseAbstract
-  implements OnInit
-{
+export class OrganizationActionsComponent extends ActionBaseAbstract {
   @Input() organization: {
     isProvider: boolean;
     namespace: string;
@@ -37,14 +33,8 @@ export class OrganizationActionsComponent
   @Output() deleteConfirmed = new EventEmitter();
   @Output() edited = new EventEmitter();
 
-  stakingUrl: string;
-
   constructor(dialog: MatDialog) {
     super(dialog);
-  }
-
-  ngOnInit() {
-    this.generateStakingUrl();
   }
 
   viewAppsHandler() {
@@ -96,16 +86,6 @@ export class OrganizationActionsComponent
       .subscribe(() => this.roleCreated.emit(this.organization));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  openStakingPool(element: any) {
-    this.dialog.open(NewStakingPoolComponent, {
-      data: element,
-      width: '600px',
-      maxWidth: '100%',
-      disableClose: true,
-    });
-  }
-
   edit() {
     this.showEditComponent(NewOrganizationComponent, {
       viewType: ViewType.UPDATE,
@@ -136,11 +116,5 @@ export class OrganizationActionsComponent
       header: 'Remove Organization',
       message: 'Do you wish to continue?',
     });
-  }
-
-  private generateStakingUrl() {
-    if (this.organization?.namespace) {
-      this.stakingUrl = `${location.origin}/staking?org=${this.organization.namespace}`;
-    }
   }
 }

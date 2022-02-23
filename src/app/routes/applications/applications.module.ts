@@ -21,11 +21,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
-import { NewStakingPoolComponent } from './new-staking-pool/new-staking-pool.component';
 import { OrganizationActionsComponent } from './actions/organization-actions/organization-actions.component';
 import { ApplicationActionsComponent } from './actions/application-actions/application-actions.component';
 import { RoleActionsComponent } from './actions/role-actions/role-actions.component';
-import { NgxEditorModule } from 'ngx-editor';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 import { TransactionsCompleteComponent } from './transactions-complete/transactions-complete.component';
 import { RoleListComponent } from './role-list/role-list.component';
@@ -53,7 +51,6 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     NewRoleComponent,
     TransferOwnershipComponent,
     RemoveOrgAppComponent,
-    NewStakingPoolComponent,
     OrganizationActionsComponent,
     ApplicationActionsComponent,
     RoleActionsComponent,
@@ -88,7 +85,6 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    NgxEditorModule,
     CreateFieldsModule,
     DidBookModule,
     DefaultValueModule,

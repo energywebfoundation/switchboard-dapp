@@ -2,21 +2,17 @@ import { TestBed } from '@angular/core/testing';
 
 import { OrganizationService } from './organization.service';
 import { IamService } from '../../../../shared/services/iam.service';
-import { StakingPoolServiceFacade } from '../../../../shared/services/staking/staking-pool-service-facade';
 import { of } from 'rxjs';
 import { iamServiceSpy } from '@tests';
 
 describe('OrganizationService', () => {
   let service: OrganizationService;
-  const stakingServiceSpy = jasmine.createSpyObj('StakingPoolServiceFacade', [
-    'allServices',
-  ]);
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         OrganizationService,
         { provide: IamService, useValue: iamServiceSpy },
-        { provide: StakingPoolServiceFacade, useValue: stakingServiceSpy },
       ],
     });
     service = TestBed.inject(OrganizationService);
@@ -28,30 +24,14 @@ describe('OrganizationService', () => {
   });
 
   describe('getOrganizationList', () => {
-    it('should check if organization is also a provider', (done) => {
+    it('should check if organization belongs to the current user', (done) => {
       const org = { namespace: 'test' };
       iamServiceSpy.isOwner.and.returnValue(of(true));
       iamServiceSpy.getOrganizationsByOwner.and.returnValue(of([org]));
-      stakingServiceSpy.allServices.and.returnValue(of([{ org: 'test' }]));
 
       service.getOrganizationList().subscribe((orgs) => {
         expect(orgs.length).toEqual(1);
-        expect(orgs[0].isProvider).toBeTruthy();
         expect(orgs[0].isOwnedByCurrentUser).toBeTruthy();
-        done();
-      });
-    });
-
-    it('should check if sub organization is not a provider', (done) => {
-      const org = { namespace: 'test' };
-      iamServiceSpy.isOwner.and.returnValue(of(true));
-      iamServiceSpy.getOrganizationsByOwner.and.returnValue(of([org]));
-      stakingServiceSpy.allServices.and.returnValue(of([{ org: 'test.test' }]));
-
-      service.getOrganizationList().subscribe((orgs) => {
-        expect(orgs.length).toEqual(1);
-        expect(orgs[0].isProvider).toBeFalsy();
-
         done();
       });
     });
@@ -60,7 +40,6 @@ describe('OrganizationService', () => {
       const org = { namespace: 'test' };
       iamServiceSpy.isOwner.and.returnValue(of(false));
       iamServiceSpy.getOrganizationsByOwner.and.returnValue(of([org]));
-      stakingServiceSpy.allServices.and.returnValue(of([{ org: 'test' }]));
 
       service.getOrganizationList().subscribe((orgs) => {
         expect(orgs[0].isOwnedByCurrentUser).toBeFalsy();
@@ -74,7 +53,6 @@ describe('OrganizationService', () => {
     const org = { namespace: 'test', apps: [{}], roles: [{}] };
     iamServiceSpy.isOwner.and.returnValue(of(true));
     iamServiceSpy.getOrganizationsByOwner.and.returnValue(of([org]));
-    stakingServiceSpy.allServices.and.returnValue(of([{ org: 'test' }]));
 
     service.getOrganizationList().subscribe((orgs) => {
       expect(orgs.length).toEqual(1);
@@ -88,7 +66,6 @@ describe('OrganizationService', () => {
     const org = { namespace: 'test' };
     iamServiceSpy.isOwner.and.returnValue(of(true));
     iamServiceSpy.getOrganizationsByOwner.and.returnValue(of([org]));
-    stakingServiceSpy.allServices.and.returnValue(of([{ org: 'test' }]));
 
     service.getOrganizationList().subscribe((orgs) => {
       expect(orgs.length).toEqual(1);
