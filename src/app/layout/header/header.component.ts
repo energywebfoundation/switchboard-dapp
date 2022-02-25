@@ -58,30 +58,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private didBookService: DidBookService,
     private messageSubscriptionService: MessageSubscriptionService
   ) {
-    this.store
-      .select(AuthSelectors.isUserLoggedIn)
-      .pipe(truthy(), takeUntil(this._subscription$))
-      .subscribe(async () => {
-        this.didBookService.getList();
-        await this.notifService.init();
-        await this.messageSubscriptionService.init();
-      });
-
-    this.router.events
-      .pipe(
-        filter((event: Event) => event instanceof NavigationEnd),
-        takeUntil(this._subscription$)
-      )
-      .subscribe((event: NavigationEnd) => {
-        this.loginService.setDeepLink(event.url);
-
-        this.isNavMenuVisible = event.url !== '/dashboard';
-
-        const pathArr = event.url.split('/');
-
-        // TODO: use routerLinkActive instead
-        this.currentNav = pathArr[1];
-      });
   }
 
   async ngOnDestroy(): Promise<void> {
@@ -120,10 +96,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store
-      .select(userSelectors.getUserProfile)
-      .pipe(filter(Boolean), takeUntil(this._subscription$))
+      .select(AuthSelectors.isUserLoggedIn)
+      .pipe(truthy(), takeUntil(this._subscription$))
       .subscribe(async () => {
+        this.didBookService.getList();
+        await this.notifService.init();
+        await this.messageSubscriptionService.init();
+      });
 
+    this.handleRouterEvents();
+  }
+
+  handleRouterEvents() {
+    this.router.events
+      .pipe(
+        filter((event: Event) => event instanceof NavigationEnd),
+        takeUntil(this._subscription$)
+      )
+      .subscribe((event: NavigationEnd) => {
+        this.loginService.setDeepLink(event.url);
+
+        this.isNavMenuVisible = event.url !== '/dashboard';
+
+        const pathArr = event.url.split('/');
+
+        // TODO: use routerLinkActive instead
+        this.currentNav = pathArr[1];
       });
   }
 
