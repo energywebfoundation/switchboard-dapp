@@ -40,7 +40,7 @@ describe('SwitchboardToastrService', () => {
       type: 'toast-success',
       isNew: false,
     };
-    service.readAllItems();
+    service.readAll();
     service.getMessageList().subscribe((list) => {
       expect(list).toEqual([expectedResult]);
       done();

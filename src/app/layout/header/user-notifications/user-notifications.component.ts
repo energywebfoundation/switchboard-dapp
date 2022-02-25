@@ -26,7 +26,7 @@ export class UserNotificationsComponent {
   constructor(private toastr: SwitchboardToastrService) {}
 
   menuCloseHandler() {
-    this.toastr.readAllItems();
+    this.toastr.readAll();
   }
 
   clearHandler(): void {

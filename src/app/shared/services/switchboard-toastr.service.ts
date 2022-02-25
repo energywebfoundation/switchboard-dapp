@@ -51,7 +51,7 @@ export class SwitchboardToastrService implements OnDestroy {
     this.messageList.next([]);
   }
 
-  readAllItems(): void {
+  readAll(): void {
     this.messageList.next(
       this.messageList.getValue().map((item) => ({ ...item, isNew: false }))
     );

@@ -16,6 +16,8 @@ describe('UserNotificationsComponent', () => {
         'newMessagesAmount',
         'getMessageList',
         'areNewNotifications',
+        'readAll',
+        'reset',
       ]);
       TestBed.configureTestingModule({
         declarations: [UserNotificationsComponent],
@@ -35,4 +37,14 @@ describe('UserNotificationsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should call read all in toastr ', () => {
+    component.menuCloseHandler();
+    expect(toastrSpy.readAll).toHaveBeenCalled();
+  });
+
+  it('should call reset messages', () => {
+    component.clearHandler();
+    expect(toastrSpy.reset).toHaveBeenCalled()
+  })
 });
