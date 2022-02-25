@@ -9,29 +9,16 @@ import { takeUntil } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class NotificationService implements OnDestroy {
+export class NotificationService {
   private _pendingApproval = new BehaviorSubject<number>(0);
   private _pendingDidDocSync = new BehaviorSubject<number>(0);
   private _assetsOfferedToMe = new BehaviorSubject<number>(0);
-  private _pendingAssetDidDocSync = new BehaviorSubject<number>(0);
-
-  private destroy$ = new Subject<void>();
 
   constructor(
     private claimsFacade: ClaimsFacadeService,
     private assetsFacade: AssetsFacadeService,
     private enrolmentListService: EnrolmentListService
-  ) {
-    this._pendingApproval;
-    this._pendingDidDocSync = new BehaviorSubject<number>(0);
-    this._assetsOfferedToMe = new BehaviorSubject<number>(0);
-    this._pendingAssetDidDocSync = new BehaviorSubject<number>(0);
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  ) {}
 
   get pendingApproval() {
     return this._pendingApproval.asObservable();
@@ -45,42 +32,10 @@ export class NotificationService implements OnDestroy {
     return this._assetsOfferedToMe.asObservable();
   }
 
-  get pendingAssetDidDocSync() {
-    return this._pendingAssetDidDocSync.asObservable();
-  }
-
   async init() {
-    this.pendingApproval.pipe(takeUntil(this.destroy$)).subscribe(async () => {
-      await this._initPendingClaimsCount();
-    });
-
-    this.pendingDidDocSync
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(async () => {
-        await this.getPendingDidDocSync();
-      });
-
-    this.assetsOfferedToMe
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(async () => {
-        await this.getOfferedAssetsCount();
-      });
-
-    this.initNotifCounts(
-      await this._initPendingClaimsCount(),
-      await this.getOfferedAssetsCount(),
-      await this.getPendingDidDocSync()
-    );
-  }
-
-  initNotifCounts(
-    pendingApproval: number,
-    assetsOfferedToMe: number,
-    pendingSyncToDID: number
-  ) {
-    this._pendingApproval.next(pendingApproval);
-    this._assetsOfferedToMe.next(assetsOfferedToMe);
-    this._pendingDidDocSync.next(pendingSyncToDID);
+    this._pendingApproval.next(await this._initPendingClaimsCount());
+    this._assetsOfferedToMe.next(await this.getOfferedAssetsCount());
+    this._pendingDidDocSync.next(await this.getPendingDidDocSync());
   }
 
   increasePendingApprovalCount() {
