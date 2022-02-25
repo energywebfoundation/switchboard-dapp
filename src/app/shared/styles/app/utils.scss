@@ -81,69 +81,6 @@
   @extend .bb;
 } // all borders
 
-// Text helpers
-
-.text-primary {
-  color: $primary !important;
-}
-.text-success {
-  color: $success !important;
-}
-.text-info {
-  color: $info !important;
-}
-.text-warning {
-  color: $warning !important;
-}
-.text-danger {
-  color: $danger !important;
-}
-
-.text-white {
-  color: #fff !important;
-}
-.text-inverse {
-  color: $inverse !important;
-}
-.text-alpha {
-  color: $text-alpha !important;
-}
-.text-pink {
-  color: $pink !important;
-}
-.text-purple {
-  color: $purple !important;
-}
-.text-dark {
-  color: $dark !important;
-}
-.text-alpha-inverse {
-  color: $text-alpha-inverse !important;
-}
-.text-green {
-  color: $green !important;
-}
-.text-yellow {
-  color: $yellow !important;
-}
-.text-gray-darker {
-  color: $gray-darker !important;
-}
-.text-gray-dark {
-  color: $gray-dark !important;
-}
-.text-gray {
-  color: $gray !important;
-}
-.text-gray-light {
-  color: $gray-light !important;
-}
-.text-gray-lighter {
-  color: $gray-lighter !important;
-}
-.text-inherit {
-  color: inherit !important;
-}
 
 // Text sizing
 
