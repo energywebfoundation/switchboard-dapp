@@ -26,6 +26,7 @@ export class SwitchboardToastrService implements OnDestroy {
   private messageList = new BehaviorSubject<SwitchboardToastr[]>([]);
 
   constructor(private toastr: ToastrService) {}
+
   ngOnDestroy() {
     this.reset();
   }
@@ -44,7 +45,7 @@ export class SwitchboardToastrService implements OnDestroy {
   }
 
   areNewNotifications(): Observable<boolean> {
-    return this.newMessagesAmount().pipe(map (value => value !== 0));
+    return this.newMessagesAmount().pipe(map((value) => value !== 0));
   }
 
   reset(): void {

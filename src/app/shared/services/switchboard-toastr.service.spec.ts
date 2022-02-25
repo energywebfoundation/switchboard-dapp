@@ -97,4 +97,40 @@ describe('SwitchboardToastrService', () => {
     service.warning(message, title, override);
     expect(toastrSpyObj.warning).toHaveBeenCalledWith(message, title, override);
   });
+
+  it('should get 0 when there are no new items', (done) => {
+    service.newMessagesAmount().subscribe((v) => {
+      expect(v).toBe(0);
+      done();
+    });
+  });
+
+  it('should get 1 when there is 1 new item', (done) => {
+    service.success('Message');
+
+    service.newMessagesAmount().subscribe((v) => {
+      expect(v).toBe(1);
+      done();
+    });
+  });
+
+  it('should return true when there are new elements', (done) => {
+    service.success('Message');
+
+    service.areNewNotifications().subscribe((v) => {
+      expect(v).toBeTrue();
+      done();
+    });
+  });
+
+  it('should reset notifications after destroying service', (done) => {
+    service.success('Message');
+
+    service.ngOnDestroy();
+
+    service.getMessageList().subscribe((v) => {
+      expect(v.length).toBe(0);
+      done();
+    });
+  });
 });
