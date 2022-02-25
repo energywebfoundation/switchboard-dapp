@@ -24,7 +24,7 @@ describe('SwitchboardToastrService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be run reset', (done) => {
+  it('should clean list elements', (done) => {
     service.success('test');
     service.reset();
     service.getMessageList().subscribe((list) => {
@@ -33,7 +33,7 @@ describe('SwitchboardToastrService', () => {
     });
   });
 
-  it('should be run readAllItems', (done) => {
+  it('should mark all items as read', (done) => {
     service.success('test');
     const expectedResult = {
       message: 'test',
@@ -47,7 +47,7 @@ describe('SwitchboardToastrService', () => {
     });
   });
 
-  it('should be run show', () => {
+  it('should display toastr message', () => {
     const message = 'message test';
     const title = 'title test';
     const override = {};
@@ -62,7 +62,7 @@ describe('SwitchboardToastrService', () => {
     );
   });
 
-  it('should be run error', () => {
+  it('should display error toastr message', () => {
     const message = 'message test';
     const title = 'title test';
     const override = {};
@@ -71,7 +71,7 @@ describe('SwitchboardToastrService', () => {
     expect(toastrSpyObj.error).toHaveBeenCalledWith(message, title, override);
   });
 
-  it('should be run info', () => {
+  it('should display info toastr message', () => {
     const message = 'message test';
     const title = 'title test';
     const override = {};
@@ -80,7 +80,7 @@ describe('SwitchboardToastrService', () => {
     expect(toastrSpyObj.info).toHaveBeenCalledWith(message, title, override);
   });
 
-  it('should be run success', () => {
+  it('should display succcess toastr message', () => {
     const message = 'message test';
     const title = 'title test';
     const override = {};
@@ -89,7 +89,7 @@ describe('SwitchboardToastrService', () => {
     expect(toastrSpyObj.success).toHaveBeenCalledWith(message, title, override);
   });
 
-  it('should be run warning', () => {
+  it('should display warning toastr message', () => {
     const message = 'message test';
     const title = 'title test';
     const override = {};
