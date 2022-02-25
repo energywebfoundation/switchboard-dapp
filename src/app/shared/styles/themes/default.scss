@@ -25,6 +25,8 @@ $preloader-bg: #181423;
   --content-bg: #181423;
 
   --menu-panel: #2a2837;
+
+  --default-text-color: #ffffff;
 }
 
 // LAYOUT
@@ -171,7 +173,7 @@ ul.menu-top {
 
 .card-register {
   background: transparent;
-  color: #fff !important;
+  color: var(--default-text-color) !important;
   &::after {
     content: '';
     background: transparent;
@@ -209,7 +211,7 @@ ul.menu-top {
 
 .card-search-body {
   background-color: #363443;
-  color: #fff;
+  color: var(--default-text-color);
 }
 
 .card-hint {
@@ -276,7 +278,7 @@ mat-drawer {
 
 .mat-expansion-panel {
   background: #353540;
-  color: #fff;
+  color: var(--default-text-color);
 }
 
 .img-container {
@@ -286,8 +288,8 @@ mat-drawer {
 .card-filter {
   background-color: #302e3d;
 
-  .color-white {
-    color: #fff;
+  .default-color {
+    color: var(--default-text-color);
   }
 }
 
@@ -311,7 +313,7 @@ mat-drawer {
 
 th.mat-header-cell {
   background-color: #24222f !important;
-  color: #ffffff !important;
+  color: var(--default-text-color) !important;
 }
 
 .mat-row:nth-child(odd) {
@@ -353,11 +355,11 @@ tr.mat-row {
 .mat-header-cell,
 .mat-cell,
 .mat-footer-cell {
-  color: #fff !important;
+  color: var(--default-text-color) !important;
 }
 
 .mat-tab-label-active {
-  color: #ffffff;
+  color: var(--default-text-color);
 }
 
 .mat-row:nth-child(odd) {
@@ -378,7 +380,7 @@ tr.mat-row {
 
 .mat-dialog-container {
   background: #2a2837;
-  color: #ffffff;
+  color: var(--default-text-color);
 }
 
 .mat-dialog-title {
@@ -409,7 +411,7 @@ tr.mat-row {
 }
 
 .mat-step-header .mat-step-label.mat-step-label-active {
-  color: #fff;
+  color: var(--default-text-color);
 }
 
 .header-notification-container {
@@ -418,7 +420,7 @@ tr.mat-row {
 
 .account-title,
 .account-name {
-  color: #fff;
+  color: var(--default-text-color);
 }
 
 .did-wrapper {
@@ -456,13 +458,13 @@ tr.mat-row {
 .mat-step-header .mat-step-icon-selected {
   background-color: #a467ff !important;
   border: 1px solid #a467ff !important;
-  color: #fff !important;
+  color: var(--default-text-color) !important;
 }
 
 .mat-step-header .mat-step-icon-state-edit {
   background-color: #a467ff !important;
   border: 1px solid #a467ff !important;
-  color: #fff !important;
+  color: var(--default-text-color) !important;
 }
 
 .mat-step-header .mat-step-icon {
@@ -503,8 +505,8 @@ tr.mat-row {
 }
 
 .mat-input-element {
-  color: #fff;
-  caret-color: #fff;
+  color: var(--default-text-color);
+  caret-color: var(--default-text-color);
   font-size: 14px;
 
   &[disabled] {
@@ -518,7 +520,7 @@ tr.mat-row {
 }
 
 .mat-select-value {
-  color: #ffffff;
+  color: var(--default-text-color);
 }
 
 .mat-select-arrow {
@@ -526,16 +528,16 @@ tr.mat-row {
 }
 
 mat-label {
-  color: #fff;
+  color: var(--default-text-color);
 }
 
 .mat-filter-sort {
   .mat-label {
-    color: #ffffff;
+    color: var(--default-text-color);
   }
 
   .mat-input-element {
-    color: #fff;
+    color: var(--default-text-color);
   }
 
   .mat-form-field-outline {
@@ -552,11 +554,11 @@ mat-label {
 
 .btn-primary {
   background-color: var(--button-primary);
-  color: #ffffff;
+  color: var(--default-text-color);
 
   &:hover {
     background-color: #5bd6d6;
-    color: #ffffff;
+    color: var(--default-text-color);
   }
 }
 
@@ -565,7 +567,7 @@ mat-label {
 }
 
 .btn-connect {
-  background-color: #ffffff;
+  background-color: var(--default-text-color);
   color: #000000;
 }
 
@@ -581,7 +583,7 @@ mat-label {
     background-color: rgba(164, 103, 255, 0.3);
   }
   .mat-slide-toggle-content {
-    color: #fff !important;
+    color: var(--default-text-color) !important;
   }
 }
 
@@ -605,7 +607,7 @@ mat-label {
 }
 
 .md-search.mat-form-field .mat-input-element {
-  color: #ffffff;
+  color: var(--default-text-color);
 }
 
 .mat-stroked-button {
@@ -664,13 +666,13 @@ mat-label {
 }
 
 .label-role {
-  color: #ffffff;
+  color: var(--default-text-color);
 }
 
 .btn-connect:not(:disabled):not(.disabled):active:focus,
 .btn-connect :not(:disabled):not(.disabled).active:focus,
 .btn-connect .show > .dropdown-toggle:focus {
-  background-color: #fff;
+  background-color: var(--default-text-color);
 }
 
 .btn-connect:hover {
@@ -696,7 +698,7 @@ mat-label {
   .mat-form-field-suffix
   .mat-icon-button {
   background-color: var(--button-primary);
-  color: #fff;
+  color: var(--default-text-color);
 }
 
 .mat-select-placeholder {
@@ -736,8 +738,8 @@ mat-label {
 
 // dashboard
 
-.color-white {
-  color: #ffffff;
+.default-color {
+  color: var(--default-text-color);
 }
 
 .mat-option:nth-child(odd) {
@@ -745,7 +747,7 @@ mat-label {
 }
 
 .mat-option {
-  color: #fff;
+  color: var(--default-text-color);
   background: #343242;
 }
 
@@ -760,7 +762,7 @@ mat-label {
 }
 
 .mat-option.mat-active {
-  color: #fff;
+  color: var(--default-text-color);
   background: #2a2837;
 }
 
@@ -829,7 +831,7 @@ mat-label {
 }
 
 .color-default {
-  color: #fff !important;
+  color: var(--default-text-color) !important;
 }
 
 .border-warned {
@@ -945,7 +947,7 @@ mat-label {
 // Enrolment page
 
 .md-enroll.btn-primary {
-  color: #fff;
+  color: var(--default-text-color);
   background: var(--button-primary);
 }
 
@@ -971,7 +973,7 @@ mat-label {
 }
 
 .md-enroll.mat-option.mat-selected:not(.mat-option-disabled) {
-  color: #fff;
+  color: var(--default-text-color);
 }
 
 .mat-search_icon-close,
@@ -1049,7 +1051,7 @@ mat-label {
 }
 
 .swal-title {
-  color: #fff;
+  color: var(--default-text-color);
 }
 
 .swal-button {
@@ -1074,7 +1076,7 @@ mat-label {
 
 .swal-button.swal-button--viewMyEnrolments,
 .swal-button--enrolForAsset {
-  color: #fff !important;
+  color: var(--default-text-color) !important;
   background-color: var(--button-primary);
   border: 1px solid var(--button-primary);
 
@@ -1114,7 +1116,7 @@ mat-label {
 }
 .swal-button--confirm {
   background-color: var(--button-primary);
-  color: #fff;
+  color: var(--default-text-color);
   border: 1px solid var(--button-primary);
 }
 

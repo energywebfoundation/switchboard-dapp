@@ -1,6 +1,6 @@
 <div class="text-left my-3">
   <div class="label opacity-50 mb-2">{{ title }}</div>
-  <span class="color-white mb-0" *ngIf="!data?.length">None</span>
+  <span class='default-color mb-0' *ngIf="!data?.length">None</span>
   <table mat-table [dataSource]="data" *ngIf="data?.length">
     <ng-container matColumnDef="type">
       <th mat-header-cell *matHeaderCellDef>Type</th>
