@@ -34,10 +34,10 @@ export class EnrolmentListService {
   }
 
   async getNotSyncedDIDsDocsList() {
-    const list: Claim[] = await this.claimsFacade.getClaimsByRequester(true);
-
     return (
-      await this.appendDidDocSyncStatus(list)
+      await this.appendDidDocSyncStatus(
+        await this.claimsFacade.getClaimsByRequester(true)
+      )
     ).filter((item) => this.isPendingSync(item));
   }
 
