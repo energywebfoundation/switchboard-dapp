@@ -1127,11 +1127,8 @@ mat-label {
 }
 
 // Preloader
-.preloader-progress-bar {
-  background: url('/assets/img/preloader/preloader.empty.png') no-repeat;
-}
-
 .preloader-progress {
+  background: url('/assets/img/preloader/preloader.empty.png') no-repeat;
   width: 200px;
   height: 65.5px;
   background-size: 200px 65.5px;
