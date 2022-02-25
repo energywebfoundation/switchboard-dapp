@@ -33,9 +33,9 @@ export class NotificationService {
   }
 
   async init() {
-    this._pendingApproval.next(await this._initPendingClaimsCount());
-    this._assetsOfferedToMe.next(await this.getOfferedAssetsCount());
-    this._pendingDidDocSync.next(await this.getPendingDidDocSync());
+    this._pendingApproval.next(await this.getPendingClaimsAmount());
+    this._assetsOfferedToMe.next(await this.getOfferedAssetsAmount());
+    this._pendingDidDocSync.next(await this.getPendingDidDocSyncAmount());
   }
 
   increasePendingApprovalCount() {
@@ -62,21 +62,15 @@ export class NotificationService {
     this._assetsOfferedToMe.next(this._assetsOfferedToMe.getValue() - 1);
   }
 
-  async _initPendingClaimsCount(): Promise<number> {
-    return (await this.claimsFacade.getClaimsByIssuer()).filter(
-      (item) => !item.isRejected
-    ).length;
+  private async getPendingClaimsAmount(): Promise<number> {
+    return (await this.claimsFacade.getNotRejectedClaimsByIssuer()).length;
   }
 
-  async getOfferedAssetsCount(): Promise<number> {
+  private async getOfferedAssetsAmount(): Promise<number> {
     return (await this.assetsFacade.getOfferedAssets()).length;
   }
 
-  async getPendingDidDocSync(): Promise<number> {
-    const list: Claim[] = await this.claimsFacade.getClaimsByRequester(true);
-
-    return (
-      await this.enrolmentListService.appendDidDocSyncStatus(list)
-    ).filter((item) => this.enrolmentListService.isPendingSync(item)).length;
+  private async getPendingDidDocSyncAmount(): Promise<number> {
+    return (await this.enrolmentListService.getNotSyncedDIDsDocsList()).length;
   }
 }

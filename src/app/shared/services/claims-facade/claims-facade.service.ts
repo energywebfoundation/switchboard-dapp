@@ -26,11 +26,13 @@ export class ClaimsFacadeService {
     );
   }
 
-  getClaimsByIssuer() {
-    return this.iamService.claimsService.getClaimsByIssuer({
+  async getNotRejectedClaimsByIssuer() {
+    return (await this.iamService.claimsService.getClaimsByIssuer({
       did: this.iamService.signerService.did,
       isAccepted: false,
-    });
+    })).filter(
+      (item) => !item.isRejected
+    );
   }
 
   getClaimsByRequester(isAccepted: boolean = undefined): Promise<Claim[]> {

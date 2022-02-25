@@ -33,6 +33,14 @@ export class EnrolmentListService {
     });
   }
 
+  async getNotSyncedDIDsDocsList() {
+    const list: Claim[] = await this.claimsFacade.getClaimsByRequester(true);
+
+    return (
+      await this.appendDidDocSyncStatus(list)
+    ).filter((item) => this.isPendingSync(item));
+  }
+
   isPendingSync(element: {
     isSynced: boolean;
     registrationTypes: RegistrationTypes[];
