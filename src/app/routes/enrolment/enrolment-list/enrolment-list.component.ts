@@ -285,10 +285,10 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
           width: '600px',
           maxHeight: 'auto',
           data: {
-            header: 'Sync credential to my DID document',
+            header: 'Publish credential to my DID document',
             svgIcon: 'sync-did-icon',
             message:
-              'It is currently necessary to sync the credential to your DID document in order to make it available. However, please note that this will make your role data public and permanent.',
+              'It is currently necessary to publish the credential to your DID document in order to make it available. However, please note that this will make your role data public and permanent.',
           },
           maxWidth: '100%',
           disableClose: true,
