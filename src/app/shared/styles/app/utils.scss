@@ -82,64 +82,8 @@
 } // all borders
 
 
-// Background helpers
-
-.bg-primary {
-  @include bgcolor-variant('primary');
-}
-.bg-success {
-  @include bgcolor-variant('success');
-}
-.bg-info {
-  @include bgcolor-variant('info');
-}
-.bg-warning {
-  @include bgcolor-variant('warning');
-}
-.bg-danger {
-  @include bgcolor-variant('danger');
-}
-.bg-green {
-  @include bgcolor-variant('green');
-}
-.bg-pink {
-  @include bgcolor-variant('pink');
-}
-.bg-purple {
-  @include bgcolor-variant('purple');
-}
-.bg-inverse {
-  @include bgcolor-variant('inverse');
-}
-.bg-yellow {
-  @include bgcolor-variant('yellow');
-}
-
-.bg-white {
-  @include make-bg(#fff, inherit);
-}
-.bg-gray-darker {
-  @include make-bg($gray-darker);
-}
-.bg-gray-dark {
-  @include make-bg($gray-dark);
-}
-.bg-gray {
-  @include make-bg($gray, $body-color);
-}
-.bg-gray-light {
-  @include make-bg($gray-light, $body-color);
-}
-.bg-gray-lighter {
-  @include make-bg($gray-lighter, $body-color);
-}
-
 .bg-transparent {
   background-color: transparent !important;
-}
-
-.bg-cover {
-  background-size: cover;
 }
 
 // Common thumbnail sizes (ideal for images)
