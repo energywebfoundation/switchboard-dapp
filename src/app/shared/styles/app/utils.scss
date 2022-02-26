@@ -10,12 +10,6 @@
   @return map-get($colors, $key);
 }
 
-// Common thumbnail sizes (ideal for images)
-@mixin thumnbail-size($sz: 8px) {
-  width: $sz !important;
-  height: $sz !important;
-}
-
 // Border
 // --------------------
 
@@ -58,36 +52,6 @@
 
 .bg-transparent {
   background-color: transparent !important;
-}
-
-// Common thumbnail sizes (ideal for images)
-
-.thumb8 {
-  @include thumnbail-size();
-}
-.thumb16 {
-  @include thumnbail-size(16px);
-}
-.thumb24 {
-  @include thumnbail-size(24px);
-}
-.thumb32 {
-  @include thumnbail-size(32px);
-}
-.thumb48 {
-  @include thumnbail-size(48px);
-}
-.thumb64 {
-  @include thumnbail-size(64px);
-}
-.thumb80 {
-  @include thumnbail-size(80px);
-}
-.thumb96 {
-  @include thumnbail-size(96px);
-}
-.thumb128 {
-  @include thumnbail-size(128px);
 }
 
 // Vertical align helpers
