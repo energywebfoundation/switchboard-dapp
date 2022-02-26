@@ -82,40 +82,6 @@
 } // all borders
 
 
-// Text sizing
-
-.text-sm {
-  font-size: $text-sm;
-}
-.text-md {
-  font-size: $text-md;
-}
-.text-lg {
-  font-size: $text-lg;
-}
-
-// Text others
-
-.text-nowrap {
-  white-space: nowrap;
-}
-.text-thin {
-  font-weight: 100 !important;
-}
-.text-normal {
-  font-weight: normal !important;
-}
-.text-bold {
-  font-weight: bold !important;
-}
-
-.inline {
-  display: inline-block !important;
-}
-.block-center {
-  margin: 0 auto;
-}
-
 // Background helpers
 
 .bg-primary {
