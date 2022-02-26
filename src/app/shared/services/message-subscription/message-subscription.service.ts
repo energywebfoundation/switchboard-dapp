@@ -8,7 +8,7 @@ import { NotificationService } from '../notification.service';
   providedIn: 'root',
 })
 export class MessageSubscriptionService implements OnDestroy {
-  private subscriptionId: number
+  private subscriptionId: number;
   constructor(
     private iamService: IamService,
     private toastr: SwitchboardToastrService,
@@ -16,7 +16,7 @@ export class MessageSubscriptionService implements OnDestroy {
   ) {}
 
   ngOnDestroy() {
-    this.iamService.messagingService.unsubscribeFrom(this.subscriptionId)
+    this.iamService.messagingService.unsubscribeFrom(this.subscriptionId);
   }
 
   async init() {

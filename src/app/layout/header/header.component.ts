@@ -3,7 +3,6 @@ import { Event, NavigationEnd, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
-import { AssetHistoryEventType, ClaimEventType } from 'iam-client-lib';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { IamService } from '../../shared/services/iam.service';
 import { NotificationService } from '../../shared/services/notification.service';
@@ -57,8 +56,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private didBookService: DidBookService,
     private messageSubscriptionService: MessageSubscriptionService
-  ) {
-  }
+  ) {}
 
   async ngOnDestroy(): Promise<void> {
     this._subscription$.next();

@@ -45,6 +45,6 @@ describe('UserNotificationsComponent', () => {
 
   it('should call reset messages', () => {
     component.clearHandler();
-    expect(toastrSpy.reset).toHaveBeenCalled()
-  })
+    expect(toastrSpy.reset).toHaveBeenCalled();
+  });
 });

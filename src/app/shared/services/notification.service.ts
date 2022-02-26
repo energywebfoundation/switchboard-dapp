@@ -1,10 +1,8 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
-import { Claim } from 'iam-client-lib';
 import { EnrolmentListService } from './enrolment-list/enrolment-list.service';
-import { takeUntil } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',

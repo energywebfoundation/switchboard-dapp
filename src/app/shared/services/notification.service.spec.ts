@@ -96,7 +96,8 @@ describe('NotificationService', () => {
       expect(v).toEqual(1);
       done();
     });
-  });  it('should increase assets offered', (done) => {
+  });
+  it('should increase assets offered', (done) => {
     service.increaseAssetsOfferedToMeCount();
 
     service.assetsOfferedToMe.subscribe((v) => {
