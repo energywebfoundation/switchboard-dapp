@@ -5,46 +5,6 @@
 // Utilities classes to simplify
 // components constructions
 
-// Border
-// --------------------
-
-.b0 {
-  border-width: 0 !important;
-}
-.bl0 {
-  border-left-width: 0 !important;
-}
-.br0 {
-  border-right-width: 0 !important;
-}
-.bt0 {
-  border-top-width: 0 !important;
-}
-.bb0 {
-  border-bottom-width: 0 !important;
-}
-
-.br {
-  border-right: 1px solid $border-color;
-}
-.bl {
-  border-left: 1px solid $border-color;
-}
-.bt {
-  border-top: 1px solid $border-color;
-}
-.bb {
-  border-bottom: 1px solid $border-color;
-}
-.b,
-.ba {
-  @extend .br;
-  @extend .bl;
-  @extend .bt;
-  @extend .bb;
-} // all borders
-
-
 .bg-transparent {
   background-color: transparent !important;
 }
