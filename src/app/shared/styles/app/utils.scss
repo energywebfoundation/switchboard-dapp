@@ -10,32 +10,6 @@
   @return map-get($colors, $key);
 }
 
-@mixin bgcolor-variant($bgcolor, $text-color: #fff) {
-  $amountOfLight: 10%;
-  & {
-    background-color: custom-color($bgcolor);
-    color: $text-color !important;
-  }
-  &-light {
-    $col: custom-color($bgcolor + '-light');
-    background-color: #{$col};
-    color: $text-color !important;
-  }
-  &-dark {
-    $col: custom-color($bgcolor + '-dark');
-    background-color: #{$col};
-    color: $text-color !important;
-  }
-  small {
-    color: inherit;
-  }
-}
-
-@mixin make-bg($bgcolor, $text-color: #fff) {
-  background-color: $bgcolor;
-  color: $text-color !important;
-}
-
 // Common thumbnail sizes (ideal for images)
 @mixin thumnbail-size($sz: 8px) {
   width: $sz !important;
