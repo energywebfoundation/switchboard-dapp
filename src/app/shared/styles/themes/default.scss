@@ -35,6 +35,8 @@ $preloader-bg: #181423;
   --list-group-item: #2a2a37;
 
   --list-group-item-hover: #21212b;
+
+  --overlay-content-bg: #2a2837;
 }
 
 /* ========================================================================
@@ -373,7 +375,7 @@ tr.mat-row {
 }
 
 .mat-dialog-container {
-  background: #2a2837;
+  background: var(--overlay-content-bg);
   color: var(--default-text-color);
 }
 
@@ -757,11 +759,11 @@ mat-label {
 
 .mat-option.mat-active {
   color: var(--default-text-color);
-  background: #2a2837;
+  background: var(--overlay-content-bg);
 }
 
 .mat-autocomplete-panel {
-  background: #2a2837;
+  background: var(--overlay-content-bg);
 }
 
 /* Handle */
@@ -1041,7 +1043,7 @@ mat-label {
 }
 
 .swal-modal {
-  background-color: #2a2837;
+  background-color: var(--overlay-content-bg);
 }
 
 .swal-title {
@@ -1096,11 +1098,11 @@ mat-label {
 
 .swal-icon--success:after,
 .swal-icon--success:before {
-  background: #2a2837;
+  background: var(--overlay-content-bg);
 }
 
 .swal-icon--success__hide-corners {
-  background: #2a2837;
+  background: var(--overlay-content-bg);
 }
 
 .swal-button--cancel {
