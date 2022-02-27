@@ -29,20 +29,6 @@ $preloader-bg: #181423;
   --default-text-color: #ffffff;
 }
 
-// LAYOUT
-
-$aside-bg: #181423;
-
-// NAVBAR TOP
-
-$nav-top-bg: #181523;
-$nav-top-bg-start: $nav-top-bg;
-$nav-top-bg-end: $nav-top-bg;
-$nav-header-bg: transparent;
-
-$nav-top-item: #fff;
-$nav-top-item-active: darken(#fff, 60%);
-
 /* ========================================================================
    Component: layout
  ========================================================================== */
@@ -67,7 +53,7 @@ a {
    Component: top-navbar
  ========================================================================== */
 .topnavbar {
-  background-color: $nav-top-bg;
+  background-color: var(--content-bg);
 
   @include media-breakpoint-up(lg) {
     border-bottom: 1px solid #ffffff08;
@@ -81,7 +67,7 @@ a {
   }
 
   .navbar-nav > .nav-item > .navbar-text {
-    color: $nav-top-item;
+    color: var(--default-text-color);
   }
 
   .navbar-nav > .nav-item > .nav-link,
@@ -116,7 +102,7 @@ a {
 
   .dropdown-item.active,
   .dropdown-item:active {
-    background-color: $nav-top-bg;
+    background-color: var(--content-bg);
   }
 }
 
