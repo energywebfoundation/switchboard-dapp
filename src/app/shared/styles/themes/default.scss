@@ -18,6 +18,8 @@ $preloader-bg: #181423;
 
   --nav-primary: #9080ba;
   --nav-primary-hover: #33cbcb;
+  --nav-border: #ffffff08;
+  --nav-bg: #181523FF;
 
   --scrollbar: #8d7db6;
   --scrollbar-hover: #33cbcb;
@@ -27,6 +29,12 @@ $preloader-bg: #181423;
   --menu-panel: #2a2837;
 
   --default-text-color: #ffffff;
+
+  --default-link-color: #33cbcb;
+
+  --list-group-item: #2a2a37;
+
+  --list-group-item-hover: #21212b;
 }
 
 /* ========================================================================
@@ -42,7 +50,7 @@ body,
 }
 
 a {
-  color: #33cbcb;
+  color: var(--default-link-color);
 
   &:hover {
     color: var(--nav-primary-hover);
@@ -56,7 +64,7 @@ a {
   background-color: var(--content-bg);
 
   @include media-breakpoint-up(lg) {
-    border-bottom: 1px solid #ffffff08;
+    border-bottom: 1px solid var(--nav-border);
     .navbar-nav > .nav-item.show > .nav-link {
       &,
       &:hover,
@@ -75,7 +83,7 @@ a {
     color: var(--nav-primary);
     &:hover,
     &:focus {
-      color: $inverse;
+      color: var(--nav-primary-hover);
     }
   }
 
@@ -108,11 +116,11 @@ a {
 
 .header-notification-container,
 .list-group-item {
-  background-color: #2a2a37;
+  background-color: var(--list-group-item);
 }
 
 .list-group-item-action:hover {
-  background-color: #21212b;
+  background-color: var(--list-group-item-hover);
 }
 
 .logo-wrapper {
@@ -139,7 +147,7 @@ a {
 }
 
 ul.menu-top {
-  background-color: rgb(24 21 35);
+  background-color: var(--nav-bg);
 }
 
 .header-logo {
