@@ -1,22 +1,7 @@
 <div class="row">
   <div class="card card-default w-100 shadow-none d-flex pt-3">
-    <div class="d-flex justify-content-center" *ngIf="data?.type !== ListType.ROLE">
-      <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
-        <img class="img-logo" *ngIf="formData?.definition?.logoUrl" src="{{ formData?.definition?.logoUrl }}" />
-        <ng-container *ngIf="!formData?.definition?.logoUrl">
-          <img
-            class="img-logo"
-            src="../assets/img/no-organization-image.png"
-            height="48px"
-            *ngIf="data?.type === RoleType.ORG" />
-          <img
-            class="img-logo"
-            src="../assets/img/no-application-image.png"
-            height="48px"
-            *ngIf="data?.type === RoleType.APP" />
-        </ng-container>
-      </div>
-    </div>
+    <!--    TODO: check how it looks like-->
+    <app-domain-image [url]="formData?.definition?.logoUrl" [type]="type"></app-domain-image>
     <div class="text-left my-3">
       <div class="label opacity-50 mb-2">{{ typeLabel }} Namespace</div>
       <span class="color-white mb-0">{{ formData?.namespace }}</span>
@@ -25,41 +10,41 @@
     <div class="text-left my-3">
       <div class="label opacity-50 mb-2">{{ typeLabel }} Name</div>
       <span class="color-white mb-0">
-        <ng-container *ngIf="data?.type === ListType.ORG">
+        <ng-container *ngIf="isOrganization">
           {{ formData?.definition?.orgName }}
         </ng-container>
-        <ng-container *ngIf="data?.type === ListType.APP">
+        <ng-container *ngIf="isApplication">
           {{ formData?.definition?.appName }}
         </ng-container>
-        <ng-container *ngIf="data?.type === ListType.ROLE">
+        <ng-container *ngIf="isRole">
           {{ formData?.name | uppercase }}
         </ng-container>
       </span>
     </div>
-    <ng-container *ngIf="data?.type !== ListType.ROLE">
+    <ng-container *ngIf="!isRole">
       <mat-divider></mat-divider>
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Website URL</div>
         <span class="color-white mb-0">
-          {{ formData?.definition?.websiteUrl || 'None' }}
+          {{ formData?.definition?.websiteUrl | defaultValue }}
         </span>
       </div>
       <mat-divider></mat-divider>
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Description</div>
         <span class="color-white mb-0">
-          {{ formData?.definition?.description || 'None' }}
+          {{ formData?.definition?.description | defaultValue }}
         </span>
       </div>
       <mat-divider></mat-divider>
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Others (JSON)</div>
         <span class="color-white mb-0">
-          {{ formData?.definition?.others || 'None' }}
+          {{ formData?.definition?.others | defaultValue }}
         </span>
       </div>
     </ng-container>
-    <ng-container *ngIf="data?.type === ListType.ROLE">
+    <ng-container *ngIf="isRole">
       <mat-divider></mat-divider>
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Role Type</div>
@@ -108,7 +93,7 @@
       <app-fields-details [data]="requestorFields" title="Requestor Fields"></app-fields-details>
       <app-fields-details [data]="issuerFields" title="Issuer Fields"></app-fields-details>
     </ng-container>
-    <ng-container *ngIf="isEmbedded && data?.type === ListType.ORG">
+    <ng-container *ngIf="isEmbedded && isOrganization">
       <mat-divider></mat-divider>
       <mat-accordion>
         <mat-expansion-panel
