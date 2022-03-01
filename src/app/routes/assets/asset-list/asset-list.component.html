@@ -54,7 +54,7 @@
     <ng-container matColumnDef="name">
       <th mat-header-cell class="d-flex align-items-center pt-1" *matHeaderCellDef mat-sort-header>
         Asset Name
-        <mat-icon class="btn-color-disabled ml-2">visibility_off</mat-icon>
+        <mat-icon class='icon-disabled ml-2'>visibility_off</mat-icon>
       </th>
       <td mat-cell *matCellDef="let element; let i = index" data-label="Name">
         <div class="d-flex flex-row align-items-center justify-content-between justify-content-lg-start">
@@ -251,7 +251,7 @@
 
               <!-- QR-Code -->
               <button mat-menu-item class="btn-color-primary" (click)="generateQrCode(element)">
-                <mat-icon class="btn-color-primary btn-action-3" svgIcon="generate-qr-icon"></mat-icon>
+                <mat-icon class="btn-color-primary btn-action-3 icon-color" svgIcon="generate-qr-icon"></mat-icon>
                 <span>Generate QR-Code</span>
               </button>
 

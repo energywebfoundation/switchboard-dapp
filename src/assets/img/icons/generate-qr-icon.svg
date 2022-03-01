@@ -10,11 +10,11 @@
 	.st1 {
 		fill-rule: evenodd;
 		clip-rule: evenodd;
-		fill: #33CBCB;
+		fill: currentColor;
 	}
 
 	.st2 {
-		fill: #33CBCB;
+		fill: currentColor;
 	}
 </style>
 	<title>generate-qr-icon</title>
