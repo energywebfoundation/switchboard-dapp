@@ -234,12 +234,6 @@ export class AppComponent implements OnInit {
       )
     );
     this.matIconRegistry.addSvgIcon(
-      'create-staking-icon',
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        '../assets/img/icons/create-staking-icon.svg'
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
       'sync-did-icon',
       this.domSanitizer.bypassSecurityTrustResourceUrl(
         '../assets/img/icons/sync-did-icon.svg'

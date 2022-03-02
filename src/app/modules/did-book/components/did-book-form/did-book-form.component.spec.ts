@@ -31,7 +31,6 @@ describe('DidBookFormComponent', () => {
     fixture = TestBed.createComponent(DidBookFormComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -39,6 +38,7 @@ describe('DidBookFormComponent', () => {
   });
 
   it('should not emit adding pair when form is invalid', () => {
+    fixture.detectChanges();
     const addSpy = spyOn(component.add, 'emit');
     const { add } = getSelectors(hostDebug);
     add.click();
@@ -47,6 +47,7 @@ describe('DidBookFormComponent', () => {
   });
 
   it('should emit adding pair when form is valid', () => {
+    fixture.detectChanges();
     const addSpy = spyOn(component.add, 'emit');
     const { label, did, add } = getSelectors(hostDebug);
 
@@ -65,11 +66,24 @@ describe('DidBookFormComponent', () => {
   });
 
   it('should emit cancel when clicking on cancel button', () => {
+    fixture.detectChanges();
     const cancelSpy = spyOn(component.cancel, 'emit');
     const { cancel } = getSelectors(hostDebug);
     cancel.click();
 
     expect(cancelSpy).toHaveBeenCalled();
+  });
+
+  it('should set predefined values to the form', () => {
+    component.did = 'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8A1234567890';
+    component.label = 'Foo Bar';
+    fixture.detectChanges();
+
+    const { label, did, add } = getSelectors(hostDebug);
+
+    expect(did.value).toEqual(component.did);
+    expect(label.value).toEqual(component.label);
+    expect(add.disabled).toBeFalse();
   });
 });
 

@@ -9,10 +9,6 @@ import * as OwnedAssetsSelectors from './assets/owned/owned.selectors';
 import * as AuthActions from './auth/auth.actions';
 import * as AuthSelectors from './auth/auth.selectors';
 
-// === Stake ===
-import * as StakeActions from './stake/stake.actions';
-import * as StakeSelectors from './stake/stake.selectors';
-
 // === User Claim ===
 import * as UserClaimActions from './user-claim/user.actions';
 import * as UserClaimSelectors from './user-claim/user.selectors';
@@ -45,8 +41,6 @@ export {
   OwnedAssetsSelectors,
   AuthActions,
   AuthSelectors,
-  StakeActions,
-  StakeSelectors,
   UserClaimActions,
   UserClaimSelectors,
   OrganizationActions,

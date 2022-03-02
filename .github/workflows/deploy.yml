@@ -2,9 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: ['develop', 'master']
-  pull_request:
-    branches: ['develop', 'master']
+    branches: ['develop']
 
 jobs:
   cancel-previous:

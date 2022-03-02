@@ -117,11 +117,7 @@
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="back()">Back</button>
-            <button
-              mat-raised-button
-              class="btn btn-small btn-primary"
-              [disabled]="isChecking"
-              (click)="proceedAddingFields()">
+            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="goNextStep()">
               Next
             </button>
           </div>
@@ -130,15 +126,11 @@
         <mat-step [completed]="false">
           <ng-template matStepLabel>Set Requestor Fields</ng-template>
           <app-role-field
-            [fieldsList]="dataSource.data"
-            (updateData)="dataSourceChangeHandler($event)"></app-role-field>
+            [fieldsList]="requestorFields.data"
+            (updateData)="requestorFieldsChangeHandler($event)"></app-role-field>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2 back" data-qa-id="back" (click)="back()">Back</button>
-            <button
-              mat-raised-button
-              class="btn btn-small btn-primary"
-              [disabled]="isChecking"
-              (click)="proceedConfirmDetails()">
+            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="goNextStep()">
               Next
             </button>
           </div>
@@ -151,11 +143,7 @@
             (updateData)="issuerFieldsChangeHandler($event)"></app-role-field>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2 back" data-qa-id="back" (click)="back()">Back</button>
-            <button
-              mat-raised-button
-              class="btn btn-small btn-primary"
-              [disabled]="isChecking"
-              (click)="proceedConfirmDetails()">
+            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="goNextStep()">
               Next
             </button>
           </div>
@@ -167,7 +155,7 @@
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Role Type</div>
               <span class="color-white mb-0">
-                {{ roleForm?.value?.roleType | roleType }}
+                {{ roleForm?.value?.roleType | domainType }}
               </span>
             </div>
             <mat-divider></mat-divider>
@@ -214,12 +202,12 @@
             <mat-divider></mat-divider>
             <div class="text-left mt-3">
               <div class="label opacity-50 mb-2">Requestor Fields</div>
-              <span class="color-white mb-0" *ngIf="!dataSource?.data?.length"> None </span>
+              <span class="color-white mb-0" *ngIf="!requestorFields?.data?.length"> None </span>
 
-              <ng-container *ngIf="dataSource.data.length">
+              <ng-container *ngIf="requestorFields.data.length">
                 <div class="field-list">
                   <app-fields-summary
-                    *ngFor="let element of dataSource.data"
+                    *ngFor="let element of requestorFields.data"
                     [element]="element"
                     class="field-list-item mt-3 mb-2 px-2 pb-3 pt-4 d-block"></app-fields-summary>
                 </div>

@@ -47,7 +47,7 @@ describe('DialogUserComponent', () => {
   });
 
   it('should create', () => {
-    store.overrideSelector(userSelectors.getUserData, {});
+    store.overrideSelector(userSelectors.getUserData, {} as any);
     expect(component).toBeTruthy();
   });
 

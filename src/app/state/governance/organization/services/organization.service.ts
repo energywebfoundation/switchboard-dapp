@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { StakingPoolServiceFacade } from '../../../../shared/services/staking/staking-pool-service-facade';
 import { IamService } from '../../../../shared/services/iam.service';
 import { forkJoin, Observable } from 'rxjs';
 import { IOrganization } from 'iam-client-lib';
@@ -10,42 +9,36 @@ import { OrganizationProvider } from '../models/organization-provider.interface'
   providedIn: 'root',
 })
 export class OrganizationService {
-  constructor(
-    private stakingService: StakingPoolServiceFacade,
-    private iamService: IamService
-  ) {}
+  constructor(private iamService: IamService) {}
 
-  getOrganizationList() {
-    return this.iamService.wrapWithLoadingService(
-      forkJoin([
+  getOrganizationList(): Observable<any[]> {
+    return this.iamService
+      .wrapWithLoadingService(
         this.iamService
           .getOrganizationsByOwner()
           .pipe(
-            switchMap((organizations) =>
+            switchMap((organizations: IOrganization[]) =>
               this.isOrganizationOwner(organizations)
             )
-          ),
-        this.stakingService.allServices(),
-      ]).pipe(
-        map(([organizations, providers]) => {
-          const servicesNames = providers.map((service) => service.org);
+          )
+      )
+      .pipe(
+        map((organizations) => {
           return (organizations as IOrganization[]).map(
             (org: IOrganization) => ({
               ...org,
               containsApps: org?.apps?.length > 0,
               containsRoles: org?.roles?.length > 0,
-              isProvider: servicesNames.includes(org.namespace),
             })
           );
         })
-      )
-    );
+      );
   }
 
   getHistory(namespace: string): Observable<OrganizationProvider> {
-    return this.iamService.wrapWithLoadingService(
+    return this.iamService.wrapWithLoadingService<OrganizationProvider>(
       this.iamService.getOrgHistory(namespace).pipe(
-        switchMap(async (organization: OrganizationProvider) => {
+        switchMap(async (organization: IOrganization) => {
           return {
             ...organization,
             subOrgs: await this.isOrganizationOwner(
@@ -61,9 +54,11 @@ export class OrganizationService {
    * When we get list of organization there is property owner. However that property is  not very reliable.
    * That's why we need to check if current user is the owner of organization from the list.
    */
-  private isOrganizationOwner(organizations) {
+  private isOrganizationOwner(
+    organizations: OrganizationProvider[]
+  ): Observable<OrganizationProvider[]> {
     return forkJoin(
-      (organizations as OrganizationProvider[]).map((org) =>
+      organizations.map((org) =>
         this.iamService.isOwner(org.namespace).pipe(
           map((isOwnedByCurrentUser) => ({
             ...org,

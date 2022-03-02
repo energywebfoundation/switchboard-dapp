@@ -43,29 +43,6 @@ describe('OrganizationActionsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('stakingUrl', () => {
-    it('should check if staking url is undefined when passed element is undefined', () => {
-      component.organization = undefined;
-      fixture.detectChanges();
-
-      expect(component.stakingUrl).toBeUndefined();
-    });
-
-    it('should check if staking url is undefined when passed element without namespace', () => {
-      component.organization = { example: '' } as any;
-      fixture.detectChanges();
-
-      expect(component.stakingUrl).toBeUndefined();
-    });
-
-    it('should generate stakingUrl when passing element with namespace', () => {
-      component.organization = { namespace: 'test' } as any;
-      fixture.detectChanges();
-
-      expect(component.stakingUrl).toContain('/staking?org=test');
-    });
-  });
-
   it('should call ConfirmationDialogComponent with proper information', () => {
     const element = { namespace: '', owner: '' } as any;
     component.organization = element;

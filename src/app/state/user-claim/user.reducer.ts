@@ -1,9 +1,9 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Profile } from 'iam-client-lib';
 import * as userActions from './user.actions';
+import { userLocalStorage } from '../../shared/utils/local-storage-wrapper';
 
 export const USER_FEATURE_KEY = 'user';
-export const USER_DATA_STORAGE_KEY = 'userData';
 
 export interface UserClaimState {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,7 +35,7 @@ const userReducer = createReducer(
     })
   ),
   on(userActions.updateUserData, (state, { userData }) => {
-    localStorage.setItem(USER_DATA_STORAGE_KEY, JSON.stringify(userData));
+    userLocalStorage.parsed = userData;
     return { ...state, userData };
   }),
   on(userActions.clearUserClaim, (state) => ({

@@ -1,0 +1,11 @@
+<div class="d-flex justify-content-center">
+  <div class="image-wrapper d-flex align-items-center justify-content-center mb-3">
+    <img
+      *ngIf="url"
+      class="img-logo"
+      src="{{ url }}"
+      (error)="imageEventHandler(false)"
+      (load)="imageEventHandler(true)" />
+    <img *ngIf="!url" class="img-logo" [src]="defaultUrl" height="48px" />
+  </div>
+</div>

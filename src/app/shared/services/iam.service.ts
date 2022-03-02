@@ -18,11 +18,11 @@ import {
   MessagingService,
   NamespaceType,
   ProviderType,
+  RegistrationTypes,
   setCacheConfig,
   setChainConfig,
   setMessagingConfig,
   SignerService,
-  StakingFactoryService,
 } from 'iam-client-lib';
 import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
 import { LoadingService } from './loading.service';
@@ -34,6 +34,7 @@ import { finalize, map } from 'rxjs/operators';
 import { EnvService } from './env/env.service';
 import { ChainConfig } from 'iam-client-lib/dist/src/config/chain.config';
 import { EkcSettingsService } from '../../modules/connect-to-wallet/ekc-settings/services/ekc-settings.service';
+import { IOrganization } from 'iam-client-lib/dist/src/modules/domains/domains.types';
 
 export const PROVIDER_TYPE = 'ProviderType';
 
@@ -56,7 +57,6 @@ export class IamService {
   claimsService: ClaimsService;
   messagingService: MessagingService;
   domainsService: DomainsService;
-  stakingService: StakingFactoryService;
   assetsService: AssetsService;
   cacheClient: CacheClient;
 
@@ -94,7 +94,11 @@ export class IamService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  issueClaim(data: { subject: string; claim: any }) {
+  issueClaim(data: {
+    subject: string;
+    claim: any;
+    registrationTypes: RegistrationTypes[];
+  }) {
     return this.wrapWithLoadingService(this.claimsService.issueClaim(data));
   }
 
@@ -144,7 +148,7 @@ export class IamService {
     });
   }
 
-  getOrgHistory(namespace: string) {
+  getOrgHistory(namespace: string): Observable<IOrganization> {
     return this.wrapWithLoadingService(
       this.domainsService.getOrgHierarchy(namespace)
     );
@@ -174,13 +178,11 @@ export class IamService {
       if (initCacheServer) {
         const {
           domainsService,
-          stakingPoolService,
           assetsService,
           connectToDidRegistry,
           cacheClient,
         } = await connectToCacheServer();
         this.domainsService = domainsService;
-        this.stakingService = stakingPoolService;
         this.assetsService = assetsService;
         this.cacheClient = cacheClient;
         if (createDocument) {
@@ -260,10 +262,6 @@ export class IamService {
     const chainConfig: Partial<ChainConfig> = {
       rpcUrl: this.envService.rpcUrl,
     };
-
-    if (this.envService.claimManagerAddress) {
-      chainConfig.claimManagerAddress = this.envService.claimManagerAddress;
-    }
 
     return chainConfig;
   }

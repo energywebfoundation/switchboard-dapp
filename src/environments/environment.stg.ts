@@ -11,7 +11,6 @@ export const environment = {
   natsServerUrl: 'https://identityevents-staging.energyweb.org/',
   kmsServerUrl: 'https://kms.energyweb.org/connect/new',
   ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',
-  claimManagerAddress: '0xC3dD7ED75779b33F5Cfb709E0aB02b71fbFA3210',
   showAzureLoginOption: true,
   natsEnvironmentName: 'ewf-dev',
   rootNamespace: 'iam.ewc',

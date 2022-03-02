@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { NamespaceType, PreconditionType } from 'iam-client-lib';
+import { IRole, NamespaceType, PreconditionType } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { delay, take } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -24,11 +24,11 @@ import {
 } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
-import { isAlphanumericValidator } from '../../../utils/validators/is-alphanumeric.validator';
+import { isAlphanumericValidator } from '@utils';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
+import { HexValidators } from '@utils';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
-import { IFieldDefinition } from '@energyweb/iam-contracts/dist/src/types/DomainDefinitions';
+import { IFieldDefinition } from '@energyweb/iam-contracts';
 import { RoleCreationService } from './services/role-creation.service';
 import { ISmartSearch } from '../../../shared/components/smart-search/models/smart-search.interface';
 import { SmartSearchType } from '../../../shared/components/smart-search/models/smart-search-type.enum';
@@ -45,7 +45,7 @@ export const RoleType = {
   CUSTOM: 'custom',
 };
 
-export enum RoleTypeEnum {
+export enum DomainTypeEnum {
   ORG = 'org',
   APP = 'app',
   CUSTOM = 'custom',
@@ -116,11 +116,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   public issuerList: string[] = [this.signerFacade.getDid()];
 
   // Fields
-  dataSource = new MatTableDataSource<IFieldDefinition>([]);
+  requestorFields = new MatTableDataSource<IFieldDefinition>([]);
   issuerFields = new MatTableDataSource<IFieldDefinition>([]);
   public ViewType = ViewType;
   viewType: string = ViewType.NEW;
-  origData: any;
+  origData: IRole;
   roleName: string;
   private TOASTR_HEADER = 'Create New Role';
   public txs: any[];
@@ -212,6 +212,21 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
+  private getRequestorFieldsFromDefinition(def: {
+    requestorFields?: IFieldDefinition[];
+    fields?: IFieldDefinition[];
+  }): IFieldDefinition[] {
+    if (def?.requestorFields) {
+      return [...def.requestorFields];
+    }
+
+    if (def?.fields) {
+      return [...def.fields];
+    }
+
+    return [];
+  }
+
   private _initFormData() {
     if (this.origData) {
       const def = this.origData.definition;
@@ -223,9 +238,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       const parentNamespace = arrParentNamespace[1].substring(1);
 
       // Construct Fields
-      this.dataSource.data = def.fields ? [...def.fields] : [];
+      this.requestorFields.data = this.getRequestorFieldsFromDefinition(def);
       this.issuerFields.data = def?.issuerFields ? [...def.issuerFields] : [];
-      // this._initDates();
       this.roleForm.patchValue({
         roleType: def.roleType,
         parentNamespace,
@@ -321,8 +335,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  dataSourceChangeHandler(data) {
-    this.dataSource.data = [...data];
+  requestorFieldsChangeHandler(data) {
+    this.requestorFields.data = [...data];
   }
 
   proceedSettingIssuer(roleName) {
@@ -342,18 +356,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       this.issuerList
     );
     if (canProceed) {
-      // Proceed to Adding Fields Step
       this.goNextStep();
     }
-  }
-
-  async proceedAddingFields() {
-    // Proceed to Adding Fields Step
-    this.goNextStep();
-  }
-
-  proceedConfirmDetails() {
-    this.goNextStep();
   }
 
   async confirmParentNamespace() {
@@ -429,7 +433,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     req.data.roleName = req.roleName;
 
     req.data.issuer.did = this.issuerList;
-    req.data.fields = this.dataSource.data;
+    req.data.requestorFields = this.requestorFields.data;
     req.data.issuerFields = this.issuerFields.data;
 
     if (!skipNextStep) {
@@ -634,7 +638,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private goNextStep() {
+  goNextStep() {
     this.stepper.selected.editable = false;
     this.stepper.selected.completed = true;
     this.stepper.next();

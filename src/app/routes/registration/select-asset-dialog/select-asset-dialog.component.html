@@ -53,11 +53,5 @@
     <tr class="cursor-pointer" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
-  <!-- Shows when table is empty -->
-  <div class="d-flex justify-content-center align-items-center mt-4 mb-3" *ngIf="!dataSource?.data?.length">
-    <div class="d-flex align-items-center no-record color-white">
-      <mat-icon class="mr-2">info</mat-icon>
-      <i>No Record Found</i>
-    </div>
-  </div>
+  <app-no-records *ngIf="!dataSource?.data?.length"></app-no-records>
 </div>

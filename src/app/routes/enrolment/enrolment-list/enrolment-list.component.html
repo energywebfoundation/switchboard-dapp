@@ -64,7 +64,7 @@
               <div class="mt-2 mt-md-2 mb-md-2" *ngIf="isPendingSync(element)">
                 <mat-icon class="color-warned icon-small mr-2" svgIcon="sync-did-icon"></mat-icon>
                 <!-- Apply link to add to DID Document -->
-                <span class="color-white cursor-pointer" (click)="addToDidDoc(element)"> Sync to DID Document </span>
+                <span class="color-white cursor-pointer" (click)="addToDidDoc(element)">Publish</span>
               </div>
               <div class="mt-2 mt-md-2 mb-md-2" *ngIf="element?.notSyncedOnChain">
                 <mat-icon class="color-warned icon-small mr-2" svgIcon="add-to-claimmanager-icon"></mat-icon>
@@ -107,7 +107,7 @@
               (click)="addToDidDoc(element)"
               *ngIf="isPendingSync(element) && isAccepted(element)">
               <mat-icon class="btn-color-primary">note_add</mat-icon>
-              <span>Add to DID Document</span>
+              <span>Publish</span>
             </button>
 
             <!-- Add to the claim manager -->
@@ -137,13 +137,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <!-- Shows when table is empty -->
-  <div class="d-flex justify-content-center align-items-center mt-4 mb-3 pb-3" *ngIf="!dataSource?.data?.length">
-    <div class="d-flex align-items-center no-record color-white">
-      <mat-icon class="mr-2">info</mat-icon>
-      <i>No Record Found</i>
-    </div>
-  </div>
+  <app-no-records *ngIf="!dataSource?.data?.length"></app-no-records>
   <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" [hidePageSize]="true" showFirstLastButtons>
   </mat-paginator> -->
 </div>

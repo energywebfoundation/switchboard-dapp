@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { ListType } from '../../../shared/constants/shared-constants';
 import { ExpiredRequestError } from '../../../shared/errors/errors';
 import { IamRequestService } from '../../../shared/services/iam-request.service';
 import { IamService } from '../../../shared/services/iam.service';
@@ -7,6 +6,8 @@ import { LoadingService } from '../../../shared/services/loading.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { DomainTypeEnum } from '../new-role/new-role.component';
+import { DomainTypePipe } from '../../../shared/pipes/domain-type/domain-type.pipe';
 
 @Component({
   selector: 'app-remove-org-app',
@@ -24,9 +25,8 @@ export class RemoveOrgAppComponent implements OnInit {
   }
 
   TOASTR_HEADER: string;
-  ListType = ListType;
 
-  listType: string;
+  listType: DomainTypeEnum;
   namespace: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   steps: any[];
@@ -46,11 +46,9 @@ export class RemoveOrgAppComponent implements OnInit {
     this.namespace = data.namespace;
     this.steps = data.steps;
 
-    if (this.listType === ListType.ORG) {
-      this.TOASTR_HEADER = 'Remove Organization';
-    } else if (this.listType === ListType.APP) {
-      this.TOASTR_HEADER = 'Remove Application';
-    }
+    this.TOASTR_HEADER = `Remove ${new DomainTypePipe().transform(
+      this.listType
+    )}`;
   }
 
   async ngOnInit() {

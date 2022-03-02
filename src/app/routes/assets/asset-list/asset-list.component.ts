@@ -35,11 +35,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
-import { DidQrCodeComponent } from '../did-qr-code/did-qr-code.component';
 import { FormControl } from '@angular/forms';
 import { NewIssueVcComponent } from '../../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 import { Store } from '@ngrx/store';
 import { OwnedAssetsActions, OwnedAssetsSelectors } from '@state';
+import { QrCodeService } from '../../../shared/components/qr-code/services/qr-code.service';
+import { ScanType } from '../../../shared/components/qr-code-scanner/models/scan-type.enum';
+import { IssuanceVcService } from '../../../modules/issue-vc/services/issuance-vc.service';
 
 const HEADER_TRANSFER_OWNERSHIP = 'Transfer Ownership';
 const HEADER_CANCEL_OWNERSHIP = 'Cancel Offered Ownership';
@@ -79,7 +81,9 @@ export class AssetListComponent implements OnInit, OnDestroy {
     private notifService: NotificationService,
     private loadingService: LoadingService,
     private route: Router,
-    private store: Store
+    private store: Store,
+    private qrCodeService: QrCodeService,
+    private issuanceVCService: IssuanceVcService
   ) {}
 
   async ngOnDestroy(): Promise<void> {
@@ -255,6 +259,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
     }
   }
 
+  get issuesRoles(): boolean {
+    return this.issuanceVCService.hasRoles();
+  }
+
   async rejectAssetOffer(data: Asset) {
     if (
       await this._confirm(
@@ -342,19 +350,20 @@ export class AssetListComponent implements OnInit, OnDestroy {
     );
   }
 
-  generateQrCode(data: Asset) {
-    this.dialog.open(DidQrCodeComponent, {
-      width: '400px',
-      data,
-      maxWidth: '100%',
+  generateQrCode(data: Asset): void {
+    this.qrCodeService.open({
+      header: 'Asset DID QR-Code',
+      qrCodeData: {
+        type: ScanType.Asset,
+        data: {
+          did: data.id,
+        },
+      },
     });
   }
 
-  updateSearchByDidValue(value) {
-    if (!value.did) {
-      return;
-    }
-    this.searchByDid.setValue(value.did);
+  updateSearchByDidValue(value: string) {
+    this.searchByDid.setValue(value);
   }
 
   private _checkDidControlChanges(): void {

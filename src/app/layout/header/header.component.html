@@ -47,18 +47,6 @@
           <h6 class="mb-0">Enrolments</h6>
         </a>
       </li>
-      <li
-        class="nav-item coming-soon"
-        *appToggleApplication
-        [ngClass]="{ active: currentNav.includes('applications') }"
-        data-qa-id="header-applications">
-        <a class="nav-link d-lg-block d-xl-block coming-soon link-footer">
-          <div class="icon-footer-center">
-            <img src="../assets/img/icons/applications-icon.png" width="auto" height="21" alt="Dashboard image" />
-          </div>
-          <h6 class="mb-0">Applications</h6>
-        </a>
-      </li>
     </ul>
     <ul class="navbar-nav flex-row align-items-center profile-wrapper">
       <li
@@ -219,6 +207,14 @@
       (click)="openDidBook()"
       data-qa-id="menu-did-book">
       DID Book
+    </button>
+    <button
+      class="color-link px-4 pb-2 border-bottom-1"
+      mat-menu-item
+      appQrCodeScanner
+      [detect]="true"
+      data-qa-id="menu-qr-code-scanner">
+      QR Code Scanner
     </button>
     <div class="d-block d-xl-none">
       <div

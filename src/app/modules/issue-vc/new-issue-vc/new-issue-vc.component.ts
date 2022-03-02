@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
+import { HexValidators } from '@utils';
 import { IssuanceVcService } from '../services/issuance-vc.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
@@ -62,6 +62,10 @@ export class NewIssueVcComponent implements OnInit {
     return this.form.get('subject');
   }
 
+  displayType(): boolean {
+    return this.isFormSubjectValid() || this.isDidPredefined();
+  }
+
   getFormType() {
     return this.form.get('type');
   }
@@ -94,13 +98,26 @@ export class NewIssueVcComponent implements OnInit {
       .subscribe(() => this.dialogRef.close());
   }
 
-  private setPossibleRoles() {
+  private setPossibleRoles(): void {
+    this.getPossibleRolesForPassedDID();
+    this.getPossibleRolesWithPredefinedDID();
+  }
+
+  private getPossibleRolesForPassedDID(): void {
     this.getFormSubject()
       .valueChanges.pipe(
         filter(() => this.isFormSubjectValid()),
         switchMap((did) => this.issuanceVcService.getNotEnrolledRoles(did))
       )
       .subscribe((list) => (this.possibleRolesToEnrol = list));
+  }
+
+  private getPossibleRolesWithPredefinedDID(): void {
+    if (this.getFormSubject().disabled) {
+      this.issuanceVcService
+        .getNotEnrolledRoles(this.getFormSubject().value)
+        .subscribe((list) => (this.possibleRolesToEnrol = list));
+    }
   }
 
   private setDid() {

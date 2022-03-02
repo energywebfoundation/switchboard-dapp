@@ -67,7 +67,7 @@ export class NewOrganizationComponent extends CreationBaseAbstract {
     }),
   });
   public isChecking = false;
-  private _isLogoUrlValid = true;
+  isLogoUrlValid = true;
   public ENSPrefixes = NamespaceType;
   public ViewType = ViewType;
 
@@ -302,7 +302,7 @@ export class NewOrganizationComponent extends CreationBaseAbstract {
     delete req.data.organizationName;
 
     // Check if logoUrl resolves
-    if (req.data.logoUrl && !this._isLogoUrlValid) {
+    if (req.data.logoUrl && !this.isLogoUrlValid) {
       this.toastr.error(
         'Logo URL cannot be resolved. Please change it to a correct and valid image URL.',
         this.TOASTR_HEADER
@@ -473,14 +473,6 @@ export class NewOrganizationComponent extends CreationBaseAbstract {
         'System Error'
       );
     }
-  }
-
-  logoUrlError() {
-    this._isLogoUrlValid = false;
-  }
-
-  logoUrlSuccess() {
-    this._isLogoUrlValid = true;
   }
 
   cancelOrgDetails() {

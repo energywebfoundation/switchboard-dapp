@@ -52,10 +52,13 @@
           </div>
         </div>
 
-        <app-fields *ngIf="fields?.length" title="Requestor fields" [fieldsList]="fields"></app-fields>
+        <app-fields
+          *ngIf="requestorFields?.length"
+          title="Requestor fields"
+          [fieldsList]="requestorFields"></app-fields>
         <app-fields *ngIf="issuerFields?.length" title="Issuer fields" [fieldsList]="issuerFields"></app-fields>
 
-        <div class="col-lg-12 mt-2" *ngIf="!fields?.length">
+        <div class="col-lg-12 mt-2" *ngIf="!requestorFields?.length">
           <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
             <mat-icon>info</mat-icon>
             <span class="f-14"> Role did not require any field for enrolment request. </span>
@@ -76,7 +79,7 @@
           <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
             <mat-icon>info</mat-icon>
             <span class="f-14">
-              Two signatures are required in the event that both off-chain and on-chain credentials are requested.
+              Two signatures are required in the event that both Private and Public credentials are requested.
             </span>
           </div>
         </div>

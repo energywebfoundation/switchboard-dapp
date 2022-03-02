@@ -21,11 +21,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
-import { NewStakingPoolComponent } from './new-staking-pool/new-staking-pool.component';
 import { OrganizationActionsComponent } from './actions/organization-actions/organization-actions.component';
 import { ApplicationActionsComponent } from './actions/application-actions/application-actions.component';
 import { RoleActionsComponent } from './actions/role-actions/role-actions.component';
-import { NgxEditorModule } from 'ngx-editor';
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 import { TransactionsCompleteComponent } from './transactions-complete/transactions-complete.component';
 import { RoleListComponent } from './role-list/role-list.component';
@@ -38,9 +36,9 @@ import { RoleNameComponent } from './new-role/components/role-name/role-name.com
 import { IssuerDidListComponent } from './new-role/components/issuer-did-list/issuer-did-list.component';
 import { IssuerDidComponent } from './new-role/components/issuer-did/issuer-did.component';
 import { SearchIssuerRoleComponent } from './new-role/components/search-issuer-role/search-issuer-role.component';
-import { ApplicationDetailsComponent } from './new-application/application-details/application-details.component';
-import { DefaultValuePipe } from './pipes/default-value.pipe';
+import { NamespaceDetailsComponent } from './namespace-details/namespace-details.component';
 import { ApplicationCreationFormComponent } from './new-application/application-creation-form/application-creation-form.component';
+import { DefaultValueModule } from './pipes/default-value.module';
 
 const routes: Routes = [{ path: '', component: ApplicationsComponent }];
 
@@ -53,7 +51,6 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     NewRoleComponent,
     TransferOwnershipComponent,
     RemoveOrgAppComponent,
-    NewStakingPoolComponent,
     OrganizationActionsComponent,
     ApplicationActionsComponent,
     RoleActionsComponent,
@@ -68,8 +65,7 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     IssuerDidListComponent,
     IssuerDidComponent,
     SearchIssuerRoleComponent,
-    ApplicationDetailsComponent,
-    DefaultValuePipe,
+    NamespaceDetailsComponent,
     ApplicationCreationFormComponent,
   ],
   imports: [
@@ -89,9 +85,9 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     MatInputModule,
     GovernanceDetailsModule,
     MatExpansionModule,
-    NgxEditorModule,
     CreateFieldsModule,
     DidBookModule,
+    DefaultValueModule,
   ],
 })
 export class ApplicationsModule {}

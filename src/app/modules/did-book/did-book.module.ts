@@ -8,6 +8,7 @@ import { DidBookService } from './services/did-book.service';
 import { DidBookHttpService } from './services/did-book-http.service';
 import { SelectDidComponent } from './components/select-did/select-did.component';
 import { AddSingleRecordComponent } from './components/add-single-record/add-single-record.component';
+import { QrCodeModule } from '../../shared/components/qr-code/qr-code.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,7 @@ import { AddSingleRecordComponent } from './components/add-single-record/add-sin
     SelectDidComponent,
     AddSingleRecordComponent,
   ],
-  imports: [CommonModule, SharedModule],
+  imports: [CommonModule, SharedModule, QrCodeModule],
   providers: [DidBookService, DidBookHttpService],
   exports: [DidBookComponent, SelectDidComponent],
 })
