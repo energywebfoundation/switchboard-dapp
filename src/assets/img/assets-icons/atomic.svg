@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 508 508" style="enable-background:new 0 0 508 508;" xml:space="preserve">
+<svg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' x='0px' y='0px'
+     viewBox='0 0 508 508' style='enable-background:new 0 0 508 508;' xml:space='preserve'>
 <circle style="fill:#FD8469;" cx="254" cy="254" r="254"/>
 <path style="fill:#FFFFFF;" d="M258.4,443.6c-52,0-92.8-85.2-92.8-194.4c0-108.8,40.8-194.4,92.8-194.4s92.8,85.2,92.8,194.4
 	C351.6,358,310.4,443.6,258.4,443.6z M258.4,65.6c-44.8,0-82.4,84-82.4,183.6s37.6,183.6,82.4,183.6s82.4-84,82.4-183.6
@@ -24,7 +24,7 @@
 <ellipse transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 25.4999 399.2213)" style="fill:#FFFFFF;" cx="95.431" cy="194.329" rx="5.2" ry="7.2"/>
 <circle style="fill:#4CDBC4;" cx="234.8" cy="431.6" r="21.2"/>
 <g>
-	
+
 		<ellipse transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 88.3836 883.8786)" style="fill:#FFFFFF;" cx="227.249" cy="423.634" rx="5.2" ry="7.2"/>
 	<path style="fill:#FFFFFF;" d="M344.8,322c2.8-14.8,4.8-30.8,5.6-47.6h-10.8c-1.2,16.8-3.2,32.8-6,47.6H344.8z"/>
 </g>

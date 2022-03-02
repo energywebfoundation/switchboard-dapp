@@ -56,125 +56,16 @@
           Enable experimental
         </mat-slide-toggle>
       </li>
-      <li class="nav-item dropdown dropdown-list" dropdown>
-        <a class="nav-link dropdown-toggle dropdown-toggle-nocaret cursor-pointer" dropdownToggle>
-          <!-- loading here -->
-          <ng-container *ngIf="isLoadingNotif">
-            <div>
-              <mat-spinner diameter="21" class="color-white"></mat-spinner>
-            </div>
-          </ng-container>
-
-          <!-- notif count here -->
-          <ng-container *ngIf="!isLoadingNotif">
-            <em class="fas fa-tasks"></em>
-            <span class="badge badge-danger" *ngIf="tasks?.totalCount">
-              {{ tasks?.totalCount }}
-            </span>
-            <!-- <span class="badge badge-danger">2</span> -->
-          </ng-container>
-        </a>
-        <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
-          <div class="dropdown-item">
-            <div class="d-flex flex-grow-1 list-group header-notification-container">
-              <div class="d-flex justify-content-between pt-1 pb-3 px-3 mt-2 mb-2 align-items-center border-bottom-1">
-                <h4 class="mb-0 f-16 color-white">Tasks</h4>
-                <a href="#" class="color-primary d-none">Clear all</a>
-              </div>
-              <a [routerLink]="['/assets']" routerLinkActive="active" [queryParams]="{ notif: 'assetsOfferedToMe' }">
-                <div class="list-group-item list-group-item-action">
-                  <div class="media d-flex align-items-center cursor-pointer">
-                    <div class="align-self-start mr-2">
-                      <mat-icon svgIcon="new-claim-icon"></mat-icon>
-                    </div>
-                    <div class="media-body d-flex flex-row justify-content-between align-items-center">
-                      <p class="m-0 pr-2 color-white">Accept the transfer of the Asset</p>
-                      <span *ngIf="tasks?.assetsOfferedToMeCount" class="badge badge-danger ml-2">
-                        {{ tasks?.assetsOfferedToMeCount }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-              <a routerLink="/enrolment" routerLinkActive="active">
-                <div class="list-group-item list-group-item-action">
-                  <div class="media d-flex align-items-center cursor-pointer">
-                    <div class="align-self-start mr-2">
-                      <mat-icon svgIcon="new-claim-icon"></mat-icon>
-                    </div>
-                    <div class="media-body d-flex flex-row justify-content-between align-items-center">
-                      <p class="m-0 pr-2 color-white">For approval</p>
-                      <span *ngIf="tasks?.pendingApprovalCount" class="badge badge-danger ml-2">
-                        {{ tasks?.pendingApprovalCount }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-              <a href="#">
-                <div class="list-group-item list-group-item-action">
-                  <div class="media d-flex align-items-center cursor-pointer">
-                    <div class="align-self-start mr-2">
-                      <mat-icon>timelapse</mat-icon>
-                    </div>
-                    <div class="media-body d-flex flex-row justify-content-between align-items-center">
-                      <p class="m-0 pr-2 color-white">Pending Sync to DID Document</p>
-                      <span *ngIf="tasks?.pendingAssetSyncCount" class="badge badge-danger ml-2">
-                        {{ tasks?.pendingAssetSyncCount }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </a>
-              <!-- Show only when empty or no task -->
-              <!-- <div class="d-flex align-items-center justify-content-center">
-                  <div class="color-white no-record mt-3 mb-4"><i>No task</i></div>
-              </div> -->
-            </div>
-          </div>
-        </div>
-      </li>
-      <li
-        class="nav-item dropdown dropdown-list"
-        dropdown
-        *ngIf="notificationList$ | async as notificationList"
-        (onHidden)="onHiddenNotificationList()">
-        <a class="nav-link dropdown-toggle dropdown-toggle-nocaret cursor-pointer" dropdownToggle>
-          <em class="icon-bell"></em>
-          <span class="badge badge-danger" *ngIf="notificationNewItems">
-            {{ notificationNewItems }}
-          </span>
-        </a>
-        <ng-container *ngIf="notificationList?.length">
-          <div *dropdownMenu class="dropdown-menu dropdown-menu-right">
-            <div class="dropdown-item">
-              <div class="d-flex flex-grow-1 list-group header-notification-container">
-                <div class="d-flex justify-content-between pt-1 pb-3 px-3 mt-2 mb-2 align-items-center border-bottom-1">
-                  <h4 class="mb-0 f-16 color-white">Notification</h4>
-                  <a href="#" (click)="clearSwitchboardToaster()" class="color-primary"> Clear all </a>
-                </div>
-
-                <div class="list-group-item list-group-item-action">
-                  <div class="media d-flex align-items-center notification-item" *ngFor="let item of notificationList">
-                    <div class="notification-icon align-self-start mr-2 ngx-toastr" [ngClass]="item.type"></div>
-                    <div class="media-body d-flex flex-row justify-content-between align-items-center">
-                      <p class="m-0 pr-2 color-white" [ngClass]="{ 'font-weight-bold': item.isNew }">
-                        {{ item.message }}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-container>
-      </li>
+      <app-system-notifications
+        [pendingApprovalCount]="pendingApprovalCount$ | async"
+        [pendingAssetSyncCount]="pendingSyncToDIDCount$ | async"
+        [assetsOfferedToMeCount]="assetsOfferedToMeCount$ | async"></app-system-notifications>
+      <app-user-notifications> </app-user-notifications>
 
       <li class="nav-item d-none d-md-block">
         <a
           matTooltip="Help"
           class="nav-link"
-          #fsbutton
           href="https://energyweb.atlassian.net/wiki/spaces/SWITCH/pages/1712554033/Using+Switchboard"
           target="_blank">
           <em class="far fa-lg fa-question-circle"></em>

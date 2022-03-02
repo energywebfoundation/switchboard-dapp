@@ -6,7 +6,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { FieldsDetailsComponent } from './fields-details/fields-details.component';
-import { ApplicationsModule } from '../../applications.module';
 import { DefaultValueModule } from '../../pipes/default-value.module';
 
 @NgModule({
