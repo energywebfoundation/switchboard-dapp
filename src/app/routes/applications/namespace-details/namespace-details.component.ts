@@ -5,7 +5,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { IAppDefinition } from '@energyweb/iam-contracts';
+import { IAppDefinition } from 'iam-client-lib';
 
 @Component({
   selector: 'app-namespace-details',

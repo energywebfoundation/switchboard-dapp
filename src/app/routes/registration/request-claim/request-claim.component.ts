@@ -36,7 +36,7 @@ import {
   preconditionCheck,
 } from '../utils/precondition-check';
 import { LoginService } from 'src/app/shared/services/login/login.service';
-import { IFieldDefinition } from '@energyweb/iam-contracts';
+import { IFieldDefinition } from 'iam-client-lib';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
