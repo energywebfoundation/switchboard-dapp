@@ -11,7 +11,7 @@ import { filter, switchMap } from 'rxjs/operators';
 import { EnrolmentSubmission } from '../../../routes/registration/enrolment-form/enrolment-form.component';
 import { IRole } from 'iam-client-lib';
 import { MatSelectChange } from '@angular/material/select/select';
-import { IRoleDefinition } from '@energyweb/iam-contracts';
+import { IRoleDefinition } from 'iam-client-lib';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 

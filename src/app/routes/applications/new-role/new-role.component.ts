@@ -28,7 +28,7 @@ import { isAlphanumericValidator } from '@utils';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { HexValidators } from '@utils';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
-import { IFieldDefinition } from '@energyweb/iam-contracts';
+import { IFieldDefinition } from 'iam-client-lib';
 import { RoleCreationService } from './services/role-creation.service';
 import { ISmartSearch } from '../../../shared/components/smart-search/models/smart-search.interface';
 import { SmartSearchType } from '../../../shared/components/smart-search/models/smart-search-type.enum';

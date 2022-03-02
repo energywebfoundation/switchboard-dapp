@@ -7,7 +7,7 @@ import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { IssuerType } from '../../new-role/models/issuer-type.enum';
-import { IFieldDefinition } from '@energyweb/iam-contracts';
+import { IFieldDefinition } from 'iam-client-lib';
 
 @Component({
   selector: 'app-governance-details',
