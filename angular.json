@@ -135,6 +135,11 @@
               "ngswConfigPath": "ngsw-config.json"
             },
             "stedin": {
+              "assets": ["src/assets"],
+              "index": {
+                "input": "src/index.stedin.html",
+                "output": "index.html"
+              },
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
