@@ -1,6 +1,6 @@
 {
-  "locale": "std",
+  "locale": "en-US",
   "translations": {
-    "2987510875342085677": " Welcome to Stedin "
+    "WelcomeID": " Welcome to Stedin "
   }
 }
