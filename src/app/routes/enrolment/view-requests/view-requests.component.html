@@ -44,11 +44,13 @@
                 <span class="color-white mb-0">{{ claim?.subject }}</span>
               </div>
             </ng-container>
-            <mat-divider></mat-divider>
-            <div class="text-left my-3">
-              <div class="label opacity-50 mb-2">Issuer</div>
-              <span class="color-white mb-0">{{ claim?.claimIssuer }}</span>
-            </div>
+            <ng-container *ngIf="claim.acceptedBy">
+              <mat-divider></mat-divider>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Issuer</div>
+                <span class="color-white mb-0">{{ claim.acceptedBy }}</span>
+              </div>
+            </ng-container>
           </div>
         </div>
 

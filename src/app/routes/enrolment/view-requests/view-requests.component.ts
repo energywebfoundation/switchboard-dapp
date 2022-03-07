@@ -16,6 +16,7 @@ import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.component';
 import { KeyValue } from '@angular/common';
+import { Claim, ClaimData } from 'iam-client-lib';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
