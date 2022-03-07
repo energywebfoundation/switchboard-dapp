@@ -49,6 +49,13 @@ export const routes = [
     component: RequestClaimComponent,
   },
   {
+    path: 'vp',
+    loadChildren: () =>
+      import('./verifiable-presentation/verifiable-presentation.module').then(
+        (m) => m.VerifiablePresentationModule
+      ),
+  },
+  {
     path: 'welcome',
     children: [
       {
