@@ -1,7 +1,7 @@
 import { constants } from './constants';
 
 export const environment = {
-  production: true,
+  production: false,
   theme: 'stedin',
   application: false,
 

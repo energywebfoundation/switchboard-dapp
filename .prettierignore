@@ -12,3 +12,4 @@ eslint_report.json
 coverage/
 .angular/
 package-lock.json
+src/locale/
