@@ -6,9 +6,10 @@ import { VpHeaderComponent } from './vp-header/vp-header.component';
 import { ReceivedPresentationsComponent } from './received-presentations/received-presentations.component';
 import { SharedModule } from '../../shared/shared.module';
 import { PresentationCredentialsComponent } from './presentation-credentials/presentation-credentials.component';
+import { VpCardComponent } from './vp-card/vp-card.component';
 
 @NgModule({
-  declarations: [VerifiablePresentationComponent, VpHeaderComponent, ReceivedPresentationsComponent, PresentationCredentialsComponent],
+  declarations: [VerifiablePresentationComponent, VpHeaderComponent, ReceivedPresentationsComponent, PresentationCredentialsComponent, VpCardComponent],
   imports: [
     CommonModule,
     SharedModule,

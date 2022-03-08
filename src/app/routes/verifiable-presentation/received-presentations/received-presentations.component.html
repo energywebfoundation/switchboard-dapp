@@ -1,4 +1,4 @@
-<mat-card class="card-enroll color-default">
+<app-vp-card>
   <h4><strong>Received</strong> presentation request</h4>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="namespace">
@@ -14,4 +14,4 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-</mat-card>
+</app-vp-card>
