@@ -21,6 +21,7 @@ import { truthy } from '@operators';
 import { Store } from '@ngrx/store';
 import { SettingsSelectors } from '@state';
 import { EnrolmentListService } from '../../../shared/services/enrolment-list/enrolment-list.service';
+import { EnrolmentClaim } from '../models/enrolment-claim.interface';
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
@@ -46,14 +47,14 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   ListType = EnrolmentListType;
-  dataSource = new MatTableDataSource([]);
+  dataSource = new MatTableDataSource<EnrolmentClaim>([]);
   displayedColumns: string[];
   dynamicAccepted: boolean;
   dynamicRejected: boolean;
 
   private _subscription$ = new Subject();
   private _iamSubscriptionId: number;
-  private _shadowList = [];
+  private _shadowList: EnrolmentClaim[] = [];
 
   constructor(
     private loadingService: LoadingService,
@@ -221,23 +222,23 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     return item;
   }
 
-  isAccepted(element) {
+  isAccepted(element: EnrolmentClaim) {
     return element?.isAccepted;
   }
 
-  isSynced(element) {
+  isSynced(element: EnrolmentClaim) {
     return element?.isSynced;
   }
 
-  isRejected(element) {
+  isRejected(element: EnrolmentClaim) {
     return !element?.isAccepted && element?.isRejected;
   }
 
-  isPending(element) {
+  isPending(element: EnrolmentClaim) {
     return !element?.isAccepted && !element?.isRejected;
   }
 
-  isPendingSync(element) {
+  isPendingSync(element: EnrolmentClaim) {
     return (
       !this.viewedByIssuer() && this.enrolmentListService.isPendingSync(element)
     );
@@ -247,7 +248,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     return this.listType === EnrolmentListType.ISSUER;
   }
 
-  view(element: any) {
+  view(element: EnrolmentClaim) {
     this.dialog
       .open(ViewRequestsComponent, {
         width: '600px',
@@ -265,7 +266,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       });
   }
 
-  async addToDidDoc(element: any) {
+  async addToDidDoc(element: EnrolmentClaim) {
     this.dialog
       .open<ConfirmationDialogComponent, ConfirmationDialogData>(
         ConfirmationDialogComponent,
@@ -287,7 +288,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       .subscribe(() => this.syncClaimToDidDoc(element));
   }
 
-  async addToClaimManager(element: any) {
+  async addToClaimManager(element: EnrolmentClaim) {
     this.dialog
       .open<ConfirmationDialogComponent, ConfirmationDialogData>(
         ConfirmationDialogComponent,
@@ -309,7 +310,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       .subscribe(() => this.syncToClaimManager(element));
   }
 
-  async cancelClaimRequest(element: any) {
+  async cancelClaimRequest(element: EnrolmentClaim) {
     const dialogRef = this.dialog
       .open(ConfirmationDialogComponent, {
         width: '400px',
@@ -395,7 +396,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async syncClaimToDidDoc(element: any) {
+  private async syncClaimToDidDoc(element: EnrolmentClaim) {
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.',
       CancelButton.ENABLED
@@ -426,7 +427,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
-  private async syncToClaimManager(element: any) {
+  private async syncToClaimManager(element) {
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.',
       CancelButton.ENABLED
@@ -445,7 +446,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
-  private setDisplayedColumns(isExperimental) {
+  private setDisplayedColumns(isExperimental: boolean) {
     if (isExperimental) {
       return [
         'requestDate',

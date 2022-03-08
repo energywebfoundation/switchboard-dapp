@@ -16,6 +16,7 @@ import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.component';
 import { KeyValue } from '@angular/common';
+import { EnrolmentClaim } from '../models/enrolment-claim.interface';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -27,16 +28,16 @@ const TOASTR_HEADER = 'Enrolment Request';
 export class ViewRequestsComponent implements OnInit {
   @ViewChild('issuerFields', { static: false }) requiredFields: EnrolmentForm;
   listType: string;
-  claim: any;
+  claim: EnrolmentClaim;
   requestorFields: KeyValue<string, string | number>[] = [];
   issuerFields: KeyValue<string, string | number>[] = [];
   userDid$ = this.store.select(userSelectors.getDid);
-  claimParams;
   fieldList = [];
 
   constructor(
     public dialogRef: MatDialogRef<ViewRequestsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { claimData: EnrolmentClaim; listType: string },
     public dialog: MatDialog,
     private iamService: IamService,
     private toastr: SwitchboardToastrService,
