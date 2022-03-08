@@ -4,11 +4,14 @@ import { VerifiablePresentationComponent } from './verifiable-presentation/verif
 import { RouterModule } from '@angular/router';
 import { VpHeaderComponent } from './vp-header/vp-header.component';
 import { ReceivedPresentationsComponent } from './received-presentations/received-presentations.component';
+import { SharedModule } from '../../shared/shared.module';
+import { PresentationCredentialsComponent } from './presentation-credentials/presentation-credentials.component';
 
 @NgModule({
-  declarations: [VerifiablePresentationComponent, VpHeaderComponent, ReceivedPresentationsComponent],
+  declarations: [VerifiablePresentationComponent, VpHeaderComponent, ReceivedPresentationsComponent, PresentationCredentialsComponent],
   imports: [
     CommonModule,
+    SharedModule,
     RouterModule.forChild([
       { path: '', component: VerifiablePresentationComponent },
     ]),
