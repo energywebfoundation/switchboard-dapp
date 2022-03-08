@@ -23,16 +23,11 @@
     </mat-checkbox>
 
     <!-- On-chain, warning -->
-    <div
-      *ngIf="isOnChainChecked"
-      class="card card-warning d-flex flex-row justify-content-start align-items-center shadow-none mb-3">
-      <mat-icon>report_problem</mat-icon>
-      <div class="d-flex flex-column">
-        <div class="f-14" [ngStyle]="txtColor">
-          Public credential will be included in the blockchain history once the issuer approves the request.
-        </div>
-      </div>
-    </div>
+    <app-report-problem *ngIf="isOnChainChecked">
+      <span [ngStyle]="txtColor">
+        Public credential will be included in the blockchain history once the issuer approves the request.
+      </span>
+    </app-report-problem>
 
     <mat-error
       *ngIf="registrationTypesGroup.hasError('notEnoughCheckboxChecked') && showOffChain"
