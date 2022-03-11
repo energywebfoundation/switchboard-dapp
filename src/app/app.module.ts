@@ -47,5 +47,4 @@ const providers: Provider[] = [
   providers: [...providers, ...SENTRY_PROVIDERS],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { SettingsService } from './core/settings/settings.service';
 import { UrlService } from './shared/services/url-service/url.service';
 import { Store } from '@ngrx/store';
 import * as AuthActions from './state/auth/auth.actions';
@@ -15,7 +14,6 @@ import { ThemesService } from './core/themes/themes.service';
 })
 export class AppComponent implements OnInit {
   constructor(
-    public settings: SettingsService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private urlHistoryService: UrlService,
