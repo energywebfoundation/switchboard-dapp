@@ -133,9 +133,9 @@ ul.menu-top {
     content: '';
     background: var(--card-register-after-bg);
     background-image: linear-gradient(
-                    0deg,
-                    rgba(23, 23, 37, 0.52) 0%,
-                    rgba(57, 55, 101, 0.41) 100%
+      0deg,
+      rgba(23, 23, 37, 0.52) 0%,
+      rgba(57, 55, 101, 0.41) 100%
     );
     border: 1px solid var(--card-register-after-border);
   }
@@ -612,8 +612,8 @@ mat-label {
 }
 
 .mat-form-field:not(.mat-form-field-appearance-legacy)
-.mat-form-field-suffix
-.mat-icon-button {
+  .mat-form-field-suffix
+  .mat-icon-button {
   background-color: var(--suffix-icon-btn-bg);
   color: var(--default-text-color);
 }
@@ -708,7 +708,7 @@ mat-label {
 }
 
 .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent
-.mat-ripple-element,
+  .mat-ripple-element,
 .mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element,
 .md-create.mat-checkbox-checked.mat-accent .mat-checkbox-background,
 .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
@@ -930,8 +930,8 @@ mat-label {
 }
 
 ::ng-deep
-.mat-checkbox-disabled:not(.mat-checkbox-checked)
-.mat-checkbox-frame {
+  .mat-checkbox-disabled:not(.mat-checkbox-checked)
+  .mat-checkbox-frame {
   opacity: 0.5;
   border-color: currentColor;
 }

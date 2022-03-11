@@ -1,7 +1,7 @@
 <div class="row mx-0 mt-1">
   <div class="col-xl-12">
     <div class="d-flex flex-row justify-content-start align-items-center mr-md-2">
-      <h4 class='default-color strong my-4'>My Asset Enrolments</h4>
+      <h4 class="default-color strong my-4">My Asset Enrolments</h4>
       <div></div>
     </div>
     <div class="card card-default mb-3 pb-0 shadow-none d-flex" *ngIf="asset$ | async as asset">
@@ -21,26 +21,26 @@
       </div>
       <div class="d-flex flex-column flex-md-row justify-content-md-between mx-md-2">
         <div class="my-3">
-          <div class='label opacity-50 mb-2 default-color'>Created Date</div>
-          <span class='default-color mb-0' data-qa-id="created-date">
+          <div class="label opacity-50 mb-2 default-color">Created Date</div>
+          <span class="default-color mb-0" data-qa-id="created-date">
             {{ asset?.createdAt | date: 'MM/dd/yyyy HH:mm:ss' }}
           </span>
         </div>
         <div class="my-3">
-          <div class='label opacity-50 mb-2 default-color'>Asset DID</div>
-          <span class='default-color mb-0' data-qa-id="asset-did">
+          <div class="label opacity-50 mb-2 default-color">Asset DID</div>
+          <span class="default-color mb-0" data-qa-id="asset-did">
             {{ asset?.id }}
           </span>
         </div>
         <div class="my-3">
-          <div class='label opacity-50 mb-2 default-color'>Offered To</div>
-          <span class='default-color mb-0' data-qa-id="offered-to">
+          <div class="label opacity-50 mb-2 default-color">Offered To</div>
+          <span class="default-color mb-0" data-qa-id="offered-to">
             {{ asset?.offeredTo ? asset?.offeredTo : '--' }}
           </span>
         </div>
         <div class="my-3">
-          <div class='label opacity-50 mb-2 default-color'>Last Updated Date</div>
-          <span class='default-color mb-0' data-qa-id="last-updated">
+          <div class="label opacity-50 mb-2 default-color">Last Updated Date</div>
+          <span class="default-color mb-0" data-qa-id="last-updated">
             {{ asset?.updatedAt | date: 'MM/dd/yyyy HH:mm:ss' }}
           </span>
         </div>
