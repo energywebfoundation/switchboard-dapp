@@ -12,6 +12,7 @@ import { ISmartSearch } from './models/smart-search.interface';
 import { truthy } from '@operators';
 import { SmartSearchService } from './services/smart-search.service';
 import { SmartSearchType } from './models/smart-search-type.enum';
+import { SearchType } from 'iam-client-lib';
 
 @Component({
   selector: 'app-smart-search',
@@ -22,6 +23,7 @@ export class SmartSearchComponent implements AfterViewInit {
   @Input() searchText: FormControl;
   @Input() placeholderSearch: string;
   @Input() searchType: SmartSearchType = SmartSearchType.Default;
+  @Input() searchBy: SearchType[] = [SearchType.Role]
 
   @Output() add: EventEmitter<ISmartSearch> = new EventEmitter();
 
@@ -37,7 +39,7 @@ export class SmartSearchComponent implements AfterViewInit {
       truthy(),
       debounceTime(1200),
       tap(() => (this.isLoadingList = true)),
-      switchMap((value: string) => this.smartSearchService.searchBy(value)),
+      switchMap((value: string) => this.smartSearchService.searchBy(value, this.searchBy)),
       tap(() => (this.isLoadingList = false))
     );
   }
