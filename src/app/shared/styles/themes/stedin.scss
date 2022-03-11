@@ -1,0 +1,289 @@
+// Stedin Theme
+
+// Bootstrap
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '../app/variables';
+@import '../app/material/colors';
+@import './preloader';
+// VARIABLES
+$preloader-bg: #ffd100;
+:root {
+  --loader-color: #ffd100;
+  --warning-color: #ff9614;
+
+  // Preloader css properties
+  --preloader-bg: #{$preloader-bg};
+  --preloader-bg-darker: #{darken($preloader-bg, 5%)};
+
+  --button-primary: #ffd100;
+  --button-primary-color: #4d4d4d;
+  --btn-primary-hover: #ffd100;
+  --swal-button-cancel: #4d4d4d;
+  --btn-stroked-hover: #000000;
+  --stroked-filter-button: #4d4d4d;
+  --stroked-filter-button-hover: #62b5e5;
+  --stroked-table-btn: #4d4d4d;
+  --stroked-table-btn-hover: #62b5e5;
+
+  --button-toggle-group-border: transparent;
+  --button-toggle-color: #4d4d4d;
+  --button-toggle-checked-bg: #ffd100;
+
+  --btn-connect-bg: #ffffff;
+  --btn-connect-color: #4d4d4d;
+
+  --primary-color: #4d4d4d;
+
+  --nav-primary: #4d4d4d;
+  --nav-primary-hover: #62b5e5;
+  --nav-primary-active: #ffd100;
+  --nav-border: #ffffff08;
+  --nav-bg: #f0f0f0;
+
+  --scrollbar: #7e7e7e;
+  --scrollbar-hover: #646363;
+
+  --content-bg: #f0f0f0;
+  --dropdown-item-active: #97999b;
+
+  --menu-panel: #ffffff;
+  --navbar-text-color: #ffffff;
+  --default-text-color: #4d4d4d;
+  --label-role-color: #ffffff;
+  --input-color: #4d4d4d;
+  --input-color-disabled: rgba(0, 0, 0, 0.3);
+  --search-input-color: #000000;
+  --default-link-color: #4d4d4d;
+
+  --list-group-item: #ffffff;
+
+  --list-group-item-hover: #ffffff;
+
+  --overlay-content-bg: #ffffff;
+  --overlay-backdrop-bg: rgba(255, 255, 255, 0.7);
+  --swal-overlay-bg: rgba(255, 255, 255, 0.7);
+  --swal-button-hover: #ffd100;
+  --swal-button-cancel-hover: #4d4d4d;
+  --swal-button-confirm-hover: #ffe053;
+  --swal-button-enrol-hover: #ffe053;
+  --swal-success-bg: #bfb800;
+  --swal-text-color: #97999b;
+
+  --card-bg: #ffffff;
+  --card-disabled-bg: #eaeaea;
+  --card-disabled-border: transparent;
+  --card-icon-bg: #ffffff;
+  --card-icon-border: transparent;
+  --card-icon-hover-bg: #ffd100;
+  --card-icon-hover-border: transparent;
+  --card-register-after-border: transparent;
+  --card-register-after-bg: #f0f0f0;
+
+  --card-success-border: #bfb800;
+  --card-success-bg: lighten(#bfb800, 60%);
+  --card-success-color: #bfb800;
+  --card-search-body-bg: #ffffff;
+
+  --card-hint-border: #4d4d4d;
+  --card-hint-bg: #f0f0f0;
+  --card-hint-color: #4d4d4d;
+
+  --card-info-border: #62b5e5;
+  --card-info-bg: lighten(#62b5e5, 30%);
+  --info-color: #62b5e5;
+
+  --card-warning-border: #ff9614;
+  --card-warning-bg: lighten($stedin-orange, 60%);
+
+  --register-bg: #ffffff;
+
+  --card-result-border: #4d4d4d;
+  --card-result-bg: transparent;
+
+  --card-result-list-bg: #2d2c3d;
+  --mat-drawer-bg: #ffffff;
+  --mat-expansion-panel-bg: #ffffff;
+
+  --img-container-bg: #ffffff;
+  --card-filter-bg: #ffffff;
+  --card-filter-color: #000000;
+
+  --table-header-cell-bg: #ffffff;
+  --row-odd-bg: #f8f8f8;
+  --row-even-bg: #ffffff;
+  --row-border: #ffffff;
+
+  --tab-labels-bg: #dedede;
+  --tab-label-color: #97999b;
+  --ink-bar-bg: #ffffff;
+
+  --dialog-title-color: #4d4d4d;
+  --dialog-border: #eaeaea;
+  --dialog-actions-border: #363546;
+  --dialog-icon-button-color: #4d4d4d;
+
+  --img-wrapper-border: #ffffff;
+
+  --img-thumbnail-bg: #f0f0f0;
+  --img-thumbnail-border: #97999b;
+  --divider-border: #000000;
+  --notif-container-bg: #ffffff;
+
+  --did-wrapper-bg: #d6d6d6;
+  --did-wrapper-color: #4b4b4b;
+  --did-wrapper-hover-color: #4b4b4b;
+
+  --step-icon-color: #ffd100;
+  --step-icon-default-color: #4d4d4d;
+  --step-label: #4d4d4d;
+  --stepper-vertical-line: #4d4d4d;
+
+  --field-appearance-outline-bg: #ffffff;
+  --field-appearance-outline-color: #97999b;
+  --field-appearance-outline-thick-color: #4d4d4d;
+
+  --dropdown-option-odd-bg: #97999b;
+  --dropdown-option-bg: #ffffff;
+
+  --form-placeholder: #97999b;
+  --toggle-color: #4d4d4d;
+  --icon-disabled: rgb(75 75 75 / 25%);
+
+  --error-color: #eb5764;
+  --success-color: #bfb800;
+  --btn-warn-color: #ff9614;
+
+  --btn-connect-hover: #d9d9d9;
+  --btn-disabled-color: #00000042;
+  --btn-disabled-bg: rgba(0, 0, 0, 0.12);
+  --suffix-icon-btn-bg: #f0f0f0;
+  --icon-color: #4d4d4d;
+
+  --tooltip-color: #62b5e5;
+  --sub-org-tooltip-border: #62b5e5;
+  --sub-org-tooltip-color: #4d4d4d;
+  --select-placeholder-color: #4d4d4d;
+  --option-selected: #4d4d4d;
+
+  --select-option-selected-not-multiple-bg: #f0f0f0;
+  --select-option-selected-not-multiple-color: #97999b;
+  --select-option-hover: rgb(215, 215, 215);
+  --option-active-color: #000000;
+  --option-active-bg: rgb(215, 215, 215);
+  --autocomplete-panel-bg: #f7f7f7;
+  --expansion-panel-color: #4d4d4d;
+
+  --color-link: #4d4d4d;
+  --border-bottom: transparent;
+  --checkbox-checked-bg: #ffd100;
+  --field-list-item-bg: #f0f0f0;
+  --sub-row-bg: #ffffff;
+
+  --datepicker-content: #ffffff;
+  --datepicker-color: #4d4d4d;
+  --datepicker-label-color: #4d4d4d;
+  --calendar-table-color: #4d4d4d;
+  --calendar-option-selected-bg: #ffd100;
+  --calendar-divider-after-bg: #97999b;
+  --timepicker-body-selected: #ffd100;
+
+  --text-blur-shadow: rgb(0 0 0 / 50%);
+  --history-item-bg: #f0f0f0;
+  --border-vertical-color: #4d4d4d;
+  --header-enroll-bg: #f0f0f0;
+  --footer-bg: #ffffff;
+  --footer-color: #4d4d4d;
+
+  --select-arrow-color: #4d4d4d;
+
+  --field-outline-bg: #ffffff;
+  --field-outline-color: #4d4d4d;
+
+  --slide-toggle-thumb: #4d4d4d;
+  --slide-toggle-thumb-checked: #ffd100;
+  --slide-toggle-bar-bg: #ffffff;
+  --slide-toggle-content-color: #97999b;
+}
+
+.img-dashboard,
+.link-footer {
+  filter: grayscale(1);
+}
+
+.logo-wrapper {
+  background: url('/assets/img/stedin-logo.png') no-repeat;
+  margin: 0 auto;
+  width: 110px;
+  max-width: 100%;
+  height: 40.625px;
+  margin-top: 22px;
+}
+.position-brand {
+  .welcome-header-logo {
+    background: url('/assets/img/stedin-logo.png') no-repeat;
+    height: 44px;
+    width: 174px;
+    background-size: contain;
+  }
+}
+
+.header-logo {
+  background: url('/assets/img/stedin-logo.png') no-repeat;
+  width: 150px;
+  height: 30px;
+  background-size: 150px 30px;
+}
+
+// Dashboard
+
+.assets-icon,
+.governance-icon,
+.enrolments-icon,
+.applications-icon,
+.stake-icon {
+  background-size: contain;
+  width: 72;
+  height: 70px;
+}
+
+.assets-icon {
+  background: url('/assets/img/icons/stedin-icons/assets-icon-stroked.png')
+    no-repeat;
+}
+
+.governance-icon {
+  background: url('/assets/img/icons/stedin-icons/governance-icon-stroked.png')
+    no-repeat;
+}
+
+.enrolments-icon {
+  background: url('/assets/img/icons/stedin-icons/enrollment-icon-stroked.png')
+    no-repeat;
+}
+
+.applications-icon {
+  background: url('/assets/img/icons/stedin-icons/applications-icon-stroked.png')
+    no-repeat;
+}
+
+.stake-icon {
+  background: url('/assets/img/icons/stedin-icons/stake-icon-stroked.svg')
+    no-repeat;
+}
+
+.preloader-progress {
+  background: url('/assets/img/preloader/stedin-preloader.empty.png') no-repeat;
+  width: 200px;
+  height: 37.5px;
+  background-size: 200px 37.5px;
+}
+
+/*@noflip*/
+.preloader-progress-bar {
+  background: url('/assets/img/preloader/stedin-preloader.full.png') no-repeat;
+  width: 200px;
+  height: 37.5px;
+  background-size: 200px 37.5px;
+}

@@ -12,19 +12,12 @@
 @import 'app/layout-extra';
 @import 'app/layout-animation';
 @import 'app/top-navbar';
-@import 'app/sidebar';
-@import 'app/offsidebar';
-@import 'app/user-block';
-@import 'app/settings';
 // Common
 @import 'app/typo';
 @import 'app/bootstrap-reset';
-@import 'app/bootstrap-custom';
 @import 'app/button-extra';
 @import 'app/dropdown-extra';
 @import 'app/animate';
-@import 'app/slim-scroll';
-@import 'app/datepicker';
 @import 'app/utils';
 @import 'app/popup';
 
@@ -41,3 +34,4 @@
 @import 'app/material/md-list';
 @import 'app/material/md-inputs';
 @import 'app/material/ngmaterial';
+@import 'app/for-theme';

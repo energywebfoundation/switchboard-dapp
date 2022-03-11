@@ -1,0 +1,219 @@
+// Bootstrap
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '../app/variables';
+@import '../app/material/colors';
+@import './preloader';
+$preloader-bg: #181423;
+:root {
+  --loader-color: #a567ff;
+  --warning-color: #ffa500;
+
+  // Preloader css properties
+  --preloader-bg: #{$preloader-bg};
+  --preloader-bg-darker: #{darken($preloader-bg, 5%)};
+
+  --button-primary: #33cbcb;
+  --button-primary-color: #33cbcb;
+  --btn-primary-hover: #5bd6d6;
+  --swal-button-cancel: #33cbcb;
+  --btn-stroked-hover: #5bd6d6;
+  --stroked-filter-button: #33cbcb;
+  --stroked-filter-button-hover: #5bd6d6;
+  --stroked-table-btn: #8677ae;
+  --stroked-table-btn-hover: #33cbcb;
+
+  --button-toggle-group-border: #33cbcb;
+  --button-toggle-color: #33cbcb;
+  --button-toggle-checked-bg: #33cbcb;
+
+  --btn-connect-bg: #ffffff;
+  --btn-connect-color: #000000;
+
+  --primary-color: #33cbcb;
+
+  --nav-primary: #9080ba;
+  --nav-primary-hover: #33cbcb;
+  --nav-primary-active: #33cbcb;
+  --nav-border: #ffffff08;
+  --nav-bg: #181523ff;
+
+  --scrollbar: #8d7db6;
+  --scrollbar-hover: #33cbcb;
+
+  --content-bg: #181423;
+  --dropdown-item-active: 181423;
+  --menu-panel: #2a2837;
+  --navbar-text-color: #ffffff;
+  --default-text-color: #ffffff;
+  --label-role-color: #ffffff;
+  --input-color: #ffffff;
+  --input-color-disabled: rgba(255, 255, 255, 0.4);
+  --search-input-color: #ffffff;
+  --default-link-color: #33cbcb;
+
+  --list-group-item: #2a2a37;
+
+  --list-group-item-hover: #21212b;
+
+  --overlay-content-bg: #2a2837;
+  --overlay-backdrop-bg: rgba(38, 33, 51, 0.88);
+  --swal-overlay-bg: rgba(16, 14, 22, 0.9);
+  --swal-button-hover: #289b9b;
+  --swal-button-cancel-hover: #289b9b;
+  --swal-button-confirm-hover: #289b9b;
+  --swal-button-enrol-hover: #289b9b;
+  --swal-success-bg: #a467ff;
+  --swal-text-color: rgba(255, 255, 255, 0.8);
+
+  --card-bg: #242230;
+  --card-disabled-bg: #181523ff;
+  --card-disabled-border: #181523ff;
+  --card-icon-bg: rgba(132, 131, 144, 0.06);
+  --card-icon-border: #232131;
+  --card-icon-hover-bg: #a567ff;
+  --card-icon-hover-border: #c6a0ff;
+  --card-register-after-border: #2a2837;
+  --card-register-after-bg: transparent;
+
+  --card-success-border: rgb(135 193 141 / 45%);
+  --card-success-bg: rgba(117, 254, 197, 0.05);
+  --card-success-color: rgb(174 255 176 / 71%);
+  --card-search-body-bg: #363443;
+
+  --card-hint-border: #efe1b533;
+  --card-hint-bg: #efe1b533;
+  --card-hint-color: #fff2c1;
+
+  --card-info-border: rgb(193 255 249 / 50%);
+  --card-info-bg: rgb(193 255 249 / 8%);
+  --info-color: #c1fff9;
+
+  --card-warning-border: rgb(255 165 0 / 50%);
+  --card-warning-bg: rgb(255 165 0 / 50%);
+
+  --register-bg: #181421;
+
+  --card-result-border: #3c3b4d;
+  --card-result-bg: transparent;
+
+  --card-result-list-bg: #2d2c3d;
+  --mat-drawer-bg: #242330;
+  --mat-expansion-panel-bg: #353540;
+
+  --img-container-bg: #201f28;
+  --card-filter-bg: #302e3d;
+  --card-filter-color: #ffffff;
+
+  --table-header-cell-bg: #24222f;
+  --row-odd-bg: #201e2b;
+  --row-even-bg: #1e1c29;
+  --row-border: #252230;
+
+  --tab-labels-bg: #120e19;
+  --tab-label-color: #9080ba;
+  --ink-bar-bg: #282239;
+
+  --dialog-title-color: #bcb1e0;
+  --dialog-border: #363546;
+  --dialog-actions-border: #363546;
+  --dialog-icon-button-color: #726690;
+
+  --img-wrapper-border: #353540;
+
+  --img-thumbnail-bg: #181424;
+  --img-thumbnail-border: #6e75aa;
+  --divider-border: #d8d8d8;
+  --notif-container-bg: #2a2a37;
+
+  --did-wrapper-bg: #231f32;
+  --did-wrapper-color: #a6a5ab;
+  --did-wrapper-hover-color: #33cbcb;
+
+  --step-icon-color: #a467ff;
+  --step-icon-default-color: #9080ba;
+  --step-label: #9080ba;
+  --stepper-vertical-line: #9080ba;
+
+  --field-appearance-outline-bg: #1c1726;
+  --field-appearance-outline-color: #52436e;
+  --field-appearance-outline-thick-color: #a567ff;
+
+  --dropdown-option-odd-bg: #383746;
+  --dropdown-option-bg: #343242;
+
+  --form-placeholder: #b0addc;
+  --toggle-color: white;
+  --icon-disabled: rgb(207 207 207 / 25%);
+
+  --error-color: #c82e2e;
+  --success-color: #0fb544;
+  --btn-warn-color: #ffa500;
+
+  --btn-connect-hover: #131214;
+  --btn-disabled-color: rgba(255, 255, 255, 0.3);
+  --btn-disabled-bg: rgb(33, 29, 47);
+  --suffix-icon-btn-bg: #33cbcb;
+  --icon-color: #9080ba;
+
+  --tooltip-color: #9080ba;
+  --sub-org-tooltip-border: #a567ff;
+  --sub-org-tooltip-color: rgba(255, 255, 255, 1);
+  --select-placeholder-color: #9080bb;
+  --option-selected: #673ab7;
+
+  --select-option-selected-not-multiple-bg: rgba(0, 0, 0, 0.12);
+  --select-option-selected-not-multiple-color: rgba(255, 255, 255, 0.8);
+  --select-option-hover: rgba(218, 218, 218, 0.08);
+  --option-active-color: #ffffff;
+  --option-active-bg: #2a2837;
+  --autocomplete-panel-bg: #2a2837;
+  --expansion-panel-color: #9081ba;
+
+  --color-link: #b6b2e1;
+  --border-bottom: #3c3b4c;
+  --checkbox-checked-bg: #a567ff;
+  --field-list-item-bg: #363446;
+  --sub-row-bg: #302e40;
+
+  --datepicker-content: #2a2937;
+  --datepicker-color: rgba(255, 255, 255, 0.87);
+  --datepicker-label-color: rgba(255, 255, 255, 0.54);
+  --calendar-table-color: rgba(255, 255, 255, 0.38);
+  --calendar-option-selected-bg: #673ab7;
+  --calendar-divider-after-bg: rgba(255, 255, 255, 0.12);
+  --timepicker-body-selected: #a466ff;
+
+  --text-blur-shadow: rgb(255 255 255 / 50%);
+  --history-item-bg: #363446;
+  --border-vertical-color: #c1fff9;
+  --header-enroll-bg: #181524;
+  --footer-bg: #382856;
+  --footer-color: rgba(255, 255, 255, 0.5);
+
+  --select-arrow-color: #4d4d4d;
+
+  --field-outline-bg: #181522;
+  --field-outline-color: #554675;
+
+  --slide-toggle-thumb: #bcb0df;
+  --slide-toggle-thumb-checked: #a467ff;
+  --slide-toggle-bar-bg: rgba(164, 103, 255, 0.3);
+  --slide-toggle-content-color: #9080ba;
+}
+
+// Preloader
+.preloader-progress {
+  background: url('/assets/img/preloader/preloader.empty.png') no-repeat;
+  width: 200px;
+  height: 65.5px;
+  background-size: 200px 65.5px;
+}
+
+.preloader-progress-bar {
+  background: url('/assets/img/preloader/preloader.full.png') no-repeat;
+  width: 200px;
+  height: 65.5px;
+  background-size: 200px 65.5px;
+}
