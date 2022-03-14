@@ -6,9 +6,14 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { IRole, NamespaceType, PreconditionType } from 'iam-client-lib';
+import {
+  IFieldDefinition,
+  IRole,
+  NamespaceType,
+  PreconditionType,
+} from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { delay, take } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -27,7 +32,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { HexValidators, isAlphanumericValidator } from '@utils';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
-import { IFieldDefinition } from 'iam-client-lib';
 import { RoleCreationService } from './services/role-creation.service';
 import { ISmartSearch } from '../../../shared/components/smart-search/models/smart-search.interface';
 import { SmartSearchType } from '../../../shared/components/smart-search/models/smart-search-type.enum';
@@ -161,8 +165,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return this.roleForm.get('data').get('issuer').get('issuerType').value;
   }
 
-  get issuerRoleName() {
-    return this.roleForm.get('data').get('issuer').get('roleName');
+  get issuerRoleName(): FormControl {
+    return this.roleForm
+      .get('data')
+      .get('issuer')
+      .get('roleName') as FormControl;
   }
 
   constructor(
