@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   Asset,
   Claim,
+  IFieldDefinition,
   IRoleDefinition,
   NamespaceType,
   RegistrationTypes,
@@ -36,7 +37,6 @@ import {
   preconditionCheck,
 } from '../utils/precondition-check';
 import { LoginService } from 'src/app/shared/services/login/login.service';
-import { IFieldDefinition } from 'iam-client-lib';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;

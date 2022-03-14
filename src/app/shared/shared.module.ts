@@ -53,6 +53,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { QrCodeScannerModule } from './components/qr-code-scanner/qr-code-scanner.module';
 import { DomainImageComponent } from './components/domain-image/domain-image.component';
 import { ReportProblemComponent } from './components/report-problem/report-problem.component';
+import { SmartSearchOptionComponent } from './components/smart-search/component/smart-search-option/smart-search-option.component';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -116,6 +117,7 @@ const MATERIAL_MODULES = [
     DomainTypePipe,
     DomainImageComponent,
     ReportProblemComponent,
+    SmartSearchOptionComponent,
   ],
   exports: [
     CommonModule,
