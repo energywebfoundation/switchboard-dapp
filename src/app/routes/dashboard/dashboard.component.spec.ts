@@ -10,6 +10,7 @@ import { LayoutActions, SettingsSelectors } from '@state';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
 import { SearchType } from 'iam-client-lib';
+import { RouterConst } from '../router-const';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -57,11 +58,11 @@ describe('DashboardComponent', () => {
   });
 
   it('should call setRedirectUrl action', () => {
-    activatedRouteStub.testParams = { returnUrl: 'dashboard' };
+    activatedRouteStub.testParams = { returnUrl: RouterConst.Dashboard };
     setUp();
     fixture.detectChanges();
     expect(dispatchSpy).toHaveBeenCalledWith(
-      LayoutActions.setRedirectUrl({ url: 'dashboard' })
+      LayoutActions.setRedirectUrl({ url: RouterConst.Dashboard })
     );
   });
 
@@ -81,8 +82,11 @@ describe('DashboardComponent', () => {
     const keyword = 'keyword';
     component.goToSearchResult(namespace, keyword);
 
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['search-result'], {
-      queryParams: { namespace, keyword },
-    });
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [RouterConst.SearchResult],
+      {
+        queryParams: { namespace, keyword },
+      }
+    );
   });
 });
