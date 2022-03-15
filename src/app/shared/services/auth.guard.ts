@@ -3,7 +3,8 @@ import {
   ActivatedRouteSnapshot,
   CanActivate,
   Router,
-  RouterStateSnapshot, UrlTree
+  RouterStateSnapshot,
+  UrlTree,
 } from '@angular/router';
 
 import { LoginService } from './login/login.service';

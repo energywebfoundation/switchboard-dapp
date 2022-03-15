@@ -28,7 +28,10 @@ describe('AuthEffects', () => {
     'getSession',
   ]);
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll', 'open']);
-  const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl', 'navigate']);
+  const routerSpy = jasmine.createSpyObj('Router', [
+    'navigateByUrl',
+    'navigate',
+  ]);
   let actions$: ReplaySubject<any>;
   let effects: AuthEffects;
   let store: MockStore<AuthState>;
@@ -261,7 +264,9 @@ describe('AuthEffects', () => {
             reinitializeMetamask: true,
           });
           expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(`/${RouterConst.ReturnUrl}`);
+          expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(
+            `/${RouterConst.ReturnUrl}`
+          );
           expect(resultAction).toEqual(
             AuthActions.loginSuccess({ accountInfo })
           );
@@ -379,7 +384,9 @@ describe('AuthEffects', () => {
       loginServiceSpy.isSessionActive.and.returnValue(true);
       actions$.next(AuthActions.navigateWhenSessionActive());
       effects.navigateToDashboardWhenSessionIsActive$.subscribe(() => {
-        expect(routerSpy.navigate).toHaveBeenCalledWith([RouterConst.Dashboard]);
+        expect(routerSpy.navigate).toHaveBeenCalledWith([
+          RouterConst.Dashboard,
+        ]);
         done();
       });
     });

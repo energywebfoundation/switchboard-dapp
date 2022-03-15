@@ -43,7 +43,9 @@ describe('AuthGuard', () => {
     expect(
       guard.canActivate(dummyRoute, fakeRouterState(RouterConst.Enrolment))
     ).toBeTrue();
-    expect(routerSpy.navigate).toHaveBeenCalledWith([RouterConst.Dashboard], { queryParams: { returnUrl: RouterConst.Enrolment } });
+    expect(routerSpy.navigate).toHaveBeenCalledWith([RouterConst.Dashboard], {
+      queryParams: { returnUrl: RouterConst.Enrolment },
+    });
     done();
   });
 
@@ -65,5 +67,5 @@ describe('AuthGuard', () => {
     ).toBeFalse();
     expect(routerSpy.navigate).toHaveBeenCalledWith([RouterConst.Welcome]);
     done();
-  })
+  });
 });

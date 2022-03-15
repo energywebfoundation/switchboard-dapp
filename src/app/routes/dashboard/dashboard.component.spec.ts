@@ -82,8 +82,11 @@ describe('DashboardComponent', () => {
     const keyword = 'keyword';
     component.goToSearchResult(namespace, keyword);
 
-    expect(routerSpy.navigate).toHaveBeenCalledWith([RouterConst.SearchResult], {
-      queryParams: { namespace, keyword },
-    });
+    expect(routerSpy.navigate).toHaveBeenCalledWith(
+      [RouterConst.SearchResult],
+      {
+        queryParams: { namespace, keyword },
+      }
+    );
   });
 });

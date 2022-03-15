@@ -14,7 +14,7 @@ describe('SettingsEffects', () => {
   let actions$: ReplaySubject<any>;
   let effects: SettingsEffects;
   let store: MockStore<SettingsState>;
-  const urlServiceSpy = jasmine.createSpyObj('UrlService', ['goTo', 'current'])
+  const urlServiceSpy = jasmine.createSpyObj('UrlService', ['goTo', 'current']);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,7 +36,7 @@ describe('SettingsEffects', () => {
       actions$ = new ReplaySubject(1);
     });
     it('should redirect when current page is assets', (done) => {
-      urlServiceSpy.current.and.returnValue(of(RouterConst.Assets))
+      urlServiceSpy.current.and.returnValue(of(RouterConst.Assets));
       actions$.next(SettingsActions.disableExperimental());
 
       effects.redirectFromAssetsToDashboard$.subscribe(() => {

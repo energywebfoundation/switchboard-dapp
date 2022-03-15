@@ -31,7 +31,10 @@ import { RouterConst } from '../router-const';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent },
-  { path: RouterConst.EnrolmentDetails, component: AssetEnrolmentListComponent },
+  {
+    path: RouterConst.EnrolmentDetails,
+    component: AssetEnrolmentListComponent,
+  },
 ];
 
 @NgModule({

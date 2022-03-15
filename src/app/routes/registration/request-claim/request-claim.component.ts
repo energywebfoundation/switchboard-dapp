@@ -327,7 +327,8 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       // Navigate to My Enrolments Page
       this.route.navigate([RouterConst.Dashboard], {
         queryParams: {
-          returnUrl: RouterConst.AssetEnrolment + this.roleTypeForm.value.assetDid,
+          returnUrl:
+            RouterConst.AssetEnrolment + this.roleTypeForm.value.assetDid,
         },
       });
     } else {
@@ -449,7 +450,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             this.route.navigate([RouterConst.Dashboard], {
               queryParams: {
                 returnUrl:
-                RouterConst.AssetEnrolment + this.roleTypeForm.value.assetDid,
+                  RouterConst.AssetEnrolment + this.roleTypeForm.value.assetDid,
               },
             });
           } else {
