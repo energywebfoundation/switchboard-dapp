@@ -21,6 +21,7 @@ import * as userActions from '../user-claim/user.actions';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import * as AuthSelectors from './auth.selectors';
 import { EnvService } from '../../shared/services/env/env.service';
+import { RouterConst } from '../../routes/router-const';
 
 @Injectable()
 export class AuthEffects {
@@ -197,7 +198,7 @@ export class AuthEffects {
         ofType(AuthActions.reinitializeAuth),
         filter(() => !this.loginService.isSessionActive()),
         map(() => {
-          this.router.navigate(['welcome']);
+          this.router.navigate([RouterConst.Welcome]);
         })
       ),
     { dispatch: false }
@@ -219,7 +220,7 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(AuthActions.navigateWhenSessionActive),
         filter(() => this.loginService.isSessionActive()),
-        map(() => this.router.navigate(['dashboard']))
+        map(() => this.router.navigate([RouterConst.Dashboard]))
       ),
     { dispatch: false }
   );

@@ -37,6 +37,7 @@ import {
   preconditionCheck,
 } from '../utils/precondition-check';
 import { LoginService } from 'src/app/shared/services/login/login.service';
+import { RouterConst } from '../../router-const';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -324,15 +325,16 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   goToEnrolment() {
     if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], {
+      this.route.navigate([RouterConst.Dashboard], {
         queryParams: {
-          returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid,
+          returnUrl:
+            RouterConst.AssetEnrolment + this.roleTypeForm.value.assetDid,
         },
       });
     } else {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], {
-        queryParams: { returnUrl: '/enrolment?selectedTab=1' },
+      this.route.navigate([RouterConst.Dashboard], {
+        queryParams: { returnUrl: RouterConst.MyEnrolments },
       });
     }
   }
@@ -445,16 +447,16 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             location.href = this.callbackUrl;
           } else if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
             // Navigate to My Enrolments Page
-            this.route.navigate(['dashboard'], {
+            this.route.navigate([RouterConst.Dashboard], {
               queryParams: {
                 returnUrl:
-                  '/assets/enrolment/' + this.roleTypeForm.value.assetDid,
+                  RouterConst.AssetEnrolment + this.roleTypeForm.value.assetDid,
               },
             });
           } else {
             // Navigate to My Enrolments Page
-            this.route.navigate(['dashboard'], {
-              queryParams: { returnUrl: '/enrolment?selectedTab=1' },
+            this.route.navigate([RouterConst.Dashboard], {
+              queryParams: { returnUrl: RouterConst.MyEnrolments },
             });
           }
       }
