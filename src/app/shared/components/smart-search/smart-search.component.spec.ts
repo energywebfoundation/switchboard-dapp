@@ -90,7 +90,7 @@ describe('SmartSearchComponent', () => {
 
   it('should emit event when adding role', fakeAsync(() => {
     smartSearchServiceSpy.searchBy.and.returnValue(
-      of(['namespace1', 'namespace2'])
+      of([{ namespace: 'namespace1' }, { namespace: 'namespace2' }])
     );
     component.searchType = SmartSearchType.Add;
     component.searchText = new FormControl('');
@@ -106,7 +106,6 @@ describe('SmartSearchComponent', () => {
 
     const { add } = selectors(hostDebug);
     expect(add).toBeTruthy();
-
     add.click();
 
     expect(addSpyEvent).toHaveBeenCalledWith({
@@ -115,6 +114,50 @@ describe('SmartSearchComponent', () => {
     });
     flush();
   }));
+
+  it('should emit event when clicking enter', () => {
+    smartSearchServiceSpy.searchBy.and.returnValue(
+      of([{ namespace: 'namespace1' }, { namespace: 'namespace2' }])
+    );
+    const selectedSpyEvent = spyOn(component.selected, 'emit');
+    fixture.detectChanges();
+
+    const { smartSearchInput } = selectors(hostDebug);
+
+    smartSearchInput.value = 'name';
+    smartSearchInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const event = new KeyboardEvent('keyup', {
+      key: 'Enter',
+    });
+    smartSearchInput.dispatchEvent(event);
+    fixture.detectChanges();
+    expect(selectedSpyEvent).toHaveBeenCalledWith({
+      namespace: undefined,
+      keyword: 'name',
+    });
+  });
+
+  it('click search', () => {
+    const searchTextUpdateSpy = spyOn(
+      component.searchText,
+      'updateValueAndValidity'
+    );
+    fixture.detectChanges();
+
+    const { smartSearchInput } = selectors(hostDebug);
+
+    smartSearchInput.value = 'name';
+    dispatchInputEvent(smartSearchInput);
+    fixture.detectChanges();
+
+    const { search } = selectors(hostDebug);
+
+    search.click();
+
+    expect(searchTextUpdateSpy).toHaveBeenCalled();
+  });
 });
 
 const selectors = (hostDebug) => {

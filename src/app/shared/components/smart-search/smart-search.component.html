@@ -5,13 +5,20 @@
     [placeholder]="placeholderSearch"
     matInput
     [formControl]="searchText"
-    [matAutocomplete]="auto" />
+    [matAutocomplete]="auto"
+    (input)="updateSearchTxtFieldValue()"
+    (keyup.enter)="selectionHandler()" />
 
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-    <mat-option *ngFor="let item of filteredOptions | async" [value]="item" class="d-flex align-items-start">
-      <div class="d-flex flex-column">
-        <span [attr.data-qa-id]="item">{{ item }}</span>
-      </div>
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    [displayWith]="displayFn"
+    (optionSelected)="autocompleteSelectionHandler($event)">
+    <mat-option
+      *ngFor="let item of filteredOptions | async"
+      style="height: auto"
+      [value]="item.namespace"
+      class="d-flex align-items-start">
+      <app-smart-search-option [namespace]="item.namespace" [definition]="item?.definition"></app-smart-search-option>
     </mat-option>
   </mat-autocomplete>
   <div matSuffix class="d-flex" *ngIf="showButtons()">
