@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { ColorsService } from './colors/colors.service';
-import { ScrollableDirective } from './directives/scrollable/scrollable.directive';
 import { PreventPasteDirective } from './directives/prevent-paste.directive';
 import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
 import { EnrolmentListComponent } from '../routes/enrolment/enrolment-list/enrolment-list.component';
@@ -104,7 +103,6 @@ const MATERIAL_MODULES = [
   ],
   providers: [ColorsService],
   declarations: [
-    ScrollableDirective,
     PreventPasteDirective,
     RetryBtnDirective,
     EnrolmentListComponent,
@@ -124,7 +122,6 @@ const MATERIAL_MODULES = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    ScrollableDirective,
     PreventPasteDirective,
     RetryBtnDirective,
     MinifiedDidViewerDirective,
