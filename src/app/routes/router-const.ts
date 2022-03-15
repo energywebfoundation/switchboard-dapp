@@ -9,6 +9,7 @@ export const RouterConst = {
 
   AssetEnrolment: '/assets/enrolment/',
   MyEnrolments: '/enrolment?selectedTab=1',
+  EnrolmentDetails: 'enrolment/:subject',
 
   ReturnUrl: 'returnUrl'
 }

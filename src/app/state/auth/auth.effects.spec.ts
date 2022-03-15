@@ -261,7 +261,7 @@ describe('AuthEffects', () => {
             reinitializeMetamask: true,
           });
           expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/returnUrl');
+          expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(`/${RouterConst.ReturnUrl}`);
           expect(resultAction).toEqual(
             AuthActions.loginSuccess({ accountInfo })
           );
