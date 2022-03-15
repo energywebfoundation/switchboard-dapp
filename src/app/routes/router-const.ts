@@ -8,5 +8,7 @@ export const RouterConst = {
   Welcome: 'welcome',
 
   AssetEnrolment: '/assets/enrolment/',
-  MyEnrolments: '/enrolment?selectedTab=1'
+  MyEnrolments: '/enrolment?selectedTab=1',
+
+  ReturnUrl: 'returnUrl'
 }
