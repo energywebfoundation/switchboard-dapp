@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
 import { LayoutActions, SettingsSelectors } from '@state';
+import { RouterConst } from '../router-const';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,20 +45,20 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   goToSearchResult(namespace?: string, keyword?: string) {
-    this.route.navigate(['search-result'], {
+    this.route.navigate([RouterConst.SearchResult], {
       queryParams: { keyword, namespace },
     });
   }
 
   goToGovernance() {
-    this.route.navigate(['governance']);
+    this.route.navigate([RouterConst.Governance]);
   }
 
   goToEnrolment() {
-    this.route.navigate(['enrolment']);
+    this.route.navigate([RouterConst.Enrolment]);
   }
 
   goToAssets() {
-    this.route.navigate(['assets']);
+    this.route.navigate([RouterConst.Assets]);
   }
 }
