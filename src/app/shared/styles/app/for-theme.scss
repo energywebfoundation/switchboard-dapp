@@ -485,7 +485,7 @@ mat-label {
 }
 
 .btn-color-primary {
-  color: var(--button-primary-color);
+  color: var(--button-primary-color) !important;
 }
 
 .btn-connect {
