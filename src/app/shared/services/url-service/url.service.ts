@@ -15,7 +15,7 @@ export class UrlService {
     return this.previousUrl.asObservable();
   }
 
-  get current() {
+  current() {
     return this.currentUrl.asObservable();
   }
 
