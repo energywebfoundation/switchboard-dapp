@@ -10,7 +10,7 @@
         <div class="d-flex align-items-center justify-content-center w-100">
           <app-smart-search
             class="search-field px-0 px-md-2 pb-0 py-md-2"
-            (selected)="search($event.namespace, $event.keyword)"
+            (selected)="goToSearchResult($event.namespace, $event.keyword)"
             [searchBy]="searchBy()"
             placeholderSearch="Search for any organization or application"></app-smart-search>
         </div>

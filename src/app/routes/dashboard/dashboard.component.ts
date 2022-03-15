@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, take } from 'rxjs/operators';
@@ -50,7 +49,7 @@ export class DashboardComponent implements AfterViewInit {
     return [SearchType.App, SearchType.Org];
   }
 
-  search(namespace?: string, keyword?: string) {
+  goToSearchResult(namespace?: string, keyword?: string) {
     this.route.navigate(['search-result'], {
       queryParams: { keyword, namespace },
     });
