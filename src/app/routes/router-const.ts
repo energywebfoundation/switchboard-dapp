@@ -5,5 +5,8 @@ export const RouterConst = {
   Governance: 'governance',
   SearchResult: 'search-result',
   Enrol: 'enrol',
-  Welcome: 'welcome'
+  Welcome: 'welcome',
+
+  AssetEnrolment: '/assets/enrolment/',
+  MyEnrolments: '/enrolment?selectedTab=1'
 }
