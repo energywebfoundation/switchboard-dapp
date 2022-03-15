@@ -31,7 +31,8 @@
     "e2e": "ng e2e",
     "stedin:flags": "node scripts/stedin.js",
     "analyze": "ng build -- --statsJson=true && webpack-bundle-analyzer dist/stats.json",
-    "extract-i18n": "ng extract-i18n --output-path src/locale --format=json"
+    "extract-i18n": "ng extract-i18n --output-path src/locale --format=json",
+    "prettier": "npx prettier --check ."
   },
   "dependencies": {
     "@angular/animations": "13.2.2",
