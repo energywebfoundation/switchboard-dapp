@@ -13,9 +13,9 @@ export class DidFormatMinifierPipe implements PipeTransform {
     }
 
     const lastColonIndex = value.lastIndexOf(':');
-    return `${value.substr(
+    return `${value.substring(
       0,
       lastColonIndex + CHARACTERS_AFTER_LAST_COLON
-    )}...${value.substr(value.length - LAST_CHARACTERS)}`;
+    )}...${value.substring(value.length - LAST_CHARACTERS)}`;
   }
 }
