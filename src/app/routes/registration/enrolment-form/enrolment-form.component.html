@@ -1,47 +1,4 @@
 <form role="form" [formGroup]="enrolmentForm">
-  <div formGroupName="registrationTypes" *ngIf="showRegistrationTypes">
-    <mat-checkbox class="pl-3 default-checkbox" data-qa-id="on-chain" formControlName="onChain" [ngStyle]="txtboxColor">
-      <span
-        class="mb-3 d-inline-flex"
-        [ngStyle]="txtColor"
-        matTooltip="A role recorded in a smart contract that can be read by other smart contracts">
-        Public
-      </span>
-    </mat-checkbox>
-    <mat-checkbox
-      *ngIf="showOffChain"
-      class="pl-3 default-checkbox"
-      data-qa-id="off-chain"
-      formControlName="offChain"
-      [ngStyle]="txtboxColor">
-      <span
-        class="mb-3 d-inline-flex"
-        [ngStyle]="txtColor"
-        matTooltip="A JWT verifiable credential that can be presented">
-        Private
-      </span>
-    </mat-checkbox>
-
-    <!-- On-chain, warning -->
-    <app-report-problem *ngIf="isOnChainChecked">
-      <span [ngStyle]="txtColor">
-        Public credential will be included in the blockchain history once the issuer approves the request.
-      </span>
-    </app-report-problem>
-
-    <mat-error
-      *ngIf="registrationTypesGroup.hasError('notEnoughCheckboxChecked') && showOffChain"
-      data-qa-id="not-enough-checkbox-checked">
-      You need to pick at least one option.
-    </mat-error>
-
-    <mat-error
-      *ngIf="registrationTypesGroup.hasError('notEnoughCheckboxChecked') && !showOffChain"
-      data-qa-id="not-enough-checkbox-checked">
-      You need to select Public option.
-    </mat-error>
-  </div>
-
   <ng-container *ngIf="fieldList.length">
     <div class="row">
       <!-- START: Dynamic Form Fields -->

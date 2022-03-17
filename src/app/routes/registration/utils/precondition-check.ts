@@ -7,7 +7,7 @@ export interface EnrolmentPrecondition {
 }
 
 export interface PreconditionCheck {
-  namespace: string;
+  conditionNamespace: string;
   status: RolePreconditionType;
 }
 
@@ -15,14 +15,12 @@ export const preconditionCheck = (
   preconditionList: EnrolmentPrecondition[],
   roleClaimList: Claim[]
 ): [boolean, PreconditionCheck[]] => {
-  let retVal = true;
-  let rolePreconditionList: PreconditionCheck[];
+  const rolePreconditionList: PreconditionCheck[] = [];
   if (preconditionList && preconditionList.length) {
     for (const precondition of preconditionList) {
       switch (precondition.type) {
         case PreconditionType.Role:
           // Check for Role Conditions
-          rolePreconditionList = [];
 
           // eslint-disable-next-line no-case-declarations
           const conditions = precondition.conditions;
@@ -33,13 +31,9 @@ export const preconditionCheck = (
                 roleClaimList
               );
               rolePreconditionList.push({
-                namespace: roleCondition,
+                conditionNamespace: roleCondition,
                 status,
               });
-
-              if (status !== RolePreconditionType.SYNCED) {
-                retVal = false;
-              }
             }
           }
           break;
@@ -47,7 +41,12 @@ export const preconditionCheck = (
     }
   }
 
-  return [retVal, rolePreconditionList];
+  return [
+    rolePreconditionList?.every(
+      (item) => item.status === RolePreconditionType.SYNCED
+    ),
+    rolePreconditionList,
+  ];
 };
 
 const getRoleConditionStatus = (namespace: string, roleList) => {

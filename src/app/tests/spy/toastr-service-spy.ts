@@ -1,4 +1,4 @@
-export const toastrSpy = jasmine.createSpyObj('ToastrService', [
+export const toastrSpy = jasmine.createSpyObj('SwitchboardToastrService', [
   'success',
   'error',
 ]);

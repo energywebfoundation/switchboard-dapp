@@ -24,7 +24,6 @@ import swal from 'sweetalert';
 import {
   EnrolmentField,
   EnrolmentSubmission,
-  PredefinedRegistrationTypes,
 } from '../enrolment-form/enrolment-form.component';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { Store } from '@ngrx/store';
@@ -51,7 +50,7 @@ const SwalButtons = {
   ENROL_FOR_MYSELF: 'enrolForSelf',
 };
 
-interface FormClaim extends Claim {
+export interface FormClaim extends Claim {
   isSynced?: boolean;
   claimTypeVersion: string;
 }
@@ -83,13 +82,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public txtboxColor = {};
   public isLoggedIn = false;
   public isPrecheckSuccess = false;
-  public predefinedRegTypes: PredefinedRegistrationTypes;
   isLoading = false;
   rolePreconditionList: PreconditionCheck[] = [];
   public roleType: string;
   experimentalEnabled: boolean;
 
-  private userRoleList: FormClaim[];
+  userRoleList: FormClaim[];
   private namespace: string;
   private callbackUrl: string;
   private defaultRole: string;
@@ -166,7 +164,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         }
 
         this.setUrlParams(params);
-        this.setPredefinedRegistrationTypes(params);
         this.resetData();
 
         try {
@@ -217,13 +214,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       await this.iamService.domainsService.registrationTypesOfRoles(
         this.roleList.map((role) => role.namespace)
       );
-  }
-
-  private setPredefinedRegistrationTypes(params) {
-    this.predefinedRegTypes = {
-      onChain: params?.onchain === 'true',
-      offChain: params?.offchain === 'true',
-    };
   }
 
   roleTypeSelected(e: any) {
