@@ -7,6 +7,10 @@ import {
 } from 'iam-client-lib';
 import { ClaimsFacadeService } from '../claims-facade/claims-facade.service';
 
+/**
+  @deprecated
+ Use PublishRoleService instead.
+ */
 @Injectable({
   providedIn: 'root',
 })

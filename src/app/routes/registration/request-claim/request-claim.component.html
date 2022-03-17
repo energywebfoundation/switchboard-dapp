@@ -87,13 +87,13 @@
 
       <!-- PRE-CHECK Error Messages-->
       <ng-container *ngIf="!isPrecheckSuccess && rolePreconditionList?.length">
-        <app-role-precondition-list [preconditionList]="rolePreconditionList"></app-role-precondition-list>
+        <app-role-precondition-list
+          [preconditionList]="rolePreconditionList"
+          [userRoles]="userRoleList"></app-role-precondition-list>
       </ng-container>
       <app-enrolment-form
         *ngIf="isPrecheckSuccess"
         [namespaceRegistrationRoles]="getNamespaceRegistrationRoles()"
-        [predefinedRegTypes]="predefinedRegTypes"
-        [showOffChain]="experimentalEnabled"
         [fieldList]="fieldList"
         [disabledSubmit]="isSubmitDisabled()"
         [txtboxColor]="txtboxColor"
