@@ -11,13 +11,13 @@
       title="Notification"
       (clear)="clearHandler()"
       [showClear]="areNewNotifications$ | async"></app-notification-header>
-    <ng-container *ngIf="notificationList$ | async as notificationList; else noNotifications">
-      <ng-container>
+    <ng-container *ngIf="notificationList$ | async as notificationList">
+      <ng-container *ngIf="notificationList.length > 0; else noNotifications">
         <div class="list-group-item list-group-item-action border-0">
           <div class="media d-flex align-items-center notification-item" *ngFor="let item of notificationList">
             <div class="notification-icon align-self-start mr-2 ngx-toastr" [ngClass]="item.type"></div>
             <div class="media-body d-flex flex-row justify-content-between align-items-center">
-              <p class="m-0 pr-2 color-white" [ngClass]="{ 'font-weight-bold': item.isNew }">
+              <p class="m-0 pr-2 default-color" [ngClass]="{ 'font-weight-bold': item.isNew }">
                 {{ item.message }}
               </p>
             </div>
@@ -25,10 +25,10 @@
         </div>
       </ng-container>
     </ng-container>
+    <ng-template #noNotifications>
+      <div class="d-flex align-items-center justify-content-center no-notif">
+        <div class="default-color no-record mt-3 mb-4"><i>No Notifications</i></div>
+      </div>
+    </ng-template>
   </app-notification-container>
-  <ng-template #noNotifications>
-    <div class="d-flex align-items-center justify-content-center no-notif">
-      <div class="color-white no-record mt-3 mb-4"><i>No Notifications</i></div>
-    </div>
-  </ng-template>
 </mat-menu>
