@@ -129,7 +129,7 @@ export class PublishRoleService {
         registrationTypes: element.registrationTypes,
         claim: {
           token: element.issuedToken,
-          claimType: element.claimType
+          claimType: element.claimType,
         },
       })
       .pipe(

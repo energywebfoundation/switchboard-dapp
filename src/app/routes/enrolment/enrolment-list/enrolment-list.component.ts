@@ -253,7 +253,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       .addToDidDoc({
         issuedToken: element.issuedToken,
         registrationTypes: element.registrationTypes,
-        claimType: element.claimType
+        claimType: element.claimType,
       })
       .pipe(truthy())
       .subscribe(async () => await this.getList(this.rejected, this.accepted));
