@@ -54,7 +54,7 @@ describe('PublishRoleService', () => {
 
     it('should return true', (done) => {
       claimsFacadeSpy.publishPublicClaim.and.returnValue(of(true));
-      service.addToDidDoc({ issuedToken: 'some-token' }).subscribe((v) => {
+      service.addToDidDoc({ issuedToken: 'some-token', registrationTypes: [] }).subscribe((v) => {
         expect(toastrSpy.success).toHaveBeenCalled();
         expect(notifSpy.decreasePendingDidDocSyncCount).toHaveBeenCalled();
         expect(v).toBeTrue();
@@ -64,7 +64,7 @@ describe('PublishRoleService', () => {
 
     it('should return false', (done) => {
       claimsFacadeSpy.publishPublicClaim.and.returnValue(of(undefined));
-      service.addToDidDoc({ issuedToken: 'some-token' }).subscribe((v) => {
+      service.addToDidDoc({ issuedToken: 'some-token', registrationTypes:[] }).subscribe((v) => {
         expect(toastrSpy.warning).toHaveBeenCalled();
         expect(v).toBeFalse();
         done();

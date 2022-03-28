@@ -250,7 +250,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
   addToDidDoc(element: EnrolmentClaim) {
     this.publishRoleService
-      .addToDidDoc({ issuedToken: element.issuedToken })
+      .addToDidDoc({ issuedToken: element.issuedToken, registrationTypes: element.registrationTypes })
       .pipe(truthy())
       .subscribe(async () => await this.getList(this.rejected, this.accepted));
   }
