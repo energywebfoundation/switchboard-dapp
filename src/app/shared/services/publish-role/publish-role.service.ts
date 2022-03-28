@@ -32,7 +32,10 @@ export class PublishRoleService {
     private claimsFacade: ClaimsFacadeService
   ) {}
 
-  addToDidDoc(element: { issuedToken: string, registrationTypes: RegistrationTypes[] }) {
+  addToDidDoc(element: {
+    issuedToken: string;
+    registrationTypes: RegistrationTypes[];
+  }) {
     return this.openConfirmationDialog({
       header: 'Publish credential to my DID document',
       svgIcon: 'sync-did-icon',
@@ -111,7 +114,10 @@ export class PublishRoleService {
       .pipe(truthy());
   }
 
-  private syncClaimToDidDoc(element: { issuedToken: string, registrationTypes: RegistrationTypes[] }) {
+  private syncClaimToDidDoc(element: {
+    issuedToken: string;
+    registrationTypes: RegistrationTypes[];
+  }) {
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.',
       CancelButton.ENABLED
