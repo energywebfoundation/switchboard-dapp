@@ -30,6 +30,7 @@ export class RolePreconditionListComponent implements OnInit {
 
   ngOnInit() {
     this.createPreconditionList();
+    console.log(this.list);
   }
 
   isApproved(status: RolePreconditionType): boolean {

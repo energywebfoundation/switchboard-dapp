@@ -35,6 +35,7 @@ export class PublishRoleService {
   addToDidDoc(element: {
     issuedToken: string;
     registrationTypes: RegistrationTypes[];
+    claimType: string;
   }) {
     return this.openConfirmationDialog({
       header: 'Publish credential to my DID document',
@@ -117,6 +118,7 @@ export class PublishRoleService {
   private syncClaimToDidDoc(element: {
     issuedToken: string;
     registrationTypes: RegistrationTypes[];
+    claimType: string;
   }) {
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.',
@@ -127,6 +129,7 @@ export class PublishRoleService {
         registrationTypes: element.registrationTypes,
         claim: {
           token: element.issuedToken,
+          claimType: element.claimType
         },
       })
       .pipe(
