@@ -4,10 +4,10 @@
   [attr.data-qa-id]="title"
   [class.card-icon]="!comingSoon">
   <div *ngIf="comingSoon" class="position-fixed d-flex align-items-center text-center">
-    <h3 class="color-white opacity-50">Coming Soon</h3>
+    <h3 class="default-color opacity-50">Coming Soon</h3>
   </div>
   <img class="img-dashboard mt-4 m-3 m-lg-4" [src]="iconUrl" [class.opacity-01]="comingSoon" [alt]="title + 'image'" />
-  <h4 class="color-white mt-3 mb-4 my-lg-4" [class.opacity-01]="comingSoon">
+  <h4 class="default-color mt-3 mb-4 my-lg-4" [class.opacity-01]="comingSoon">
     {{ title }}
   </h4>
 </div>

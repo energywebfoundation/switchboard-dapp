@@ -171,7 +171,6 @@ export class EnrolmentComponent implements AfterViewInit {
   private initDefaultMyEnrolments() {
     if (this.enrolmentTabGroup) {
       this.enrolmentTabGroup.selectedIndex = 1;
-      this.notificationService.setZeroToPendingDidDocSyncCount();
     }
   }
 

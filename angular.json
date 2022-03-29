@@ -13,6 +13,15 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "std": {
+            "baseHref": "",
+            "translation": "src/locale/messages.std.json"
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
@@ -46,12 +55,12 @@
                 "inject": false
               },
               {
-                "input": "src/app/shared/styles/themes/theme-b.scss",
+                "input": "src/app/shared/styles/themes/default.scss",
                 "bundleName": "default",
                 "inject": false
               },
               {
-                "input": "src/app/shared/styles/themes/theme-c.scss",
+                "input": "src/app/shared/styles/themes/stedin.scss",
                 "bundleName": "stedin",
                 "inject": false
               }
@@ -65,7 +74,8 @@
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "i18nMissingTranslation": "error"
           },
           "configurations": {
             "production": {
@@ -125,6 +135,11 @@
               "ngswConfigPath": "ngsw-config.json"
             },
             "stedin": {
+              "assets": ["src/assets"],
+              "index": {
+                "input": "src/index.stedin.html",
+                "output": "index.html"
+              },
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -151,7 +166,8 @@
                 }
               ],
               "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json"
+              "ngswConfigPath": "ngsw-config.json",
+              "localize": ["std"]
             },
             "development": {
               "budgets": [
@@ -180,7 +196,7 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "@angular-builders/custom-webpack:extract-i18n",
           "options": {
             "browserTarget": "switchboard-dapp:build"
           }

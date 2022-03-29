@@ -1,3 +1,3 @@
-export interface IDialogData {
+export interface SelectAssetDialogData {
   assetDiD?: string;
 }

@@ -9,7 +9,7 @@
 
 <div mat-dialog-content>
   <ng-container *ngIf="verificationsAmount > 0; else emptyList">
-    <div class="label color-white ml-1 pt-3 pl-2">{{ verificationsAmount }} Verification Method(s)</div>
+    <div class="label default-color ml-1 pt-3 pl-2">{{ verificationsAmount }} Verification Method(s)</div>
     <div class="history-list pt-2">
       <div class="history-list-item mb-3 p-2" *ngFor="let publicKey of dataSource">
         <div class="d-flex flex-row justify-content-between align-items-center px-2">

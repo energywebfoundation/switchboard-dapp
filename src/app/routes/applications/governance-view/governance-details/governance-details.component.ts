@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NamespaceType, PreconditionType } from 'iam-client-lib';
+import {
+  IFieldDefinition,
+  NamespaceType,
+  PreconditionType,
+} from 'iam-client-lib';
 import { ListType } from '../../../../shared/constants/shared-constants';
 import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { IssuerType } from '../../new-role/models/issuer-type.enum';
-import { IFieldDefinition } from '@energyweb/iam-contracts';
 
 @Component({
   selector: 'app-governance-details',

@@ -12,8 +12,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ConfigService } from './shared/services/config.service';
-import { MenuService } from './core/menu/menu.service';
-import { menu } from './routes/menu';
 import { StoreRootModule } from './state/store-root.module';
 import { EnvServiceProvider } from './shared/services/env/env.service.factory';
 import { SENTRY_PROVIDERS } from './shared/services/sentry/sentry.service';
@@ -49,8 +47,4 @@ const providers: Provider[] = [
   providers: [...providers, ...SENTRY_PROVIDERS],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-  constructor(public menuService: MenuService) {
-    menuService.addMenu(menu);
-  }
-}
+export class AppModule {}

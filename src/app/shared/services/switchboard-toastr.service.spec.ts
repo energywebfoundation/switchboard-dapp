@@ -24,7 +24,7 @@ describe('SwitchboardToastrService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should be run reset', (done) => {
+  it('should clean list elements', (done) => {
     service.success('test');
     service.reset();
     service.getMessageList().subscribe((list) => {
@@ -33,21 +33,21 @@ describe('SwitchboardToastrService', () => {
     });
   });
 
-  it('should be run readAllItems', (done) => {
+  it('should mark all items as read', (done) => {
     service.success('test');
     const expectedResult = {
       message: 'test',
       type: 'toast-success',
       isNew: false,
     };
-    service.readAllItems();
+    service.readAll();
     service.getMessageList().subscribe((list) => {
       expect(list).toEqual([expectedResult]);
       done();
     });
   });
 
-  it('should be run show', () => {
+  it('should display toastr message', () => {
     const message = 'message test';
     const title = 'title test';
     const override = {};
@@ -62,7 +62,7 @@ describe('SwitchboardToastrService', () => {
     );
   });
 
-  it('should be run error', () => {
+  it('should display error toastr message', () => {
     const message = 'message test';
     const title = 'title test';
     const override = {};
@@ -71,7 +71,7 @@ describe('SwitchboardToastrService', () => {
     expect(toastrSpyObj.error).toHaveBeenCalledWith(message, title, override);
   });
 
-  it('should be run info', () => {
+  it('should display info toastr message', () => {
     const message = 'message test';
     const title = 'title test';
     const override = {};
@@ -80,7 +80,7 @@ describe('SwitchboardToastrService', () => {
     expect(toastrSpyObj.info).toHaveBeenCalledWith(message, title, override);
   });
 
-  it('should be run success', () => {
+  it('should display succcess toastr message', () => {
     const message = 'message test';
     const title = 'title test';
     const override = {};
@@ -89,12 +89,48 @@ describe('SwitchboardToastrService', () => {
     expect(toastrSpyObj.success).toHaveBeenCalledWith(message, title, override);
   });
 
-  it('should be run warning', () => {
+  it('should display warning toastr message', () => {
     const message = 'message test';
     const title = 'title test';
     const override = {};
 
     service.warning(message, title, override);
     expect(toastrSpyObj.warning).toHaveBeenCalledWith(message, title, override);
+  });
+
+  it('should get 0 when there are no new items', (done) => {
+    service.newMessagesAmount().subscribe((v) => {
+      expect(v).toBe(0);
+      done();
+    });
+  });
+
+  it('should get 1 when there is 1 new item', (done) => {
+    service.success('Message');
+
+    service.newMessagesAmount().subscribe((v) => {
+      expect(v).toBe(1);
+      done();
+    });
+  });
+
+  it('should return true when there are new elements', (done) => {
+    service.success('Message');
+
+    service.areNewNotifications().subscribe((v) => {
+      expect(v).toBeTrue();
+      done();
+    });
+  });
+
+  it('should reset notifications after destroying service', (done) => {
+    service.success('Message');
+
+    service.ngOnDestroy();
+
+    service.getMessageList().subscribe((v) => {
+      expect(v.length).toBe(0);
+      done();
+    });
   });
 });

@@ -1,0 +1,31 @@
+a:hover {
+  background-color: initial;
+}
+
+:host ::ng-deep .mat-menu-content:not(:empty) {
+  padding: 0 !important;
+}
+
+.mt-2 {
+  margin-top: 0.6rem !important;
+}
+
+.notification-item {
+  padding: 10px 0;
+}
+
+.notification-icon {
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  border-radius: 100%;
+}
+
+.nav-link {
+  padding: 1.1rem 0.95rem;
+  font-size: 0.85rem;
+}
+
+.no-notif {
+  width: 180px;
+}

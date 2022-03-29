@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ClaimData, NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import { NamespaceType, RegistrationTypes } from 'iam-client-lib';
 import { take, takeUntil } from 'rxjs/operators';
 import { combineLatest, of, Subject } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
@@ -20,6 +20,8 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { truthy } from '@operators';
 import { Store } from '@ngrx/store';
 import { SettingsSelectors } from '@state';
+import { EnrolmentListService } from '../../../shared/services/enrolment-list/enrolment-list.service';
+import { EnrolmentClaim } from '../models/enrolment-claim.interface';
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
@@ -45,14 +47,14 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   ListType = EnrolmentListType;
-  dataSource = new MatTableDataSource([]);
+  dataSource = new MatTableDataSource<EnrolmentClaim>([]);
   displayedColumns: string[];
   dynamicAccepted: boolean;
   dynamicRejected: boolean;
 
   private _subscription$ = new Subject();
   private _iamSubscriptionId: number;
-  private _shadowList = [];
+  private _shadowList: EnrolmentClaim[] = [];
 
   constructor(
     private loadingService: LoadingService,
@@ -60,7 +62,8 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private toastr: SwitchboardToastrService,
     private notifService: NotificationService,
-    private store: Store
+    private store: Store,
+    private enrolmentListService: EnrolmentListService
   ) {}
 
   isAsset(element) {
@@ -182,7 +185,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         }
 
         if (this.listType !== EnrolmentListType.ISSUER) {
-          await this.appendDidDocSyncStatus(list);
+          list = await this.enrolmentListService.appendDidDocSyncStatus(list);
         }
       }
     } catch (e) {
@@ -219,28 +222,25 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     return item;
   }
 
-  isAccepted(element) {
+  isAccepted(element: EnrolmentClaim) {
     return element?.isAccepted;
   }
 
-  isSynced(element) {
+  isSynced(element: EnrolmentClaim) {
     return element?.isSynced;
   }
 
-  isRejected(element) {
+  isRejected(element: EnrolmentClaim) {
     return !element?.isAccepted && element?.isRejected;
   }
 
-  isPending(element) {
+  isPending(element: EnrolmentClaim) {
     return !element?.isAccepted && !element?.isRejected;
   }
 
-  isPendingSync(element) {
+  isPendingSync(element: EnrolmentClaim) {
     return (
-      !this.viewedByIssuer() &&
-      !this.isSynced(element) &&
-      this.isOffChain(element) &&
-      !this.isOnlyOnChain(element)
+      !this.viewedByIssuer() && this.enrolmentListService.isPendingSync(element)
     );
   }
 
@@ -248,18 +248,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     return this.listType === EnrolmentListType.ISSUER;
   }
 
-  isOnlyOnChain(element) {
-    return (
-      element.registrationTypes.length === 1 &&
-      element.registrationTypes.includes(RegistrationTypes.OnChain)
-    );
-  }
-
-  isOffChain(element) {
-    return element.registrationTypes.includes(RegistrationTypes.OffChain);
-  }
-
-  view(element: any) {
+  view(element: EnrolmentClaim) {
     this.dialog
       .open(ViewRequestsComponent, {
         width: '600px',
@@ -277,7 +266,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       });
   }
 
-  async addToDidDoc(element: any) {
+  async addToDidDoc(element: EnrolmentClaim) {
     this.dialog
       .open<ConfirmationDialogComponent, ConfirmationDialogData>(
         ConfirmationDialogComponent,
@@ -299,7 +288,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       .subscribe(() => this.syncClaimToDidDoc(element));
   }
 
-  async addToClaimManager(element: any) {
+  async addToClaimManager(element: EnrolmentClaim) {
     this.dialog
       .open<ConfirmationDialogComponent, ConfirmationDialogData>(
         ConfirmationDialogComponent,
@@ -321,7 +310,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       .subscribe(() => this.syncToClaimManager(element));
   }
 
-  async cancelClaimRequest(element: any) {
+  async cancelClaimRequest(element: EnrolmentClaim) {
     const dialogRef = this.dialog
       .open(ConfirmationDialogComponent, {
         width: '400px',
@@ -407,37 +396,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async appendDidDocSyncStatus(list: any[]) {
-    // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    const did =
-      this.listType === EnrolmentListType.ASSET
-        ? { did: this.subject }
-        : undefined;
-    const claims: ClaimData[] = (
-      await this.iamService.claimsService.getUserClaims(did)
-    ).filter((item: ClaimData) => {
-      if (item && item.claimType) {
-        const arr = item.claimType.split('.');
-        if (arr.length > 1 && arr[1] === NamespaceType.Role) {
-          return true;
-        }
-        return false;
-      }
-      return false;
-    });
-
-    if (claims && claims.length) {
-      claims.forEach((item: ClaimData) => {
-        for (let i = 0; i < list.length; i++) {
-          if (item.claimType === list[i].claimType) {
-            list[i].isSynced = true;
-          }
-        }
-      });
-    }
-  }
-
-  private async syncClaimToDidDoc(element: any) {
+  private async syncClaimToDidDoc(element: EnrolmentClaim) {
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.',
       CancelButton.ENABLED
@@ -468,13 +427,12 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
-  private async syncToClaimManager(element: any) {
+  private async syncToClaimManager(element) {
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.',
       CancelButton.ENABLED
     );
 
-    console.log(element);
     try {
       await this.iamService.claimsService.registerOnchain(element);
 
@@ -488,7 +446,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
-  private setDisplayedColumns(isExperimental) {
+  private setDisplayedColumns(isExperimental: boolean) {
     if (isExperimental) {
       return [
         'requestDate',

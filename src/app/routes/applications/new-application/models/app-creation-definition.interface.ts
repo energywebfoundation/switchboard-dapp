@@ -1,4 +1,4 @@
-import { IAppDefinition } from '@energyweb/iam-contracts';
+import { IAppDefinition } from 'iam-client-lib';
 
 export interface AppCreationDefinition {
   orgNamespace: string;
