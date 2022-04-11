@@ -63,12 +63,12 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
   @Input() showRegistrationTypes = true;
 
-  @Input() set fieldList(list: IRoleDefinition['fields']) {
+  @Input() set fieldList(list: IRoleDefinition['requestorFields']) {
     this.fields = list;
     this.updateEnrolmentForm(new FormArray(this.createControls(list)));
   }
 
-  get fieldList(): IRoleDefinition['fields'] {
+  get fieldList(): IRoleDefinition['requestorFields'] {
     return this.fields;
   }
 

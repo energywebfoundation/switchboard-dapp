@@ -666,10 +666,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             .map((role) => {
               this.selectedRole = role.definition;
               this.selectedNamespace = role.namespace;
-              this.fieldList =
-                this.selectedRole?.requestorFields ||
-                this.selectedRole?.fields ||
-                [];
+              this.fieldList = this.selectedRole?.requestorFields || [];
               this.roleTypeForm.get('roleType').setValue(role);
 
               // Init Preconditions
