@@ -56,20 +56,17 @@ export class ClaimsFacadeService {
   }
 
   publishPublicClaim({
-    token,
     registrationTypes,
     claim,
   }: {
-    token?: string;
     registrationTypes?: RegistrationTypes[];
     claim: {
-      token?: string;
-      claimType?: string;
+      token: string;
+      claimType: string;
     };
   }): Observable<string | undefined> {
     return from(
       this.iamService.claimsService.publishPublicClaim({
-        token,
         registrationTypes,
         claim,
       })
