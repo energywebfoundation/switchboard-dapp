@@ -53,8 +53,12 @@ export class NewIssueVcComponent implements OnInit {
   private setPreconditions(): void {
     [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(
       this.selectedRoleDefinition.enrolmentPreconditions,
-      this.issuanceVcService.assetClaims
+      this.getClaims()
     );
+  }
+
+  getClaims() {
+    return this.issuanceVcService.assetClaims;
   }
 
   getFormSubject() {

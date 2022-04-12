@@ -4,17 +4,9 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnInit,
   Output,
 } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { requireCheckboxesToBeCheckedValidator } from '../../../utils/validators/require-checkboxes-to-be-checked.validator';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IRoleDefinition, RegistrationTypes } from 'iam-client-lib';
 import { KeyValue } from '@angular/common';
 
@@ -47,21 +39,13 @@ export interface PredefinedRegistrationTypes {
   templateUrl: './enrolment-form.component.html',
   styleUrls: ['./enrolment-form.component.scss'],
 })
-export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
+export class EnrolmentFormComponent implements EnrolmentForm {
   enrolmentForm: FormGroup = new FormGroup({
-    registrationTypes: new FormGroup(
-      {
-        offChain: new FormControl({ value: false, disabled: false }),
-        onChain: new FormControl({ value: true, disabled: false }),
-      },
-      requireCheckboxesToBeCheckedValidator()
-    ),
     fields: new FormArray([]),
   });
 
   @Input() showSubmit = true;
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
-  @Input() showRegistrationTypes = true;
 
   @Input() set fieldList(list: IRoleDefinition['requestorFields']) {
     this.fields = list;
@@ -72,10 +56,6 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
     return this.fields;
   }
 
-  @Input() showOffChain: boolean;
-
-  @Input() predefinedRegTypes: PredefinedRegistrationTypes;
-
   @Input() txtboxColor;
   @Input() txtColor;
   @Input() btnColor;
@@ -85,10 +65,6 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
   private fields;
 
   constructor(private cdRef: ChangeDetectorRef) {}
-
-  ngOnInit() {
-    this.setPredefinedFormatForCheckboxes();
-  }
 
   isValid() {
     return this.enrolmentForm.valid;
@@ -110,16 +86,7 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
   }
 
   getRegistrationTypes(): RegistrationTypes[] {
-    const result = [];
-    if (this.registrationTypesGroup.get('offChain').value) {
-      result.push(RegistrationTypes.OffChain);
-    }
-
-    if (this.registrationTypesGroup.get('onChain').value) {
-      result.push(RegistrationTypes.OnChain);
-    }
-
-    return result;
+    return [RegistrationTypes.OffChain, RegistrationTypes.OnChain];
   }
 
   private buildEnrolmentFormFields() {
@@ -133,15 +100,6 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
   private updateEnrolmentForm(formArray: FormArray) {
     this.enrolmentForm.removeControl('fields');
     this.enrolmentForm.registerControl('fields', formArray);
-    this.registrationTypesGroup.reset({
-      offChain: { value: false, disabled: false },
-      onChain: {
-        value: true,
-        disabled: !this.namespaceRegistrationRoles?.has(
-          RegistrationTypes.OnChain
-        ),
-      },
-    });
     this.cdRef.detectChanges();
   }
 
@@ -149,14 +107,6 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
     return (this.enrolmentForm?.get('fields') as FormArray)?.controls[
       id
     ] as FormControl;
-  }
-
-  get registrationTypesGroup(): AbstractControl {
-    return this.enrolmentForm.get('registrationTypes');
-  }
-
-  get isOnChainChecked() {
-    return this.registrationTypesGroup.get('onChain').value;
   }
 
   private createControls(list) {
@@ -216,23 +166,5 @@ export class EnrolmentFormComponent implements OnInit, EnrolmentForm {
     }
 
     return validations;
-  }
-
-  private setPredefinedFormatForCheckboxes(): void {
-    if (!this.predefinedRegTypes) {
-      return;
-    }
-    if (this.predefinedRegTypes.onChain || this.predefinedRegTypes.offChain) {
-      this.registrationTypesGroup.reset({
-        offChain: {
-          value: Boolean(this.predefinedRegTypes.offChain),
-          disabled: true,
-        },
-        onChain: {
-          value: Boolean(this.predefinedRegTypes.onChain),
-          disabled: true,
-        },
-      });
-    }
   }
 }
