@@ -14,10 +14,11 @@ import { LoginService } from '../../shared/services/login/login.service';
 import { logoutWithRedirectUrl } from '../../state/auth/auth.actions';
 import { DidBookComponent } from '../../modules/did-book/components/did-book/did-book.component';
 import { DidBookService } from '../../modules/did-book/services/did-book.service';
-import { AuthSelectors, SettingsActions, SettingsSelectors } from '@state';
+import { AuthSelectors, LayoutActions, SettingsActions, SettingsSelectors } from '@state';
 import { truthy } from '@operators';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MessageSubscriptionService } from '../../shared/services/message-subscription/message-subscription.service';
+import { RouterConst } from '../../routes/router-const';
 
 @Component({
   selector: 'app-header',
@@ -100,6 +101,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.didBookService.getList();
         await this.notifService.init();
         await this.messageSubscriptionService.init();
+        this.store.dispatch(LayoutActions.redirect());
       });
 
     this.handleRouterEvents();
@@ -114,7 +116,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe((event: NavigationEnd) => {
         this.loginService.setDeepLink(event.url);
 
-        this.isNavMenuVisible = event.url !== '/dashboard';
+        this.isNavMenuVisible = event.url !== `/${RouterConst.Dashboard}`;
 
         const pathArr = event.url.split('/');
 
