@@ -14,7 +14,12 @@ import { LoginService } from '../../shared/services/login/login.service';
 import { logoutWithRedirectUrl } from '../../state/auth/auth.actions';
 import { DidBookComponent } from '../../modules/did-book/components/did-book/did-book.component';
 import { DidBookService } from '../../modules/did-book/services/did-book.service';
-import { AuthSelectors, LayoutActions, SettingsActions, SettingsSelectors } from '@state';
+import {
+  AuthSelectors,
+  LayoutActions,
+  SettingsActions,
+  SettingsSelectors,
+} from '@state';
 import { truthy } from '@operators';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MessageSubscriptionService } from '../../shared/services/message-subscription/message-subscription.service';
@@ -30,9 +35,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentNav = '';
 
-  assetsOfferedToMeCount: number;
-  pendingApprovalCount: number;
-  pendingSyncToDIDCount: number;
   assetsOfferedToMeCount$ = this.notifService.assetsOfferedToMe;
   pendingApprovalCount$ = this.notifService.pendingApproval;
   pendingSyncToDIDCount$ = this.notifService.pendingDidDocSync;
