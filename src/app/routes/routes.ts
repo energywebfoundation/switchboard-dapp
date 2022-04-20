@@ -42,6 +42,13 @@ export const routes = [
             (m) => m.SearchResultModule
           ),
       },
+      {
+        path: 'vp',
+        loadChildren: () =>
+          import('./verifiable-presentation/verifiable-presentation.module').then(
+            (m) => m.VerifiablePresentationModule
+          ),
+      },
     ],
   },
   {
