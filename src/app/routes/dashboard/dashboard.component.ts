@@ -19,6 +19,7 @@ import { Store } from '@ngrx/store';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
 import { LayoutActions, SettingsSelectors } from '@state';
+import { UrlService } from 'src/app/shared/services/url-service/url.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -48,7 +49,8 @@ export class DashboardComponent implements AfterViewInit {
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService,
     private fb: FormBuilder,
-    private store: Store
+    private store: Store,
+    private urlService: UrlService
   ) {
     // Init Search
     this.searchForm = fb.group({
@@ -62,6 +64,12 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.activeRoute.queryParams.subscribe(async (params: any) => {
+        if (params._oob) {
+            this.goToVerifiablePresentation(params._oob);
+        }
+    }) 
+    
     this.activeRoute.queryParams
       .pipe(
         filter((queryParams) => queryParams?.returnUrl),
@@ -71,8 +79,7 @@ export class DashboardComponent implements AfterViewInit {
       .subscribe((redirectUrl) => {
         this.store.dispatch(LayoutActions.setRedirectUrl({ url: redirectUrl }));
       });
-
-    this.store.dispatch(AuthActions.reinitializeAuth());
+      this.store.dispatch(AuthActions.reinitializeAuth());
   }
 
   private async _filterOrgsAndApps(keyword: any): Promise<any[]> {
@@ -149,6 +156,12 @@ export class DashboardComponent implements AfterViewInit {
 
   goToAssets() {
     this.route.navigate(['assets']);
+  }
+
+  goToVerifiablePresentation(oob: string) {
+    this.route.navigate(['vp'], {
+        queryParams: {_oob: oob},
+      });
   }
 
   clearSearchTxt() {
