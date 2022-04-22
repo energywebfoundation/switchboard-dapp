@@ -1,5 +1,5 @@
 <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-  <app-domain-image [url]="data?.logoUrl" [type]="type" (imageLoaded)="imageEventHandler(false)"></app-domain-image>
+  <app-domain-image [url]="data?.logoUrl" [type]="type" (imageLoaded)="imageEventHandler($event)"></app-domain-image>
   <div class="text-left my-3">
     <div class="label opacity-50 mb-2">{{ type }} Namespace</div>
     <span class="default-color mb-0">

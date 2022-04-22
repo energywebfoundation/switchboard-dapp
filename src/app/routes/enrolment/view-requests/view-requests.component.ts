@@ -87,6 +87,7 @@ export class ViewRequestsComponent implements OnInit {
         subjectAgreement: this.claim.subjectAgreement,
         registrationTypes: this.claim.registrationTypes,
         issuerFields: this.requiredFields?.fieldsData() || [],
+        publishOnChain: false,
       };
 
       await this.iamService.claimsService.issueClaimRequest(req);
