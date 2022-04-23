@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
-import { SearchType } from 'iam-client-lib/dist/src/modules/cacheClient/cacheClient.types';
+import { SearchType } from 'iam-client-lib/dist/src/modules/cache-client/cache-client.types';
 import { from } from 'rxjs';
 
 @Injectable({
