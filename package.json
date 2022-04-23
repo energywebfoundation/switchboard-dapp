@@ -62,7 +62,7 @@
     "bootstrap": "4.3.1",
     "core-js": "3.21.0",
     "hammerjs": "^2.0.8",
-    "iam-client-lib": "^5.1.0-alpha.5",
+    "iam-client-lib": "5.1.0-alpha.14",
     "moment": "2.22.2",
     "ng-qrcode": "6.0.0",
     "ngx-bootstrap": "8.0.0",

@@ -6,6 +6,7 @@ export const RouterConst = {
   SearchResult: 'search-result',
   Enrol: 'enrol',
   Welcome: 'welcome',
+  VerifiablePresentation: 'vp',
 
   AssetEnrolment: '/assets/enrolment/',
   MyEnrolments: '/enrolment?selectedTab=1',
