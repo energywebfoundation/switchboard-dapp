@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   Asset,
   Claim,
+  IFieldDefinition,
   IRoleDefinition,
   NamespaceType,
   RegistrationTypes,
@@ -23,7 +24,6 @@ import swal from 'sweetalert';
 import {
   EnrolmentField,
   EnrolmentSubmission,
-  PredefinedRegistrationTypes,
 } from '../enrolment-form/enrolment-form.component';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { Store } from '@ngrx/store';
@@ -36,7 +36,7 @@ import {
   preconditionCheck,
 } from '../utils/precondition-check';
 import { LoginService } from 'src/app/shared/services/login/login.service';
-import { IFieldDefinition } from 'iam-client-lib';
+import { RouterConst } from '../../router-const';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -50,7 +50,7 @@ const SwalButtons = {
   ENROL_FOR_MYSELF: 'enrolForSelf',
 };
 
-interface FormClaim extends Claim {
+export interface FormClaim extends Claim {
   isSynced?: boolean;
   claimTypeVersion: string;
 }
@@ -82,13 +82,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public txtboxColor = {};
   public isLoggedIn = false;
   public isPrecheckSuccess = false;
-  public predefinedRegTypes: PredefinedRegistrationTypes;
   isLoading = false;
   rolePreconditionList: PreconditionCheck[] = [];
   public roleType: string;
   experimentalEnabled: boolean;
 
-  private userRoleList: FormClaim[];
+  userRoleList: FormClaim[];
   private namespace: string;
   private callbackUrl: string;
   private defaultRole: string;
@@ -165,7 +164,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         }
 
         this.setUrlParams(params);
-        this.setPredefinedRegistrationTypes(params);
         this.resetData();
 
         try {
@@ -216,13 +214,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       await this.iamService.domainsService.registrationTypesOfRoles(
         this.roleList.map((role) => role.namespace)
       );
-  }
-
-  private setPredefinedRegistrationTypes(params) {
-    this.predefinedRegTypes = {
-      onChain: params?.onchain === 'true',
-      offChain: params?.offchain === 'true',
-    };
   }
 
   roleTypeSelected(e: any) {
@@ -324,15 +315,16 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   goToEnrolment() {
     if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], {
+      this.route.navigate([RouterConst.Dashboard], {
         queryParams: {
-          returnUrl: '/assets/enrolment/' + this.roleTypeForm.value.assetDid,
+          returnUrl:
+            RouterConst.AssetEnrolment + this.roleTypeForm.value.assetDid,
         },
       });
     } else {
       // Navigate to My Enrolments Page
-      this.route.navigate(['dashboard'], {
-        queryParams: { returnUrl: '/enrolment?selectedTab=1' },
+      this.route.navigate([RouterConst.Dashboard], {
+        queryParams: { returnUrl: RouterConst.MyEnrolments },
       });
     }
   }
@@ -445,16 +437,16 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             location.href = this.callbackUrl;
           } else if (this.roleTypeForm.value.enrolFor === EnrolForType.ASSET) {
             // Navigate to My Enrolments Page
-            this.route.navigate(['dashboard'], {
+            this.route.navigate([RouterConst.Dashboard], {
               queryParams: {
                 returnUrl:
-                  '/assets/enrolment/' + this.roleTypeForm.value.assetDid,
+                  RouterConst.AssetEnrolment + this.roleTypeForm.value.assetDid,
               },
             });
           } else {
             // Navigate to My Enrolments Page
-            this.route.navigate(['dashboard'], {
-              queryParams: { returnUrl: '/enrolment?selectedTab=1' },
+            this.route.navigate([RouterConst.Dashboard], {
+              queryParams: { returnUrl: RouterConst.MyEnrolments },
             });
           }
       }
@@ -664,10 +656,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             .map((role) => {
               this.selectedRole = role.definition;
               this.selectedNamespace = role.namespace;
-              this.fieldList =
-                this.selectedRole?.requestorFields ||
-                this.selectedRole?.fields ||
-                [];
+              this.fieldList = this.selectedRole?.requestorFields || [];
               this.roleTypeForm.get('roleType').setValue(role);
 
               // Init Preconditions

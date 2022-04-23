@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import { NamespaceType } from 'iam-client-lib';
 import { take, takeUntil } from 'rxjs/operators';
 import { combineLatest, of, Subject } from 'rxjs';
-import { CancelButton } from '../../../layout/loading/loading.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { NotificationService } from '../../../shared/services/notification.service';
-import {
-  ConfirmationDialogComponent,
-  ConfirmationDialogData,
-} from '../../widgets/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewRequestsComponent } from '../view-requests/view-requests.component';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,7 +16,8 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 import { truthy } from '@operators';
 import { Store } from '@ngrx/store';
 import { SettingsSelectors } from '@state';
-import { EnrolmentListService } from '../../../shared/services/enrolment-list/enrolment-list.service';
+import { EnrolmentClaim } from '../models/enrolment-claim.interface';
+import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
@@ -46,14 +43,14 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   ListType = EnrolmentListType;
-  dataSource = new MatTableDataSource([]);
+  dataSource = new MatTableDataSource<EnrolmentClaim>([]);
   displayedColumns: string[];
   dynamicAccepted: boolean;
   dynamicRejected: boolean;
 
   private _subscription$ = new Subject();
   private _iamSubscriptionId: number;
-  private _shadowList = [];
+  private _shadowList: EnrolmentClaim[] = [];
 
   constructor(
     private loadingService: LoadingService,
@@ -62,7 +59,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     private toastr: SwitchboardToastrService,
     private notifService: NotificationService,
     private store: Store,
-    private enrolmentListService: EnrolmentListService
+    private publishRoleService: PublishRoleService
   ) {}
 
   isAsset(element) {
@@ -172,7 +169,9 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
               did: this.iamService.signerService.did,
               isAccepted,
             })
-          ).map((item) => this.checkForNotSyncedOnChain(item))
+          ).map((item) =>
+            this.publishRoleService.checkForNotSyncedOnChain(item)
+          )
         );
       }
 
@@ -184,7 +183,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         }
 
         if (this.listType !== EnrolmentListType.ISSUER) {
-          list = await this.enrolmentListService.appendDidDocSyncStatus(list);
+          list = await this.publishRoleService.appendDidDocSyncStatus(list);
         }
       }
     } catch (e) {
@@ -207,47 +206,31 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
-  async checkForNotSyncedOnChain(item) {
-    if (item.registrationTypes.includes(RegistrationTypes.OnChain)) {
-      return {
-        ...item,
-        notSyncedOnChain: !(await this.iamService.claimsService.hasOnChainRole(
-          this.iamService.signerService.did,
-          item.claimType,
-          parseInt(item.claimTypeVersion.toString(), 10)
-        )),
-      };
-    }
-    return item;
-  }
-
-  isAccepted(element) {
+  isAccepted(element: EnrolmentClaim) {
     return element?.isAccepted;
   }
 
-  isSynced(element) {
+  isSynced(element: EnrolmentClaim) {
     return element?.isSynced;
   }
 
-  isRejected(element) {
+  isRejected(element: EnrolmentClaim) {
     return !element?.isAccepted && element?.isRejected;
   }
 
-  isPending(element) {
+  isPending(element: EnrolmentClaim) {
     return !element?.isAccepted && !element?.isRejected;
   }
 
-  isPendingSync(element) {
-    return (
-      !this.viewedByIssuer() && this.enrolmentListService.isPendingSync(element)
-    );
+  isPendingSync(element: EnrolmentClaim) {
+    return !this.viewedByIssuer() && !element?.isSynced;
   }
 
   viewedByIssuer() {
     return this.listType === EnrolmentListType.ISSUER;
   }
 
-  view(element: any) {
+  view(element: EnrolmentClaim) {
     this.dialog
       .open(ViewRequestsComponent, {
         width: '600px',
@@ -265,51 +248,18 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       });
   }
 
-  async addToDidDoc(element: any) {
-    this.dialog
-      .open<ConfirmationDialogComponent, ConfirmationDialogData>(
-        ConfirmationDialogComponent,
-        {
-          width: '600px',
-          maxHeight: 'auto',
-          data: {
-            header: 'Publish credential to my DID document',
-            svgIcon: 'sync-did-icon',
-            message:
-              'It is currently necessary to publish the credential to your DID document in order to make it available. However, please note that this will make your role data public and permanent.',
-          },
-          maxWidth: '100%',
-          disableClose: true,
-        }
-      )
-      .afterClosed()
+  addToDidDoc(element: EnrolmentClaim) {
+    this.publishRoleService
+      .addToDidDoc({
+        issuedToken: element.issuedToken,
+        registrationTypes: element.registrationTypes,
+        claimType: element.claimType,
+      })
       .pipe(truthy())
-      .subscribe(() => this.syncClaimToDidDoc(element));
+      .subscribe(async () => await this.getList(this.rejected, this.accepted));
   }
 
-  async addToClaimManager(element: any) {
-    this.dialog
-      .open<ConfirmationDialogComponent, ConfirmationDialogData>(
-        ConfirmationDialogComponent,
-        {
-          width: '600px',
-          maxHeight: 'auto',
-          data: {
-            header: 'Sync to Claim Manager',
-            svgIcon: 'add-to-claimmanager-icon',
-            message:
-              'It is necessary to register your role on-chain in order to make it available to verifying smart contracts. However, please note that this will make your role data permanently public.',
-          },
-          maxWidth: '100%',
-          disableClose: true,
-        }
-      )
-      .afterClosed()
-      .pipe(truthy())
-      .subscribe(() => this.syncToClaimManager(element));
-  }
-
-  async cancelClaimRequest(element: any) {
+  async cancelClaimRequest(element: EnrolmentClaim) {
     const dialogRef = this.dialog
       .open(ConfirmationDialogComponent, {
         width: '400px',
@@ -395,57 +345,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async syncClaimToDidDoc(element: any) {
-    this.loadingService.show(
-      'Please confirm this transaction in your connected wallet.',
-      CancelButton.ENABLED
-    );
-
-    try {
-      const retVal = await this.iamService.claimsService.publishPublicClaim({
-        claim: {
-          token: element.issuedToken,
-        },
-      });
-
-      if (retVal) {
-        this.notifService.decreasePendingDidDocSyncCount();
-        this.toastr.success('Action is successful.', 'Sync to DID Document');
-        await this.getList(this.rejected, this.accepted);
-      } else {
-        this.toastr.warning(
-          'Unable to proceed with this action. Please contact system administrator.',
-          'Sync to DID Document'
-        );
-      }
-    } catch (e) {
-      console.error(e);
-      this.toastr.error(e?.message, 'Sync to DID Document');
-    }
-
-    this.loadingService.hide();
-  }
-
-  private async syncToClaimManager(element: any) {
-    this.loadingService.show(
-      'Please confirm this transaction in your connected wallet.',
-      CancelButton.ENABLED
-    );
-
-    try {
-      await this.iamService.claimsService.registerOnchain(element);
-
-      this.toastr.success('Action is successful.', 'Sync to Claim Manager');
-      await this.getList(this.rejected, this.accepted);
-    } catch (e) {
-      console.error(e);
-      this.toastr.error(e?.message, 'Sync to Claim Manager');
-    }
-
-    this.loadingService.hide();
-  }
-
-  private setDisplayedColumns(isExperimental) {
+  private setDisplayedColumns(isExperimental: boolean) {
     if (isExperimental) {
       return [
         'requestDate',

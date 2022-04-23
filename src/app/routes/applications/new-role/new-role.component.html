@@ -71,7 +71,7 @@
         <mat-step [completed]="false">
           <ng-template matStepLabel>Set Restrictions</ng-template>
           <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-            <div class="label color-white ml-1 pb-2">Role Precondition</div>
+            <div class="label default-color ml-1 pb-2">Role Precondition</div>
             <div
               class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
               <mat-icon>info</mat-icon>
@@ -82,7 +82,7 @@
             </div>
             <div class="card-result mb-1" *ngIf="!roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions?.length">
               <div class="d-flex justify-content-between flex-row flex-nowrap">
-                <div class="color-white break-word">No role precondition set</div>
+                <div class="default-color break-word">No role precondition set</div>
               </div>
             </div>
             <div
@@ -92,7 +92,7 @@
                 let i = index
               ">
               <div class="d-flex justify-content-between flex-row flex-nowrap">
-                <div class="color-white break-word">{{ rolePrecondition }}</div>
+                <div class="default-color break-word">{{ rolePrecondition }}</div>
                 <div class="d-inline-flex">
                   <button
                     mat-icon-button
@@ -154,47 +154,47 @@
           <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Role Type</div>
-              <span class="color-white mb-0">
+              <span class="default-color mb-0">
                 {{ roleForm?.value?.roleType | domainType }}
               </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Role Namespace</div>
-              <span class="color-white mb-0">
+              <span class="default-color mb-0">
                 {{ roleForm?.value?.roleName }}
               </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Issuer Type</div>
-              <span class="color-white mb-0">
+              <span class="default-color mb-0">
                 {{ roleForm?.value?.data?.issuer?.issuerType }}
               </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3" *ngIf="isDIDType">
               <div class="label opacity-50 mb-2">Issuer List</div>
-              <div class="color-white mb-0" *ngFor="let did of issuerList">
+              <div class="default-color mb-0" *ngFor="let did of issuerList">
                 {{ did }}
               </div>
             </div>
             <div class="text-left my-3" *ngIf="isRoleType">
               <div class="label opacity-50 mb-2">Issuer Role Namespace</div>
-              <span class="color-white mb-0">
-                {{ roleForm?.value?.data?.issuer?.roleName?.namespace }}
+              <span class="default-color mb-0">
+                {{ issuerRoleName.value }}
               </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Restrictions (Role Preconditions)</div>
               <div
-                class="color-white mb-0"
+                class="default-color mb-0"
                 *ngIf="!roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions?.length">
                 None
               </div>
               <div
-                class="color-white mb-0"
+                class="default-color mb-0"
                 *ngFor="let precondition of roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions">
                 {{ precondition }}
               </div>
@@ -202,7 +202,7 @@
             <mat-divider></mat-divider>
             <div class="text-left mt-3">
               <div class="label opacity-50 mb-2">Requestor Fields</div>
-              <span class="color-white mb-0" *ngIf="!requestorFields?.data?.length"> None </span>
+              <span class="default-color mb-0" *ngIf="!requestorFields?.data?.length"> None </span>
 
               <ng-container *ngIf="requestorFields.data.length">
                 <div class="field-list">
@@ -216,7 +216,7 @@
             <mat-divider></mat-divider>
             <div class="text-left mt-3">
               <div class="label opacity-50 mb-2">Issuer Required Fields</div>
-              <span class="color-white mb-0" *ngIf="!issuerFields?.data?.length"> None </span>
+              <span class="default-color mb-0" *ngIf="!issuerFields?.data?.length"> None </span>
 
               <ng-container *ngIf="issuerFields.data.length">
                 <div class="field-list">

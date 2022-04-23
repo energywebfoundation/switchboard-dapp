@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import * as AuthSelectors from './auth.selectors';
 import { EnvService } from '../../shared/services/env/env.service';
+import { RouterConst } from '../../routes/router-const';
 
 describe('AuthEffects', () => {
   const loginServiceSpy = jasmine.createSpyObj('LoginService', [
@@ -27,7 +28,10 @@ describe('AuthEffects', () => {
     'getSession',
   ]);
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll', 'open']);
-  const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
+  const routerSpy = jasmine.createSpyObj('Router', [
+    'navigateByUrl',
+    'navigate',
+  ]);
   let actions$: ReplaySubject<any>;
   let effects: AuthEffects;
   let store: MockStore<AuthState>;
@@ -260,7 +264,9 @@ describe('AuthEffects', () => {
             reinitializeMetamask: true,
           });
           expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/returnUrl');
+          expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(
+            `/${RouterConst.ReturnUrl}`
+          );
           expect(resultAction).toEqual(
             AuthActions.loginSuccess({ accountInfo })
           );
@@ -349,6 +355,38 @@ describe('AuthEffects', () => {
             walletProvider: ProviderType.WalletConnect,
           })
         );
+        done();
+      });
+    });
+  });
+
+  describe('notPossibleToReinitializeUser$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should navigate to welcome page when session is not active', (done) => {
+      loginServiceSpy.isSessionActive.and.returnValue(false);
+      actions$.next(AuthActions.reinitializeAuth());
+      effects.notPossibleToReinitializeUser$.subscribe(() => {
+        expect(routerSpy.navigate).toHaveBeenCalledWith([RouterConst.Welcome]);
+        done();
+      });
+    });
+  });
+
+  describe('navigateToDashboardWhenSessionIsActive$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should navigate to dashboard page when session is active', (done) => {
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+      actions$.next(AuthActions.navigateWhenSessionActive());
+      effects.navigateToDashboardWhenSessionIsActive$.subscribe(() => {
+        expect(routerSpy.navigate).toHaveBeenCalledWith([
+          RouterConst.Dashboard,
+        ]);
         done();
       });
     });

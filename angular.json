@@ -55,12 +55,12 @@
                 "inject": false
               },
               {
-                "input": "src/app/shared/styles/themes/theme-b.scss",
+                "input": "src/app/shared/styles/themes/default.scss",
                 "bundleName": "default",
                 "inject": false
               },
               {
-                "input": "src/app/shared/styles/themes/theme-c.scss",
+                "input": "src/app/shared/styles/themes/stedin.scss",
                 "bundleName": "stedin",
                 "inject": false
               }

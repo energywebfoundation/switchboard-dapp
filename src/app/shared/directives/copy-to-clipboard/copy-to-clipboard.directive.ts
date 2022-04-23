@@ -6,7 +6,7 @@ import {
   Output,
 } from '@angular/core';
 import { SwitchboardToastrService } from '../../services/switchboard-toastr.service';
-
+import { Clipboard } from '@angular/cdk/clipboard';
 @Directive({
   selector: '[appCopyToClipboard]',
 })
@@ -16,34 +16,31 @@ export class CopyToClipboardDirective {
 
   @Output() public copied: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor(private toastr: SwitchboardToastrService) {}
+  constructor(
+    private toastr: SwitchboardToastrService,
+    private clipboard: Clipboard
+  ) {}
 
   @HostListener('click', ['$event'])
-  public onClick(event: MouseEvent): void {
-    event.preventDefault();
+  public onClick(): void {
     if (!this.copyClipboard) {
       return;
     }
 
-    const listener = (e: ClipboardEvent) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const clipboard = e.clipboardData || (window as any).clipboardData;
-      clipboard.setData('text', this.copyClipboard.toString());
-      e.preventDefault();
-
-      this.displayToastrMessage();
-
-      this.copied.emit(this.copyClipboard);
-    };
-
-    document.addEventListener('copy', listener, false);
-    document.execCommand('copy');
-    document.removeEventListener('copy', listener, false);
+    if (this.clipboard.copy(this.copyClipboard)) {
+      this.displaySuccessToastrMessage();
+    } else {
+      this.displayFailureToastrMessage();
+    }
   }
 
-  displayToastrMessage(): void {
+  displaySuccessToastrMessage(): void {
     if (this.message) {
       this.toastr.success(`${this.message} successfully copied to clipboard.`);
     }
+  }
+
+  displayFailureToastrMessage(): void {
+    this.toastr.error(`Copying to clipboard failed`);
   }
 }

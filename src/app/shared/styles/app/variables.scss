@@ -64,27 +64,7 @@ $card-default-border-color: #cfdbe2;
 // Utilities variables
 // ---------------------
 
-$text-alpha: rgba(255, 255, 255, 0.5);
-$text-alpha-inverse: rgba(0, 0, 0, 0.5);
-
-$font-size-base: 1rem;
-$text-sm: $font-size-base * 0.74375;
-$text-md: $font-size-base * 1.6625;
-$text-lg: $font-size-base * 2.625;
-
 $border-color: rgba(0, 0, 0, 0.12);
-
-$wd-xxs: 60px;
-$wd-xs: 90px;
-$wd-sm: 150px;
-$wd-sd: 200px; // sd == standard
-$wd-md: 240px;
-$wd-lg: 280px;
-$wd-xl: 320px;
-$wd-xxl: 360px;
-$wd-wide: 100%;
-$wd-auto: auto;
-$wd-zero: 0;
 
 // ---------------------
 // Bootstrap 4 Variables Override

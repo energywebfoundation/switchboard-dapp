@@ -10,10 +10,7 @@
       <div class="row">
         <div class="col-lg-12 w-100">
           <div class="card card-default text-center mb-3 p-3 shadow-none">
-            <h3 class="color-white mb-2">{{ claim?.roleName | uppercase }}</h3>
-            <div class="label color-white opacity-50 text-truncate-middle">
-              {{ claim?.parentNamespace }}
-            </div>
+            <h3 class="default-color mb-2">{{ claim?.roleName | uppercase }}</h3>
             <div class="btn-color-warn text-truncate-middle" *ngIf="!claim?.isAccepted && !claim?.isRejected">
               Pending
             </div>
@@ -28,27 +25,29 @@
           <div class="card card-default mb-3 pb-0 shadow-none">
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Requested Date</div>
-              <span class="color-white mb-0">
+              <span class="default-color mb-0">
                 {{ claim?.requestDate | date: 'MM/dd/yyyy HH:mm:ss' }}
               </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3">
               <div class="label opacity-50 mb-2">Requestor</div>
-              <span class="color-white mb-0">{{ claim?.requester }}</span>
+              <span class="default-color mb-0">{{ claim?.requester }}</span>
             </div>
             <ng-container *ngIf="claim?.subject !== claim?.claimType && claim?.subject !== claim?.requester">
               <mat-divider></mat-divider>
               <div class="text-left my-3">
                 <div class="label opacity-50 mb-2">Asset</div>
-                <span class="color-white mb-0">{{ claim?.subject }}</span>
+                <span class="default-color mb-0">{{ claim?.subject }}</span>
               </div>
             </ng-container>
-            <mat-divider></mat-divider>
-            <div class="text-left my-3">
-              <div class="label opacity-50 mb-2">Issuer</div>
-              <span class="color-white mb-0">{{ claim?.claimIssuer }}</span>
-            </div>
+            <ng-container *ngIf="claim.acceptedBy">
+              <mat-divider></mat-divider>
+              <div class="text-left my-3">
+                <div class="label opacity-50 mb-2">Issuer</div>
+                <span class="color-white mb-0">{{ claim.acceptedBy }}</span>
+              </div>
+            </ng-container>
           </div>
         </div>
 
@@ -66,11 +65,7 @@
         </div>
         <div class="col-lg-12 mt-2 mb-3" *ngIf="canAccept() && roleContainRequiredParams()">
           <div class="card card-default mb-3 pb-0 shadow-none">
-            <app-enrolment-form
-              #issuerFields
-              [fieldList]="fieldList"
-              [showRegistrationTypes]="false"
-              [showSubmit]="false"></app-enrolment-form>
+            <app-enrolment-form #issuerFields [fieldList]="fieldList" [showSubmit]="false"></app-enrolment-form>
           </div>
         </div>
         <div

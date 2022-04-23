@@ -8,6 +8,7 @@ import { UrlService } from '../../../shared/services/url-service/url.service';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 import { Store } from '@ngrx/store';
 import { AssetDetailsActions, AssetDetailsSelectors } from '@state';
+import { RouterConst } from '../../router-const';
 
 @Component({
   selector: 'app-asset-enrolment-list',
@@ -77,8 +78,8 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
 
   private navigateBackHandler(url: string): void {
     // 'returnUrl' is taken as an indicator back() would trigger an loop back to asset-enrolment
-    if (url.includes('returnUrl')) {
-      this.urlService.goTo('assets');
+    if (url.includes(RouterConst.ReturnUrl)) {
+      this.urlService.goTo(RouterConst.Assets);
       return;
     }
     this.urlService.back();

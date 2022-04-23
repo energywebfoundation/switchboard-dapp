@@ -27,10 +27,14 @@ import { HistoryPeriodComponent } from './asset-ownership-history/history-period
 import { TypeAlgorithmPipe } from './pipes/type-algorithm.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-code-scanner.module';
+import { RouterConst } from '../router-const';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent },
-  { path: 'enrolment/:subject', component: AssetEnrolmentListComponent },
+  {
+    path: RouterConst.EnrolmentDetails,
+    component: AssetEnrolmentListComponent,
+  },
 ];
 
 @NgModule({

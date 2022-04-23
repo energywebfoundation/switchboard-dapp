@@ -5,18 +5,19 @@ import * as SettingsActions from './settings.actions';
 import { SettingsStorage } from './models/settings-storage';
 import { UrlService } from '../../shared/services/url-service/url.service';
 import { filter, switchMap, take, tap } from 'rxjs/operators';
+import { RouterConst } from '../../routes/router-const';
 
 @Injectable()
 export class SettingsEffects {
-  redirectFromAssetsToDashboard = createEffect(
+  redirectFromAssetsToDashboard$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(SettingsActions.disableExperimental),
         switchMap(() =>
-          this.urlService.current.pipe(
+          this.urlService.current().pipe(
             take(1),
-            filter((url) => url.includes('assets')),
-            tap(() => this.urlService.goTo('dashboard'))
+            filter((url) => url.includes(RouterConst.Assets)),
+            tap(() => this.urlService.goTo(RouterConst.Dashboard))
           )
         )
       ),

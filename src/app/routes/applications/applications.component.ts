@@ -28,6 +28,7 @@ import { ApplicationListComponent } from './application-list/application-list.co
 import { RoleListComponent } from './role-list/role-list.component';
 import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
 import { EnvService } from '../../shared/services/env/env.service';
+import { RouterConst } from '../router-const';
 
 @Component({
   selector: 'app-applications',
@@ -98,7 +99,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       const namespace =
         'orgcreator.apps.testorg.' + this.envService.rootNamespace;
       const roleName = 'org';
-      this.router.navigate([`enrol`], {
+      this.router.navigate([RouterConst.Enrol], {
         queryParams: { roleName, app: namespace, stayLoggedIn: true },
       });
       return;

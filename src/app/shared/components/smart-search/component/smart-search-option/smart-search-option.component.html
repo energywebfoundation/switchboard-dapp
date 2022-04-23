@@ -1,0 +1,18 @@
+<ng-container *ngIf="definition?.orgName">
+  <mat-icon svgIcon="organization-list-icon"></mat-icon>
+  <span class="search-title">
+    {{ definition?.orgName }}
+  </span>
+</ng-container>
+<ng-container *ngIf="definition?.appName">
+  <mat-icon svgIcon="application-list-icon"></mat-icon>
+  <span class="search-title">
+    {{ definition?.appName }}
+  </span>
+</ng-container>
+<div [class.search-preview]="isDefinitionDefined" class="d-flex flex-column">
+  <span [attr.data-qa-id]="namespace">{{ namespace }}</span>
+  <span class="opacity-50" *ngIf="definition?.description">
+    {{ definition?.description }}
+  </span>
+</div>

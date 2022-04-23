@@ -4,6 +4,7 @@ import { RequestClaimComponent } from './registration/request-claim/request-clai
 import { NgModule } from '@angular/core';
 import { NoPreloading, RouterModule } from '@angular/router';
 import { ExperimentalGuard } from '../shared/guards/experimental.guard';
+import { RouterConst } from './router-const';
 
 export const routes = [
   {
@@ -11,32 +12,32 @@ export const routes = [
     component: LayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: RouterConst.Dashboard, pathMatch: 'full' },
       {
-        path: 'dashboard',
+        path: RouterConst.Dashboard,
         loadChildren: () =>
           import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
       },
       {
-        path: 'governance',
+        path: RouterConst.Governance,
         loadChildren: () =>
           import('./applications/applications.module').then(
             (m) => m.ApplicationsModule
           ),
       },
       {
-        path: 'assets',
+        path: RouterConst.Assets,
         loadChildren: () =>
           import('./assets/assets.module').then((m) => m.AssetsModule),
         canActivate: [ExperimentalGuard],
       },
       {
-        path: 'enrolment',
+        path: RouterConst.Enrolment,
         loadChildren: () =>
           import('./enrolment/enrolment.module').then((m) => m.EnrolmentModule),
       },
       {
-        path: 'search-result',
+        path: RouterConst.SearchResult,
         loadChildren: () =>
           import('./search-result/search-result.module').then(
             (m) => m.SearchResultModule
@@ -45,18 +46,18 @@ export const routes = [
     ],
   },
   {
-    path: 'enrol',
+    path: RouterConst.Enrol,
     component: RequestClaimComponent,
   },
   {
-    path: 'vp',
+    path: RouterConst.VerifiablePresentation,
     loadChildren: () =>
       import('./verifiable-presentation/verifiable-presentation.module').then(
         (m) => m.VerifiablePresentationModule
       ),
   },
   {
-    path: 'welcome',
+    path: RouterConst.Welcome,
     children: [
       {
         path: '',
@@ -67,7 +68,7 @@ export const routes = [
   },
 
   // Not found
-  { path: '**', redirectTo: 'dashboard' },
+  { path: '**', redirectTo: RouterConst.Dashboard },
 ];
 
 @NgModule({
