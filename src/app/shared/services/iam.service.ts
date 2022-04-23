@@ -23,6 +23,8 @@ import {
   setChainConfig,
   setMessagingConfig,
   SignerService,
+  getVerifiableCredentialsService,
+  VerifiableCredentialsServiceBase
 } from 'iam-client-lib';
 import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
 import { LoadingService } from './loading.service';
@@ -59,6 +61,7 @@ export class IamService {
   domainsService: DomainsService;
   assetsService: AssetsService;
   cacheClient: CacheClient;
+  verifiableCredentialsService: VerifiableCredentialsServiceBase
 
   constructor(
     private loadingService: LoadingService,
