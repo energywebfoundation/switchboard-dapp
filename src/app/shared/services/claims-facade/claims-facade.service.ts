@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
-import { ClaimData } from 'iam-client-lib/dist/src/modules/didRegistry/did.types';
+import { ClaimData } from 'iam-client-lib';
 import { from, Observable } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
