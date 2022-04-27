@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { IamService } from "../../../shared/services/iam.service";
-import { IOOBPresentation } from '../models/out-of-band-presentation.interface';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { LoginService } from 'src/app/shared/services/login/login.service';
-import { AuthActions} from '@state';
+import { AuthActions } from '@state';
 import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
@@ -30,20 +29,11 @@ export class VerifiablePresentationComponent implements OnInit {
     isAutolistLoading = {
         requests: [],
         value: false,
-      };
-        ngOnInit(): void {
-            this._initSearch()
-    
-        }
+    };
+    ngOnInit(): void {
+        this._initSearch()
 
-        // async getCredentialsByPresentationDefinition(
-        //     definition: PresentationDefinition
-        //   ): Promise<SelectResults> {
-        //     const { data } = await this._http.post<SelectResults>(
-        //       `/vp/match`,
-        //       definition
-        //     );
- 
+    }
     private _initSearch() {
         this.route.queryParams.subscribe(async (params: any) => {
             this.loadingService.show()
@@ -51,41 +41,47 @@ export class VerifiablePresentationComponent implements OnInit {
             if (params._oob) {
                 const paramsDecoded = atob(params._oob);
                 const parsedToObj = JSON.parse(paramsDecoded)
-                console.log(parsedToObj, "THE OBJECT PARSED");
-                this.iamService.verifiableCredentialsService.initiateExchange({type: "ExchangeInvitation", url: })
+                const { url } = parsedToObj;
+                /*
+                TO DO: Call ICL when persistence of pres def is implemented:
+                    try {
+                    await this.iamService.verifiableCredentialsService.initiateExchange({type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url: url})
+                    this.loadingService.hide();
+                } catch (e) {
+                    console.log(e)
+                }
+                 */
                 this.loadingService.hide();
-                //Send decoded params to IAM client lib
             }
-          this.loadingService.hide();
-        })
+        });
     }
     private async initLoginUser() {
         // Check Login
         if (this.loginService.isSessionActive()) {
             console.log("GETING HERE TO IS ACTIVE")
-          this.store.dispatch(AuthActions.reinitializeAuthForEnrol());
-          // Set Loggedin Flag to true
-          this.isLoggedIn = await this.store
-            .select(isUserLoggedIn)
-            .pipe(filter<boolean>(Boolean), take(1))
-            .toPromise();
+            this.store.dispatch(AuthActions.reinitializeAuthForEnrol());
+            // Set Loggedin Flag to true
+            this.isLoggedIn = await this.store
+                .select(isUserLoggedIn)
+                .pipe(filter<boolean>(Boolean), take(1))
+                .toPromise();
         } else {
-          this.loadingService.hide();
-          // Launch Login Dialog
-          await this.dialog
-            .open(ConnectToWalletDialogComponent, {
-              width: '434px',
-              panelClass: 'connect-to-wallet',
-              maxWidth: '100%',
-              disableClose: true,
-            })
-            .afterClosed()
-            .toPromise();
-    
-          // Set Loggedin Flag to true
-          this.isLoggedIn = true;
-          this.loadingService.show();
+            this.loadingService.hide();
+            // Launch Login Dialog
+            await this.dialog
+                .open(ConnectToWalletDialogComponent, {
+                    width: '434px',
+                    panelClass: 'connect-to-wallet',
+                    maxWidth: '100%',
+                    disableClose: true,
+                })
+                .afterClosed()
+                .toPromise();
+
+            // Set Loggedin Flag to true
+            this.isLoggedIn = true;
+            this.loadingService.show();
         }
-      }
-    
+    }
+
 }
