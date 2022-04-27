@@ -36,7 +36,7 @@ export class VerifiablePresentationComponent implements OnInit {
     }
     private _initSearch() {
         this.route.queryParams.subscribe(async (params: any) => {
-            this.loadingService.show()
+            //this.loadingService.show()
             await this.initLoginUser();
             if (params._oob) {
                 const paramsDecoded = atob(params._oob);
@@ -49,16 +49,17 @@ export class VerifiablePresentationComponent implements OnInit {
                     this.loadingService.hide();
                 } catch (e) {
                     console.log(e)
+                } finally {
+                    this.loadingService.hide();
                 }
                  */
-                this.loadingService.hide();
+                
             }
         });
     }
     private async initLoginUser() {
         // Check Login
         if (this.loginService.isSessionActive()) {
-            console.log("GETING HERE TO IS ACTIVE")
             this.store.dispatch(AuthActions.reinitializeAuthForEnrol());
             // Set Loggedin Flag to true
             this.isLoggedIn = await this.store
