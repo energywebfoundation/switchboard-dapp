@@ -7,15 +7,21 @@ import { ReceivedPresentationsComponent } from './received-presentations/receive
 import { SharedModule } from '../../shared/shared.module';
 import { PresentationCredentialsComponent } from './presentation-credentials/presentation-credentials.component';
 import { VpCardComponent } from './vp-card/vp-card.component';
-import {LayoutModule} from "../../layout/layout.module";
+import { LayoutModule } from '../../layout/layout.module';
 @NgModule({
-  declarations: [VerifiablePresentationComponent, VpHeaderComponent, ReceivedPresentationsComponent, PresentationCredentialsComponent, VpCardComponent],
+  declarations: [
+    VerifiablePresentationComponent,
+    VpHeaderComponent,
+    ReceivedPresentationsComponent,
+    PresentationCredentialsComponent,
+    VpCardComponent,
+  ],
   imports: [
     CommonModule,
     SharedModule,
     LayoutModule,
     RouterModule.forChild([
-        { path: '', component: VerifiablePresentationComponent },
+      { path: '', component: VerifiablePresentationComponent },
     ]),
   ],
 })

@@ -5,13 +5,13 @@ import { SelectionModel } from '@angular/cdk/collections';
 @Component({
   selector: 'app-presentation-credentials',
   templateUrl: './presentation-credentials.component.html',
-  styleUrls: ['./presentation-credentials.component.scss']
+  styleUrls: ['./presentation-credentials.component.scss'],
 })
 export class PresentationCredentialsComponent {
-  displayedColumns: string[] = ['select','namespace', 'status'];
+  displayedColumns: string[] = ['select', 'namespace', 'status'];
   dataSource = new MatTableDataSource([
-    {namespace: 'installer', status: 'Approved'},
-    {namespace: 'installer2', status: 'Approved'},
+    { namespace: 'installer', status: 'Approved' },
+    { namespace: 'installer2', status: 'Approved' },
   ]);
 
   selection = new SelectionModel(true, []);
@@ -38,6 +38,8 @@ export class PresentationCredentialsComponent {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
+      row.position + 1
+    }`;
   }
 }

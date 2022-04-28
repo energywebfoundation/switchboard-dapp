@@ -27,7 +27,6 @@ export class DashboardComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-  
     this.activeRoute.queryParams
       .pipe(
         filter((queryParams) => queryParams?.returnUrl),
@@ -37,7 +36,7 @@ export class DashboardComponent implements AfterViewInit {
       .subscribe((redirectUrl) => {
         this.store.dispatch(LayoutActions.setRedirectUrl({ url: redirectUrl }));
       });
-      this.store.dispatch(AuthActions.reinitializeAuth());
+    this.store.dispatch(AuthActions.reinitializeAuth());
   }
 
   searchBy() {

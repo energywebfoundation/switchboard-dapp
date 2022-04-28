@@ -24,7 +24,6 @@ describe('SettingsEffects', () => {
       ],
     });
 
-
     effects = TestBed.inject(SettingsEffects);
   });
 

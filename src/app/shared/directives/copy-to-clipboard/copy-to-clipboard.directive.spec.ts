@@ -1,9 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {
-  Component,
-  DebugElement,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
+import { Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CopyToClipboardDirective } from './copy-to-clipboard.directive';
 import { SwitchboardToastrService } from '../../services/switchboard-toastr.service';
 import { getElement } from '@tests';
