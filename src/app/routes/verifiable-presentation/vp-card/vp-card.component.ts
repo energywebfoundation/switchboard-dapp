@@ -5,11 +5,5 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './vp-card.component.html',
   styleUrls: ['./vp-card.component.scss']
 })
-export class VpCardComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class VpCardComponent {
 }

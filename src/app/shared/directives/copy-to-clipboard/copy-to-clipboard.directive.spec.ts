@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {
   Component,
   DebugElement,
-  Input,
   NO_ERRORS_SCHEMA,
 } from '@angular/core';
 import { CopyToClipboardDirective } from './copy-to-clipboard.directive';

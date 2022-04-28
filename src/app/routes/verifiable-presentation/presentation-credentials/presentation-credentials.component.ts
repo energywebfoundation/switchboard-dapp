@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 
@@ -7,7 +7,7 @@ import { SelectionModel } from '@angular/cdk/collections';
   templateUrl: './presentation-credentials.component.html',
   styleUrls: ['./presentation-credentials.component.scss']
 })
-export class PresentationCredentialsComponent implements OnInit {
+export class PresentationCredentialsComponent {
   displayedColumns: string[] = ['select','namespace', 'status'];
   dataSource = new MatTableDataSource([
     {namespace: 'installer', status: 'Approved'},
@@ -40,9 +40,4 @@ export class PresentationCredentialsComponent implements OnInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

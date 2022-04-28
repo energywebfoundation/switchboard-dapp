@@ -4,16 +4,14 @@ import { of, ReplaySubject } from 'rxjs';
 
 import { SettingsEffects } from './settings.effects';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { UrlService } from '../../shared/services/url-service/url.service';
 import * as SettingsActions from './settings.actions';
 import { RouterConst } from '../../routes/router-const';
-import { SettingsState } from './settings.reducer';
 
 describe('SettingsEffects', () => {
   let actions$: ReplaySubject<any>;
   let effects: SettingsEffects;
-  let store: MockStore<SettingsState>;
   const urlServiceSpy = jasmine.createSpyObj('UrlService', ['goTo', 'current']);
 
   beforeEach(() => {
@@ -26,7 +24,6 @@ describe('SettingsEffects', () => {
       ],
     });
 
-    store = TestBed.inject(MockStore);
 
     effects = TestBed.inject(SettingsEffects);
   });

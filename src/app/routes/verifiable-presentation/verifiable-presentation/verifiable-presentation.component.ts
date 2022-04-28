@@ -42,6 +42,7 @@ export class VerifiablePresentationComponent implements OnInit {
                 const paramsDecoded = atob(params._oob);
                 const parsedToObj = JSON.parse(paramsDecoded)
                 const { url } = parsedToObj;
+                console.log(url)
                 /*
                 TO DO: Call ICL when persistence of pres def is implemented:
                     try {
