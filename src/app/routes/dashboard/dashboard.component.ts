@@ -27,6 +27,7 @@ export class DashboardComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
+  
     this.activeRoute.queryParams
       .pipe(
         filter((queryParams) => queryParams?.returnUrl),

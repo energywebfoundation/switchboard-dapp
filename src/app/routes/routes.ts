@@ -50,7 +50,7 @@ export const routes = [
     component: RequestClaimComponent,
   },
   {
-    path: 'vp',
+    path: RouterConst.VerifiablePresentation,
     loadChildren: () =>
       import('./verifiable-presentation/verifiable-presentation.module').then(
         (m) => m.VerifiablePresentationModule
