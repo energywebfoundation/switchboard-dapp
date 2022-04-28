@@ -1,5 +1,4 @@
 import * as OwnedSelectors from './owned.selectors';
-import { getAssetsWithSelection } from './owned.selectors';
 
 describe('Owned Assets Selectors', () => {
   const asset: any = {

@@ -23,6 +23,7 @@ import {
   setChainConfig,
   setMessagingConfig,
   SignerService,
+  VerifiableCredentialsServiceBase,
 } from 'iam-client-lib';
 import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
 import { LoadingService } from './loading.service';
@@ -59,6 +60,7 @@ export class IamService {
   domainsService: DomainsService;
   assetsService: AssetsService;
   cacheClient: CacheClient;
+  verifiableCredentialsService: VerifiableCredentialsServiceBase;
 
   constructor(
     private loadingService: LoadingService,
@@ -181,10 +183,12 @@ export class IamService {
           assetsService,
           connectToDidRegistry,
           cacheClient,
+          verifiableCredentialsService,
         } = await connectToCacheServer();
         this.domainsService = domainsService;
         this.assetsService = assetsService;
         this.cacheClient = cacheClient;
+        this.verifiableCredentialsService = verifiableCredentialsService;
         if (createDocument) {
           const { didRegistry, claimsService } = await connectToDidRegistry();
           this.didRegistry = didRegistry;
