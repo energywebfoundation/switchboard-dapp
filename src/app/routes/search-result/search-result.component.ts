@@ -78,7 +78,6 @@ export class SearchResultComponent implements OnInit {
         );
         this.filteredOptions.next(options);
       });
-      //IMPLEMENT THIS FINALLY!!!
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
       // Get requested claims
       try {
