@@ -51,6 +51,12 @@ export class ClaimsFacadeService {
     });
   }
 
+  getClaimsByIssuer() {
+    return this.iamService.claimsService.getClaimsByIssuer({
+      did: this.iamService.signerService.did
+    });
+  }
+
   getUserClaims(did: string) {
     return this.iamService.claimsService.getUserClaims({ did });
   }
