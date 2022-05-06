@@ -247,17 +247,15 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         this.getList(this.dynamicRejected, this.dynamicAccepted);
       });
   }
-  //the method to checke element
   async addToDidDoc(element: EnrolmentClaim) {
-      console.log("in add to did doc method");
     const isRegisteredOnChain = await this.publishRoleService.checkForNotSyncedOnChain(element);
     const {notSyncedOnChain} = isRegisteredOnChain;
-    console.log(notSyncedOnChain, "NOT SYNCED ON CHAIN")
+    // If the element is already synced on chain, only off-chain registration is needed:
     const registrationTypes = notSyncedOnChain ? element.registrationTypes : [RegistrationTypes.OffChain];
     this.publishRoleService
       .addToDidDoc({
         issuedToken: element.issuedToken,
-        registrationTypes: registrationTypes,
+        registrationTypes,
         claimType: element.claimType,
       })
       .pipe(truthy())
