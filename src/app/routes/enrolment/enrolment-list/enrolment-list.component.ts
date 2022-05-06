@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NamespaceType } from 'iam-client-lib';
+import { NamespaceType, RegistrationTypes } from 'iam-client-lib';
 import { take, takeUntil } from 'rxjs/operators';
 import { combineLatest, of, Subject } from 'rxjs';
 import { IamService } from '../../../shared/services/iam.service';
@@ -247,12 +247,17 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         this.getList(this.dynamicRejected, this.dynamicAccepted);
       });
   }
-
-  addToDidDoc(element: EnrolmentClaim) {
+  //the method to checke element
+  async addToDidDoc(element: EnrolmentClaim) {
+      console.log("in add to did doc method");
+    const isRegisteredOnChain = await this.publishRoleService.checkForNotSyncedOnChain(element);
+    const {notSyncedOnChain} = isRegisteredOnChain;
+    console.log(notSyncedOnChain, "NOT SYNCED ON CHAIN")
+    const registrationTypes = notSyncedOnChain ? element.registrationTypes : [RegistrationTypes.OffChain];
     this.publishRoleService
       .addToDidDoc({
         issuedToken: element.issuedToken,
-        registrationTypes: element.registrationTypes,
+        registrationTypes: registrationTypes,
         claimType: element.claimType,
       })
       .pipe(truthy())
