@@ -248,10 +248,13 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       });
   }
   async addToDidDoc(element: EnrolmentClaim) {
-    const isRegisteredOnChain = await this.publishRoleService.checkForNotSyncedOnChain(element);
-    const {notSyncedOnChain} = isRegisteredOnChain;
+    const isRegisteredOnChain =
+      await this.publishRoleService.checkForNotSyncedOnChain(element);
+    const { notSyncedOnChain } = isRegisteredOnChain;
     // If the element is already synced on chain, only off-chain registration is needed:
-    const registrationTypes = notSyncedOnChain ? element.registrationTypes : [RegistrationTypes.OffChain];
+    const registrationTypes = notSyncedOnChain
+      ? element.registrationTypes
+      : [RegistrationTypes.OffChain];
     this.publishRoleService
       .addToDidDoc({
         issuedToken: element.issuedToken,
