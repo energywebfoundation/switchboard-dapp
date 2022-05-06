@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlParamService } from '../../shared/services/url-param.service';
-import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 import { MatTabGroup } from '@angular/material/tabs';
-import { NotificationService } from '../../shared/services/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 import { Store } from '@ngrx/store';
 import {
   OwnedEnrolmentsActions,
   OwnedEnrolmentsSelectors,
-  SettingsSelectors,
+  RequestedEnrolmentsActions,
+  RequestedEnrolmentsSelectors,
+  SettingsSelectors
 } from '@state';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 import { FilterStatus } from '../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-enrolment',
@@ -24,24 +24,16 @@ import { FilterStatus } from '../../shared/components/table/enrolment-list-filte
 })
 export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
-  @ViewChild('issuerList') issuerList: EnrolmentListComponent;
-  @ViewChild('enrolmentList') enrolmentList: EnrolmentListComponent;
 
   issuerListAccepted = false;
   enrolmentListAccepted = undefined;
   myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
+  requestedEnrolmentsList$ = this.store.select(
+    RequestedEnrolmentsSelectors.getEnrolments
+  );
 
   issuerDropdown = FilterStatus.Pending;
   enrolmentDropdown = FilterStatus.All;
-  namespaceControlIssuer = new FormControl(undefined);
-  namespaceControlMyEnrolments = new FormControl(undefined);
-  searchByDid = new FormControl(undefined);
-  public dropdownValue = {
-    all: 'none',
-    pending: 'false',
-    approved: 'true',
-    rejected: 'rejected',
-  };
 
   public isMyEnrolmentShown = false;
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
@@ -53,7 +45,6 @@ export class EnrolmentComponent implements AfterViewInit {
 
   constructor(
     private activeRoute: ActivatedRoute,
-    private notificationService: NotificationService,
     private urlParamService: UrlParamService,
     private router: Router,
     private dialog: MatDialog,
@@ -62,8 +53,10 @@ export class EnrolmentComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
-      if (queryParams) {
+    this.initDefault();
+    this.activeRoute.queryParams
+      .pipe(filter((queryParams) => !!queryParams))
+      .subscribe(async (queryParams: any) => {
         if (queryParams.notif) {
           if (queryParams.notif === 'pendingSyncToDidDoc') {
             // Display Approved Claims
@@ -93,10 +86,7 @@ export class EnrolmentComponent implements AfterViewInit {
         } else {
           this.initDefault();
         }
-      } else {
-        this.initDefault();
-      }
-    });
+      });
   }
 
   showMe(i: any) {
@@ -112,29 +102,13 @@ export class EnrolmentComponent implements AfterViewInit {
 
     if (i.index === 1) {
       if (this.isMyEnrolmentShown) {
-        this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
-        this.enrolmentList.getList(
-          this.enrolmentDropdown === FilterStatus.Rejected,
-          this.issuerDropdown === FilterStatus.Approved
-            ? true
-            : this.issuerDropdown === FilterStatus.Pending
-            ? false
-            : undefined
-        );
+        this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
       } else {
         this.isMyEnrolmentShown = true;
       }
     } else {
-      this.issuerList.getList(
-        this.enrolmentDropdown === FilterStatus.Rejected,
-        this.issuerDropdown === FilterStatus.Approved
-          ? true
-          : this.issuerDropdown === FilterStatus.Pending
-          ? false
-          : undefined
-      );
+      this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
     }
-    this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
   }
 
   updateEnrolmentList(value: FilterStatus): void {
@@ -149,20 +123,28 @@ export class EnrolmentComponent implements AfterViewInit {
     );
   }
 
-  updateIssuerList(e: any) {
-    const value = e.value;
-    this.issuerList.getList(
-      value === FilterStatus.Rejected,
-      value === FilterStatus.Approved
-        ? true
-        : value === FilterStatus.Pending
-        ? false
-        : undefined
+  updateIssuerFilterStatus(status: FilterStatus) {
+    this.store.dispatch(
+      RequestedEnrolmentsActions.changeFilterStatus({ status })
     );
   }
 
   updateSearchByDidValue(value: string) {
-    this.searchByDid.setValue(value);
+    this.store.dispatch(RequestedEnrolmentsActions.changeDIDFilter({ value }));
+  }
+
+  refreshIssuerList() {
+    this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
+  }
+
+  enrolmentsNamespaceFilterChangeHandler(value) {
+    this.store.dispatch(
+      RequestedEnrolmentsActions.changeNamespaceFilter({ value })
+    );
+  }
+
+  refreshMyEnrolmentsList(): void {
+    this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
   }
 
   createVC() {
@@ -187,23 +169,16 @@ export class EnrolmentComponent implements AfterViewInit {
   private initDefaultMyEnrolments() {
     if (this.enrolmentTabGroup) {
       this.enrolmentTabGroup.selectedIndex = 1;
+      this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
     }
   }
 
   private asyncSetDropdownValue(value: FilterStatus) {
-    if (this.enrolmentList) {
-      const timeout$ = setTimeout(() => {
-        this.enrolmentDropdown = value;
-        this.enrolmentList.getList(
-          this.enrolmentDropdown === FilterStatus.Rejected,
-          this.enrolmentDropdown === FilterStatus.Approved
-            ? true
-            : this.enrolmentDropdown === FilterStatus.Pending
-            ? false
-            : undefined
-        );
-        clearTimeout(timeout$);
-      }, 30);
-    }
+    const timeout$ = setTimeout(() => {
+      this.enrolmentDropdown = value;
+      clearTimeout(timeout$);
+    }, 30);
+    this.store.dispatch(RequestedEnrolmentsActions.getEnrolmentRequests());
+    this.updateIssuerFilterStatus(value);
   }
 }

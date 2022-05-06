@@ -1,4 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { EnrolmentClaim } from '../models/enrolment-claim.interface';
@@ -13,6 +21,7 @@ import { ViewRequestsComponent } from '../view-requests/view-requests.component'
 import { truthy } from '@operators';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { EnrolmentListType } from '../enrolment-list/enrolment-list.component';
+import { isAsset } from 'src/app/state/enrolments/utils/remove-assets-from-list/remove-assets-from-list';
 
 const TOASTR_HEADER = 'Enrolment';
 
@@ -29,6 +38,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild(MatSort) sort: MatSort;
+  @Output() refreshList = new EventEmitter<void>();
 
   dataSource = new MatTableDataSource<EnrolmentClaim>([]);
   displayedColumns: string[] = [
@@ -37,12 +47,9 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
     'parentNamespace',
     'status',
     'actions',
-  ];;
-  dynamicAccepted: boolean;
-  dynamicRejected: boolean;
+  ];
 
   private _iamSubscriptionId: number;
-  private _shadowList: EnrolmentClaim[] = [];
 
   constructor(
     private loadingService: LoadingService,
@@ -55,10 +62,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   ) {}
 
   isAsset(element) {
-    return (
-      element?.subject !== element?.claimType &&
-      element?.subject !== element?.requester
-    );
+    isAsset(element);
   }
 
   async ngOnInit() {
@@ -92,20 +96,10 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   async ngOnDestroy(): Promise<void> {
-
     // Unsubscribe from IAM Events
     await this.iamService.messagingService.unsubscribeFrom(
       this._iamSubscriptionId
     );
-  }
-
-  public async getList(isRejected: boolean, isAccepted?: boolean) {
-    this.loadingService.show();
-    this.dynamicRejected = isRejected;
-    this.dynamicAccepted = isAccepted;
-
-
-    this._shadowList = this.list;
   }
 
   isAccepted(element: EnrolmentClaim) {
@@ -141,9 +135,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .pipe(truthy())
-      .subscribe(() => {
-        // this.getList(this.dynamicRejected, this.dynamicAccepted);
-      });
+      .subscribe(() => this.updateList());
   }
 
   addToDidDoc(element: EnrolmentClaim) {
@@ -154,8 +146,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
         claimType: element.claimType,
       })
       .pipe(truthy())
-      // TODO: handle refreshing list after adding to did doc.
-      .subscribe();
+      .subscribe(() => this.updateList());
   }
 
   async cancelClaimRequest(element: EnrolmentClaim) {
@@ -184,7 +175,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
           'Action is successful.',
           'Cancel Enrolment Request'
         );
-        // await this.getList(this.rejected, this.accepted);
+        this.updateList();
       } catch (e) {
         console.error(e);
         this.toastr.error(
@@ -195,6 +186,10 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
         this.loadingService.hide();
       }
     }
+  }
+
+  private updateList(): void {
+    this.refreshList.emit();
   }
 
   private async _handleMessage(message: any) {

@@ -16,15 +16,13 @@
           <app-enrolment-list-filter
             [status]="enrolmentDropdown"
             [showDID]="true"
-            (updateStatus)="updateIssuerList($event)"
-            (scannedDID)="updateSearchByDidValue($event)"
-          ></app-enrolment-list-filter>
-          <app-enrolment-list
-            [listType]="'issuer'"
-            [accepted]="issuerListAccepted"
-            #issuerList
-            [namespaceFilterControl]="namespaceControlIssuer"
-            [didFilterControl]="searchByDid"></app-enrolment-list>
+            (updateStatus)="updateIssuerFilterStatus($event)"
+            (namespaceChange)="enrolmentsNamespaceFilterChangeHandler($event)"
+            (didChange)="updateSearchByDidValue($event)"
+            (scannedDID)="updateSearchByDidValue($event)"></app-enrolment-list-filter>
+          <app-requested-enrolment-list
+            [list]="requestedEnrolmentsList$ | async"
+            (refreshList)="refreshIssuerList()"></app-requested-enrolment-list>
         </div>
       </div>
     </div>
@@ -38,11 +36,11 @@
         <div class="card card-default mb-3 pb-0">
           <app-enrolment-list-filter
             [status]="issuerDropdown"
-            [showDID]="false"
             (updateStatus)="updateEnrolmentList($event)"
-            (namespaceChange)="myEnrolmentsNamespaceFilterChangeHandler($event)"
-          ></app-enrolment-list-filter>
-          <app-my-enrolment-list [list]="myEnrolmentList$ | async"></app-my-enrolment-list>
+            (namespaceChange)="myEnrolmentsNamespaceFilterChangeHandler($event)"></app-enrolment-list-filter>
+          <app-my-enrolment-list
+            [list]="myEnrolmentList$ | async"
+            (refreshList)="refreshMyEnrolmentsList()"></app-my-enrolment-list>
         </div>
       </div>
     </div>

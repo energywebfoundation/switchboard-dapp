@@ -6,6 +6,9 @@ import {
   RegistrationTypes,
 } from 'iam-client-lib';
 import { ClaimsFacadeService } from '../claims-facade/claims-facade.service';
+import { Store } from '@ngrx/store';
+import { RequestedEnrolmentsSelectors } from '@state';
+import { getNotSyncedAmount } from '../../../state/enrolments/requested/requested.selectors';
 
 /**
   @deprecated
@@ -15,7 +18,7 @@ import { ClaimsFacadeService } from '../claims-facade/claims-facade.service';
   providedIn: 'root',
 })
 export class EnrolmentListService {
-  constructor(private claimsFacade: ClaimsFacadeService) {}
+  constructor(private claimsFacade: ClaimsFacadeService, private store: Store) {}
 
   public async appendDidDocSyncStatus(
     list: Claim[],
@@ -38,11 +41,8 @@ export class EnrolmentListService {
   }
 
   async getNotSyncedDIDsDocsList() {
-    return (
-      await this.appendDidDocSyncStatus(
-        await this.claimsFacade.getClaimsByRequester(true)
-      )
-    ).filter((item) => this.isPendingSync(item));
+   return this.store.select(RequestedEnrolmentsSelectors.getNotSyncedAmount)
+
   }
 
   isPendingSync(element: {

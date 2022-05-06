@@ -2,8 +2,6 @@ import { Action, createReducer, on } from '@ngrx/store';
 import * as OwnedActions from './owned.actions';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
 import { FilterStatus } from '../../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
-import { changeFilterStatus } from './owned.actions';
-import { filterByDid } from '../utils/filter-by-did/filter-by-did';
 import { filterByNamespace } from '../utils/filter-by-namespace/filter-by-namespace';
 import { statusFilter } from '../utils/status-filter/status-filter';
 
@@ -14,7 +12,6 @@ export interface OwnedState {
   filteredList: EnrolmentClaim[];
   status: FilterStatus;
   namespaceFilter: string;
-  didFilter: string;
   error: string;
 }
 
@@ -23,7 +20,6 @@ export const initialState: OwnedState = {
   filteredList: [],
   status: FilterStatus.Pending,
   namespaceFilter: '',
-  didFilter: '',
   error: null,
 };
 
@@ -59,11 +55,11 @@ const ownedReducer = createReducer(
 
 const filter = (
   list: EnrolmentClaim[],
-  { enrolments, didFilter, namespaceFilter }: OwnedState,
+  { enrolments, namespaceFilter }: OwnedState,
   status: FilterStatus
 ) => {
   return statusFilter(
-    filterByNamespace(filterByDid(list, didFilter), namespaceFilter),
+    filterByNamespace(list, namespaceFilter),
     status
   );
 };

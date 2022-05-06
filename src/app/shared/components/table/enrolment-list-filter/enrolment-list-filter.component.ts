@@ -11,10 +11,10 @@ import { debounce, debounceTime, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 export enum FilterStatus {
-  All = 'none',
-  Pending = 'false',
-  Approved = 'true',
-  Rejected = 'rejected',
+  All = 'All',
+  Pending = 'Pending',
+  Approved = 'Approved',
+  Rejected = 'Rejected',
 }
 
 const INPUT_DEBOUNCE_TIME = 300;

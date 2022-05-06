@@ -15,7 +15,6 @@ export class EnrolmentRequestsEffects {
       switchMap(() =>
         from(this.claimsFacade.getClaimsByIssuer()).pipe(
           extendEnrolmentClaim,
-          tap(d => console.log(d)),
           map((enrolments) =>
             RequestedActions.getEnrolmentRequestsSuccess({ enrolments })
           ),
