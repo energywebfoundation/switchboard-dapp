@@ -1,0 +1,204 @@
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { EnrolmentClaim } from '../models/enrolment-claim.interface';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { IamService } from '../../../shared/services/iam.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { NotificationService } from '../../../shared/services/notification.service';
+import { Store } from '@ngrx/store';
+import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';
+import { ViewRequestsComponent } from '../view-requests/view-requests.component';
+import { truthy } from '@operators';
+import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
+import { EnrolmentListType } from '../enrolment-list/enrolment-list.component';
+
+const TOASTR_HEADER = 'Enrolment';
+
+@Component({
+  selector: 'app-my-enrolment-list',
+  templateUrl: './my-enrolment-list.component.html',
+  styleUrls: ['./my-enrolment-list.component.scss'],
+})
+export class MyEnrolmentListComponent implements OnInit, OnDestroy {
+  @Input() set list(data: EnrolmentClaim[]) {
+    if (data.length > 0) {
+      this.dataSource.data = data;
+    }
+  }
+
+  @ViewChild(MatSort) sort: MatSort;
+
+  dataSource = new MatTableDataSource<EnrolmentClaim>([]);
+  displayedColumns: string[] = [
+    'requestDate',
+    'roleName',
+    'parentNamespace',
+    'status',
+    'actions',
+  ];;
+  dynamicAccepted: boolean;
+  dynamicRejected: boolean;
+
+  private _iamSubscriptionId: number;
+  private _shadowList: EnrolmentClaim[] = [];
+
+  constructor(
+    private loadingService: LoadingService,
+    private iamService: IamService,
+    private dialog: MatDialog,
+    private toastr: SwitchboardToastrService,
+    private notifService: NotificationService,
+    private store: Store,
+    private publishRoleService: PublishRoleService
+  ) {}
+
+  isAsset(element) {
+    return (
+      element?.subject !== element?.claimType &&
+      element?.subject !== element?.requester
+    );
+  }
+
+  async ngOnInit() {
+    // Subscribe to IAM events
+    this._iamSubscriptionId =
+      await this.iamService.messagingService.subscribeTo({
+        messageHandler: this._handleMessage.bind(this),
+      });
+
+    // Initialize table
+    this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      if (property === 'status') {
+        if (item.isAccepted) {
+          if (item.isSynced) {
+            return 'approved';
+          } else {
+            return 'approved pending sync';
+          }
+        } else {
+          if (item.isRejected) {
+            return 'rejected';
+          } else {
+            return 'pending';
+          }
+        }
+      } else {
+        return item[property];
+      }
+    };
+  }
+
+  async ngOnDestroy(): Promise<void> {
+
+    // Unsubscribe from IAM Events
+    await this.iamService.messagingService.unsubscribeFrom(
+      this._iamSubscriptionId
+    );
+  }
+
+  public async getList(isRejected: boolean, isAccepted?: boolean) {
+    this.loadingService.show();
+    this.dynamicRejected = isRejected;
+    this.dynamicAccepted = isAccepted;
+
+
+    this._shadowList = this.list;
+  }
+
+  isAccepted(element: EnrolmentClaim) {
+    return element?.isAccepted;
+  }
+
+  isSynced(element: EnrolmentClaim) {
+    return element?.isSynced;
+  }
+
+  isRejected(element: EnrolmentClaim) {
+    return !element?.isAccepted && element?.isRejected;
+  }
+
+  isPending(element: EnrolmentClaim) {
+    return !element?.isAccepted && !element?.isRejected;
+  }
+
+  isPendingSync(element: EnrolmentClaim) {
+    return !element?.isSynced;
+  }
+
+  view(element: EnrolmentClaim) {
+    this.dialog
+      .open(ViewRequestsComponent, {
+        width: '600px',
+        data: {
+          listType: EnrolmentListType.APPLICANT,
+          claimData: element,
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .pipe(truthy())
+      .subscribe(() => {
+        // this.getList(this.dynamicRejected, this.dynamicAccepted);
+      });
+  }
+
+  addToDidDoc(element: EnrolmentClaim) {
+    this.publishRoleService
+      .addToDidDoc({
+        issuedToken: element.issuedToken,
+        registrationTypes: element.registrationTypes,
+        claimType: element.claimType,
+      })
+      .pipe(truthy())
+      // TODO: handle refreshing list after adding to did doc.
+      .subscribe();
+  }
+
+  async cancelClaimRequest(element: EnrolmentClaim) {
+    const dialogRef = this.dialog
+      .open(ConfirmationDialogComponent, {
+        width: '400px',
+        maxHeight: '195px',
+        data: {
+          header: TOASTR_HEADER,
+          message: 'Are you sure to cancel this enrolment request?',
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .toPromise();
+
+    if (await dialogRef) {
+      this.loadingService.show();
+
+      try {
+        await this.iamService.claimsService.deleteClaim({
+          id: element.id,
+        });
+        this.toastr.success(
+          'Action is successful.',
+          'Cancel Enrolment Request'
+        );
+        // await this.getList(this.rejected, this.accepted);
+      } catch (e) {
+        console.error(e);
+        this.toastr.error(
+          'Failed to cancel the enrolment request.',
+          TOASTR_HEADER
+        );
+      } finally {
+        this.loadingService.hide();
+      }
+    }
+  }
+
+  private async _handleMessage(message: any) {
+    if (message.issuedToken || message.isRejected) {
+    }
+  }
+}

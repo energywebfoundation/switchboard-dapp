@@ -9,8 +9,13 @@ import { NotificationService } from '../../shared/services/notification.service'
 import { MatDialog } from '@angular/material/dialog';
 import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 import { Store } from '@ngrx/store';
-import { SettingsSelectors } from '@state';
+import {
+  OwnedEnrolmentsActions,
+  OwnedEnrolmentsSelectors,
+  SettingsSelectors,
+} from '@state';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
+import { FilterStatus } from '../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
 
 @Component({
   selector: 'app-enrolment',
@@ -24,9 +29,10 @@ export class EnrolmentComponent implements AfterViewInit {
 
   issuerListAccepted = false;
   enrolmentListAccepted = undefined;
+  myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
 
-  issuerDropdown = new FormControl('false');
-  enrolmentDropdown = new FormControl('none');
+  issuerDropdown = FilterStatus.Pending;
+  enrolmentDropdown = FilterStatus.All;
   namespaceControlIssuer = new FormControl(undefined);
   namespaceControlMyEnrolments = new FormControl(undefined);
   searchByDid = new FormControl(undefined);
@@ -62,14 +68,14 @@ export class EnrolmentComponent implements AfterViewInit {
           if (queryParams.notif === 'pendingSyncToDidDoc') {
             // Display Approved Claims
             this.enrolmentListAccepted = true;
-            this.asyncSetDropdownValue(this.dropdownValue.approved);
+            this.asyncSetDropdownValue(FilterStatus.Approved);
 
             if (this.enrolmentTabGroup) {
               this.enrolmentTabGroup.selectedIndex = 1;
             }
           } else if (queryParams.notif === 'myEnrolments') {
             // Display All Claims
-            this.asyncSetDropdownValue(this.dropdownValue.all);
+            this.asyncSetDropdownValue(FilterStatus.All);
 
             if (this.enrolmentTabGroup) {
               this.enrolmentTabGroup.selectedIndex = 1;
@@ -106,11 +112,12 @@ export class EnrolmentComponent implements AfterViewInit {
 
     if (i.index === 1) {
       if (this.isMyEnrolmentShown) {
+        this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
         this.enrolmentList.getList(
-          this.enrolmentDropdown.value === 'rejected',
-          this.enrolmentDropdown.value === 'true'
+          this.enrolmentDropdown === FilterStatus.Rejected,
+          this.issuerDropdown === FilterStatus.Approved
             ? true
-            : this.enrolmentDropdown.value === 'false'
+            : this.issuerDropdown === FilterStatus.Pending
             ? false
             : undefined
         );
@@ -119,29 +126,38 @@ export class EnrolmentComponent implements AfterViewInit {
       }
     } else {
       this.issuerList.getList(
-        this.enrolmentDropdown.value === 'rejected',
-        this.issuerDropdown.value === 'true'
+        this.enrolmentDropdown === FilterStatus.Rejected,
+        this.issuerDropdown === FilterStatus.Approved
           ? true
-          : this.issuerDropdown.value === 'false'
+          : this.issuerDropdown === FilterStatus.Pending
           ? false
           : undefined
       );
     }
+    this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
   }
 
-  updateEnrolmentList(e: any) {
-    const value = e.value;
-    this.enrolmentList.getList(
-      value === 'rejected',
-      value === 'true' ? true : value === 'false' ? false : undefined
+  updateEnrolmentList(value: FilterStatus): void {
+    this.store.dispatch(
+      OwnedEnrolmentsActions.changeFilterStatus({ status: value })
+    );
+  }
+
+  myEnrolmentsNamespaceFilterChangeHandler(value: string): void {
+    this.store.dispatch(
+      OwnedEnrolmentsActions.changeNamespaceFilter({ value })
     );
   }
 
   updateIssuerList(e: any) {
     const value = e.value;
     this.issuerList.getList(
-      value === 'rejected',
-      value === 'true' ? true : value === 'false' ? false : undefined
+      value === FilterStatus.Rejected,
+      value === FilterStatus.Approved
+        ? true
+        : value === FilterStatus.Pending
+        ? false
+        : undefined
     );
   }
 
@@ -160,7 +176,7 @@ export class EnrolmentComponent implements AfterViewInit {
   private initDefault(index?: number) {
     if (!this._queryParamSelectedTabInit) {
       this.issuerListAccepted = false;
-      this.asyncSetDropdownValue(this.dropdownValue.pending);
+      this.asyncSetDropdownValue(FilterStatus.Pending);
     }
 
     if (this.enrolmentTabGroup) {
@@ -174,15 +190,15 @@ export class EnrolmentComponent implements AfterViewInit {
     }
   }
 
-  private asyncSetDropdownValue(value: any) {
+  private asyncSetDropdownValue(value: FilterStatus) {
     if (this.enrolmentList) {
       const timeout$ = setTimeout(() => {
-        this.enrolmentDropdown.setValue(value);
+        this.enrolmentDropdown = value;
         this.enrolmentList.getList(
-          this.enrolmentDropdown.value === 'rejected',
-          this.enrolmentDropdown.value === 'true'
+          this.enrolmentDropdown === FilterStatus.Rejected,
+          this.enrolmentDropdown === FilterStatus.Approved
             ? true
-            : this.enrolmentDropdown.value === 'false'
+            : this.enrolmentDropdown === FilterStatus.Pending
             ? false
             : undefined
         );

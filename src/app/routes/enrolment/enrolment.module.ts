@@ -19,6 +19,8 @@ import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-
 import { IssueVcModule } from '../../modules/issue-vc/issue-vc.module';
 import { EnrolmentFormModule } from '../registration/enrolment-form/enrolment-form.module';
 import { FieldsComponent } from './fields/fields.component';
+import { MyEnrolmentListComponent } from './my-enrolment-list/my-enrolment-list.component';
+import { RequestedEnrolmentListComponent } from './requested-enrolment-list/requested-enrolment-list.component';
 
 const routes: Routes = [{ path: '', component: EnrolmentComponent }];
 
@@ -29,6 +31,8 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
     ViewRequestsComponent,
     ViewRoleComponent,
     FieldsComponent,
+    MyEnrolmentListComponent,
+    RequestedEnrolmentListComponent,
   ],
   imports: [
     SharedModule,

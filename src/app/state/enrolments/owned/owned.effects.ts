@@ -6,7 +6,6 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { forkJoin, from, of } from 'rxjs';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
-import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';
 import { extendEnrolmentClaim } from '../pipes/extend-enrolment-claim';
 
 @Injectable()
@@ -16,8 +15,8 @@ export class OwnedEnrolmentsEffects {
       ofType(OwnedActions.getOwnedEnrolments),
       switchMap(() =>
         from(this.claimsFacade.getClaimsByRequester()).pipe(
-          this.checkForNotSyncedOnChain,
           extendEnrolmentClaim,
+          switchMap(enrolments => from(this.claimsFacade.appendDidDocSyncStatus(enrolments))),
           map((enrolments: EnrolmentClaim[]) =>
             OwnedActions.getOwnedEnrolmentsSuccess({ enrolments })
           ),
@@ -39,6 +38,7 @@ export class OwnedEnrolmentsEffects {
         from(this.claimsFacade.getClaimsByRequester()).pipe(
           this.checkForNotSyncedOnChain,
           extendEnrolmentClaim,
+          switchMap(enrolments => from(this.claimsFacade.appendDidDocSyncStatus(enrolments))),
           map((enrolments: EnrolmentClaim[]) =>
             OwnedActions.updateOwnedEnrolmentsSuccess({ enrolments })
           ),
@@ -58,7 +58,7 @@ export class OwnedEnrolmentsEffects {
       switchMap((enrolments: EnrolmentClaim[]) => {
         return forkJoin(
           enrolments.map((enrolment) =>
-            from(this.publishRoleService.checkForNotSyncedOnChain(enrolment))
+            from(this.claimsFacade.checkForNotSyncedOnChain(enrolment))
           )
         );
       })
@@ -69,6 +69,6 @@ export class OwnedEnrolmentsEffects {
     private actions$: Actions,
     private store: Store,
     private claimsFacade: ClaimsFacadeService,
-    private publishRoleService: PublishRoleService
-  ) {}
+  ) {
+  }
 }
