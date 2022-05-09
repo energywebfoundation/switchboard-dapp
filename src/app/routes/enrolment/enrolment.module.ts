@@ -21,6 +21,7 @@ import { EnrolmentFormModule } from '../registration/enrolment-form/enrolment-fo
 import { FieldsComponent } from './fields/fields.component';
 import { MyEnrolmentListComponent } from './my-enrolment-list/my-enrolment-list.component';
 import { RequestedEnrolmentListComponent } from './requested-enrolment-list/requested-enrolment-list.component';
+import { EnrolmentStatusComponent } from './enrolment-status/enrolment-status.component';
 
 const routes: Routes = [{ path: '', component: EnrolmentComponent }];
 
@@ -33,6 +34,7 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
     FieldsComponent,
     MyEnrolmentListComponent,
     RequestedEnrolmentListComponent,
+    EnrolmentStatusComponent,
   ],
   imports: [
     SharedModule,

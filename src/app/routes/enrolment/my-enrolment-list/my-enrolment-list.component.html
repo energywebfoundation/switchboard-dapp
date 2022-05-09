@@ -30,24 +30,13 @@
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
       <td mat-cell *matCellDef="let element" data-label="Status">
-        <ng-container *ngIf="isAccepted(element)">
-          <div class="d-flex flex-column align-items-md-center flex-md-row justify-content-between mr-2">
-            <div class="color-success">Approved</div>
-            <div>
-              <div class="mt-2 mt-md-2 mb-md-2" *ngIf="isPendingSync(element)">
-                <mat-icon class="color-warned icon-small mr-2" svgIcon="sync-did-icon"></mat-icon>
-                <!-- Apply link to add to DID Document -->
-                <span class="default-color cursor-pointer" (click)="addToDidDoc(element)">Publish</span>
-              </div>
-            </div>
+        <app-enrolment-status [item]="element">
+          <div class="mt-2 mt-md-2 mb-md-2">
+            <mat-icon class="color-warned icon-small mr-2" svgIcon="sync-did-icon"></mat-icon>
+            <!-- Apply link to add to DID Document -->
+            <span class="default-color cursor-pointer" (click)="addToDidDoc(element)">Publish</span>
           </div>
-        </ng-container>
-        <ng-container *ngIf="isPending(element)">
-          <span class="color-warned">Pending</span>
-        </ng-container>
-        <ng-container *ngIf="isRejected(element)">
-          <span class="color-error">Rejected</span>
-        </ng-container>
+        </app-enrolment-status>
       </td>
     </ng-container>
 
