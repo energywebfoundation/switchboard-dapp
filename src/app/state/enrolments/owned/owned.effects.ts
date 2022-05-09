@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as OwnedActions from './owned.actions';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
-import { forkJoin, from, of } from 'rxjs';
+import { forkJoin, from, Observable, of } from 'rxjs';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
 import { extendEnrolmentClaim } from '../pipes/extend-enrolment-claim';
@@ -17,17 +17,10 @@ export class OwnedEnrolmentsEffects {
       tap(() => this.loadingService.show()),
       switchMap(() =>
         from(this.claimsFacade.getClaimsByRequester()).pipe(
-          extendEnrolmentClaim,
-          switchMap(enrolments => from(this.claimsFacade.appendDidDocSyncStatus(enrolments))),
-          map((enrolments: EnrolmentClaim[]) =>
-            OwnedActions.getOwnedEnrolmentsSuccess({ enrolments })
+          this.getEnrolments(
+            OwnedActions.getOwnedEnrolmentsSuccess,
+            OwnedActions.getOwnedEnrolmentsFailure
           ),
-          catchError((e) => {
-            console.error(e);
-            return of(
-              OwnedActions.getOwnedEnrolmentsFailure({ error: e.message })
-            );
-          }),
           finalize(() => this.loadingService.hide())
         )
       )
@@ -39,21 +32,30 @@ export class OwnedEnrolmentsEffects {
       ofType(OwnedActions.updateOwnedEnrolments),
       switchMap(() =>
         from(this.claimsFacade.getClaimsByRequester()).pipe(
-          extendEnrolmentClaim,
-          switchMap(enrolments => from(this.claimsFacade.appendDidDocSyncStatus(enrolments))),
-          map((enrolments: EnrolmentClaim[]) =>
-            OwnedActions.updateOwnedEnrolmentsSuccess({ enrolments })
-          ),
-          catchError((e) => {
-            console.error(e);
-            return of(
-              OwnedActions.updateOwnedEnrolmentsFailure({ error: e.message })
-            );
-          }),
+          this.getEnrolments(
+            OwnedActions.updateOwnedEnrolmentsSuccess,
+            OwnedActions.updateOwnedEnrolmentsFailure
+          )
         )
       )
     )
   );
+
+  private getEnrolments(successAction, failureAction) {
+    return (source: Observable<EnrolmentClaim[]>) => {
+      return source.pipe(
+        switchMap((enrolments) =>
+          from(this.claimsFacade.appendDidDocSyncStatus(enrolments))
+        ),
+        extendEnrolmentClaim(),
+        map((enrolments: EnrolmentClaim[]) => successAction({ enrolments })),
+        catchError((e) => {
+          console.error(e);
+          return of(failureAction({ error: e.message }));
+        })
+      );
+    };
+  }
 
   checkForNotSyncedOnChain(source) {
     return source.pipe(
@@ -72,6 +74,5 @@ export class OwnedEnrolmentsEffects {
     private store: Store,
     private claimsFacade: ClaimsFacadeService,
     private loadingService: LoadingService
-  ) {
-  }
+  ) {}
 }
