@@ -8,9 +8,9 @@ describe('filterByNamespace function', () => {
   it('should remove 1 element from list', () => {
     expect(
       filterByNamespace(
-        [{ namespace: 'test' }, { subject: 'cool' }] as any[],
+        [{ namespace: 'test' }, { namespace: 'cool' }] as any[],
         'te'
       )
-    ).toEqual([{ subject: 'test' }] as any);
+    ).toEqual([{ namespace: 'test' }] as any);
   });
 });

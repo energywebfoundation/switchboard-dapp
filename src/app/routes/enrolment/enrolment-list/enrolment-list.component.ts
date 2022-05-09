@@ -15,7 +15,7 @@ import { FormControl } from '@angular/forms';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { truthy } from '@operators';
 import { Store } from '@ngrx/store';
-import { OwnedEnrolmentsActions, RequestedEnrolmentsActions, SettingsSelectors } from '@state';
+import { SettingsSelectors } from '@state';
 import { EnrolmentClaim } from '../models/enrolment-claim.interface';
 import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';
 
@@ -110,18 +110,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         'status',
         'actions',
       ];
-    } else {
-      this.store
-        .select(SettingsSelectors.isExperimentalEnabled)
-        .subscribe((isExperimental: boolean) => {
-          this.displayedColumns = this.setDisplayedColumns(isExperimental);
-          this.dataSource.data = this.removeEnrollmentToAssets(
-            this._shadowList,
-            isExperimental
-          );
-        });
     }
-
     this.setFilters();
   }
 
@@ -150,30 +139,6 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
             did: this.subject,
             isAccepted,
           })
-        );
-      } else if (this.listType === EnrolmentListType.ISSUER) {
-        this.store.dispatch(RequestedEnrolmentsActions.getEnrolmentRequests());
-        list = this._getRejectedOnly(
-          isRejected,
-          isAccepted,
-          await this.iamService.claimsService.getClaimsByIssuer({
-            did: this.iamService.signerService.did,
-            isAccepted,
-          })
-        );
-      } else {
-        this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
-        list = await Promise.all(
-          this._getRejectedOnly(
-            isRejected,
-            isAccepted,
-            await this.iamService.claimsService.getClaimsByRequester({
-              did: this.iamService.signerService.did,
-              isAccepted,
-            })
-          ).map((item) =>
-            this.publishRoleService.checkForNotSyncedOnChain(item)
-          )
         );
       }
 

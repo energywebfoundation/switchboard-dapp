@@ -5,7 +5,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { dialogSpy, loadingServiceSpy } from '@tests';
 import { LoadingService } from '../loading.service';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
-import { NotificationService } from '../notification.service';
 import { ClaimsFacadeService } from '../claims-facade/claims-facade.service';
 import { from, of } from 'rxjs';
 import { NamespaceType, RegistrationTypes } from 'iam-client-lib';
@@ -13,7 +12,6 @@ import { NamespaceType, RegistrationTypes } from 'iam-client-lib';
 describe('PublishRoleService', () => {
   let service: PublishRoleService;
   let toastrSpy;
-  let notifSpy;
   let claimsFacadeSpy;
   beforeEach(() => {
     toastrSpy = jasmine.createSpyObj('SwitchboardToastrService', [
@@ -22,9 +20,6 @@ describe('PublishRoleService', () => {
       'warning',
     ]);
 
-    notifSpy = jasmine.createSpyObj('NotificationService', [
-      'decreasePendingDidDocSyncCount',
-    ]);
     claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
       'publishPublicClaim',
       'registerOnchain',
@@ -36,7 +31,6 @@ describe('PublishRoleService', () => {
         { provide: MatDialog, useValue: dialogSpy },
         { provide: LoadingService, useValue: loadingServiceSpy },
         { provide: SwitchboardToastrService, useValue: toastrSpy },
-        { provide: NotificationService, useValue: notifSpy },
         { provide: ClaimsFacadeService, useValue: claimsFacadeSpy },
       ],
     });
@@ -64,7 +58,6 @@ describe('PublishRoleService', () => {
         })
         .subscribe((v) => {
           expect(toastrSpy.success).toHaveBeenCalled();
-          expect(notifSpy.decreasePendingDidDocSyncCount).toHaveBeenCalled();
           expect(v).toBeTrue();
           done();
         });

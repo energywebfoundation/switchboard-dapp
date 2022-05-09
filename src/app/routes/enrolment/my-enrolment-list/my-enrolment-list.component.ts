@@ -14,7 +14,6 @@ import { LoadingService } from '../../../shared/services/loading.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { NotificationService } from '../../../shared/services/notification.service';
 import { Store } from '@ngrx/store';
 import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';
 import { ViewRequestsComponent } from '../view-requests/view-requests.component';
@@ -57,7 +56,6 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
     private iamService: IamService,
     private dialog: MatDialog,
     private toastr: SwitchboardToastrService,
-    private notifService: NotificationService,
     private store: Store,
     private publishRoleService: PublishRoleService
   ) {}

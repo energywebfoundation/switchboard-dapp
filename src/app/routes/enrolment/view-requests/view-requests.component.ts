@@ -92,7 +92,7 @@ export class ViewRequestsComponent implements OnInit {
 
       await this.iamService.claimsService.issueClaimRequest(req);
 
-      this.notifService.decreasePendingApprovalCount();
+      this.notifService.updatePendingApprovalList();
       this.toastr.success('Request is approved.', TOASTR_HEADER);
       this.dialogRef.close(true);
     } catch (e) {
@@ -124,7 +124,7 @@ export class ViewRequestsComponent implements OnInit {
               id: this.claim.id,
               requesterDID: this.claim.requester,
             });
-            this.notifService.decreasePendingApprovalCount();
+            this.notifService.updatePendingApprovalList();
             this.toastr.success(
               'Request is rejected successfully.',
               TOASTR_HEADER

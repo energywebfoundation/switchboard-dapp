@@ -63,14 +63,14 @@ export class MessageSubscriptionService implements OnDestroy {
   private handleClaimEvents(type: string) {
     switch (type) {
       case ClaimEventType.REQUEST_CREDENTIALS:
-        this.notifService.increasePendingApprovalCount();
+        this.notifService.updatePendingApprovalList();
         this.toastr.info(
           'A new enrolment request is waiting for your approval.',
           'New Enrolment Request'
         );
         break;
       case ClaimEventType.ISSUE_CREDENTIAL:
-        this.notifService.increasePendingDidDocSyncCount();
+        this.notifService.updatePendingPublishList();
         this.toastr.info(
           'Your enrolment request is approved. ' +
             'Please sync your approved claims in your DID Document.',

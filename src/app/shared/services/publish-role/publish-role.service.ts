@@ -9,7 +9,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
-import { NotificationService } from '../notification.service';
 import { catchError, finalize, map, switchMap } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { ClaimsFacadeService } from '../claims-facade/claims-facade.service';
@@ -28,7 +27,6 @@ export class PublishRoleService {
     private dialog: MatDialog,
     private loadingService: LoadingService,
     private toastr: SwitchboardToastrService,
-    private notifService: NotificationService,
     private claimsFacade: ClaimsFacadeService
   ) {}
 
@@ -88,14 +86,6 @@ export class PublishRoleService {
     });
   }
 
-  async getNotSyncedDIDsDocsList() {
-    return (
-      await this.appendDidDocSyncStatus(
-        await this.claimsFacade.getClaimsByRequester(true)
-      )
-    ).filter((item) => !item?.isSynced);
-  }
-
   private openConfirmationDialog(data: {
     header: string;
     svgIcon: string;
@@ -147,7 +137,6 @@ export class PublishRoleService {
           .pipe(
             map((retVal) => {
               if (retVal) {
-                this.notifService.decreasePendingDidDocSyncCount();
                 this.toastr.success('Action is successful.', 'Publish');
               } else {
                 this.toastr.warning(

@@ -3,16 +3,29 @@ import { TestBed } from '@angular/core/testing';
 import { NotificationService } from './notification.service';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import {
+  OwnedEnrolmentsActions,
+  OwnedEnrolmentsSelectors,
+  RequestedEnrolmentsActions,
+  RequestedEnrolmentsSelectors
+} from '@state';
 
 describe('NotificationService', () => {
   let service: NotificationService;
   let claimsFacadeSpy;
   let assetsFacadeServiceSpy;
+  let store: MockStore;
 
   const setUp = () => {
     assetsFacadeServiceSpy.getOfferedAssets.and.returnValue(
       Promise.resolve([{}, {}])
+    );
+
+    store.overrideSelector(OwnedEnrolmentsSelectors.getNotSyncedAmount, 1);
+    store.overrideSelector(
+      RequestedEnrolmentsSelectors.getPendingEnrolmentsAmount,
+      3
     );
   };
   beforeEach(() => {
@@ -23,10 +36,11 @@ describe('NotificationService', () => {
       providers: [
         { provide: AssetsFacadeService, useValue: assetsFacadeServiceSpy },
         { provide: ClaimsFacadeService, useValue: claimsFacadeSpy },
-        provideMockStore()
+        provideMockStore(),
       ],
     });
     service = TestBed.inject(NotificationService);
+    store = TestBed.inject(MockStore);
   });
 
   it('should be created', () => {
@@ -48,8 +62,6 @@ describe('NotificationService', () => {
   it('should get number of not synced DID Docs when initializing', async (done) => {
     setUp();
 
-    await service.init();
-
     service.pendingDidDocSync.subscribe((v) => {
       expect(v).toEqual(1);
       done();
@@ -59,31 +71,24 @@ describe('NotificationService', () => {
   it('should get number of pending approvals when initializing', async (done) => {
     setUp();
 
-    await service.init();
-
     service.pendingApproval.subscribe((v) => {
       expect(v).toEqual(3);
       done();
     });
   });
 
-  it('should increase pending approval', (done) => {
-    service.increasePendingApprovalCount();
-
-    service.pendingApproval.subscribe((v) => {
-      expect(v).toEqual(1);
-      done();
-    });
+  it('should refresh requested enrolments list after approving or rejecting', () => {
+    const dispatchSpy = spyOn(store, 'dispatch');
+    service.updatePendingApprovalList();
+    expect(dispatchSpy).toHaveBeenCalledOnceWith(RequestedEnrolmentsActions.updateEnrolmentRequests());
   });
 
-  it('should increase pendingDidDocSync', (done) => {
-    service.increasePendingDidDocSyncCount();
-
-    service.pendingDidDocSync.subscribe((v) => {
-      expect(v).toEqual(1);
-      done();
-    });
+  it('should refresh owned enrolments list after publishing', () => {
+    const dispatchSpy = spyOn(store, 'dispatch');
+    service.updatePendingPublishList();
+    expect(dispatchSpy).toHaveBeenCalledOnceWith(OwnedEnrolmentsActions.updateOwnedEnrolments());
   });
+
   it('should increase assets offered', (done) => {
     service.increaseAssetsOfferedToMeCount();
 
