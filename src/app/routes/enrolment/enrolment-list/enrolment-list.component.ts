@@ -253,7 +253,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         issuedToken: element.issuedToken,
         registrationTypes: element.registrationTypes,
         claimType: element.claimType,
-        claimTypeVersion: element.claimTypeVersion
+        claimTypeVersion: element.claimTypeVersion,
       })
       .pipe(truthy())
       .subscribe(async () => await this.getList(this.rejected, this.accepted));

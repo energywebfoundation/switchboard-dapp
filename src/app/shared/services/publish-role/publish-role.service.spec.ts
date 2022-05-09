@@ -59,7 +59,7 @@ describe('PublishRoleService', () => {
           issuedToken: 'some-token',
           registrationTypes: [],
           claimType: '',
-          claimTypeVersion: "1",
+          claimTypeVersion: '1',
         })
         .subscribe((v) => {
           expect(toastrSpy.success).toHaveBeenCalled();
@@ -76,7 +76,7 @@ describe('PublishRoleService', () => {
           issuedToken: 'some-token',
           registrationTypes: [],
           claimType: '',
-          claimTypeVersion: "1",
+          claimTypeVersion: '1',
         })
         .subscribe((v) => {
           expect(toastrSpy.warning).toHaveBeenCalled();
