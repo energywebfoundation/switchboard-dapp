@@ -179,52 +179,5 @@ describe('PublishRoleService', () => {
       expect(await service.checkForNotSyncedOnChain(item)).toEqual(item);
     });
   });
-
-  describe('appendDidDocSyncStatus', () => {
-    it('should return empty list when getting empty list', async () => {
-      claimsFacadeSpy.getUserClaims.and.returnValue(Promise.resolve([]));
-      expect(await service.appendDidDocSyncStatus([])).toEqual([]);
-    });
-
-    it('should return not changed list when UserClaims is empty', async () => {
-      claimsFacadeSpy.getUserClaims.and.returnValue(Promise.resolve([]));
-      expect(
-        await service.appendDidDocSyncStatus([{ claimType: '123' }] as any[])
-      ).toEqual([{ claimType: '123', isSynced: false }] as any[]);
-    });
-
-    it('should return list with object containing isSynced property', async () => {
-      const claimType = createClaimType('123');
-      claimsFacadeSpy.getUserClaims.and.returnValue(
-        Promise.resolve([{ claimType }])
-      );
-      expect(
-        await service.appendDidDocSyncStatus([
-          { claimType },
-          { claimType: createClaimType('111') },
-        ] as any[])
-      ).toEqual([
-        { claimType, isSynced: true },
-        { claimType: createClaimType('111'), isSynced: false },
-      ] as any[]);
-    });
-
-    it('should not change list when claimType do not match', async () => {
-      claimsFacadeSpy.getUserClaims.and.returnValue(
-        Promise.resolve([{ claimType: createClaimType('12') }])
-      );
-
-      expect(
-        await service.appendDidDocSyncStatus([
-          { claimType: createClaimType('123') },
-        ] as any[])
-      ).toEqual([
-        { claimType: createClaimType('123'), isSynced: false },
-      ] as any[]);
-    });
-  });
 });
 
-const createClaimType = (value: string) => {
-  return `${value}.${NamespaceType.Role}`;
-};

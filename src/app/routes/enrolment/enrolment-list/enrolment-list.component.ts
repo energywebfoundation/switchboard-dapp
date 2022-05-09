@@ -18,6 +18,7 @@ import { Store } from '@ngrx/store';
 import { SettingsSelectors } from '@state';
 import { EnrolmentClaim } from '../models/enrolment-claim.interface';
 import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';
+import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
@@ -59,7 +60,8 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     private toastr: SwitchboardToastrService,
     private notifService: NotificationService,
     private store: Store,
-    private publishRoleService: PublishRoleService
+    private publishRoleService: PublishRoleService,
+    private claimsFacade: ClaimsFacadeService
   ) {}
 
   isAsset(element) {
@@ -150,7 +152,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         }
 
         if (this.listType !== EnrolmentListType.ISSUER) {
-          list = await this.publishRoleService.appendDidDocSyncStatus(list);
+          list = await this.claimsFacade.appendDidDocSyncStatus(list);
         }
       }
     } catch (e) {

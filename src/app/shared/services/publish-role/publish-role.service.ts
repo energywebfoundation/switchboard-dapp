@@ -66,26 +66,6 @@ export class PublishRoleService {
     return item;
   }
 
-  public async appendDidDocSyncStatus(
-    list: Claim[],
-    did?: string
-  ): Promise<(Claim & { isSynced: boolean })[]> {
-    // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    const claims: ClaimData[] = (await this.claimsFacade.getUserClaims(did))
-      .filter((item) => item && item.claimType)
-      .filter((item: ClaimData) => {
-        const arr = item.claimType.split('.');
-        return arr.length > 1 && arr[1] === NamespaceType.Role;
-      });
-
-    return list.map((item) => {
-      return {
-        ...item,
-        isSynced: claims.some((claim) => claim.claimType === item.claimType),
-      };
-    });
-  }
-
   private openConfirmationDialog(data: {
     header: string;
     svgIcon: string;
