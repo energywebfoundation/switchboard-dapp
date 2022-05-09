@@ -36,6 +36,7 @@ export class PublishRoleService {
     issuedToken: string;
     registrationTypes: RegistrationTypes[];
     claimType: string;
+    claimTypeVersion: string;
   }) {
     return this.openConfirmationDialog({
       header: 'Publish credential to my DID document',
@@ -115,18 +116,24 @@ export class PublishRoleService {
       .pipe(truthy());
   }
 
-  private syncClaimToDidDoc(element: {
+  private async syncClaimToDidDoc(element: {
     issuedToken: string;
     registrationTypes: RegistrationTypes[];
     claimType: string;
   }) {
+    const isRegisteredOnChain = await this.checkForNotSyncedOnChain(element);
+    const { notSyncedOnChain } = isRegisteredOnChain;
+    // If the element is already synced on chain, only off-chain registration is needed:
+    const registrationTypes = notSyncedOnChain
+      ? element.registrationTypes
+      : [RegistrationTypes.OffChain];
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.',
       CancelButton.ENABLED
     );
     return this.claimsFacade
       .publishPublicClaim({
-        registrationTypes: element.registrationTypes,
+        registrationTypes: registrationTypes,
         claim: {
           token: element.issuedToken,
           claimType: element.claimType,
