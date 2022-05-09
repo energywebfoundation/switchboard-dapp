@@ -17,6 +17,7 @@ import { ViewRequestsComponent } from '../view-requests/view-requests.component'
 import { truthy } from '@operators';
 import { EnrolmentListType } from '../enrolment-list/enrolment-list.component';
 import { isAsset } from '../../../state/enrolments/utils/remove-assets-from-list/remove-assets-from-list';
+import { sortingDataAccessor } from '../utils/sorting-data-accessor';
 
 const TOASTR_HEADER = 'Enrolment';
 
@@ -88,25 +89,7 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
 
     // Initialize table
     this.dataSource.sort = this.sort;
-    this.dataSource.sortingDataAccessor = (item, property) => {
-      if (property === 'status') {
-        if (item.isAccepted) {
-          if (item.isSynced) {
-            return 'approved';
-          } else {
-            return 'approved pending sync';
-          }
-        } else {
-          if (item.isRejected) {
-            return 'rejected';
-          } else {
-            return 'pending';
-          }
-        }
-      } else {
-        return item[property];
-      }
-    };
+    this.dataSource.sortingDataAccessor = sortingDataAccessor
   }
 
   async ngOnDestroy(): Promise<void> {
