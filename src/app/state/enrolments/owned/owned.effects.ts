@@ -2,17 +2,19 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as OwnedActions from './owned.actions';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { forkJoin, from, of } from 'rxjs';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
 import { extendEnrolmentClaim } from '../pipes/extend-enrolment-claim';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Injectable()
 export class OwnedEnrolmentsEffects {
   getOwnedEnrolments$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OwnedActions.getOwnedEnrolments),
+      tap(() => this.loadingService.show()),
       switchMap(() =>
         from(this.claimsFacade.getClaimsByRequester()).pipe(
           extendEnrolmentClaim,
@@ -25,7 +27,8 @@ export class OwnedEnrolmentsEffects {
             return of(
               OwnedActions.getOwnedEnrolmentsFailure({ error: e.message })
             );
-          })
+          }),
+          finalize(() => this.loadingService.hide())
         )
       )
     )
@@ -36,7 +39,6 @@ export class OwnedEnrolmentsEffects {
       ofType(OwnedActions.updateOwnedEnrolments),
       switchMap(() =>
         from(this.claimsFacade.getClaimsByRequester()).pipe(
-          this.checkForNotSyncedOnChain,
           extendEnrolmentClaim,
           switchMap(enrolments => from(this.claimsFacade.appendDidDocSyncStatus(enrolments))),
           map((enrolments: EnrolmentClaim[]) =>
@@ -47,7 +49,7 @@ export class OwnedEnrolmentsEffects {
             return of(
               OwnedActions.updateOwnedEnrolmentsFailure({ error: e.message })
             );
-          })
+          }),
         )
       )
     )
@@ -69,6 +71,7 @@ export class OwnedEnrolmentsEffects {
     private actions$: Actions,
     private store: Store,
     private claimsFacade: ClaimsFacadeService,
+    private loadingService: LoadingService
   ) {
   }
 }

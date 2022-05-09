@@ -17,10 +17,6 @@ import { ViewRequestsComponent } from '../view-requests/view-requests.component'
 import { truthy } from '@operators';
 import { EnrolmentListType } from '../enrolment-list/enrolment-list.component';
 import { isAsset } from '../../../state/enrolments/utils/remove-assets-from-list/remove-assets-from-list';
-import {
-  ColumnDefinition,
-  ColumnType,
-} from '../../../shared/components/table/generic-table/generic-table.component';
 
 const TOASTR_HEADER = 'Enrolment';
 

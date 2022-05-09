@@ -11,11 +11,12 @@ import {
   OwnedEnrolmentsSelectors,
   RequestedEnrolmentsActions,
   RequestedEnrolmentsSelectors,
-  SettingsSelectors
+  SettingsSelectors,
 } from '@state';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 import { FilterStatus } from '../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
 import { filter } from 'rxjs/operators';
+import { getStatus } from '../../state/enrolments/requested/requested.selectors';
 
 @Component({
   selector: 'app-enrolment',
@@ -25,15 +26,13 @@ import { filter } from 'rxjs/operators';
 export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
 
-  issuerListAccepted = false;
-  enrolmentListAccepted = undefined;
   myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
   requestedEnrolmentsList$ = this.store.select(
     RequestedEnrolmentsSelectors.getEnrolments
   );
 
-  issuerDropdown = FilterStatus.Pending;
-  enrolmentDropdown = FilterStatus.All;
+  issuerDropdown$ = this.store.select(RequestedEnrolmentsSelectors.getStatus);
+  enrolmentDropdown$ = this.store.select(OwnedEnrolmentsSelectors.getStatus);
 
   public isMyEnrolmentShown = false;
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
@@ -60,7 +59,6 @@ export class EnrolmentComponent implements AfterViewInit {
         if (queryParams.notif) {
           if (queryParams.notif === 'pendingSyncToDidDoc') {
             // Display Approved Claims
-            this.enrolmentListAccepted = true;
             this.asyncSetDropdownValue(FilterStatus.Approved);
 
             if (this.enrolmentTabGroup) {
@@ -111,7 +109,7 @@ export class EnrolmentComponent implements AfterViewInit {
     }
   }
 
-  updateEnrolmentList(value: FilterStatus): void {
+  updateEnrolmentListStatus(value: FilterStatus): void {
     this.store.dispatch(
       OwnedEnrolmentsActions.changeFilterStatus({ status: value })
     );
@@ -157,7 +155,6 @@ export class EnrolmentComponent implements AfterViewInit {
 
   private initDefault(index?: number) {
     if (!this._queryParamSelectedTabInit) {
-      this.issuerListAccepted = false;
       this.asyncSetDropdownValue(FilterStatus.Pending);
     }
 
@@ -174,11 +171,6 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   private asyncSetDropdownValue(value: FilterStatus) {
-    const timeout$ = setTimeout(() => {
-      this.enrolmentDropdown = value;
-      clearTimeout(timeout$);
-    }, 30);
-    this.store.dispatch(RequestedEnrolmentsActions.getEnrolmentRequests());
-    this.updateIssuerFilterStatus(value);
+    this.updateEnrolmentListStatus(value);
   }
 }

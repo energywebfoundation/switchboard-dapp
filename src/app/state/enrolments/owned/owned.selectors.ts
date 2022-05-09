@@ -17,17 +17,29 @@ export const getAllEnrolments = createSelector(
 export const getFilteredEnrolments = createSelector(
   getOwnedState,
   (state) => state.filteredList
-)
+);
 
 export const getEnrolments = createSelector(
   isExperimentalEnabled,
   getFilteredEnrolments,
   (isExperimental, allEnrolments) => {
-    if(!isExperimental) {
+    if (!isExperimental) {
       return removeAssetsFromList(allEnrolments);
     }
 
-    return allEnrolments
+    return allEnrolments;
   }
-)
+);
+export const getNotSyncedAmount = createSelector(
+  getAllEnrolments,
+  (enrolments) => {
+    return enrolments
+      .filter((enrolment) => enrolment.isAccepted)
+      .filter((enrolment) => !enrolment.isSynced).length;
+  }
+);
 
+export const getStatus = createSelector(
+  getOwnedState,
+  (state) => state.status
+)

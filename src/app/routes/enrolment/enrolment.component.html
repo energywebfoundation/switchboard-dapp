@@ -14,7 +14,7 @@
         </div>
         <div class="card card-default mb-3 pb-0">
           <app-enrolment-list-filter
-            [status]="enrolmentDropdown"
+            [status]="issuerDropdown$ | async"
             [showDID]="true"
             (updateStatus)="updateIssuerFilterStatus($event)"
             (namespaceChange)="enrolmentsNamespaceFilterChangeHandler($event)"
@@ -22,6 +22,7 @@
             (scannedDID)="updateSearchByDidValue($event)"></app-enrolment-list-filter>
           <app-requested-enrolment-list
             [list]="requestedEnrolmentsList$ | async"
+            [showAssets]="isExperimental$ | async"
             (refreshList)="refreshIssuerList()"></app-requested-enrolment-list>
         </div>
       </div>
@@ -35,8 +36,8 @@
         </div>
         <div class="card card-default mb-3 pb-0">
           <app-enrolment-list-filter
-            [status]="issuerDropdown"
-            (updateStatus)="updateEnrolmentList($event)"
+            [status]="enrolmentDropdown$ | async"
+            (updateStatus)="updateEnrolmentListStatus($event)"
             (namespaceChange)="myEnrolmentsNamespaceFilterChangeHandler($event)"></app-enrolment-list-filter>
           <app-my-enrolment-list
             [list]="myEnrolmentList$ | async"

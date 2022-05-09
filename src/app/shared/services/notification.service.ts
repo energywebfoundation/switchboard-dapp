@@ -2,30 +2,32 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
-import { EnrolmentListService } from './enrolment-list/enrolment-list.service';
-import { RequestedEnrolmentsSelectors } from '@state';
+import {
+  OwnedEnrolmentsActions,
+  OwnedEnrolmentsSelectors,
+  RequestedEnrolmentsActions,
+  RequestedEnrolmentsSelectors
+} from '@state';
 import { Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
-  private _pendingApproval = new BehaviorSubject<number>(0);
   private _assetsOfferedToMe = new BehaviorSubject<number>(0);
 
   constructor(
     private claimsFacade: ClaimsFacadeService,
     private assetsFacade: AssetsFacadeService,
     private store: Store,
-    private enrolmentListService: EnrolmentListService
   ) {}
 
   get pendingApproval() {
-    return this._pendingApproval.asObservable();
+    return this.store.select(RequestedEnrolmentsSelectors.getPendingEnrolmentsAmount);
   }
 
   get pendingDidDocSync() {
-    return this.store.select(RequestedEnrolmentsSelectors.getNotSyncedAmount);
+    return this.store.select(OwnedEnrolmentsSelectors.getNotSyncedAmount);
   }
 
   get assetsOfferedToMe() {
@@ -33,24 +35,23 @@ export class NotificationService {
   }
 
   async init() {
-    this._pendingApproval.next(await this.getPendingClaimsAmount());
     this._assetsOfferedToMe.next(await this.getOfferedAssetsAmount());
   }
 
   increasePendingApprovalCount() {
-    this._pendingApproval.next(this._pendingApproval.getValue() + 1);
+    this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
   }
 
   decreasePendingApprovalCount() {
-    this._pendingApproval.next(this._pendingApproval.getValue() - 1);
+    this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
   }
 
   increasePendingDidDocSyncCount() {
-    //TODO: update list
+    this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
   }
 
   decreasePendingDidDocSyncCount() {
-    //TODO: update list
+    this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
   }
 
   increaseAssetsOfferedToMeCount() {
@@ -59,10 +60,6 @@ export class NotificationService {
 
   decreaseAssetsOfferedToMeCount() {
     this._assetsOfferedToMe.next(this._assetsOfferedToMe.getValue() - 1);
-  }
-
-  private async getPendingClaimsAmount(): Promise<number> {
-    return (await this.claimsFacade.getNotRejectedClaimsByIssuer()).length;
   }
 
   private async getOfferedAssetsAmount(): Promise<number> {

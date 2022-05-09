@@ -20,7 +20,7 @@ export interface RequestedState {
 export const initialState: RequestedState = {
   enrolments: [],
   filteredList: [],
-  status: FilterStatus.All,
+  status: FilterStatus.Pending,
   namespaceFilter: '',
   didFilter: '',
   error: null,

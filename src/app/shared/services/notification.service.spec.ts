@@ -3,40 +3,27 @@ import { TestBed } from '@angular/core/testing';
 import { NotificationService } from './notification.service';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
-import { EnrolmentListService } from './enrolment-list/enrolment-list.service';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('NotificationService', () => {
   let service: NotificationService;
   let claimsFacadeSpy;
   let assetsFacadeServiceSpy;
-  let enrolmentListServiceSpy;
 
   const setUp = () => {
     assetsFacadeServiceSpy.getOfferedAssets.and.returnValue(
       Promise.resolve([{}, {}])
-    );
-    enrolmentListServiceSpy.getNotSyncedDIDsDocsList.and.returnValue(
-      Promise.resolve([{}])
-    );
-    claimsFacadeSpy.getNotRejectedClaimsByIssuer.and.returnValue(
-      Promise.resolve([{}, {}, {}])
     );
   };
   beforeEach(() => {
     assetsFacadeServiceSpy = jasmine.createSpyObj('AssetsFacadeService', [
       'getOfferedAssets',
     ]);
-    enrolmentListServiceSpy = jasmine.createSpyObj('EnrolmentListService', [
-      'getNotSyncedDIDsDocsList',
-    ]);
-    claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
-      'getNotRejectedClaimsByIssuer',
-    ]);
     TestBed.configureTestingModule({
       providers: [
         { provide: AssetsFacadeService, useValue: assetsFacadeServiceSpy },
-        { provide: EnrolmentListService, useValue: enrolmentListServiceSpy },
         { provide: ClaimsFacadeService, useValue: claimsFacadeSpy },
+        provideMockStore()
       ],
     });
     service = TestBed.inject(NotificationService);
