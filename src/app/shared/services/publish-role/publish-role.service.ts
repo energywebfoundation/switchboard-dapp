@@ -120,6 +120,7 @@ export class PublishRoleService {
     issuedToken: string;
     registrationTypes: RegistrationTypes[];
     claimType: string;
+    claimTypeVersion: string;
   }) {
     const isRegisteredOnChain = await this.checkForNotSyncedOnChain(element);
     const { notSyncedOnChain } = isRegisteredOnChain;
@@ -141,6 +142,7 @@ export class PublishRoleService {
       })
       .pipe(
         map((retVal) => {
+            console.log(retVal, "THE RET VAL@@@@")
           if (retVal) {
             this.notifService.decreasePendingDidDocSyncCount();
             this.toastr.success('Action is successful.', 'Publish');
