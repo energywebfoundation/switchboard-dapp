@@ -1,4 +1,4 @@
-export const sortingDataAccessor = (item, property) => {
+export const sortingEnrolmentData = (item, property) => {
   if (property === 'status') {
     if (item.isAccepted) {
       if (item.isSynced) {

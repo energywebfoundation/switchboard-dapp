@@ -8,7 +8,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { EnrolmentClaim } from '../models/enrolment-claim.interface';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { IamService } from '../../../shared/services/iam.service';
@@ -17,7 +16,11 @@ import { ViewRequestsComponent } from '../view-requests/view-requests.component'
 import { truthy } from '@operators';
 import { EnrolmentListType } from '../enrolment-list/enrolment-list.component';
 import { isAsset } from '../../../state/enrolments/utils/remove-assets-from-list/remove-assets-from-list';
-import { sortingDataAccessor } from '../utils/sorting-data-accessor';
+import {
+  ColumnDefinition,
+  ColumnType,
+} from '../../../shared/components/table/generic-table/generic-table.component';
+import { sortingEnrolmentData } from '../utils/sorting-enrolment-data';
 
 const TOASTR_HEADER = 'Enrolment';
 
@@ -27,35 +30,21 @@ const TOASTR_HEADER = 'Enrolment';
   styleUrls: ['./requested-enrolment-list.component.scss'],
 })
 export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
-  @Input() set list(data: EnrolmentClaim[]) {
-    if (data.length > 0) {
-      this.dataSource.data = data;
-    }
-  }
+  @ViewChild('actions') actions;
+  @ViewChild('status') status;
+  @Input() list: EnrolmentClaim[];
   @Input() set showAssets(value: boolean) {
     this._showAssets = value;
     if (this.showAssets) {
-      this.displayedColumns = [
-        'requestDate',
-        'roleName',
-        'parentNamespace',
-        'requester',
-        'asset',
-        'status',
-        'actions',
-      ];
+      this.defineColumns();
     } else {
-      this.displayedColumns = [
-        'requestDate',
-        'roleName',
-        'parentNamespace',
-        'requester',
-        'status',
-        'actions',
-      ];
+      this.defineColumnsWithoutAssets();
     }
   }
   @Output() refreshList = new EventEmitter<void>();
+
+  columns: ColumnDefinition[];
+  sorting = sortingEnrolmentData;
 
   get showAssets() {
     return this._showAssets;
@@ -65,9 +54,6 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  dataSource = new MatTableDataSource<EnrolmentClaim>([]);
-  displayedColumns: string[];
-
   private _iamSubscriptionId: number;
 
   constructor(
@@ -76,10 +62,6 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
     private dialog: MatDialog
   ) {}
 
-  isAsset(element) {
-    return isAsset(element);
-  }
-
   async ngOnInit() {
     // Subscribe to IAM events
     this._iamSubscriptionId =
@@ -87,9 +69,7 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
         messageHandler: this._handleMessage.bind(this),
       });
 
-    // Initialize table
-    this.dataSource.sort = this.sort;
-    this.dataSource.sortingDataAccessor = sortingDataAccessor
+    this.defineColumns();
   }
 
   async ngOnDestroy(): Promise<void> {
@@ -101,22 +81,6 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
 
   isAccepted(element: EnrolmentClaim) {
     return element?.isAccepted;
-  }
-
-  isSynced(element: EnrolmentClaim) {
-    return element?.isSynced;
-  }
-
-  isRejected(element: EnrolmentClaim) {
-    return !element?.isAccepted && element?.isRejected;
-  }
-
-  isPending(element: EnrolmentClaim) {
-    return !element?.isAccepted && !element?.isRejected;
-  }
-
-  isPendingSync(element: EnrolmentClaim) {
-    return !element?.isSynced;
   }
 
   view(element: EnrolmentClaim) {
@@ -145,5 +109,66 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
 
   private updateList() {
     this.refreshList.emit();
+  }
+
+  private defineColumns() {
+    this.columns = [
+      { type: ColumnType.Date, field: 'requestDate', header: 'Request Date' },
+      { type: ColumnType.String, field: 'roleName', header: 'Claim Name' },
+      {
+        type: ColumnType.String,
+        field: 'namespace',
+        header: 'Parent Namespace',
+      },
+      {
+        type: ColumnType.DID,
+        field: 'requester',
+        header: 'Requestor DID',
+      },
+      {
+        type: ColumnType.DID,
+        field: 'subject',
+        header: 'Asset DID',
+        condition: (element: EnrolmentClaim) => isAsset(element),
+      },
+      {
+        type: ColumnType.Custom,
+        field: 'status',
+        header: 'status',
+        customElement: this.status,
+      },
+      {
+        type: ColumnType.Actions,
+        field: 'actions',
+        customElement: this.actions,
+      },
+    ];
+  }
+  private defineColumnsWithoutAssets() {
+    this.columns = [
+      { type: ColumnType.Date, field: 'requestDate', header: 'Request Date' },
+      { type: ColumnType.String, field: 'roleName', header: 'Claim Name' },
+      {
+        type: ColumnType.String,
+        field: 'namespace',
+        header: 'Parent Namespace',
+      },
+      {
+        type: ColumnType.DID,
+        field: 'requester',
+        header: 'Requestor DID',
+      },
+      {
+        type: ColumnType.Custom,
+        field: 'status',
+        header: 'status',
+        customElement: this.status,
+      },
+      {
+        type: ColumnType.Actions,
+        field: 'actions',
+        customElement: this.actions,
+      },
+    ];
   }
 }

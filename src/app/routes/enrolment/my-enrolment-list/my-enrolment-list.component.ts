@@ -8,7 +8,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { EnrolmentClaim } from '../models/enrolment-claim.interface';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { IamService } from '../../../shared/services/iam.service';
@@ -21,7 +20,11 @@ import { truthy } from '@operators';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { EnrolmentListType } from '../enrolment-list/enrolment-list.component';
 import { isAsset } from 'src/app/state/enrolments/utils/remove-assets-from-list/remove-assets-from-list';
-import { sortingDataAccessor } from '../utils/sorting-data-accessor';
+import { sortingEnrolmentData } from '../utils/sorting-enrolment-data';
+import {
+  ColumnDefinition,
+  ColumnType,
+} from '../../../shared/components/table/generic-table/generic-table.component';
 
 const TOASTR_HEADER = 'Enrolment';
 
@@ -31,24 +34,15 @@ const TOASTR_HEADER = 'Enrolment';
   styleUrls: ['./my-enrolment-list.component.scss'],
 })
 export class MyEnrolmentListComponent implements OnInit, OnDestroy {
-  @Input() set list(data: EnrolmentClaim[]) {
-    if (data.length > 0) {
-      this.dataSource.data = data;
-    }
-  }
+  @ViewChild('actions') actions;
+  @ViewChild('status') status;
+  @Input() list: EnrolmentClaim[]
 
   @ViewChild(MatSort) sort: MatSort;
   @Output() refreshList = new EventEmitter<void>();
 
-  dataSource = new MatTableDataSource<EnrolmentClaim>([]);
-  displayedColumns: string[] = [
-    'requestDate',
-    'roleName',
-    'parentNamespace',
-    'status',
-    'actions',
-  ];
-
+  columns: ColumnDefinition[];
+  sorting = sortingEnrolmentData;
   private _iamSubscriptionId: number;
 
   constructor(
@@ -71,9 +65,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
         messageHandler: this._handleMessage.bind(this),
       });
 
-    // Initialize table
-    this.dataSource.sort = this.sort;
-    this.dataSource.sortingDataAccessor = sortingDataAccessor;
+    this.defineColumns();
   }
 
   async ngOnDestroy(): Promise<void> {
@@ -85,18 +77,6 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
 
   isAccepted(element: EnrolmentClaim) {
     return element?.isAccepted;
-  }
-
-  isSynced(element: EnrolmentClaim) {
-    return element?.isSynced;
-  }
-
-  isRejected(element: EnrolmentClaim) {
-    return !element?.isAccepted && element?.isRejected;
-  }
-
-  isPending(element: EnrolmentClaim) {
-    return !element?.isAccepted && !element?.isRejected;
   }
 
   isPendingSync(element: EnrolmentClaim) {
@@ -176,5 +156,33 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   private async _handleMessage(message: any) {
     if (message.issuedToken || message.isRejected) {
     }
+  }
+
+  private defineColumns() {
+    this.columns = [
+      { type: ColumnType.Date, field: 'requestDate', header: 'Request Date' },
+      { type: ColumnType.String, field: 'roleName', header: 'Claim Name' },
+      {
+        type: ColumnType.String,
+        field: 'namespace',
+        header: 'Parent Namespace',
+      },
+      {
+        type: ColumnType.DID,
+        field: 'requester',
+        header: 'Requestor DID',
+      },
+      {
+        type: ColumnType.Custom,
+        field: 'status',
+        header: 'status',
+        customElement: this.status,
+      },
+      {
+        type: ColumnType.Actions,
+        field: 'actions',
+        customElement: this.actions,
+      },
+    ];
   }
 }
