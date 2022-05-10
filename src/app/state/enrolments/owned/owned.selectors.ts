@@ -1,8 +1,6 @@
 import { createSelector } from '@ngrx/store';
 import { getEnrolmentsState } from '../enrolments.reducer';
 import { USER_FEATURE_KEY } from './owned.reducer';
-import { removeAssetsFromList } from '../utils/remove-assets-from-list/remove-assets-from-list';
-import { isExperimentalEnabled } from '../../settings/settings.selectors';
 
 export const getOwnedState = createSelector(
   getEnrolmentsState,
@@ -20,13 +18,8 @@ export const getFilteredEnrolments = createSelector(
 );
 
 export const getEnrolments = createSelector(
-  isExperimentalEnabled,
   getFilteredEnrolments,
-  (isExperimental, allEnrolments) => {
-    if (!isExperimental) {
-      return removeAssetsFromList(allEnrolments);
-    }
-
+  (allEnrolments) => {
     return allEnrolments;
   }
 );

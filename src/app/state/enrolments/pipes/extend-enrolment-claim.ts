@@ -7,7 +7,7 @@ export const extendEnrolmentClaim =
   () => (source: Observable<EnrolmentClaim[]>) => {
     return source.pipe(
       map((enrolments: EnrolmentClaim[]) => {
-        return enrolments.map((item) => {
+        return enrolments.map((item: EnrolmentClaim) => {
           const arr = item.claimType.split(`.${NamespaceType.Role}.`);
           return {
             ...item,
