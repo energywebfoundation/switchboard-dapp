@@ -10,7 +10,7 @@ import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
 import { NotificationService } from '../notification.service';
-import { catchError, finalize, map, switchMap, mergeMap } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { ClaimsFacadeService } from '../claims-facade/claims-facade.service';
 import {
