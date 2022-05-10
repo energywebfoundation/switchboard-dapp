@@ -606,6 +606,10 @@ mat-label {
   color: var(--icon-color);
 }
 
+.badge-anchor {
+    display: inline-block;
+
+}
 .sub-org-tooltip {
   border: 1px solid var(--sub-org-tooltip-border);
   color: var(--sub-org-tooltip-color);
