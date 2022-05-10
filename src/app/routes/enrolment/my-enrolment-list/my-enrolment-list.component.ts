@@ -105,6 +105,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
         issuedToken: element.issuedToken,
         registrationTypes: element.registrationTypes,
         claimType: element.claimType,
+        claimTypeVersion: element.claimTypeVersion,
       })
       .pipe(truthy())
       .subscribe(() => this.updateList());
