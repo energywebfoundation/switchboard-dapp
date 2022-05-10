@@ -7,7 +7,7 @@ import { LoadingService } from '../loading.service';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
 import { ClaimsFacadeService } from '../claims-facade/claims-facade.service';
 import { from, of } from 'rxjs';
-import { NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import { RegistrationTypes } from 'iam-client-lib';
 
 describe('PublishRoleService', () => {
   let service: PublishRoleService;

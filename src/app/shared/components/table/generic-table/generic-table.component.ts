@@ -56,11 +56,10 @@ export class GenericTableComponent implements OnInit {
     this.displayedColumns = data.map((item) => item.field);
     this._columDefinitions = data;
   }
-  @Input() sortingFunction: (data, sortHeaderId: string) => string | number;
-
-  get columDefinitions() {
+  get columDefinitions(): ColumnDefinition[] {
     return this._columDefinitions;
   }
+  @Input() sortingFunction: (data, sortHeaderId: string) => string | number;
 
   columnType = ColumnType;
 

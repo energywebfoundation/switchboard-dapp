@@ -1,11 +1,9 @@
 import { createSelector } from '@ngrx/store';
 
-import { RequestedState, USER_FEATURE_KEY } from './requested.reducer';
+import { USER_FEATURE_KEY } from './requested.reducer';
 import { getEnrolmentsState } from '../enrolments.reducer';
 import { isExperimentalEnabled } from '../../settings/settings.selectors';
 import { removeAssetsFromList } from '../utils/remove-assets-from-list/remove-assets-from-list';
-import { getOwnedState } from '../owned/owned.selectors';
-import { RegistrationTypes } from 'iam-client-lib';
 
 export const getRequestedState = createSelector(
   getEnrolmentsState,

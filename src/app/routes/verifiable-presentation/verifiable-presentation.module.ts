@@ -8,6 +8,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { PresentationCredentialsComponent } from './presentation-credentials/presentation-credentials.component';
 import { VpCardComponent } from './vp-card/vp-card.component';
 import { LayoutModule } from '../../layout/layout.module';
+
 @NgModule({
   declarations: [
     VerifiablePresentationComponent,

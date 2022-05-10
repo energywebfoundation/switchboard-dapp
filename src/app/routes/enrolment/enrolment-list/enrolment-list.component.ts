@@ -314,29 +314,6 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setDisplayedColumns(isExperimental: boolean) {
-    if (isExperimental) {
-      return [
-        'requestDate',
-        'roleName',
-        'parentNamespace',
-        'requester',
-        'asset',
-        'status',
-        'actions',
-      ];
-    } else {
-      return [
-        'requestDate',
-        'roleName',
-        'parentNamespace',
-        'requester',
-        'status',
-        'actions',
-      ];
-    }
-  }
-
   private filterByDid(list: any[], value: string) {
     if (!value) {
       return list;

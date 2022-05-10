@@ -1,5 +1,4 @@
 import { TestScheduler } from 'rxjs/testing';
-import { mapClaimsProfile } from '@operators';
 import { extendEnrolmentClaim } from './extend-enrolment-claim';
 
 describe('extendEnrolmentClaim', () => {

@@ -16,7 +16,6 @@ import {
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 import { FilterStatus } from '../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
 import { filter } from 'rxjs/operators';
-import { getStatus } from '../../state/enrolments/requested/requested.selectors';
 
 @Component({
   selector: 'app-enrolment',

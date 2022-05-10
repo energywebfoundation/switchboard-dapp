@@ -12,12 +12,7 @@ import { SwitchboardToastrService } from '../switchboard-toastr.service';
 import { catchError, finalize, map, switchMap } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { ClaimsFacadeService } from '../claims-facade/claims-facade.service';
-import {
-  Claim,
-  ClaimData,
-  NamespaceType,
-  RegistrationTypes,
-} from 'iam-client-lib';
+import { RegistrationTypes } from 'iam-client-lib';
 
 @Injectable({
   providedIn: 'root',

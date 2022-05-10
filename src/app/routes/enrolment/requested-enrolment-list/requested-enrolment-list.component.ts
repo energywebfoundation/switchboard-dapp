@@ -22,8 +22,6 @@ import {
 } from '../../../shared/components/table/generic-table/generic-table.component';
 import { sortingEnrolmentData } from '../utils/sorting-enrolment-data';
 
-const TOASTR_HEADER = 'Enrolment';
-
 @Component({
   selector: 'app-requested-enrolment-list',
   templateUrl: './requested-enrolment-list.component.html',
@@ -34,8 +32,7 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
   @ViewChild('status') status;
   @Input() list: EnrolmentClaim[];
   @Input() set showAssets(value: boolean) {
-    this._showAssets = value;
-    if (this.showAssets) {
+    if (value) {
       this.defineColumns();
     } else {
       this.defineColumnsWithoutAssets();
@@ -45,12 +42,6 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
 
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
-
-  get showAssets() {
-    return this._showAssets;
-  }
-
-  private _showAssets: boolean;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -101,7 +92,7 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
       });
   }
 
-  private async _handleMessage(message: any) {
+  private async _handleMessage(message) {
     if (!message.issuedToken) {
       this.updateList();
     }

@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
+
 @Component({
   selector: 'app-verifiable-presentation',
   templateUrl: './verifiable-presentation.component.html',

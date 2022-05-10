@@ -153,8 +153,9 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
     this.refreshList.emit();
   }
 
-  private async _handleMessage(message: any) {
+  private async _handleMessage(message) {
     if (message.issuedToken || message.isRejected) {
+      this.updateList();
     }
   }
 
