@@ -54,11 +54,13 @@ describe('PublishRoleService', () => {
 
     it('should return true', (done) => {
       claimsFacadeSpy.publishPublicClaim.and.returnValue(of(true));
+      claimsFacadeSpy.hasOnChainRole.and.returnValue(Promise.resolve(false));
       service
         .addToDidDoc({
           issuedToken: 'some-token',
           registrationTypes: [],
           claimType: '',
+          claimTypeVersion: '1',
         })
         .subscribe((v) => {
           expect(toastrSpy.success).toHaveBeenCalled();
@@ -70,17 +72,68 @@ describe('PublishRoleService', () => {
 
     it('should return false', (done) => {
       claimsFacadeSpy.publishPublicClaim.and.returnValue(of(undefined));
+      claimsFacadeSpy.hasOnChainRole.and.returnValue(Promise.resolve(false));
       service
         .addToDidDoc({
           issuedToken: 'some-token',
           registrationTypes: [],
           claimType: '',
+          claimTypeVersion: '1',
         })
         .subscribe((v) => {
           expect(toastrSpy.warning).toHaveBeenCalled();
           expect(v).toBeFalse();
           done();
         });
+    });
+    it('should publish only with OffChain when onChain is synced', (done) => {
+      claimsFacadeSpy.publishPublicClaim.and.returnValue(of(true));
+      claimsFacadeSpy.hasOnChainRole.and.returnValue(Promise.resolve(true));
+      const enrolment = {
+        issuedToken: 'some-token',
+        registrationTypes: [
+          RegistrationTypes.OnChain,
+          RegistrationTypes.OffChain,
+        ],
+        claimType: '',
+        claimTypeVersion: '1',
+      };
+      service.addToDidDoc(enrolment).subscribe(() => {
+        expect(claimsFacadeSpy.publishPublicClaim).toHaveBeenCalledOnceWith({
+          registrationTypes: [RegistrationTypes.OffChain],
+          claim: {
+            token: enrolment.issuedToken,
+            claimType: enrolment.claimType,
+          },
+        });
+        done();
+      });
+    });
+    it('should publish with OnChain and OffChain when onChain is not synced', (done) => {
+      claimsFacadeSpy.publishPublicClaim.and.returnValue(of(true));
+      claimsFacadeSpy.hasOnChainRole.and.returnValue(Promise.resolve(false));
+      const enrolment = {
+        issuedToken: 'some-token',
+        registrationTypes: [
+          RegistrationTypes.OnChain,
+          RegistrationTypes.OffChain,
+        ],
+        claimType: '',
+        claimTypeVersion: '1',
+      };
+      service.addToDidDoc(enrolment).subscribe(() => {
+        expect(claimsFacadeSpy.publishPublicClaim).toHaveBeenCalledOnceWith({
+          registrationTypes: [
+            RegistrationTypes.OnChain,
+            RegistrationTypes.OffChain,
+          ],
+          claim: {
+            token: enrolment.issuedToken,
+            claimType: enrolment.claimType,
+          },
+        });
+        done();
+      });
     });
   });
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NamespaceType } from 'iam-client-lib';
+import { NamespaceType, RegistrationTypes } from 'iam-client-lib';
 import { take, takeUntil } from 'rxjs/operators';
 import { combineLatest, of, Subject } from 'rxjs';
 import { IamService } from '../../../shared/services/iam.service';
@@ -247,13 +247,13 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         this.getList(this.dynamicRejected, this.dynamicAccepted);
       });
   }
-
-  addToDidDoc(element: EnrolmentClaim) {
+  async addToDidDoc(element: EnrolmentClaim) {
     this.publishRoleService
       .addToDidDoc({
         issuedToken: element.issuedToken,
         registrationTypes: element.registrationTypes,
         claimType: element.claimType,
+        claimTypeVersion: element.claimTypeVersion,
       })
       .pipe(truthy())
       .subscribe(async () => await this.getList(this.rejected, this.accepted));

@@ -11,7 +11,7 @@ import { LoadingService } from '../loading.service';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
 import { NotificationService } from '../notification.service';
 import { catchError, finalize, map, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { from, of } from 'rxjs';
 import { ClaimsFacadeService } from '../claims-facade/claims-facade.service';
 import {
   Claim,
@@ -36,6 +36,7 @@ export class PublishRoleService {
     issuedToken: string;
     registrationTypes: RegistrationTypes[];
     claimType: string;
+    claimTypeVersion: string;
   }) {
     return this.openConfirmationDialog({
       header: 'Publish credential to my DID document',
@@ -119,39 +120,52 @@ export class PublishRoleService {
     issuedToken: string;
     registrationTypes: RegistrationTypes[];
     claimType: string;
+    claimTypeVersion: string;
   }) {
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.',
       CancelButton.ENABLED
     );
-    return this.claimsFacade
-      .publishPublicClaim({
-        registrationTypes: element.registrationTypes,
-        claim: {
-          token: element.issuedToken,
-          claimType: element.claimType,
-        },
+    return from(this.checkForNotSyncedOnChain(element)).pipe(
+      map((response) => {
+        const { notSyncedOnChain } = response;
+        // If the element is alreadypublish synced on chain, only off-chain registration is needed:
+        const registrationTypes = notSyncedOnChain
+          ? element.registrationTypes
+          : [RegistrationTypes.OffChain];
+        return registrationTypes;
+      }),
+      switchMap((regTypes: RegistrationTypes[]) => {
+        return this.claimsFacade
+          .publishPublicClaim({
+            registrationTypes: regTypes,
+            claim: {
+              token: element.issuedToken,
+              claimType: element.claimType,
+            },
+          })
+          .pipe(
+            map((retVal) => {
+              if (retVal) {
+                this.notifService.decreasePendingDidDocSyncCount();
+                this.toastr.success('Action is successful.', 'Publish');
+              } else {
+                this.toastr.warning(
+                  'Unable to proceed with this action. Please contact system administrator.',
+                  'Publish'
+                );
+              }
+              return Boolean(retVal);
+            }),
+            catchError((err) => {
+              console.error(err);
+              this.toastr.error(err?.message, 'Sync to DID Document');
+              return of(err);
+            }),
+            finalize(() => this.loadingService.hide())
+          );
       })
-      .pipe(
-        map((retVal) => {
-          if (retVal) {
-            this.notifService.decreasePendingDidDocSyncCount();
-            this.toastr.success('Action is successful.', 'Publish');
-          } else {
-            this.toastr.warning(
-              'Unable to proceed with this action. Please contact system administrator.',
-              'Publish'
-            );
-          }
-          return Boolean(retVal);
-        }),
-        catchError((err) => {
-          console.error(err);
-          this.toastr.error(err?.message, 'Sync to DID Document');
-          return of(err);
-        }),
-        finalize(() => this.loadingService.hide())
-      );
+    );
   }
 
   private syncToClaimManager(element) {
