@@ -14,23 +14,29 @@ describe('statusFilter', () => {
   });
 
   it('should return only rejected elements', () => {
-    expect(statusFilter(list, FilterStatus.Rejected)).toEqual([{
-      isAccepted: false,
-      isRejected: true,
-    }] as EnrolmentClaim[]);
+    expect(statusFilter(list, FilterStatus.Rejected)).toEqual([
+      {
+        isAccepted: false,
+        isRejected: true,
+      },
+    ] as EnrolmentClaim[]);
   });
 
   it('should return only approved elements', () => {
-    expect(statusFilter(list, FilterStatus.Approved)).toEqual([{
-      isAccepted: true,
-      isRejected: false,
-    }] as EnrolmentClaim[]);
+    expect(statusFilter(list, FilterStatus.Approved)).toEqual([
+      {
+        isAccepted: true,
+        isRejected: false,
+      },
+    ] as EnrolmentClaim[]);
   });
 
   it('should return pending elements', () => {
-    expect(statusFilter(list, FilterStatus.Pending)).toEqual([{
-      isAccepted: false,
-      isRejected: false,
-    }] as EnrolmentClaim[]);
-  })
+    expect(statusFilter(list, FilterStatus.Pending)).toEqual([
+      {
+        isAccepted: false,
+        isRejected: false,
+      },
+    ] as EnrolmentClaim[]);
+  });
 });

@@ -8,9 +8,8 @@ xdescribe('RequestedEnrolmentListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RequestedEnrolmentListComponent ]
-    })
-    .compileComponents();
+      declarations: [RequestedEnrolmentListComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

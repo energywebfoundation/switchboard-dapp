@@ -38,9 +38,9 @@ export const changeFilterStatus = createAction(
 export const changeNamespaceFilter = createAction(
   '[ENROLMENT REQUESTS] Change Namespace Filter',
   props<{ value: string }>()
-)
+);
 
 export const changeDIDFilter = createAction(
   '[ENROLMENT REQUESTS] Change DID Filter',
   props<{ value: string }>()
-)
+);

@@ -8,7 +8,7 @@ import {
   OwnedEnrolmentsActions,
   OwnedEnrolmentsSelectors,
   RequestedEnrolmentsActions,
-  RequestedEnrolmentsSelectors
+  RequestedEnrolmentsSelectors,
 } from '@state';
 
 describe('NotificationService', () => {
@@ -80,13 +80,17 @@ describe('NotificationService', () => {
   it('should refresh requested enrolments list after approving or rejecting', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     service.updatePendingApprovalList();
-    expect(dispatchSpy).toHaveBeenCalledOnceWith(RequestedEnrolmentsActions.updateEnrolmentRequests());
+    expect(dispatchSpy).toHaveBeenCalledOnceWith(
+      RequestedEnrolmentsActions.updateEnrolmentRequests()
+    );
   });
 
   it('should refresh owned enrolments list after publishing', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     service.updatePendingPublishList();
-    expect(dispatchSpy).toHaveBeenCalledOnceWith(OwnedEnrolmentsActions.updateOwnedEnrolments());
+    expect(dispatchSpy).toHaveBeenCalledOnceWith(
+      OwnedEnrolmentsActions.updateOwnedEnrolments()
+    );
   });
 
   it('should increase assets offered', (done) => {

@@ -6,7 +6,7 @@ import {
   OwnedEnrolmentsActions,
   OwnedEnrolmentsSelectors,
   RequestedEnrolmentsActions,
-  RequestedEnrolmentsSelectors
+  RequestedEnrolmentsSelectors,
 } from '@state';
 import { Store } from '@ngrx/store';
 
@@ -19,11 +19,13 @@ export class NotificationService {
   constructor(
     private claimsFacade: ClaimsFacadeService,
     private assetsFacade: AssetsFacadeService,
-    private store: Store,
+    private store: Store
   ) {}
 
   get pendingApproval() {
-    return this.store.select(RequestedEnrolmentsSelectors.getPendingEnrolmentsAmount);
+    return this.store.select(
+      RequestedEnrolmentsSelectors.getPendingEnrolmentsAmount
+    );
   }
 
   get pendingDidDocSync() {

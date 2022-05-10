@@ -8,7 +8,10 @@ import { OwnedEnrolmentsEffects } from './owned/owned.effects';
 @NgModule({
   imports: [
     StoreModule.forFeature(enrolments.USER_FEATURE_KEY, enrolments.reducer),
-    EffectsModule.forFeature([EnrolmentRequestsEffects, OwnedEnrolmentsEffects]),
+    EffectsModule.forFeature([
+      EnrolmentRequestsEffects,
+      OwnedEnrolmentsEffects,
+    ]),
   ],
 })
 export class EnrolmentsStoreSliceModule {}

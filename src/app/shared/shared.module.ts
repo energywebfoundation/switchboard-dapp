@@ -119,7 +119,7 @@ const MATERIAL_MODULES = [
     ReportProblemComponent,
     SmartSearchOptionComponent,
     EnrolmentListFilterComponent,
-    GenericTableComponent
+    GenericTableComponent,
   ],
   exports: [
     CommonModule,
@@ -143,7 +143,7 @@ const MATERIAL_MODULES = [
     DomainImageComponent,
     ReportProblemComponent,
     EnrolmentListFilterComponent,
-    GenericTableComponent
+    GenericTableComponent,
   ],
 })
 

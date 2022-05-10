@@ -38,4 +38,4 @@ export const changeFilterStatus = createAction(
 export const changeNamespaceFilter = createAction(
   '[OWNED ENROLMENTS] Change Namespace Filter',
   props<{ value: string }>()
-)
+);

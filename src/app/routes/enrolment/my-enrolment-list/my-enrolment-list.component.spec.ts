@@ -8,9 +8,8 @@ xdescribe('MyEnrolmentListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MyEnrolmentListComponent ]
-    })
-    .compileComponents();
+      declarations: [MyEnrolmentListComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -39,7 +39,4 @@ export const getNotSyncedAmount = createSelector(
   }
 );
 
-export const getStatus = createSelector(
-  getOwnedState,
-  (state) => state.status
-)
+export const getStatus = createSelector(getOwnedState, (state) => state.status);

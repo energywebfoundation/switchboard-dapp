@@ -5,10 +5,7 @@ import { SearchType } from 'iam-client-lib';
 import { Store } from '@ngrx/store';
 import * as userSelectors from '../../state/user-claim/user.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
-import {
-  LayoutActions,
-  SettingsSelectors,
-} from '@state';
+import { LayoutActions, SettingsSelectors } from '@state';
 import { RouterConst } from '../router-const';
 
 @Component({

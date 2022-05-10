@@ -28,7 +28,7 @@ import { EnrolmentsStoreSliceModule } from './enrolments/enrolments-store-slice.
     ApplicationStoreSliceModule,
     RoleStoreSliceModule,
     SettingsStoreSliceModule,
-    EnrolmentsStoreSliceModule
+    EnrolmentsStoreSliceModule,
   ],
 })
 export class StoreRootModule {}

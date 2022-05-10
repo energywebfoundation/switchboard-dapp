@@ -15,7 +15,7 @@ describe('ClaimsFacadeService', () => {
     'getClaimsByIssuer',
     'getClaimsByRequester',
     'publishPublicClaim',
-    'registerOnchain'
+    'registerOnchain',
   ]);
 
   beforeEach(() => {

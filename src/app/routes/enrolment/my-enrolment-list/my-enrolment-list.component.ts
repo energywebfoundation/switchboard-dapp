@@ -36,7 +36,7 @@ const TOASTR_HEADER = 'Enrolment';
 export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   @ViewChild('actions') actions;
   @ViewChild('status') status;
-  @Input() list: EnrolmentClaim[]
+  @Input() list: EnrolmentClaim[];
 
   @ViewChild(MatSort) sort: MatSort;
   @Output() refreshList = new EventEmitter<void>();

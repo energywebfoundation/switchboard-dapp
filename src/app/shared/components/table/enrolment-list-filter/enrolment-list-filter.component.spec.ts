@@ -8,9 +8,8 @@ describe('EnrolmentListFilterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EnrolmentListFilterComponent ]
-    })
-    .compileComponents();
+      declarations: [EnrolmentListFilterComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -58,10 +58,7 @@ const filter = (
   { enrolments, namespaceFilter }: OwnedState,
   status: FilterStatus
 ) => {
-  return statusFilter(
-    filterByNamespace(list, namespaceFilter),
-    status
-  );
+  return statusFilter(filterByNamespace(list, namespaceFilter), status);
 };
 
 export function reducer(state: OwnedState | undefined, action: Action) {
