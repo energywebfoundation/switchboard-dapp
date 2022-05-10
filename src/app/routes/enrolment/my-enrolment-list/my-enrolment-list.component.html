@@ -1,0 +1,33 @@
+<app-generic-table [list]="list" [columDefinitions]="columns" [sortingFunction]="sorting"></app-generic-table>
+<ng-template #actions let-element>
+  <button mat-menu-item class="btn-color-primary" (click)="view(element)">
+    <mat-icon class="btn-color-primary">preview</mat-icon>
+    <span>Preview</span>
+  </button>
+
+  <button
+    mat-menu-item
+    class="btn-color-primary"
+    (click)="addToDidDoc(element)"
+    *ngIf="isPendingSync(element) && isAccepted(element)">
+    <mat-icon class="btn-color-primary">note_add</mat-icon>
+    <span>Publish</span>
+  </button>
+
+  <button
+    mat-menu-item
+    class="btn-color-error"
+    (click)="cancelClaimRequest(element)"
+    *ngIf="!element?.isAccepted && !element?.isRejected">
+    <mat-icon class="btn-color-error">highlight_off</mat-icon>
+    <span>Cancel Claim Request</span>
+  </button>
+</ng-template>
+<ng-template #status let-element>
+  <app-enrolment-status [item]="element">
+    <div class="mt-2 mt-md-2 mb-md-2">
+      <mat-icon class="color-warned icon-small mr-2" svgIcon="sync-did-icon"></mat-icon>
+      <span class="default-color cursor-pointer" (click)="addToDidDoc(element)">Publish</span>
+    </div>
+  </app-enrolment-status>
+</ng-template>

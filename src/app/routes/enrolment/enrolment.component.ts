@@ -1,16 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlParamService } from '../../shared/services/url-param.service';
-import { EnrolmentListComponent } from './enrolment-list/enrolment-list.component';
 import { MatTabGroup } from '@angular/material/tabs';
-import { NotificationService } from '../../shared/services/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 import { Store } from '@ngrx/store';
-import { SettingsSelectors } from '@state';
+import {
+  OwnedEnrolmentsActions,
+  OwnedEnrolmentsSelectors,
+  RequestedEnrolmentsActions,
+  RequestedEnrolmentsSelectors,
+  SettingsSelectors,
+} from '@state';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
+import { FilterStatus } from '../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-enrolment',
@@ -19,23 +24,14 @@ import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.s
 })
 export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
-  @ViewChild('issuerList') issuerList: EnrolmentListComponent;
-  @ViewChild('enrolmentList') enrolmentList: EnrolmentListComponent;
 
-  issuerListAccepted = false;
-  enrolmentListAccepted = undefined;
+  myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
+  requestedEnrolmentsList$ = this.store.select(
+    RequestedEnrolmentsSelectors.getEnrolments
+  );
 
-  issuerDropdown = new FormControl('false');
-  enrolmentDropdown = new FormControl('none');
-  namespaceControlIssuer = new FormControl(undefined);
-  namespaceControlMyEnrolments = new FormControl(undefined);
-  searchByDid = new FormControl(undefined);
-  public dropdownValue = {
-    all: 'none',
-    pending: 'false',
-    approved: 'true',
-    rejected: 'rejected',
-  };
+  issuerDropdown$ = this.store.select(RequestedEnrolmentsSelectors.getStatus);
+  enrolmentDropdown$ = this.store.select(OwnedEnrolmentsSelectors.getStatus);
 
   public isMyEnrolmentShown = false;
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
@@ -47,7 +43,6 @@ export class EnrolmentComponent implements AfterViewInit {
 
   constructor(
     private activeRoute: ActivatedRoute,
-    private notificationService: NotificationService,
     private urlParamService: UrlParamService,
     private router: Router,
     private dialog: MatDialog,
@@ -56,20 +51,21 @@ export class EnrolmentComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
-      if (queryParams) {
+    this.initDefault();
+    this.activeRoute.queryParams
+      .pipe(filter((queryParams) => !!queryParams))
+      .subscribe(async (queryParams: any) => {
         if (queryParams.notif) {
           if (queryParams.notif === 'pendingSyncToDidDoc') {
             // Display Approved Claims
-            this.enrolmentListAccepted = true;
-            this.asyncSetDropdownValue(this.dropdownValue.approved);
+            this.asyncSetDropdownValue(FilterStatus.Approved);
 
             if (this.enrolmentTabGroup) {
               this.enrolmentTabGroup.selectedIndex = 1;
             }
           } else if (queryParams.notif === 'myEnrolments') {
             // Display All Claims
-            this.asyncSetDropdownValue(this.dropdownValue.all);
+            this.asyncSetDropdownValue(FilterStatus.All);
 
             if (this.enrolmentTabGroup) {
               this.enrolmentTabGroup.selectedIndex = 1;
@@ -87,10 +83,7 @@ export class EnrolmentComponent implements AfterViewInit {
         } else {
           this.initDefault();
         }
-      } else {
-        this.initDefault();
-      }
-    });
+      });
   }
 
   showMe(i: any) {
@@ -106,47 +99,49 @@ export class EnrolmentComponent implements AfterViewInit {
 
     if (i.index === 1) {
       if (this.isMyEnrolmentShown) {
-        this.enrolmentList.getList(
-          this.enrolmentDropdown.value === 'rejected',
-          this.enrolmentDropdown.value === 'true'
-            ? true
-            : this.enrolmentDropdown.value === 'false'
-            ? false
-            : undefined
-        );
+        this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
       } else {
         this.isMyEnrolmentShown = true;
       }
     } else {
-      this.issuerList.getList(
-        this.enrolmentDropdown.value === 'rejected',
-        this.issuerDropdown.value === 'true'
-          ? true
-          : this.issuerDropdown.value === 'false'
-          ? false
-          : undefined
-      );
+      this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
     }
   }
 
-  updateEnrolmentList(e: any) {
-    const value = e.value;
-    this.enrolmentList.getList(
-      value === 'rejected',
-      value === 'true' ? true : value === 'false' ? false : undefined
+  updateEnrolmentListStatus(value: FilterStatus): void {
+    this.store.dispatch(
+      OwnedEnrolmentsActions.changeFilterStatus({ status: value })
     );
   }
 
-  updateIssuerList(e: any) {
-    const value = e.value;
-    this.issuerList.getList(
-      value === 'rejected',
-      value === 'true' ? true : value === 'false' ? false : undefined
+  myEnrolmentsNamespaceFilterChangeHandler(value: string): void {
+    this.store.dispatch(
+      OwnedEnrolmentsActions.changeNamespaceFilter({ value })
+    );
+  }
+
+  updateIssuerFilterStatus(status: FilterStatus) {
+    this.store.dispatch(
+      RequestedEnrolmentsActions.changeFilterStatus({ status })
     );
   }
 
   updateSearchByDidValue(value: string) {
-    this.searchByDid.setValue(value);
+    this.store.dispatch(RequestedEnrolmentsActions.changeDIDFilter({ value }));
+  }
+
+  refreshIssuerList() {
+    this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
+  }
+
+  enrolmentsNamespaceFilterChangeHandler(value) {
+    this.store.dispatch(
+      RequestedEnrolmentsActions.changeNamespaceFilter({ value })
+    );
+  }
+
+  refreshMyEnrolmentsList(): void {
+    this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
   }
 
   createVC() {
@@ -159,8 +154,7 @@ export class EnrolmentComponent implements AfterViewInit {
 
   private initDefault(index?: number) {
     if (!this._queryParamSelectedTabInit) {
-      this.issuerListAccepted = false;
-      this.asyncSetDropdownValue(this.dropdownValue.pending);
+      this.asyncSetDropdownValue(FilterStatus.Pending);
     }
 
     if (this.enrolmentTabGroup) {
@@ -171,23 +165,11 @@ export class EnrolmentComponent implements AfterViewInit {
   private initDefaultMyEnrolments() {
     if (this.enrolmentTabGroup) {
       this.enrolmentTabGroup.selectedIndex = 1;
+      this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
     }
   }
 
-  private asyncSetDropdownValue(value: any) {
-    if (this.enrolmentList) {
-      const timeout$ = setTimeout(() => {
-        this.enrolmentDropdown.setValue(value);
-        this.enrolmentList.getList(
-          this.enrolmentDropdown.value === 'rejected',
-          this.enrolmentDropdown.value === 'true'
-            ? true
-            : this.enrolmentDropdown.value === 'false'
-            ? false
-            : undefined
-        );
-        clearTimeout(timeout$);
-      }, 30);
-    }
+  private asyncSetDropdownValue(value: FilterStatus) {
+    this.updateEnrolmentListStatus(value);
   }
 }

@@ -5,15 +5,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { dialogSpy, loadingServiceSpy } from '@tests';
 import { LoadingService } from '../loading.service';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
-import { NotificationService } from '../notification.service';
 import { ClaimsFacadeService } from '../claims-facade/claims-facade.service';
 import { from, of } from 'rxjs';
-import { NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import { RegistrationTypes } from 'iam-client-lib';
 
 describe('PublishRoleService', () => {
   let service: PublishRoleService;
   let toastrSpy;
-  let notifSpy;
   let claimsFacadeSpy;
   beforeEach(() => {
     toastrSpy = jasmine.createSpyObj('SwitchboardToastrService', [
@@ -22,9 +20,6 @@ describe('PublishRoleService', () => {
       'warning',
     ]);
 
-    notifSpy = jasmine.createSpyObj('NotificationService', [
-      'decreasePendingDidDocSyncCount',
-    ]);
     claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
       'publishPublicClaim',
       'registerOnchain',
@@ -36,7 +31,6 @@ describe('PublishRoleService', () => {
         { provide: MatDialog, useValue: dialogSpy },
         { provide: LoadingService, useValue: loadingServiceSpy },
         { provide: SwitchboardToastrService, useValue: toastrSpy },
-        { provide: NotificationService, useValue: notifSpy },
         { provide: ClaimsFacadeService, useValue: claimsFacadeSpy },
       ],
     });
@@ -64,7 +58,6 @@ describe('PublishRoleService', () => {
         })
         .subscribe((v) => {
           expect(toastrSpy.success).toHaveBeenCalled();
-          expect(notifSpy.decreasePendingDidDocSyncCount).toHaveBeenCalled();
           expect(v).toBeTrue();
           done();
         });
@@ -186,52 +179,4 @@ describe('PublishRoleService', () => {
       expect(await service.checkForNotSyncedOnChain(item)).toEqual(item);
     });
   });
-
-  describe('appendDidDocSyncStatus', () => {
-    it('should return empty list when getting empty list', async () => {
-      claimsFacadeSpy.getUserClaims.and.returnValue(Promise.resolve([]));
-      expect(await service.appendDidDocSyncStatus([])).toEqual([]);
-    });
-
-    it('should return not changed list when UserClaims is empty', async () => {
-      claimsFacadeSpy.getUserClaims.and.returnValue(Promise.resolve([]));
-      expect(
-        await service.appendDidDocSyncStatus([{ claimType: '123' }] as any[])
-      ).toEqual([{ claimType: '123', isSynced: false }] as any[]);
-    });
-
-    it('should return list with object containing isSynced property', async () => {
-      const claimType = createClaimType('123');
-      claimsFacadeSpy.getUserClaims.and.returnValue(
-        Promise.resolve([{ claimType }])
-      );
-      expect(
-        await service.appendDidDocSyncStatus([
-          { claimType },
-          { claimType: createClaimType('111') },
-        ] as any[])
-      ).toEqual([
-        { claimType, isSynced: true },
-        { claimType: createClaimType('111'), isSynced: false },
-      ] as any[]);
-    });
-
-    it('should not change list when claimType do not match', async () => {
-      claimsFacadeSpy.getUserClaims.and.returnValue(
-        Promise.resolve([{ claimType: createClaimType('12') }])
-      );
-
-      expect(
-        await service.appendDidDocSyncStatus([
-          { claimType: createClaimType('123') },
-        ] as any[])
-      ).toEqual([
-        { claimType: createClaimType('123'), isSynced: false },
-      ] as any[]);
-    });
-  });
 });
-
-const createClaimType = (value: string) => {
-  return `${value}.${NamespaceType.Role}`;
-};

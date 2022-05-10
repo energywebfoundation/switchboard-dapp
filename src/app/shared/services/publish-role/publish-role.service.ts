@@ -9,16 +9,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
-import { NotificationService } from '../notification.service';
 import { catchError, finalize, map, switchMap } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 import { ClaimsFacadeService } from '../claims-facade/claims-facade.service';
-import {
-  Claim,
-  ClaimData,
-  NamespaceType,
-  RegistrationTypes,
-} from 'iam-client-lib';
+import { RegistrationTypes } from 'iam-client-lib';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +22,6 @@ export class PublishRoleService {
     private dialog: MatDialog,
     private loadingService: LoadingService,
     private toastr: SwitchboardToastrService,
-    private notifService: NotificationService,
     private claimsFacade: ClaimsFacadeService
   ) {}
 
@@ -66,34 +59,6 @@ export class PublishRoleService {
       };
     }
     return item;
-  }
-
-  public async appendDidDocSyncStatus(
-    list: Claim[],
-    did?: string
-  ): Promise<(Claim & { isSynced: boolean })[]> {
-    // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    const claims: ClaimData[] = (await this.claimsFacade.getUserClaims(did))
-      .filter((item) => item && item.claimType)
-      .filter((item: ClaimData) => {
-        const arr = item.claimType.split('.');
-        return arr.length > 1 && arr[1] === NamespaceType.Role;
-      });
-
-    return list.map((item) => {
-      return {
-        ...item,
-        isSynced: claims.some((claim) => claim.claimType === item.claimType),
-      };
-    });
-  }
-
-  async getNotSyncedDIDsDocsList() {
-    return (
-      await this.appendDidDocSyncStatus(
-        await this.claimsFacade.getClaimsByRequester(true)
-      )
-    ).filter((item) => !item?.isSynced);
   }
 
   private openConfirmationDialog(data: {
@@ -147,7 +112,6 @@ export class PublishRoleService {
           .pipe(
             map((retVal) => {
               if (retVal) {
-                this.notifService.decreasePendingDidDocSyncCount();
                 this.toastr.success('Action is successful.', 'Publish');
               } else {
                 this.toastr.warning(

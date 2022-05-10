@@ -18,6 +18,7 @@ import { Store } from '@ngrx/store';
 import { SettingsSelectors } from '@state';
 import { EnrolmentClaim } from '../models/enrolment-claim.interface';
 import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';
+import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 
 export const EnrolmentListType = {
   ISSUER: 'issuer',
@@ -59,7 +60,8 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     private toastr: SwitchboardToastrService,
     private notifService: NotificationService,
     private store: Store,
-    private publishRoleService: PublishRoleService
+    private publishRoleService: PublishRoleService,
+    private claimsFacade: ClaimsFacadeService
   ) {}
 
   isAsset(element) {
@@ -110,18 +112,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         'status',
         'actions',
       ];
-    } else {
-      this.store
-        .select(SettingsSelectors.isExperimentalEnabled)
-        .subscribe((isExperimental: boolean) => {
-          this.displayedColumns = this.setDisplayedColumns(isExperimental);
-          this.dataSource.data = this.removeEnrollmentToAssets(
-            this._shadowList,
-            isExperimental
-          );
-        });
     }
-
     this.setFilters();
   }
 
@@ -151,28 +142,6 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
             isAccepted,
           })
         );
-      } else if (this.listType === EnrolmentListType.ISSUER) {
-        list = this._getRejectedOnly(
-          isRejected,
-          isAccepted,
-          await this.iamService.claimsService.getClaimsByIssuer({
-            did: this.iamService.signerService.did,
-            isAccepted,
-          })
-        );
-      } else {
-        list = await Promise.all(
-          this._getRejectedOnly(
-            isRejected,
-            isAccepted,
-            await this.iamService.claimsService.getClaimsByRequester({
-              did: this.iamService.signerService.did,
-              isAccepted,
-            })
-          ).map((item) =>
-            this.publishRoleService.checkForNotSyncedOnChain(item)
-          )
-        );
       }
 
       if (list && list.length) {
@@ -183,7 +152,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         }
 
         if (this.listType !== EnrolmentListType.ISSUER) {
-          list = await this.publishRoleService.appendDidDocSyncStatus(list);
+          list = await this.claimsFacade.appendDidDocSyncStatus(list);
         }
       }
     } catch (e) {
@@ -342,29 +311,6 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
       (this.listType === EnrolmentListType.ISSUER && !message.issuedToken)
     ) {
       await this.getList(this.rejected, this.accepted);
-    }
-  }
-
-  private setDisplayedColumns(isExperimental: boolean) {
-    if (isExperimental) {
-      return [
-        'requestDate',
-        'roleName',
-        'parentNamespace',
-        'requester',
-        'asset',
-        'status',
-        'actions',
-      ];
-    } else {
-      return [
-        'requestDate',
-        'roleName',
-        'parentNamespace',
-        'requester',
-        'status',
-        'actions',
-      ];
     }
   }
 

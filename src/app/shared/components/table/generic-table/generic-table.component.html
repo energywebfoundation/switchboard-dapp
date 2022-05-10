@@ -1,0 +1,49 @@
+<div class="mb-3">
+  <table mat-table [dataSource]="dataSource" matSort>
+    <ng-container *ngFor="let item of columDefinitions">
+      <ng-container [matColumnDef]="item.field">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ item?.header }}</th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container *ngIf="checkCondition(item, element)">
+            <ng-container [ngSwitch]="item?.type">
+              <ng-container *ngSwitchCase="columnType.Date">
+                {{ element[item.field] | date: 'MM/dd/yyyy HH:mm:ss' }}
+              </ng-container>
+
+              <ng-container *ngSwitchCase="columnType.String">
+                {{ element[item.field] }}
+              </ng-container>
+              <ng-container *ngSwitchCase="columnType.Custom">
+                <ng-container *ngTemplateOutlet="item.customElement; context: { $implicit: element }"></ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="columnType.DID">
+                <div
+                  matTooltip="{{ element[item.field] }}"
+                  [appMinifiedDidViewer]="element[item.field]"
+                  matTooltipClass="tooltip-full-width">
+                  {{ element[item.field] | didFormatMinifier }}
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="columnType.Actions">
+                <div class="d-flex justify-content-end">
+                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action button list">
+                    <mat-icon class="btn-color-primary">more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <ng-container
+                      *ngTemplateOutlet="item?.customElement; context: { $implicit: element }"></ng-container>
+                  </mat-menu>
+                </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </td>
+      </ng-container>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <app-no-records *ngIf="!dataSource?.data?.length"></app-no-records>
+</div>

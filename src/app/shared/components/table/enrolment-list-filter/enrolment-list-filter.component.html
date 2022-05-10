@@ -1,0 +1,38 @@
+<div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
+  <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0">
+    <mat-form-field appearance="outline" matTooltip="Filter by status" class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+      <mat-select (selectionChange)="statusChangeHandler($event.value)" [value]="status">
+        <mat-option [value]="dropdownValue.all">All</mat-option>
+        <mat-option [value]="dropdownValue.pending"> Pending</mat-option>
+        <mat-option [value]="dropdownValue.approved"> Approved</mat-option>
+        <mat-option [value]="dropdownValue.rejected"> Rejected</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
+    <mat-form-field
+      appearance="outline"
+      class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
+      matTooltip="Filter by namespace - Wildcard filtering, a short description?">
+      <input matInput placeholder="Namespace" [formControl]="namespace" />
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3" *ngIf="showDID">
+    <mat-form-field
+      appearance="outline"
+      class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
+      matTooltip="Filter by did - it will search through Requestor DID and Asset Did">
+      <input matInput placeholder="DID" [formControl]="did" />
+      <button
+        matSuffix
+        mat-icon-button
+        class="qr-code"
+        aria-label="Scan DID"
+        appQrCodeScanner
+        (scannedValue)="updateSearchByDidValue($event.data?.did)">
+        <mat-icon>qr_code_2</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</div>

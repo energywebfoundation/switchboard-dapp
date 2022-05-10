@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
-import { ClaimData } from 'iam-client-lib';
+import {
+  Claim,
+  ClaimData,
+  NamespaceType,
+  RegistrationTypes,
+} from 'iam-client-lib';
 import { from, Observable } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
 import { finalize } from 'rxjs/operators';
-import { Claim } from 'iam-client-lib';
-import { RegistrationTypes } from 'iam-client-lib/dist/src/modules/claims/claims.types';
+import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -35,19 +39,49 @@ export class ClaimsFacadeService {
     );
   }
 
-  async getNotRejectedClaimsByIssuer() {
-    return (
-      await this.iamService.claimsService.getClaimsByIssuer({
-        did: this.iamService.signerService.did,
-        isAccepted: false,
-      })
-    ).filter((item) => !item.isRejected);
+  async checkForNotSyncedOnChain(item) {
+    if (item.registrationTypes.includes(RegistrationTypes.OnChain)) {
+      return {
+        ...item,
+        notSyncedOnChain: !(await this.hasOnChainRole(
+          item.claimType,
+          parseInt(item.claimTypeVersion.toString(), 10)
+        )),
+      };
+    }
+    return item;
+  }
+
+  public async appendDidDocSyncStatus(
+    list: EnrolmentClaim[],
+    did?: string
+  ): Promise<EnrolmentClaim[]> {
+    // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
+    const claims: ClaimData[] = (await this.getUserClaims(did))
+      .filter((item) => item && item.claimType)
+      .filter((item: ClaimData) => {
+        const arr = item.claimType.split('.');
+        return arr.length > 1 && arr[1] === NamespaceType.Role;
+      });
+
+    return list.map((item) => {
+      return {
+        ...item,
+        isSynced: claims.some((claim) => claim.claimType === item.claimType),
+      };
+    });
   }
 
   getClaimsByRequester(isAccepted: boolean = undefined): Promise<Claim[]> {
     return this.iamService.claimsService.getClaimsByRequester({
       did: this.iamService.signerService.did,
       isAccepted,
+    });
+  }
+
+  getClaimsByIssuer() {
+    return this.iamService.claimsService.getClaimsByIssuer({
+      did: this.iamService.signerService.did,
     });
   }
 

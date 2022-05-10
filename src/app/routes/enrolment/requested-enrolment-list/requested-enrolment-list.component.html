@@ -1,0 +1,11 @@
+<app-generic-table [list]="list" [columDefinitions]="columns" [sortingFunction]="sorting"></app-generic-table>
+<ng-template #actions let-element>
+  <button mat-menu-item class="btn-color-primary" (click)="view(element)">
+    <mat-icon class="btn-color-primary">preview</mat-icon>
+    <span>Preview</span>
+  </button>
+</ng-template>
+
+<ng-template #status let-element>
+  <app-enrolment-status [item]="element"></app-enrolment-status>
+</ng-template>

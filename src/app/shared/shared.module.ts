@@ -53,6 +53,8 @@ import { QrCodeScannerModule } from './components/qr-code-scanner/qr-code-scanne
 import { DomainImageComponent } from './components/domain-image/domain-image.component';
 import { ReportProblemComponent } from './components/report-problem/report-problem.component';
 import { SmartSearchOptionComponent } from './components/smart-search/component/smart-search-option/smart-search-option.component';
+import { EnrolmentListFilterComponent } from './components/table/enrolment-list-filter/enrolment-list-filter.component';
+import { GenericTableComponent } from './components/table/generic-table/generic-table.component';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -116,6 +118,8 @@ const MATERIAL_MODULES = [
     DomainImageComponent,
     ReportProblemComponent,
     SmartSearchOptionComponent,
+    EnrolmentListFilterComponent,
+    GenericTableComponent,
   ],
   exports: [
     CommonModule,
@@ -138,6 +142,8 @@ const MATERIAL_MODULES = [
     QrCodeScannerModule,
     DomainImageComponent,
     ReportProblemComponent,
+    EnrolmentListFilterComponent,
+    GenericTableComponent,
   ],
 })
 

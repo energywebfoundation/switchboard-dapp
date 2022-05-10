@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { SwitchboardToastrService } from '../../services/switchboard-toastr.service';
 import { Clipboard } from '@angular/cdk/clipboard';
+
 @Directive({
   selector: '[appCopyToClipboard]',
 })
