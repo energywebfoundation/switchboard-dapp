@@ -1,4 +1,9 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 //
 // export enum FilterType {
@@ -29,11 +34,12 @@ export interface ColumnDefinition {
   customElement?: any;
   condition?: (element: unknown) => boolean;
 }
-
+//TODO: handle filtering data in this component
 @Component({
   selector: 'app-generic-table',
   templateUrl: './generic-table.component.html',
   styleUrls: ['./generic-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GenericTableComponent implements OnInit {
   @Input() set list(data: unknown[]) {
@@ -42,8 +48,6 @@ export class GenericTableComponent implements OnInit {
     }
     this.dataSource.data = data;
   }
-
-  columnType = ColumnType;
 
   @Input() set columDefinitions(data: ColumnDefinition[]) {
     if (!Array.isArray(data)) {
@@ -58,6 +62,14 @@ export class GenericTableComponent implements OnInit {
     return this._columDefinitions;
   }
 
+  columnType = ColumnType;
+
+  private _columDefinitions: ColumnDefinition[];
+
+  displayedColumns: string[];
+
+  dataSource = new MatTableDataSource<unknown>([]);
+
   ngOnInit() {
     if (this.sortingFunction) {
       this.dataSource.sort;
@@ -66,17 +78,10 @@ export class GenericTableComponent implements OnInit {
   }
 
   checkCondition(item: ColumnDefinition, element: unknown) {
-    debugger;
     if (!item.condition) {
       return true;
     }
 
     return item.condition(element);
   }
-
-  private _columDefinitions: ColumnDefinition[];
-
-  displayedColumns: string[];
-
-  dataSource = new MatTableDataSource<unknown>([]);
 }
