@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-verifiable-presentation',
@@ -26,7 +27,7 @@ export class VerifiablePresentationComponent implements OnInit {
     private store: Store,
     public dialog: MatDialog,
     private iamService: IamService
-  ) {}
+  ) { }
   isAutolistLoading = {
     requests: [],
     value: false,
@@ -41,8 +42,77 @@ export class VerifiablePresentationComponent implements OnInit {
       if (params._oob) {
         const paramsDecoded = atob(params._oob);
         const parsedToObj = JSON.parse(paramsDecoded);
+        console.log(parsedToObj, "THE PARAMS!!!")
         const { url } = parsedToObj;
         console.log(url);
+        try {
+         // const result = await this.iamService.verifiableCredentialsService.initiateExchange({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url: "https://vc-api-dev.energyweb.org/vc-api/exchanges/did:ethr:blxm-dev:0xFBd3d99915bFcB8ad4EBf45773E4D0745F2c2F61" });
+         // console.log(result, "THE RESULT!")
+
+        } catch (e) {
+          console.log(e, "THE ERROR")
+        }
+/*
+        const interface = [{
+          presentationDefinition: {
+            challege: String,
+            query: [{
+              type: "DIDAuth" || "PresentationDefinition",
+              credentialQuery: "any"
+            }],
+            interact: {
+              service: [{
+                type: "unmediatedPresentation" || "mediatedPresentation"
+              }]
+            }
+          },
+          selectResults: {
+            errors: "blah",
+            matches: [{
+              hello: "hello"
+            }],
+            areRequiredCredentialsPresent: "status",
+            verifiableCredential: [
+              {
+                context: String,
+                proof: {
+                  type: "ProofType | string",
+                  created: "string",
+                  proofPurpose: "ProofPurpose | string",
+                  verificationMethod: "string",
+                  challenge: "string",
+                  domain: "string",
+                  proofValue: "string",
+                  jws: "string",
+                  nonce: "string",
+                  requiredRevealStatements: "string[]",
+
+                },
+                credentialStatus: {
+                  id: String,
+                  type: String
+                },
+                credentialSubject: {
+                  id: String
+                },
+                credentialSchema: {
+                  id: "string",
+                  type: "string",
+                },
+                description: "string",
+                expirationDate: "string",
+                id: "string",
+                issuanceDate: "string",
+                issuer: "string",
+                name: "string",
+                type: ["string"]
+              }
+            ]
+          }
+
+        }]
+        */
+
         /*
                 TO DO: Call ICL when persistence of pres def is implemented:
                     try {
