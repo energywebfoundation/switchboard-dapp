@@ -15,6 +15,7 @@ export enum FilterStatus {
   Pending = 'Pending',
   Approved = 'Approved',
   Rejected = 'Rejected',
+  Revoked = 'Revoked'
 }
 
 const INPUT_DEBOUNCE_TIME = 300;
@@ -43,6 +44,8 @@ export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
     rejected: FilterStatus.Rejected,
   };
 
+  public statusButtons = [FilterStatus.All, FilterStatus.Pending, FilterStatus.Approved, FilterStatus.Rejected, FilterStatus.Revoked]
+
   private destroy$ = new Subject();
 
   ngOnInit() {
@@ -65,6 +68,7 @@ export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
   }
 
   statusChangeHandler(value: FilterStatus) {
+    console.log(value)
     this.updateStatus.emit(value);
   }
 }
