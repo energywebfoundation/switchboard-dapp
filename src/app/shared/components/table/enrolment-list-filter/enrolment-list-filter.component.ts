@@ -74,7 +74,6 @@ export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
   }
 
   statusChangeHandler(value: FilterStatus) {
-    console.log(value);
     this.updateStatus.emit(value);
   }
 }
