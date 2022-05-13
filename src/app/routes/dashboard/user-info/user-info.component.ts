@@ -6,6 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./user-info.component.scss'],
 })
 export class UserInfoComponent {
-  @Input() userName = 'My Decentralised Identifier:';
+  @Input() userName = 'My Decentralised Identifier:'; //usename
   @Input() accountDid: string;
 }

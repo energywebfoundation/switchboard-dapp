@@ -19,6 +19,7 @@ import { stringify } from 'querystring';
 })
 export class VerifiablePresentationComponent implements OnInit {
   oob$: Observable<string>;
+  tableData$: any;
   public isLoggedIn = false;
   constructor(
     private route: ActivatedRoute,
@@ -45,6 +46,12 @@ export class VerifiablePresentationComponent implements OnInit {
         console.log(parsedToObj, "THE PARAMS!!!")
         const { url } = parsedToObj;
         console.log(url);
+        this.tableData$ = [
+          { descriptor: 'Charging Data Agreement', selfSign: true },
+          { descriptor: 'Customer Role Credential', selfSign: false, credentials: ['Option 1', 'Option 2', 'Option 3'] },
+          
+        ]
+        console.log(this.tableData$, "THE TABLE DATA")
         try {
          // const result = await this.iamService.verifiableCredentialsService.initiateExchange({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url: "https://vc-api-dev.energyweb.org/vc-api/exchanges/did:ethr:blxm-dev:0xFBd3d99915bFcB8ad4EBf45773E4D0745F2c2F61" });
          // console.log(result, "THE RESULT!")

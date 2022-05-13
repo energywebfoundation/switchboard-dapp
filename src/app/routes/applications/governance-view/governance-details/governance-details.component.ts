@@ -85,7 +85,7 @@ export class GovernanceDetailsComponent {
   ) {}
 
   public async setData(data: any) {
-    this.data = data;
+    this.data = data; //MAYBE SET DATA
 
     this.formData = JSON.parse(JSON.stringify(this.data.definition));
     if (this.formData.definition.others) {

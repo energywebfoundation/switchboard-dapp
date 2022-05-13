@@ -27,7 +27,7 @@ export class AssetOwnershipHistoryComponent implements OnInit {
     private toastr: SwitchboardToastrService,
     private loadingService: LoadingService
   ) {}
-
+//USE THIS FOR LIST
   async ngOnInit(): Promise<void> {
     try {
       this.loadingService.show();
