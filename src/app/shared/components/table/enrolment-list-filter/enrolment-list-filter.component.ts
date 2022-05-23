@@ -37,13 +37,6 @@ export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
   namespace: FormControl = new FormControl('');
   did: FormControl = new FormControl('');
 
-  public dropdownValue = {
-    all: FilterStatus.All,
-    pending: FilterStatus.Pending,
-    approved: FilterStatus.Approved,
-    rejected: FilterStatus.Rejected,
-  };
-
   public statusButtons = [
     FilterStatus.All,
     FilterStatus.Pending,
