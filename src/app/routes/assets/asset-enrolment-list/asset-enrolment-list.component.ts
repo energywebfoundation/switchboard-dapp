@@ -9,6 +9,7 @@ import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 import { Store } from '@ngrx/store';
 import { AssetDetailsActions, AssetDetailsSelectors } from '@state';
 import { RouterConst } from '../../router-const';
+import { FilterStatus } from '../../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
 
 @Component({
   selector: 'app-asset-enrolment-list',
@@ -18,16 +19,16 @@ import { RouterConst } from '../../router-const';
 export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   @ViewChild('enrolmentList') enrolmentList: EnrolmentListComponent;
 
-  enrolmentDropdown = new FormControl('none');
+  enrolmentDropdown = FilterStatus.All;
   subject: string;
   namespaceControlIssuer = new FormControl(undefined);
   defaultLogo = ASSET_DEFAULT_LOGO;
 
   public dropdownValue = {
-    all: 'none',
-    pending: 'false',
-    approved: 'true',
-    rejected: 'rejected',
+    all: FilterStatus.All,
+    pending: FilterStatus.Pending,
+    approved: FilterStatus.Approved,
+    rejected: FilterStatus.Rejected,
   };
   asset$ = this.store.select(AssetDetailsSelectors.getAssetDetails);
 
@@ -61,13 +62,16 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
       });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateEnrolmentList(e: any) {
-    const value = e.value;
+  updateEnrolmentList(value: FilterStatus) {
+    this.enrolmentDropdown = value;
     this.enrolmentList.getList(
-      value === 'rejected',
-      value === 'true' ? true : value === 'false' ? false : undefined
+      value === FilterStatus.Rejected,
+      value === FilterStatus.Approved ? true : value === FilterStatus.Pending ? false : undefined
     );
+  }
+
+  namespaceFilterChangeHandler(value: string) {
+    this.namespaceControlIssuer.setValue(value);
   }
 
   back() {

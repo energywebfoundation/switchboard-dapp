@@ -48,30 +48,10 @@
     </div>
     <div class="card card-default mb-3 pb-0">
       <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
-        <!-- Filter -->
-        <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0">
-          <!-- <div class="filter-label mr-1">Group by:</div> -->
-          <mat-form-field
-            appearance="outline"
-            floatPlaceholder="never"
-            class="mat-input-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
-            <mat-select [formControl]="enrolmentDropdown" (selectionChange)="updateEnrolmentList($event)">
-              <mat-option [value]="dropdownValue.all">All</mat-option>
-              <mat-option [value]="dropdownValue.pending">Pending</mat-option>
-              <mat-option [value]="dropdownValue.approved">Approved</mat-option>
-              <mat-option [value]="dropdownValue.rejected">Rejected</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
-          <mat-form-field
-            appearance="outline"
-            floatPlaceholder="never"
-            class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
-            matTooltip="Filter by namespace - Wildcard filtering, a short description?">
-            <input matInput placeholder="Namespace" [formControl]="namespaceControlIssuer" />
-          </mat-form-field>
-        </div>
+        <app-enrolment-list-filter
+          [status]="enrolmentDropdown"
+          (updateStatus)="updateEnrolmentList($event)"
+          (namespaceChange)="namespaceFilterChangeHandler($event)"></app-enrolment-list-filter>
       </div>
       <app-enrolment-list
         [listType]="'asset'"
