@@ -22,6 +22,10 @@ export class EnrolmentStatusComponent {
     return !this.item?.isAccepted && this.item?.isRejected;
   }
 
+  isRevoked() {
+    return this.item.isRevoked;
+  }
+
   isPending() {
     return !this.item?.isAccepted && !this.item?.isRejected;
   }
