@@ -23,13 +23,6 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   subject: string;
   namespaceControlIssuer = new FormControl(undefined);
   defaultLogo = ASSET_DEFAULT_LOGO;
-
-  public dropdownValue = {
-    all: FilterStatus.All,
-    pending: FilterStatus.Pending,
-    approved: FilterStatus.Approved,
-    rejected: FilterStatus.Rejected,
-  };
   asset$ = this.store.select(AssetDetailsSelectors.getAssetDetails);
 
   private subscription$ = new Subject();
