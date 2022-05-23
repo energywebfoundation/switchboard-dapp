@@ -59,7 +59,11 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
     this.enrolmentDropdown = value;
     this.enrolmentList.getList(
       value === FilterStatus.Rejected,
-      value === FilterStatus.Approved ? true : value === FilterStatus.Pending ? false : undefined
+      value === FilterStatus.Approved
+        ? true
+        : value === FilterStatus.Pending
+        ? false
+        : undefined
     );
   }
 
