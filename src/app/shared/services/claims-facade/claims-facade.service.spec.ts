@@ -16,6 +16,7 @@ describe('ClaimsFacadeService', () => {
     'getClaimsByRequester',
     'publishPublicClaim',
     'registerOnchain',
+    'isClaimRevoked',
   ]);
 
   beforeEach(() => {
@@ -73,6 +74,25 @@ describe('ClaimsFacadeService', () => {
       ).toEqual([
         { claimType: createClaimType('123'), isSynced: false },
       ] as any[]);
+    });
+  });
+
+  describe('setIsRevokedStatus', () => {
+    it('should set isRevoked property to the claims', (done) => {
+      claimsServiceSpy.isClaimRevoked.and.returnValues(
+        Promise.resolve(true),
+        Promise.resolve(false),
+      );
+
+      service
+        .setIsRevokedStatus([{ id: 1 }, { id: 2 }] as any)
+        .subscribe((list) => {
+          expect(list).toEqual([
+            { id: 1, isRevoked: true },
+            { id: 2, isRevoked: false },
+          ] as any);
+          done();
+        });
     });
   });
 });

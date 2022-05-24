@@ -153,6 +153,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
 
         if (this.listType !== EnrolmentListType.ISSUER) {
           list = await this.claimsFacade.appendDidDocSyncStatus(list);
+          list = await this.claimsFacade.setIsRevokedStatus(list).toPromise()
         }
       }
     } catch (e) {

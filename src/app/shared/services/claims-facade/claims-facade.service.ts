@@ -6,10 +6,10 @@ import {
   NamespaceType,
   RegistrationTypes,
 } from 'iam-client-lib';
-import { from, Observable } from 'rxjs';
+import { forkJoin, from, Observable } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
 
 @Injectable({
@@ -70,6 +70,25 @@ export class ClaimsFacadeService {
         isSynced: claims.some((claim) => claim.claimType === item.claimType),
       };
     });
+  }
+
+  public setIsRevokedStatus(
+    list: EnrolmentClaim[]
+  ): Observable<EnrolmentClaim[]> {
+    return forkJoin(
+      list.map((claim) =>
+        from(
+          this.iamService.claimsService.isClaimRevoked({
+            claimId: claim.id,
+          })
+        ).pipe(
+          map((v) => ({
+            ...claim,
+            isRevoked: v,
+          }))
+        )
+      )
+    );
   }
 
   getClaimsByRequester(isAccepted: boolean = undefined): Promise<Claim[]> {
