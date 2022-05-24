@@ -7,6 +7,7 @@ describe('statusFilter', () => {
     { isAccepted: false, isRejected: false },
     { isAccepted: false, isRejected: true },
     { isAccepted: true, isRejected: false },
+    { isAccepted: true, isRejected: false, isRevoked: true },
   ] as EnrolmentClaim[];
 
   it('should return all elements', () => {
@@ -37,6 +38,12 @@ describe('statusFilter', () => {
         isAccepted: false,
         isRejected: false,
       },
+    ] as EnrolmentClaim[]);
+  });
+
+  it('should return only revoked elements', () => {
+    expect(statusFilter(list, FilterStatus.Revoked)).toEqual([
+      { isAccepted: true, isRejected: false, isRevoked: true },
     ] as EnrolmentClaim[]);
   });
 });
