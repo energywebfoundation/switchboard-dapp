@@ -14,6 +14,10 @@ export const statusFilter = (list: EnrolmentClaim[], status: FilterStatus) => {
     return list.filter((item) => item.isAccepted);
   }
 
+  if (status === FilterStatus.Revoked) {
+    return list.filter((item) => item.isRevoked);
+  }
+
   if (status === FilterStatus.All) {
     return list;
   }
