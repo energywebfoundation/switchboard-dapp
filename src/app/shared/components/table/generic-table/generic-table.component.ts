@@ -3,8 +3,10 @@ import {
   Component,
   Input,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 //
 // export enum FilterType {
 //   Dropdown = 'dropdown',
@@ -41,12 +43,15 @@ export interface ColumnDefinition {
   styleUrls: ['./generic-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GenericTableComponent implements OnInit {
+export class GenericTableComponent {
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Input() set list(data: unknown[]) {
     if (!Array.isArray(data)) {
       return;
     }
-    this.dataSource.data = data;
+    this.dataSource = new MatTableDataSource<unknown>(data);
+    this.dataSource.sort = this.sort;
+    this.setSortingDataAccessor();
   }
 
   @Input() set columDefinitions(data: ColumnDefinition[]) {
@@ -69,18 +74,17 @@ export class GenericTableComponent implements OnInit {
 
   dataSource = new MatTableDataSource<unknown>([]);
 
-  ngOnInit() {
-    if (this.sortingFunction) {
-      this.dataSource.sort;
-      this.dataSource.sortingDataAccessor = this.sortingFunction;
-    }
-  }
-
   checkCondition(item: ColumnDefinition, element: unknown) {
     if (!item.condition) {
       return true;
     }
 
     return item.condition(element);
+  }
+
+  private setSortingDataAccessor() {
+    if (this.sortingFunction) {
+      this.dataSource.sortingDataAccessor = this.sortingFunction;
+    }
   }
 }
