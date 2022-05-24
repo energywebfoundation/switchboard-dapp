@@ -23,6 +23,7 @@ describe('EnrolmentRequestsEffects', () => {
     ]);
     claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
       'getClaimsByIssuer',
+      'setIsRevokedStatus',
     ]);
     TestBed.configureTestingModule({
       providers: [
@@ -62,6 +63,9 @@ describe('EnrolmentRequestsEffects', () => {
         createdAt: '2021-12-06T20:43:35.471Z',
       };
       claimsFacadeSpy.getClaimsByIssuer.and.returnValue(of([enrolment]));
+      claimsFacadeSpy.setIsRevokedStatus.and.returnValue(
+        of([{ ...enrolment, isRevoked: false }])
+      );
       actions$.next(RequestedActions.getEnrolmentRequests());
 
       effects.getEnrolmentRequests$.subscribe((resultAction) => {
@@ -73,6 +77,7 @@ describe('EnrolmentRequestsEffects', () => {
                 ...enrolment,
                 roleName: 'role',
                 requestDate: new Date(enrolment.createdAt),
+                isRevoked: false,
               } as EnrolmentClaim,
             ],
           })

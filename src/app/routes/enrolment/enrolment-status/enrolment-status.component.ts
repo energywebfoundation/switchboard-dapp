@@ -23,7 +23,7 @@ export class EnrolmentStatusComponent {
   }
 
   isRevoked() {
-    return this.item.isRevoked;
+    return this.item?.isRevoked;
   }
 
   isPending() {

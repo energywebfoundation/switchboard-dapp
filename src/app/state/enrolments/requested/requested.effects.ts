@@ -44,8 +44,10 @@ export class EnrolmentRequestsEffects {
   private getEnrolments(successAction, failureAction) {
     return (source: Observable<EnrolmentClaim[]>) => {
       return source.pipe(
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          this.claimsFacade.setIsRevokedStatus(enrolments)
+        ),
         extendEnrolmentClaim(),
-        switchMap((enrolments: EnrolmentClaim[]) => this.claimsFacade.setIsRevokedStatus(enrolments)),
         map((enrolments) => successAction({ enrolments })),
         catchError((e) => {
           console.error(e);
