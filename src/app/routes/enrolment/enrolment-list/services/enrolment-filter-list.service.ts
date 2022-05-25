@@ -77,7 +77,7 @@ export class EnrolmentFilterListService {
       )
     );
   }
-  get status$() {
+  status$() {
     return this._status.asObservable();
   }
 

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AssetEnrolmentListComponent } from './enrolment-list.component';
+import { AssetEnrolmentListComponent } from './asset-enrolment-list.component';
 
 xdescribe('EnrolmentListComponent', () => {
   let component: AssetEnrolmentListComponent;

@@ -29,7 +29,7 @@ const INPUT_DEBOUNCE_TIME = 300;
 export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
   @Input() showDID = false;
 
-  status$: Observable<FilterStatus> = this.enrolmentFilterListService.status$;
+  status$: Observable<FilterStatus> = this.enrolmentFilterListService.status$();
 
   namespace: FormControl = new FormControl('');
   did: FormControl = new FormControl('');
