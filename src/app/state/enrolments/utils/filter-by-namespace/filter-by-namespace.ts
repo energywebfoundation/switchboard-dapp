@@ -7,5 +7,5 @@ export const filterByNamespace = (
   if (!value) {
     return list;
   }
-  return list.filter((item) => item.namespace.includes(value));
+  return list.filter((item) => item.namespace.includes(value.toLowerCase()));
 };

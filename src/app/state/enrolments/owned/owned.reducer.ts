@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as OwnedActions from './owned.actions';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
-import { FilterStatus } from '../../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
+import { FilterStatus } from '../../../routes/enrolment/enrolment-list/enrolment-list-filter/enrolment-list-filter.component';
 import { filterByNamespace } from '../utils/filter-by-namespace/filter-by-namespace';
 import { statusFilter } from '../utils/status-filter/status-filter';
 

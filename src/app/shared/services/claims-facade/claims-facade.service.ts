@@ -9,8 +9,9 @@ import {
 import { forkJoin, from, Observable } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { finalize, map } from 'rxjs/operators';
+import { finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
+import { extendEnrolmentClaim } from '../../../state/enrolments/pipes/extend-enrolment-claim';
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +51,19 @@ export class ClaimsFacadeService {
       };
     }
     return item;
+  }
+
+  getClaimsBySubject(did) {
+    return from(this.iamService.claimsService.getClaimsBySubject({
+      did,
+    })).pipe(
+      switchMap((enrolments: EnrolmentClaim[]) =>
+        from(this.appendDidDocSyncStatus(enrolments))
+      ),
+      switchMap((enrolments: EnrolmentClaim[]) =>
+        this.setIsRevokedStatus(enrolments)
+      ),
+      extendEnrolmentClaim())
   }
 
   public async appendDidDocSyncStatus(

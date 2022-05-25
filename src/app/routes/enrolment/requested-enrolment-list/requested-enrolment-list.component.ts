@@ -14,13 +14,14 @@ import { IamService } from '../../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewRequestsComponent } from '../view-requests/view-requests.component';
 import { truthy } from '@operators';
-import { EnrolmentListType } from '../enrolment-list/enrolment-list.component';
+import { EnrolmentListType } from '../../assets/asset-enrolment-list/asset-enrolment-list.component';
 import { isAsset } from '../../../state/enrolments/utils/remove-assets-from-list/remove-assets-from-list';
 import {
   ColumnDefinition,
   ColumnType,
 } from '../../../shared/components/table/generic-table/generic-table.component';
 import { sortingEnrolmentData } from '../utils/sorting-enrolment-data';
+import { FilterStatus } from '../enrolment-list/enrolment-list-filter/enrolment-list-filter.component';
 
 @Component({
   selector: 'app-requested-enrolment-list',
@@ -28,9 +29,10 @@ import { sortingEnrolmentData } from '../utils/sorting-enrolment-data';
   styleUrls: ['./requested-enrolment-list.component.scss'],
 })
 export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
-  @ViewChild('actions') actions;
-  @ViewChild('status') status;
+  @ViewChild('actions', { static: true }) actions;
+  @ViewChild('status', { static: true }) status;
   @Input() list: EnrolmentClaim[];
+  @Input() enrolmentStatus: FilterStatus;
   @Input() set showAssets(value: boolean) {
     if (value) {
       this.defineColumns();

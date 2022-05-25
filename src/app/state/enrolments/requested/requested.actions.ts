@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
-import { FilterStatus } from '../../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
+import { FilterStatus } from '../../../routes/enrolment/enrolment-list/enrolment-list-filter/enrolment-list-filter.component';
 
 export const getEnrolmentRequests = createAction(
   '[ENROLMENT REQUESTS] Get Enrolment Requests'

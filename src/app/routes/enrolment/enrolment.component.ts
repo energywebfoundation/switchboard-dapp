@@ -14,7 +14,7 @@ import {
   SettingsSelectors,
 } from '@state';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
-import { FilterStatus } from '../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
+import { FilterStatus } from './enrolment-list/enrolment-list-filter/enrolment-list-filter.component';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -30,13 +30,10 @@ export class EnrolmentComponent implements AfterViewInit {
     RequestedEnrolmentsSelectors.getEnrolments
   );
 
-  issuerDropdown$ = this.store.select(RequestedEnrolmentsSelectors.getStatus);
-  enrolmentDropdown$ = this.store.select(OwnedEnrolmentsSelectors.getStatus);
-
   public isMyEnrolmentShown = false;
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
   private _queryParamSelectedTabInit = false;
-
+  enrolmentStatus: FilterStatus = FilterStatus.All;
   get issuesRoles(): boolean {
     return this.issuanceVCService.hasRoles();
   }
@@ -87,7 +84,6 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   showMe(i: any) {
-    // Preserve Selected Tab
     this.urlParamService.updateQueryParams(
       this.router,
       this.activeRoute,
@@ -109,35 +105,11 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   updateEnrolmentListStatus(value: FilterStatus): void {
-    this.store.dispatch(
-      OwnedEnrolmentsActions.changeFilterStatus({ status: value })
-    );
-  }
-
-  myEnrolmentsNamespaceFilterChangeHandler(value: string): void {
-    this.store.dispatch(
-      OwnedEnrolmentsActions.changeNamespaceFilter({ value })
-    );
-  }
-
-  updateIssuerFilterStatus(status: FilterStatus) {
-    this.store.dispatch(
-      RequestedEnrolmentsActions.changeFilterStatus({ status })
-    );
-  }
-
-  updateSearchByDidValue(value: string) {
-    this.store.dispatch(RequestedEnrolmentsActions.changeDIDFilter({ value }));
+    this.enrolmentStatus = value;
   }
 
   refreshIssuerList() {
     this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
-  }
-
-  enrolmentsNamespaceFilterChangeHandler(value) {
-    this.store.dispatch(
-      RequestedEnrolmentsActions.changeNamespaceFilter({ value })
-    );
   }
 
   refreshMyEnrolmentsList(): void {
@@ -165,7 +137,6 @@ export class EnrolmentComponent implements AfterViewInit {
   private initDefaultMyEnrolments() {
     if (this.enrolmentTabGroup) {
       this.enrolmentTabGroup.selectedIndex = 1;
-      this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
     }
   }
 

@@ -1,5 +1,5 @@
 import { statusFilter } from './status-filter';
-import { FilterStatus } from '../../../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
+import { FilterStatus } from '../../../../routes/enrolment/enrolment-list/enrolment-list-filter/enrolment-list-filter.component';
 import { EnrolmentClaim } from '../../../../routes/enrolment/models/enrolment-claim.interface';
 
 describe('statusFilter', () => {
