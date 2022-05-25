@@ -29,11 +29,13 @@ export class EnrolmentComponent implements AfterViewInit {
   requestedEnrolmentsList$ = this.store.select(
     RequestedEnrolmentsSelectors.getEnrolments
   );
-
-  public isMyEnrolmentShown = false;
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
+
+  isMyEnrolmentShown = false;
+  enrolmentStatus: FilterStatus = FilterStatus.Pending;
+
   private _queryParamSelectedTabInit = false;
-  enrolmentStatus: FilterStatus = FilterStatus.All;
+
   get issuesRoles(): boolean {
     return this.issuanceVCService.hasRoles();
   }
