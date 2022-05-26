@@ -94,4 +94,9 @@
       Reject
     </button>
   </div>
+  <div mat-dialog-actions *ngIf="isRevocable()">
+    <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit" (click)="revoke()">
+      Revoke
+    </button>
+  </div>
 </div>

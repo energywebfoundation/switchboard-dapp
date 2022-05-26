@@ -18,6 +18,7 @@ import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.
 import { KeyValue } from '@angular/common';
 import { EnrolmentClaim } from '../models/enrolment-claim.interface';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
+import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -44,7 +45,8 @@ export class ViewRequestsComponent implements OnInit {
     private toastr: SwitchboardToastrService,
     private loadingService: LoadingService,
     private store: Store<UserClaimState>,
-    private notifService: NotificationService
+    private notifService: NotificationService,
+    private claimFacade: ClaimsFacadeService
   ) {}
 
   canAccept() {
@@ -138,6 +140,21 @@ export class ViewRequestsComponent implements OnInit {
           }
         }
       });
+  }
+
+  isRevocable() {
+    return (
+      this.claim.isAccepted &&
+      this.claim.isSynced &&
+      !this.claim.isRevoked &&
+      this.listType === EnrolmentListType.ISSUER
+    );
+  }
+
+  revoke() {
+    this.claimFacade.revoke(this.claim).subscribe((result) => {
+      this.dialogRef.close(result);
+    });
   }
 
   private async getRoleIssuerFields(namespace: string) {
