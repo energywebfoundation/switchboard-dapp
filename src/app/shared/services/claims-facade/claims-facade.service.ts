@@ -54,16 +54,19 @@ export class ClaimsFacadeService {
   }
 
   getClaimsBySubject(did) {
-    return from(this.iamService.claimsService.getClaimsBySubject({
-      did,
-    })).pipe(
+    return from(
+      this.iamService.claimsService.getClaimsBySubject({
+        did,
+      })
+    ).pipe(
       switchMap((enrolments: EnrolmentClaim[]) =>
         from(this.appendDidDocSyncStatus(enrolments))
       ),
       switchMap((enrolments: EnrolmentClaim[]) =>
         this.setIsRevokedStatus(enrolments)
       ),
-      extendEnrolmentClaim())
+      extendEnrolmentClaim()
+    );
   }
 
   public async appendDidDocSyncStatus(

@@ -14,7 +14,7 @@ export class EnrolmentListComponent {
   @Input() set enrolmentStatus(status: FilterStatus) {
     this.enrolmentFilterListService.setStatus(status);
   }
-  @Input() showDID: boolean = false;
+  @Input() showDID = false;
   @Input() columDefinitions: ColumnDefinition[];
   @Input() set list(data: EnrolmentClaim[]) {
     this.enrolmentFilterListService.setList(data);

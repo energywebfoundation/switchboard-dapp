@@ -81,7 +81,7 @@ describe('ClaimsFacadeService', () => {
     it('should set isRevoked property to the claims', (done) => {
       claimsServiceSpy.isClaimRevoked.and.returnValues(
         Promise.resolve(true),
-        Promise.resolve(false),
+        Promise.resolve(false)
       );
 
       service

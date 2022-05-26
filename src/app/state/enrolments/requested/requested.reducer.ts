@@ -21,7 +21,7 @@ const requestedReducer = createReducer(
       ...state,
       enrolments,
     })
-  ),
+  )
 );
 
 export function reducer(state: RequestedState | undefined, action: Action) {
