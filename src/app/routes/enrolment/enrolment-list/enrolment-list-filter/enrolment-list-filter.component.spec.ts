@@ -10,13 +10,23 @@ describe('EnrolmentListFilterComponent', () => {
   let fixture: ComponentFixture<EnrolmentListFilterComponent>;
   let enrolmentFilterListServiceSpy;
 
-  beforeEach(waitForAsync( () => {
-    enrolmentFilterListServiceSpy = jasmine.createSpyObj('EnrolmentFilterListService', ['setNamespace', 'setDid', 'setStatus', 'status$'])
-    TestBed.configureTestingModule({
-      declarations: [EnrolmentListFilterComponent],
-      providers: [{provide: EnrolmentFilterListService, useValue: enrolmentFilterListServiceSpy}]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      enrolmentFilterListServiceSpy = jasmine.createSpyObj(
+        'EnrolmentFilterListService',
+        ['setNamespace', 'setDid', 'setStatus', 'status$']
+      );
+      TestBed.configureTestingModule({
+        declarations: [EnrolmentListFilterComponent],
+        providers: [
+          {
+            provide: EnrolmentFilterListService,
+            useValue: enrolmentFilterListServiceSpy,
+          },
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EnrolmentListFilterComponent);

@@ -44,7 +44,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
   private _iamSubscriptionId: number;
-  enrolmentType = EnrolmentListType.APPLICANT
+  enrolmentType = EnrolmentListType.APPLICANT;
 
   constructor(
     private loadingService: LoadingService,

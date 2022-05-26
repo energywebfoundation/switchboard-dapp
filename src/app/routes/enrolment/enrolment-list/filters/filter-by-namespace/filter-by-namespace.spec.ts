@@ -15,11 +15,8 @@ describe('filterByNamespace function', () => {
   });
 
   it('should not be case sensitive', () => {
-    expect(
-      filterByNamespace(
-        [{ namespace: 'test' }] as any[],
-        'TE'
-      )
-    ).toEqual([{ namespace: 'test' }] as any);
-  })
+    expect(filterByNamespace([{ namespace: 'test' }] as any[], 'TE')).toEqual([
+      { namespace: 'test' },
+    ] as any);
+  });
 });

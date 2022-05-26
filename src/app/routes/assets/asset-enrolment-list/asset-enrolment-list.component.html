@@ -1,6 +1,6 @@
 <app-enrolment-list [list]="list" [columDefinitions]="columns"></app-enrolment-list>
 <ng-template #actions let-element>
-  <app-preview [element]="element" [enrolmentType]="enrolmentType"></app-preview>
+  <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="getList()"></app-preview>
 
   <button
     mat-menu-item

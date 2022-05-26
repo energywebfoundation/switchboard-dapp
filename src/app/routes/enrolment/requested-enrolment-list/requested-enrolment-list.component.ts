@@ -44,7 +44,7 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
   }
   @Output() refreshList = new EventEmitter<void>();
 
-  enrolmentType = EnrolmentListType.ISSUER
+  enrolmentType = EnrolmentListType.ISSUER;
 
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
@@ -102,7 +102,7 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateList() {
+  updateList() {
     this.refreshList.emit();
   }
 

@@ -1,7 +1,11 @@
-<app-enrolment-list [enrolmentStatus]="enrolmentStatus" [list]="list" [columDefinitions]="columns" [showDID]="true"></app-enrolment-list>
+<app-enrolment-list
+  [enrolmentStatus]="enrolmentStatus"
+  [list]="list"
+  [columDefinitions]="columns"
+  [showDID]="true"></app-enrolment-list>
 
 <ng-template #actions let-element>
-  <app-preview [element]="element" [enrolmentType]="enrolmentType"></app-preview>
+  <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList()"></app-preview>
 </ng-template>
 
 <ng-template #status let-element>
