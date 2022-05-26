@@ -26,5 +26,3 @@ export const getNotSyncedAmount = createSelector(
       .filter((enrolment) => !enrolment.isSynced).length;
   }
 );
-
-export const getStatus = createSelector(getOwnedState, (state) => state.status);

@@ -21,7 +21,7 @@ import {
   ColumnType,
 } from '../../../shared/components/table/generic-table/generic-table.component';
 import { sortingEnrolmentData } from '../utils/sorting-enrolment-data';
-import { FilterStatus } from '../enrolment-list/enrolment-list-filter/enrolment-list-filter.component';
+import { FilterStatus } from '../enrolment-list/models/filter-status.enum';
 
 @Component({
   selector: 'app-requested-enrolment-list',

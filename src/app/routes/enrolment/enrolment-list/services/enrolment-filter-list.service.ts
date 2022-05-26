@@ -1,14 +1,16 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { EnrolmentClaim } from '../../models/enrolment-claim.interface';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { FilterStatus } from '../enrolment-list-filter/enrolment-list-filter.component';
-import { statusFilter } from '../../../../state/enrolments/utils/status-filter/status-filter';
-import { filterByNamespace } from '../../../../state/enrolments/utils/filter-by-namespace/filter-by-namespace';
-import { filterByDid } from '../../../../state/enrolments/utils/filter-by-did/filter-by-did';
+import { BehaviorSubject } from 'rxjs';
+import { statusFilter } from '../filters/status-filter/status-filter';
+import { filterByNamespace } from '../filters/filter-by-namespace/filter-by-namespace';
+import { filterByDid } from '../filters/filter-by-did/filter-by-did';
+import { FilterStatus } from '../models/filter-status.enum';
 
 @Injectable()
 export class EnrolmentFilterListService {
-  private filteredList: Subject<EnrolmentClaim[]> = new BehaviorSubject([]);
+  private filteredList: BehaviorSubject<EnrolmentClaim[]> = new BehaviorSubject(
+    []
+  );
   private originalList: BehaviorSubject<EnrolmentClaim[]> = new BehaviorSubject(
     []
   );
@@ -20,14 +22,7 @@ export class EnrolmentFilterListService {
 
   setList(list: EnrolmentClaim[]) {
     this.originalList.next(list);
-    this.filteredList.next(
-      this.filter(
-        list,
-        this._did.value,
-        this._namespace.value,
-        this._status.value
-      )
-    );
+    this.filter();
   }
 
   setNamespace(namespace: string) {
@@ -35,14 +30,7 @@ export class EnrolmentFilterListService {
       return;
     }
     this._namespace.next(namespace);
-    this.filteredList.next(
-      this.filter(
-        this.originalList.value,
-        this._did.value,
-        namespace,
-        this._status.value
-      )
-    );
+    this.filter();
   }
 
   setDid(did: string) {
@@ -50,14 +38,7 @@ export class EnrolmentFilterListService {
       return;
     }
     this._did.next(did);
-    this.filteredList.next(
-      this.filter(
-        this.originalList.value,
-        did,
-        this._namespace.value,
-        this._status.value
-      )
-    );
+    this.filter();
   }
 
   setStatus(status: FilterStatus) {
@@ -68,14 +49,7 @@ export class EnrolmentFilterListService {
       return;
     }
     this._status.next(status);
-    this.filteredList.next(
-      this.filter(
-        this.originalList.value,
-        this._did.value,
-        this._namespace.value,
-        status
-      )
-    );
+    this.filter();
   }
   status$() {
     return this._status.asObservable();
@@ -85,15 +59,15 @@ export class EnrolmentFilterListService {
     return this.filteredList.asObservable();
   }
 
-  private filter(
-    list: EnrolmentClaim[],
-    didFilter: string,
-    namespaceFilter: string,
-    status: FilterStatus
-  ) {
-    return statusFilter(
-      filterByNamespace(filterByDid(list, didFilter), namespaceFilter),
-      status
+  private filter() {
+    this.filteredList.next(
+      statusFilter(
+        filterByNamespace(
+          filterByDid(this.originalList.value, this._did.value),
+          this._namespace.value
+        ),
+        this._status.value
+      )
     );
   }
 }

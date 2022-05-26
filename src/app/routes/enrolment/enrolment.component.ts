@@ -14,8 +14,8 @@ import {
   SettingsSelectors,
 } from '@state';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
-import { FilterStatus } from './enrolment-list/enrolment-list-filter/enrolment-list-filter.component';
 import { filter } from 'rxjs/operators';
+import { FilterStatus } from './enrolment-list/models/filter-status.enum';
 
 @Component({
   selector: 'app-enrolment',

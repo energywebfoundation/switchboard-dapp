@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { FilterStatus } from './enrolment-list-filter/enrolment-list-filter.component';
 import { ColumnDefinition } from '../../../shared/components/table/generic-table/generic-table.component';
 import { EnrolmentClaim } from '../models/enrolment-claim.interface';
 import { EnrolmentFilterListService } from './services/enrolment-filter-list.service';
+import { FilterStatus } from './models/filter-status.enum';
 
 @Component({
   selector: 'app-enrolment-list',

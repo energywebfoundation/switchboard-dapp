@@ -1,6 +1,6 @@
 import { statusFilter } from './status-filter';
-import { FilterStatus } from '../../../../routes/enrolment/enrolment-list/enrolment-list-filter/enrolment-list-filter.component';
-import { EnrolmentClaim } from '../../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../models/enrolment-claim.interface';
+import { FilterStatus } from '../../models/filter-status.enum';
 
 describe('statusFilter', () => {
   const list = [

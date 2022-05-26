@@ -1,4 +1,4 @@
-import { EnrolmentClaim } from '../../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../models/enrolment-claim.interface';
 
 export const filterByNamespace = (
   list: EnrolmentClaim[],

@@ -1,23 +1,9 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { EnrolmentFilterListService } from '../services/enrolment-filter-list.service';
-
-export enum FilterStatus {
-  All = 'All',
-  Pending = 'Pending',
-  Approved = 'Approved',
-  Rejected = 'Rejected',
-  Revoked = 'Revoked',
-}
+import { FilterStatus } from '../models/filter-status.enum';
 
 const INPUT_DEBOUNCE_TIME = 300;
 

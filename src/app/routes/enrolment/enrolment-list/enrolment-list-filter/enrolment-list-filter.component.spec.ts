@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { EnrolmentListFilterComponent, FilterStatus } from './enrolment-list-filter.component';
+import { EnrolmentListFilterComponent } from './enrolment-list-filter.component';
 import { EnrolmentFilterListService } from '../services/enrolment-filter-list.service';
 import { of } from 'rxjs';
+import { FilterStatus } from '../models/filter-status.enum';
 
 describe('EnrolmentListFilterComponent', () => {
   let component: EnrolmentListFilterComponent;
