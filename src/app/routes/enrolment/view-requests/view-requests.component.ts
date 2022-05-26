@@ -17,6 +17,7 @@ import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.component';
 import { KeyValue } from '@angular/common';
 import { EnrolmentClaim } from '../models/enrolment-claim.interface';
+import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -27,7 +28,7 @@ const TOASTR_HEADER = 'Enrolment Request';
 })
 export class ViewRequestsComponent implements OnInit {
   @ViewChild('issuerFields', { static: false }) requiredFields: EnrolmentForm;
-  listType: string;
+  listType: EnrolmentListType;
   claim: EnrolmentClaim;
   requestorFields: KeyValue<string, string | number>[] = [];
   issuerFields: KeyValue<string, string | number>[] = [];
@@ -37,7 +38,7 @@ export class ViewRequestsComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ViewRequestsComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { claimData: EnrolmentClaim; listType: string },
+    public data: { claimData: EnrolmentClaim; listType: EnrolmentListType },
     public dialog: MatDialog,
     private iamService: IamService,
     private toastr: SwitchboardToastrService,
@@ -48,7 +49,7 @@ export class ViewRequestsComponent implements OnInit {
 
   canAccept() {
     return (
-      this.listType === 'issuer' &&
+      this.listType === EnrolmentListType.ISSUER &&
       !this.claim?.isAccepted &&
       !this.claim?.isRejected
     );

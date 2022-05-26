@@ -1,9 +1,6 @@
 <app-enrolment-list [list]="list" [columDefinitions]="columns"></app-enrolment-list>
 <ng-template #actions let-element>
-  <button mat-menu-item class="btn-color-primary" (click)="view(element)">
-    <mat-icon class="btn-color-primary">preview</mat-icon>
-    <span>Preview</span>
-  </button>
+  <app-preview [element]="element" [enrolmentType]="enrolmentType"></app-preview>
 
   <button
     mat-menu-item

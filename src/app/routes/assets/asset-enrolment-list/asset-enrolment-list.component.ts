@@ -17,12 +17,7 @@ import {
   ColumnDefinition,
   ColumnType,
 } from '../../../shared/components/table/generic-table/generic-table.component';
-
-export const EnrolmentListType = {
-  ISSUER: 'issuer',
-  APPLICANT: 'applicant',
-  ASSET: 'asset',
-};
+import { EnrolmentListType } from '../../enrolment/enrolment-list/models/enrolment-list-type.enum';
 
 const TOASTR_HEADER = 'Enrolment';
 
@@ -39,6 +34,7 @@ export class AssetEnrolmentListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   columns: ColumnDefinition[];
   list: EnrolmentClaim[];
+  enrolmentType: EnrolmentListType.ASSET;
 
   constructor(
     private loadingService: LoadingService,
@@ -87,21 +83,6 @@ export class AssetEnrolmentListComponent implements OnInit {
     return !element?.isSynced;
   }
 
-  view(element: EnrolmentClaim) {
-    this.dialog
-      .open(ViewRequestsComponent, {
-        width: '600px',
-        data: {
-          listType: EnrolmentListType.ASSET,
-          claimData: element,
-        },
-        maxWidth: '100%',
-        disableClose: true,
-      })
-      .afterClosed()
-      .pipe(truthy())
-      .subscribe(() => this.getList());
-  }
   async addToDidDoc(element: EnrolmentClaim) {
     this.publishRoleService
       .addToDidDoc({
