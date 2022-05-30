@@ -24,6 +24,7 @@ describe('OwnedEnrolmentsEffects', () => {
     claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
       'getClaimsByRequester',
       'appendDidDocSyncStatus',
+      'setIsRevokedStatus',
     ]);
     TestBed.configureTestingModule({
       providers: [
@@ -65,9 +66,14 @@ describe('OwnedEnrolmentsEffects', () => {
         createdAt: '2021-12-06T20:43:35.471Z',
       };
       claimsFacadeSpy.getClaimsByRequester.and.returnValue(of([enrolment]));
-      claimsFacadeSpy.appendDidDocSyncStatus.and.returnValue(
-        of([{ ...enrolment, isSynced: true }])
+      claimsFacadeSpy.setIsRevokedStatus.and.returnValue(
+        of([{ ...enrolment, isSynced: true, isRevoked: false }])
       );
+
+      claimsFacadeSpy.appendDidDocSyncStatus.and.returnValue(
+        of([{ ...enrolment, isSynced: true, isRevoked: false }])
+      );
+
       actions$.next(OwnedActions.getOwnedEnrolments());
 
       effects.getOwnedEnrolments$.subscribe((resultAction) => {
@@ -80,6 +86,7 @@ describe('OwnedEnrolmentsEffects', () => {
                 roleName: 'role',
                 requestDate: new Date(enrolment.createdAt),
                 isSynced: true,
+                isRevoked: false,
               } as EnrolmentClaim,
             ],
           })

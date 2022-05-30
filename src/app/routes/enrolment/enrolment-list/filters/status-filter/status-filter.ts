@@ -1,5 +1,5 @@
-import { EnrolmentClaim } from '../../../../routes/enrolment/models/enrolment-claim.interface';
-import { FilterStatus } from '../../../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
+import { EnrolmentClaim } from '../../../models/enrolment-claim.interface';
+import { FilterStatus } from '../../models/filter-status.enum';
 
 export const statusFilter = (list: EnrolmentClaim[], status: FilterStatus) => {
   if (status === FilterStatus.Pending) {
@@ -11,7 +11,13 @@ export const statusFilter = (list: EnrolmentClaim[], status: FilterStatus) => {
   }
 
   if (status === FilterStatus.Approved) {
-    return list.filter((item) => item.isAccepted);
+    return list
+      .filter((item) => !item.isRevoked)
+      .filter((item) => item.isAccepted);
+  }
+
+  if (status === FilterStatus.Revoked) {
+    return list.filter((item) => item.isRevoked);
   }
 
   if (status === FilterStatus.All) {

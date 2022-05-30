@@ -12,13 +12,8 @@ export const getAllEnrolments = createSelector(
   (state) => state.enrolments
 );
 
-export const getFilteredEnrolments = createSelector(
-  getOwnedState,
-  (state) => state.filteredList
-);
-
 export const getEnrolments = createSelector(
-  getFilteredEnrolments,
+  getAllEnrolments,
   (allEnrolments) => {
     return allEnrolments;
   }
@@ -31,5 +26,3 @@ export const getNotSyncedAmount = createSelector(
       .filter((enrolment) => !enrolment.isSynced).length;
   }
 );
-
-export const getStatus = createSelector(getOwnedState, (state) => state.status);

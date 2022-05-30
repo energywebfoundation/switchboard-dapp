@@ -1,12 +1,13 @@
 import { statusFilter } from './status-filter';
-import { FilterStatus } from '../../../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
-import { EnrolmentClaim } from '../../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../models/enrolment-claim.interface';
+import { FilterStatus } from '../../models/filter-status.enum';
 
 describe('statusFilter', () => {
   const list = [
     { isAccepted: false, isRejected: false },
     { isAccepted: false, isRejected: true },
     { isAccepted: true, isRejected: false },
+    { isAccepted: true, isRejected: false, isRevoked: true },
   ] as EnrolmentClaim[];
 
   it('should return all elements', () => {
@@ -37,6 +38,12 @@ describe('statusFilter', () => {
         isAccepted: false,
         isRejected: false,
       },
+    ] as EnrolmentClaim[]);
+  });
+
+  it('should return only revoked elements', () => {
+    expect(statusFilter(list, FilterStatus.Revoked)).toEqual([
+      { isAccepted: true, isRejected: false, isRevoked: true },
     ] as EnrolmentClaim[]);
   });
 });

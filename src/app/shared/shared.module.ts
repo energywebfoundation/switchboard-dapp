@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { ColorsService } from './colors/colors.service';
 import { PreventPasteDirective } from './directives/prevent-paste.directive';
 import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
-import { EnrolmentListComponent } from '../routes/enrolment/enrolment-list/enrolment-list.component';
 import { MinifiedDidViewerDirective } from './directives/minified-did-viewer/minified-did-viewer.directive';
 import { MinifiedDidViewerDialogComponent } from './directives/minified-did-viewer/minified-did-viewer-dialog.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -53,7 +52,6 @@ import { QrCodeScannerModule } from './components/qr-code-scanner/qr-code-scanne
 import { DomainImageComponent } from './components/domain-image/domain-image.component';
 import { ReportProblemComponent } from './components/report-problem/report-problem.component';
 import { SmartSearchOptionComponent } from './components/smart-search/component/smart-search-option/smart-search-option.component';
-import { EnrolmentListFilterComponent } from './components/table/enrolment-list-filter/enrolment-list-filter.component';
 import { GenericTableComponent } from './components/table/generic-table/generic-table.component';
 
 const MATERIAL_MODULES = [
@@ -107,7 +105,6 @@ const MATERIAL_MODULES = [
   declarations: [
     PreventPasteDirective,
     RetryBtnDirective,
-    EnrolmentListComponent,
     MinifiedDidViewerDirective,
     MinifiedDidViewerDialogComponent,
     SmartSearchComponent,
@@ -118,7 +115,6 @@ const MATERIAL_MODULES = [
     DomainImageComponent,
     ReportProblemComponent,
     SmartSearchOptionComponent,
-    EnrolmentListFilterComponent,
     GenericTableComponent,
   ],
   exports: [
@@ -129,7 +125,6 @@ const MATERIAL_MODULES = [
     PreventPasteDirective,
     RetryBtnDirective,
     MinifiedDidViewerDirective,
-    EnrolmentListComponent,
     MATERIAL_MODULES,
     SmartSearchComponent,
     ReplaceUnderscorePipe,
@@ -142,7 +137,6 @@ const MATERIAL_MODULES = [
     QrCodeScannerModule,
     DomainImageComponent,
     ReportProblemComponent,
-    EnrolmentListFilterComponent,
     GenericTableComponent,
   ],
 })

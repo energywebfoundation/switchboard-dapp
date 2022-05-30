@@ -1,0 +1,17 @@
+.img-logo-asset-enrolled {
+  width: 84px;
+
+  @media only screen and (max-width: 800px) {
+    width: 64px;
+  }
+}
+
+.btn-back-position {
+  position: absolute;
+  left: 18px;
+  top: 36px;
+
+  @media only screen and (max-width: 800px) {
+    top: 25px;
+  }
+}

@@ -1,21 +1,9 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-
-export enum FilterStatus {
-  All = 'All',
-  Pending = 'Pending',
-  Approved = 'Approved',
-  Rejected = 'Rejected',
-}
+import { Observable, Subject } from 'rxjs';
+import { EnrolmentFilterListService } from '../services/enrolment-filter-list.service';
+import { FilterStatus } from '../models/filter-status.enum';
 
 const INPUT_DEBOUNCE_TIME = 300;
 
@@ -25,34 +13,35 @@ const INPUT_DEBOUNCE_TIME = 300;
   styleUrls: ['./enrolment-list-filter.component.scss'],
 })
 export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
-  @Input() status: FilterStatus;
   @Input() showDID = false;
 
-  @Output() scannedDID = new EventEmitter<string>();
-  @Output() updateStatus = new EventEmitter<FilterStatus>();
-  @Output() namespaceChange = new EventEmitter<string>();
-  @Output() didChange = new EventEmitter<string>();
+  status$: Observable<FilterStatus> = this.enrolmentFilterListService.status$();
 
   namespace: FormControl = new FormControl('');
   did: FormControl = new FormControl('');
 
-  public dropdownValue = {
-    all: FilterStatus.All,
-    pending: FilterStatus.Pending,
-    approved: FilterStatus.Approved,
-    rejected: FilterStatus.Rejected,
-  };
+  public statusButtons = [
+    FilterStatus.All,
+    FilterStatus.Pending,
+    FilterStatus.Approved,
+    FilterStatus.Rejected,
+    FilterStatus.Revoked,
+  ];
 
   private destroy$ = new Subject();
+
+  constructor(private enrolmentFilterListService: EnrolmentFilterListService) {}
 
   ngOnInit() {
     this.namespace.valueChanges
       .pipe(debounceTime(INPUT_DEBOUNCE_TIME), takeUntil(this.destroy$))
-      .subscribe((value) => this.namespaceChange.emit(value));
+      .subscribe((value) =>
+        this.enrolmentFilterListService.setNamespace(value)
+      );
 
     this.did.valueChanges
       .pipe(debounceTime(INPUT_DEBOUNCE_TIME), takeUntil(this.destroy$))
-      .subscribe((value) => this.didChange.emit(value));
+      .subscribe((value) => this.enrolmentFilterListService.setDid(value));
   }
 
   ngOnDestroy() {
@@ -61,10 +50,10 @@ export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
   }
 
   updateSearchByDidValue(did: string) {
-    this.scannedDID.emit(did);
+    this.enrolmentFilterListService.setDid(did);
   }
 
   statusChangeHandler(value: FilterStatus) {
-    this.updateStatus.emit(value);
+    this.enrolmentFilterListService.setStatus(value);
   }
 }

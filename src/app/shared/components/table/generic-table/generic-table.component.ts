@@ -2,14 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
+  ViewChild,
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-//
-// export enum FilterType {
-//   Dropdown = 'dropdown',
-//   Input = 'input'
-// }
+import { MatSort } from '@angular/material/sort';
 
 export enum ColumnType {
   String = 'string',
@@ -19,14 +15,6 @@ export enum ColumnType {
   Actions = 'actions',
 }
 
-// export interface FilterDefinition<T = any> {
-//   type: FilterType;
-//   placeholder: string;
-//   defaultValue: T;
-//   callback: (value: T) => any[];
-//   tooltip: string;
-// }
-
 export interface ColumnDefinition {
   type: ColumnType;
   field: string;
@@ -34,19 +22,21 @@ export interface ColumnDefinition {
   customElement?: any;
   condition?: (element: unknown) => boolean;
 }
-//TODO: handle filtering data in this component
 @Component({
   selector: 'app-generic-table',
   templateUrl: './generic-table.component.html',
   styleUrls: ['./generic-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GenericTableComponent implements OnInit {
+export class GenericTableComponent {
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Input() set list(data: unknown[]) {
     if (!Array.isArray(data)) {
       return;
     }
-    this.dataSource.data = data;
+    this.dataSource = new MatTableDataSource<unknown>(data);
+    this.dataSource.sort = this.sort;
+    this.setSortingDataAccessor();
   }
 
   @Input() set columDefinitions(data: ColumnDefinition[]) {
@@ -63,18 +53,10 @@ export class GenericTableComponent implements OnInit {
 
   columnType = ColumnType;
 
-  private _columDefinitions: ColumnDefinition[];
-
   displayedColumns: string[];
 
   dataSource = new MatTableDataSource<unknown>([]);
-
-  ngOnInit() {
-    if (this.sortingFunction) {
-      this.dataSource.sort;
-      this.dataSource.sortingDataAccessor = this.sortingFunction;
-    }
-  }
+  private _columDefinitions: ColumnDefinition[];
 
   checkCondition(item: ColumnDefinition, element: unknown) {
     if (!item.condition) {
@@ -82,5 +64,11 @@ export class GenericTableComponent implements OnInit {
     }
 
     return item.condition(element);
+  }
+
+  private setSortingDataAccessor() {
+    if (this.sortingFunction) {
+      this.dataSource.sortingDataAccessor = this.sortingFunction;
+    }
   }
 }

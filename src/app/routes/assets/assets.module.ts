@@ -10,7 +10,7 @@ import { NewAssetTypeComponent } from './new-asset-type/new-asset-type.component
 import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
 import { AssetListComponent } from './asset-list/asset-list.component';
 import { AssetOwnershipHistoryComponent } from './asset-ownership-history/asset-ownership-history.component';
-import { AssetEnrolmentListComponent } from './asset-enrolment-list/asset-enrolment-list.component';
+import { AssetDetailsComponent } from './asset-details/asset-details.component';
 import { EditAssetDialogComponent } from './edit-asset-dialog/edit-asset-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -28,12 +28,14 @@ import { TypeAlgorithmPipe } from './pipes/type-algorithm.pipe';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-code-scanner.module';
 import { RouterConst } from '../router-const';
+import { AssetEnrolmentListComponent } from './asset-enrolment-list/asset-enrolment-list.component';
+import { EnrolmentListModule } from '../enrolment/enrolment-list/enrolment-list.module';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent },
   {
     path: RouterConst.EnrolmentDetails,
-    component: AssetEnrolmentListComponent,
+    component: AssetDetailsComponent,
   },
 ];
 
@@ -50,6 +52,7 @@ const routes: Routes = [
     HistoryElementComponent,
     HistoryPeriodComponent,
     TypeAlgorithmPipe,
+    AssetDetailsComponent,
   ],
   imports: [
     CommonModule,
@@ -70,6 +73,7 @@ const routes: Routes = [
     MatExpansionModule,
     ClipboardModule,
     QrCodeScannerModule,
+    EnrolmentListModule,
   ],
 })
 export class AssetsModule {}

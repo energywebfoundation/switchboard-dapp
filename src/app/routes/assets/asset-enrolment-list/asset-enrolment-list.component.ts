@@ -1,87 +1,163 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { filter, map, take, takeUntil } from 'rxjs/operators';
-import { EnrolmentListComponent } from '../../enrolment/enrolment-list/enrolment-list.component';
-import { UrlService } from '../../../shared/services/url-service/url.service';
-import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { IamService } from '../../../shared/services/iam.service';
+import { LoadingService } from '../../../shared/services/loading.service';
+import { NotificationService } from '../../../shared/services/notification.service';
+import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
+import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { truthy } from '@operators';
 import { Store } from '@ngrx/store';
-import { AssetDetailsActions, AssetDetailsSelectors } from '@state';
-import { RouterConst } from '../../router-const';
+import { EnrolmentClaim } from '../../enrolment/models/enrolment-claim.interface';
+import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';
+import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
+import {
+  ColumnDefinition,
+  ColumnType,
+} from '../../../shared/components/table/generic-table/generic-table.component';
+import { EnrolmentListType } from '../../enrolment/enrolment-list/models/enrolment-list-type.enum';
+
+const TOASTR_HEADER = 'Enrolment';
 
 @Component({
   selector: 'app-asset-enrolment-list',
   templateUrl: './asset-enrolment-list.component.html',
   styleUrls: ['./asset-enrolment-list.component.scss'],
 })
-export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
-  @ViewChild('enrolmentList') enrolmentList: EnrolmentListComponent;
+export class AssetEnrolmentListComponent implements OnInit {
+  @ViewChild('actions', { static: true }) actions;
+  @ViewChild('status', { static: true }) status;
+  @Input() subject: string;
 
-  enrolmentDropdown = new FormControl('none');
-  subject: string;
-  namespaceControlIssuer = new FormControl(undefined);
-  defaultLogo = ASSET_DEFAULT_LOGO;
-
-  public dropdownValue = {
-    all: 'none',
-    pending: 'false',
-    approved: 'true',
-    rejected: 'rejected',
-  };
-  asset$ = this.store.select(AssetDetailsSelectors.getAssetDetails);
-
-  private subscription$ = new Subject();
+  @ViewChild(MatSort) sort: MatSort;
+  columns: ColumnDefinition[];
+  list: EnrolmentClaim[];
+  enrolmentType: EnrolmentListType.ASSET;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private urlService: UrlService,
-    private store: Store
+    private loadingService: LoadingService,
+    private iamService: IamService,
+    private dialog: MatDialog,
+    private toastr: SwitchboardToastrService,
+    private notifService: NotificationService,
+    private store: Store,
+    private publishRoleService: PublishRoleService,
+    private claimsFacade: ClaimsFacadeService
   ) {}
 
-  ngOnDestroy(): void {
-    this.subscription$.next();
-    this.subscription$.complete();
+  ngOnInit() {
+    this.defineColumns();
+    this.getList();
   }
 
-  ngOnInit(): void {
-    this.getAssetsWithClaims();
-  }
+  public getList() {
+    this.loadingService.show();
 
-  private getAssetsWithClaims() {
-    this.activatedRoute.params
-      .pipe(
-        map((params) => params.subject),
-        filter<string>(Boolean),
-        take(1)
-      )
-      .subscribe((assetId) => {
-        this.subject = assetId;
-        this.store.dispatch(AssetDetailsActions.getDetails({ assetId }));
+    this.claimsFacade
+      .getClaimsBySubject(this.subject)
+      .subscribe((enrolments) => {
+        this.list = enrolments;
       });
+    this.loadingService.hide();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateEnrolmentList(e: any) {
-    const value = e.value;
-    this.enrolmentList.getList(
-      value === 'rejected',
-      value === 'true' ? true : value === 'false' ? false : undefined
-    );
+  isAccepted(element: EnrolmentClaim) {
+    return element?.isAccepted;
   }
 
-  back() {
-    this.urlService.previous
-      .pipe(takeUntil(this.subscription$))
-      .subscribe((url) => this.navigateBackHandler(url));
+  isSynced(element: EnrolmentClaim) {
+    return element?.isSynced;
   }
 
-  private navigateBackHandler(url: string): void {
-    // 'returnUrl' is taken as an indicator back() would trigger an loop back to asset-enrolment
-    if (url.includes(RouterConst.ReturnUrl)) {
-      this.urlService.goTo(RouterConst.Assets);
-      return;
+  isRejected(element: EnrolmentClaim) {
+    return !element?.isAccepted && element?.isRejected;
+  }
+
+  isPending(element: EnrolmentClaim) {
+    return !element?.isAccepted && !element?.isRejected;
+  }
+
+  isPendingSync(element: EnrolmentClaim) {
+    return !element?.isSynced;
+  }
+
+  async addToDidDoc(element: EnrolmentClaim) {
+    this.publishRoleService
+      .addToDidDoc({
+        issuedToken: element.issuedToken,
+        registrationTypes: element.registrationTypes,
+        claimType: element.claimType,
+        claimTypeVersion: element.claimTypeVersion,
+      })
+      .pipe(truthy())
+      .subscribe(() => this.getList());
+  }
+
+  async cancelClaimRequest(element: EnrolmentClaim) {
+    const dialogRef = this.dialog
+      .open(ConfirmationDialogComponent, {
+        width: '400px',
+        maxHeight: '195px',
+        data: {
+          header: TOASTR_HEADER,
+          message: 'Are you sure to cancel this enrolment request?',
+        },
+        maxWidth: '100%',
+        disableClose: true,
+      })
+      .afterClosed()
+      .toPromise();
+
+    if (await dialogRef) {
+      this.loadingService.show();
+
+      try {
+        await this.iamService.claimsService.deleteClaim({
+          id: element.id,
+        });
+        this.toastr.success(
+          'Action is successful.',
+          'Cancel Enrolment Request'
+        );
+        this.getList();
+      } catch (e) {
+        console.error(e);
+        this.toastr.error(
+          'Failed to cancel the enrolment request.',
+          TOASTR_HEADER
+        );
+      } finally {
+        this.loadingService.hide();
+      }
     }
-    this.urlService.back();
+  }
+
+  private defineColumns() {
+    this.columns = [
+      { type: ColumnType.Date, field: 'requestDate', header: 'Request Date' },
+      { type: ColumnType.String, field: 'roleName', header: 'Claim Name' },
+      {
+        type: ColumnType.String,
+        field: 'namespace',
+        header: 'Parent Namespace',
+      },
+      {
+        type: ColumnType.DID,
+        field: 'requester',
+        header: 'Requestor DID',
+      },
+      {
+        type: ColumnType.Custom,
+        field: 'status',
+        header: 'status',
+        customElement: this.status,
+      },
+      {
+        type: ColumnType.Actions,
+        field: 'actions',
+        customElement: this.actions,
+      },
+    ];
   }
 }

@@ -1,6 +1,5 @@
 import { createAction, props } from '@ngrx/store';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
-import { FilterStatus } from '../../../shared/components/table/enrolment-list-filter/enrolment-list-filter.component';
 
 export const getOwnedEnrolments = createAction(
   '[OWNED ENROLMENTS] Get Owned Enrolments'
@@ -28,14 +27,4 @@ export const updateOwnedEnrolmentsSuccess = createAction(
 export const updateOwnedEnrolmentsFailure = createAction(
   '[OWNED ENROLMENTS] Update Owned Enrolments Failure',
   props<{ error: string }>()
-);
-
-export const changeFilterStatus = createAction(
-  '[OWNED ENROLMENTS] Change Filter Status',
-  props<{ status: FilterStatus }>()
-);
-
-export const changeNamespaceFilter = createAction(
-  '[OWNED ENROLMENTS] Change Namespace Filter',
-  props<{ value: string }>()
 );
