@@ -1,14 +1,16 @@
 <div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
-  <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0" *ngFor="let option of statusButtons">
-    <button
-      mat-raised-button
-      class="btn btn-small btn-primary filter-button"
-      type="submit"
-      (click)="statusChangeHandler(option)"
-      [ngClass]="{ 'is-selected-enrolment': status === option }">
-      {{ option }}
-    </button>
-  </div>
+  <ng-container *ngIf="status$ | async as status">
+    <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0" *ngFor="let option of statusButtons">
+      <button
+        mat-raised-button
+        class="btn btn-small btn-primary filter-button"
+        type="submit"
+        (click)="statusChangeHandler(option)"
+        [ngClass]="{ 'is-selected-enrolment': status === option }">
+        {{ option }}
+      </button>
+    </div>
+  </ng-container>
 
   <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
     <mat-form-field

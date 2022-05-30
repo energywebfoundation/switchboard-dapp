@@ -18,13 +18,13 @@ import { PublishRoleService } from '../../../shared/services/publish-role/publis
 import { ViewRequestsComponent } from '../view-requests/view-requests.component';
 import { truthy } from '@operators';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
-import { EnrolmentListType } from '../enrolment-list/enrolment-list.component';
 import { isAsset } from 'src/app/state/enrolments/utils/remove-assets-from-list/remove-assets-from-list';
 import { sortingEnrolmentData } from '../utils/sorting-enrolment-data';
 import {
   ColumnDefinition,
   ColumnType,
 } from '../../../shared/components/table/generic-table/generic-table.component';
+import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
 
 const TOASTR_HEADER = 'Enrolment';
 
@@ -44,6 +44,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
   private _iamSubscriptionId: number;
+  enrolmentType = EnrolmentListType.APPLICANT;
 
   constructor(
     private loadingService: LoadingService,
@@ -150,7 +151,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateList(): void {
+  updateList(): void {
     this.refreshList.emit();
   }
 

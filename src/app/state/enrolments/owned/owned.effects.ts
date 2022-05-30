@@ -47,6 +47,9 @@ export class OwnedEnrolmentsEffects {
         switchMap((enrolments) =>
           from(this.claimsFacade.appendDidDocSyncStatus(enrolments))
         ),
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          this.claimsFacade.setIsRevokedStatus(enrolments)
+        ),
         extendEnrolmentClaim(),
         map((enrolments: EnrolmentClaim[]) => successAction({ enrolments })),
         catchError((e) => {

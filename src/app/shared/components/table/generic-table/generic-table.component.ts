@@ -2,16 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
   ViewChild,
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-//
-// export enum FilterType {
-//   Dropdown = 'dropdown',
-//   Input = 'input'
-// }
 
 export enum ColumnType {
   String = 'string',
@@ -21,14 +15,6 @@ export enum ColumnType {
   Actions = 'actions',
 }
 
-// export interface FilterDefinition<T = any> {
-//   type: FilterType;
-//   placeholder: string;
-//   defaultValue: T;
-//   callback: (value: T) => any[];
-//   tooltip: string;
-// }
-
 export interface ColumnDefinition {
   type: ColumnType;
   field: string;
@@ -36,7 +22,6 @@ export interface ColumnDefinition {
   customElement?: any;
   condition?: (element: unknown) => boolean;
 }
-//TODO: handle filtering data in this component
 @Component({
   selector: 'app-generic-table',
   templateUrl: './generic-table.component.html',
@@ -68,11 +53,10 @@ export class GenericTableComponent {
 
   columnType = ColumnType;
 
-  private _columDefinitions: ColumnDefinition[];
-
   displayedColumns: string[];
 
   dataSource = new MatTableDataSource<unknown>([]);
+  private _columDefinitions: ColumnDefinition[];
 
   checkCondition(item: ColumnDefinition, element: unknown) {
     if (!item.condition) {
