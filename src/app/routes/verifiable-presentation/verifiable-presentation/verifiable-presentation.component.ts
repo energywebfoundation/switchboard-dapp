@@ -10,7 +10,6 @@ import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
-import { stringify } from 'querystring';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
@@ -21,7 +20,8 @@ import { MatTableDataSource } from '@angular/material/table';
 export class VerifiablePresentationComponent implements OnInit {
   oob$: Observable<string>;
   tableData$: any;
-  presentationData$: any
+  presentationData$: any;
+  submitDisabledForSelfSign$ = false;
   public isLoggedIn = false;
   constructor(
     private route: ActivatedRoute,
@@ -55,29 +55,18 @@ export class VerifiablePresentationComponent implements OnInit {
         console.log(url);
         // let result
         // try {
-         const  result = await this.iamService.verifiableCredentialsService.initiateExchange({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url: 'https://vc-api-dev.energyweb.org/vc-api/exchanges/did:ethr:blxm-dev:0xCCa5fa8d744080eD0378cB739703ce53e9a56C00'});
-         this.presentationData$ = result;
-         // const result = await this.iamService.verifiableCredentialsService.initiateExchange({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url: "https://vc-api-dev.energyweb.org/vc-api/exchanges/did:ethr:blxm-dev:0xFBd3d99915bFcB8ad4EBf45773E4D0745F2c2F61" });
-         console.log(JSON.stringify(result), "THE CREDENTIAL RESULT!!! RESULT!")
+        const result = await this.iamService.verifiableCredentialsService.initiateExchange({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url: 'https://vc-api-dev.energyweb.org/vc-api/exchanges/did:ethr:blxm-dev:0xCCa5fa8d744080eD0378cB739703ce53e9a56C00' });
+        this.presentationData$ = result;
+        // const result = await this.iamService.verifiableCredentialsService.initiateExchange({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url: "https://vc-api-dev.energyweb.org/vc-api/exchanges/did:ethr:blxm-dev:0xFBd3d99915bFcB8ad4EBf45773E4D0745F2c2F61" });
+        console.log(JSON.stringify(result), "THE CREDENTIAL RESULT!!! RESULT!")
 
         // } catch (e) {
         //   console.log(e, "THE ERROR")
         // }
-        const {presentationDefinition, selectResults} = result[0];
-        const credentialSelections = selectResults?.verifiableCredential?.map(cred => {
-          const subject =  cred.credentialSubject as any;
-          return subject.role.namespace
-        });
-        const dataFormatted = this.formatTableData(result)
-        console.log(credentialSelections, "THE SELECTIONS!")
-        this.tableData$ = new MatTableDataSource([
-          { descriptor: 'Charging Data Agreement', selfSign: true },
-          { descriptor: 'Customer Role Credential', selfSign: false, credentials: credentialSelections },
-        ]);
-      
-      
-    
-
+        const hasSelfSignedRequirement = result[0].presentationDefinition.input_descriptors.findIndex(desc => desc.constraints?.subject_is_issuer === "required")
+        this.submitDisabledForSelfSign$ = hasSelfSignedRequirement > -1
+        const dataFormatted = this.formatTableData(result);
+        this.tableData$ = new MatTableDataSource(dataFormatted);
       }
     });
   }
@@ -110,19 +99,27 @@ export class VerifiablePresentationComponent implements OnInit {
   }
 
   formatTableData(data) {
-    const formattedData = data.map(pres => {
-     const descriptors = pres.inputDescriptor.map(desc => desc.name)
-     const matches = descriptors.map(desc => {
-       const match =  pres.selectResults?.matches?.find(match => match.name === desc);
-       const matchPath = match.vc_path[0];
-       const pathWithIndex = matchPath.split(".")
-       const pathIndexSplit = pathWithIndex.split("]");
-      
-    })
+
+    const pres = data[0]
+    // If the input descriptor is self-sign:
+    const descriptors = pres.presentationDefinition?.input_descriptors.map(desc => {
+      if (desc.constraints?.subject_is_issuer === "required") {
+        return { descriptor: desc.name, selfSign: true }
+      }
+    // If the input descriptor contains a matching credential(s) to select from:
+        //Get indeces of matched credentials:
+      const descriptorMatches = pres.selectResults?.matches?.filter(match => match.name === desc.name).map(res => {
+        const regexMatch = res.vc_path?.map(path => path.match(/\d+/)).map(mtch => parseInt(mtch[0]))
+        return regexMatch[0]
+      })
+      const allMatchedCredentials = [];
+        //Select credential name at each index
+      descriptorMatches.forEach(match => {
+        allMatchedCredentials.push({role: pres.selectResults?.verifiableCredential[match]?.credentialSubject?.role?.namespace, credential:pres.selectResults?.verifiableCredential[match]})
+      });
+        //create table data with descriptor name and all matched credentials. 
+      return { descriptor: desc.name, credentials: allMatchedCredentials, selfSign: false };
     });
-   
-
+    return descriptors
   }
-
-  
 }

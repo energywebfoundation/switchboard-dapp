@@ -24,7 +24,7 @@
             >
             <mat-option [value]="credential" *ngFor="let credential of element?.credentials; let i = index"
               [attr.data-qa-id]="'select-option-' + i">
-              {{ credential }}
+              {{ credential.role }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -35,12 +35,16 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <button
+  <div class="button-container">
+    <button
     mat-raised-button
     class="btn btn-primary w-100"
     type="submit"
     data-qa-id="submit"
+    [disabled]="submitDisabled"
     >
     Submit Credentials
   </button>
+  </div>
+ 
 </app-vp-card>

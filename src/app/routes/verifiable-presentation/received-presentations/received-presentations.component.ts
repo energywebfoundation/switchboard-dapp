@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-received-presentations',
@@ -8,12 +7,13 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class ReceivedPresentationsComponent {
   @Input() tableData; 
+  @Input() submitDisabled;
   displayedColumns: string[] = ['descriptor', 'verification'];
-  selectedCredentials$ = [];
+  selectedCredentials$;
 
   credentialSelected(data: any) {
    console.log(data, "THE SELECTED CREDENTIAL");
-   this.selectedCredentials$.push(data)
+   this.selectedCredentials$ = data;
   }
 
 }
