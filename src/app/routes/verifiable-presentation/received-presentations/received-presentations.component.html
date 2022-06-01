@@ -1,7 +1,7 @@
 <app-vp-card>
   <h4><strong>Received</strong> presentation request</h4>
   <!-- START TABLE -->
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <table mat-table [dataSource]="tableData" class="mat-elevation-z8">
     <!-- Descriptor Column -->
     <ng-container matColumnDef="descriptor">
       <th mat-header-cell *matHeaderCellDef>Requested Credentials</th>
@@ -16,7 +16,12 @@
         </button>
 
         <mat-form-field *ngIf="!element?.selfSign" class="mt-2 md-enroll" appearance="outline">
-          <mat-select class="md-enroll" placeholder="Select Credential">
+          <mat-select 
+            class="md-enroll" 
+            placeholder="Select Credential"
+            (selectionChange)="credentialSelected($event)"
+            
+            >
             <mat-option [value]="credential" *ngFor="let credential of element?.credentials; let i = index"
               [attr.data-qa-id]="'select-option-' + i">
               {{ credential }}
@@ -30,4 +35,12 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+  <button
+    mat-raised-button
+    class="btn btn-primary w-100"
+    type="submit"
+    data-qa-id="submit"
+    >
+    Submit Credentials
+  </button>
 </app-vp-card>
