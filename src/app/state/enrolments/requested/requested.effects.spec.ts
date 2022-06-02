@@ -24,6 +24,7 @@ describe('EnrolmentRequestsEffects', () => {
     claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
       'getClaimsByIssuer',
       'setIsRevokedStatus',
+      'appendDidDocSyncStatus',
     ]);
     TestBed.configureTestingModule({
       providers: [
@@ -64,6 +65,9 @@ describe('EnrolmentRequestsEffects', () => {
       };
       claimsFacadeSpy.getClaimsByIssuer.and.returnValue(of([enrolment]));
       claimsFacadeSpy.setIsRevokedStatus.and.returnValue(
+        of([{ ...enrolment, isRevoked: false }])
+      );
+      claimsFacadeSpy.appendDidDocSyncStatus.and.returnValue(
         of([{ ...enrolment, isRevoked: false }])
       );
       actions$.next(RequestedActions.getEnrolmentRequests());

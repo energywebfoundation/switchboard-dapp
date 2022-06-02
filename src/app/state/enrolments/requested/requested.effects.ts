@@ -44,6 +44,9 @@ export class EnrolmentRequestsEffects {
   private getEnrolments(successAction, failureAction) {
     return (source: Observable<EnrolmentClaim[]>) => {
       return source.pipe(
+        switchMap((enrolments) =>
+          from(this.claimsFacade.appendDidDocSyncStatus(enrolments))
+        ),
         switchMap((enrolments: EnrolmentClaim[]) =>
           this.claimsFacade.setIsRevokedStatus(enrolments)
         ),

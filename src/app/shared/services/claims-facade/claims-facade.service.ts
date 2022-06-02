@@ -154,4 +154,13 @@ export class ClaimsFacadeService {
   }): Observable<void> {
     return from(this.iamService.claimsService.registerOnchain(claim));
   }
+
+  revoke(claim: EnrolmentClaim) {
+    this.loadingService.show();
+    return from(
+      this.iamService.claimsService.revokeClaim({
+        claim: { namespace: claim.namespace, subject: claim.subject },
+      })
+    ).pipe(finalize(() => this.loadingService.hide()));
+  }
 }
