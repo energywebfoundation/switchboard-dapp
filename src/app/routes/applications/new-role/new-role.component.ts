@@ -36,6 +36,7 @@ import { RoleCreationService } from './services/role-creation.service';
 import { ISmartSearch } from '../../../shared/components/smart-search/models/smart-search.interface';
 import { SmartSearchType } from '../../../shared/components/smart-search/models/smart-search-type.enum';
 import { IssuerType } from './models/issuer-type.enum';
+import { CreateRoleOptions } from 'iam-client-lib/dist/src/modules/domains/domains.types';
 
 export enum ENSPrefixes {
   Roles = 'roles',
@@ -441,6 +442,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     req.data.issuer.did = this.issuerList;
     req.data.requestorFields = this.requestorFields.data;
     req.data.issuerFields = this.issuerFields.data;
+    req.data.revoker = {
+      revokerType: 'DID',
+      did: [this.signerFacade.getDid()],
+      roleName: '',
+    };
 
     if (!skipNextStep) {
       // Set the second step to non-editable
@@ -491,7 +497,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private async proceedCreateSteps(req: any) {
+  private async proceedCreateSteps(req: CreateRoleOptions) {
     const returnSteps =
       this.data.owner === this.iamService.signerService.address;
     try {
