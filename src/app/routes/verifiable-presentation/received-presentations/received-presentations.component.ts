@@ -7,16 +7,21 @@ import { Component, Input } from '@angular/core';
 })
 export class ReceivedPresentationsComponent {
   @Input() tableData; 
-  @Input() submitDisabled;
+  @Input() submitDisabled: boolean;
+  @Input() credentialSelected
+  @Input() requiredCredentials
   displayedColumns: string[] = ['descriptor', 'verification'];
-  selectedCredentials$;
 
-  credentialSelected(data: any) {
-   console.log(data, "THE SELECTED CREDENTIAL");
-   this.selectedCredentials$ = data;
-  }
+  handleCredentialUpdate(data: any) {
 
+    console.log(this.requiredCredentials, "THE REQUIRED CREDENTIALS HERE")
+    console.log(data, "THE SELECTED CREDENTIAL");
+    this.requiredCredentials[data?.value?.descriptor] = data?.value?.credential;
+    console.log(this.requiredCredentials, "CREDENTIALS AFTER SET")
+   }
 }
+
+
 
 
 

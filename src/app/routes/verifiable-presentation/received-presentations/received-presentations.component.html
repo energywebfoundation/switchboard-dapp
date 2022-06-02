@@ -19,7 +19,7 @@
           <mat-select 
             class="md-enroll" 
             placeholder="Select Credential"
-            (selectionChange)="credentialSelected($event)"
+            (selectionChange)="handleCredentialUpdate($event)"
             
             >
             <mat-option [value]="credential" *ngFor="let credential of element?.credentials; let i = index"

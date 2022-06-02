@@ -20,8 +20,9 @@ import { MatTableDataSource } from '@angular/material/table';
 export class VerifiablePresentationComponent implements OnInit {
   oob$: Observable<string>;
   tableData$: any;
-  presentationData$: any;
+  presentationData: any;
   submitDisabledForSelfSign$ = false;
+  requiredRedentials;
   public isLoggedIn = false;
   constructor(
     private route: ActivatedRoute,
@@ -38,7 +39,7 @@ export class VerifiablePresentationComponent implements OnInit {
   ngOnInit(): void {
     this._initSearch();
   }
-  private _initSearch() {
+  _initSearch() {
     this.route.queryParams.subscribe(async (params: any) => {
       //this.loadingService.show()
       await this.initLoginUser();
@@ -55,8 +56,9 @@ export class VerifiablePresentationComponent implements OnInit {
         console.log(url);
         // let result
         // try {
-        const result = await this.iamService.verifiableCredentialsService.initiateExchange({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url: 'https://vc-api-dev.energyweb.org/vc-api/exchanges/did:ethr:blxm-dev:0xCCa5fa8d744080eD0378cB739703ce53e9a56C00' });
-        this.presentationData$ = result;
+        const result = await this.iamService.verifiableCredentialsService.initiateExchange({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url: 'https://vc-api-dev.energyweb.org/vc-api/exchanges/did:ethr:blxm-dev:0xD3Bb33C08B245d72280A9A25cF54AcA636Cd073b' });
+        this.presentationData = result;
+        this.setRequiredCredentials(result[0]?.presentationDefinition?.input_descriptors)
         // const result = await this.iamService.verifiableCredentialsService.initiateExchange({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url: "https://vc-api-dev.energyweb.org/vc-api/exchanges/did:ethr:blxm-dev:0xFBd3d99915bFcB8ad4EBf45773E4D0745F2c2F61" });
         console.log(JSON.stringify(result), "THE CREDENTIAL RESULT!!! RESULT!")
 
@@ -99,12 +101,11 @@ export class VerifiablePresentationComponent implements OnInit {
   }
 
   formatTableData(data) {
-
     const pres = data[0]
     // If the input descriptor is self-sign:
     const descriptors = pres.presentationDefinition?.input_descriptors.map(desc => {
       if (desc.constraints?.subject_is_issuer === "required") {
-        return { descriptor: desc.name, selfSign: true }
+        return { descriptor: desc.name, selfSign: true, descId: desc.id }
       }
     // If the input descriptor contains a matching credential(s) to select from:
         //Get indeces of matched credentials:
@@ -115,11 +116,19 @@ export class VerifiablePresentationComponent implements OnInit {
       const allMatchedCredentials = [];
         //Select credential name at each index
       descriptorMatches.forEach(match => {
-        allMatchedCredentials.push({role: pres.selectResults?.verifiableCredential[match]?.credentialSubject?.role?.namespace, credential:pres.selectResults?.verifiableCredential[match]})
+        allMatchedCredentials.push({role: pres.selectResults?.verifiableCredential[match]?.credentialSubject?.role?.namespace, credential:pres.selectResults?.verifiableCredential[match], descriptor: desc.id})
       });
         //create table data with descriptor name and all matched credentials. 
-      return { descriptor: desc.name, credentials: allMatchedCredentials, selfSign: false };
+      return { descriptor: desc.name, credentials: allMatchedCredentials, selfSign: false, descId: desc.id };
     });
     return descriptors
+  }
+
+ setRequiredCredentials(inputDescriptors) {
+    const reqCredentials = {};
+    inputDescriptors.forEach(desc => {
+      reqCredentials[desc.id] = null;
+    });
+    this.requiredRedentials = reqCredentials;
   }
 }
