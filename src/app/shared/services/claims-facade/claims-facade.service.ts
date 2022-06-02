@@ -159,7 +159,7 @@ export class ClaimsFacadeService {
     this.loadingService.show();
     return from(
       this.iamService.claimsService.revokeClaim({
-        claim: { namespace: claim.namespace, subject: claim.subject },
+        claim: { namespace: claim.claimType, subject: claim.subject },
       })
     ).pipe(finalize(() => this.loadingService.hide()));
   }
