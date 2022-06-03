@@ -5,6 +5,7 @@ import { IamService } from '../iam.service';
 import { loadingServiceSpy } from '@tests';
 import { LoadingService } from '../loading.service';
 import { NamespaceType } from 'iam-client-lib';
+import { SwitchboardToastrService } from '../switchboard-toastr.service';
 
 describe('ClaimsFacadeService', () => {
   let service: ClaimsFacadeService;
@@ -24,6 +25,7 @@ describe('ClaimsFacadeService', () => {
       providers: [
         { provide: IamService, useValue: { claimsService: claimsServiceSpy } },
         { provide: LoadingService, useValue: loadingServiceSpy },
+        { provide: SwitchboardToastrService, useValue: {} },
       ],
     });
     service = TestBed.inject(ClaimsFacadeService);

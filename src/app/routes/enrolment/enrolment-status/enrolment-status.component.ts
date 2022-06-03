@@ -11,7 +11,7 @@ export class EnrolmentStatusComponent {
   @Input() item: EnrolmentClaim;
 
   isAccepted() {
-    return this.item?.isAccepted;
+    return this.item?.isAccepted && !this.item?.isRevoked;
   }
 
   isSynced() {
