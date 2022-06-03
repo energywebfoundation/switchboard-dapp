@@ -28,7 +28,7 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs/operators';
-import { from, Observable, Subject } from 'rxjs';
+import { lastValueFrom, from, Observable, Subject } from 'rxjs';
 import { VerificationMethodComponent } from '../verification-method/verification-method.component';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -92,7 +92,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     await this.iamService.messagingService.unsubscribeFrom(
       this._iamSubscriptionId
     );
-    this.unsubscribe.next();
+    this.unsubscribe.next(undefined);
     this.unsubscribe.complete();
   }
 
@@ -450,7 +450,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   private async _confirm(confirmationMsg: string, header: string) {
-    return this.dialog
+    return lastValueFrom(this.dialog
       .open(ConfirmationDialogComponent, {
         width: '400px',
         maxHeight: '195px',
@@ -461,8 +461,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         maxWidth: '100%',
         disableClose: true,
       })
-      .afterClosed()
-      .toPromise();
+      .afterClosed());
   }
 
   private loadAssetList(source: Promise<Asset[]> | Observable<Asset[]>) {

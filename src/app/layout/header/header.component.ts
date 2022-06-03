@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnDestroy(): Promise<void> {
-    this._subscription$.next();
+    this._subscription$.next(undefined);
     this._subscription$.complete();
 
     // Unsubscribe to IAM Events

@@ -16,7 +16,7 @@ import {
 } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { delay, take } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { lastValueFrom, of } from 'rxjs';
 
 import { ListType } from '../../../shared/constants/shared-constants';
 import { IamService } from '../../../shared/services/iam.service';
@@ -596,7 +596,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   private async confirm(confirmationMsg: string, isDiscardButton?: boolean) {
-    return this.dialog
+    return lastValueFrom(this.dialog
       .open(ConfirmationDialogComponent, {
         width: '400px',
         maxHeight: '195px',
@@ -608,8 +608,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         maxWidth: '100%',
         disableClose: true,
       })
-      .afterClosed()
-      .toPromise();
+      .afterClosed());
   }
 
   async confirmClose(touched: boolean) {

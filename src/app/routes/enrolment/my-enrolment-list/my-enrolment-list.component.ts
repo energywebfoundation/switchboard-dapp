@@ -1,3 +1,4 @@
+import { lastValueFrom } from 'rxjs';
 import {
   Component,
   EventEmitter,
@@ -112,7 +113,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   async cancelClaimRequest(element: EnrolmentClaim) {
-    const dialogRef = this.dialog
+    const dialogRef = lastValueFrom(this.dialog
       .open(ConfirmationDialogComponent, {
         width: '400px',
         maxHeight: '195px',
@@ -123,8 +124,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
         maxWidth: '100%',
         disableClose: true,
       })
-      .afterClosed()
-      .toPromise();
+      .afterClosed());
 
     if (await dialogRef) {
       this.loadingService.show();

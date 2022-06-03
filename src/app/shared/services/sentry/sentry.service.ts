@@ -1,7 +1,7 @@
 import { APP_INITIALIZER, ErrorHandler, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { lastValueFrom, of } from 'rxjs';
 import * as Sentry from '@sentry/angular';
 import { Router } from '@angular/router';
 import { EnvService } from '../env/env.service';
@@ -16,7 +16,7 @@ export class SentryService {
    * This is why the values is written to a file using the GHA workflow and is loaded here
    */
   public load() {
-    return this.http
+    return lastValueFrom(this.http
       .get<{ dsn: string }>('sentry-config.json', {
         headers: { 'Cache-Control': 'no-store' },
       })
@@ -26,8 +26,7 @@ export class SentryService {
           console.log(err);
           return of(null);
         })
-      )
-      .toPromise();
+      ));
   }
 
   initSentry(dsn: string): void {

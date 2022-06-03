@@ -27,7 +27,7 @@ export class DialogUserComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder, private store: Store) {}
 
   ngOnDestroy() {
-    this.destroy$.next();
+    this.destroy$.next(undefined);
     this.destroy$.complete();
   }
 

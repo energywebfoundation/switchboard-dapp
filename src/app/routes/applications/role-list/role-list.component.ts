@@ -72,7 +72,7 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.subscription$.next();
+    this.subscription$.next(undefined);
     this.subscription$.complete();
   }
 

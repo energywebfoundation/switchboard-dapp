@@ -40,7 +40,7 @@ export class AssetEnrolmentListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    this.subscription$.next();
+    this.subscription$.next(undefined);
     this.subscription$.complete();
   }
 

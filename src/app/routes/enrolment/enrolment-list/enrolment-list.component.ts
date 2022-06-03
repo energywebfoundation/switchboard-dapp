@@ -2,7 +2,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NamespaceType, RegistrationTypes } from 'iam-client-lib';
 import { take, takeUntil } from 'rxjs/operators';
-import { combineLatest, of, Subject } from 'rxjs';
+import { lastValueFrom, combineLatest, of, Subject } from 'rxjs';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { NotificationService } from '../../../shared/services/notification.service';
@@ -117,7 +117,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   async ngOnDestroy(): Promise<void> {
-    this._subscription$.next();
+    this._subscription$.next(undefined);
     this._subscription$.complete();
 
     // Unsubscribe from IAM Events
@@ -161,10 +161,9 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
     }
 
     this._shadowList = list;
-    const isExperimental = await this.store
+    const isExperimental = await lastValueFrom(this.store
       .select(SettingsSelectors.isExperimentalEnabled)
-      .pipe(take<boolean>(1))
-      .toPromise();
+      .pipe(take<boolean>(1)));
     this.dataSource.data = this.removeEnrollmentToAssets(
       this.filterByNamespace(
         this.filterByDid(this._shadowList, this.didFilterControl?.value),
@@ -229,7 +228,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
   }
 
   async cancelClaimRequest(element: EnrolmentClaim) {
-    const dialogRef = this.dialog
+    const dialogRef = lastValueFrom(this.dialog
       .open(ConfirmationDialogComponent, {
         width: '400px',
         maxHeight: '195px',
@@ -240,8 +239,7 @@ export class EnrolmentListComponent implements OnInit, OnDestroy {
         maxWidth: '100%',
         disableClose: true,
       })
-      .afterClosed()
-      .toPromise();
+      .afterClosed());
 
     if (await dialogRef) {
       this.loadingService.show();

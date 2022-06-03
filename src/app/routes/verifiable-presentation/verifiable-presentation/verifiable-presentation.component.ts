@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
@@ -62,22 +62,20 @@ export class VerifiablePresentationComponent implements OnInit {
     if (this.loginService.isSessionActive()) {
       this.store.dispatch(AuthActions.reinitializeAuthForEnrol());
       // Set Loggedin Flag to true
-      this.isLoggedIn = await this.store
+      this.isLoggedIn = await lastValueFrom(this.store
         .select(isUserLoggedIn)
-        .pipe(filter<boolean>(Boolean), take(1))
-        .toPromise();
+        .pipe(filter<boolean>(Boolean), take(1)));
     } else {
       this.loadingService.hide();
       // Launch Login Dialog
-      await this.dialog
+      await lastValueFrom(this.dialog
         .open(ConnectToWalletDialogComponent, {
           width: '434px',
           panelClass: 'connect-to-wallet',
           maxWidth: '100%',
           disableClose: true,
         })
-        .afterClosed()
-        .toPromise();
+        .afterClosed());
 
       // Set Loggedin Flag to true
       this.isLoggedIn = true;

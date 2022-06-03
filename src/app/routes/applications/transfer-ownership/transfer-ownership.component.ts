@@ -18,7 +18,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { Subject } from 'rxjs';
+import { lastValueFrom, Subject } from 'rxjs';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { extractAddress } from '../../../utils/functions/extract-address/extract-address';
 
@@ -84,12 +84,12 @@ export class TransferOwnershipComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(undefined);
     this.destroy$.complete();
   }
 
   private async confirm(confirmationMsg: string, showDiscardButton?: boolean) {
-    return this.dialog
+    return lastValueFrom(this.dialog
       .open(ConfirmationDialogComponent, {
         width: '400px',
         maxHeight: '195px',
@@ -101,8 +101,7 @@ export class TransferOwnershipComponent implements OnDestroy {
         maxWidth: '100%',
         disableClose: true,
       })
-      .afterClosed()
-      .toPromise();
+      .afterClosed());
   }
 
   async closeDialog(isSuccess?: boolean) {

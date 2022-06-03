@@ -1,3 +1,4 @@
+import { lastValueFrom } from 'rxjs';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -140,10 +141,9 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   async ngOnInit() {
-    this.experimentalEnabled = await this.store
+    this.experimentalEnabled = await lastValueFrom(this.store
       .select(SettingsSelectors.isExperimentalEnabled)
-      .pipe(take<boolean>(1))
-      .toPromise();
+      .pipe(take<boolean>(1)));
 
     this.activeRoute.queryParams.subscribe(async (params: any) => {
       this.cleanUpSwal();
@@ -529,22 +529,20 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     if (this.loginService.isSessionActive()) {
       this.store.dispatch(AuthActions.reinitializeAuthForEnrol());
       // Set Loggedin Flag to true
-      this.isLoggedIn = await this.store
+      this.isLoggedIn = await lastValueFrom(this.store
         .select(isUserLoggedIn)
-        .pipe(filter<boolean>(Boolean), take(1))
-        .toPromise();
+        .pipe(filter<boolean>(Boolean), take(1)));
     } else {
       this.loadingService.hide();
       // Launch Login Dialog
-      await this.dialog
+      await lastValueFrom(this.dialog
         .open(ConnectToWalletDialogComponent, {
           width: '434px',
           panelClass: 'connect-to-wallet',
           maxWidth: '100%',
           disableClose: true,
         })
-        .afterClosed()
-        .toPromise();
+        .afterClosed());
 
       // Set Loggedin Flag to true
       this.isLoggedIn = true;

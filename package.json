@@ -68,7 +68,7 @@
     "ngx-bootstrap": "8.0.0",
     "ngx-spinner": "13.1.1",
     "ngx-toastr": "14.2.1",
-    "rxjs": "6.6.7",
+    "rxjs": "^7.0.0",
     "simple-line-icons": "2.4.1",
     "sweetalert": "2.1.2",
     "ts-md5": "^1.2.7",

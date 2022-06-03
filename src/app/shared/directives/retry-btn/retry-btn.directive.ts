@@ -102,7 +102,7 @@ export class RetryBtnDirective implements OnDestroy {
 
   private _initiateDestroy(): void {
     if (!this._destroy.isStopped) {
-      this._destroy.next();
+      this._destroy.next(undefined);
       this._destroy.complete();
     }
   }

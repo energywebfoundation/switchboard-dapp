@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subject } from 'rxjs';
+import { lastValueFrom, Subject } from 'rxjs';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -66,7 +66,7 @@ export class OrganizationListComponent
   }
 
   ngOnDestroy(): void {
-    this.subscription$.next();
+    this.subscription$.next(undefined);
     this.subscription$.complete();
   }
 
@@ -121,7 +121,7 @@ export class OrganizationListComponent
 
     if (steps) {
       // Launch Remove Org / App Dialog
-      const isRemoved = this.dialog
+      const isRemoved = lastValueFrom(this.dialog
         .open(RemoveOrgAppComponent, {
           width: '600px',
           data: {
@@ -132,8 +132,7 @@ export class OrganizationListComponent
           maxWidth: '100%',
           disableClose: true,
         })
-        .afterClosed()
-        .toPromise();
+        .afterClosed());
 
       // Refresh the list after successful removal
       if (await isRemoved) {

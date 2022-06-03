@@ -1,3 +1,4 @@
+import { lastValueFrom } from 'rxjs';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -481,7 +482,7 @@ export class NewOrganizationComponent extends CreationBaseAbstract {
   }
 
   private async confirm(confirmationMsg: string, isDiscardButton?: boolean) {
-    return this.dialog
+    return lastValueFrom(this.dialog
       .open(ConfirmationDialogComponent, {
         width: '400px',
         maxHeight: '195px',
@@ -493,8 +494,7 @@ export class NewOrganizationComponent extends CreationBaseAbstract {
         maxWidth: '100%',
         disableClose: true,
       })
-      .afterClosed()
-      .toPromise();
+      .afterClosed());
   }
 
   async closeDialog(isSuccess?: boolean) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../../../../shared/services/iam.service';
-import { forkJoin, Observable } from 'rxjs';
+import { lastValueFrom, forkJoin, Observable } from 'rxjs';
 import { IOrganization } from 'iam-client-lib';
 import { map, switchMap } from 'rxjs/operators';
 import { OrganizationProvider } from '../models/organization-provider.interface';
@@ -41,9 +41,9 @@ export class OrganizationService {
         switchMap(async (organization: IOrganization) => {
           return {
             ...organization,
-            subOrgs: await this.isOrganizationOwner(
+            subOrgs: await lastValueFrom(this.isOrganizationOwner(
               organization.subOrgs
-            ).toPromise(),
+            )),
           };
         })
       )
