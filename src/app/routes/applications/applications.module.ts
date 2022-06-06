@@ -33,8 +33,8 @@ import { FilterComponent } from './filter/filter.component';
 import { CreateFieldsModule } from './new-role/components/create-fields/create-fields.module';
 import { DidBookModule } from '../../modules/did-book/did-book.module';
 import { RoleNameComponent } from './new-role/components/role-name/role-name.component';
-import { IssuerDidListComponent } from './new-role/components/issuer-did-list/issuer-did-list.component';
-import { IssuerDidComponent } from './new-role/components/issuer-did/issuer-did.component';
+import { DidListComponent } from './new-role/components/did-list/did-list.component';
+import { RoleTypeDidComponent } from './new-role/components/role-type-did/role-type-did.component';
 import { SearchIssuerRoleComponent } from './new-role/components/search-issuer-role/search-issuer-role.component';
 import { NamespaceDetailsComponent } from './namespace-details/namespace-details.component';
 import { ApplicationCreationFormComponent } from './new-application/application-creation-form/application-creation-form.component';
@@ -62,8 +62,8 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     ActionsMenuComponent,
     TransactionsCompleteComponent,
     RoleNameComponent,
-    IssuerDidListComponent,
-    IssuerDidComponent,
+    DidListComponent,
+    RoleTypeDidComponent,
     SearchIssuerRoleComponent,
     NamespaceDetailsComponent,
     ApplicationCreationFormComponent,

@@ -3,12 +3,13 @@ import { FormControl } from '@angular/forms';
 import { HexValidators, ListValidator } from '@utils';
 
 @Component({
-  selector: 'app-issuer-did',
-  templateUrl: './issuer-did.component.html',
-  styleUrls: ['./issuer-did.component.scss'],
+  selector: 'app-role-type-did',
+  templateUrl: './role-type-did.component.html',
+  styleUrls: ['./role-type-did.component.scss'],
 })
-export class IssuerDidComponent {
-  @Input() set issuerList(value: string[]) {
+export class RoleTypeDidComponent {
+  @Input() type: 'Issuer' | 'Revoker' = 'Issuer';
+  @Input() set dids(value: string[]) {
     this._list = value;
     this.setValidators();
   }
@@ -29,7 +30,7 @@ export class IssuerDidComponent {
     this.form.reset();
   }
 
-  removeIssuer(id) {
+  remove(id) {
     if (this.list.length > 1) {
       this.list.splice(id, 1);
     }

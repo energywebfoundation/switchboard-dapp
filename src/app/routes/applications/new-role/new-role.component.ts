@@ -154,11 +154,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return this.viewType !== ViewType.UPDATE;
   }
 
-  get isDIDType() {
+  get isIssuerDIDType() {
     return this.roleForm?.value?.data?.issuer?.issuerType === IssuerType.DID;
   }
 
-  get isRoleType() {
+  get isIssuerRoleType() {
     return this.roleForm?.value?.data?.issuer?.issuerType === IssuerType.ROLE;
   }
 

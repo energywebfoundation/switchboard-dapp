@@ -43,11 +43,11 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div *ngIf="isDIDType" class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-                <app-issuer-did [issuerList]="issuerList"></app-issuer-did>
+              <div *ngIf="isIssuerDIDType" class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+                <app-role-type-did type="Issuer" [dids]="issuerList"></app-role-type-did>
               </div>
               <div
-                *ngIf="isRoleType"
+                *ngIf="isIssuerRoleType"
                 class="card card-default d-flex shadow-none d-flex pt-3 mb-3"
                 formGroupName="issuer">
                 <app-search-issuer-role class="row mt-2" [role]="issuerRoleName"></app-search-issuer-role>
@@ -173,13 +173,13 @@
               </span>
             </div>
             <mat-divider></mat-divider>
-            <div class="text-left my-3" *ngIf="isDIDType">
+            <div class="text-left my-3" *ngIf="isIssuerDIDType">
               <div class="label opacity-50 mb-2">Issuer List</div>
               <div class="default-color mb-0" *ngFor="let did of issuerList">
                 {{ did }}
               </div>
             </div>
-            <div class="text-left my-3" *ngIf="isRoleType">
+            <div class="text-left my-3" *ngIf="isIssuerRoleType">
               <div class="label opacity-50 mb-2">Issuer Role Namespace</div>
               <span class="default-color mb-0">
                 {{ issuerRoleName.value }}
