@@ -35,7 +35,7 @@
                   <mat-select
                     placeholder="Issuer Type"
                     formControlName="issuerType"
-                    (selectionChange)="issuerTypeChanged($event)"
+                    (selectionChange)="issuerTypeChanged($event.value)"
                     required>
                     <mat-option *ngFor="let issuerType of IssuerTypes" [value]="issuerType">
                       {{ issuerType }}

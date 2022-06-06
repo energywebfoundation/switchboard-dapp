@@ -294,7 +294,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return retVal;
   }
 
-  issuerTypeChanged(data: any) {
+  issuerTypeChanged(value: IssuerType) {
     this.issuerGroup.reset();
 
     // Reset DID List
@@ -305,7 +305,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     // Clear Role
     this.roleForm.get('data').get('issuer').get('roleName').reset();
 
-    if (IssuerType.DID === data.value) {
+    if (IssuerType.DID === value) {
       // Set current user's DID
       this.issuerList.push(this.signerFacade.getDid());
     }
