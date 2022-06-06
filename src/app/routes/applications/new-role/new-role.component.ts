@@ -10,9 +10,9 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import {
   IFieldDefinition,
-  IRole,
+  IRole, IRoleDefinitionV2,
   NamespaceType,
-  PreconditionType,
+  PreconditionType
 } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { delay, take } from 'rxjs/operators';
@@ -236,7 +236,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   private _initFormData() {
     if (this.origData) {
-      const def = this.origData.definition;
+      const def = this.origData.definition as IRoleDefinitionV2;
 
       // Construct Parent Namespace
       const arrParentNamespace = this.origData.namespace.split(
@@ -258,6 +258,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
             issuerType: def.issuer.issuerType,
             roleName: def.issuer.roleName,
             did: def.issuer.did ? [...def.issuer.did] : [],
+          },
+          revoker: {
+            revokerType: def.revoker.revokerType,
+            roleName: def.issuer.roleName,
+            did: def.issuer.did ? [...def.revoker.did] : [],
           },
           enrolmentPreconditions: this._initPreconditions(
             def.enrolmentPreconditions
