@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { EnrolmentClaim } from '../../models/enrolment-claim.interface';
 import { BehaviorSubject } from 'rxjs';
-import { statusFilter } from '../filters/status-filter/status-filter';
-import { filterByNamespace } from '../filters/filter-by-namespace/filter-by-namespace';
-import { filterByDid } from '../filters/filter-by-did/filter-by-did';
 import { FilterStatus } from '../models/filter-status.enum';
+import { FilterBuilder } from '../filter-builder/filter.builder';
 
 @Injectable()
 export class EnrolmentFilterListService {
@@ -61,13 +59,11 @@ export class EnrolmentFilterListService {
 
   private filter() {
     this.filteredList.next(
-      statusFilter(
-        filterByNamespace(
-          filterByDid(this.originalList.value, this._did.value),
-          this._namespace.value
-        ),
-        this._status.value
-      )
+      new FilterBuilder(this.originalList.value)
+        .status(this._status.value)
+        .namespace(this._namespace.value)
+        .did(this._did.value)
+        .build()
     );
   }
 }
