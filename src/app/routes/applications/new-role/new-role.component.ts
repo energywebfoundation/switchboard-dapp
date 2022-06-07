@@ -37,6 +37,7 @@ import { ISmartSearch } from '../../../shared/components/smart-search/models/sma
 import { SmartSearchType } from '../../../shared/components/smart-search/models/smart-search-type.enum';
 import { IssuerType } from './models/issuer-type.enum';
 import { CreateRoleOptions } from 'iam-client-lib/dist/src/modules/domains/domains.types';
+import { IRoleType } from './models/role-type.interface';
 
 export enum ENSPrefixes {
   Roles = 'roles',
@@ -77,6 +78,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   IssuerTypes = [IssuerType.DID, IssuerType.ROLE];
+  revoker: IRoleType;
+  issuer: IRoleType;
+  signerDID = this.signerFacade.getDid();
 
   public roleForm = this.fb.group({
     roleType: [null, Validators.required],
@@ -100,16 +104,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     namespace: '',
     data: this.fb.group({
       version: 1,
-      issuer: this.fb.group({
-        issuerType: IssuerType.DID,
-        roleName: '',
-        did: this.fb.array([]),
-      }),
-      revoker: this.fb.group({
-        revokerType: IssuerType.DID,
-        roleName: '',
-        did: this.fb.array([]),
-      }),
       enrolmentPreconditions: [
         [{ type: PreconditionType.Role, conditions: [] }],
       ],
@@ -119,8 +113,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   public restrictionRoleControl = this.fb.control('');
   public isChecking = false;
   public ENSPrefixes = ENSPrefixes;
-  public issuerList: string[] = [this.signerFacade.getDid()];
-  public revokerList: string[] = [this.signerFacade.getDid()];
 
   // Fields
   requestorFields = new MatTableDataSource<IFieldDefinition>([]);
@@ -166,7 +158,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   get issuerType(): IssuerType {
-    return this.roleForm.get('data').get('issuer').get('issuerType').value;
+    return this.issuer.type
   }
 
   get isRevokerDIDType(): boolean {
@@ -178,21 +170,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   get revokerType(): IssuerType {
-    return this.roleForm.get('data').get('revoker').get('revokerType').value;
-  }
-
-  get issuerRoleName(): FormControl {
-    return this.roleForm
-      .get('data')
-      .get('issuer')
-      .get('roleName') as FormControl;
-  }
-
-  get revokerRoleName(): FormControl {
-    return this.roleForm
-      .get('data')
-      .get('revoker')
-      .get('roleName') as FormControl;
+    return this.revoker.type
   }
 
   constructor(
@@ -265,7 +243,16 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         NamespaceType.Role
       );
       const parentNamespace = arrParentNamespace[1].substring(1);
-
+      this.issuer = {
+        type: def.issuer.issuerType as IssuerType,
+        roleName: def.issuer.roleName,
+        did: def.issuer.did ? [...def.issuer.did] : [],
+      };
+      this.revoker = {
+        type: def.revoker.revokerType as IssuerType,
+        roleName: def.issuer.roleName,
+        did: def.issuer.did ? [...def.revoker.did] : [],
+      }
       // Construct Fields
       this.requestorFields.data = this.getRequestorFieldsFromDefinition(def);
       this.issuerFields.data = def?.issuerFields ? [...def.issuerFields] : [];
@@ -276,25 +263,12 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         namespace: `${this.ENSPrefixes.Roles}.${parentNamespace}`,
         data: {
           version: def.version,
-          issuer: {
-            issuerType: def.issuer.issuerType,
-            roleName: def.issuer.roleName,
-            did: def.issuer.did ? [...def.issuer.did] : [],
-          },
-          revoker: {
-            revokerType: def.revoker.revokerType,
-            roleName: def.issuer.roleName,
-            did: def.issuer.did ? [...def.revoker.did] : [],
-          },
           enrolmentPreconditions: this._initPreconditions(
             def.enrolmentPreconditions
           ),
         },
       });
 
-      if (def.issuer.did && def.issuer.did.length) {
-        this.issuerList = [...def.issuer.did];
-      }
     }
     this.roleName = this.roleForm.value.roleName;
 
@@ -319,36 +293,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
 
     return retVal;
-  }
-
-  issuerTypeChanged(value: IssuerType) {
-    // Reset DID List
-    if (this.issuerList.length > 0) {
-      this.issuerList.splice(0, this.issuerList.length);
-    }
-
-    // Clear Role
-    this.roleForm.get('data').get('issuer').get('roleName').reset();
-
-    if (IssuerType.DID === value) {
-      // Set current user's DID
-      this.issuerList.push(this.signerFacade.getDid());
-    }
-  }
-
-  revokerTypeChanged(value: IssuerType) {
-    // Reset DID List
-    if (this.revokerList.length > 0) {
-      this.revokerList.splice(0, this.revokerList.length);
-    }
-
-    // Clear Role
-    this.roleForm.get('data').get('revoker').get('roleName').reset();
-
-    if (IssuerType.DID === value) {
-      // Set current user's DID
-      this.revokerList.push(this.signerFacade.getDid());
-    }
   }
 
   back() {
@@ -388,33 +332,30 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   proceedSettingIssuer(roleName) {
     this.roleForm.get('roleName').setValue(roleName);
-    this.roleForm
-      .get('data')
-      .get('issuer')
-      .get('issuerType')
-      .setValue(IssuerType.DID);
     this.goNextStep();
   }
 
-  async proceedSettingRevokers(): Promise<void> {
+  async proceedSettingRevokers(data: IRoleType): Promise<void> {
     const canProceed = await this.roleCreationService.isListOrRoleNameValid(
-      this.issuerType,
-      this.issuerRoleName.value,
-      this.issuerList,
+      data.type,
+      data.roleName,
+      data.did,
       'Issuer'
     );
+    this.issuer = data;
     if (canProceed) {
       this.goNextStep();
     }
   }
 
-  async proceedSettingRestrictions() {
+  async proceedSettingRestrictions(data: IRoleType) {
     const canProceed = await this.roleCreationService.isListOrRoleNameValid(
-      this.revokerType,
-      this.revokerRoleName.value,
-      this.revokerList,
+      data.type,
+      data.roleName,
+      data.did,
       'Revoker'
     );
+    this.revoker = data;
     if (canProceed) {
       this.goNextStep();
     }
@@ -492,10 +433,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
     req.data.roleName = req.roleName;
 
-    req.data.issuer.did = this.issuerList;
+    req.data.issuer = {...this.issuer, issuerType: this.issuer.type};
     req.data.requestorFields = this.requestorFields.data;
     req.data.issuerFields = this.issuerFields.data;
-    req.data.revoker.did = this.revokerList;
+    req.data.revoker = {...this.revoker, revokerType: this.revoker.type};
     console.log(req);
 
     if (!skipNextStep) {

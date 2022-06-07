@@ -27,88 +27,27 @@
             class="card card-result d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3 mr-3 mt-2">
             <span class="pb-2">{{ namespace }}</span>
           </div>
-          <form [formGroup]="roleForm">
-            <ng-container formGroupName="data">
-              <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="issuer">
-                <mat-label class="ml-3 pl-1">Issuer Type</mat-label>
-                <mat-form-field class="mt-2" appearance="outline">
-                  <mat-select
-                    placeholder="Issuer Type"
-                    formControlName="issuerType"
-                    (selectionChange)="issuerTypeChanged($event.value)"
-                    required>
-                    <mat-option *ngFor="let issuerType of IssuerTypes" [value]="issuerType">
-                      {{ issuerType }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div *ngIf="isIssuerDIDType" class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-                <app-role-type-did type="Issuer" [dids]="issuerList"></app-role-type-did>
-              </div>
-              <div
-                *ngIf="isIssuerRoleType"
-                class="card card-default d-flex shadow-none d-flex pt-3 mb-3"
-                formGroupName="issuer">
-                <app-search-issuer-role class="row mt-2" [role]="issuerRoleName"></app-search-issuer-role>
-              </div>
-            </ng-container>
-            <div class="d-flex justify-content-end mb-2">
-              <button mat-stroked-button class="btn btn-small mr-2" *ngIf="origData" (click)="closeDialog()">
-                Cancel
-              </button>
-              <button mat-stroked-button class="btn btn-small mr-2" *ngIf="!origData" (click)="back()">Back</button>
-              <button
-                mat-raised-button
-                class="btn btn-small btn-primary"
-                [disabled]="isChecking"
-                (click)="proceedSettingRevokers()">
-                Next
-              </button>
-            </div>
-          </form>
+          <app-set-role-type-dids-or-name
+            roleType="Issuer"
+            [typeDefinition]="issuer"
+            [signerDID]="signerDID"
+            (next)="proceedSettingRevokers($event)"
+            [showBackButton]="isCreatingNew"
+            [showCancelButton]="!isCreatingNew"
+            (close)="closeDialog()"
+            (back)="back()"></app-set-role-type-dids-or-name>
         </mat-step>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Set Role Revokers</ng-template>
-          <form [formGroup]="roleForm">
-            <ng-container formGroupName="data">
-              <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3" formGroupName="revoker">
-                <mat-label class="ml-3 pl-1">Revoker Type</mat-label>
-                <mat-form-field class="mt-2" appearance="outline">
-                  <mat-select
-                    placeholder="Revoker Type"
-                    formControlName="revokerType"
-                    (selectionChange)="revokerTypeChanged($event.value)"
-                    required>
-                    <mat-option *ngFor="let issuerType of IssuerTypes" [value]="issuerType">
-                      {{ issuerType }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div *ngIf="isRevokerDIDType" class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-                <app-role-type-did type="Revoker" [dids]="revokerList"></app-role-type-did>
-              </div>
-              <div
-                *ngIf="isRevokerRoleType"
-                class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
-                <app-search-issuer-role class="row mt-2" [role]="revokerRoleName"></app-search-issuer-role>
-              </div>
-            </ng-container>
-            <div class="d-flex justify-content-end mb-2">
-              <button mat-stroked-button class="btn btn-small mr-2" *ngIf="origData" (click)="closeDialog()">
-                Cancel
-              </button>
-              <button mat-stroked-button class="btn btn-small mr-2" *ngIf="!origData" (click)="back()">Back</button>
-              <button
-                mat-raised-button
-                class="btn btn-small btn-primary"
-                [disabled]="isChecking"
-                (click)="proceedSettingRestrictions()">
-                Next
-              </button>
-            </div>
-          </form>
+          <app-set-role-type-dids-or-name
+            roleType="Revoker"
+            [typeDefinition]="revoker"
+            [signerDID]="signerDID"
+            (next)="proceedSettingRestrictions($event)"
+            [showBackButton]="isCreatingNew"
+            [showCancelButton]="!isCreatingNew"
+            (close)="closeDialog()"
+            (back)="back()"></app-set-role-type-dids-or-name>
         </mat-step>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Set Restrictions</ng-template>
@@ -217,27 +156,27 @@
             <mat-divider></mat-divider>
             <div class="text-left my-3" *ngIf="isIssuerDIDType">
               <div class="label opacity-50 mb-2">Issuer List</div>
-              <div class="default-color mb-0" *ngFor="let did of issuerList">
+              <div class="default-color mb-0" *ngFor="let did of issuer?.did">
                 {{ did }}
               </div>
             </div>
             <div class="text-left my-3" *ngIf="isIssuerRoleType">
               <div class="label opacity-50 mb-2">Issuer Role Namespace</div>
               <span class="default-color mb-0">
-                {{ issuerRoleName.value }}
+                {{ issuer.roleName }}
               </span>
             </div>
             <mat-divider></mat-divider>
             <div class="text-left my-3" *ngIf="isRevokerDIDType">
               <div class="label opacity-50 mb-2">Revoker List</div>
-              <div class="default-color mb-0" *ngFor="let did of revokerList">
+              <div class="default-color mb-0" *ngFor="let did of revoker?.did">
                 {{ did }}
               </div>
             </div>
             <div class="text-left my-3" *ngIf="isRevokerRoleType">
               <div class="label opacity-50 mb-2">Revoker Role Namespace</div>
               <span class="default-color mb-0">
-                {{ revokerRoleName.value }}
+                {{ revoker.roleName }}
               </span>
             </div>
             <mat-divider></mat-divider>

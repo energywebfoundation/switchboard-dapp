@@ -4,6 +4,7 @@ import { LoadingService } from '../../../../shared/services/loading.service';
 import { SwitchboardToastrService } from '../../../../shared/services/switchboard-toastr.service';
 import { NamespaceType } from 'iam-client-lib';
 import { IssuerType } from '../models/issuer-type.enum';
+import { RoleStepType } from '../models/role-step.type';
 
 const TOASTR_HEADER = 'Role Creation';
 
@@ -34,7 +35,7 @@ export class RoleCreationService {
     selectionType: IssuerType,
     roleName: string,
     list: string[],
-    type: 'Issuer' | 'Revoker'
+    type: RoleStepType = 'Issuer'
   ): Promise<boolean> {
     if (IssuerType.DID === selectionType && !list.length) {
       this.toastrService.error(`${type} list is empty.`, TOASTR_HEADER);
