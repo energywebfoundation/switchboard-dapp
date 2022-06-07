@@ -13,11 +13,7 @@ export class ReceivedPresentationsComponent {
   displayedColumns: string[] = ['descriptor', 'verification'];
 
   handleCredentialUpdate(data: any) {
-
-    console.log(this.requiredCredentials, "THE REQUIRED CREDENTIALS HERE")
-    console.log(data, "THE SELECTED CREDENTIAL");
     this.requiredCredentials[data?.value?.descriptor] = data?.value?.credential;
-    console.log(this.requiredCredentials, "CREDENTIALS AFTER SET")
    }
 }
 
