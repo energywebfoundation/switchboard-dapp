@@ -30,30 +30,31 @@ export class RoleCreationService {
     }
   }
 
-  async areIssuersValid(
-    issuerType: IssuerType,
-    issuerRoleName: string,
-    issuerList: string[]
+  async isListOrRoleNameValid(
+    selectionType: IssuerType,
+    roleName: string,
+    list: string[],
+    type: 'Issuer' | 'Revoker'
   ): Promise<boolean> {
-    if (IssuerType.DID === issuerType && !issuerList.length) {
-      this.toastrService.error('Issuer list is empty.', TOASTR_HEADER);
+    if (IssuerType.DID === selectionType && !list.length) {
+      this.toastrService.error(`${type} list is empty.`, TOASTR_HEADER);
       return false;
     }
 
-    if (IssuerType.ROLE === issuerType && !issuerRoleName) {
-      this.toastrService.error('Issuer Role is empty.', TOASTR_HEADER);
+    if (IssuerType.ROLE === selectionType && !roleName) {
+      this.toastrService.error(`${type} Role is empty.`, TOASTR_HEADER);
       return false;
     }
 
-    if (IssuerType.ROLE === issuerType) {
+    if (IssuerType.ROLE === selectionType) {
       // Check if rolename exists or valid
       const exists = await this.domainsFacade.checkExistenceOfDomain(
-        issuerRoleName
+        roleName
       );
 
-      if (!exists || !issuerRoleName.includes(`.${NamespaceType.Role}.`)) {
+      if (!exists || !roleName.includes(`.${NamespaceType.Role}.`)) {
         this.toastrService.error(
-          'Issuer Role Namespace does not exist or is invalid.',
+          `${type} Role Namespace does not exist or is invalid.`,
           TOASTR_HEADER
         );
         return false;

@@ -10,7 +10,6 @@ import {
   selector: 'app-did-list',
   templateUrl: './did-list.component.html',
   styleUrls: ['./did-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DidListComponent {
   @Input() list: string[];

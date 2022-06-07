@@ -86,21 +86,21 @@ describe('RoleCreationService', () => {
 
   describe('areIssuersValid method', () => {
     it('should return false and display a message when type is did and list is empty', async () => {
-      const result = await service.areIssuersValid(IssuerType.DID, '', []);
+      const result = await service.isListOrRoleNameValid(IssuerType.DID, '', []);
 
       expect(result).toBeFalse();
       expect(toastrSpy.error).toHaveBeenCalled();
     });
 
     it('should return false and display a message when type is role and role name is empty', async () => {
-      const result = await service.areIssuersValid(IssuerType.ROLE, '', []);
+      const result = await service.isListOrRoleNameValid(IssuerType.ROLE, '', []);
 
       expect(result).toBeFalse();
       expect(toastrSpy.error).toHaveBeenCalled();
     });
 
     it('should return true when type is did and list is not empty', async () => {
-      const result = await service.areIssuersValid(IssuerType.DID, '', ['did']);
+      const result = await service.isListOrRoleNameValid(IssuerType.DID, '', ['did']);
 
       expect(result).toBeTrue();
     });
@@ -109,7 +109,7 @@ describe('RoleCreationService', () => {
       domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
         Promise.resolve(false)
       );
-      const result = await service.areIssuersValid(IssuerType.ROLE, 'role', []);
+      const result = await service.isListOrRoleNameValid(IssuerType.ROLE, 'role', []);
 
       expect(result).toBeFalse();
       expect(toastrSpy.error).toHaveBeenCalled();
@@ -119,7 +119,7 @@ describe('RoleCreationService', () => {
       domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
         Promise.resolve(true)
       );
-      const result = await service.areIssuersValid(IssuerType.ROLE, 'role', []);
+      const result = await service.isListOrRoleNameValid(IssuerType.ROLE, 'role', []);
 
       expect(result).toBeFalse();
       expect(toastrSpy.error).toHaveBeenCalled();
@@ -129,7 +129,7 @@ describe('RoleCreationService', () => {
       domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
         Promise.resolve(true)
       );
-      const result = await service.areIssuersValid(
+      const result = await service.isListOrRoleNameValid(
         IssuerType.ROLE,
         'role.roles.asd.iam.ewc',
         []

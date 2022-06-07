@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { HexValidators, ListValidator } from '@utils';
+import { RoleStepTypeEnum } from '../../models/role-step-type.enum';
 
 @Component({
   selector: 'app-role-type-did',
@@ -8,7 +9,7 @@ import { HexValidators, ListValidator } from '@utils';
   styleUrls: ['./role-type-did.component.scss'],
 })
 export class RoleTypeDidComponent {
-  @Input() type: 'Issuer' | 'Revoker' = 'Issuer';
+  @Input() type: RoleStepTypeEnum = RoleStepTypeEnum.Issuer;
   @Input() set dids(value: string[]) {
     this._list = value;
     this.setValidators();

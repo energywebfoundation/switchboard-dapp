@@ -105,19 +105,22 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         roleName: '',
         did: this.fb.array([]),
       }),
+      revoker: this.fb.group({
+        revokerType: IssuerType.DID,
+        roleName: '',
+        did: this.fb.array([]),
+      }),
       enrolmentPreconditions: [
         [{ type: PreconditionType.Role, conditions: [] }],
       ],
     }),
-  });
-  public issuerGroup = this.fb.group({
-    newIssuer: ['', HexValidators.isDidValid()],
   });
 
   public restrictionRoleControl = this.fb.control('');
   public isChecking = false;
   public ENSPrefixes = ENSPrefixes;
   public issuerList: string[] = [this.signerFacade.getDid()];
+  public revokerList: string[] = [this.signerFacade.getDid()];
 
   // Fields
   requestorFields = new MatTableDataSource<IFieldDefinition>([]);
@@ -154,22 +157,41 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return this.viewType !== ViewType.UPDATE;
   }
 
-  get isIssuerDIDType() {
-    return this.roleForm?.value?.data?.issuer?.issuerType === IssuerType.DID;
+  get isIssuerDIDType(): boolean {
+    return this.issuerType === IssuerType.DID;
   }
 
-  get isIssuerRoleType() {
-    return this.roleForm?.value?.data?.issuer?.issuerType === IssuerType.ROLE;
+  get isIssuerRoleType(): boolean {
+    return this.issuerType === IssuerType.ROLE;
   }
 
-  get issuerType() {
+  get issuerType(): IssuerType {
     return this.roleForm.get('data').get('issuer').get('issuerType').value;
+  }
+
+  get isRevokerDIDType(): boolean {
+    return this.revokerType === IssuerType.DID;
+  }
+
+  get isRevokerRoleType(): boolean {
+    return this.revokerType === IssuerType.ROLE;
+  }
+
+  get revokerType(): IssuerType {
+    return this.roleForm.get('data').get('revoker').get('revokerType').value;
   }
 
   get issuerRoleName(): FormControl {
     return this.roleForm
       .get('data')
       .get('issuer')
+      .get('roleName') as FormControl;
+  }
+
+  get revokerRoleName(): FormControl {
+    return this.roleForm
+      .get('data')
+      .get('revoker')
       .get('roleName') as FormControl;
   }
 
@@ -300,8 +322,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   issuerTypeChanged(value: IssuerType) {
-    this.issuerGroup.reset();
-
     // Reset DID List
     if (this.issuerList.length > 0) {
       this.issuerList.splice(0, this.issuerList.length);
@@ -313,6 +333,21 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     if (IssuerType.DID === value) {
       // Set current user's DID
       this.issuerList.push(this.signerFacade.getDid());
+    }
+  }
+
+  revokerTypeChanged(value: IssuerType) {
+    // Reset DID List
+    if (this.revokerList.length > 0) {
+      this.revokerList.splice(0, this.revokerList.length);
+    }
+
+    // Clear Role
+    this.roleForm.get('data').get('revoker').get('roleName').reset();
+
+    if (IssuerType.DID === value) {
+      // Set current user's DID
+      this.revokerList.push(this.signerFacade.getDid());
     }
   }
 
@@ -361,11 +396,24 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     this.goNextStep();
   }
 
-  async proceedSettingRestriction(): Promise<void> {
-    const canProceed = await this.roleCreationService.areIssuersValid(
+  async proceedSettingRevokers(): Promise<void> {
+    const canProceed = await this.roleCreationService.isListOrRoleNameValid(
       this.issuerType,
       this.issuerRoleName.value,
-      this.issuerList
+      this.issuerList,
+      'Issuer'
+    );
+    if (canProceed) {
+      this.goNextStep();
+    }
+  }
+
+  async proceedSettingRestrictions() {
+    const canProceed = await this.roleCreationService.isListOrRoleNameValid(
+      this.revokerType,
+      this.revokerRoleName.value,
+      this.revokerList,
+      'Revoker'
     );
     if (canProceed) {
       this.goNextStep();
@@ -447,11 +495,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     req.data.issuer.did = this.issuerList;
     req.data.requestorFields = this.requestorFields.data;
     req.data.issuerFields = this.issuerFields.data;
-    req.data.revoker = {
-      revokerType: 'DID',
-      did: [this.signerFacade.getDid()],
-      roleName: '',
-    };
+    req.data.revoker.did = this.revokerList;
+    console.log(req);
 
     if (!skipNextStep) {
       // Set the second step to non-editable

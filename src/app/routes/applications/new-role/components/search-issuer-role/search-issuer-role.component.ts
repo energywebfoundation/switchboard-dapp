@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ENSPrefixes } from '../../new-role.component';
 import { FormControl } from '@angular/forms';
+import { RoleStepTypeEnum } from '../../models/role-step-type.enum';
 
 @Component({
   selector: 'app-search-issuer-role',
@@ -8,6 +9,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./search-issuer-role.component.scss'],
 })
 export class SearchIssuerRoleComponent {
+  @Input() type: RoleStepTypeEnum;
   @Input() role: FormControl;
 
   get searchPlaceholder() {
