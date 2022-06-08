@@ -49,9 +49,7 @@ export class RoleCreationService {
 
     if (IssuerType.ROLE === selectionType) {
       // Check if rolename exists or valid
-      const exists = await this.domainsFacade.checkExistenceOfDomain(
-        roleName
-      );
+      const exists = await this.domainsFacade.checkExistenceOfDomain(roleName);
 
       if (!exists || !roleName.includes(`.${NamespaceType.Role}.`)) {
         this.toastrService.error(

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   IFieldDefinition,
+  IRevokerDefinition,
   NamespaceType,
   PreconditionType,
 } from 'iam-client-lib';
@@ -11,11 +12,13 @@ import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { IssuerType } from '../../new-role/models/issuer-type.enum';
+import { IIssuerDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 
 @Component({
   selector: 'app-governance-details',
   templateUrl: './governance-details.component.html',
   styleUrls: ['./governance-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GovernanceDetailsComponent {
   @Input() set origData(value: any) {
@@ -54,16 +57,20 @@ export class GovernanceDetailsComponent {
     return this.formData?.definition?.issuerFields;
   }
 
-  get isDIDType(): boolean {
-    return this.issuer?.issuerType === IssuerType.DID;
+  isDIDType(type: string): boolean {
+    return type === IssuerType.DID;
   }
 
-  get isRoleType() {
-    return this.issuer?.issuerType === IssuerType.ROLE;
+  isRoleType(type: string): boolean {
+    return type === IssuerType.ROLE;
   }
 
-  get issuer() {
+  get issuer(): IIssuerDefinition {
     return this.formData?.definition?.issuer;
+  }
+
+  get revoker(): IRevokerDefinition {
+    return this.formData?.definition?.revoker;
   }
 
   get isApplication(): boolean {

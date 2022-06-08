@@ -70,7 +70,6 @@ describe('SetRoleTypeDidsOrNameComponent', () => {
   });
 
   it('should emit did list on next click', () => {
-
     component.signerDID = 'did';
     fixture.detectChanges();
     const { next } = getSelectors(hostDebug);
@@ -81,6 +80,35 @@ describe('SetRoleTypeDidsOrNameComponent', () => {
     expect(component.next.emit).toHaveBeenCalledWith({
       type: IssuerType.DID,
       did: ['did'],
+      roleName: '',
+    });
+  });
+
+  it('should change select to DID and set signerDID to the list', () => {
+    component.signerDID = 'signer-did';
+    component.typeDefinition = {
+      type: IssuerType.ROLE,
+      roleName: 'roleName',
+      did: [],
+    };
+
+    fixture.detectChanges();
+
+    const { selectType, next } = getSelectors(hostDebug);
+
+    selectType.click();
+    fixture.detectChanges();
+
+    const { optionDID } = getSelectors(hostDebug);
+    optionDID.click();
+    fixture.detectChanges();
+
+    next.click();
+    fixture.detectChanges();
+
+    expect(component.next.emit).toHaveBeenCalledWith({
+      type: IssuerType.DID,
+      did: [component.signerDID],
       roleName: '',
     });
   });
@@ -100,7 +128,7 @@ describe('SetRoleTypeDidsOrNameComponent', () => {
     expect(typeRole).toBeTruthy();
     expect(typeDID).toBeFalsy();
 
-    next.click()
+    next.click();
     fixture.detectChanges();
 
     expect(component.next.emit).toHaveBeenCalledWith({

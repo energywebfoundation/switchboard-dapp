@@ -52,9 +52,7 @@ export class SetRoleTypeDidsOrNameComponent implements OnInit {
 
     this.roleName.reset();
 
-    if (IssuerType.DID === value) {
-      this.list = [this.signerDID];
-    }
+    this.setDefaultDID();
   }
 
   ngOnInit(): void {

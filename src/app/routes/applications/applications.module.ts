@@ -39,9 +39,7 @@ import { SearchIssuerRoleComponent } from './new-role/components/search-issuer-r
 import { NamespaceDetailsComponent } from './namespace-details/namespace-details.component';
 import { ApplicationCreationFormComponent } from './new-application/application-creation-form/application-creation-form.component';
 import { DefaultValueModule } from './pipes/default-value.module';
-import {
-  SetRoleTypeDidsOrNameComponent
-} from './new-role/components/set-role-type-dids-or-name/set-role-type-dids-or-name.component';
+import { SetRoleTypeDidsOrNameComponent } from './new-role/components/set-role-type-dids-or-name/set-role-type-dids-or-name.component';
 
 const routes: Routes = [{ path: '', component: ApplicationsComponent }];
 
@@ -70,7 +68,7 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     SearchIssuerRoleComponent,
     NamespaceDetailsComponent,
     ApplicationCreationFormComponent,
-    SetRoleTypeDidsOrNameComponent
+    SetRoleTypeDidsOrNameComponent,
   ],
   imports: [
     CommonModule,
@@ -93,5 +91,6 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     DidBookModule,
     DefaultValueModule,
   ],
+  exports: [RoleTypeDidComponent],
 })
 export class ApplicationsModule {}

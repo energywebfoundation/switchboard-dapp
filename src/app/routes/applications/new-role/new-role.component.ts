@@ -10,9 +10,10 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import {
   IFieldDefinition,
-  IRole, IRoleDefinitionV2,
+  IRole,
+  IRoleDefinitionV2,
   NamespaceType,
-  PreconditionType
+  PreconditionType,
 } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { delay, take } from 'rxjs/operators';
@@ -158,7 +159,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   get issuerType(): IssuerType {
-    return this.issuer.type
+    return this.issuer?.type;
   }
 
   get isRevokerDIDType(): boolean {
@@ -170,7 +171,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   get revokerType(): IssuerType {
-    return this.revoker.type
+    return this.revoker?.type;
   }
 
   constructor(
@@ -252,7 +253,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         type: def.revoker.revokerType as IssuerType,
         roleName: def.issuer.roleName,
         did: def.issuer.did ? [...def.revoker.did] : [],
-      }
+      };
       // Construct Fields
       this.requestorFields.data = this.getRequestorFieldsFromDefinition(def);
       this.issuerFields.data = def?.issuerFields ? [...def.issuerFields] : [];
@@ -268,7 +269,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
           ),
         },
       });
-
     }
     this.roleName = this.roleForm.value.roleName;
 
@@ -433,11 +433,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
     req.data.roleName = req.roleName;
 
-    req.data.issuer = {...this.issuer, issuerType: this.issuer.type};
+    req.data.issuer = { ...this.issuer, issuerType: this.issuer.type };
     req.data.requestorFields = this.requestorFields.data;
     req.data.issuerFields = this.issuerFields.data;
-    req.data.revoker = {...this.revoker, revokerType: this.revoker.type};
-    console.log(req);
+    req.data.revoker = { ...this.revoker, revokerType: this.revoker.type };
 
     if (!skipNextStep) {
       // Set the second step to non-editable
