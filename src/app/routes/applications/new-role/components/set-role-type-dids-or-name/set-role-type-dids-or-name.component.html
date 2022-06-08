@@ -23,7 +23,7 @@
     </div>
   </ng-container>
   <div class="d-flex justify-content-end mb-2">
-    <button mat-stroked-button class="btn btn-small mr-2" *ngIf="showCancelButton" (click)="close.emit()">
+    <button mat-stroked-button class="btn btn-small mr-2" *ngIf="showCancelButton" (click)="cancel.emit()">
       Cancel
     </button>
     <button mat-stroked-button class="btn btn-small mr-2" *ngIf="showBackButton" (click)="back.emit()">Back</button>

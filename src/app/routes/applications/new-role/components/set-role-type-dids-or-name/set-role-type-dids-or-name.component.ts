@@ -33,7 +33,7 @@ export class SetRoleTypeDidsOrNameComponent implements OnInit {
   @Input() showBackButton = false;
   @Input() showCancelButton = false;
   @Output() next = new EventEmitter<IRoleType>();
-  @Output() close = new EventEmitter();
+  @Output() cancel = new EventEmitter();
   @Output() back = new EventEmitter();
   form = this.fb.group({
     type: IssuerType.DID,

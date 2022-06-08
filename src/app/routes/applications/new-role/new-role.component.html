@@ -34,7 +34,7 @@
             (next)="proceedSettingRevokers($event)"
             [showBackButton]="isCreatingNew"
             [showCancelButton]="!isCreatingNew"
-            (close)="closeDialog()"
+            (cancel)="closeDialog()"
             (back)="back()"></app-set-role-type-dids-or-name>
         </mat-step>
         <mat-step [completed]="false">
@@ -46,7 +46,7 @@
             (next)="proceedSettingRestrictions($event)"
             [showBackButton]="isCreatingNew"
             [showCancelButton]="!isCreatingNew"
-            (close)="closeDialog()"
+            (cancel)="closeDialog()"
             (back)="back()"></app-set-role-type-dids-or-name>
         </mat-step>
         <mat-step [completed]="false">
