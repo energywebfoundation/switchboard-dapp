@@ -90,7 +90,6 @@ describe('NewRoleComponent', () => {
     let data;
 
     beforeEach(() => {
-      component.issuerGroup = fb.group({});
       data = { value: 'test value' };
       component.roleForm = fb.group({
         data: fb.group({
@@ -99,36 +98,6 @@ describe('NewRoleComponent', () => {
           }),
         }),
       });
-      spyOn(component.issuerGroup, 'reset');
-      spyOn(
-        component.roleForm.get('data').get('issuer').get('roleName'),
-        'reset'
-      );
-    });
-
-    it('issuerList length > 0', () => {
-      component.issuerList = ['1', '2'];
-
-      component.issuerTypeChanged(data);
-
-      expect(component.issuerGroup.reset).toHaveBeenCalled();
-      expect(component.issuerList.length).toBe(0);
-      expect(
-        component.roleForm.get('data').get('issuer').get('roleName').reset
-      ).toHaveBeenCalled();
-    });
-
-    it('iIssuerType.DID === data.value', () => {
-      data = { value: IssuerType.DID };
-      component.issuerList = [];
-
-      component.issuerTypeChanged(data);
-
-      expect(component.issuerGroup.reset).toHaveBeenCalled();
-      expect(
-        component.roleForm.get('data').get('issuer').get('roleName').reset
-      ).toHaveBeenCalled();
-      expect(component.issuerList.length).toBe(1);
     });
   });
 });

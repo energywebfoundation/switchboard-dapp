@@ -66,16 +66,39 @@
           <span class="default-color mb-0">{{ issuer?.issuerType }}</span>
         </div>
         <mat-divider></mat-divider>
-        <ng-container *ngIf="isRoleType">
+        <ng-container *ngIf="isRoleType(issuer.issuerType)">
           <div class="text-left my-3">
             <div class="label opacity-50 mb-2">Role</div>
             <span class="default-color mb-0">{{ issuer?.roleName }}</span>
           </div>
         </ng-container>
-        <ng-container *ngIf="isDIDType">
+        <ng-container *ngIf="isDIDType(issuer.issuerType)">
           <div class="text-left my-3">
             <div class="label opacity-50 mb-2">Issuer List</div>
-            <div class="default-color mb-0" *ngFor="let did of formData?.definition?.issuer?.did">
+            <div class="default-color mb-0" *ngFor="let did of issuer?.did">
+              {{ did }}
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="revoker">
+        <mat-divider></mat-divider>
+        <div class="text-left my-3">
+          <div class="label opacity-50 mb-2">Revoker Type</div>
+          <span class="default-color mb-0">{{ revoker?.revokerType }}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <ng-container *ngIf="isRoleType(revoker.revokerType)">
+          <div class="text-left my-3">
+            <div class="label opacity-50 mb-2">Role</div>
+            <span class="default-color mb-0">{{ revoker?.roleName }}</span>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="isDIDType(revoker.revokerType)">
+          <div class="text-left my-3">
+            <div class="label opacity-50 mb-2">Revoker List</div>
+            <div class="default-color mb-0" *ngFor="let did of revoker?.did">
               {{ did }}
             </div>
           </div>

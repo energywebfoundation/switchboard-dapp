@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { IssuerDidListComponent } from './issuer-did-list.component';
+import { DidListComponent } from './did-list.component';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { getElement } from '@tests';
 
-describe('IssuerDidListComponent', () => {
-  let component: IssuerDidListComponent;
-  let fixture: ComponentFixture<IssuerDidListComponent>;
+describe('DidListComponent', () => {
+  let component: DidListComponent;
+  let fixture: ComponentFixture<DidListComponent>;
   let hostDebug: DebugElement;
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [IssuerDidListComponent],
+        declarations: [DidListComponent],
         imports: [MatButtonModule, NoopAnimationsModule],
         schemas: [NO_ERRORS_SCHEMA],
       }).compileComponents();
@@ -22,7 +22,7 @@ describe('IssuerDidListComponent', () => {
   );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IssuerDidListComponent);
+    fixture = TestBed.createComponent(DidListComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
   });
