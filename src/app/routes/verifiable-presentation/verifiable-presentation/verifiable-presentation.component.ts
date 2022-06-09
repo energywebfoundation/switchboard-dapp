@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { LoginService } from 'src/app/shared/services/login/login.service';
@@ -10,10 +9,10 @@ import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
-import { MatTableDataSource } from '@angular/material/table';
 import { VpRequestInteractService } from '@ew-did-registry/credentials-interface'
-import { IPresentationDefinition, IVerifiableCredential, SubmissionRequirementMatch} from '@sphereon/pex';
-import {ICredentialTableData} from "../models/credential-table-data.interface"
+import { IPresentationDefinition, IVerifiableCredential} from '@sphereon/pex';
+import {ICredentialTableData} from "../models/credential-table-data.interface";
+import { PresentationService } from '../services/presentation.service';
 @Component({
   selector: 'app-verifiable-presentation',
   templateUrl: './verifiable-presentation.component.html',
@@ -21,7 +20,7 @@ import {ICredentialTableData} from "../models/credential-table-data.interface"
 })
 export class VerifiablePresentationComponent implements OnInit {
   oob$: Observable<string>;
-  tableData: MatTableDataSource<ICredentialTableData>;
+  tableData: ICredentialTableData[];
   requiredRedentials: { [key: string]: IVerifiableCredential };
   challenge: string;
   interact: {
@@ -34,7 +33,7 @@ export class VerifiablePresentationComponent implements OnInit {
     private loginService: LoginService,
     private store: Store,
     public dialog: MatDialog,
-    private iamService: IamService
+    private presentationService: PresentationService,
   ) { }
   isAutolistLoading = {
     requests: [],
@@ -57,13 +56,14 @@ export class VerifiablePresentationComponent implements OnInit {
          - UI Handling - no results found from initiate exchange
         */
         console.log(url);
-        const result = await this.iamService.verifiableCredentialsService.initiateExchange({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url });
+        await this.presentationService.fetchPresentation({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url }).subscribe((result) => {
         console.log(JSON.stringify(result), "CREDENTIAL RESULT FROM ICL");
         const presDef: IPresentationDefinition = result?.vpRequest?.query[0]?.credentialQuery[0]?.presentationDefinition as IPresentationDefinition
         this.challenge = result?.vpRequest?.challenge;
         this.interact = result?.vpRequest?.interact
         this.setRequiredCredentials(presDef)
-        this.tableData = new MatTableDataSource(this.formatTableData(result));
+        this.tableData = this.presentationService.formatTableData(result);
+        });
       }
     });
   }
@@ -101,38 +101,6 @@ export class VerifiablePresentationComponent implements OnInit {
     } else {
       return true;
     }
-  }
-
-  formatTableData(request): ICredentialTableData[] {
-    const inputDescriptors = request?.vpRequest?.query[0]?.credentialQuery[0]?.presentationDefinition?.input_descriptors;
-    const selectResults = request?.selections[0]?.selectResults;
-    // If the input descriptor is self-sign:
-     const descriptors = inputDescriptors.map(desc => {
-      if (desc.constraints?.subject_is_issuer === "required") {
-        return { descriptor: desc.name, selfSign: true, descId: desc.id }
-      }
-    // If the input descriptor contains a matching credential(s) to select from:
-      /* 
-      Get indeces of matched credentials from path:
-         "path": [
-            "$.credentialSubject.chargingData.contractDID"
-          ]
-      */
-      const descriptorMatches: number[] = selectResults?.matches?.filter((match: SubmissionRequirementMatch) => match.name === desc.name).map(res => {
-        const regexMatch = res.vc_path?.map((path: string) => path.match(/\d+/)).map(mtch => parseInt(mtch[0]))
-        return regexMatch[0]
-      })
-      console.log(descriptorMatches, "THE DESCRIPTOR MATCHES")
-       const allMatchedCredentials = [];
-        // Select credential at each index
-      descriptorMatches.forEach((match: number) => {
-        allMatchedCredentials.push({role: selectResults?.verifiableCredential[match]?.credentialSubject?.role?.namespace, credential: selectResults?.verifiableCredential[match], descriptor: desc.id})
-      });
-        // Create table data with descriptor name and all matched credentials. 
-      return { descriptor: desc.name, credentials: allMatchedCredentials, selfSign: false, descId: desc.id };
-    });
-    console.log(JSON.stringify(descriptors), "THE DESCRIPTORS")
-    return descriptors;
   }
 
  setRequiredCredentials(presDef: IPresentationDefinition) {
