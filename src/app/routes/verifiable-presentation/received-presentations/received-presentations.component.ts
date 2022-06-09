@@ -20,7 +20,6 @@ export class ReceivedPresentationsComponent {
   dataSource = new MatTableDataSource<unknown>([]);
 
   handleCredentialUpdate(data: MatSelect) {
-    console.log(data, 'what is this?');
     this.requiredCredentials[data?.value?.descriptor] = data?.value?.credential;
   }
 }

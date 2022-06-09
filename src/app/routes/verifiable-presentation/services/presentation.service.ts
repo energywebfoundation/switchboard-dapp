@@ -19,16 +19,9 @@ export class PresentationService {
           url: presentation.url,
         })
       )
-      .pipe(
-        map((result) => result),
-        catchError((e) => {
-          console.error(e);
-          return throwError(e.message);
-        })
-      );
   }
 
-  formatTableData(request): ICredentialTableData[] {
+  formatPresentationTableData(request): ICredentialTableData[] {
     const inputDescriptors =
       request?.vpRequest?.query[0]?.credentialQuery[0]?.presentationDefinition
         ?.input_descriptors;
@@ -38,13 +31,6 @@ export class PresentationService {
       if (desc.constraints?.subject_is_issuer === 'required') {
         return { descriptor: desc.name, selfSign: true, descId: desc.id };
       }
-      // If the input descriptor contains a matching credential(s) to select from:
-      /* 
-      Get indeces of matched credentials from path:
-         "path": [
-            "$.credentialSubject.chargingData.contractDID"
-          ]
-      */
       const descriptorMatches: number[] = selectResults?.matches
         ?.filter(
           (match: SubmissionRequirementMatch) => match.name === desc.name
@@ -55,7 +41,6 @@ export class PresentationService {
             .map((mtch) => parseInt(mtch[0]));
           return regexMatch[0];
         });
-      console.log(descriptorMatches, 'THE DESCRIPTOR MATCHES');
       const allMatchedCredentials = [];
       // Select credential at each index
       descriptorMatches.forEach((match: number) => {
@@ -74,7 +59,6 @@ export class PresentationService {
         descId: desc.id,
       };
     });
-    console.log(JSON.stringify(descriptors), 'THE DESCRIPTORS');
     return descriptors;
   }
 }

@@ -260,7 +260,7 @@ describe('PresentationService', () => {
         },
       ],
     };
-    const result = service.formatTableData(data);
+    const result = service.formatPresentationTableData(data);
     expect(result).toEqual([
       {
         descriptor: 'Energy Supplier Customer Contract',

@@ -48,7 +48,6 @@ export class VerifiablePresentationComponent implements OnInit {
       if (params._oob) {
         const paramsDecoded = atob(params._oob);
         const parsedToObj = JSON.parse(paramsDecoded);
-        console.log(JSON.stringify(parsedToObj), 'THE PARAMS!!!');
         const { url } = parsedToObj;
         /*
          TO DO:
@@ -62,14 +61,13 @@ export class VerifiablePresentationComponent implements OnInit {
             url,
           })
           .subscribe((result) => {
-            console.log(JSON.stringify(result), 'CREDENTIAL RESULT FROM ICL');
             const presDef: IPresentationDefinition = result?.vpRequest?.query[0]
               ?.credentialQuery[0]
               ?.presentationDefinition as IPresentationDefinition;
             this.challenge = result?.vpRequest?.challenge;
             this.interact = result?.vpRequest?.interact;
             this.setRequiredCredentials(presDef);
-            this.tableData = this.presentationService.formatTableData(result);
+            this.tableData = this.presentationService.formatPresentationTableData(result);
           });
       }
     });
