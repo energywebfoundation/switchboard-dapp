@@ -16,13 +16,13 @@
         </button>
 
         <mat-form-field *ngIf="!element?.selfSign" class="mt-2 md-enroll" appearance="outline">
-          <mat-select 
-            class="md-enroll" 
+          <mat-select
+            class="md-enroll"
             placeholder="Select Credential"
-            (selectionChange)="handleCredentialUpdate($event)"
-            
-            >
-            <mat-option [value]="credential" *ngFor="let credential of element?.credentials; let i = index"
+            (selectionChange)="handleCredentialUpdate($event)">
+            <mat-option
+              [value]="credential"
+              *ngFor="let credential of element?.credentials; let i = index"
               [attr.data-qa-id]="'select-option-' + i">
               {{ credential.role }}
             </mat-option>
@@ -37,14 +37,12 @@
   </table>
   <div class="button-container">
     <button
-    mat-raised-button
-    class="btn btn-primary w-100"
-    type="submit"
-    data-qa-id="submit"
-    [disabled]="submitDisabled"
-    >
-    Submit Credentials
-  </button>
+      mat-raised-button
+      class="btn btn-primary w-100"
+      type="submit"
+      data-qa-id="submit"
+      [disabled]="submitDisabled">
+      Submit Credentials
+    </button>
   </div>
- 
 </app-vp-card>

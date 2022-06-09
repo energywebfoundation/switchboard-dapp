@@ -1,4 +1,4 @@
 export interface PresentationRequest {
-    type: string,
-    url: string
+  type: string;
+  url: string;
 }

@@ -1,15 +1,14 @@
-import { IVerifiableCredential } from "@sphereon/pex"
+import { IVerifiableCredential } from '@sphereon/pex';
 
 interface ICredentialData {
-    role: string,
-    credential: IVerifiableCredential,
-    descriptor: string
+  role: string;
+  credential: IVerifiableCredential;
+  descriptor: string;
 }
 
 export interface ICredentialTableData {
-    descriptor: string,
-    selfSign: boolean,
-    descId: string,
-    credentials?: ICredentialData[]
-  }
-  
+  descriptor: string;
+  selfSign: boolean;
+  descId: string;
+  credentials?: ICredentialData[];
+}

@@ -9,9 +9,9 @@ import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
-import { VpRequestInteractService } from '@ew-did-registry/credentials-interface'
-import { IPresentationDefinition, IVerifiableCredential} from '@sphereon/pex';
-import {ICredentialTableData} from "../models/credential-table-data.interface";
+import { VpRequestInteractService } from '@ew-did-registry/credentials-interface';
+import { IPresentationDefinition, IVerifiableCredential } from '@sphereon/pex';
+import { ICredentialTableData } from '../models/credential-table-data.interface';
 import { PresentationService } from '../services/presentation.service';
 @Component({
   selector: 'app-verifiable-presentation',
@@ -24,7 +24,7 @@ export class VerifiablePresentationComponent implements OnInit {
   requiredRedentials: { [key: string]: IVerifiableCredential };
   challenge: string;
   interact: {
-    service: VpRequestInteractService[]
+    service: VpRequestInteractService[];
   };
   public isLoggedIn = false;
   constructor(
@@ -33,8 +33,8 @@ export class VerifiablePresentationComponent implements OnInit {
     private loginService: LoginService,
     private store: Store,
     public dialog: MatDialog,
-    private presentationService: PresentationService,
-  ) { }
+    private presentationService: PresentationService
+  ) {}
   isAutolistLoading = {
     requests: [],
     value: false,
@@ -43,12 +43,12 @@ export class VerifiablePresentationComponent implements OnInit {
     this._initPresentationFetch();
   }
   _initPresentationFetch() {
-    this.route.queryParams.subscribe(async (params: {_oob?: string}) => {
+    this.route.queryParams.subscribe(async (params: { _oob?: string }) => {
       await this.initLoginUser();
       if (params._oob) {
         const paramsDecoded = atob(params._oob);
         const parsedToObj = JSON.parse(paramsDecoded);
-        console.log(JSON.stringify(parsedToObj), "THE PARAMS!!!")
+        console.log(JSON.stringify(parsedToObj), 'THE PARAMS!!!');
         const { url } = parsedToObj;
         /*
          TO DO:
@@ -56,14 +56,21 @@ export class VerifiablePresentationComponent implements OnInit {
          - UI Handling - no results found from initiate exchange
         */
         console.log(url);
-        await this.presentationService.fetchPresentation({ type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange', url }).subscribe((result) => {
-        console.log(JSON.stringify(result), "CREDENTIAL RESULT FROM ICL");
-        const presDef: IPresentationDefinition = result?.vpRequest?.query[0]?.credentialQuery[0]?.presentationDefinition as IPresentationDefinition
-        this.challenge = result?.vpRequest?.challenge;
-        this.interact = result?.vpRequest?.interact
-        this.setRequiredCredentials(presDef)
-        this.tableData = this.presentationService.formatTableData(result);
-        });
+        await this.presentationService
+          .fetchPresentation({
+            type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange',
+            url,
+          })
+          .subscribe((result) => {
+            console.log(JSON.stringify(result), 'CREDENTIAL RESULT FROM ICL');
+            const presDef: IPresentationDefinition = result?.vpRequest?.query[0]
+              ?.credentialQuery[0]
+              ?.presentationDefinition as IPresentationDefinition;
+            this.challenge = result?.vpRequest?.challenge;
+            this.interact = result?.vpRequest?.interact;
+            this.setRequiredCredentials(presDef);
+            this.tableData = this.presentationService.formatTableData(result);
+          });
       }
     });
   }
@@ -97,15 +104,15 @@ export class VerifiablePresentationComponent implements OnInit {
   isSubmitFormButtonDisabled() {
     // only enable submit button if all required credentials from input descriptors have credential for submission:
     if (this.requiredRedentials) {
-      return Object.values(this.requiredRedentials).some(x => x === null)
+      return Object.values(this.requiredRedentials).some((x) => x === null);
     } else {
       return true;
     }
   }
 
- setRequiredCredentials(presDef: IPresentationDefinition) {
+  setRequiredCredentials(presDef: IPresentationDefinition) {
     const reqCredentials = {};
-    presDef?.input_descriptors.forEach(desc => {
+    presDef?.input_descriptors.forEach((desc) => {
       reqCredentials[desc.id] = null;
     });
     this.requiredRedentials = reqCredentials;
