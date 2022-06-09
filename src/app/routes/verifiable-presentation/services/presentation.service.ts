@@ -12,13 +12,12 @@ export class PresentationService {
   constructor(private iamService: IamService) {}
 
   fetchPresentation(presentation: PresentationRequest) {
-    return this.iamService
-      .wrapWithLoadingService(
-        this.iamService.verifiableCredentialsService.initiateExchange({
-          type: presentation.type,
-          url: presentation.url,
-        })
-      )
+    return this.iamService.wrapWithLoadingService(
+      this.iamService.verifiableCredentialsService.initiateExchange({
+        type: presentation.type,
+        url: presentation.url,
+      })
+    );
   }
 
   formatPresentationTableData(request): ICredentialTableData[] {

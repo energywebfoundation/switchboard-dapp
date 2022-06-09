@@ -67,7 +67,8 @@ export class VerifiablePresentationComponent implements OnInit {
             this.challenge = result?.vpRequest?.challenge;
             this.interact = result?.vpRequest?.interact;
             this.setRequiredCredentials(presDef);
-            this.tableData = this.presentationService.formatPresentationTableData(result);
+            this.tableData =
+              this.presentationService.formatPresentationTableData(result);
           });
       }
     });
