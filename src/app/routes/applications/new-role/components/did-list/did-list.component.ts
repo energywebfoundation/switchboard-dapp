@@ -7,12 +7,11 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-issuer-did-list',
-  templateUrl: './issuer-did-list.component.html',
-  styleUrls: ['./issuer-did-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-did-list',
+  templateUrl: './did-list.component.html',
+  styleUrls: ['./did-list.component.scss'],
 })
-export class IssuerDidListComponent {
+export class DidListComponent {
   @Input() list: string[];
   @Output() remove = new EventEmitter<number>();
 

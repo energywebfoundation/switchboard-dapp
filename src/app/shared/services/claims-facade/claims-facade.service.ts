@@ -9,9 +9,10 @@ import {
 import { forkJoin, from, Observable } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { finalize, map, switchMap } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
 import { extendEnrolmentClaim } from '../../../state/enrolments/pipes/extend-enrolment-claim';
+import { SwitchboardToastrService } from '../switchboard-toastr.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,8 @@ import { extendEnrolmentClaim } from '../../../state/enrolments/pipes/extend-enr
 export class ClaimsFacadeService {
   constructor(
     private iamService: IamService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private toastrService: SwitchboardToastrService
   ) {}
 
   createSelfSignedClaim(data: { data: ClaimData; subject?: string }) {
@@ -153,5 +155,32 @@ export class ClaimsFacadeService {
     subject?: string;
   }): Observable<void> {
     return from(this.iamService.claimsService.registerOnchain(claim));
+  }
+
+  revoke(claim: EnrolmentClaim) {
+    this.loadingService.show();
+    return from(
+      this.iamService.claimsService.revokeClaim({
+        claim: { namespace: claim.claimType, subject: claim.subject },
+      })
+    ).pipe(
+      map((value) => {
+        if (value) {
+          this.toastrService.success(
+            'Successfully revoked claim',
+            'Claim Revoke'
+          );
+        } else {
+          this.toastrService.error('Claim was not revoked', 'Claim Revoke');
+        }
+        return value;
+      }),
+      catchError((err) => {
+        console.log(err);
+        this.toastrService.error(err.message);
+        return err;
+      }),
+      finalize(() => this.loadingService.hide())
+    );
   }
 }
