@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { ICredentialTableData } from '../models/credential-table-data.interface';
+import { IVerifiableCredential } from '@sphereon/pex';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-received-presentations',
@@ -7,9 +10,16 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./received-presentations.component.scss'],
 })
 export class ReceivedPresentationsComponent {
-  displayedColumns: string[] = ['namespace', 'reason'];
-  dataSource = new MatTableDataSource([
-    { namespace: 'installer', reason: 'asdf dsa' },
-    { namespace: 'installer2', reason: 'Some other reason' },
-  ]);
+  tableDataFormatted: MatTableDataSource<ICredentialTableData>;
+  @Input() set tableData(data: ICredentialTableData[]) {
+    this.dataSource = new MatTableDataSource<ICredentialTableData>(data);
+  }
+  @Input() submitDisabled: boolean;
+  @Input() requiredCredentials: { [key: string]: IVerifiableCredential };
+  displayedColumns: string[] = ['descriptor', 'verification'];
+  dataSource = new MatTableDataSource<unknown>([]);
+
+  handleCredentialUpdate(data: MatSelect) {
+    this.requiredCredentials[data?.value?.descriptor] = data?.value?.credential;
+  }
 }

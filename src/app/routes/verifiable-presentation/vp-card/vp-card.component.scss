@@ -1,0 +1,11 @@
+.card-presentation {
+  overflow-y: auto;
+  width: 800px;
+  height: 100%;
+  margin: 15px 15px 65px 15px;
+  border-radius: 15px;
+  z-index: 7;
+
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}

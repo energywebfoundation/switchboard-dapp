@@ -1,17 +1,48 @@
 <app-vp-card>
   <h4><strong>Received</strong> presentation request</h4>
+  <!-- START TABLE -->
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <ng-container matColumnDef="namespace">
-      <th mat-header-cell *matHeaderCellDef>Namespace</th>
-      <td mat-cell *matCellDef="let element">{{ element.namespace }}</td>
+    <!-- Descriptor Column -->
+    <ng-container matColumnDef="descriptor">
+      <th mat-header-cell *matHeaderCellDef>Requested Credentials</th>
+      <td mat-cell *matCellDef="let element">{{ element?.descriptor }}</td>
     </ng-container>
+    <!-- Verification Column -->
+    <ng-container matColumnDef="verification">
+      <th mat-header-cell *matHeaderCellDef>Available Credentials</th>
+      <td mat-cell *matCellDef="let element">
+        <button *ngIf="!!element?.selfSign" mat-raised-button class="btn btn-primary btn-small mb-3 mb-lg-0">
+          <span>Self Sign</span>
+        </button>
 
-    <ng-container matColumnDef="reason">
-      <th mat-header-cell *matHeaderCellDef>Reason</th>
-      <td mat-cell *matCellDef="let element">{{ element.reason }}</td>
+        <mat-form-field *ngIf="!element?.selfSign" class="mt-2 md-enroll" appearance="outline">
+          <mat-select
+            class="md-enroll"
+            placeholder="Select Credential"
+            (selectionChange)="handleCredentialUpdate($event)">
+            <mat-option
+              [value]="credential"
+              *ngFor="let credential of element?.credentials; let i = index"
+              [attr.data-qa-id]="'select-option-' + i">
+              {{ credential.role }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+      <!-- </ng-container> -->
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+  <div class="button-container">
+    <button
+      mat-raised-button
+      class="btn btn-primary w-100"
+      type="submit"
+      data-qa-id="submit"
+      [disabled]="submitDisabled">
+      Submit Credentials
+    </button>
+  </div>
 </app-vp-card>
