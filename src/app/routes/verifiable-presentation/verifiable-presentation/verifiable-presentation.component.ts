@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, from} from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { LoginService } from 'src/app/shared/services/login/login.service';
@@ -57,13 +57,11 @@ export class VerifiablePresentationComponent implements OnInit {
          - UI Handling - no results found from initiate exchange
         */
         console.log(url);
-        if(!url) {
-          this.openSwal(
-            {
-              title: 'Oops!',
-              text: 'No Presentation Url Detected',
-            },
-          );
+        if (!url) {
+          this.openSwal({
+            title: 'Oops!',
+            text: 'No Presentation Url Detected',
+          });
         }
         await this.presentationService
           .fetchPresentation({
@@ -118,8 +116,7 @@ export class VerifiablePresentationComponent implements OnInit {
         closeOnClickOutside: truncate,
         ...config,
       })
-    )
-      .pipe(take(1), filter(Boolean))
+    ).pipe(take(1), filter(Boolean));
   }
 
   isSubmitFormButtonDisabled() {
