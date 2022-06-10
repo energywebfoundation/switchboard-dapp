@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, from} from 'rxjs';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { LoginService } from 'src/app/shared/services/login/login.service';
@@ -13,6 +13,8 @@ import { VpRequestInteractService } from '@ew-did-registry/credentials-interface
 import { IPresentationDefinition, IVerifiableCredential } from '@sphereon/pex';
 import { ICredentialTableData } from '../models/credential-table-data.interface';
 import { PresentationService } from '../services/presentation.service';
+import SWAL from 'sweetalert';
+import { truncate } from 'fs';
 @Component({
   selector: 'app-verifiable-presentation',
   templateUrl: './verifiable-presentation.component.html',
@@ -55,6 +57,14 @@ export class VerifiablePresentationComponent implements OnInit {
          - UI Handling - no results found from initiate exchange
         */
         console.log(url);
+        if(!url) {
+          this.openSwal(
+            {
+              title: 'Oops!',
+              text: 'No Presentation Url Detected',
+            },
+          );
+        }
         await this.presentationService
           .fetchPresentation({
             type: 'https://energyweb.org/out-of-band-invitation/vc-api-exchange',
@@ -100,6 +110,18 @@ export class VerifiablePresentationComponent implements OnInit {
       this.loadingService.show();
     }
   }
+  private openSwal(config) {
+    from(
+      SWAL({
+        icon: 'error',
+        button: 'Proceed',
+        closeOnClickOutside: truncate,
+        ...config,
+      })
+    )
+      .pipe(take(1), filter(Boolean))
+  }
+
   isSubmitFormButtonDisabled() {
     // only enable submit button if all required credentials from input descriptors have credential for submission:
     if (this.requiredRedentials) {
