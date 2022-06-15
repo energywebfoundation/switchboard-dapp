@@ -62,8 +62,10 @@ export class SmartSearchComponent implements AfterViewInit {
 
   autocompleteSelectionHandler(event: MatAutocompleteSelectedEvent) {
     this.selectionHandler(event.option.value);
+    if (this.isAdding) {
+      this.addSelection();
+    }
   }
-
   selectionHandler(namespace?: string) {
     this.selected.emit({
       namespace,
@@ -83,12 +85,12 @@ export class SmartSearchComponent implements AfterViewInit {
     return this.searchText?.value?.trim()?.length > 2;
   }
 
-  addRole(): void {
+  addSelection(): void {
     if (this.searchText.invalid) {
       return;
     }
     this.add.emit({
-      role: this.searchText.value,
+      value: this.searchText.value,
       searchType: this.searchType,
     });
     this.clear();

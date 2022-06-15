@@ -26,7 +26,7 @@
       <button mat-icon-button (click)="search()" class="search-button" data-qa-id="search">
         <mat-icon>search</mat-icon>
       </button>
-      <button *ngIf="isAdding" [disabled]="!searchText.value" mat-icon-button data-qa-id="add" (click)="addRole()">
+      <button *ngIf="isAdding" [disabled]="!searchText.value" mat-icon-button data-qa-id="add" (click)="addSelection()">
         <mat-icon>add</mat-icon>
       </button>
       <button *ngIf="isDefault" mat-icon-button (click)="clear()" data-qa-id="clear">
