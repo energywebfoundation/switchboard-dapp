@@ -1,6 +1,6 @@
 export const ListType = {
-  ORG: 'organization',
-  APP: 'application',
+  ORG: 'org',
+  APP: 'app',
   ROLE: 'role',
 };
 
