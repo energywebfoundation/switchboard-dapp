@@ -20,15 +20,15 @@ describe('DomainImageComponent', () => {
   });
 
   it('should create', () => {
-    component.type = 'Organization';
+    component.type = 'Org';
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
-  it('should return no-organization-image when calling defaultUrl', () => {
-    component.type = 'Organization';
+  it('should return no-org-image when calling defaultUrl', () => {
+    component.type = 'Org';
     fixture.detectChanges();
 
-    expect(component.defaultUrl).toContain('no-organization-image.png');
+    expect(component.defaultUrl).toContain('no-org-image.png');
   });
 });

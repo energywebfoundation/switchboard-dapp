@@ -18,7 +18,7 @@ describe('ApplicationDetailsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NamespaceDetailsComponent);
     component = fixture.componentInstance;
-    component.type = 'Organization';
+    component.type = 'Org';
     fixture.detectChanges();
   });
 
