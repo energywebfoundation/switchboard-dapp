@@ -313,11 +313,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         .get('enrolmentPreconditions').value;
 
       if (enrolmentPreconditions.length) {
-        enrolmentPreconditions[0].conditions.push(event.role);
+        enrolmentPreconditions[0].conditions.push(event.value);
       } else {
         this.roleForm.get('data').patchValue({
           enrolmentPreconditions: [
-            { type: PreconditionType.Role, conditions: [event.role] },
+            { type: PreconditionType.Role, conditions: [event.value] },
           ],
         });
       }
