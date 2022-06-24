@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   IFieldDefinition,
@@ -18,7 +18,6 @@ import { IIssuerDefinition } from '@energyweb/credential-governance/dist/src/typ
   selector: 'app-governance-details',
   templateUrl: './governance-details.component.html',
   styleUrls: ['./governance-details.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GovernanceDetailsComponent {
   @Input() set origData(value: any) {
@@ -169,8 +168,6 @@ export class GovernanceDetailsComponent {
       });
     }
 
-    // console.log('appList', this.appList);
-    // console.log('roleList', this.roleList);
     this.loadingService.hide();
   }
 
