@@ -19,6 +19,7 @@ import { KeyValue } from '@angular/common';
 import { EnrolmentClaim } from '../models/enrolment-claim.interface';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
+import { IRoleDefinition } from 'iam-client-lib';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -159,7 +160,7 @@ export class ViewRequestsComponent implements OnInit {
 
   private async getRoleIssuerFields(namespace: string) {
     this.loadingService.show();
-    const definitions: any = await this.iamService.getRolesDefinition([
+    const definitions = await this.iamService.getRolesDefinition([
       namespace,
     ]);
     const issuerFieldList = definitions[namespace]?.issuerFields;
