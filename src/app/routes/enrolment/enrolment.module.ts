@@ -22,6 +22,7 @@ import { FieldsComponent } from './fields/fields.component';
 import { MyEnrolmentListComponent } from './my-enrolment-list/my-enrolment-list.component';
 import { RequestedEnrolmentListComponent } from './requested-enrolment-list/requested-enrolment-list.component';
 import { EnrolmentListModule } from './enrolment-list/enrolment-list.module';
+import { RequestDetailsComponent } from './view-requests/components/request-details/request-details.component';
 
 const routes: Routes = [{ path: '', component: EnrolmentComponent }];
 
@@ -34,6 +35,7 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
     FieldsComponent,
     MyEnrolmentListComponent,
     RequestedEnrolmentListComponent,
+    RequestDetailsComponent,
   ],
   imports: [
     SharedModule,
