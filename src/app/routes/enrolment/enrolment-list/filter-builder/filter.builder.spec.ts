@@ -1,6 +1,7 @@
 import { FilterBuilder } from './filter.builder';
-import { EnrolmentClaim } from '../../models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../models/enrolment-claim';
 import { FilterStatus } from '../models/filter-status.enum';
+import { Claim } from 'iam-client-lib';
 
 describe('FilterBuilder', () => {
   describe('DID filter', () => {
@@ -61,57 +62,43 @@ describe('FilterBuilder', () => {
   });
   describe('Status filter', () => {
     const list = [
-      { isAccepted: false, isRejected: false },
-      { isAccepted: false, isRejected: true },
-      { isAccepted: true, isRejected: false },
-      { isAccepted: true, isRejected: false, isRevoked: true },
-    ] as EnrolmentClaim[];
+      new EnrolmentClaim({ isAccepted: false, isRejected: false } as Claim),
+      new EnrolmentClaim({ isAccepted: false, isRejected: true } as Claim),
+      new EnrolmentClaim({ isAccepted: true, isRejected: false } as Claim),
+      new EnrolmentClaim({
+        isAccepted: true,
+        isRejected: false,
+      } as Claim).setIsRevoked(true),
+    ] as unknown as EnrolmentClaim[];
 
     it('should return all elements', () => {
-      expect(new FilterBuilder(list).status(FilterStatus.All).build()).toEqual(
-        list
-      );
+      expect(
+        new FilterBuilder(list).status(FilterStatus.All).build().length
+      ).toEqual(4);
     });
 
     it('should return only rejected elements', () => {
       expect(
-        new FilterBuilder(list).status(FilterStatus.Rejected).build()
-      ).toEqual([
-        {
-          isAccepted: false,
-          isRejected: true,
-        },
-      ] as EnrolmentClaim[]);
+        new FilterBuilder(list).status(FilterStatus.Rejected).build().length
+      ).toEqual(1);
     });
 
     it('should return only approved elements', () => {
       expect(
-        new FilterBuilder(list).status(FilterStatus.Approved).build()
-      ).toEqual([
-        {
-          isAccepted: true,
-          isRejected: false,
-        },
-      ] as EnrolmentClaim[]);
+        new FilterBuilder(list).status(FilterStatus.Approved).build().length
+      ).toEqual(1);
     });
 
     it('should return pending elements', () => {
       expect(
-        new FilterBuilder(list).status(FilterStatus.Pending).build()
-      ).toEqual([
-        {
-          isAccepted: false,
-          isRejected: false,
-        },
-      ] as EnrolmentClaim[]);
+        new FilterBuilder(list).status(FilterStatus.Pending).build().length
+      ).toEqual(1);
     });
 
     it('should return only revoked elements', () => {
       expect(
-        new FilterBuilder(list).status(FilterStatus.Revoked).build()
-      ).toEqual([
-        { isAccepted: true, isRejected: false, isRevoked: true },
-      ] as EnrolmentClaim[]);
+        new FilterBuilder(list).status(FilterStatus.Revoked).build().length
+      ).toEqual(1);
     });
   });
 });

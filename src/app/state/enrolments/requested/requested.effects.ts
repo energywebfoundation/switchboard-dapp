@@ -5,9 +5,8 @@ import * as RequestedActions from './requested.actions';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { from, Observable, of } from 'rxjs';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
-import { extendEnrolmentClaim } from '../pipes/extend-enrolment-claim';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 
 @Injectable()
 export class EnrolmentRequestsEffects {
@@ -16,7 +15,7 @@ export class EnrolmentRequestsEffects {
       ofType(RequestedActions.getEnrolmentRequests),
       tap(() => this.loadingService.show()),
       switchMap(() =>
-        from(this.claimsFacade.getClaimsByIssuer()).pipe(
+        this.claimsFacade.getClaimsByIssuer().pipe(
           this.getEnrolments(
             RequestedActions.getEnrolmentRequestsSuccess,
             RequestedActions.getEnrolmentRequestsFailure
@@ -44,13 +43,6 @@ export class EnrolmentRequestsEffects {
   private getEnrolments(successAction, failureAction) {
     return (source: Observable<EnrolmentClaim[]>) => {
       return source.pipe(
-        switchMap((enrolments) =>
-          from(this.claimsFacade.appendDidDocSyncStatus(enrolments))
-        ),
-        switchMap((enrolments: EnrolmentClaim[]) =>
-          this.claimsFacade.setIsRevokedStatus(enrolments)
-        ),
-        extendEnrolmentClaim(),
         map((enrolments) => successAction({ enrolments })),
         catchError((e) => {
           console.error(e);

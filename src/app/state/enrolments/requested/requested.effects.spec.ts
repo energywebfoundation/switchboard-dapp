@@ -8,7 +8,7 @@ import { EnrolmentRequestsEffects } from './requested.effects';
 import * as RequestedActions from './requested.actions';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
-import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 
 describe('EnrolmentRequestsEffects', () => {
   let actions$: ReplaySubject<any>;
@@ -23,8 +23,6 @@ describe('EnrolmentRequestsEffects', () => {
     ]);
     claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
       'getClaimsByIssuer',
-      'setIsRevokedStatus',
-      'appendDidDocSyncStatus',
     ]);
     TestBed.configureTestingModule({
       providers: [
@@ -64,12 +62,6 @@ describe('EnrolmentRequestsEffects', () => {
         createdAt: '2021-12-06T20:43:35.471Z',
       };
       claimsFacadeSpy.getClaimsByIssuer.and.returnValue(of([enrolment]));
-      claimsFacadeSpy.setIsRevokedStatus.and.returnValue(
-        of([{ ...enrolment, isRevoked: false }])
-      );
-      claimsFacadeSpy.appendDidDocSyncStatus.and.returnValue(
-        of([{ ...enrolment, isRevoked: false }])
-      );
       actions$.next(RequestedActions.getEnrolmentRequests());
 
       effects.getEnrolmentRequests$.subscribe((resultAction) => {
@@ -79,9 +71,6 @@ describe('EnrolmentRequestsEffects', () => {
             enrolments: [
               {
                 ...enrolment,
-                roleName: 'role',
-                requestDate: new Date(enrolment.createdAt),
-                isRevoked: false,
               } as EnrolmentClaim,
             ],
           })

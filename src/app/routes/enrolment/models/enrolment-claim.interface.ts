@@ -1,10 +1,8 @@
-import { Claim } from 'iam-client-lib';
-
-export interface EnrolmentClaim extends Claim {
+export interface IEnrolmentClaim {
   roleName: string;
   requestDate: Date;
-  isSynced: boolean;
+  isSyncedOnChain: boolean;
   isRevoked: boolean;
   createdAt: string;
-  notSyncedOnChain?: boolean;
+  isSyncedOffChain?: boolean;
 }

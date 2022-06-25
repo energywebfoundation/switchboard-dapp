@@ -2,24 +2,24 @@ import { TestBed } from '@angular/core/testing';
 
 import { EnrolmentFilterListService } from './enrolment-filter-list.service';
 import { FilterStatus } from '../models/filter-status.enum';
+import { EnrolmentClaim } from '../../models/enrolment-claim';
+import { Claim } from 'iam-client-lib';
 
-const acceptedClaim = {
+const acceptedClaim = new EnrolmentClaim({
   isAccepted: true,
   isRejected: false,
-  isRevoked: false,
   namespace: 'claim.namespace.iam.ewc',
   subject: 'subject',
   requester: '',
-};
+} as Claim).setIsRevoked(false);
 
-const notAcceptedClaim = {
+const notAcceptedClaim = new EnrolmentClaim({
   isAccepted: false,
   isRejected: false,
-  isRevoked: false,
   namespace: 'another.namespace.iam.ewc',
   subject: '',
   requester: '',
-};
+} as Claim).setIsRevoked(false);
 const claims = [acceptedClaim, notAcceptedClaim] as any[];
 
 describe('EnrolmentFilterListService', () => {
@@ -42,11 +42,7 @@ describe('EnrolmentFilterListService', () => {
     service.setDid('subject');
     service.filteredList$.subscribe((list) => {
       expect(list.length).toEqual(1);
-      expect(list).toEqual([
-        {
-          ...acceptedClaim,
-        },
-      ] as any[]);
+      expect(list).toEqual([acceptedClaim] as any[]);
       done();
     });
   });
@@ -56,11 +52,7 @@ describe('EnrolmentFilterListService', () => {
     service.setStatus(FilterStatus.Approved);
     service.filteredList$.subscribe((list) => {
       expect(list.length).toEqual(1);
-      expect(list).toEqual([
-        {
-          ...acceptedClaim,
-        },
-      ] as any[]);
+      expect(list).toEqual([acceptedClaim] as any[]);
       done();
     });
   });
@@ -71,11 +63,7 @@ describe('EnrolmentFilterListService', () => {
     service.setNamespace('claim');
     service.filteredList$.subscribe((list) => {
       expect(list.length).toEqual(1);
-      expect(list).toEqual([
-        {
-          ...acceptedClaim,
-        },
-      ] as any[]);
+      expect(list).toEqual([acceptedClaim] as any[]);
       done();
     });
   });

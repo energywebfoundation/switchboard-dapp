@@ -1,5 +1,5 @@
 import { FilterStatus } from '../models/filter-status.enum';
-import { EnrolmentClaim } from '../../models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../models/enrolment-claim';
 
 export class FilterBuilder {
   private list: EnrolmentClaim[];
@@ -38,17 +38,16 @@ export class FilterBuilder {
 
   private statusFilter(list: EnrolmentClaim[], status: FilterStatus) {
     if (status === FilterStatus.Pending) {
-      return list.filter((item) => !item.isAccepted && !item.isRejected);
+      return list.filter((item) => item.isPending() );
     }
 
     if (status === FilterStatus.Rejected) {
-      return list.filter((item) => item.isRejected);
+      return list.filter((item) => item.isRejected());
     }
 
     if (status === FilterStatus.Approved) {
       return list
-        .filter((item) => !item.isRevoked)
-        .filter((item) => item.isAccepted);
+        .filter((item) => item.isAccepted())
     }
 
     if (status === FilterStatus.Revoked) {

@@ -16,7 +16,7 @@ import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.component';
 import { KeyValue } from '@angular/common';
-import { EnrolmentClaim } from '../models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../models/enrolment-claim';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 import { IRoleDefinition } from 'iam-client-lib';

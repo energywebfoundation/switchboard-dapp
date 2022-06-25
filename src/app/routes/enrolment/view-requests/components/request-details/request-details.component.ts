@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { EnrolmentClaim } from '../../../models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../models/enrolment-claim';
 
 @Component({
   selector: 'app-request-details',
