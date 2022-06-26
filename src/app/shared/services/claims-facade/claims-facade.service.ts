@@ -156,10 +156,9 @@ export class ClaimsFacadeService {
       });
 
     return list.map((item: EnrolmentClaim) => {
-      item.isSyncedOffChain = claims.some(
-        (claim) => claim.claimType === item.claimType
+      return item.setIsRevoked(
+        claims.some((claim) => claim.claimType === item.claimType)
       );
-      return item;
     });
   }
 
