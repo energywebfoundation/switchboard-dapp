@@ -1,6 +1,6 @@
 export interface IEnrolmentClaim {
   roleName: string;
   requestDate: Date;
-  isRevoked: boolean;
+  isRevokedOnChain: boolean;
   createdAt: string;
 }

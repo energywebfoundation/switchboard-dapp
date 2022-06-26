@@ -9,7 +9,8 @@ export class EnrolmentClaim
   roleName: string;
   requestDate: Date;
 
-  isRevoked: boolean;
+  isRevokedOnChain: boolean;
+  isRevokedOffChain: boolean;
   createdAt: string;
 
   private _isSyncedOnChain: boolean;
@@ -24,7 +25,7 @@ export class EnrolmentClaim
   }
 
   get isAccepted() {
-    return this.iclClaim.isAccepted && !this.isRevoked;
+    return this.iclClaim.isAccepted && !this.isRevokedOnChain && !this.isRevokedOffChain;
   }
 
   get isRejected() {
@@ -65,12 +66,21 @@ export class EnrolmentClaim
     );
   }
 
-  get isRevocable(): boolean {
-    return this.isAccepted && this.isSynced && !this.isRevoked;
+  get isRevocableOnChain(): boolean {
+    return this.isAccepted && this.isSyncedOnChain && !this.isRevokedOnChain;
   }
 
-  setIsRevoked(isRevoked: boolean): EnrolmentClaim {
-    this.isRevoked = isRevoked;
+  get isRevocableOffChain(): boolean {
+    return this.isAccepted && this.isSyncedOffChain && !this.isRevokedOffChain;
+  }
+
+  setIsRevokedOnChain(isRevoked: boolean): EnrolmentClaim {
+    this.isRevokedOnChain = isRevoked;
+    return this;
+  }
+
+  setIsRevokedOffChain(isRevoked: boolean): EnrolmentClaim {
+    this.isRevokedOffChain = isRevoked;
     return this;
   }
 

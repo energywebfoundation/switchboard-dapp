@@ -11,7 +11,7 @@ const acceptedClaim = new EnrolmentClaim({
   namespace: 'claim.namespace.iam.ewc',
   subject: 'subject',
   requester: '',
-} as Claim).setIsRevoked(false);
+} as Claim).setIsRevokedOnChain(false);
 
 const notAcceptedClaim = new EnrolmentClaim({
   isAccepted: false,
@@ -19,7 +19,7 @@ const notAcceptedClaim = new EnrolmentClaim({
   namespace: 'another.namespace.iam.ewc',
   subject: '',
   requester: '',
-} as Claim).setIsRevoked(false);
+} as Claim).setIsRevokedOnChain(false);
 const claims = [acceptedClaim, notAcceptedClaim] as any[];
 
 describe('EnrolmentFilterListService', () => {

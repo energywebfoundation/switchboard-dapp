@@ -11,7 +11,7 @@ export class EnrolmentStatusComponent {
   @Input() item: EnrolmentClaim;
 
   isAccepted() {
-    return this.item?.isAccepted && !this.item?.isRevoked;
+    return this.item?.isAccepted && !this.item?.isRevokedOnChain;
   }
 
   isSynced() {
@@ -23,7 +23,7 @@ export class EnrolmentStatusComponent {
   }
 
   isRevoked() {
-    return this.item?.isRevoked;
+    return this.item?.isRevokedOnChain;
   }
 
   isPending() {

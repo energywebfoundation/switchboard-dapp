@@ -156,7 +156,7 @@ export class ClaimsFacadeService {
       });
 
     return list.map((item: EnrolmentClaim) => {
-      return item.setIsRevoked(
+      return item.setIsRevokedOnChain(
         claims.some((claim) => claim.claimType === item.claimType)
       );
     });
@@ -173,7 +173,7 @@ export class ClaimsFacadeService {
           })
         ).pipe(
           map((isRevoked: boolean) => {
-            claim.isRevoked = isRevoked;
+            claim.isRevokedOnChain = isRevoked;
             return claim;
           })
         )

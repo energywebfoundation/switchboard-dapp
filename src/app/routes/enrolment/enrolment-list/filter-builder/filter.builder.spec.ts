@@ -68,7 +68,7 @@ describe('FilterBuilder', () => {
       new EnrolmentClaim({
         isAccepted: true,
         isRejected: false,
-      } as Claim).setIsRevoked(true),
+      } as Claim).setIsRevokedOnChain(true),
     ] as unknown as EnrolmentClaim[];
 
     it('should return all elements', () => {

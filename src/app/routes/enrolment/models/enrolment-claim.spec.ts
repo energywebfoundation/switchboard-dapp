@@ -6,7 +6,7 @@ describe('EnrolmentClaim tests', () => {
     it('should return true when is accepted', () => {
       expect(
         new EnrolmentClaim({ isAccepted: true } as Claim)
-          .setIsRevoked(false)
+          .setIsRevokedOnChain(false)
           .isAccepted
       ).toBeTrue();
     });
@@ -14,7 +14,7 @@ describe('EnrolmentClaim tests', () => {
     it('should return false when is not accepted', () => {
       expect(
         new EnrolmentClaim({ isAccepted: false } as Claim)
-          .setIsRevoked(false)
+          .setIsRevokedOnChain(false)
           .isAccepted
       ).toBeFalse();
     });
@@ -22,7 +22,7 @@ describe('EnrolmentClaim tests', () => {
     it('should return false when isAccepted but revoked', () => {
       expect(
         new EnrolmentClaim({ isAccepted: true } as Claim)
-          .setIsRevoked(true)
+          .setIsRevokedOnChain(true)
           .isAccepted
       ).toBeFalse();
     });

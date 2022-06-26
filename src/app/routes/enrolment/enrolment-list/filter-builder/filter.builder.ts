@@ -50,7 +50,7 @@ export class FilterBuilder {
     }
 
     if (status === FilterStatus.Revoked) {
-      return list.filter((item) => item.isRevoked);
+      return list.filter((item) => item.isRevokedOnChain);
     }
 
     if (status === FilterStatus.All) {

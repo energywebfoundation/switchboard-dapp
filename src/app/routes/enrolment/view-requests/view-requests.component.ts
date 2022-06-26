@@ -143,9 +143,9 @@ export class ViewRequestsComponent implements OnInit {
       });
   }
 
-  isRevocable() {
+  isRevocableOnChain() {
     return (
-      this.claim.isRevocable &&
+      this.claim.isRevocableOnChain &&
       this.listType === EnrolmentListType.ISSUER
     );
   }
