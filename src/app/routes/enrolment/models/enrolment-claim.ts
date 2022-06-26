@@ -8,18 +8,19 @@ export class EnrolmentClaim
 {
   roleName: string;
   requestDate: Date;
-  isSyncedOnChain: boolean;
-  isSyncedOffChain: boolean;
 
   isRevoked: boolean;
   createdAt: string;
+
+  private _isSyncedOnChain: boolean;
+  private _isSyncedOffChain: boolean;
   constructor(iclClaim: Claim) {
     super(iclClaim);
     this.defineProperties();
   }
 
   isSynced() {
-    return this.isAccepted() && this.syncedOnChain() && this.syncedOffChain();
+    return this.isSyncedOnChain() && this.isSyncedOffChain();
   }
 
   isAccepted() {
@@ -35,21 +36,39 @@ export class EnrolmentClaim
   }
 
   isPendingSync() {
+    if (
+      this.iclClaim.registrationTypes.includes(RegistrationTypes.OnChain) &&
+      this.iclClaim.registrationTypes.includes(RegistrationTypes.OffChain)
+    ) {
+      return !this.isSyncedOffChain() || !this.isSyncedOnChain();
+    }
+    if (this.iclClaim.registrationTypes.includes(RegistrationTypes.OnChain)) {
+      return !this.isSyncedOnChain();
+    }
+
+    if (this.iclClaim.registrationTypes.includes(RegistrationTypes.OffChain)) {
+      return !this.isSyncedOffChain();
+    }
+
+    return false;
+  }
+
+  isSyncedOffChain(): boolean {
     return (
-      this.isAccepted() && !(this.syncedOffChain() && this.syncedOnChain())
+      this.isAccepted() && this.isRegisteredOffChain() && this._isSyncedOffChain
     );
   }
 
+  isSyncedOnChain(): boolean {
+    return this.isAccepted() && this.isRegisteredOnChain() && this._isSyncedOnChain;
+  }
+
   syncedOnChain(): boolean {
-    return this.iclClaim.registrationTypes.includes(RegistrationTypes.OnChain)
-      ? this.isSyncedOnChain
-      : true;
+    return this.isRegisteredOnChain() && this._isSyncedOnChain;
   }
 
   syncedOffChain(): boolean {
-    return this.iclClaim.registrationTypes.includes(RegistrationTypes.OffChain)
-      ? this.isSyncedOffChain
-      : true;
+    return this.isRegisteredOffChain() && this._isSyncedOffChain;
   }
 
   setIsRevoked(isRevoked: boolean): EnrolmentClaim {
@@ -58,8 +77,16 @@ export class EnrolmentClaim
   }
 
   setIsSyncedOffChain(isSyncedOffChain: boolean): EnrolmentClaim {
-    this.isSyncedOffChain = isSyncedOffChain;
+    this._isSyncedOffChain = isSyncedOffChain;
     return this;
+  }
+
+  private isRegisteredOnChain(): boolean {
+    return this.iclClaim.registrationTypes.includes(RegistrationTypes.OnChain);
+  }
+
+  private isRegisteredOffChain(): boolean {
+    return this.iclClaim.registrationTypes.includes(RegistrationTypes.OffChain);
   }
 
   private defineProperties(): void {
@@ -79,7 +106,7 @@ export class EnrolmentClaim
   }
 
   private defineSyncedOnChain(): void {
-    this.isSyncedOnChain = Boolean(
+    this._isSyncedOnChain = Boolean(
       this.iclClaim.issuedToken &&
         this.iclClaim.onChainProof &&
         this.iclClaim.vp

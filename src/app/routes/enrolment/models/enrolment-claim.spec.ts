@@ -158,8 +158,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OnChain],
-        } as Claim)
-          .isSynced()
+        } as Claim).isSynced()
       ).toBeFalse();
     });
 
@@ -177,6 +176,73 @@ describe('EnrolmentClaim tests', () => {
         } as Claim)
           .setIsSyncedOffChain(true)
           .isSynced()
+      ).toBeTrue();
+    });
+  });
+  describe('isSyncedOnChain', () => {
+    it('should return false when OnChain is not registered', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [],
+        } as Claim)
+          .isSyncedOnChain()
+      ).toBeFalse();
+    });
+
+    it('should return false when onChain is not synced', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [RegistrationTypes.OnChain],
+        } as Claim).isSyncedOnChain()
+      ).toBeFalse();
+    });
+
+    it('should return true when onChain is synced', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [
+            RegistrationTypes.OnChain,
+          ],
+          issuedToken: 'test',
+          vp: {},
+          onChainProof: 'test',
+        } as Claim)
+          .isSyncedOnChain()
+      ).toBeTrue();
+    });
+  });
+  describe('isSyncedOffChain', () => {
+    it('should return false when offChain is not registered', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [],
+        } as Claim).isSyncedOffChain()
+      ).toBeFalse();
+    });
+
+    it('should return false when offChain is not synced', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [RegistrationTypes.OffChain],
+        } as Claim)
+          .setIsSyncedOffChain(false)
+          .isSyncedOffChain()
+      ).toBeFalse();
+    });
+
+    it('should return true when offChain is synced', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [RegistrationTypes.OffChain],
+        } as Claim)
+          .setIsSyncedOffChain(true)
+          .isSyncedOffChain()
       ).toBeTrue();
     });
   });
