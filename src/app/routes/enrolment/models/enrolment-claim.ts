@@ -60,7 +60,13 @@ export class EnrolmentClaim
   }
 
   get isSyncedOnChain(): boolean {
-    return this.isAccepted && this.isRegisteredOnChain() && this._isSyncedOnChain;
+    return (
+      this.isAccepted && this.isRegisteredOnChain() && this._isSyncedOnChain
+    );
+  }
+
+  get isRevocable(): boolean {
+    return this.isAccepted && this.isSynced && !this.isRevoked;
   }
 
   setIsRevoked(isRevoked: boolean): EnrolmentClaim {

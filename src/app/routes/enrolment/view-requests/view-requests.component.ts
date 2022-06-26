@@ -145,9 +145,7 @@ export class ViewRequestsComponent implements OnInit {
 
   isRevocable() {
     return (
-      this.claim.isAccepted &&
-      this.claim.isSynced &&
-      !this.claim.isRevoked &&
+      this.claim.isRevocable &&
       this.listType === EnrolmentListType.ISSUER
     );
   }
