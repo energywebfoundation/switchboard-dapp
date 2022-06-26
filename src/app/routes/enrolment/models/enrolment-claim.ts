@@ -19,56 +19,48 @@ export class EnrolmentClaim
     this.defineProperties();
   }
 
-  isSynced() {
-    return this.isSyncedOnChain() && this.isSyncedOffChain();
+  get isSynced() {
+    return this.isSyncedOnChain && this.isSyncedOffChain;
   }
 
-  isAccepted() {
+  get isAccepted() {
     return this.iclClaim.isAccepted && !this.isRevoked;
   }
 
-  isRejected() {
+  get isRejected() {
     return !this.iclClaim?.isAccepted && this.iclClaim?.isRejected;
   }
 
-  isPending() {
+  get isPending() {
     return !this.iclClaim?.isAccepted && !this.iclClaim?.isRejected;
   }
 
-  isPendingSync() {
+  get isPendingSync() {
     if (
       this.iclClaim.registrationTypes.includes(RegistrationTypes.OnChain) &&
       this.iclClaim.registrationTypes.includes(RegistrationTypes.OffChain)
     ) {
-      return !this.isSyncedOffChain() || !this.isSyncedOnChain();
+      return !this.isSyncedOffChain || !this.isSyncedOnChain;
     }
     if (this.iclClaim.registrationTypes.includes(RegistrationTypes.OnChain)) {
-      return !this.isSyncedOnChain();
+      return !this.isSyncedOnChain;
     }
 
     if (this.iclClaim.registrationTypes.includes(RegistrationTypes.OffChain)) {
-      return !this.isSyncedOffChain();
+      return !this.isSyncedOffChain;
     }
 
     return false;
   }
 
-  isSyncedOffChain(): boolean {
+  get isSyncedOffChain(): boolean {
     return (
-      this.isAccepted() && this.isRegisteredOffChain() && this._isSyncedOffChain
+      this.isAccepted && this.isRegisteredOffChain() && this._isSyncedOffChain
     );
   }
 
-  isSyncedOnChain(): boolean {
-    return this.isAccepted() && this.isRegisteredOnChain() && this._isSyncedOnChain;
-  }
-
-  syncedOnChain(): boolean {
-    return this.isRegisteredOnChain() && this._isSyncedOnChain;
-  }
-
-  syncedOffChain(): boolean {
-    return this.isRegisteredOffChain() && this._isSyncedOffChain;
+  get isSyncedOnChain(): boolean {
+    return this.isAccepted && this.isRegisteredOnChain() && this._isSyncedOnChain;
   }
 
   setIsRevoked(isRevoked: boolean): EnrolmentClaim {

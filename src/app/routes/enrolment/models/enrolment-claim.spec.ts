@@ -7,7 +7,7 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({ isAccepted: true } as Claim)
           .setIsRevoked(false)
-          .isAccepted()
+          .isAccepted
       ).toBeTrue();
     });
 
@@ -15,7 +15,7 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({ isAccepted: false } as Claim)
           .setIsRevoked(false)
-          .isAccepted()
+          .isAccepted
       ).toBeFalse();
     });
 
@@ -23,7 +23,7 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({ isAccepted: true } as Claim)
           .setIsRevoked(true)
-          .isAccepted()
+          .isAccepted
       ).toBeFalse();
     });
   });
@@ -31,7 +31,7 @@ describe('EnrolmentClaim tests', () => {
   describe('isRejected', () => {
     it('should return true when claim is rejected', () => {
       expect(
-        new EnrolmentClaim({ isRejected: true } as Claim).isRejected()
+        new EnrolmentClaim({ isRejected: true } as Claim).isRejected
       ).toBeTrue();
     });
   });
@@ -42,7 +42,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isRejected: false,
           isAccepted: false,
-        } as Claim).isPending()
+        } as Claim).isPending
       ).toBeTrue();
     });
 
@@ -51,7 +51,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isRejected: false,
           isAccepted: true,
-        } as Claim).isPending()
+        } as Claim).isPending
       ).toBeFalse();
     });
 
@@ -60,7 +60,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isRejected: true,
           isAccepted: false,
-        } as Claim).isPending()
+        } as Claim).isPending
       ).toBeFalse();
     });
   });
@@ -71,7 +71,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OnChain],
-        } as Claim).isPendingSync()
+        } as Claim).isPendingSync
       ).toBeTrue();
     });
 
@@ -82,7 +82,7 @@ describe('EnrolmentClaim tests', () => {
           registrationTypes: [RegistrationTypes.OffChain],
         } as Claim)
           .setIsSyncedOffChain(false)
-          .isPendingSync()
+          .isPendingSync
       ).toBeTrue();
     });
 
@@ -93,7 +93,7 @@ describe('EnrolmentClaim tests', () => {
           registrationTypes: [RegistrationTypes.OffChain],
         } as Claim)
           .setIsSyncedOffChain(true)
-          .isPendingSync()
+          .isPendingSync
       ).toBeFalse();
     });
 
@@ -105,7 +105,7 @@ describe('EnrolmentClaim tests', () => {
           issuedToken: 'test',
           vp: {},
           onChainProof: 'test',
-        } as Claim).isPendingSync()
+        } as Claim).isPendingSync
       ).toBeFalse();
     });
 
@@ -122,7 +122,7 @@ describe('EnrolmentClaim tests', () => {
           onChainProof: 'test',
         } as Claim)
           .setIsSyncedOffChain(false)
-          .isPendingSync()
+          .isPendingSync
       ).toBeTrue();
     });
 
@@ -136,7 +136,7 @@ describe('EnrolmentClaim tests', () => {
           ],
         } as Claim)
           .setIsSyncedOffChain(true)
-          .isPendingSync()
+          .isPendingSync
       ).toBeTrue();
     });
   });
@@ -149,7 +149,7 @@ describe('EnrolmentClaim tests', () => {
           registrationTypes: [RegistrationTypes.OffChain],
         } as Claim)
           .setIsSyncedOffChain(false)
-          .isSynced()
+          .isSynced
       ).toBeFalse();
     });
 
@@ -158,7 +158,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OnChain],
-        } as Claim).isSynced()
+        } as Claim).isSynced
       ).toBeFalse();
     });
 
@@ -175,7 +175,7 @@ describe('EnrolmentClaim tests', () => {
           onChainProof: 'test',
         } as Claim)
           .setIsSyncedOffChain(true)
-          .isSynced()
+          .isSynced
       ).toBeTrue();
     });
   });
@@ -186,7 +186,7 @@ describe('EnrolmentClaim tests', () => {
           isAccepted: true,
           registrationTypes: [],
         } as Claim)
-          .isSyncedOnChain()
+          .isSyncedOnChain
       ).toBeFalse();
     });
 
@@ -195,7 +195,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OnChain],
-        } as Claim).isSyncedOnChain()
+        } as Claim).isSyncedOnChain
       ).toBeFalse();
     });
 
@@ -210,7 +210,7 @@ describe('EnrolmentClaim tests', () => {
           vp: {},
           onChainProof: 'test',
         } as Claim)
-          .isSyncedOnChain()
+          .isSyncedOnChain
       ).toBeTrue();
     });
   });
@@ -220,7 +220,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [],
-        } as Claim).isSyncedOffChain()
+        } as Claim).isSyncedOffChain
       ).toBeFalse();
     });
 
@@ -231,7 +231,7 @@ describe('EnrolmentClaim tests', () => {
           registrationTypes: [RegistrationTypes.OffChain],
         } as Claim)
           .setIsSyncedOffChain(false)
-          .isSyncedOffChain()
+          .isSyncedOffChain
       ).toBeFalse();
     });
 
@@ -242,7 +242,7 @@ describe('EnrolmentClaim tests', () => {
           registrationTypes: [RegistrationTypes.OffChain],
         } as Claim)
           .setIsSyncedOffChain(true)
-          .isSyncedOffChain()
+          .isSyncedOffChain
       ).toBeTrue();
     });
   });

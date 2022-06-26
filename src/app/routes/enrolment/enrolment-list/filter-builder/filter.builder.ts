@@ -38,16 +38,15 @@ export class FilterBuilder {
 
   private statusFilter(list: EnrolmentClaim[], status: FilterStatus) {
     if (status === FilterStatus.Pending) {
-      return list.filter((item) => item.isPending() );
+      return list.filter((item) => item.isPending);
     }
 
     if (status === FilterStatus.Rejected) {
-      return list.filter((item) => item.isRejected());
+      return list.filter((item) => item.isRejected);
     }
 
     if (status === FilterStatus.Approved) {
-      return list
-        .filter((item) => item.isAccepted())
+      return list.filter((item) => item.isAccepted);
     }
 
     if (status === FilterStatus.Revoked) {
