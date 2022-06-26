@@ -16,8 +16,6 @@ export class EnrolmentClaim
   constructor(iclClaim: Claim) {
     super(iclClaim);
     this.defineProperties();
-    this.defineRequestDate();
-    this.defineSyncedOnChain();
   }
 
   isSynced() {
@@ -66,6 +64,8 @@ export class EnrolmentClaim
 
   private defineProperties(): void {
     this.defineRoleName();
+    this.defineRequestDate();
+    this.defineSyncedOnChain();
   }
 
   private defineRoleName(): void {
