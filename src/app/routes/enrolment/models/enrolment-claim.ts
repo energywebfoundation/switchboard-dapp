@@ -37,16 +37,16 @@ export class EnrolmentClaim
 
   get isPendingSync() {
     if (
-      this.iclClaim.registrationTypes.includes(RegistrationTypes.OnChain) &&
-      this.iclClaim.registrationTypes.includes(RegistrationTypes.OffChain)
+      this.isRegisteredOnChain() &&
+      this.isRegisteredOffChain()
     ) {
       return !this.isSyncedOffChain || !this.isSyncedOnChain;
     }
-    if (this.iclClaim.registrationTypes.includes(RegistrationTypes.OnChain)) {
+    if (this.isRegisteredOnChain()) {
       return !this.isSyncedOnChain;
     }
 
-    if (this.iclClaim.registrationTypes.includes(RegistrationTypes.OffChain)) {
+    if (this.isRegisteredOffChain()) {
       return !this.isSyncedOffChain;
     }
 
