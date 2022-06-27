@@ -46,4 +46,8 @@ export abstract class EnrolmentClaimAbstract {
   get acceptedBy(): string {
     return this.iclClaim.acceptedBy;
   }
+
+  get credential() {
+    return this.iclClaim?.vp?.verifiableCredential[0];
+  }
 }

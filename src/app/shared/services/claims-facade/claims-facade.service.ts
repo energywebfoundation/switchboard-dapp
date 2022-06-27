@@ -3,13 +3,14 @@ import { IamService } from '../iam.service';
 import {
   Claim,
   ClaimData,
+  isRoleCredential,
   NamespaceType,
   RegistrationTypes,
 } from 'iam-client-lib';
-import { forkJoin, from, Observable, of } from 'rxjs';
+import { forkJoin, from, Observable } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
 
@@ -61,7 +62,7 @@ export class ClaimsFacadeService {
   }
 
   private async addStatusIfIsSyncedOnChain(enrolment: EnrolmentClaim) {
-    if(enrolment.isRegisteredOnChain()) {
+    if (enrolment.isRegisteredOnChain()) {
       const hasOnChainRole = await this.iamService.claimsService.hasOnChainRole(
         this.iamService.signerService.did,
         enrolment.claimType,
@@ -159,7 +160,14 @@ export class ClaimsFacadeService {
           ])
         ),
         switchMap((enrolments: EnrolmentClaim[]) =>
-          this.setIsRevokedStatus(enrolments)
+          this.setIsRevokedOnChainStatus(enrolments)
+        ),
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          forkJoin([
+            ...enrolments.map((enrolment) =>
+              from(this.setIsRevokedOffChainStatus(enrolment))
+            ),
+          ])
         )
       );
   }
@@ -168,7 +176,6 @@ export class ClaimsFacadeService {
     list: EnrolmentClaim[],
     did?: string
   ): Promise<EnrolmentClaim[]> {
-    console.log(list);
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
     const claims: ClaimData[] = (await this.getUserClaims(did))
       .filter((item) => item && item.claimType)
@@ -184,7 +191,7 @@ export class ClaimsFacadeService {
     });
   }
 
-  private setIsRevokedStatus(
+  private setIsRevokedOnChainStatus(
     list: EnrolmentClaim[]
   ): Observable<EnrolmentClaim[]> {
     return forkJoin(
@@ -195,11 +202,25 @@ export class ClaimsFacadeService {
           })
         ).pipe(
           map((isRevoked: boolean) => {
-            claim.isRevokedOnChain = isRevoked;
-            return claim;
+            return claim.setIsRevokedOnChain(isRevoked);
           })
         )
       )
     );
+  }
+
+  private async setIsRevokedOffChainStatus(enrolment: EnrolmentClaim) {
+    if (
+      enrolment.isSyncedOffChain && enrolment.credential &&
+      isRoleCredential(enrolment.credential)
+    ) {
+      return enrolment.setIsRevokedOffChain(
+        await this.iamService.verifiableCredentialsService.isRevoked(
+          enrolment.credential
+        )
+      );
+    }
+
+    return enrolment.setIsRevokedOffChain(false);
   }
 }
