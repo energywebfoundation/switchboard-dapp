@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
@@ -18,8 +14,6 @@ import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.
 import { KeyValue } from '@angular/common';
 import { EnrolmentClaim } from '../models/enrolment-claim';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
-import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
-import { IRoleDefinition } from 'iam-client-lib';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -47,12 +41,11 @@ export class ViewRequestsComponent implements OnInit {
     private loadingService: LoadingService,
     private store: Store<UserClaimState>,
     private notifService: NotificationService,
-    private claimFacade: ClaimsFacadeService
   ) {}
 
   canAccept() {
     return (
-      this.listType === EnrolmentListType.ISSUER &&
+      this.isIssuerViewing() &&
       !this.claim?.isAccepted &&
       !this.claim?.isRejected
     );
@@ -143,17 +136,10 @@ export class ViewRequestsComponent implements OnInit {
       });
   }
 
-  isRevocableOnChain() {
+  isIssuerViewing() {
     return (
-      this.claim.isRevocableOnChain &&
       this.listType === EnrolmentListType.ISSUER
     );
-  }
-
-  revoke() {
-    this.claimFacade.revoke(this.claim).subscribe((result) => {
-      this.dialogRef.close(result);
-    });
   }
 
   private async getRoleIssuerFields(namespace: string) {

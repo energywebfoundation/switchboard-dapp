@@ -32,6 +32,10 @@ export class EnrolmentClaim
     return !this.iclClaim?.isAccepted && this.iclClaim?.isRejected;
   }
 
+  get isRevoked() {
+    return this.isRevokedOnChain || this.isRevokedOffChain;
+  }
+
   get isPending() {
     return !this.iclClaim?.isAccepted && !this.iclClaim?.isRejected;
   }

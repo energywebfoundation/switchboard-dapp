@@ -8,29 +8,29 @@ import { EnrolmentClaim } from '../models/enrolment-claim';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EnrolmentStatusComponent {
-  @Input() item: EnrolmentClaim;
+  @Input() claim: EnrolmentClaim;
 
   isAccepted() {
-    return this.item?.isAccepted && !this.item?.isRevokedOnChain;
+    return this.claim?.isAccepted && !this.claim?.isRevokedOnChain;
   }
 
   isSynced() {
-    return this.item?.isSynced;
+    return this.claim?.isSynced;
   }
 
   isRejected() {
-    return !this.item?.isAccepted && this.item?.isRejected;
+    return !this.claim?.isAccepted && this.claim?.isRejected;
   }
 
   isRevoked() {
-    return this.item?.isRevokedOnChain;
+    return this.claim?.isRevokedOnChain;
   }
 
   isPending() {
-    return !this.item?.isAccepted && !this.item?.isRejected;
+    return !this.claim?.isAccepted && !this.claim?.isRejected;
   }
 
   isPendingSync() {
-    return !this.item?.isSynced;
+    return !this.claim?.isSynced;
   }
 }

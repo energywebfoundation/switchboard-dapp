@@ -116,33 +116,6 @@ export class ClaimsFacadeService {
     return from(this.iamService.claimsService.registerOnchain(claim));
   }
 
-  revoke(claim: EnrolmentClaim): Observable<boolean> {
-    this.loadingService.show();
-    return from(
-      this.iamService.claimsService.revokeClaim({
-        claim: { namespace: claim.claimType, subject: claim.subject },
-      })
-    ).pipe(
-      map((value: boolean) => {
-        if (value) {
-          this.toastrService.success(
-            'Successfully revoked claim',
-            'Claim Revoke'
-          );
-        } else {
-          this.toastrService.error('Claim was not revoked', 'Claim Revoke');
-        }
-        return value;
-      }),
-      catchError((err) => {
-        console.log(err);
-        this.toastrService.error(err.message);
-        return err;
-      }),
-      finalize<boolean>(() => this.loadingService.hide())
-    );
-  }
-
   private createEnrolmentClaimsFromClaims() {
     return (source: Observable<Claim[]>) =>
       source.pipe(
@@ -162,13 +135,13 @@ export class ClaimsFacadeService {
         switchMap((enrolments: EnrolmentClaim[]) =>
           this.setIsRevokedOnChainStatus(enrolments)
         ),
-        switchMap((enrolments: EnrolmentClaim[]) =>
-          forkJoin([
-            ...enrolments.map((enrolment) =>
-              from(this.setIsRevokedOffChainStatus(enrolment))
-            ),
-          ])
-        )
+        // switchMap((enrolments: EnrolmentClaim[]) =>
+        //   forkJoin([
+        //     ...enrolments.map((enrolment) =>
+        //       from(this.setIsRevokedOffChainStatus(enrolment))
+        //     ),
+        //   ])
+        // )
       );
   }
 
@@ -185,7 +158,7 @@ export class ClaimsFacadeService {
       });
 
     return list.map((item: EnrolmentClaim) => {
-      return item.setIsRevokedOnChain(
+      return item.setIsSyncedOffChain(
         claims.some((claim) => claim.claimType === item.claimType)
       );
     });

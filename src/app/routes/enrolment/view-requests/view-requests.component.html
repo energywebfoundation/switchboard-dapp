@@ -11,7 +11,7 @@
         <div class="col-lg-12 w-100">
           <div class="card card-default text-center mb-3 p-3 shadow-none">
             <h3 class="default-color mb-2">{{ claim?.roleName | uppercase }}</h3>
-            <app-enrolment-status [item]="claim"></app-enrolment-status>
+            <app-enrolment-status [claim]="claim"></app-enrolment-status>
           </div>
         </div>
 
@@ -47,7 +47,8 @@
       </div>
     </form>
   </div>
-  <div mat-dialog-actions *ngIf="canAccept()">
+  <div mat-dialog-actions >
+    <ng-container *ngIf="canAccept()">
     <button
       mat-raised-button
       class="btn btn-primary w-100 mx-3"
@@ -59,10 +60,7 @@
     <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit" (click)="reject()">
       Reject
     </button>
-  </div>
-  <div mat-dialog-actions *ngIf="isRevocableOnChain()">
-    <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit" (click)="revoke()">
-      Revoke
-    </button>
+    </ng-container>
+    <app-revoke-buttons *ngIf="isIssuerViewing()" [claim]="claim"></app-revoke-buttons>
   </div>
 </div>
