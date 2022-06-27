@@ -89,11 +89,16 @@ export class EnrolmentClaim
     return this;
   }
 
-  private isRegisteredOnChain(): boolean {
+  setIsSyncedOnChain(isSyncedOnChain: boolean): EnrolmentClaim {
+    this._isSyncedOnChain = isSyncedOnChain;
+    return this;
+  }
+
+  isRegisteredOnChain(): boolean {
     return this.iclClaim.registrationTypes.includes(RegistrationTypes.OnChain);
   }
 
-  private isRegisteredOffChain(): boolean {
+  isRegisteredOffChain(): boolean {
     return this.iclClaim.registrationTypes.includes(RegistrationTypes.OffChain);
   }
 

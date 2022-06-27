@@ -6,10 +6,10 @@ import {
   NamespaceType,
   RegistrationTypes,
 } from 'iam-client-lib';
-import { forkJoin, from, Observable } from 'rxjs';
+import { forkJoin, from, Observable, of } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { catchError, finalize, map, switchMap } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
 
@@ -46,7 +46,7 @@ export class ClaimsFacadeService {
       this.iamService.claimsService.getClaimsBySubject({
         did,
       })
-    ).pipe(this.createEnrolmentClaimsFromClaims);
+    ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
   getClaimsByRequester(
@@ -57,7 +57,20 @@ export class ClaimsFacadeService {
         did: this.iamService.signerService.did,
         isAccepted,
       })
-    ).pipe(this.createEnrolmentClaimsFromClaims);
+    ).pipe(this.createEnrolmentClaimsFromClaims());
+  }
+
+  private async addStatusIfIsSyncedOnChain(enrolment: EnrolmentClaim) {
+    if(enrolment.isRegisteredOnChain()) {
+      const hasOnChainRole = await this.iamService.claimsService.hasOnChainRole(
+        this.iamService.signerService.did,
+        enrolment.claimType,
+        +enrolment.claimTypeVersion
+      );
+      return enrolment.setIsSyncedOnChain(hasOnChainRole);
+    }
+
+    return enrolment.setIsSyncedOnChain(false);
   }
 
   getClaimsByIssuer(): Observable<EnrolmentClaim[]> {
@@ -65,7 +78,7 @@ export class ClaimsFacadeService {
       this.iamService.claimsService.getClaimsByIssuer({
         did: this.iamService.signerService.did,
       })
-    ).pipe(this.createEnrolmentClaimsFromClaims);
+    ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
   getUserClaims(did: string) {
@@ -129,24 +142,33 @@ export class ClaimsFacadeService {
     );
   }
 
-  private createEnrolmentClaimsFromClaims(
-    source: Observable<Claim[]>
-  ): Observable<EnrolmentClaim[]> {
-    return source.pipe(
-      map((claims) => claims.map((claim) => new EnrolmentClaim(claim))),
-      switchMap((enrolments: EnrolmentClaim[]) =>
-        from(this.appendDidDocSyncStatus(enrolments))
-      ),
-      switchMap((enrolments: EnrolmentClaim[]) =>
-        this.setIsRevokedStatus(enrolments)
-      )
-    );
+  private createEnrolmentClaimsFromClaims() {
+    return (source: Observable<Claim[]>) =>
+      source.pipe(
+        map((claims: Claim[]) =>
+          claims.map((claim: Claim) => new EnrolmentClaim(claim))
+        ),
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          from(this.addStatusIfIsSyncedOffChain(enrolments))
+        ),
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          forkJoin([
+            ...enrolments.map((enrolment) =>
+              from(this.addStatusIfIsSyncedOnChain(enrolment))
+            ),
+          ])
+        ),
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          this.setIsRevokedStatus(enrolments)
+        )
+      );
   }
 
-  private async appendDidDocSyncStatus(
+  private async addStatusIfIsSyncedOffChain(
     list: EnrolmentClaim[],
     did?: string
   ): Promise<EnrolmentClaim[]> {
+    console.log(list);
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
     const claims: ClaimData[] = (await this.getUserClaims(did))
       .filter((item) => item && item.claimType)
