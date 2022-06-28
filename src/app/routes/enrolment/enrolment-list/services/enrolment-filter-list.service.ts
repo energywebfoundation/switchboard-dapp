@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EnrolmentClaim } from '../../models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../models/enrolment-claim';
 import { BehaviorSubject } from 'rxjs';
 import { FilterStatus } from '../models/filter-status.enum';
 import { FilterBuilder } from '../filter-builder/filter.builder';

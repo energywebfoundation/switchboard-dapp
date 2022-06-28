@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,

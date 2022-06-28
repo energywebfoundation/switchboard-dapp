@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { EnrolmentClaim } from '../models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../models/enrolment-claim';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';

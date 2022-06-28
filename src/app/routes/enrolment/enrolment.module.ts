@@ -23,6 +23,8 @@ import { MyEnrolmentListComponent } from './my-enrolment-list/my-enrolment-list.
 import { RequestedEnrolmentListComponent } from './requested-enrolment-list/requested-enrolment-list.component';
 import { MyRevokablesListComponent } from './revoke-enrolments/revoke-enrolment-list.component';
 import { EnrolmentListModule } from './enrolment-list/enrolment-list.module';
+import { RequestDetailsComponent } from './view-requests/components/request-details/request-details.component';
+import { RevokeButtonsComponent } from './view-requests/components/revoke-buttons/revoke-buttons.component';
 
 const routes: Routes = [{ path: '', component: EnrolmentComponent }];
 
@@ -35,7 +37,9 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
     FieldsComponent,
     MyEnrolmentListComponent,
     RequestedEnrolmentListComponent,
-    MyRevokablesListComponent
+    MyRevokablesListComponent,
+    RequestDetailsComponent,
+    RevokeButtonsComponent,
   ],
   imports: [
     SharedModule,

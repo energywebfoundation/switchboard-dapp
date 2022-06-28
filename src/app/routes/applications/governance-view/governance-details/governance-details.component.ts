@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   IFieldDefinition,
@@ -18,7 +18,6 @@ import { IssuerType } from '../../new-role/models/issuer-type.enum';
   selector: 'app-governance-details',
   templateUrl: './governance-details.component.html',
   styleUrls: ['./governance-details.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 //origData is in html
 export class GovernanceDetailsComponent {
@@ -170,8 +169,6 @@ export class GovernanceDetailsComponent {
       });
     }
 
-    // console.log('appList', this.appList);
-    // console.log('roleList', this.roleList);
     this.loadingService.hide();
   }
 

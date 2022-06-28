@@ -5,7 +5,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { EnrolmentClaim } from '../../../../models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../../models/enrolment-claim';
 import { ViewRequestsComponent } from '../../../../view-requests/view-requests.component';
 import { truthy } from '@operators';
 import { MatDialog } from '@angular/material/dialog';

@@ -6,7 +6,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { OwnedEnrolmentsEffects } from './owned.effects';
 import * as OwnedActions from './owned.actions';
-import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 
@@ -23,8 +23,6 @@ describe('OwnedEnrolmentsEffects', () => {
     ]);
     claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
       'getClaimsByRequester',
-      'appendDidDocSyncStatus',
-      'setIsRevokedStatus',
     ]);
     TestBed.configureTestingModule({
       providers: [
@@ -66,13 +64,6 @@ describe('OwnedEnrolmentsEffects', () => {
         createdAt: '2021-12-06T20:43:35.471Z',
       };
       claimsFacadeSpy.getClaimsByRequester.and.returnValue(of([enrolment]));
-      claimsFacadeSpy.setIsRevokedStatus.and.returnValue(
-        of([{ ...enrolment, isSynced: true, isRevoked: false }])
-      );
-
-      claimsFacadeSpy.appendDidDocSyncStatus.and.returnValue(
-        of([{ ...enrolment, isSynced: true, isRevoked: false }])
-      );
 
       actions$.next(OwnedActions.getOwnedEnrolments());
 
@@ -83,11 +74,7 @@ describe('OwnedEnrolmentsEffects', () => {
             enrolments: [
               {
                 ...enrolment,
-                roleName: 'role',
-                requestDate: new Date(enrolment.createdAt),
-                isSynced: true,
-                isRevoked: false,
-              } as EnrolmentClaim,
+              } as any,
             ],
           })
         );

@@ -16,9 +16,8 @@ import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.component';
 import { KeyValue } from '@angular/common';
-import { EnrolmentClaim } from '../models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../models/enrolment-claim';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
-import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -45,13 +44,12 @@ export class ViewRequestsComponent implements OnInit {
     private toastr: SwitchboardToastrService,
     private loadingService: LoadingService,
     private store: Store<UserClaimState>,
-    private notifService: NotificationService,
-    private claimFacade: ClaimsFacadeService
+    private notifService: NotificationService
   ) {}
 
   canAccept() {
     return (
-      this.listType === EnrolmentListType.ISSUER &&
+      this.isIssuerViewing() &&
       !this.claim?.isAccepted &&
       !this.claim?.isRejected
     );
@@ -142,26 +140,13 @@ export class ViewRequestsComponent implements OnInit {
       });
   }
 
-  isRevocable() {
-    return (
-      this.claim.isAccepted &&
-      this.claim.isSynced &&
-      !this.claim.isRevoked &&
-      this.listType === EnrolmentListType.ISSUER
-    );
-  }
-
-  revoke() {
-    this.claimFacade.revoke(this.claim).subscribe((result) => {
-      this.dialogRef.close(result);
-    });
+  isIssuerViewing() {
+    return this.listType === EnrolmentListType.ISSUER;
   }
 
   private async getRoleIssuerFields(namespace: string) {
     this.loadingService.show();
-    const definitions: any = await this.iamService.getRolesDefinition([
-      namespace,
-    ]);
+    const definitions = await this.iamService.getRolesDefinition([namespace]);
     const issuerFieldList = definitions[namespace]?.issuerFields;
     if (
       issuerFieldList &&

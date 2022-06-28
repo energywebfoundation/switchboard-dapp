@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 
 export const getEnrolmentRequests = createAction(
   '[ENROLMENT REQUESTS] Get Enrolment Requests'

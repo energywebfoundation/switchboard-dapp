@@ -144,39 +144,4 @@ describe('PublishRoleService', () => {
       });
     });
   });
-
-  describe('checkForNotSyncedOnChain', () => {
-    it('should set notSyncedOnChain property to true', async () => {
-      claimsFacadeSpy.hasOnChainRole.and.returnValue(Promise.resolve(false));
-      expect(
-        await service.checkForNotSyncedOnChain({
-          registrationTypes: [RegistrationTypes.OnChain],
-          claimType: '',
-          claimTypeVersion: '1',
-        })
-      ).toEqual(jasmine.objectContaining({ notSyncedOnChain: true }));
-    });
-
-    it('should set notSyncedOnChain property to false', async () => {
-      claimsFacadeSpy.hasOnChainRole.and.returnValue(Promise.resolve(true));
-      expect(
-        await service.checkForNotSyncedOnChain({
-          registrationTypes: [RegistrationTypes.OnChain],
-          claimType: '',
-          claimTypeVersion: '1',
-        })
-      ).toEqual(jasmine.objectContaining({ notSyncedOnChain: false }));
-    });
-
-    it('should not set notSyncedOnChain when it is not OnChain', async () => {
-      claimsFacadeSpy.hasOnChainRole.and.returnValue(Promise.resolve(true));
-
-      const item = {
-        registrationTypes: [RegistrationTypes.OffChain],
-        claimType: '',
-        claimTypeVersion: '1',
-      };
-      expect(await service.checkForNotSyncedOnChain(item)).toEqual(item);
-    });
-  });
 });
