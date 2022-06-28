@@ -10,7 +10,7 @@ describe('RevokeService', () => {
   let service: RevokeService;
   const claimsServiceSpy = jasmine.createSpyObj('IamService', ['revokeClaim']);
 
-  const vcServiceSpy = jasmine.createSpyObj('IamService', ['revokeCredential']);
+  let vcServiceSpy;
   let toastrSpy;
   let loadingServiceSpy;
   beforeEach(() => {
@@ -22,6 +22,7 @@ describe('RevokeService', () => {
       'show',
       'hide',
     ]);
+    vcServiceSpy = jasmine.createSpyObj('IamService', ['revokeCredential']);
     TestBed.configureTestingModule({
       providers: [
         {
