@@ -40,6 +40,7 @@ export class EnrolmentFilterListService {
   }
 
   setStatus(status: FilterStatus) {
+    console.log(status, "THE FILTER STATUS IN SET STATS")
     if (!status) {
       return;
     }

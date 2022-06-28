@@ -40,6 +40,9 @@ import * as OwnedEnrolmentsSelectors from './enrolments/owned/owned.selectors';
 import * as RequestedEnrolmentsActions from './enrolments/requested/requested.actions';
 import * as RequestedEnrolmentsSelectors from './enrolments/requested/requested.selectors';
 
+import * as RevokableEnrolmentsActions from './enrolments/revokable/revokable.actions';
+import * as RevokableEnrolmentsSelectors from './enrolments/revokable/revokable.selectors'
+
 export * from './store-root.module';
 export {
   AssetDetailsActions,
@@ -64,4 +67,6 @@ export {
   OwnedEnrolmentsSelectors,
   RequestedEnrolmentsActions,
   RequestedEnrolmentsSelectors,
+  RevokableEnrolmentsActions,
+  RevokableEnrolmentsSelectors,
 };

@@ -1,0 +1,22 @@
+<app-enrolment-list [list]="list" [columDefinitions]="columns" [showRevokeFilters]="true">
+    <ng-template #revoke let-element>
+      
+        <button
+          mat-menu-item
+          class="btn-color-primary"
+          (click)="revokeOnChainClaim(element)"
+          [disabled]="!isSyncedOnChain(element)"
+          >
+          <mat-icon class="btn-color-primary">cancel_presentation</mat-icon>
+          <span>Revoke On-Chain Enrollment</span>
+        </button>
+      
+        <button
+        mat-menu-item
+        class="btn-color-primary"
+        (click)="revokeOffChainClaim(element)"
+        >
+        <mat-icon class="btn-color-primary">cancel_presentation</mat-icon>
+        <span>Revoke Off-Chain Enrollment</span>
+      </button>
+      </ng-template>

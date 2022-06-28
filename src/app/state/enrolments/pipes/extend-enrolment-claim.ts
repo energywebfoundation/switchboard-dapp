@@ -3,6 +3,9 @@ import { NamespaceType } from 'iam-client-lib';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+//HERE IT IS
+
+
 export const extendEnrolmentClaim =
   () => (source: Observable<EnrolmentClaim[]>) => {
     return source.pipe(

@@ -15,13 +15,16 @@ export class EnrolmentListComponent {
     this.enrolmentFilterListService.setStatus(status);
   }
   @Input() showDID = false;
+  @Input() showRevokeFilters = false;
   @Input() columDefinitions: ColumnDefinition[];
   @Input() set list(data: EnrolmentClaim[]) {
     this.enrolmentFilterListService.setList(data);
   }
 
   get filteredList$() {
-    return this.enrolmentFilterListService.filteredList$;
+    
+    const filteredList =  this.enrolmentFilterListService.filteredList$;
+    return filteredList
   }
 
   constructor(private enrolmentFilterListService: EnrolmentFilterListService) {}

@@ -1,4 +1,6 @@
-<app-enrolment-list [list]="list" [columDefinitions]="columns"></app-enrolment-list>
+<app-enrolment-list [list]="list" [columDefinitions]="columns">
+  
+</app-enrolment-list>
 <ng-template #actions let-element>
   <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList()"></app-preview>
 

@@ -118,9 +118,19 @@ export class ClaimsFacadeService {
   }
 
   getClaimsByIssuer() {
-    return this.iamService.claimsService.getClaimsByIssuer({
+    const claimsByIssuer =  this.iamService.claimsService.getClaimsByIssuer({
       did: this.iamService.signerService.did,
     });
+    console.log(JSON.stringify(claimsByIssuer), "THE CLAIMS BY ISSUER")
+    return claimsByIssuer
+  }
+
+  getClaimsByRevoker(): Promise<any[]> {
+    const claimsByRevoker =  this.iamService.claimsService.getClaimsByRevoker({
+      did: this.iamService.signerService.did,
+    });
+    console.log(JSON.stringify(claimsByRevoker), "THE CLAIMS BY Revoker")
+    return claimsByRevoker
   }
 
   getUserClaims(did: string) {

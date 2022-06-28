@@ -23,7 +23,7 @@ import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/
 import * as AuthSelectors from './auth.selectors';
 import { EnvService } from '../../shared/services/env/env.service';
 import { RouterConst } from '../../routes/router-const';
-import { OwnedEnrolmentsActions, RequestedEnrolmentsActions } from '@state';
+import { OwnedEnrolmentsActions, RequestedEnrolmentsActions, RevokableEnrolmentsActions } from '@state';
 
 @Injectable()
 export class AuthEffects {
@@ -144,6 +144,7 @@ export class AuthEffects {
         userActions.setUpUser(),
         OwnedEnrolmentsActions.getOwnedEnrolments(),
         RequestedEnrolmentsActions.getEnrolmentRequests(),
+        RevokableEnrolmentsActions.getRevokableEnrolments()
       ])
     )
   );

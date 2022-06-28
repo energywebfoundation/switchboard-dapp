@@ -67,6 +67,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
       });
 
     this.defineColumns();
+    console.log(JSON.stringify(this.list), "my enrolment list")
   }
 
   async ngOnDestroy(): Promise<void> {

@@ -4,6 +4,7 @@ import { EffectsModule } from '@ngrx/effects';
 import * as enrolments from './enrolments.reducer';
 import { EnrolmentRequestsEffects } from './requested/requested.effects';
 import { OwnedEnrolmentsEffects } from './owned/owned.effects';
+import {RevokableEnrolmentEffects} from './revokable/revokable.effects'
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { OwnedEnrolmentsEffects } from './owned/owned.effects';
     EffectsModule.forFeature([
       EnrolmentRequestsEffects,
       OwnedEnrolmentsEffects,
+      RevokableEnrolmentEffects,
     ]),
   ],
 })
