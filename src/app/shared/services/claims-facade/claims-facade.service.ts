@@ -135,13 +135,13 @@ export class ClaimsFacadeService {
         switchMap((enrolments: EnrolmentClaim[]) =>
           this.setIsRevokedOnChainStatus(enrolments)
         ),
-        // switchMap((enrolments: EnrolmentClaim[]) =>
-        //   forkJoin([
-        //     ...enrolments.map((enrolment) =>
-        //       from(this.setIsRevokedOffChainStatus(enrolment))
-        //     ),
-        //   ])
-        // )
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          forkJoin([
+            ...enrolments.map((enrolment) =>
+              from(this.setIsRevokedOffChainStatus(enrolment))
+            ),
+          ])
+        )
       );
   }
 
@@ -185,7 +185,8 @@ export class ClaimsFacadeService {
   private async setIsRevokedOffChainStatus(enrolment: EnrolmentClaim) {
     if (
       enrolment.isSyncedOffChain && enrolment.credential &&
-      isRoleCredential(enrolment.credential)
+      isRoleCredential(enrolment.credential) &&
+      enrolment.credential?.credentialStatus
     ) {
       return enrolment.setIsRevokedOffChain(
         await this.iamService.verifiableCredentialsService.isRevoked(
