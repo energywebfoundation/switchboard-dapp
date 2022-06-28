@@ -246,4 +246,108 @@ describe('EnrolmentClaim tests', () => {
       ).toBeTrue();
     });
   });
+
+  describe('isRevoked', () => {
+    it('should return true if is revoked only off chain', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [RegistrationTypes.OffChain, RegistrationTypes.OnChain],
+        } as Claim)
+          .setIsRevokedOffChain(true)
+          .isRevoked
+      ).toBeTrue();
+    });
+
+    it('should return true if is revoked only on chain', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [RegistrationTypes.OffChain, RegistrationTypes.OnChain],
+        } as Claim)
+          .setIsRevokedOnChain(true)
+          .isRevoked
+      ).toBeTrue();
+    });
+
+    it('should return false if is not revoked on chain', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [RegistrationTypes.OnChain],
+        } as Claim)
+          .setIsRevokedOnChain(false)
+          .isRevoked
+      ).toBeFalse();
+    });
+  });
+
+  describe('isRevocableOnChain', () => {
+    it('should return true when is synced and not revoked', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [
+            RegistrationTypes.OnChain,
+          ],
+          issuedToken: 'test',
+          vp: {},
+          onChainProof: 'test',
+        } as Claim)
+          .setIsSyncedOnChain(true)
+          .setIsRevokedOnChain(false)
+          .isRevocableOnChain
+      ).toBeTrue();
+    });
+
+    it('should return false when is synced and revoked', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [
+            RegistrationTypes.OnChain,
+          ],
+          issuedToken: 'test',
+          vp: {},
+          onChainProof: 'test',
+        } as Claim)
+          .setIsSyncedOnChain(true)
+          .setIsRevokedOnChain(true)
+          .isRevocableOnChain
+      ).toBeFalse();
+    });
+
+
+  })
+  describe('isRevocableOffChain', () => {
+    it('should return true when is synced and not revoked', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [
+            RegistrationTypes.OffChain,
+          ],
+        } as Claim)
+          .setIsSyncedOffChain(true)
+          .setIsRevokedOffChain(false)
+          .isRevocableOffChain
+      ).toBeTrue();
+    });
+
+    it('should return false when is synced and revoked', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [
+            RegistrationTypes.OffChain,
+          ],
+        } as Claim)
+          .setIsSyncedOffChain(true)
+          .setIsRevokedOffChain(true)
+          .isRevocableOffChain
+      ).toBeFalse();
+    });
+
+
+  })
 });

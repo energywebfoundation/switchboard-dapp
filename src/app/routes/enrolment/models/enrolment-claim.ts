@@ -33,7 +33,7 @@ export class EnrolmentClaim
   }
 
   get isRevoked() {
-    return this.isRevokedOnChain || this.isRevokedOffChain;
+    return !!this.isRevokedOnChain || !!this.isRevokedOffChain;
   }
 
   get isPending() {
