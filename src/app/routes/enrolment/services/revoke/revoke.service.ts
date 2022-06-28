@@ -27,6 +27,7 @@ export class RevokeService {
   }
 
   revokeOnChain(claim: EnrolmentClaim): Observable<boolean> {
+    console.log("In revoke on chain service!", claim, claim.claimType, claim.subject, "ARE TEHSE COMING THROUGH")
     this.loadingService.show();
     return from(
       this.iamService.claimsService.revokeClaim({
@@ -34,6 +35,7 @@ export class RevokeService {
       })
     ).pipe(
       map((value: boolean) => {
+        console.log(value, "THE VALUE RETURNED")
         if (value) {
           this.toastrService.success(
             'Successfully revoked claim',

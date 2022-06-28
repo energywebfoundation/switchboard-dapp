@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as RevokableActions from './revokable.actions';
-import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { IRole } from 'iam-client-lib';
 
 export const USER_FEATURE_KEY = 'revokable';

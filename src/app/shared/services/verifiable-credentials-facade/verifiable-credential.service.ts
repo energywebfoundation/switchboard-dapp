@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
 import { forkJoin, from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 
 
 @Injectable({
@@ -15,20 +15,20 @@ export class CredentialsFacadeService {
 
 
 
-public setCredentialRevokedStatus(list: EnrolmentClaim[]): Observable<EnrolmentClaim[]> {
-  return forkJoin(
-    list.map((claim) =>
-      from(
-        this.iamService.verifiableCredentialsService.isRevoked(claim as any)
-      ).pipe(
-        map((v) => ({
-          ...claim,
-          isRevokedOffChain: v,
-        }))
-      )
-    )
-  );
-}
+// public setCredentialRevokedStatus(list: EnrolmentClaim[]): Observable<EnrolmentClaim[]> {
+//   return forkJoin(
+//     list.map((claim) =>
+//       from(
+//         this.iamService.verifiableCredentialsService.isRevoked(claim as any)
+//       ).pipe(
+//         map((v) => ({
+//           ...claim,
+//           isRevokedOffChain: v,
+//         }))
+//       )
+//     )
+//   );
+// }
 
 
 

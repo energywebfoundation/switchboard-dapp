@@ -18,7 +18,7 @@ import {
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 import { filter } from 'rxjs/operators';
 import { FilterStatus } from './enrolment-list/models/filter-status.enum';
-import { EnrolmentClaim } from './models/enrolment-claim.interface';
+import { EnrolmentClaim } from './models/enrolment-claim';
 
 @Component({
   selector: 'app-enrolment',

@@ -8,7 +8,7 @@ import {
     ViewChild,
   } from '@angular/core';
   import { MatSort } from '@angular/material/sort';
-  import { EnrolmentClaim } from '../models/enrolment-claim.interface';
+  import { EnrolmentClaim } from '../models/enrolment-claim';
   import { LoadingService } from '../../../shared/services/loading.service';
   import { IamService } from '../../../shared/services/iam.service';
   import { MatDialog } from '@angular/material/dialog';
@@ -26,6 +26,7 @@ import {
   } from '../../../shared/components/table/generic-table/generic-table.component';
   import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
 import { RegistrationTypes } from 'iam-client-lib';
+import { RevokeService } from '../services/revoke/revoke.service';
   
   const TOASTR_HEADER = 'Enrolment';
   
@@ -42,7 +43,7 @@ import { RegistrationTypes } from 'iam-client-lib';
     @Input() columnDefinitions: ColumnDefinition[];
     @ViewChild(MatSort) sort: MatSort;
     @Output() refreshList = new EventEmitter<void>();
-  
+    @Output() revoked = new EventEmitter();
     columns: ColumnDefinition[];
     sorting = sortingEnrolmentData;
     private _iamSubscriptionId: number;
@@ -54,7 +55,8 @@ import { RegistrationTypes } from 'iam-client-lib';
       private dialog: MatDialog,
       private toastr: SwitchboardToastrService,
       private store: Store,
-      private publishRoleService: PublishRoleService
+      private publishRoleService: PublishRoleService,
+      private revokeService: RevokeService
     ) {}
   
     isAsset(element) {
@@ -86,8 +88,11 @@ import { RegistrationTypes } from 'iam-client-lib';
       console.log("revoking off chain", element)
     }
 
-    async revokeOnChainClaim(element: EnrolmentClaim) {
+   revokeOnChainClaim(element: EnrolmentClaim) {
       console.log("revoking on chain", element)
+      this.revokeService.revokeOnChain(element).subscribe(() => {
+        this.revoked.emit();
+      });
     }
 
     async isSyncedOnChain(element: EnrolmentClaim) {

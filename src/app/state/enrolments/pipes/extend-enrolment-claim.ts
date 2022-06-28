@@ -1,4 +1,4 @@
-import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from 'src/app/routes/enrolment/models/enrolment-claim'; 
 import { NamespaceType } from 'iam-client-lib';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

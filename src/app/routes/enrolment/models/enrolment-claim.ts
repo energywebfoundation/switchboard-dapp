@@ -110,7 +110,7 @@ export class EnrolmentClaim
   private defineProperties(): void {
     this.defineRoleName();
     this.defineRequestDate();
-    this.defineSyncedOnChain();
+    //this.defineSyncedOnChain();
   }
 
   private defineRoleName(): void {
@@ -123,13 +123,13 @@ export class EnrolmentClaim
     this.requestDate = new Date((this.iclClaim as any).createdAt);
   }
 
-  private defineSyncedOnChain(): void {
-    this._isSyncedOnChain = Boolean(
-      this.iclClaim.issuedToken &&
-        this.iclClaim.onChainProof &&
-        this.iclClaim.vp
-    );
-  }
+  // private defineSyncedOnChain(): void {
+  //   this._isSyncedOnChain = Boolean(
+  //     this.iclClaim.issuedToken &&
+  //       this.iclClaim.onChainProof &&
+  //       this.iclClaim.vp
+  //   );
+  // }
 
   isAsset() {
     return (

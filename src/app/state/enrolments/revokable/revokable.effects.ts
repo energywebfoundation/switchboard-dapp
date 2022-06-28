@@ -6,7 +6,7 @@ import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { forkJoin, from, Observable, of } from 'rxjs';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 import { CredentialsFacadeService } from 'src/app/shared/services/verifiable-credentials-facade/verifiable-credential.service';
-import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { extendEnrolmentClaim } from '../pipes/extend-enrolment-claim';
 import { LoadingService } from '../../../shared/services/loading.service';
 
@@ -28,28 +28,39 @@ export class RevokableEnrolmentEffects {
     )
   );
 
-private getRevokableEnrolments(success, failure) {
-  return (source: Observable<EnrolmentClaim[]>) => {
-    return source.pipe(
-      switchMap((enrolments) =>
-        from(this.claimsFacade.appendDidDocSyncStatus(enrolments))
-      ),
-      switchMap((enrolments: EnrolmentClaim[]) =>
-        this.claimsFacade.setIsRevokedStatus(enrolments)
-      ),
-      // switchMap((enrolments: EnrolmentClaim[]) =>
-      //   from(this.credentialsFacade.setCredentialRevokedStatus(enrolments))
-      // ),
-      extendEnrolmentClaim(),
-      map((enrolments: EnrolmentClaim[]) => success({ enrolments })),
-      catchError((e) => {
-        console.error(e);
-        return of(failure({ error: e.message }));
-      })
-    );
-  };
+  private getRevokableEnrolments(successAction, failureAction) {
+    return (source: Observable<EnrolmentClaim[]>) => {
+      return source.pipe(
+        map((enrolments: EnrolmentClaim[]) => successAction({ enrolments })),
+        catchError((e) => {
+          console.error(e);
+          return of(failureAction({ error: e.message }));
+        })
+      );
+    };
+  }
+// private getRevokableEnrolments(success, failure) {
+//   return (source: Observable<EnrolmentClaim[]>) => {
+//     return source.pipe(
+//       // switchMap((enrolments) =>
+//       //   from(this.claimsFacade.appendDidDocSyncStatus(enrolments))
+//       // ),
+//       // switchMap((enrolments: EnrolmentClaim[]) =>
+//       //   this.claimsFacade.setIsRevokedStatus(enrolments)
+//       // ),
+//       // switchMap((enrolments: EnrolmentClaim[]) =>
+//       //   from(this.credentialsFacade.setCredentialRevokedStatus(enrolments))
+//       // ),
+//       extendEnrolmentClaim(),
+//       map((enrolments: EnrolmentClaim[]) => success({ enrolments })),
+//       catchError((e) => {
+//         console.error(e);
+//         return of(failure({ error: e.message }));
+//       })
+//     );
+//   };
 
-}
+// }
 
 
 //   updateOwnedEnrolments$ = createEffect(() =>
