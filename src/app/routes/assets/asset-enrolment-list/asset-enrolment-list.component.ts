@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { truthy } from '@operators';
 import { Store } from '@ngrx/store';
-import { EnrolmentClaim } from '../../enrolment/models/enrolment-claim.interface';
+import { EnrolmentClaim } from '../../enrolment/models/enrolment-claim';
 import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 import {

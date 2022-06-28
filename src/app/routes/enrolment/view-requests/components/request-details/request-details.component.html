@@ -1,0 +1,27 @@
+<div class="card card-default mb-3 pb-0 shadow-none">
+  <div class="text-left my-3">
+    <div class="label opacity-50 mb-2">Requested Date</div>
+    <span class="default-color mb-0">
+      {{ claim?.requestDate | date: 'MM/dd/yyyy HH:mm:ss' }}
+    </span>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="text-left my-3">
+    <div class="label opacity-50 mb-2">Requestor</div>
+    <span class="default-color mb-0">{{ claim?.requester }}</span>
+  </div>
+  <ng-container *ngIf="claim?.isAsset()">
+    <mat-divider></mat-divider>
+    <div class="text-left my-3">
+      <div class="label opacity-50 mb-2">Asset</div>
+      <span class="default-color mb-0">{{ claim?.subject }}</span>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="claim?.acceptedBy">
+    <mat-divider></mat-divider>
+    <div class="text-left my-3">
+      <div class="label opacity-50 mb-2">Issuer</div>
+      <span class="color-white mb-0">{{ claim?.acceptedBy }}</span>
+    </div>
+  </ng-container>
+</div>
