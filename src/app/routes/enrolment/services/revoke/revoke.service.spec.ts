@@ -67,12 +67,14 @@ describe('RevokeService', () => {
   });
 
   it('should catch an error when revoke will thrown', (done) => {
-    claimsServiceSpy.revokeClaim.and.returnValue(Promise.reject({ message: 'reason' } ));
+    claimsServiceSpy.revokeClaim.and.returnValue(
+      Promise.reject({ message: 'reason' })
+    );
 
     service.revokeOnChain({} as EnrolmentClaim).subscribe(() => {
       expect(loadingServiceSpy.show).toHaveBeenCalled();
       expect(toastrSpy.error).toHaveBeenCalledWith('reason');
       done();
     });
-  })
+  });
 });

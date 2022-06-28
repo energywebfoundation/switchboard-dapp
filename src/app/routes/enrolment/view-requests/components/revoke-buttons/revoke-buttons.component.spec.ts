@@ -8,9 +8,8 @@ describe('RevokeButtonsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RevokeButtonsComponent ]
-    })
-    .compileComponents();
+      declarations: [RevokeButtonsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

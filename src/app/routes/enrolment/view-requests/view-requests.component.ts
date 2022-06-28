@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
@@ -40,7 +44,7 @@ export class ViewRequestsComponent implements OnInit {
     private toastr: SwitchboardToastrService,
     private loadingService: LoadingService,
     private store: Store<UserClaimState>,
-    private notifService: NotificationService,
+    private notifService: NotificationService
   ) {}
 
   canAccept() {
@@ -137,16 +141,12 @@ export class ViewRequestsComponent implements OnInit {
   }
 
   isIssuerViewing() {
-    return (
-      this.listType === EnrolmentListType.ISSUER
-    );
+    return this.listType === EnrolmentListType.ISSUER;
   }
 
   private async getRoleIssuerFields(namespace: string) {
     this.loadingService.show();
-    const definitions = await this.iamService.getRolesDefinition([
-      namespace,
-    ]);
+    const definitions = await this.iamService.getRolesDefinition([namespace]);
     const issuerFieldList = definitions[namespace]?.issuerFields;
     if (
       issuerFieldList &&

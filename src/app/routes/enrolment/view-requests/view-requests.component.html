@@ -47,19 +47,19 @@
       </div>
     </form>
   </div>
-  <div mat-dialog-actions >
+  <div mat-dialog-actions>
     <ng-container *ngIf="canAccept()">
-    <button
-      mat-raised-button
-      class="btn btn-primary w-100 mx-3"
-      type="submit"
-      [disabled]="isApproveDisabled"
-      (click)="approve()">
-      Approve
-    </button>
-    <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit" (click)="reject()">
-      Reject
-    </button>
+      <button
+        mat-raised-button
+        class="btn btn-primary w-100 mx-3"
+        type="submit"
+        [disabled]="isApproveDisabled"
+        (click)="approve()">
+        Approve
+      </button>
+      <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit" (click)="reject()">
+        Reject
+      </button>
     </ng-container>
     <app-revoke-buttons *ngIf="isIssuerViewing()" [claim]="claim"></app-revoke-buttons>
   </div>

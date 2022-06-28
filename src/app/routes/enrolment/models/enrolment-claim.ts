@@ -25,7 +25,11 @@ export class EnrolmentClaim
   }
 
   get isAccepted() {
-    return this.iclClaim.isAccepted && !this.isRevokedOnChain && !this.isRevokedOffChain;
+    return (
+      this.iclClaim.isAccepted &&
+      !this.isRevokedOnChain &&
+      !this.isRevokedOffChain
+    );
   }
 
   get isRejected() {
@@ -41,10 +45,7 @@ export class EnrolmentClaim
   }
 
   get isPendingSync() {
-    if (
-      this.isRegisteredOnChain() &&
-      this.isRegisteredOffChain()
-    ) {
+    if (this.isRegisteredOnChain() && this.isRegisteredOffChain()) {
       return !this.isSyncedOffChain || !this.isSyncedOnChain;
     }
     if (this.isRegisteredOnChain()) {

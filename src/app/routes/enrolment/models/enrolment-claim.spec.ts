@@ -5,25 +5,25 @@ describe('EnrolmentClaim tests', () => {
   describe('isAccepted', () => {
     it('should return true when is accepted', () => {
       expect(
-        new EnrolmentClaim({ isAccepted: true } as Claim)
-          .setIsRevokedOnChain(false)
-          .isAccepted
+        new EnrolmentClaim({ isAccepted: true } as Claim).setIsRevokedOnChain(
+          false
+        ).isAccepted
       ).toBeTrue();
     });
 
     it('should return false when is not accepted', () => {
       expect(
-        new EnrolmentClaim({ isAccepted: false } as Claim)
-          .setIsRevokedOnChain(false)
-          .isAccepted
+        new EnrolmentClaim({ isAccepted: false } as Claim).setIsRevokedOnChain(
+          false
+        ).isAccepted
       ).toBeFalse();
     });
 
     it('should return false when isAccepted but revoked', () => {
       expect(
-        new EnrolmentClaim({ isAccepted: true } as Claim)
-          .setIsRevokedOnChain(true)
-          .isAccepted
+        new EnrolmentClaim({ isAccepted: true } as Claim).setIsRevokedOnChain(
+          true
+        ).isAccepted
       ).toBeFalse();
     });
   });
@@ -80,9 +80,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OffChain],
-        } as Claim)
-          .setIsSyncedOffChain(false)
-          .isPendingSync
+        } as Claim).setIsSyncedOffChain(false).isPendingSync
       ).toBeTrue();
     });
 
@@ -91,9 +89,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OffChain],
-        } as Claim)
-          .setIsSyncedOffChain(true)
-          .isPendingSync
+        } as Claim).setIsSyncedOffChain(true).isPendingSync
       ).toBeFalse();
     });
 
@@ -120,9 +116,7 @@ describe('EnrolmentClaim tests', () => {
           issuedToken: 'test',
           vp: {},
           onChainProof: 'test',
-        } as Claim)
-          .setIsSyncedOffChain(false)
-          .isPendingSync
+        } as Claim).setIsSyncedOffChain(false).isPendingSync
       ).toBeTrue();
     });
 
@@ -134,9 +128,7 @@ describe('EnrolmentClaim tests', () => {
             RegistrationTypes.OnChain,
             RegistrationTypes.OffChain,
           ],
-        } as Claim)
-          .setIsSyncedOffChain(true)
-          .isPendingSync
+        } as Claim).setIsSyncedOffChain(true).isPendingSync
       ).toBeTrue();
     });
   });
@@ -147,9 +139,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OffChain],
-        } as Claim)
-          .setIsSyncedOffChain(false)
-          .isSynced
+        } as Claim).setIsSyncedOffChain(false).isSynced
       ).toBeFalse();
     });
 
@@ -173,9 +163,7 @@ describe('EnrolmentClaim tests', () => {
           issuedToken: 'test',
           vp: {},
           onChainProof: 'test',
-        } as Claim)
-          .setIsSyncedOffChain(true)
-          .isSynced
+        } as Claim).setIsSyncedOffChain(true).isSynced
       ).toBeTrue();
     });
   });
@@ -185,8 +173,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [],
-        } as Claim)
-          .isSyncedOnChain
+        } as Claim).isSyncedOnChain
       ).toBeFalse();
     });
 
@@ -203,14 +190,11 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           isAccepted: true,
-          registrationTypes: [
-            RegistrationTypes.OnChain,
-          ],
+          registrationTypes: [RegistrationTypes.OnChain],
           issuedToken: 'test',
           vp: {},
           onChainProof: 'test',
-        } as Claim)
-          .isSyncedOnChain
+        } as Claim).isSyncedOnChain
       ).toBeTrue();
     });
   });
@@ -229,9 +213,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OffChain],
-        } as Claim)
-          .setIsSyncedOffChain(false)
-          .isSyncedOffChain
+        } as Claim).setIsSyncedOffChain(false).isSyncedOffChain
       ).toBeFalse();
     });
 
@@ -240,9 +222,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OffChain],
-        } as Claim)
-          .setIsSyncedOffChain(true)
-          .isSyncedOffChain
+        } as Claim).setIsSyncedOffChain(true).isSyncedOffChain
       ).toBeTrue();
     });
   });
@@ -252,10 +232,11 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           isAccepted: true,
-          registrationTypes: [RegistrationTypes.OffChain, RegistrationTypes.OnChain],
-        } as Claim)
-          .setIsRevokedOffChain(true)
-          .isRevoked
+          registrationTypes: [
+            RegistrationTypes.OffChain,
+            RegistrationTypes.OnChain,
+          ],
+        } as Claim).setIsRevokedOffChain(true).isRevoked
       ).toBeTrue();
     });
 
@@ -263,10 +244,11 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           isAccepted: true,
-          registrationTypes: [RegistrationTypes.OffChain, RegistrationTypes.OnChain],
-        } as Claim)
-          .setIsRevokedOnChain(true)
-          .isRevoked
+          registrationTypes: [
+            RegistrationTypes.OffChain,
+            RegistrationTypes.OnChain,
+          ],
+        } as Claim).setIsRevokedOnChain(true).isRevoked
       ).toBeTrue();
     });
 
@@ -275,9 +257,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OnChain],
-        } as Claim)
-          .setIsRevokedOnChain(false)
-          .isRevoked
+        } as Claim).setIsRevokedOnChain(false).isRevoked
       ).toBeFalse();
     });
   });
@@ -287,16 +267,13 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           isAccepted: true,
-          registrationTypes: [
-            RegistrationTypes.OnChain,
-          ],
+          registrationTypes: [RegistrationTypes.OnChain],
           issuedToken: 'test',
           vp: {},
           onChainProof: 'test',
         } as Claim)
           .setIsSyncedOnChain(true)
-          .setIsRevokedOnChain(false)
-          .isRevocableOnChain
+          .setIsRevokedOnChain(false).isRevocableOnChain
       ).toBeTrue();
     });
 
@@ -304,33 +281,25 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           isAccepted: true,
-          registrationTypes: [
-            RegistrationTypes.OnChain,
-          ],
+          registrationTypes: [RegistrationTypes.OnChain],
           issuedToken: 'test',
           vp: {},
           onChainProof: 'test',
         } as Claim)
           .setIsSyncedOnChain(true)
-          .setIsRevokedOnChain(true)
-          .isRevocableOnChain
+          .setIsRevokedOnChain(true).isRevocableOnChain
       ).toBeFalse();
     });
-
-
-  })
+  });
   describe('isRevocableOffChain', () => {
     it('should return true when is synced and not revoked', () => {
       expect(
         new EnrolmentClaim({
           isAccepted: true,
-          registrationTypes: [
-            RegistrationTypes.OffChain,
-          ],
+          registrationTypes: [RegistrationTypes.OffChain],
         } as Claim)
           .setIsSyncedOffChain(true)
-          .setIsRevokedOffChain(false)
-          .isRevocableOffChain
+          .setIsRevokedOffChain(false).isRevocableOffChain
       ).toBeTrue();
     });
 
@@ -338,16 +307,11 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           isAccepted: true,
-          registrationTypes: [
-            RegistrationTypes.OffChain,
-          ],
+          registrationTypes: [RegistrationTypes.OffChain],
         } as Claim)
           .setIsSyncedOffChain(true)
-          .setIsRevokedOffChain(true)
-          .isRevocableOffChain
+          .setIsRevokedOffChain(true).isRevocableOffChain
       ).toBeFalse();
     });
-
-
-  })
+  });
 });

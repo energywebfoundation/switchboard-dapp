@@ -184,7 +184,8 @@ export class ClaimsFacadeService {
 
   private async setIsRevokedOffChainStatus(enrolment: EnrolmentClaim) {
     if (
-      enrolment.isSyncedOffChain && enrolment.credential &&
+      enrolment.isSyncedOffChain &&
+      enrolment.credential &&
       isRoleCredential(enrolment.credential) &&
       enrolment.credential?.credentialStatus
     ) {

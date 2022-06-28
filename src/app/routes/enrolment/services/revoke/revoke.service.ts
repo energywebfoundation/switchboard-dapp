@@ -11,9 +11,11 @@ import { SwitchboardToastrService } from '../../../../shared/services/switchboar
   providedIn: 'root',
 })
 export class RevokeService {
-  constructor(private iamService: IamService,
-              private loadingService: LoadingService,
-              private toastrService: SwitchboardToastrService) {}
+  constructor(
+    private iamService: IamService,
+    private loadingService: LoadingService,
+    private toastrService: SwitchboardToastrService
+  ) {}
 
   revokeOffChain(enrolment: EnrolmentClaim) {
     if (enrolment.credential && isRoleCredential(enrolment.credential))

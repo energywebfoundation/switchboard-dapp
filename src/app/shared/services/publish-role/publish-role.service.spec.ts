@@ -144,5 +144,4 @@ describe('PublishRoleService', () => {
       });
     });
   });
-
 });
