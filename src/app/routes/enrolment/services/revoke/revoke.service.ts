@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { EnrolmentClaim } from '../../models/enrolment-claim';
 import { IamService } from '../../../../shared/services/iam.service';
 import { isRoleCredential } from 'iam-client-lib';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { SwitchboardToastrService } from '../../../../shared/services/switchboard-toastr.service';
@@ -45,7 +45,7 @@ export class RevokeService {
       catchError((err) => {
         console.log(err);
         this.toastrService.error(err.message);
-        return err;
+        return of(err);
       }),
       finalize<boolean>(() => this.loadingService.hide())
     );
