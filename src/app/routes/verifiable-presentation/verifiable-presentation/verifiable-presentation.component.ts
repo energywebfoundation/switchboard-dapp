@@ -56,7 +56,6 @@ export class VerifiablePresentationComponent implements OnInit {
          - Error handling - no url parsed
          - UI Handling - no results found from initiate exchange
         */
-        console.log(url);
         if (!url) {
           this.openSwal({
             title: 'Oops!',

@@ -15,7 +15,6 @@ export const getAllRevokableEnrolments = createSelector(
 export const getRevokableEnrolments = createSelector(
   getAllRevokableEnrolments,
   (allEnrolments) => {
-    console.log(allEnrolments, 'ALL REVOKABLE ENROLMENTS');
     return allEnrolments;
   }
 );

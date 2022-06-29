@@ -15,25 +15,12 @@ const INPUT_DEBOUNCE_TIME = 300;
 export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
   @Input() showDID = false;
   @Input() set showRevokeFilters(value: boolean) {
-    console.log(value, 'THE VALUW!!!!!!');
     this.setFilters(value);
   }
   status$: Observable<FilterStatus> = this.enrolmentFilterListService.status$();
   statusButtons: string[];
   namespace: FormControl = new FormControl('');
   did: FormControl = new FormControl('');
-
-  // public statusButtons = this.showRevokeFilters ? [
-  //   RevokableFilterStatus.NotRevoked,
-  //   RevokableFilterStatus.RevokedOffChainOnly,
-  //   RevokableFilterStatus.Revoked
-  // ] : [
-  //   FilterStatus.All,
-  //   FilterStatus.Pending,
-  //   FilterStatus.Approved,
-  //   FilterStatus.Rejected,
-  //   FilterStatus.Revoked,
-  // ];
 
   private destroy$ = new Subject();
   constructor(private enrolmentFilterListService: EnrolmentFilterListService) {}
@@ -60,7 +47,6 @@ export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
   }
 
   statusChangeHandler(value: FilterStatus) {
-    console.log(value, 'THE VALUE in STATUS CHANGE HANDLER');
     this.enrolmentFilterListService.setStatus(value);
   }
 
