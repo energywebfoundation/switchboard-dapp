@@ -6,6 +6,7 @@ import { from, Observable, of } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { SwitchboardToastrService } from '../../../../shared/services/switchboard-toastr.service';
+import { CancelButton } from 'src/app/layout/loading/loading.component';
 
 @Injectable({
   providedIn: 'root',
@@ -27,15 +28,24 @@ export class RevokeService {
   }
 
   revokeOnChain(claim: EnrolmentClaim): Observable<boolean> {
-    console.log("In revoke on chain service!", claim, claim.claimType, claim.subject, "ARE TEHSE COMING THROUGH")
-    this.loadingService.show();
+    console.log(
+      'In revoke on chain service!',
+      claim,
+      claim.claimType,
+      claim.subject,
+      'ARE TEHSE COMING THROUGH'
+    );
+    this.loadingService.show(
+      'Please confirm this transaction in your connected wallet.',
+      CancelButton.ENABLED
+    );
     return from(
       this.iamService.claimsService.revokeClaim({
         claim: { namespace: claim.claimType, subject: claim.subject },
       })
     ).pipe(
       map((value: boolean) => {
-        console.log(value, "THE VALUE RETURNED")
+        console.log(value, 'THE VALUE RETURNED');
         if (value) {
           this.toastrService.success(
             'Successfully revoked claim',

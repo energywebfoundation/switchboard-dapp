@@ -61,18 +61,20 @@ export class ClaimsFacadeService {
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
-  private async addStatusIfIsSyncedOnChain(enrolment: EnrolmentClaim, requesterIsDid: boolean = true) {
+  private async addStatusIfIsSyncedOnChain(
+    enrolment: EnrolmentClaim,
+    requesterIsDid: boolean = true
+  ) {
     if (enrolment.isRegisteredOnChain()) {
-    
       const hasOnChainRole = await this.iamService.claimsService.hasOnChainRole(
         requesterIsDid ? this.iamService.signerService.did : enrolment.subject,
         enrolment.claimType,
         +enrolment.claimTypeVersion
       );
-      console.log(hasOnChainRole , "HAS ON CHAIN ROLE", enrolment)
+      console.log(hasOnChainRole, 'HAS ON CHAIN ROLE', enrolment);
       return enrolment.setIsSyncedOnChain(hasOnChainRole);
     }
-    console.log("NOT REGISTERED", enrolment)
+    console.log('NOT REGISTERED', enrolment);
     return enrolment.setIsSyncedOnChain(false);
   }
 

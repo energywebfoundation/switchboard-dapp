@@ -34,34 +34,36 @@ export class DomainsFacadeService {
   }
 
   async getRevokableEnrolments(): Promise<any[]> {
-    console.log("IN get enrolments")
+    console.log('IN get enrolments');
     //return await this.domainsService.getAllowedRolesByRevoker(this.iamService.signerService.did)
-    return  [{
-      roleName: "role one",
-      requestDate: new Date(),
-      isSynced: true,
-      isRevoked: false,
-      createdAt: "created At",
-      notSyncedOnChain: false,
-      claimType: "role blah blah"
-    },{
-      roleName: "role two",
-      requestDate: new Date(),
-      isSynced: false,
-      isRevoked: false,
-      createdAt: "created At",
-      notSyncedOnChain: false,
-      claimType: "role blah blah 2"
-    },
-    {
-      roleName: "role three",
-      requestDate: new Date(),
-      isSynced: false,
-      isRevoked: false,
-      createdAt: "created At",
-      notSyncedOnChain: false,
-      claimType: "role blah blah 3"
-    }
-  ]
+    return [
+      {
+        roleName: 'role one',
+        requestDate: new Date(),
+        isSynced: true,
+        isRevoked: false,
+        createdAt: 'created At',
+        notSyncedOnChain: false,
+        claimType: 'role blah blah',
+      },
+      {
+        roleName: 'role two',
+        requestDate: new Date(),
+        isSynced: false,
+        isRevoked: false,
+        createdAt: 'created At',
+        notSyncedOnChain: false,
+        claimType: 'role blah blah 2',
+      },
+      {
+        roleName: 'role three',
+        requestDate: new Date(),
+        isSynced: false,
+        isRevoked: false,
+        createdAt: 'created At',
+        notSyncedOnChain: false,
+        claimType: 'role blah blah 3',
+      },
+    ];
   }
 }

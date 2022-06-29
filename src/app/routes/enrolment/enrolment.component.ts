@@ -32,7 +32,9 @@ export class EnrolmentComponent implements AfterViewInit {
     RequestedEnrolmentsSelectors.getEnrolments
   );
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
-  myRevokablesList$ = this.store.select(RevokableEnrolmentsSelectors.getRevokableEnrolments)
+  myRevokablesList$ = this.store.select(
+    RevokableEnrolmentsSelectors.getRevokableEnrolments
+  );
   isMyEnrolmentShown = false;
   enrolmentStatus: FilterStatus = FilterStatus.Pending;
 
@@ -52,14 +54,14 @@ export class EnrolmentComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    console.log( this.myRevokablesList$, "THE LIST")
-    console.log(this.enrolmentTabGroup, "THE ENROLMENT TAB GROUP")
+    console.log(this.myRevokablesList$, 'THE LIST');
+    console.log(this.enrolmentTabGroup, 'THE ENROLMENT TAB GROUP');
     this.initDefault();
     this.activeRoute.queryParams
       .pipe(filter((queryParams) => !!queryParams))
       .subscribe(async (queryParams: any) => {
-        console.log(queryParams, "THE QUERY PARAMS")
-        console.log(queryParams.notif, "NOTIF")
+        console.log(queryParams, 'THE QUERY PARAMS');
+        console.log(queryParams.notif, 'NOTIF');
         if (queryParams.notif) {
           if (queryParams.notif === 'pendingSyncToDidDoc') {
             // Display Approved Claims
@@ -79,17 +81,15 @@ export class EnrolmentComponent implements AfterViewInit {
             this.initDefault();
           }
         } else if (queryParams.selectedTab) {
-          console.log("IN THIS ELSE IF")
-          
+          console.log('IN THIS ELSE IF');
+
           if (queryParams.selectedTab === '1') {
             this.initDefaultMyEnrolments();
           } else if (queryParams.selectedTab === '2') {
-            console.log('SelECTED TAB IS 2')
-            this.initDefaultMyRevokables()
-           
-          }
-          else {
-            console.log("GETTING INTO THIS ELSE AND INITING DEFAULT")
+            console.log('SelECTED TAB IS 2');
+            this.initDefaultMyRevokables();
+          } else {
+            console.log('GETTING INTO THIS ELSE AND INITING DEFAULT');
             this.initDefault();
           }
           this._queryParamSelectedTabInit = true;
@@ -100,9 +100,9 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   showMe(i: any) {
-    console.log("IN SHOW ME!!!")
-    console.log(this.myRevokablesList$, "REVOKABLES IN SHOWME")
-    console.log(this.myEnrolmentList$, "ENROLLMENTS IN SHOW ME")
+    console.log('IN SHOW ME!!!');
+    console.log(this.myRevokablesList$, 'REVOKABLES IN SHOWME');
+    console.log(this.myEnrolmentList$, 'ENROLLMENTS IN SHOW ME');
     this.urlParamService.updateQueryParams(
       this.router,
       this.activeRoute,
@@ -121,8 +121,14 @@ export class EnrolmentComponent implements AfterViewInit {
     } else if (i.index === 0) {
       this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
     } else {
-      console.log("getting into index", this.isMyEnrolmentShown, "ENROLMENTS SHWON")
-      this.store.dispatch(RevokableEnrolmentsActions.updateRevokableEnrolments());
+      console.log(
+        'getting into index',
+        this.isMyEnrolmentShown,
+        'ENROLMENTS SHWON'
+      );
+      this.store.dispatch(
+        RevokableEnrolmentsActions.updateRevokableEnrolments()
+      );
       //this.isMyEnrolmentShown = true;
     }
   }
@@ -140,7 +146,7 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   refreshMyRevokablesList(): void {
-    console.log("refreshing")
+    console.log('refreshing');
     this.store.dispatch(RevokableEnrolmentsActions.updateRevokableEnrolments());
   }
 

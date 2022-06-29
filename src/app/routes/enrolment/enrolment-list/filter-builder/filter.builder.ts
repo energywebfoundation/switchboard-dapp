@@ -38,7 +38,13 @@ export class FilterBuilder {
 
   private statusFilter(list: EnrolmentClaim[], status: FilterStatus) {
     if (status === FilterStatus.Pending) {
-      return list.filter((item) => !item.isAccepted && !item.isRejected);
+      return list.filter(
+        (item) =>
+          !item.isAccepted &&
+          !item.isRejected &&
+          !item.isRevokedOffChain &&
+          !item.isRevokedOnChain
+      );
     }
 
     if (status === FilterStatus.Rejected) {
@@ -52,7 +58,11 @@ export class FilterBuilder {
     }
 
     if (status === FilterStatus.Revoked) {
-      return list.filter((item) => item.isRevoked);
+      return list.filter(
+        (item) =>
+          item.isRevokedOnChain &&
+          (!item.isRevocableOffChain || item.isRevokedOffChain)
+      );
     }
 
     if (status === FilterStatus.All) {
@@ -60,11 +70,16 @@ export class FilterBuilder {
     }
 
     if (status === FilterStatus.NotRevoked) {
-      return list.filter((item) => !item.isRevoked)
+      return list.filter(
+        (item) =>
+          !item.isRevoked && !item.isRevokedOffChain && !item.isRevokedOnChain
+      );
     }
 
     if (status === FilterStatus.RevokedOffChainOnly) {
-      return list.filter((item) => item.isRevokedOffChain && !item.isRevokedOnChain)
+      return list.filter(
+        (item) => item.isRevokedOffChain && !item.isRevokedOnChain
+      );
     }
   }
 

@@ -41,7 +41,7 @@ import * as RequestedEnrolmentsActions from './enrolments/requested/requested.ac
 import * as RequestedEnrolmentsSelectors from './enrolments/requested/requested.selectors';
 
 import * as RevokableEnrolmentsActions from './enrolments/revokable/revokable.actions';
-import * as RevokableEnrolmentsSelectors from './enrolments/revokable/revokable.selectors'
+import * as RevokableEnrolmentsSelectors from './enrolments/revokable/revokable.selectors';
 
 export * from './store-root.module';
 export {

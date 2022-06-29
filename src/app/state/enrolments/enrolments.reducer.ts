@@ -1,6 +1,6 @@
 import * as owned from './owned/owned.reducer';
 import * as enrolmentRequests from './requested/requested.reducer';
-import * as revokable from './revokable/revokable.reducer'
+import * as revokable from './revokable/revokable.reducer';
 import { createFeatureSelector } from '@ngrx/store';
 
 export const USER_FEATURE_KEY = 'enrolments';
@@ -17,5 +17,5 @@ export const getEnrolmentsState =
 export const reducer = {
   [enrolmentRequests.USER_FEATURE_KEY]: enrolmentRequests.reducer,
   [owned.USER_FEATURE_KEY]: owned.reducer,
-  [revokable.USER_FEATURE_KEY]: revokable.reducer
+  [revokable.USER_FEATURE_KEY]: revokable.reducer,
 };

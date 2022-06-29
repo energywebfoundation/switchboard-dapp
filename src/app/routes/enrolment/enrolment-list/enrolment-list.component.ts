@@ -22,9 +22,8 @@ export class EnrolmentListComponent {
   }
 
   get filteredList$() {
-    
-    const filteredList =  this.enrolmentFilterListService.filteredList$;
-    return filteredList
+    const filteredList = this.enrolmentFilterListService.filteredList$;
+    return filteredList;
   }
 
   constructor(private enrolmentFilterListService: EnrolmentFilterListService) {}

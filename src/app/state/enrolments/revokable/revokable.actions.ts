@@ -5,27 +5,25 @@ export const getRevokableEnrolments = createAction(
 );
 
 export const getRevokableEnrolmentsSuccess = createAction(
-    '[REVOKABLE ENROLMENTS] Get Revokable Enrolments Success',
-    props<{ enrolments: any[] }>()
-  );
-  
-  export const getRevokableEnrolmentsFailure = createAction(
-    '[REVOKABLE ENROLMENTS] Get Revolable Enrolments Failure',
-    props<{ error: string }>()
-  );
+  '[REVOKABLE ENROLMENTS] Get Revokable Enrolments Success',
+  props<{ enrolments: any[] }>()
+);
 
-  export const updateRevokableEnrolments = createAction(
-    '[REVOKABLE ENROLMENTS] Update Revokable Enrolments',
-  );
+export const getRevokableEnrolmentsFailure = createAction(
+  '[REVOKABLE ENROLMENTS] Get Revolable Enrolments Failure',
+  props<{ error: string }>()
+);
 
-  export const updateRevokableEnrolmentsSuccess = createAction(
-    '[REVOKABLE ENROLMENTS] Update Revokable Enrolments Success',
-    props<{ enrolments: EnrolmentClaim[] }>()
-  );
+export const updateRevokableEnrolments = createAction(
+  '[REVOKABLE ENROLMENTS] Update Revokable Enrolments'
+);
 
-  export const updateRevokableEnrolmentsFailure = createAction(
-    '[Revokable ENROLMENTS] Update Revokable Enrolments Failure',
-    props<{ error: string }>()
-  );
-  
+export const updateRevokableEnrolmentsSuccess = createAction(
+  '[REVOKABLE ENROLMENTS] Update Revokable Enrolments Success',
+  props<{ enrolments: EnrolmentClaim[] }>()
+);
 
+export const updateRevokableEnrolmentsFailure = createAction(
+  '[Revokable ENROLMENTS] Update Revokable Enrolments Failure',
+  props<{ error: string }>()
+);

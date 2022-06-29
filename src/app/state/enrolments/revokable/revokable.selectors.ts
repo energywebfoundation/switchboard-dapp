@@ -8,22 +8,14 @@ export const getRevokableState = createSelector(
 );
 
 export const getAllRevokableEnrolments = createSelector(
-    getRevokableState,
+  getRevokableState,
   (state) => state.enrolments
 );
 
 export const getRevokableEnrolments = createSelector(
   getAllRevokableEnrolments,
   (allEnrolments) => {
-    console.log(allEnrolments, "ALL REVOKABLE ENROLMENTS")
+    console.log(allEnrolments, 'ALL REVOKABLE ENROLMENTS');
     return allEnrolments;
   }
 );
-// export const getNotSyncedAmount = createSelector(
-//   getAllEnrolments,
-//   (enrolments) => {
-//     return enrolments
-//       .filter((enrolment) => enrolment.isAccepted)
-//       .filter((enrolment) => !enrolment.isSynced).length;
-//   }
-// );

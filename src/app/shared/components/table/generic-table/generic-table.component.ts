@@ -31,9 +31,9 @@ export interface ColumnDefinition {
 export class GenericTableComponent {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Input() set list(data: unknown[]) {
-    console.log(data, "THE DATA!!!!")
+    console.log(data, 'THE DATA!!!!');
     if (!Array.isArray(data)) {
-      console.log("getting into not array")
+      console.log('getting into not array');
       return;
     }
     this.dataSource = new MatTableDataSource<unknown>(data);

@@ -14,9 +14,9 @@ const INPUT_DEBOUNCE_TIME = 300;
 })
 export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
   @Input() showDID = false;
-  @Input() set showRevokeFilters(value: boolean){
-    console.log(value, "THE VALUW!!!!!!")
-    this.setFilters(value)
+  @Input() set showRevokeFilters(value: boolean) {
+    console.log(value, 'THE VALUW!!!!!!');
+    this.setFilters(value);
   }
   status$: Observable<FilterStatus> = this.enrolmentFilterListService.status$();
   statusButtons: string[];
@@ -39,7 +39,6 @@ export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
   constructor(private enrolmentFilterListService: EnrolmentFilterListService) {}
 
   ngOnInit() {
-  
     this.namespace.valueChanges
       .pipe(debounceTime(INPUT_DEBOUNCE_TIME), takeUntil(this.destroy$))
       .subscribe((value) =>
@@ -61,22 +60,24 @@ export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
   }
 
   statusChangeHandler(value: FilterStatus) {
-    console.log(value, "THE VALUE in STATUS CHANGE HANDLER")
+    console.log(value, 'THE VALUE in STATUS CHANGE HANDLER');
     this.enrolmentFilterListService.setStatus(value);
   }
 
   public async setFilters(showRevokeFilters: boolean) {
-    this.statusButtons =  showRevokeFilters ? [
-      FilterStatus.All,
-      FilterStatus.NotRevoked,
-      FilterStatus.RevokedOffChainOnly,
-      FilterStatus.Revoked
-    ] : [
-      FilterStatus.All,
-      FilterStatus.Pending,
-      FilterStatus.Approved,
-      FilterStatus.Rejected,
-      FilterStatus.Revoked,
-    ]
+    this.statusButtons = showRevokeFilters
+      ? [
+          FilterStatus.All,
+          FilterStatus.NotRevoked,
+          FilterStatus.RevokedOffChainOnly,
+          FilterStatus.Revoked,
+        ]
+      : [
+          FilterStatus.All,
+          FilterStatus.Pending,
+          FilterStatus.Approved,
+          FilterStatus.Rejected,
+          FilterStatus.Revoked,
+        ];
   }
 }
