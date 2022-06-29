@@ -1,4 +1,9 @@
-import { Claim, isRoleCredential, NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import {
+  Claim,
+  isRoleCredential,
+  NamespaceType,
+  RegistrationTypes,
+} from 'iam-client-lib';
 import { EnrolmentClaimAbstract } from './enrolment-claim.abstract';
 import { IEnrolmentClaim } from './enrolment-claim.interface';
 
@@ -25,9 +30,7 @@ export class EnrolmentClaim
   }
 
   get isAccepted() {
-    return (
-      this.iclClaim.isAccepted
-    );
+    return this.iclClaim.isAccepted;
   }
 
   get isRejected() {
@@ -74,14 +77,20 @@ export class EnrolmentClaim
   }
 
   get canRevokeOffChain(): boolean {
-    return this.isSyncedOffChain && !this.isRevokedOffChain && !!this.credential?.credentialStatus;
+    return (
+      this.isSyncedOffChain &&
+      !this.isRevokedOffChain &&
+      !!this.credential?.credentialStatus
+    );
   }
 
   get isRevocableOffChain(): boolean {
-   return this.isSyncedOffChain &&
-     this.credential &&
-     isRoleCredential(this.credential) &&
-     !!this.credential?.credentialStatus
+    return (
+      this.isSyncedOffChain &&
+      this.credential &&
+      isRoleCredential(this.credential) &&
+      !!this.credential?.credentialStatus
+    );
   }
 
   setIsRevokedOnChain(isRevoked: boolean): EnrolmentClaim {

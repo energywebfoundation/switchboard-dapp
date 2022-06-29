@@ -61,6 +61,9 @@
         Reject
       </button>
     </ng-container>
-    <app-revoke-buttons *ngIf="isIssuerViewing()" (revoked)="revokeSuccessHandler()" [claim]="claim"></app-revoke-buttons>
+    <app-revoke-buttons
+      *ngIf="isIssuerViewing()"
+      (revoked)="revokeSuccessHandler()"
+      [claim]="claim"></app-revoke-buttons>
   </div>
 </div>

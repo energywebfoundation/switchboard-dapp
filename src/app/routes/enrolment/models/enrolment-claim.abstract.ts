@@ -50,6 +50,7 @@ export abstract class EnrolmentClaimAbstract {
   }
 
   get credential(): VerifiableCredential<RoleCredentialSubject> {
-    return this.iclClaim?.vp?.verifiableCredential[0] as VerifiableCredential<RoleCredentialSubject>;
+    return this.iclClaim?.vp
+      ?.verifiableCredential[0] as VerifiableCredential<RoleCredentialSubject>;
   }
 }

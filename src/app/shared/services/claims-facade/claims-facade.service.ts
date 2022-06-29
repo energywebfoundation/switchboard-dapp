@@ -20,7 +20,7 @@ import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiabl
 export class ClaimsFacadeService {
   constructor(
     private iamService: IamService,
-    private loadingService: LoadingService,
+    private loadingService: LoadingService
   ) {}
 
   createSelfSignedClaim(data: { data: ClaimData; subject?: string }) {
