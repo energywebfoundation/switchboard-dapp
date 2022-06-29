@@ -76,7 +76,7 @@ export class EnrolmentClaim
   }
 
   get isRevocableOffChain(): boolean {
-    return this.isAccepted && this.isSyncedOffChain && !this.isRevokedOffChain;
+    return this.isAccepted && this.isSyncedOffChain && !this.isRevokedOffChain && !!this.credential?.credentialStatus;
   }
 
   setIsRevokedOnChain(isRevoked: boolean): EnrolmentClaim {
