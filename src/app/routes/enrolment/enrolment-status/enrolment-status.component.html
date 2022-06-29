@@ -1,4 +1,4 @@
-<ng-container *ngIf="claim?.isAccepted">
+<ng-container *ngIf="claim?.isAccepted && !claim?.isRevoked">
   <div class="d-flex flex-column align-items-md-center flex-md-row justify-content-between mr-2">
     <div class="color-success">Approved</div>
     <ng-container *ngIf="claim?.isPendingSync">
