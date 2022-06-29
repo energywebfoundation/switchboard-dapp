@@ -140,6 +140,10 @@ export class ViewRequestsComponent implements OnInit {
       });
   }
 
+  revokeSuccessHandler() {
+    this.dialogRef.close(true);
+  }
+
   isIssuerViewing() {
     return this.listType === EnrolmentListType.ISSUER;
   }

@@ -18,12 +18,13 @@ export class RevokeService {
   ) {}
 
   revokeOffChain(enrolment: EnrolmentClaim) {
+    this.loadingService.show();
     if (enrolment.credential && isRoleCredential(enrolment.credential))
       return from(
         this.iamService.verifiableCredentialsService.revokeCredential(
           enrolment.credential
         )
-      );
+      ).pipe(this.handleRevokeResponse);
   }
 
   revokeOnChain(claim: EnrolmentClaim): Observable<boolean> {
@@ -32,7 +33,11 @@ export class RevokeService {
       this.iamService.claimsService.revokeClaim({
         claim: { namespace: claim.claimType, subject: claim.subject },
       })
-    ).pipe(
+    ).pipe(this.handleRevokeResponse);
+  }
+
+  private handleRevokeResponse(source: Observable<unknown>) {
+    return source.pipe(
       map((value: boolean) => {
         if (value) {
           this.toastrService.success(
@@ -42,7 +47,7 @@ export class RevokeService {
         } else {
           this.toastrService.error('Claim was not revoked', 'Claim Revoke');
         }
-        return value;
+        return Boolean(value);
       }),
       catchError((err) => {
         console.log(err);
