@@ -26,7 +26,7 @@ export class SetRoleTypeDidsOrNameComponent implements OnInit {
     this.list = [...value.did];
     this.form.setValue({
       type: value.type,
-      roleName: value.roleName,
+      roleName: value.roleName ?? '',
     });
   }
   @Input() signerDID: string;
@@ -45,7 +45,7 @@ export class SetRoleTypeDidsOrNameComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {}
 
-  typeChanged(value: IssuerType) {
+  typeChanged(): void {
     if (this.list.length > 0) {
       this.list.splice(0, this.list.length);
     }
@@ -56,7 +56,9 @@ export class SetRoleTypeDidsOrNameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setDefaultDID();
+    if (this.list.length === 0) {
+      this.setDefaultDID();
+    }
   }
 
   get isDIDType() {
