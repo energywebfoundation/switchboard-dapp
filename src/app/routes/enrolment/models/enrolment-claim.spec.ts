@@ -18,6 +18,14 @@ describe('EnrolmentClaim tests', () => {
         ).isAccepted
       ).toBeFalse();
     });
+
+    it('should return false when isAccepted but revoked', () => {
+      expect(
+        new EnrolmentClaim({ isAccepted: true } as Claim).setIsRevokedOnChain(
+          true
+        ).isAccepted
+      ).toBeFalse();
+    });
   });
 
   describe('isRejected', () => {
