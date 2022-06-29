@@ -51,7 +51,7 @@ export class ViewRequestsComponent implements OnInit {
     return (
       this.isIssuerViewing() &&
       !this.claim?.isAccepted &&
-      !this.claim?.isRejected
+      !this.claim?.isRejected && !this.claim.isRevoked
     );
   }
 
