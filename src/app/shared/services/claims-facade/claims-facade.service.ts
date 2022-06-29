@@ -60,7 +60,7 @@ export class ClaimsFacadeService {
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
-  private async addStatusIfIsSyncedOnChain(enrolment: EnrolmentClaim) {
+  async addStatusIfIsSyncedOnChain(enrolment: EnrolmentClaim) {
     if (enrolment.isRegisteredOnChain()) {
       const hasOnChainRole = await this.iamService.claimsService.hasOnChainRole(
         this.iamService.signerService.did,
@@ -144,12 +144,14 @@ export class ClaimsFacadeService {
       );
   }
 
-  private async addStatusIfIsSyncedOffChain(
+  async addStatusIfIsSyncedOffChain(
     list: EnrolmentClaim[],
     did?: string
   ): Promise<EnrolmentClaim[]> {
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    const claims: ClaimData[] = (await this.getUserClaims(did))
+    const claims: ClaimData[] = (
+      await this.iamService.claimsService.getUserClaims({ did })
+    )
       .filter((item) => item && item.claimType)
       .filter((item: ClaimData) => {
         const arr = item.claimType.split('.');
@@ -163,7 +165,7 @@ export class ClaimsFacadeService {
     });
   }
 
-  private setIsRevokedOnChainStatus(
+  setIsRevokedOnChainStatus(
     list: EnrolmentClaim[]
   ): Observable<EnrolmentClaim[]> {
     return forkJoin(

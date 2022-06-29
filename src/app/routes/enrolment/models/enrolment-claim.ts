@@ -64,7 +64,7 @@ export class EnrolmentClaim
     return (
       this.iclClaim.isAccepted &&
       this.isRegisteredOffChain() &&
-      this._isSyncedOffChain
+      !!this._isSyncedOffChain
     );
   }
 
@@ -72,7 +72,7 @@ export class EnrolmentClaim
     return (
       this.iclClaim.isAccepted &&
       this.isRegisteredOnChain() &&
-      this._isSyncedOnChain
+      !!this._isSyncedOnChain
     );
   }
 
