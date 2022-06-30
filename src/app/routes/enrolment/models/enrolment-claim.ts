@@ -118,17 +118,18 @@ export class EnrolmentClaim
   }
 
   isRegisteredOnChain(): boolean {
-    return this.iclClaim.registrationTypes.includes(RegistrationTypes.OnChain);
+    return this.iclClaim.registrationTypes?.includes(RegistrationTypes.OnChain);
   }
 
   isRegisteredOffChain(): boolean {
-    return this.iclClaim.registrationTypes.includes(RegistrationTypes.OffChain);
+    return this.iclClaim.registrationTypes?.includes(
+      RegistrationTypes.OffChain
+    );
   }
 
   private defineProperties(): void {
     this.defineRoleName();
     this.defineRequestDate();
-    //this.defineSyncedOnChain();
   }
 
   private defineRoleName(): void {
@@ -140,14 +141,6 @@ export class EnrolmentClaim
   private defineRequestDate(): void {
     this.requestDate = new Date((this.iclClaim as any).createdAt);
   }
-
-  // private defineSyncedOnChain(): void {
-  //   this._isSyncedOnChain = Boolean(
-  //     this.iclClaim.issuedToken &&
-  //       this.iclClaim.onChainProof &&
-  //       this.iclClaim.vp
-  //   );
-  // }
 
   isAsset() {
     return (

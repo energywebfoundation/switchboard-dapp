@@ -38,13 +38,7 @@ export class FilterBuilder {
 
   private statusFilter(list: EnrolmentClaim[], status: FilterStatus) {
     if (status === FilterStatus.Pending) {
-      return list.filter(
-        (item) =>
-          !item.isAccepted &&
-          !item.isRejected &&
-          !item.isRevokedOffChain &&
-          !item.isRevokedOnChain
-      );
+      return list.filter((item) => item.isPending);
     }
 
     if (status === FilterStatus.Rejected) {
@@ -70,10 +64,7 @@ export class FilterBuilder {
     }
 
     if (status === FilterStatus.NotRevoked) {
-      return list.filter(
-        (item) =>
-          !item.isRevoked && !item.isRevokedOffChain && !item.isRevokedOnChain
-      );
+      return list.filter((item) => !item.isRevoked);
     }
 
     if (status === FilterStatus.RevokedOffChainOnly) {

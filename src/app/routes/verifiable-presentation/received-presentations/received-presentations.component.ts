@@ -9,7 +9,6 @@ import { MatSelect } from '@angular/material/select';
   templateUrl: './received-presentations.component.html',
   styleUrls: ['./received-presentations.component.scss'],
 })
-//EXAMPLE!!!
 export class ReceivedPresentationsComponent {
   tableDataFormatted: MatTableDataSource<ICredentialTableData>;
   @Input() set tableData(data: ICredentialTableData[]) {

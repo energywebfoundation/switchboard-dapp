@@ -12,14 +12,13 @@ import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { IssuerType } from '../../new-role/models/issuer-type.enum';
-// import { IIssuerDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
+import { IIssuerDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 
 @Component({
   selector: 'app-governance-details',
   templateUrl: './governance-details.component.html',
   styleUrls: ['./governance-details.component.scss'],
 })
-//origData is in html
 export class GovernanceDetailsComponent {
   @Input() set origData(value: any) {
     this.setData(value);
@@ -65,7 +64,7 @@ export class GovernanceDetailsComponent {
     return type === IssuerType.ROLE;
   }
 
-  get issuer() {
+  get issuer(): IIssuerDefinition {
     return this.formData?.definition?.issuer;
   }
 

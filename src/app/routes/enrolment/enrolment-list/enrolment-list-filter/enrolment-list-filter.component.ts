@@ -4,7 +4,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { EnrolmentFilterListService } from '../services/enrolment-filter-list.service';
 import { FilterStatus } from '../models/filter-status.enum';
-import { RevokableFilterStatus } from '../models/revokable-filter-status.enum';
+
 const INPUT_DEBOUNCE_TIME = 300;
 
 @Component({

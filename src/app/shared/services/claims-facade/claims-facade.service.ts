@@ -60,7 +60,7 @@ export class ClaimsFacadeService {
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
-  private async addStatusIfIsSyncedOnChain(
+  async addStatusIfIsSyncedOnChain(
     enrolment: EnrolmentClaim,
     requesterIsDid = true
   ) {
@@ -126,7 +126,7 @@ export class ClaimsFacadeService {
     return from(this.iamService.claimsService.registerOnchain(claim));
   }
 
-  private createEnrolmentClaimsFromClaims(requesterIsDid: boolean = true) {
+  private createEnrolmentClaimsFromClaims(requesterIsDid = true) {
     return (source: Observable<Claim[]>) =>
       source.pipe(
         map((claims: Claim[]) =>
@@ -205,24 +205,4 @@ export class ClaimsFacadeService {
 
     return enrolment.setIsRevokedOffChain(false);
   }
-
-  // public async appendDidDocSyncStatus(
-  //   list: EnrolmentClaim[],
-  //   did?: string
-  // ): Promise<EnrolmentClaim[]> {
-  //   // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-  //   const claims: ClaimData[] = (await this.getUserClaims(did))
-  //     .filter((item) => item && item.claimType)
-  //     .filter((item: ClaimData) => {
-  //       const arr = item.claimType.split('.');
-  //       return arr.length > 1 && arr[1] === NamespaceType.Role;
-  //     });
-
-  //   return list.map((item) => {
-  //     return {
-  //       ...item,
-  //       isSynced: claims.some((claim) => claim.claimType === item.claimType),
-  //     };
-  //   });
-  // }
 }

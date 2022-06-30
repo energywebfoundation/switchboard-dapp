@@ -7,7 +7,7 @@ import * as RevokableActions from './revokable.actions';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 
-describe('OwnedEnrolmentsEffects', () => {
+describe('RevokableEnrolmentsEffects', () => {
   let actions$: ReplaySubject<any>;
   let effects: RevokableEnrolmentEffects;
   let loadingServiceSpy;
@@ -19,7 +19,7 @@ describe('OwnedEnrolmentsEffects', () => {
       'hide',
     ]);
     claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
-      'getClaimsByRequester',
+      'getClaimsByRevoker',
     ]);
     TestBed.configureTestingModule({
       providers: [
