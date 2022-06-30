@@ -1,4 +1,4 @@
-<div *ngIf="claim?.isRevocableOnChain">
+<div *ngIf="claim?.canRevokeOnChain">
   <button
     mat-raised-button
     [disabled]="claim?.isRevokedOnChain || !claim?.isSyncedOnChain"
@@ -8,7 +8,7 @@
     Revoke OnChain
   </button>
 </div>
-<div *ngIf="claim?.isRevocableOffChain">
+<div *ngIf="claim?.canRevokeOffChain">
   <button
     mat-raised-button
     [disabled]="claim?.isRevokedOffChain || !claim?.isSyncedOffChain"

@@ -18,12 +18,13 @@ export class RevokeService {
   ) {}
 
   revokeOffChain(enrolment: EnrolmentClaim) {
+    this.loadingService.show();
     if (enrolment.credential && isRoleCredential(enrolment.credential))
       return from(
         this.iamService.verifiableCredentialsService.revokeCredential(
           enrolment.credential
         )
-      );
+      ).pipe(this.handleRevokeResponse());
   }
 
   revokeOnChain(claim: EnrolmentClaim): Observable<boolean> {
@@ -32,24 +33,29 @@ export class RevokeService {
       this.iamService.claimsService.revokeClaim({
         claim: { namespace: claim.claimType, subject: claim.subject },
       })
-    ).pipe(
-      map((value: boolean) => {
-        if (value) {
-          this.toastrService.success(
-            'Successfully revoked claim',
-            'Claim Revoke'
-          );
-        } else {
-          this.toastrService.error('Claim was not revoked', 'Claim Revoke');
-        }
-        return value;
-      }),
-      catchError((err) => {
-        console.log(err);
-        this.toastrService.error(err.message);
-        return of(err);
-      }),
-      finalize<boolean>(() => this.loadingService.hide())
-    );
+    ).pipe(this.handleRevokeResponse());
+  }
+
+  private handleRevokeResponse() {
+    return (source) =>
+      source.pipe(
+        map((value: boolean) => {
+          if (value) {
+            this.toastrService.success(
+              'Successfully revoked claim',
+              'Claim Revoke'
+            );
+          } else {
+            this.toastrService.error('Claim was not revoked', 'Claim Revoke');
+          }
+          return Boolean(value);
+        }),
+        catchError((err) => {
+          console.log(err);
+          this.toastrService.error(err.message);
+          return of(err);
+        }),
+        finalize<boolean>(() => this.loadingService.hide())
+      );
   }
 }

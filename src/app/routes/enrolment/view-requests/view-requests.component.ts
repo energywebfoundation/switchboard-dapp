@@ -51,7 +51,8 @@ export class ViewRequestsComponent implements OnInit {
     return (
       this.isIssuerViewing() &&
       !this.claim?.isAccepted &&
-      !this.claim?.isRejected
+      !this.claim?.isRejected &&
+      !this.claim.isRevoked
     );
   }
 
@@ -138,6 +139,10 @@ export class ViewRequestsComponent implements OnInit {
           }
         }
       });
+  }
+
+  revokeSuccessHandler() {
+    this.dialogRef.close(true);
   }
 
   isIssuerViewing() {
