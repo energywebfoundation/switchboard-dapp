@@ -3,16 +3,16 @@ import { IamService } from '../iam.service';
 import {
   Claim,
   ClaimData,
-  isRoleCredential,
   NamespaceType,
   RegistrationTypes,
 } from 'iam-client-lib';
 import { forkJoin, from, Observable } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { catchError, finalize, map, switchMap } from 'rxjs/operators';
+import { finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
-import { SwitchboardToastrService } from '../switchboard-toastr.service';
+import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
+import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +20,7 @@ import { SwitchboardToastrService } from '../switchboard-toastr.service';
 export class ClaimsFacadeService {
   constructor(
     private iamService: IamService,
-    private loadingService: LoadingService,
-    private toastrService: SwitchboardToastrService
+    private loadingService: LoadingService
   ) {}
 
   createSelfSignedClaim(data: { data: ClaimData; subject?: string }) {
@@ -156,12 +155,14 @@ export class ClaimsFacadeService {
       );
   }
 
-  private async addStatusIfIsSyncedOffChain(
+  async addStatusIfIsSyncedOffChain(
     list: EnrolmentClaim[],
     did?: string
   ): Promise<EnrolmentClaim[]> {
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    const claims: ClaimData[] = (await this.getUserClaims(did))
+    const claims: ClaimData[] = (
+      await this.iamService.claimsService.getUserClaims({ did })
+    )
       .filter((item) => item && item.claimType)
       .filter((item: ClaimData) => {
         const arr = item.claimType.split('.');
@@ -175,7 +176,7 @@ export class ClaimsFacadeService {
     });
   }
 
-  private setIsRevokedOnChainStatus(
+  setIsRevokedOnChainStatus(
     list: EnrolmentClaim[]
   ): Observable<EnrolmentClaim[]> {
     return forkJoin(
@@ -194,15 +195,10 @@ export class ClaimsFacadeService {
   }
 
   private async setIsRevokedOffChainStatus(enrolment: EnrolmentClaim) {
-    if (
-      enrolment.isSyncedOffChain &&
-      enrolment.credential &&
-      isRoleCredential(enrolment.credential) &&
-      enrolment.credential?.credentialStatus
-    ) {
+    if (enrolment.isRevocableOffChain) {
       return enrolment.setIsRevokedOffChain(
         await this.iamService.verifiableCredentialsService.isRevoked(
-          enrolment.credential
+          enrolment.credential as VerifiableCredential<RoleCredentialSubject>
         )
       );
     }

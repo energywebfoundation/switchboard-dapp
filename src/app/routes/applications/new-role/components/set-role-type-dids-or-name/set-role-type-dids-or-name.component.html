@@ -7,7 +7,7 @@
           placeholder="{{ roleType }} Type"
           data-qa-id="select-type"
           formControlName="type"
-          (selectionChange)="typeChanged($event.value)"
+          (selectionChange)="typeChanged()"
           required>
           <mat-option *ngFor="let issuerType of roleTypes" [value]="issuerType" [attr.data-qa-id]="issuerType">
             {{ issuerType }}

@@ -273,7 +273,7 @@ describe('EnrolmentClaim tests', () => {
           onChainProof: 'test',
         } as Claim)
           .setIsSyncedOnChain(true)
-          .setIsRevokedOnChain(false).isRevocableOnChain
+          .setIsRevokedOnChain(false).canRevokeOnChain
       ).toBeTrue();
     });
 
@@ -287,19 +287,20 @@ describe('EnrolmentClaim tests', () => {
           onChainProof: 'test',
         } as Claim)
           .setIsSyncedOnChain(true)
-          .setIsRevokedOnChain(true).isRevocableOnChain
+          .setIsRevokedOnChain(true).canRevokeOnChain
       ).toBeFalse();
     });
   });
-  describe('isRevocableOffChain', () => {
+  describe('canRevokeOffChain', () => {
     it('should return true when is synced and not revoked', () => {
       expect(
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OffChain],
+          vp: { verifiableCredential: [{ credentialStatus: {} }] },
         } as Claim)
           .setIsSyncedOffChain(true)
-          .setIsRevokedOffChain(false).isRevocableOffChain
+          .setIsRevokedOffChain(false).canRevokeOffChain
       ).toBeTrue();
     });
 
@@ -310,7 +311,7 @@ describe('EnrolmentClaim tests', () => {
           registrationTypes: [RegistrationTypes.OffChain],
         } as Claim)
           .setIsSyncedOffChain(true)
-          .setIsRevokedOffChain(true).isRevocableOffChain
+          .setIsRevokedOffChain(true).canRevokeOffChain
       ).toBeFalse();
     });
   });

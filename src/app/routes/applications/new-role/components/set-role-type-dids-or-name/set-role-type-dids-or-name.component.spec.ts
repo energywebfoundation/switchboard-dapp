@@ -137,6 +137,28 @@ describe('SetRoleTypeDidsOrNameComponent', () => {
       roleName: 'roleName',
     });
   });
+
+  it('should update the list with issuer dids', () => {
+    component.signerDID = 'signer-did';
+    component.typeDefinition = {
+      type: IssuerType.DID,
+      roleName: undefined,
+      did: ['first-did', 'second-did'],
+    };
+
+    fixture.detectChanges();
+
+    const { next } = getSelectors(hostDebug);
+
+    next.click();
+    fixture.detectChanges();
+
+    expect(component.next.emit).toHaveBeenCalledWith({
+      type: IssuerType.DID,
+      did: ['first-did', 'second-did'],
+      roleName: '',
+    });
+  });
 });
 
 const getSelectors = (hostDebug) => {
