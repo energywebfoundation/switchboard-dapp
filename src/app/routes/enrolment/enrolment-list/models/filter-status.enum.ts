@@ -3,5 +3,7 @@ export enum FilterStatus {
   Pending = 'Pending',
   Approved = 'Approved',
   Rejected = 'Rejected',
+  NotRevoked = 'Not Revoked',
+  RevokedOffChainOnly = 'Revoked Off-Chain Only',
   Revoked = 'Revoked',
 }

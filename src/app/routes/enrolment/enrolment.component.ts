@@ -11,11 +11,14 @@ import {
   OwnedEnrolmentsSelectors,
   RequestedEnrolmentsActions,
   RequestedEnrolmentsSelectors,
+  RevokableEnrolmentsActions,
+  RevokableEnrolmentsSelectors,
   SettingsSelectors,
 } from '@state';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 import { filter } from 'rxjs/operators';
 import { FilterStatus } from './enrolment-list/models/filter-status.enum';
+import { EnrolmentClaim } from './models/enrolment-claim';
 
 @Component({
   selector: 'app-enrolment',
@@ -24,13 +27,14 @@ import { FilterStatus } from './enrolment-list/models/filter-status.enum';
 })
 export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
-
   myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
   requestedEnrolmentsList$ = this.store.select(
     RequestedEnrolmentsSelectors.getEnrolments
   );
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
-
+  myRevokablesList$ = this.store.select(
+    RevokableEnrolmentsSelectors.getRevokableEnrolments
+  );
   isMyEnrolmentShown = false;
   enrolmentStatus: FilterStatus = FilterStatus.Pending;
 
@@ -75,6 +79,8 @@ export class EnrolmentComponent implements AfterViewInit {
         } else if (queryParams.selectedTab) {
           if (queryParams.selectedTab === '1') {
             this.initDefaultMyEnrolments();
+          } else if (queryParams.selectedTab === '2') {
+            this.initDefaultMyRevokables();
           } else {
             this.initDefault();
           }
@@ -101,8 +107,13 @@ export class EnrolmentComponent implements AfterViewInit {
       } else {
         this.isMyEnrolmentShown = true;
       }
-    } else {
+    } else if (i.index === 0) {
       this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
+    } else {
+      this.store.dispatch(
+        RevokableEnrolmentsActions.updateRevokableEnrolments()
+      );
+      //this.isMyEnrolmentShown = true;
     }
   }
 
@@ -116,6 +127,10 @@ export class EnrolmentComponent implements AfterViewInit {
 
   refreshMyEnrolmentsList(): void {
     this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
+  }
+
+  refreshMyRevokablesList(): void {
+    this.store.dispatch(RevokableEnrolmentsActions.updateRevokableEnrolments());
   }
 
   createVC() {
@@ -139,6 +154,12 @@ export class EnrolmentComponent implements AfterViewInit {
   private initDefaultMyEnrolments() {
     if (this.enrolmentTabGroup) {
       this.enrolmentTabGroup.selectedIndex = 1;
+    }
+  }
+
+  private initDefaultMyRevokables() {
+    if (this.enrolmentTabGroup) {
+      this.enrolmentTabGroup.selectedIndex = 2;
     }
   }
 

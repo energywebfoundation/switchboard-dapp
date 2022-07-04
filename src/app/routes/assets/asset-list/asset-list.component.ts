@@ -182,7 +182,6 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   createVC(element) {
-    console.log(element);
     this.dialog.open(NewIssueVcComponent, {
       width: '600px',
       data: {

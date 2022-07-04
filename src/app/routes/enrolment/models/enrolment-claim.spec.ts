@@ -101,7 +101,7 @@ describe('EnrolmentClaim tests', () => {
           issuedToken: 'test',
           vp: {},
           onChainProof: 'test',
-        } as Claim).isPendingSync
+        } as Claim).setIsSyncedOnChain(true).isPendingSync
       ).toBeFalse();
     });
 
@@ -163,7 +163,9 @@ describe('EnrolmentClaim tests', () => {
           issuedToken: 'test',
           vp: {},
           onChainProof: 'test',
-        } as Claim).setIsSyncedOffChain(true).isSynced
+        } as Claim)
+          .setIsSyncedOffChain(true)
+          .setIsSyncedOnChain(true).isSynced
       ).toBeTrue();
     });
   });
@@ -194,7 +196,7 @@ describe('EnrolmentClaim tests', () => {
           issuedToken: 'test',
           vp: {},
           onChainProof: 'test',
-        } as Claim).isSyncedOnChain
+        } as Claim).setIsSyncedOnChain(true).isSyncedOnChain
       ).toBeTrue();
     });
   });
@@ -203,7 +205,7 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           isAccepted: true,
-          registrationTypes: [],
+          registrationTypes: [RegistrationTypes.OnChain],
         } as Claim).isSyncedOffChain
       ).toBeFalse();
     });

@@ -6,6 +6,7 @@ import { from, Observable, of } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { SwitchboardToastrService } from '../../../../shared/services/switchboard-toastr.service';
+import { CancelButton } from 'src/app/layout/loading/loading.component';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,10 @@ export class RevokeService {
   }
 
   revokeOnChain(claim: EnrolmentClaim): Observable<boolean> {
-    this.loadingService.show();
+    this.loadingService.show(
+      'Please confirm this transaction in your connected wallet.',
+      CancelButton.ENABLED
+    );
     return from(
       this.iamService.claimsService.revokeClaim({
         claim: { namespace: claim.claimType, subject: claim.subject },

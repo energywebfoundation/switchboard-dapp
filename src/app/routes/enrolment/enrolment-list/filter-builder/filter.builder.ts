@@ -46,15 +46,31 @@ export class FilterBuilder {
     }
 
     if (status === FilterStatus.Approved) {
-      return list.filter((item) => item.isAccepted);
+      return list
+        .filter((item) => !item.isRevoked)
+        .filter((item) => item.isAccepted);
     }
 
     if (status === FilterStatus.Revoked) {
-      return list.filter((item) => item.isRevoked);
+      return list.filter(
+        (item) =>
+          item.isRevokedOnChain &&
+          (!item.isRevocableOffChain || item.isRevokedOffChain)
+      );
     }
 
     if (status === FilterStatus.All) {
       return list;
+    }
+
+    if (status === FilterStatus.NotRevoked) {
+      return list.filter((item) => !item.isRevoked);
+    }
+
+    if (status === FilterStatus.RevokedOffChainOnly) {
+      return list.filter(
+        (item) => item.isRevokedOffChain && !item.isRevokedOnChain
+      );
     }
   }
 
