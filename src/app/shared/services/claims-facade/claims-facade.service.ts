@@ -6,10 +6,10 @@ import {
   NamespaceType,
   RegistrationTypes,
 } from 'iam-client-lib';
-import { forkJoin, from, Observable, of } from 'rxjs';
+import { forkJoin, from, Observable } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { catchError, finalize, map, switchMap } from 'rxjs/operators';
+import { finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
 import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
@@ -188,12 +188,6 @@ export class ClaimsFacadeService {
         ).pipe(
           map((isRevoked: boolean) => {
             return claim.setIsRevokedOnChain(isRevoked);
-          }),
-          catchError((err) => {
-            console.log(claim);
-            console.log(claim.subject);
-            console.log(err);
-            return of(err);
           })
         )
       )
