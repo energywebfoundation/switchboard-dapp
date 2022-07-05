@@ -148,7 +148,7 @@ export class AuthEffects {
         userActions.setUpUser(),
         OwnedEnrolmentsActions.getOwnedEnrolments(),
         RequestedEnrolmentsActions.getEnrolmentRequests(),
-        RevokableEnrolmentsActions.getRevokableEnrolments(),
+        // RevokableEnrolmentsActions.getRevokableEnrolments(),
       ])
     )
   );
