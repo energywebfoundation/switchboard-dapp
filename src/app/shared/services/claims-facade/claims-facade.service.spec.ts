@@ -112,8 +112,14 @@ describe('ClaimsFacadeService', () => {
 
       service
         .setIsRevokedOnChainStatus([
-          new EnrolmentClaim({} as Claim),
-          new EnrolmentClaim({} as Claim),
+          new EnrolmentClaim({
+            subject:
+              'did:ethr:volta:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3',
+          } as Claim),
+          new EnrolmentClaim({
+            subject:
+              'did:ethr:volta:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3',
+          } as Claim),
         ])
         .subscribe((list) => {
           expect(list).toEqual([
