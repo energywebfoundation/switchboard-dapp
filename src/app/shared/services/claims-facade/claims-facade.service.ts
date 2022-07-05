@@ -3,16 +3,18 @@ import { IamService } from '../iam.service';
 import {
   Claim,
   ClaimData,
+  isValidDID,
   NamespaceType,
   RegistrationTypes,
 } from 'iam-client-lib';
-import { forkJoin, from, Observable } from 'rxjs';
+import { forkJoin, from, Observable, of } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
 import { finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
 import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
+import { HexValidators } from '@utils';
 
 @Injectable({
   providedIn: 'root',
@@ -180,8 +182,12 @@ export class ClaimsFacadeService {
     list: EnrolmentClaim[]
   ): Observable<EnrolmentClaim[]> {
     return forkJoin(
-      list.map((claim) =>
-        from(
+      list.map((claim) => {
+        if (!isValidDID(claim.subject)) {
+          return of(claim.setIsRevokedOnChain(true));
+        }
+
+        return from(
           this.iamService.claimsService.isClaimRevoked({
             claimId: claim.id,
           })
@@ -189,8 +195,8 @@ export class ClaimsFacadeService {
           map((isRevoked: boolean) => {
             return claim.setIsRevokedOnChain(isRevoked);
           })
-        )
-      )
+        );
+      })
     );
   }
 
