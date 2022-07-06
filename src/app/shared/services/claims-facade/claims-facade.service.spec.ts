@@ -121,7 +121,7 @@ describe('ClaimsFacadeService', () => {
         ])
         .subscribe((list) => {
           expect(list).toEqual([
-            jasmine.objectContaining({ isRevokedOnChain: true }),
+            jasmine.objectContaining({ isRevokedOnChain: false }),
             jasmine.objectContaining({ isRevokedOnChain: false }),
           ]);
           done();
