@@ -113,12 +113,10 @@ describe('ClaimsFacadeService', () => {
       service
         .setIsRevokedOnChainStatus([
           new EnrolmentClaim({
-            subject:
-              'did:ethr:volta:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3',
+            registrationTypes: [RegistrationTypes.OnChain],
           } as Claim),
           new EnrolmentClaim({
-            subject:
-              'did:ethr:volta:0xA028720Bc0cc22d296DCD3a26E7E8AAe73c9B6F3',
+            registrationTypes: [RegistrationTypes.OnChain],
           } as Claim),
         ])
         .subscribe((list) => {
