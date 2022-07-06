@@ -183,7 +183,7 @@ export class ClaimsFacadeService {
   ): Observable<EnrolmentClaim[]> {
     return forkJoin(
       list.map((claim) => {
-        if (!claim.isRegisteredOnChain()) {
+        if (!claim.isSyncedOnChain) {
           return of(claim.setIsRevokedOnChain(false));
         }
 
