@@ -14,7 +14,6 @@ import { finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
 import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
-import { HexValidators } from '@utils';
 
 @Injectable({
   providedIn: 'root',
@@ -131,6 +130,7 @@ export class ClaimsFacadeService {
   private createEnrolmentClaimsFromClaims(requesterIsDid = true) {
     return (source: Observable<Claim[]>) =>
       source.pipe(
+        map((claims) => claims.filter((claim) => isValidDID(claim.subject))),
         map((claims: Claim[]) =>
           claims.map((claim: Claim) => new EnrolmentClaim(claim))
         ),
@@ -183,8 +183,8 @@ export class ClaimsFacadeService {
   ): Observable<EnrolmentClaim[]> {
     return forkJoin(
       list.map((claim) => {
-        if (!isValidDID(claim.subject)) {
-          return of(claim.setIsRevokedOnChain(true));
+        if (!claim.isRegisteredOnChain()) {
+          return of(claim.setIsRevokedOnChain(false));
         }
 
         return from(
