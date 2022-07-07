@@ -16,6 +16,7 @@ import { PreconditionType } from 'iam-client-lib';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 import { IssuerType } from './models/issuer-type.enum';
 import { DomainTypePipe } from '../../../shared/pipes/domain-type/domain-type.pipe';
+import { TimeDurationPipe } from '../../../shared/pipes/time-duration/time-duration.pipe';
 
 describe('NewRoleComponent', () => {
   let component: NewRoleComponent;
@@ -36,7 +37,7 @@ describe('NewRoleComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NewRoleComponent, DomainTypePipe],
+      declarations: [NewRoleComponent, DomainTypePipe, TimeDurationPipe],
       imports: [ReactiveFormsModule],
       providers: [
         provideMockStore(),

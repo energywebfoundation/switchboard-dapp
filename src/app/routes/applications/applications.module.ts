@@ -40,6 +40,7 @@ import { NamespaceDetailsComponent } from './namespace-details/namespace-details
 import { ApplicationCreationFormComponent } from './new-application/application-creation-form/application-creation-form.component';
 import { DefaultValueModule } from './pipes/default-value.module';
 import { SetRoleTypeDidsOrNameComponent } from './new-role/components/set-role-type-dids-or-name/set-role-type-dids-or-name.component';
+import { ValidityPeriodComponent } from './new-role/components/validity-period/validity-period.component';
 
 const routes: Routes = [{ path: '', component: ApplicationsComponent }];
 
@@ -69,6 +70,7 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     NamespaceDetailsComponent,
     ApplicationCreationFormComponent,
     SetRoleTypeDidsOrNameComponent,
+    ValidityPeriodComponent,
   ],
   imports: [
     CommonModule,

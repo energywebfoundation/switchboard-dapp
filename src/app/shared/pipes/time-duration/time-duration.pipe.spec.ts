@@ -1,0 +1,90 @@
+import { TimeDurationPipe } from './time-duration.pipe';
+
+const YEAR_IN_SECONDS = 31536000;
+const DAY_IN_SECONDS = 86400;
+const HOUR_IN_SECONDS = 3600;
+const MINUTE_IN_SECONDS = 60;
+
+describe('time-duration', () => {
+  let pipe: TimeDurationPipe;
+
+  beforeEach(() => {
+    pipe = new TimeDurationPipe();
+  });
+
+  it('create an instance', () => {
+    expect(pipe).toBeTruthy();
+  });
+
+  it('should return 1 day', () => {
+    expect(pipe.transform(DAY_IN_SECONDS)).toEqual('1 day');
+  });
+
+  it('should return 1 year', () => {
+    expect(pipe.transform(YEAR_IN_SECONDS)).toEqual('1 year');
+  });
+
+  it('should return 2 days', () => {
+    expect(pipe.transform(2 * DAY_IN_SECONDS)).toEqual('2 days');
+  });
+
+  it('should return 1 hour', () => {
+    expect(pipe.transform(HOUR_IN_SECONDS)).toEqual('1 hour');
+  });
+
+  it('should return 2 hours', () => {
+    expect(pipe.transform(2 * HOUR_IN_SECONDS)).toEqual('2 hours');
+  });
+
+  it('should return 2 minutes', () => {
+    expect(pipe.transform(2 * MINUTE_IN_SECONDS)).toEqual('2 minutes');
+  });
+
+  it('should return 2 days and 3 hours', () => {
+    expect(pipe.transform(2 * DAY_IN_SECONDS + 3 * HOUR_IN_SECONDS)).toEqual(
+      '2 days and 3 hours'
+    );
+  });
+
+  it('should return 2 days, 3 hours and 5 minutes', () => {
+    expect(
+      pipe.transform(
+        2 * DAY_IN_SECONDS + 3 * HOUR_IN_SECONDS + 5 * MINUTE_IN_SECONDS
+      )
+    ).toEqual('2 days, 3 hours and 5 minutes');
+  });
+
+  it('should return 2 days, 3 hours, 5 minutes and 32 seconds', () => {
+    expect(
+      pipe.transform(
+        2 * DAY_IN_SECONDS + 3 * HOUR_IN_SECONDS + 5 * MINUTE_IN_SECONDS + 32
+      )
+    ).toEqual('2 days, 3 hours, 5 minutes and 32 seconds');
+  });
+
+  it('should return 1 year, 2 days, 3 hours, 5 minutes and 32 seconds', () => {
+    expect(
+      pipe.transform(
+        YEAR_IN_SECONDS +
+          2 * DAY_IN_SECONDS +
+          3 * HOUR_IN_SECONDS +
+          5 * MINUTE_IN_SECONDS +
+          32
+      )
+    ).toEqual('1 year, 2 days, 3 hours, 5 minutes and 32 seconds');
+  });
+
+  it('should return 5 hours, 3 minutes and 1 second', () => {
+    expect(
+      pipe.transform(5 * HOUR_IN_SECONDS + 3 * MINUTE_IN_SECONDS + 1)
+    ).toEqual('5 hours, 3 minutes and 1 second');
+  });
+
+  it('should return 0 seconds', () => {
+    expect(pipe.transform(0)).toEqual('---');
+  });
+
+  it('should return 0 seconds when value is less than 0', () => {
+    expect(pipe.transform(-10)).toEqual('---');
+  });
+});
