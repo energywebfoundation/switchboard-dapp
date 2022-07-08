@@ -84,6 +84,10 @@ export class GovernanceDetailsComponent {
     return this.data?.type === ListType.ORG;
   }
 
+  get validityPeriod() {
+    return this.formData?.definition?.defaultValidityPeriod;
+  }
+
   constructor(
     private iamService: IamService,
     private loadingService: LoadingService,

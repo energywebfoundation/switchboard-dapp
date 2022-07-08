@@ -53,6 +53,7 @@ import { DomainImageComponent } from './components/domain-image/domain-image.com
 import { ReportProblemComponent } from './components/report-problem/report-problem.component';
 import { SmartSearchOptionComponent } from './components/smart-search/component/smart-search-option/smart-search-option.component';
 import { GenericTableComponent } from './components/table/generic-table/generic-table.component';
+import { TimeDurationPipe } from './pipes/time-duration/time-duration.pipe';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -116,6 +117,7 @@ const MATERIAL_MODULES = [
     ReportProblemComponent,
     SmartSearchOptionComponent,
     GenericTableComponent,
+    TimeDurationPipe,
   ],
   exports: [
     CommonModule,
@@ -138,6 +140,7 @@ const MATERIAL_MODULES = [
     DomainImageComponent,
     ReportProblemComponent,
     GenericTableComponent,
+    TimeDurationPipe,
   ],
 })
 

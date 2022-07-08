@@ -103,6 +103,13 @@
             </button>
           </div>
         </mat-step>
+        <mat-step [completed]="false">
+          <ng-template matStepLabel>Set Validity Period</ng-template>
+          <app-validity-period
+            [validityPeriod]="validityPeriod"
+            (back)="back()"
+            (next)="addValidityPeriod($event)"></app-validity-period>
+        </mat-step>
 
         <mat-step [completed]="false">
           <ng-template matStepLabel>Set Requestor Fields</ng-template>
@@ -177,6 +184,13 @@
               <div class="label opacity-50 mb-2">Revoker Role Namespace</div>
               <span class="default-color mb-0">
                 {{ revoker.roleName }}
+              </span>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="text-left my-3">
+              <div class="label opacity-50 mb-2">Validity period Type</div>
+              <span class="default-color mb-0">
+                {{ validityPeriod | timeDuration }}
               </span>
             </div>
             <mat-divider></mat-divider>

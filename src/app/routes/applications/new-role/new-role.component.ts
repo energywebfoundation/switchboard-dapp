@@ -122,6 +122,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   viewType: string = ViewType.NEW;
   origData: IRole;
   roleName: string;
+  validityPeriod: number;
   private TOASTR_HEADER = 'Create New Role';
   public txs: any[];
   private _retryCount = 0;
@@ -244,6 +245,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         NamespaceType.Role
       );
       const parentNamespace = arrParentNamespace[1].substring(1);
+      this.validityPeriod = def.defaultValidityPeriod;
       this.issuer = {
         type: def.issuer.issuerType as IssuerType,
         roleName: def.issuer.roleName,
@@ -437,6 +439,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     req.data.requestorFields = this.requestorFields.data;
     req.data.issuerFields = this.issuerFields.data;
     req.data.revoker = { ...this.revoker, revokerType: this.revoker.type };
+    req.data.defaultValidityPeriod = this.validityPeriod;
 
     if (!skipNextStep) {
       // Set the second step to non-editable
@@ -615,6 +618,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     if (await this.confirm('There are unsaved changes.', true)) {
       this.dialogRef.close(false);
     }
+  }
+
+  addValidityPeriod(validityPeriod: number) {
+    this.validityPeriod = validityPeriod;
+    this.goNextStep();
   }
 
   async closeDialog(isSuccess?: boolean) {

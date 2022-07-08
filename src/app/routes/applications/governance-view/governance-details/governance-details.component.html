@@ -111,8 +111,15 @@
           {{ precondition }}
         </div>
       </div>
+      <div class="text-left my-3">
+        <div class="label opacity-50 mb-2">Validity Period</div>
+        <div class="default-color mb-0">
+          {{ validityPeriod | timeDuration }}
+        </div>
+      </div>
       <mat-divider></mat-divider>
       <app-fields-details [data]="requestorFields" title="Requestor Fields"></app-fields-details>
+      <mat-divider></mat-divider>
       <app-fields-details [data]="issuerFields" title="Issuer Fields"></app-fields-details>
     </ng-container>
     <ng-container *ngIf="isEmbedded && isOrganization">
