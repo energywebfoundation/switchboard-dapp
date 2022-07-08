@@ -127,6 +127,10 @@ export class EnrolmentClaim
     );
   }
 
+  isRegisteredBoth(): boolean {
+    return this.isRegisteredOnChain() && this.isRegisteredOffChain();
+  }
+
   private defineProperties(): void {
     this.defineRoleName();
     this.defineRequestDate();
