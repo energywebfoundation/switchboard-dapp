@@ -54,6 +54,7 @@ import { ReportProblemComponent } from './components/report-problem/report-probl
 import { SmartSearchOptionComponent } from './components/smart-search/component/smart-search-option/smart-search-option.component';
 import { GenericTableComponent } from './components/table/generic-table/generic-table.component';
 import { TimeDurationPipe } from './pipes/time-duration/time-duration.pipe';
+import { CardInfoComponent } from './components/card-info/card-info.component';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -118,6 +119,7 @@ const MATERIAL_MODULES = [
     SmartSearchOptionComponent,
     GenericTableComponent,
     TimeDurationPipe,
+    CardInfoComponent,
   ],
   exports: [
     CommonModule,
@@ -141,6 +143,7 @@ const MATERIAL_MODULES = [
     ReportProblemComponent,
     GenericTableComponent,
     TimeDurationPipe,
+    CardInfoComponent,
   ],
 })
 
