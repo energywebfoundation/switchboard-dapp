@@ -6,10 +6,10 @@ import {
   Output,
 } from '@angular/core';
 import { EnrolmentClaim } from '../../../../models/enrolment-claim';
-import { ViewRequestsComponent } from '../../../../view-requests/view-requests.component';
 import { truthy } from '@operators';
 import { MatDialog } from '@angular/material/dialog';
 import { EnrolmentListType } from '../../../models/enrolment-list-type.enum';
+import { IssuerRequestsComponent } from '../../../../view-requests/issuer-requests/issuer-requests.component';
 
 @Component({
   selector: 'app-preview',
@@ -25,10 +25,9 @@ export class PreviewComponent {
 
   view(element: EnrolmentClaim) {
     this.dialog
-      .open(ViewRequestsComponent, {
+      .open(IssuerRequestsComponent, {
         width: '600px',
         data: {
-          listType: this.enrolmentType,
           claimData: element,
         },
         maxWidth: '100%',

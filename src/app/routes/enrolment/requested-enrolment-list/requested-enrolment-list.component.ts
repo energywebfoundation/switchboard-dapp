@@ -78,24 +78,6 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
     return element?.isAccepted;
   }
 
-  view(element: EnrolmentClaim) {
-    this.dialog
-      .open(ViewRequestsComponent, {
-        width: '600px',
-        data: {
-          listType: EnrolmentListType.ISSUER,
-          claimData: element,
-        },
-        maxWidth: '100%',
-        disableClose: true,
-      })
-      .afterClosed()
-      .pipe(truthy())
-      .subscribe(() => {
-        this.updateList();
-      });
-  }
-
   private async _handleMessage(message) {
     if (!message.issuedToken) {
       this.updateList();
