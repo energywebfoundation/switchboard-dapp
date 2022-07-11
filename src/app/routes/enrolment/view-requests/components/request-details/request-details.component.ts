@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { EnrolmentClaim } from '../../../models/enrolment-claim';
+import { IRoleDefinition, IRoleDefinitionV2 } from 'iam-client-lib';
 
 @Component({
   selector: 'app-request-details',
@@ -9,4 +10,5 @@ import { EnrolmentClaim } from '../../../models/enrolment-claim';
 })
 export class RequestDetailsComponent {
   @Input() claim: EnrolmentClaim;
+  @Input() definition: IRoleDefinitionV2;
 }

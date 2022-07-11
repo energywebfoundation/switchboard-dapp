@@ -13,7 +13,7 @@ import {
   initWithMetamask,
   initWithPrivateKeySigner,
   initWithWalletConnect,
-  IRole,
+  IRole, IRoleDefinitionV2,
   MessagingMethod,
   MessagingService,
   NamespaceType,
@@ -23,7 +23,7 @@ import {
   setChainConfig,
   setMessagingConfig,
   SignerService,
-  VerifiableCredentialsServiceBase,
+  VerifiableCredentialsServiceBase
 } from 'iam-client-lib';
 import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
 import { LoadingService } from './loading.service';
@@ -121,8 +121,8 @@ export class IamService {
     );
   }
 
-  getRolesDefinition(namespaces: string[]) {
-    return this.cacheClient.getRolesDefinition(namespaces);
+  getRolesDefinition(namespace: string) {
+    return this.cacheClient.getRoleDefinition(namespace) as Promise<IRoleDefinitionV2>;
   }
 
   registerAsset() {

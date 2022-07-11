@@ -55,6 +55,7 @@ import { SmartSearchOptionComponent } from './components/smart-search/component/
 import { GenericTableComponent } from './components/table/generic-table/generic-table.component';
 import { TimeDurationPipe } from './pipes/time-duration/time-duration.pipe';
 import { CardInfoComponent } from './components/card-info/card-info.component';
+import { TimeShiftPipe } from './pipes/time-shift/time-shift.pipe';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -120,6 +121,7 @@ const MATERIAL_MODULES = [
     GenericTableComponent,
     TimeDurationPipe,
     CardInfoComponent,
+    TimeShiftPipe,
   ],
   exports: [
     CommonModule,
@@ -144,6 +146,7 @@ const MATERIAL_MODULES = [
     GenericTableComponent,
     TimeDurationPipe,
     CardInfoComponent,
+    TimeShiftPipe
   ],
 })
 

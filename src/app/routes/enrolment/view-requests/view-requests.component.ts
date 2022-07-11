@@ -18,6 +18,7 @@ import { EnrolmentForm } from '../../registration/enrolment-form/enrolment-form.
 import { KeyValue } from '@angular/common';
 import { EnrolmentClaim } from '../models/enrolment-claim';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
+import { IRoleDefinition, IRoleDefinitionV2 } from 'iam-client-lib';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -34,6 +35,7 @@ export class ViewRequestsComponent implements OnInit {
   issuerFields: KeyValue<string, string | number>[] = [];
   userDid$ = this.store.select(userSelectors.getDid);
   fieldList = [];
+  roleDefinition: IRoleDefinitionV2;
 
   constructor(
     public dialogRef: MatDialogRef<ViewRequestsComponent>,
@@ -74,6 +76,7 @@ export class ViewRequestsComponent implements OnInit {
       await this.setIssuerFields();
       await this.setRequestorFields();
     }
+    console.log('claim ', this.claim);
   }
 
   async approve() {
@@ -151,7 +154,8 @@ export class ViewRequestsComponent implements OnInit {
 
   private async getRoleIssuerFields(namespace: string) {
     this.loadingService.show();
-    const definitions = await this.iamService.getRolesDefinition([namespace]);
+    const definitions = await this.iamService.getRolesDefinition(namespace);
+    this.roleDefinition = definitions;
     const issuerFieldList = definitions[namespace]?.issuerFields;
     if (
       issuerFieldList &&
