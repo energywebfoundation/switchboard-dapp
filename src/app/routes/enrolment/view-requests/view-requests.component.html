@@ -24,10 +24,7 @@
         <app-fields *ngIf="issuerFields?.length" title="Issuer fields" [fieldsList]="issuerFields"></app-fields>
 
         <div class="col-lg-12 mt-2" *ngIf="!requestorFields?.length">
-          <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
-            <mat-icon>info</mat-icon>
-            <span class="f-14"> Role did not require any field for enrolment request. </span>
-          </div>
+          <app-card-info description="Role did not require any field for enrolment request."></app-card-info>
         </div>
         <div class="col-lg-12 mt-2 mb-3" *ngIf="canAccept() && roleContainRequiredParams()">
           <div class="card card-default mb-3 pb-0 shadow-none">
@@ -37,12 +34,8 @@
         <div
           class="col-lg-12 mt-2"
           *ngIf="claim?.registrationTypes?.length === 2 && (userDid$ | async) !== claim.requester && !claim.isAccepted">
-          <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
-            <mat-icon>info</mat-icon>
-            <span class="f-14">
-              Two signatures are required in the event that both Private and Public credentials are requested.
-            </span>
-          </div>
+          <app-card-info
+            description="Two signatures are required in the event that both Private and Public credentials are requested."></app-card-info>
         </div>
       </div>
     </form>

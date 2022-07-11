@@ -53,14 +53,9 @@
           <ng-template matStepLabel>Set Restrictions</ng-template>
           <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
             <div class="label default-color ml-1 pb-2">Role Precondition</div>
-            <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
-              <mat-icon>info</mat-icon>
-              <span class="pl-2 pb-2">
-                Users must possess the roles as set in this Role Precondition section before they can enrol to this
-                role.
-              </span>
-            </div>
+            <app-card-info
+              description="Users must possess the roles as set in this Role Precondition section before they can enrol to this
+                role."></app-card-info>
             <div class="card-result mb-1" *ngIf="!roleForm?.value?.data?.enrolmentPreconditions[0]?.conditions?.length">
               <div class="d-flex justify-content-between flex-row flex-nowrap">
                 <div class="default-color break-word">No role precondition set</div>
@@ -246,11 +241,7 @@
         <ng-container *ngFor="let step of txs; let i = index">
           <mat-step #customStep [editable]="false" [completed]="false">
             <ng-template matStepLabel>{{ step.info }}</ng-template>
-            <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-              <mat-icon>info</mat-icon>
-              <span class="pb-2">{{ step.info }}</span>
-            </div>
+            <app-card-info [description]="step.info"></app-card-info>
             <div
               class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon>notifications_none</mat-icon>

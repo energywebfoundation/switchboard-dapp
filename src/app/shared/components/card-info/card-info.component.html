@@ -1,0 +1,9 @@
+<div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3 pt-3 pb-22">
+  <mat-icon>info</mat-icon>
+  <div class="d-flex flex-column">
+    <mat-label *ngIf="title" data-qa-id="card-info-title">{{ title }}</mat-label>
+    <span data-qa-id="card-info-description" *ngIf="description">
+      {{ description }}
+    </span>
+  </div>
+</div>
