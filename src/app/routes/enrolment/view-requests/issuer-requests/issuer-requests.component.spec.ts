@@ -1,17 +1,19 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { IssuerRequestsComponent } from './issuer-requests.component';
 
-describe('IssuerRequestsComponent', () => {
+// TODO: add tests
+xdescribe('IssuerRequestsComponent', () => {
   let component: IssuerRequestsComponent;
   let fixture: ComponentFixture<IssuerRequestsComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ IssuerRequestsComponent ]
+  beforeEach(waitForAsync( () => {
+    TestBed.configureTestingModule({
+      declarations: [ IssuerRequestsComponent ],
+      providers: []
     })
     .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(IssuerRequestsComponent);

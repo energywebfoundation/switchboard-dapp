@@ -10,6 +10,7 @@ import { UserClaimState } from '../../../../state/user-claim/user.reducer';
 import { TokenDecodeService } from '../services/token-decode.service';
 import { IssuerRequestsService } from '../services/issuer-requests.service';
 import { Observable } from 'rxjs';
+import { RoleService } from '../../../../state/governance/role/services/role.service';
 
 @Component({
   selector: 'app-issuer-requests',
@@ -31,7 +32,8 @@ export class IssuerRequestsComponent implements OnInit {
     public data: { claimData: EnrolmentClaim },
     private store: Store<UserClaimState>,
     private tokenDecodeService: TokenDecodeService,
-    private issuerRequestsService: IssuerRequestsService
+    private issuerRequestsService: IssuerRequestsService,
+    private roleService: RoleService
   ) {}
 
   canAccept() {
@@ -43,7 +45,7 @@ export class IssuerRequestsComponent implements OnInit {
   }
 
   get fieldList() {
-    return this.roleDefinition.issuerFields ?? [];
+    return this.roleDefinition?.issuerFields ?? [];
   }
 
   get claim() {
@@ -81,8 +83,8 @@ export class IssuerRequestsComponent implements OnInit {
   }
 
   private getRoleIssuerFields(namespace: string): void {
-    this.issuerRequestsService
-      .getRoleIssuerFields(namespace)
+    this.roleService
+      .getDefinition(namespace)
       .subscribe((definitions) => (this.roleDefinition = definitions));
   }
 }

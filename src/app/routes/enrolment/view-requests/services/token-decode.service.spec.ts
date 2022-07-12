@@ -33,6 +33,13 @@ describe('TokenDecodeService', () => {
     });
   });
 
+  it('should return nullable stream when token is nullable', (done) => {
+    service.getIssuerFields(null).subscribe((v) => {
+      expect(v).toEqual([]);
+      done();
+    });
+  });
+
   it('should decode and return requestorFields from token', (done) => {
     didRegistry.decodeJWTToken.and.returnValue(
       Promise.resolve({
@@ -43,6 +50,17 @@ describe('TokenDecodeService', () => {
     );
     service.getRequestorFields('token').subscribe((v) => {
       expect(v.length).toBe(1);
+      done();
+    });
+  });
+
+  it('should decode and return empty array when requestorFields are nullable', (done) => {
+    didRegistry.decodeJWTToken.and.returnValue(
+      Promise.resolve({
+      })
+    );
+    service.getRequestorFields('token').subscribe((v) => {
+      expect(v).toEqual([]);
       done();
     });
   });
@@ -58,13 +76,6 @@ describe('TokenDecodeService', () => {
     );
     service.getRequestorFields('token').subscribe((v) => {
       expect(v.length).toBe(1);
-      done();
-    });
-  });
-
-  it('should return nullable stream when token is nullable', (done) => {
-    service.getIssuerFields(null).subscribe((v) => {
-      expect(v).toEqual([]);
       done();
     });
   });

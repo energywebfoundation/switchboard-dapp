@@ -13,17 +13,17 @@ import {
   initWithMetamask,
   initWithPrivateKeySigner,
   initWithWalletConnect,
-  IRole, IRoleDefinitionV2,
+  IRole,
+  IRoleDefinitionV2,
   MessagingMethod,
   MessagingService,
   NamespaceType,
   ProviderType,
-  RegistrationTypes,
   setCacheConfig,
   setChainConfig,
   setMessagingConfig,
   SignerService,
-  VerifiableCredentialsServiceBase
+  VerifiableCredentialsServiceBase,
 } from 'iam-client-lib';
 import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
 import { LoadingService } from './loading.service';
@@ -36,6 +36,7 @@ import { EnvService } from './env/env.service';
 import { ChainConfig } from 'iam-client-lib/dist/src/config/chain.config';
 import { EkcSettingsService } from '../../modules/connect-to-wallet/ekc-settings/services/ekc-settings.service';
 import { IOrganization } from 'iam-client-lib/dist/src/modules/domains/domains.types';
+import { IssueClaimOptions } from 'iam-client-lib/dist/src/modules/claims/claims.types';
 
 export const PROVIDER_TYPE = 'ProviderType';
 
@@ -95,12 +96,7 @@ export class IamService {
     return this.signerService.isEthSigner;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  issueClaim(data: {
-    subject: string;
-    claim: any;
-    registrationTypes: RegistrationTypes[];
-  }) {
+  issueClaim(data: IssueClaimOptions) {
     return this.wrapWithLoadingService(this.claimsService.issueClaim(data));
   }
 
@@ -114,15 +110,16 @@ export class IamService {
 
   getAllowedRolesByIssuer(): Observable<IRole[]> {
     return this.wrapWithLoadingService(
-      this.domainsService.getAllowedRolesByIssuer(
-        this.signerService.did
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ) as any as Promise<IRole[]>
+      this.domainsService.getAllowedRolesByIssuer(this.signerService.did)
     );
   }
 
   getRolesDefinition(namespace: string) {
-    return this.cacheClient.getRoleDefinition(namespace) as Promise<IRoleDefinitionV2>;
+    return this.wrapWithLoadingService(
+      this.cacheClient.getRoleDefinition(
+        namespace
+      ) as Promise<IRoleDefinitionV2>
+    );
   }
 
   registerAsset() {
