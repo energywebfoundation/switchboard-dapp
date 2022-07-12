@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { EnrolmentForm } from '../../../registration/enrolment-form/enrolment-form.component';
 import { EnrolmentClaim } from '../../models/enrolment-claim';
-import { KeyValue } from '@angular/common';
 import * as userSelectors from '../../../../state/user-claim/user.selectors';
 import { IRoleDefinitionV2 } from 'iam-client-lib';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -9,32 +8,32 @@ import { Store } from '@ngrx/store';
 import { UserClaimState } from '../../../../state/user-claim/user.reducer';
 import { TokenDecodeService } from '../services/token-decode.service';
 import { IssuerRequestsService } from '../services/issuer-requests.service';
-import { Observable } from 'rxjs';
 import { RoleService } from '../../../../state/governance/role/services/role.service';
+import { ViewRequestsComponent } from '../view-requests.component';
 
 @Component({
   selector: 'app-issuer-requests',
   templateUrl: './issuer-requests.component.html',
   styleUrls: ['./issuer-requests.component.scss'],
 })
-export class IssuerRequestsComponent implements OnInit {
+export class IssuerRequestsComponent
+  extends ViewRequestsComponent
+  implements OnInit
+{
   @ViewChild('issuerFields', { static: false }) requiredFields: EnrolmentForm;
-  requestorFields$: Observable<KeyValue<string, string | number>[]> =
-    this.tokenDecodeService.getRequestorFields(this.claim?.token);
-  issuerFields$: Observable<KeyValue<string, string | number>[]> =
-    this.tokenDecodeService.getIssuerFields(this.claim?.issuedToken);
   userDid$ = this.store.select(userSelectors.getDid);
   roleDefinition: IRoleDefinitionV2;
 
   constructor(
     public dialogRef: MatDialogRef<IssuerRequestsComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    public data: { claimData: EnrolmentClaim },
     private store: Store<UserClaimState>,
-    private tokenDecodeService: TokenDecodeService,
     private issuerRequestsService: IssuerRequestsService,
-    private roleService: RoleService
-  ) {}
+    private roleService: RoleService,
+    tokenDecodeService: TokenDecodeService,
+    @Inject(MAT_DIALOG_DATA) data: { claimData: EnrolmentClaim }
+  ) {
+    super(data, tokenDecodeService);
+  }
 
   canAccept() {
     return (
@@ -46,10 +45,6 @@ export class IssuerRequestsComponent implements OnInit {
 
   get fieldList() {
     return this.roleDefinition?.issuerFields ?? [];
-  }
-
-  get claim() {
-    return this.data.claimData;
   }
 
   get isApproveDisabled() {
