@@ -16,10 +16,9 @@
 
       <app-request-details class="col-lg-12 mt-2" [claim]="claim"></app-request-details>
 
-      <app-fields *ngIf="requestorFields?.length" title="Requestor fields" [fieldsList]="requestorFields"> </app-fields>
+      <app-fields title="Requestor fields" [fieldsList]="requestorFields$ | async"> </app-fields>
 
-      <app-fields *ngIf="issuerFields?.length" title="Issuer fields" [fieldsList]="issuerFields"> </app-fields>
-
+      <app-fields title="Issuer fields" [fieldsList]="issuerFields$ | async"> </app-fields>
     </div>
   </div>
 </div>

@@ -11,9 +11,9 @@ import { IamService } from '../../../shared/services/iam.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { NotificationService } from '../../../shared/services/notification.service';
 import { dialogSpy, iamServiceSpy, loadingServiceSpy } from '@tests';
 import { of } from 'rxjs';
+import { TokenDecodeService } from './services/token-decode.service';
 
 describe('ViewRequestsComponent', () => {
   let component: ViewRequestsComponent;
@@ -23,8 +23,9 @@ describe('ViewRequestsComponent', () => {
     'SwitchboardToastrService',
     ['error', 'success']
   );
-  const notificationServiceSpy = jasmine.createSpyObj('NotificationService', [
-    'decreasePendingApprovalCount',
+  const tokenDecodeSpy = jasmine.createSpyObj('TokenDecodeService', [
+    'getIssuerFields',
+    'getRequestorFields',
   ]);
 
   beforeEach(
@@ -33,7 +34,7 @@ describe('ViewRequestsComponent', () => {
         declarations: [ViewRequestsComponent],
         providers: [
           provideMockStore(),
-          { provide: NotificationService, useValue: notificationServiceSpy },
+          { provide: TokenDecodeService, useValue: tokenDecodeSpy },
           { provide: LoadingService, useValue: loadingServiceSpy },
           { provide: IamService, useValue: iamServiceSpy },
           {

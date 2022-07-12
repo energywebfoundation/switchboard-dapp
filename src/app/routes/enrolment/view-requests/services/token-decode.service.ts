@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../../../../shared/services/iam.service';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { KeyValue } from '@angular/common';
 
 @Injectable({
@@ -35,6 +35,9 @@ export class TokenDecodeService {
   }
 
   private decode(token): Observable<any> {
+    if (!token) {
+      return of(null);
+    }
     return from(
       this.iamService.didRegistry.decodeJWTToken({
         token,
