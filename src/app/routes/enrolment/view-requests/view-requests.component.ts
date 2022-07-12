@@ -18,8 +18,7 @@ export class ViewRequestsComponent {
   );
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    protected data: { claimData: EnrolmentClaim },
+    @Inject(MAT_DIALOG_DATA) protected data: { claimData: EnrolmentClaim },
     protected tokenDecodeService: TokenDecodeService
   ) {}
 

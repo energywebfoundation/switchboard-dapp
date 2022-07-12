@@ -80,6 +80,6 @@ export class IssuerRequestsComponent
   private getRoleIssuerFields(namespace: string): void {
     this.roleService
       .getDefinition(namespace)
-      .subscribe((definitions) => (this.roleDefinition = definitions));
+      .subscribe((definitions: IRoleDefinitionV2) => (this.roleDefinition = definitions));
   }
 }
