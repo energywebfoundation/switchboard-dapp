@@ -6,36 +6,39 @@
 </h4>
 <div mat-dialog-content>
   <div class="mt-3">
-      <div class="row">
-        <div class="col-lg-12 w-100">
-          <div class="card card-default text-center mb-3 p-3 shadow-none">
-            <h3 class="default-color mb-2">{{ claim?.roleName | uppercase }}</h3>
-            <app-enrolment-status class="d-flex justify-content-center" [claim]="claim"></app-enrolment-status>
-          </div>
-        </div>
-
-        <app-request-details class="col-lg-12 mt-2" [claim]="claim" [definition]="roleDefinition"></app-request-details>
-
-        <app-fields
-          title="Requestor fields"
-          [fieldsList]="requestorFields$ | async"></app-fields>
-        <app-fields title="Issuer fields" [fieldsList]="issuerFields$ | async"></app-fields>
-
-        <div class="col-lg-12 mt-2" *ngIf="!(requestorFields$ | async)?.length">
-          <app-card-info description="Role did not require any field for enrolment request."></app-card-info>
-        </div>
-        <div class="col-lg-12 mt-2 mb-3" *ngIf="canAccept() && roleContainRequiredParams()">
-          <div class="card card-default mb-3 pb-0 shadow-none">
-            <app-enrolment-form #issuerFields [fieldList]="fieldList" [showSubmit]="false"></app-enrolment-form>
-          </div>
-        </div>
-        <div
-          class="col-lg-12 mt-2"
-          *ngIf="claim?.registrationTypes?.length === 2 && !claim.isAccepted">
-          <app-card-info
-            description="Two signatures are required in the event that both Private and Public credentials are requested."></app-card-info>
+    <div class="row">
+      <div class="col-lg-12 w-100">
+        <div class="card card-default text-center mb-3 p-3 shadow-none">
+          <h3 class="default-color mb-2">{{ claim?.roleName | uppercase }}</h3>
+          <app-enrolment-status class="d-flex justify-content-center" [claim]="claim"></app-enrolment-status>
         </div>
       </div>
+
+      <app-request-details data-qa-id="request-details" class="col-lg-12 mt-2" [claim]="claim" [definition]="roleDefinition"></app-request-details>
+
+      <app-fields data-qa-id="requestor-fields" title="Requestor fields" [fieldsList]="requestorFields$ | async">
+      </app-fields>
+
+      <app-fields data-qa-id="issuer-fields" title="Issuer fields" [fieldsList]="issuerFields$ | async"> </app-fields>
+
+      <div class="col-lg-12 mt-2" *ngIf="!(requestorFields$ | async)?.length">
+        <app-card-info description="Role did not require any field for enrolment request."></app-card-info>
+      </div>
+      <div class="col-lg-12 mt-2 mb-3" *ngIf="canAccept() && roleContainRequiredParams()">
+        <div class="card card-default mb-3 pb-0 shadow-none">
+          <app-enrolment-form #issuerFields [fieldList]="fieldList" [showSubmit]="false"></app-enrolment-form>
+        </div>
+
+        <app-expiration-date
+          [defaultTimeShift]="roleDefinition?.defaultValidityPeriod"
+          (add)="updateExpirationDate($event)"></app-expiration-date>
+      </div>
+
+      <div class="col-lg-12 mt-2" *ngIf="claim?.registrationTypes?.length === 2 && !claim.isAccepted">
+        <app-card-info
+          description="Two signatures are required in the event that both Private and Public credentials are requested."></app-card-info>
+      </div>
+    </div>
   </div>
   <div mat-dialog-actions>
     <ng-container *ngIf="canAccept()">
@@ -51,8 +54,6 @@
         Reject
       </button>
     </ng-container>
-    <app-revoke-buttons
-      (revoked)="revokeSuccessHandler()"
-      [claim]="claim"></app-revoke-buttons>
+    <app-revoke-buttons (revoked)="revokeSuccessHandler()" [claim]="claim"></app-revoke-buttons>
   </div>
 </div>

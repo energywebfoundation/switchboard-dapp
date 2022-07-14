@@ -51,7 +51,7 @@ describe('IssuerRequestsService', () => {
       };
       claimsFacadeSpy.issueClaimRequest.and.returnValue(of(null));
 
-      service.approve(claim as EnrolmentClaim, []).subscribe(() => {
+      service.approve(claim as EnrolmentClaim, [], undefined).subscribe(() => {
         expect(claimsFacadeSpy.issueClaimRequest).toHaveBeenCalledWith(
           jasmine.objectContaining(claim)
         );

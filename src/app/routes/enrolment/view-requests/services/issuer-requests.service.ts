@@ -24,7 +24,7 @@ export class IssuerRequestsService {
   approve(
     claim: EnrolmentClaim,
     issuerFields: KeyValue<string, string>[],
-    expirationTimestamp: number = undefined
+    expirationTimestamp: number
   ) {
     const req: IssueClaimRequestOptions = {
       requester: claim.requester,

@@ -10,6 +10,7 @@ import { TokenDecodeService } from '../services/token-decode.service';
 import { IssuerRequestsService } from '../services/issuer-requests.service';
 import { RoleService } from '../../../../state/governance/role/services/role.service';
 import { ViewRequestsComponent } from '../view-requests.component';
+import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 
 @Component({
   selector: 'app-issuer-requests',
@@ -23,9 +24,10 @@ export class IssuerRequestsComponent
   @ViewChild('issuerFields', { static: false }) requiredFields: EnrolmentForm;
   userDid$ = this.store.select(userSelectors.getDid);
   roleDefinition: IRoleDefinitionV2;
+  expirationTime: number;
 
   constructor(
-    public dialogRef: MatDialogRef<IssuerRequestsComponent>,
+    private dialogRef: MatDialogRef<IssuerRequestsComponent>,
     private store: Store<UserClaimState>,
     private issuerRequestsService: IssuerRequestsService,
     private roleService: RoleService,
@@ -43,17 +45,17 @@ export class IssuerRequestsComponent
     );
   }
 
-  get fieldList() {
+  get fieldList(): IFieldDefinition[] {
     return this.roleDefinition?.issuerFields ?? [];
   }
 
-  get isApproveDisabled() {
+  get isApproveDisabled(): boolean {
     return Boolean(
       !this?.requiredFields?.isValid() && this.roleContainRequiredParams()
     );
   }
 
-  roleContainRequiredParams() {
+  roleContainRequiredParams(): boolean {
     return this.fieldList.length > 0;
   }
 
@@ -63,7 +65,11 @@ export class IssuerRequestsComponent
 
   approve(): void {
     this.issuerRequestsService
-      .approve(this.claim, this.requiredFields?.fieldsData() || [])
+      .approve(
+        this.claim,
+        this.requiredFields?.fieldsData() || [],
+        this.expirationTime
+      )
       .subscribe(() => this.dialogRef.close(true));
   }
 
@@ -73,13 +79,20 @@ export class IssuerRequestsComponent
     });
   }
 
-  revokeSuccessHandler() {
+  revokeSuccessHandler(): void {
     this.dialogRef.close(true);
+  }
+
+  updateExpirationDate(expirationTime: number): void {
+    this.expirationTime = expirationTime;
   }
 
   private getRoleIssuerFields(namespace: string): void {
     this.roleService
       .getDefinition(namespace)
-      .subscribe((definitions: IRoleDefinitionV2) => (this.roleDefinition = definitions));
+      .subscribe((definitions: IRoleDefinitionV2) => {
+        this.roleDefinition = definitions;
+        this.expirationTime = this.roleDefinition?.defaultValidityPeriod;
+      });
   }
 }

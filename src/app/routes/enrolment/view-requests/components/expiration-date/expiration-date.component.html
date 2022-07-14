@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-end">
+  <button
+    mat-stroked-button
+    class="btn btn-small mr-2 back"
+    data-qa-id="remove-expiration-date"
+    (click)="removeHandler()">
+    Remove expiration date
+  </button>
+  <button
+    mat-raised-button
+    class="btn btn-small btn-primary"
+    data-qa-id="add-expiration-date"
+    (click)="toggleHandler()">
+    Add expiration date
+  </button>
+</div>
+<ng-container *ngIf="toggle">
+  <mat-label class="ml-3 pl-1">Expiration Date</mat-label>
+  <mat-form-field class="mt-2" appearance="outline">
+    <input
+      [matDatepicker]="picker"
+      data-qa-id="expiration-date-input"
+      [formControl]="expirationDate"
+      matInput
+      placeholder="Expiration Date"
+      autocomplete="off" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-icon matSuffix data-qa-id="reset-date" class="close-icon" (click)="setDefaultExpirationDate()">close</mat-icon>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</ng-container>
