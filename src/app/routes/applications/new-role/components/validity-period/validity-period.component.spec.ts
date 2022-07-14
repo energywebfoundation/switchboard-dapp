@@ -47,19 +47,28 @@ describe('ValidityPeriodComponent', () => {
     component.validityPeriod = 135;
     fixture.detectChanges();
 
-    const { periodInput } = getSelectors(hostDebug);
+    const { yearsInput, daysInput, hoursInput, minutesInput, secondsInput } =
+      getSelectors(hostDebug);
 
-    expect(periodInput.value).toEqual('135');
+    expect(+yearsInput.value).toEqual(0);
+    expect(+daysInput.value).toEqual(0);
+    expect(+hoursInput.value).toEqual(0);
+    expect(+minutesInput.value).toEqual(2);
+    expect(+secondsInput.value).toEqual(15);
   });
 
   it('should emit value from the input', () => {
     component.validityPeriod = undefined;
     fixture.detectChanges();
 
-    const { periodInput, periodNext } = getSelectors(hostDebug);
+    const { minutesInput, secondsInput, periodNext } = getSelectors(hostDebug);
 
-    periodInput.value = 100;
-    dispatchInputEvent(periodInput);
+    secondsInput.value = 40;
+    dispatchInputEvent(secondsInput);
+    fixture.detectChanges();
+
+    minutesInput.value = 1;
+    dispatchInputEvent(minutesInput);
     fixture.detectChanges();
 
     periodNext.click();
@@ -70,6 +79,10 @@ describe('ValidityPeriodComponent', () => {
 });
 
 const getSelectors = (hostDebug) => ({
-  periodInput: getElement(hostDebug)('period')?.nativeElement,
+  yearsInput: getElement(hostDebug)('years')?.nativeElement,
+  daysInput: getElement(hostDebug)('days')?.nativeElement,
+  hoursInput: getElement(hostDebug)('hours')?.nativeElement,
+  minutesInput: getElement(hostDebug)('minutes')?.nativeElement,
+  secondsInput: getElement(hostDebug)('seconds')?.nativeElement,
   periodNext: getElement(hostDebug)('period-next')?.nativeElement,
 });

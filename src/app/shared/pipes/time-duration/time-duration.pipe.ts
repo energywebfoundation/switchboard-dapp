@@ -1,38 +1,29 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { ParseTimestampResult, Timestamp } from './timestamp';
 
 @Pipe({
   name: 'timeDuration',
 })
 export class TimeDurationPipe implements PipeTransform {
-  private readonly year = 31536000;
-  private readonly day = 86400;
-  private readonly hour = 3600;
-  private readonly minute = 60;
+  private readonly defaultText = '---';
 
-  transform(value: string | number): unknown {
+  transform(value: ParseTimestampResult | number): string {
     if (!value || +value < 0) {
-      return '---';
+      return this.defaultText;
+    }
+    if (typeof value === 'number') {
+      return this.createMessage(new Timestamp().determineFromSeconds(value));
     }
 
-    return this.createMessage(+value);
+    return this.createMessage(value);
   }
 
-  private createMessage(value: number): string {
-    const years = this.getQuotient(value, this.year);
-    const yearsReminder = this.getReminder(value, this.year);
-    const days = this.getQuotient(yearsReminder, this.day);
-    const daysReminder = this.getReminder(value, this.day);
-    const hours = this.getQuotient(daysReminder, this.hour);
-    const hoursReminder = this.getReminder(daysReminder, this.hour);
-    const minutes = this.getQuotient(hoursReminder, this.minute);
-    const seconds = this.getReminder(hoursReminder, this.minute) ?? 0;
-    const validValues = [
-      this.mapToString(years, 'year'),
-      this.mapToString(days, 'day'),
-      this.mapToString(hours, 'hour'),
-      this.mapToString(minutes, 'minute'),
-      this.mapToString(seconds, 'second'),
-    ].filter(Boolean);
+  private createMessage(value: ParseTimestampResult): string {
+    const validValues = this.getValidValues(value);
+
+    if (validValues.length === 0) {
+      return this.defaultText;
+    }
 
     if (validValues.length === 1) {
       return validValues.pop();
@@ -41,6 +32,17 @@ export class TimeDurationPipe implements PipeTransform {
     return `${validValues.slice(0, -1).join(', ')} and ${validValues.slice(
       -1
     )}`;
+  }
+
+  private getValidValues(value: ParseTimestampResult): string[] {
+    const { years, days, hours, minutes, seconds } = value;
+    return [
+      this.mapToString(years, 'year'),
+      this.mapToString(days, 'day'),
+      this.mapToString(hours, 'hour'),
+      this.mapToString(minutes, 'minute'),
+      this.mapToString(seconds, 'second'),
+    ].filter(Boolean);
   }
 
   private mapToString(value: number, text: string): string {
@@ -53,13 +55,5 @@ export class TimeDurationPipe implements PipeTransform {
     }
 
     return `${value} ${text}`;
-  }
-
-  private getQuotient(value: number, divider: number): number {
-    return Math.floor(value / divider);
-  }
-
-  private getReminder(value: number, divider: number): number {
-    return value % divider;
   }
 }

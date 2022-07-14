@@ -3,9 +3,14 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
+  OnInit,
   Output,
 } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Timestamp } from '../../../../../shared/pipes/time-duration/timestamp';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-validity-period',
@@ -15,17 +20,27 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class ValidityPeriodComponent {
   @Input() set validityPeriod(value: number) {
-    this.form.patchValue(value);
+    this.form.setValue({
+      ...new Timestamp().determineFromSeconds(value),
+    });
   }
   @Output() next = new EventEmitter<number | undefined>();
   @Output() back = new EventEmitter();
 
-  form = new FormControl(undefined, [
-    Validators.min(0),
-    Validators.max(Number.MAX_VALUE),
-  ]);
+  form = this.fb.group({
+    years: [0, [Validators.min(0)]],
+    days: [0, [Validators.min(0), Validators.max(364)]],
+    hours: [0, [Validators.min(0), Validators.max(23)]],
+    minutes: [0, [Validators.min(0), Validators.max(59)]],
+    seconds: [0, [Validators.min(0), Validators.max(59)]],
+  });
+
+  constructor(private fb: FormBuilder) {}
 
   onNextHandler() {
-    this.next.emit(+this.form.value);
+    if (this.form.invalid) {
+      return;
+    }
+    this.next.emit(new Timestamp().parseToSeconds(this.form.value));
   }
 }

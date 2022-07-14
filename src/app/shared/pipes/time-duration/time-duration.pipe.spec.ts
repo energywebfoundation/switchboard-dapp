@@ -84,7 +84,25 @@ describe('time-duration', () => {
     expect(pipe.transform(0)).toEqual('---');
   });
 
-  it('should return 0 seconds when value is less than 0', () => {
+  it('should return default text when value is less than 0', () => {
     expect(pipe.transform(-10)).toEqual('---');
+  });
+
+  it('should return text when passing object', () => {
+    expect(
+      pipe.transform({ years: 1, days: 2, hours: 3, minutes: 5, seconds: 32 })
+    ).toEqual('1 year, 2 days, 3 hours, 5 minutes and 32 seconds');
+  });
+
+  it('should return default text when passing object with empty properties', () => {
+    expect(
+      pipe.transform({
+        years: undefined,
+        days: undefined,
+        hours: undefined,
+        minutes: undefined,
+        seconds: undefined,
+      })
+    ).toEqual('---');
   });
 });
