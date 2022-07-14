@@ -8,9 +8,8 @@ describe('ExpirationInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExpirationInfoComponent ]
-    })
-    .compileComponents();
+      declarations: [ExpirationInfoComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

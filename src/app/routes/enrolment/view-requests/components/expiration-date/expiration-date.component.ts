@@ -30,7 +30,6 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
     this.expirationDate.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        console.log('this.expirationTimeShift', this.calcSeconds(value));
         this.expirationTimeShift = this.calcSeconds(value);
         this.add.emit(this.expirationTimeShift);
       });
@@ -65,12 +64,15 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
 
   private calcSeconds(value: string): number {
     const d = new Date(value);
-    console.log(this.getHoursShift());
     return Math.round((d.getTime() - Date.now()) / 1000) + this.getHoursShift();
   }
 
   private getHoursShift() {
     const now = new Date(Date.now());
-    return now.getUTCSeconds() + now.getUTCMinutes() * 60 + now.getUTCHours() * 60 * 60;
+    return (
+      now.getUTCSeconds() +
+      now.getUTCMinutes() * 60 +
+      now.getUTCHours() * 60 * 60
+    );
   }
 }

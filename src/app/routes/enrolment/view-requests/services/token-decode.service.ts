@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../../../../shared/services/iam.service';
 import { from, Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { KeyValue } from '@angular/common';
 
 @Injectable({
@@ -10,7 +10,9 @@ import { KeyValue } from '@angular/common';
 export class TokenDecodeService {
   constructor(private iamService: IamService) {}
 
-  getIssuerFields(token: string): Observable<KeyValue<string, string | number>[]> {
+  getIssuerFields(
+    token: string
+  ): Observable<KeyValue<string, string | number>[]> {
     return this.decode(token).pipe(
       map((decoded) =>
         decoded?.claimData?.issuerFields ? decoded?.claimData?.issuerFields : []
@@ -18,7 +20,9 @@ export class TokenDecodeService {
     );
   }
 
-  getRequestorFields(token: string): Observable<KeyValue<string, string | number>[]> {
+  getRequestorFields(
+    token: string
+  ): Observable<KeyValue<string, string | number>[]> {
     return this.decode(token).pipe(
       map((decoded) => {
         if (decoded?.claimData?.requestorFields) {

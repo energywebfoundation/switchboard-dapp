@@ -10,7 +10,9 @@ describe('TokenDecodeService', () => {
   beforeEach(() => {
     didRegistry = jasmine.createSpyObj('didRegistry', ['decodeJWTToken']);
     TestBed.configureTestingModule({
-      providers: [{ provide: IamService, useValue: {  didRegistry: didRegistry } } ],
+      providers: [
+        { provide: IamService, useValue: { didRegistry: didRegistry } },
+      ],
     });
     service = TestBed.inject(TokenDecodeService);
   });
@@ -55,10 +57,7 @@ describe('TokenDecodeService', () => {
   });
 
   it('should decode and return empty array when requestorFields are nullable', (done) => {
-    didRegistry.decodeJWTToken.and.returnValue(
-      Promise.resolve({
-      })
-    );
+    didRegistry.decodeJWTToken.and.returnValue(Promise.resolve({}));
     service.getRequestorFields('token').subscribe((v) => {
       expect(v).toEqual([]);
       done();

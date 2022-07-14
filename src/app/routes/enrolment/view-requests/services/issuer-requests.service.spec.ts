@@ -72,12 +72,10 @@ describe('IssuerRequestsService', () => {
       claimsFacadeSpy.issueClaimRequest.and.returnValue(
         throwError({ message: 'error' })
       );
-      service
-        .approve({} as EnrolmentClaim, [], 0)
-        .subscribe(() => {
-          expect(toastrSpy.error).toHaveBeenCalled();
-          done();
-        });
+      service.approve({} as EnrolmentClaim, [], 0).subscribe(() => {
+        expect(toastrSpy.error).toHaveBeenCalled();
+        done();
+      });
     });
   });
 

@@ -41,7 +41,7 @@ describe('ExpirationDateComponent', () => {
     hostDebug = fixture.debugElement;
     spyOn(component.add, 'emit');
     jasmine.clock().install();
-    baseTime = new Date(2000, 0, 1, 1,0 ,0);
+    baseTime = new Date(2000, 0, 1, 1, 0, 0);
     timezoneSeconds = baseTime.getTimezoneOffset() * 60;
     jasmine.clock().mockDate(baseTime);
   });
@@ -64,14 +64,18 @@ describe('ExpirationDateComponent', () => {
     dispatchInputEvent(expirationDateInput);
     fixture.detectChanges();
 
-    expect(component.add.emit).toHaveBeenCalledWith(60 * 60 * 24 + timezoneSeconds);
+    expect(component.add.emit).toHaveBeenCalledWith(
+      60 * 60 * 24 + timezoneSeconds
+    );
 
     resetDate.click();
     fixture.detectChanges();
     const expirationDate = new Date(
       baseTime.getTime() + component.defaultValidityPeriod * 1000
     );
-    expect(new Date(expirationDateInput.value).getTime() - timezoneSeconds * 1000).toEqual(expirationDate.getTime());
+    expect(
+      new Date(expirationDateInput.value).getTime() - timezoneSeconds * 1000
+    ).toEqual(expirationDate.getTime());
     expect(component.add.emit).toHaveBeenCalledWith(
       component.defaultValidityPeriod
     );
@@ -98,19 +102,23 @@ describe('ExpirationDateComponent', () => {
   });
 
   it('test logic', () => {
-    const  getHoursShift = () => {
+    const getHoursShift = () => {
       const now = new Date(Date.now());
       console.log('now.getUTCSeconds() ', now.getUTCSeconds());
       console.log('now.getUTCHours() ', now.getUTCHours());
       console.log('now.getTimezoneOffset() ', now.getTimezoneOffset());
-      return now.getUTCSeconds() + now.getUTCMinutes() * 60 + (now.getUTCHours()) * 60 * 60 - now.getTimezoneOffset() * 60;
-    }
+      return (
+        now.getUTCSeconds() +
+        now.getUTCMinutes() * 60 +
+        now.getUTCHours() * 60 * 60 -
+        now.getTimezoneOffset() * 60
+      );
+    };
     console.log(Date.now() / 1000);
-    console.log(new Date('1/2/2000').getTime()  / 1000);
+    console.log(new Date('1/2/2000').getTime() / 1000);
     console.log(946767600 - 946681211);
-    console.log( getHoursShift())
-
-  })
+    console.log(getHoursShift());
+  });
 });
 const getSelectors = (hostDebug) => ({
   removeButton: getElement(hostDebug)('remove-expiration-date')?.nativeElement,
