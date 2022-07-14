@@ -54,11 +54,7 @@ describe('ExpirationDateComponent', () => {
   });
 
   it('should toggle set expiration date and reset it', () => {
-    component.defaultTimeShift = 60 * 60 * 24 * 2;
-    fixture.detectChanges();
-
-    const { addButton } = getSelectors(hostDebug);
-    addButton.click();
+    component.defaultValidityPeriod = 60 * 60 * 24 * 2;
     fixture.detectChanges();
 
     const { expirationDateInput, resetDate } = getSelectors(hostDebug);
@@ -70,13 +66,13 @@ describe('ExpirationDateComponent', () => {
 
     resetDate.click();
     fixture.detectChanges();
-    const expirationDate = new Date(baseTime.getTime() + component.defaultTimeShift * 1000);
+    const expirationDate = new Date(baseTime.getTime() + component.defaultValidityPeriod * 1000);
     expect(new Date(expirationDateInput.value)).toEqual(expirationDate);
-    expect(component.add.emit).toHaveBeenCalledWith(component.defaultTimeShift);
+    expect(component.add.emit).toHaveBeenCalledWith(component.defaultValidityPeriod);
   });
 
   it('should check if remove button sets expiration time as undefined', () => {
-    component.defaultTimeShift = 100;
+    component.defaultValidityPeriod = 100;
     fixture.detectChanges();
 
     const { removeButton } = getSelectors(hostDebug);
@@ -87,11 +83,7 @@ describe('ExpirationDateComponent', () => {
   });
 
   it('should set default time in input from current time', () => {
-    component.defaultTimeShift = 60 * 60 * 24;
-    fixture.detectChanges();
-
-    const {addButton} = getSelectors(hostDebug);
-    addButton.click();
+    component.defaultValidityPeriod = 60 * 60 * 24;
     fixture.detectChanges();
 
     const {expirationDateInput} = getSelectors(hostDebug);

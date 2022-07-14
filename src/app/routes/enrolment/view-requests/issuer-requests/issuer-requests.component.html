@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <app-request-details data-qa-id="request-details" class="col-lg-12 mt-2" [claim]="claim" [definition]="roleDefinition"></app-request-details>
+      <app-request-details data-qa-id="request-details" class="col-lg-12 mt-2" [claim]="claim"></app-request-details>
 
       <app-fields data-qa-id="requestor-fields" title="Requestor fields" [fieldsList]="requestorFields$ | async">
       </app-fields>
@@ -30,7 +30,7 @@
         </div>
 
         <app-expiration-date
-          [defaultTimeShift]="roleDefinition?.defaultValidityPeriod"
+          [defaultValidityPeriod]="roleDefinition?.defaultValidityPeriod"
           (add)="updateExpirationDate($event)"></app-expiration-date>
       </div>
 

@@ -1,0 +1,9 @@
+<app-report-problem>
+  <ng-container *ngIf="defaultValidityPeriod">
+    Default expiration date of this role is {{ defaultValidityPeriod | timeShift | date: 'MM/dd/yyyy HH:mm:ss'}}
+  </ng-container>
+  <ng-container *ngIf="!defaultValidityPeriod"> Default expiration date is not set </ng-container>
+  This role will be issued with
+  <ng-container *ngIf="expirationTime">{{ expirationTime | timeShift | date: 'MM/dd/yyyy HH:mm:ss' }}</ng-container>
+  <ng-container *ngIf="!expirationTime"><b>no</b></ng-container> expiration date
+</app-report-problem>

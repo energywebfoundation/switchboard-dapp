@@ -27,6 +27,7 @@ import { RequestDetailsComponent } from './view-requests/components/request-deta
 import { RevokeButtonsComponent } from './view-requests/components/revoke-buttons/revoke-buttons.component';
 import { IssuerRequestsComponent } from './view-requests/issuer-requests/issuer-requests.component';
 import { ExpirationDateComponent } from './view-requests/components/expiration-date/expiration-date.component';
+import { ExpirationInfoComponent } from './view-requests/components/expiration-info/expiration-info.component';
 
 const routes: Routes = [{ path: '', component: EnrolmentComponent }];
 
@@ -44,6 +45,7 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
     RevokeButtonsComponent,
     IssuerRequestsComponent,
     ExpirationDateComponent,
+    ExpirationInfoComponent,
   ],
   imports: [
     SharedModule,

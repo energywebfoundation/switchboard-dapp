@@ -10,5 +10,4 @@ import { IRoleDefinition, IRoleDefinitionV2 } from 'iam-client-lib';
 })
 export class RequestDetailsComponent {
   @Input() claim: EnrolmentClaim;
-  @Input() definition: IRoleDefinitionV2;
 }

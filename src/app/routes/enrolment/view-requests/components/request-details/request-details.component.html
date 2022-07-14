@@ -24,12 +24,4 @@
       <span class="color-white mb-0">{{ claim?.acceptedBy }}</span>
     </div>
   </ng-container>
-
-  <ng-container *ngIf="definition?.defaultValidityPeriod">
-    <mat-divider></mat-divider>
-    <div class="text-left my-3">
-      <div class="label opacity-50 mb-2">Default Expiration Date</div>
-      <span class="color-white mb-0" data-qa-id="validity-period">{{ definition?.defaultValidityPeriod | timeShift | date: 'MM/dd/yyyy HH:mm:ss' }}</span>
-    </div>
-  </ng-container>
 </div>
