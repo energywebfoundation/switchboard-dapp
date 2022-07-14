@@ -5,6 +5,7 @@
 <mat-form-field class="mt-2" appearance="outline">
   <input
     [matDatepicker]="picker"
+    [min]="minDate"
     data-qa-id="expiration-date-input"
     [formControl]="expirationDate"
     matInput

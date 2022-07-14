@@ -16,6 +16,7 @@ describe('ExpirationDateComponent', () => {
   let fixture: ComponentFixture<ExpirationDateComponent>;
   let hostDebug: DebugElement;
   let baseTime: Date;
+  let timezoneSeconds: number;
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
@@ -40,7 +41,8 @@ describe('ExpirationDateComponent', () => {
     hostDebug = fixture.debugElement;
     spyOn(component.add, 'emit');
     jasmine.clock().install();
-    baseTime = new Date(2000, 0, 1);
+    baseTime = new Date(2000, 0, 1, 1,0 ,0);
+    timezoneSeconds = baseTime.getTimezoneOffset() * 60;
     jasmine.clock().mockDate(baseTime);
   });
 
@@ -53,7 +55,7 @@ describe('ExpirationDateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should toggle set expiration date and reset it', () => {
+  it('should set expiration date and reset it', () => {
     component.defaultValidityPeriod = 60 * 60 * 24 * 2;
     fixture.detectChanges();
 
@@ -62,13 +64,17 @@ describe('ExpirationDateComponent', () => {
     dispatchInputEvent(expirationDateInput);
     fixture.detectChanges();
 
-    expect(component.add.emit).toHaveBeenCalledWith(60 * 60 * 24);
+    expect(component.add.emit).toHaveBeenCalledWith(60 * 60 * 24 + timezoneSeconds);
 
     resetDate.click();
     fixture.detectChanges();
-    const expirationDate = new Date(baseTime.getTime() + component.defaultValidityPeriod * 1000);
-    expect(new Date(expirationDateInput.value)).toEqual(expirationDate);
-    expect(component.add.emit).toHaveBeenCalledWith(component.defaultValidityPeriod);
+    const expirationDate = new Date(
+      baseTime.getTime() + component.defaultValidityPeriod * 1000
+    );
+    expect(new Date(expirationDateInput.value).getTime() - timezoneSeconds * 1000).toEqual(expirationDate.getTime());
+    expect(component.add.emit).toHaveBeenCalledWith(
+      component.defaultValidityPeriod
+    );
   });
 
   it('should check if remove button sets expiration time as undefined', () => {
@@ -86,9 +92,24 @@ describe('ExpirationDateComponent', () => {
     component.defaultValidityPeriod = 60 * 60 * 24;
     fixture.detectChanges();
 
-    const {expirationDateInput} = getSelectors(hostDebug);
+    const { expirationDateInput } = getSelectors(hostDebug);
 
     expect(new Date(expirationDateInput.value)).toEqual(new Date(2000, 0, 2));
+  });
+
+  it('test logic', () => {
+    const  getHoursShift = () => {
+      const now = new Date(Date.now());
+      console.log('now.getUTCSeconds() ', now.getUTCSeconds());
+      console.log('now.getUTCHours() ', now.getUTCHours());
+      console.log('now.getTimezoneOffset() ', now.getTimezoneOffset());
+      return now.getUTCSeconds() + now.getUTCMinutes() * 60 + (now.getUTCHours()) * 60 * 60 - now.getTimezoneOffset() * 60;
+    }
+    console.log(Date.now() / 1000);
+    console.log(new Date('1/2/2000').getTime()  / 1000);
+    console.log(946767600 - 946681211);
+    console.log( getHoursShift())
+
   })
 });
 const getSelectors = (hostDebug) => ({

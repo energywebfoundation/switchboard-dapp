@@ -14,7 +14,7 @@ export class TimeShiftPipe implements PipeTransform {
 
   private getDate(date: string | Date): Date {
     if (!date) {
-      return this.defaultDate;
+      return new Date(this.defaultDate);
     }
 
     return new Date(date);

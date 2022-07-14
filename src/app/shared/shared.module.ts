@@ -1,5 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -56,6 +56,7 @@ import { GenericTableComponent } from './components/table/generic-table/generic-
 import { TimeDurationPipe } from './pipes/time-duration/time-duration.pipe';
 import { CardInfoComponent } from './components/card-info/card-info.component';
 import { TimeShiftPipe } from './pipes/time-shift/time-shift.pipe';
+import { DefaultDatePipe } from './pipes/default-date/default-date.pipe';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -104,7 +105,7 @@ const MATERIAL_MODULES = [
     BsDropdownModule,
     QrCodeScannerModule,
   ],
-  providers: [ColorsService],
+  providers: [ColorsService, DatePipe],
   declarations: [
     PreventPasteDirective,
     RetryBtnDirective,
@@ -122,6 +123,7 @@ const MATERIAL_MODULES = [
     TimeDurationPipe,
     CardInfoComponent,
     TimeShiftPipe,
+    DefaultDatePipe,
   ],
   exports: [
     CommonModule,
@@ -146,7 +148,8 @@ const MATERIAL_MODULES = [
     GenericTableComponent,
     TimeDurationPipe,
     CardInfoComponent,
-    TimeShiftPipe
+    TimeShiftPipe,
+    DefaultDatePipe,
   ],
 })
 
