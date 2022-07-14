@@ -100,25 +100,6 @@ describe('ExpirationDateComponent', () => {
 
     expect(new Date(expirationDateInput.value)).toEqual(new Date(2000, 0, 2));
   });
-
-  it('test logic', () => {
-    const getHoursShift = () => {
-      const now = new Date(Date.now());
-      console.log('now.getUTCSeconds() ', now.getUTCSeconds());
-      console.log('now.getUTCHours() ', now.getUTCHours());
-      console.log('now.getTimezoneOffset() ', now.getTimezoneOffset());
-      return (
-        now.getUTCSeconds() +
-        now.getUTCMinutes() * 60 +
-        now.getUTCHours() * 60 * 60 -
-        now.getTimezoneOffset() * 60
-      );
-    };
-    console.log(Date.now() / 1000);
-    console.log(new Date('1/2/2000').getTime() / 1000);
-    console.log(946767600 - 946681211);
-    console.log(getHoursShift());
-  });
 });
 const getSelectors = (hostDebug) => ({
   removeButton: getElement(hostDebug)('remove-expiration-date')?.nativeElement,
