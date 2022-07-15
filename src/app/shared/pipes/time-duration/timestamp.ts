@@ -7,20 +7,20 @@ export interface ParseTimestampResult {
 }
 
 export class Timestamp {
-  private readonly year = 31536000;
-  private readonly day = 86400;
-  private readonly hour = 3600;
   private readonly minute = 60;
+  private readonly hour = this.minute * 60;
+  private readonly day = this.hour * 24;
+  private readonly year = this.day * 365;
 
   determineFromSeconds(value: number): ParseTimestampResult {
     const years = this.getQuotient(value, this.year);
-    const yearsReminder = this.getReminder(value, this.year);
-    const days = this.getQuotient(yearsReminder, this.day);
-    const daysReminder = this.getReminder(value, this.day);
-    const hours = this.getQuotient(daysReminder, this.hour);
-    const hoursReminder = this.getReminder(daysReminder, this.hour);
-    const minutes = this.getQuotient(hoursReminder, this.minute);
-    const seconds = this.getReminder(hoursReminder, this.minute) ?? 0;
+    const yearsRemainder = this.getRemainder(value, this.year);
+    const days = this.getQuotient(yearsRemainder, this.day);
+    const daysRemainder = this.getRemainder(value, this.day);
+    const hours = this.getQuotient(daysRemainder, this.hour);
+    const hoursRemainder = this.getRemainder(daysRemainder, this.hour);
+    const minutes = this.getQuotient(hoursRemainder, this.minute);
+    const seconds = this.getRemainder(hoursRemainder, this.minute) ?? 0;
     return { years, days, hours, minutes, seconds };
   }
 
@@ -34,19 +34,19 @@ export class Timestamp {
     );
   }
 
-  private multiply(value: number, multiplier: number) {
-    if (value) {
-      return value * multiplier;
+  private multiply(multiplicand: number, multiplier: number) {
+    if (multiplicand) {
+      return multiplicand * multiplier;
     }
 
     return 0;
   }
 
-  private getQuotient(value: number, divider: number): number {
-    return Math.floor(value / divider);
+  private getQuotient(dividend: number, divisor: number): number {
+    return Math.floor(dividend / divisor);
   }
 
-  private getReminder(value: number, divider: number): number {
-    return value % divider;
+  private getRemainder(dividend: number, divisor: number): number {
+    return dividend % divisor;
   }
 }
