@@ -30,7 +30,7 @@ export class Timestamp {
       this.multiply(value.days, this.day) +
       this.multiply(value.hours, this.hour) +
       this.multiply(value.minutes, this.minute) +
-      this.multiply(value.seconds, 1)
+      value.seconds
     );
   }
 

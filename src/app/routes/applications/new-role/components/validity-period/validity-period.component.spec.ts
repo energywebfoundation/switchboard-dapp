@@ -76,6 +76,35 @@ describe('ValidityPeriodComponent', () => {
 
     expect(nextSpy).toHaveBeenCalledWith(100);
   });
+
+  it('should return 10 minutes when passing object contains only minutes', () => {
+    fixture.detectChanges();
+
+    const { minutesInput, periodNext } = getSelectors(hostDebug);
+
+    minutesInput.value = 10;
+    dispatchInputEvent(minutesInput);
+    fixture.detectChanges();
+
+    periodNext.click();
+    fixture.detectChanges();
+
+    expect(nextSpy).toHaveBeenCalledWith(600);
+  });
+
+  it('should update inputs while containing only minutes', () => {
+    component.validityPeriod = 600;
+    fixture.detectChanges();
+
+    const { yearsInput, daysInput, hoursInput, minutesInput, secondsInput } =
+      getSelectors(hostDebug);
+
+    expect(+yearsInput.value).toEqual(0);
+    expect(+daysInput.value).toEqual(0);
+    expect(+hoursInput.value).toEqual(0);
+    expect(+minutesInput.value).toEqual(10);
+    expect(+secondsInput.value).toEqual(0);
+  });
 });
 
 const getSelectors = (hostDebug) => ({
