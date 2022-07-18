@@ -14,6 +14,10 @@ import { finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
 import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
+import {
+  IssueClaimRequestOptions,
+  RejectClaimRequestOptions,
+} from 'iam-client-lib/dist/src/modules/claims/claims.types';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +35,25 @@ export class ClaimsFacadeService {
     );
     return from(this.iamService.claimsService.createSelfSignedClaim(data)).pipe(
       finalize(() => this.loadingService.hide())
+    );
+  }
+
+  issueClaimRequest(data: IssueClaimRequestOptions) {
+    return this.iamService.wrapWithLoadingService(
+      this.iamService.claimsService.issueClaimRequest(data),
+      {
+        message: 'Please confirm this transaction in your connected wallet.',
+        cancelable: CancelButton.ENABLED,
+      }
+    );
+  }
+
+  rejectClaimRequest(data: RejectClaimRequestOptions) {
+    this.loadingService.show();
+    return from(this.iamService.claimsService.rejectClaimRequest(data)).pipe(
+      finalize(() => {
+        this.loadingService.hide();
+      })
     );
   }
 
