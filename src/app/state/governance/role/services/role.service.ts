@@ -16,7 +16,9 @@ export class RoleService {
   }
 
   getDefinition(namespace: string) {
-    return this.iamService.getRolesDefinition(namespace);
+    return this.iamService.wrapWithLoadingService(
+      this.iamService.cacheClient.getRoleDefinition(namespace)
+    );
   }
 
   getDefinitions(namespaces: string[]) {
