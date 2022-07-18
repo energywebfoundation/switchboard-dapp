@@ -45,11 +45,11 @@ describe('RevokableEnrolmentsEffects', () => {
       claimsFacadeSpy.getClaimsByRevoker.and.returnValue(
         throwError({ message: 'Error' })
       );
-      actions$.next(RevokableActions.getRevokableEnrolments());
+      actions$.next(RevokableActions.getRevocableEnrolments());
 
       effects.getRevokableEnrolments$.subscribe((resultAction) => {
         expect(resultAction).toEqual(
-          RevokableActions.getRevokableEnrolmentsFailure({ error: 'Error' })
+          RevokableActions.getRevocableEnrolmentsFailure({ error: 'Error' })
         );
         done();
       });
@@ -62,12 +62,12 @@ describe('RevokableEnrolmentsEffects', () => {
       };
       claimsFacadeSpy.getClaimsByRevoker.and.returnValue(of([enrolment]));
 
-      actions$.next(RevokableActions.getRevokableEnrolments());
+      actions$.next(RevokableActions.getRevocableEnrolments());
 
       effects.getRevokableEnrolments$.subscribe((resultAction) => {
         expect(loadingServiceSpy.show).toHaveBeenCalled();
         expect(resultAction).toEqual(
-          RevokableActions.getRevokableEnrolmentsSuccess({
+          RevokableActions.getRevocableEnrolmentsSuccess({
             enrolments: [
               {
                 ...enrolment,

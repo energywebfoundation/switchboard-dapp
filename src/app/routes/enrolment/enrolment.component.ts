@@ -11,8 +11,8 @@ import {
   OwnedEnrolmentsSelectors,
   RequestedEnrolmentsActions,
   RequestedEnrolmentsSelectors,
-  RevokableEnrolmentsActions,
-  RevokableEnrolmentsSelectors,
+  RevocableEnrolmentsActions,
+  RevocableEnrolmentsSelectors,
   SettingsSelectors,
 } from '@state';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
@@ -32,8 +32,8 @@ export class EnrolmentComponent implements AfterViewInit {
     RequestedEnrolmentsSelectors.getEnrolments
   );
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
-  myRevokablesList$ = this.store.select(
-    RevokableEnrolmentsSelectors.getRevokableEnrolments
+  revocableList$ = this.store.select(
+    RevocableEnrolmentsSelectors.getEnrolments
   );
   isMyEnrolmentShown = false;
   enrolmentStatus: FilterStatus = FilterStatus.Pending;
@@ -55,6 +55,7 @@ export class EnrolmentComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initDefault();
+    this.getRevocableList();
     this.activeRoute.queryParams
       .pipe(filter((queryParams) => !!queryParams))
       .subscribe(async (queryParams: any) => {
@@ -111,7 +112,7 @@ export class EnrolmentComponent implements AfterViewInit {
       this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
     } else {
       this.store.dispatch(
-        RevokableEnrolmentsActions.updateRevokableEnrolments()
+        RevocableEnrolmentsActions.updateRevocableEnrolments()
       );
       //this.isMyEnrolmentShown = true;
     }
@@ -129,8 +130,8 @@ export class EnrolmentComponent implements AfterViewInit {
     this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
   }
 
-  refreshMyRevokablesList(): void {
-    this.store.dispatch(RevokableEnrolmentsActions.updateRevokableEnrolments());
+  refreshRevocableList(): void {
+    this.store.dispatch(RevocableEnrolmentsActions.updateRevocableEnrolments());
   }
 
   createVC() {
@@ -165,5 +166,9 @@ export class EnrolmentComponent implements AfterViewInit {
 
   private asyncSetDropdownValue(value: FilterStatus) {
     this.updateEnrolmentListStatus(value);
+  }
+
+  private getRevocableList(): void {
+    this.store.dispatch(RevocableEnrolmentsActions.getRevocableEnrolments());
   }
 }

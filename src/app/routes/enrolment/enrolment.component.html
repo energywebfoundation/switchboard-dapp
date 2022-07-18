@@ -36,14 +36,14 @@
       </div>
     </div>
   </mat-tab>
-  <mat-tab label="Revokable Enrolments">
+  <mat-tab label="Revocable Enrolments">
     <div class="row mx-0 mt-1">
       <div class="col-xl-12">
         <div class="d-flex flex-column flex-md-row justify-content-md-start align-items-center">
           <h4 class="default-color strong my-4">Revoke</h4>
         </div>
         <div class="card card-default mb-3 pb-0">
-          <app-revoke-enrolment-list [list]="myRevokablesList$ | async" (refreshList)="refreshMyRevokablesList()">
+          <app-revoke-enrolment-list [list]="revocableList$ | async" (refreshList)="refreshRevocableList()">
           </app-revoke-enrolment-list>
         </div>
       </div>

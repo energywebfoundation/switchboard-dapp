@@ -15,8 +15,8 @@ export const initialState: RevokableState = {
 const revokableReducer = createReducer(
   initialState,
   on(
-    RevokableActions.getRevokableEnrolmentsSuccess,
-    RevokableActions.updateRevokableEnrolmentsSuccess,
+    RevokableActions.getRevocableEnrolmentsSuccess,
+    RevokableActions.updateRevocableEnrolmentsSuccess,
     (state, { enrolments }) => ({
       ...state,
       enrolments,

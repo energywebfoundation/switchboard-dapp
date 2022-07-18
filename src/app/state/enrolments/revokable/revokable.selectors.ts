@@ -12,7 +12,7 @@ export const getAllRevokableEnrolments = createSelector(
   (state) => state.enrolments
 );
 
-export const getRevokableEnrolments = createSelector(
+export const getEnrolments = createSelector(
   getAllRevokableEnrolments,
   (allEnrolments) => {
     return allEnrolments;
