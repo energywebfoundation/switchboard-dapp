@@ -43,7 +43,7 @@
           <h4 class="default-color strong my-4">Revoke</h4>
         </div>
         <div class="card card-default mb-3 pb-0">
-          <app-revoke-enrolment-list [list]="myRevokablesList$ | async" (refreshList)="refreshMyRevokablesList()">
+          <app-revoke-enrolment-list [list]="revocableList$ | async" (refreshList)="refreshRevocableList()">
           </app-revoke-enrolment-list>
         </div>
       </div>

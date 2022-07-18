@@ -26,7 +26,7 @@ import { RouterConst } from '../../routes/router-const';
 import {
   OwnedEnrolmentsActions,
   RequestedEnrolmentsActions,
-  RevokableEnrolmentsActions,
+  RevocableEnrolmentsActions,
 } from '@state';
 
 @Injectable()

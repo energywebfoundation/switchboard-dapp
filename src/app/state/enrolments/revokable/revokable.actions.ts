@@ -1,29 +1,29 @@
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { createAction, props } from '@ngrx/store';
-export const getRevokableEnrolments = createAction(
-  '[REVOKABLE ENROLMENTS] Get Revolable Enrolments'
+export const getRevocableEnrolments = createAction(
+  '[REVOCABLE ENROLMENTS] Get Enrolments'
 );
 
-export const getRevokableEnrolmentsSuccess = createAction(
-  '[REVOKABLE ENROLMENTS] Get Revokable Enrolments Success',
-  props<{ enrolments: any[] }>()
-);
-
-export const getRevokableEnrolmentsFailure = createAction(
-  '[REVOKABLE ENROLMENTS] Get Revolable Enrolments Failure',
-  props<{ error: string }>()
-);
-
-export const updateRevokableEnrolments = createAction(
-  '[REVOKABLE ENROLMENTS] Update Revokable Enrolments'
-);
-
-export const updateRevokableEnrolmentsSuccess = createAction(
-  '[REVOKABLE ENROLMENTS] Update Revokable Enrolments Success',
+export const getRevocableEnrolmentsSuccess = createAction(
+  '[REVOCABLE ENROLMENTS] Get Enrolments Success',
   props<{ enrolments: EnrolmentClaim[] }>()
 );
 
-export const updateRevokableEnrolmentsFailure = createAction(
-  '[Revokable ENROLMENTS] Update Revokable Enrolments Failure',
+export const getRevocableEnrolmentsFailure = createAction(
+  '[REVOCABLE ENROLMENTS] Get Revocable Enrolments Failure',
+  props<{ error: string }>()
+);
+
+export const updateRevocableEnrolments = createAction(
+  '[REVOCABLE ENROLMENTS] Update Revocable Enrolments'
+);
+
+export const updateRevocableEnrolmentsSuccess = createAction(
+  '[REVOCABLE ENROLMENTS] Update Revocable Enrolments Success',
+  props<{ enrolments: EnrolmentClaim[] }>()
+);
+
+export const updateRevocableEnrolmentsFailure = createAction(
+  '[REVOCABLE ENROLMENTS] Update Revocable Enrolments Failure',
   props<{ error: string }>()
 );

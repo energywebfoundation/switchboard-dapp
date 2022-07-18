@@ -11,13 +11,13 @@ import { LoadingService } from '../../../shared/services/loading.service';
 export class RevokableEnrolmentEffects {
   getRevokableEnrolments$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(RevokableActions.getRevokableEnrolments),
+      ofType(RevokableActions.getRevocableEnrolments),
       tap(() => this.loadingService.show()),
       switchMap(() =>
         from(this.claimsFacade.getClaimsByRevoker()).pipe(
           this.getRevokableEnrolments(
-            RevokableActions.getRevokableEnrolmentsSuccess,
-            RevokableActions.getRevokableEnrolmentsFailure
+            RevokableActions.getRevocableEnrolmentsSuccess,
+            RevokableActions.getRevocableEnrolmentsFailure
           ),
           finalize(() => this.loadingService.hide())
         )
@@ -27,12 +27,12 @@ export class RevokableEnrolmentEffects {
 
   updateRevokableEnrolments$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(RevokableActions.updateRevokableEnrolments),
+      ofType(RevokableActions.updateRevocableEnrolments),
       switchMap(() =>
         from(this.claimsFacade.getClaimsByRevoker()).pipe(
           this.getRevokableEnrolments(
-            RevokableActions.updateRevokableEnrolmentsSuccess,
-            RevokableActions.updateRevokableEnrolmentsFailure
+            RevokableActions.updateRevocableEnrolmentsSuccess,
+            RevokableActions.updateRevocableEnrolmentsFailure
           )
         )
       )
