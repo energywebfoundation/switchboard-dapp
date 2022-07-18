@@ -80,9 +80,14 @@ export class EnrolmentClaim
     return this.isSyncedOnChain && !this.isRevokedOnChain;
   }
 
+  /**
+   * Role credential do not need to be synced OffChain to be able to revoke.
+   * Issuer can revoke offchain credential when there exist credentialStatus in credential.
+   */
   get canRevokeOffChain(): boolean {
     return (
-      this.isSyncedOffChain &&
+      this.iclClaim.isAccepted &&
+      this.isRegisteredOffChain() &&
       !this.isRevokedOffChain &&
       !!this.credential?.credentialStatus
     );

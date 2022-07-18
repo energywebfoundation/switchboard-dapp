@@ -4,7 +4,7 @@
       mat-menu-item
       class="btn-color-primary"
       (click)="revokeOnChainClaim(element)"
-      [disabled]="!element?.canRevokeOnChain || element?.isRevokedOnChain">
+      [disabled]="!element?.canRevokeOnChain">
       <mat-icon class="btn-color-primary">cancel_presentation</mat-icon>
       <span>Revoke On-Chain Enrollment</span>
     </button>
@@ -12,7 +12,7 @@
     <button
       mat-menu-item
       class="btn-color-primary"
-      [disabled]="!element?.isRevocableOffChain || element?.isRevokedOffChain"
+      [disabled]="!element?.canRevokeOffChain"
       (click)="revokeOffChainClaim(element)">
       <mat-icon class="btn-color-primary">cancel_presentation</mat-icon>
       <span>Revoke Off-Chain Enrollment</span>
