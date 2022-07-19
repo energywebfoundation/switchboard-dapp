@@ -93,6 +93,5 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     DidBookModule,
     DefaultValueModule,
   ],
-  exports: [RoleTypeDidComponent],
 })
 export class ApplicationsModule {}

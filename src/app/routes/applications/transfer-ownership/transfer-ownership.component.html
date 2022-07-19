@@ -11,7 +11,17 @@
     <app-card-info *ngIf="namespace" [description]="'NAMESPACE: ' + namespace"></app-card-info>
     <app-card-info *ngIf="assetDid" [description]="'ASSET: ' + assetDid"></app-card-info>
 
-    <app-select-did (didChange)="didChangeHandler($event)"></app-select-did>
+    <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+      <div class="row">
+        <div class="col-12">
+          <app-select-did
+            placeholder="New Owner DID"
+            label="New Owner DID"
+            [isRequired]="true"
+            (didChange)="didChangeHandler($event)"></app-select-did>
+        </div>
+      </div>
+    </div>
     <div class="d-flex justify-content-end mb-3" *ngIf="!mySteps?.length">
       <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
       <button mat-raised-button class="btn btn-small btn-primary" (click)="submit()" [disabled]="!didValid">

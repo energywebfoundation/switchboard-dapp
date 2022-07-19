@@ -12,35 +12,18 @@ export class RoleTypeDidComponent {
   @Input() type: RoleStepType;
   @Input() set dids(value: string[]) {
     this._list = value;
-    this.setValidators();
   }
 
-  form = new FormControl('', [HexValidators.isDidValid()]);
-
-  get list() {
+  get list(): string[] {
     return this._list;
   }
-
   private _list: string[] = [];
 
-  addDid() {
-    if (this.form.invalid) {
-      return;
-    }
-    this._list.push(this.form.value);
-    this.form.reset();
+  add(did: string): void {
+    this._list.push(did);
   }
 
-  remove(id) {
-    if (this.list.length > 1) {
-      this.list.splice(id, 1);
-    }
-  }
-
-  private setValidators(): void {
-    this.form.setValidators([
-      HexValidators.isDidValid(),
-      ListValidator.stringExist(this.list),
-    ]);
+  remove(did: string): void {
+    this._list = this.list.filter((item) => item !== did);
   }
 }
