@@ -3,14 +3,10 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
-  OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Timestamp } from '../../../../../shared/pipes/time-duration/timestamp';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-validity-period',
@@ -20,6 +16,9 @@ import { Subject } from 'rxjs';
 })
 export class ValidityPeriodComponent {
   @Input() set validityPeriod(value: number) {
+    if (!value) {
+      return;
+    }
     this.form.setValue({
       ...new Timestamp().determineFromSeconds(value),
     });

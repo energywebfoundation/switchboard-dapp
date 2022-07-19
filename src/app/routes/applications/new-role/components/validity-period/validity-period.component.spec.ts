@@ -57,7 +57,7 @@ describe('ValidityPeriodComponent', () => {
     expect(+secondsInput.value).toEqual(15);
   });
 
-  it('should emit value from the input', () => {
+  it('should emit value from the inputs', () => {
     component.validityPeriod = undefined;
     fixture.detectChanges();
 
@@ -104,6 +104,22 @@ describe('ValidityPeriodComponent', () => {
     expect(+hoursInput.value).toEqual(0);
     expect(+minutesInput.value).toEqual(10);
     expect(+secondsInput.value).toEqual(0);
+  });
+
+  it('should emit value from one input', () => {
+    component.validityPeriod = undefined;
+    fixture.detectChanges();
+
+    const { yearsInput, periodNext } = getSelectors(hostDebug);
+
+    yearsInput.value = '1';
+    dispatchInputEvent(yearsInput);
+    fixture.detectChanges();
+
+    periodNext.click();
+    fixture.detectChanges();
+
+    expect(nextSpy).toHaveBeenCalledWith(60 * 60 * 24 * 365);
   });
 });
 
