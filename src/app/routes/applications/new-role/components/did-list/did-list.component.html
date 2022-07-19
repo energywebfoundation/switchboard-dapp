@@ -16,7 +16,7 @@
         [attr.data-qa-id]="'delete-did-' + i"
         matTooltip="Remove"
         *ngIf="list.length > 1"
-        (click)="removeDid(i)">
+        (click)="removeDid(did)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>

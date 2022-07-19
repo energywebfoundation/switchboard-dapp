@@ -7,16 +7,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { dispatchInputEvent, getElement } from '@tests';
+import { getElement, TestHelper } from '@tests';
 import { By } from '@angular/platform-browser';
 
 describe('RoleTypeDidComponent', () => {
   let component: RoleTypeDidComponent;
   let fixture: ComponentFixture<RoleTypeDidComponent>;
   let hostDebug: DebugElement;
-  const stringWithLength = (length): string => {
-    return new Array(length + 1).join('a');
-  };
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
@@ -44,56 +41,21 @@ describe('RoleTypeDidComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display error message about already existing element ', () => {
-    component.dids = ['did:ethr:0x' + stringWithLength(40)];
-    fixture.detectChanges();
-
-    const { didInput } = selectors(hostDebug);
-    didInput.value = 'did:ethr:0x' + stringWithLength(40);
-    dispatchInputEvent(didInput);
-    fixture.detectChanges();
-
-    const { matError } = selectors(hostDebug);
-    expect(matError.textContent).toContain(
-      'This DID already exist on the list'
-    );
-  });
-
-  it('should display error message when element is not a did', () => {
-    component.dids = ['did:ethr:0x' + stringWithLength(40)];
-    fixture.detectChanges();
-
-    const { didInput } = selectors(hostDebug);
-    didInput.value = 'did:ethr:0x';
-    dispatchInputEvent(didInput);
-    fixture.detectChanges();
-
-    const { matError } = selectors(hostDebug);
-    expect(matError.textContent).toContain('DID format is invalid');
-  });
-
   it('should remove element from the list', () => {
     component.dids = [
-      'did:ethr:0x' + stringWithLength(40),
-      'did:ethr:0xb' + stringWithLength(39),
+      'did:ethr:0x' + TestHelper.stringWithLength(40),
+      'did:ethr:0xb' + TestHelper.stringWithLength(39),
     ];
     fixture.detectChanges();
 
-    component.remove(1);
+    component.remove('did:ethr:0x' + TestHelper.stringWithLength(40));
     expect(component.list.length).toEqual(1);
   });
 
   it('should add element to the list', () => {
-    component.dids = ['did:ethr:0x' + stringWithLength(40)];
-    fixture.detectChanges();
+    component.dids = ['did:ethr:0x' + TestHelper.stringWithLength(40)];
 
-    const { didInput } = selectors(hostDebug);
-    didInput.value = 'did:ethr:0xb' + stringWithLength(39);
-    dispatchInputEvent(didInput);
-    fixture.detectChanges();
-
-    const { addButton } = selectors(hostDebug);
-    addButton.click();
+    component.add('did:ethr:0xb' + TestHelper.stringWithLength(39));
 
     expect(component.list.length).toEqual(2);
   });
@@ -101,8 +63,6 @@ describe('RoleTypeDidComponent', () => {
 
 const selectors = (hostDebug) => {
   return {
-    didInput: getElement(hostDebug)('did')?.nativeElement,
-    addButton: getElement(hostDebug)('add-did')?.nativeElement,
     issuersLength: getElement(hostDebug)('dids-length')?.nativeElement,
     matError: hostDebug.query(By.css(`mat-error`))?.nativeElement,
   };

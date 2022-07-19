@@ -19,14 +19,7 @@ import { QrCodeModule } from '../../shared/components/qr-code/qr-code.module';
     AddSingleRecordComponent,
   ],
   imports: [CommonModule, SharedModule, QrCodeModule],
-  providers: [DidBookService, DidBookHttpService],
+  providers: [DidBookHttpService],
   exports: [DidBookComponent, SelectDidComponent],
 })
-export class DidBookModule {
-  static forRoot(): ModuleWithProviders<DidBookModule> {
-    return {
-      ngModule: DidBookModule,
-      providers: [DidBookService],
-    };
-  }
-}
+export class DidBookModule {}
