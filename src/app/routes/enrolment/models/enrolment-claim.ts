@@ -12,6 +12,8 @@ export class EnrolmentClaim
   implements IEnrolmentClaim
 {
   roleName: string;
+  organization: string;
+  application: string;
   requestDate: Date;
 
   isRevokedOnChain: boolean;
@@ -136,25 +138,47 @@ export class EnrolmentClaim
     return this.isRegisteredOnChain() && this.isRegisteredOffChain();
   }
 
-  private defineProperties(): void {
-    this.defineRoleName();
-    this.defineRequestDate();
-  }
-
-  private defineRoleName(): void {
-    this.roleName = this.iclClaim?.claimType
-      ?.split(`.${NamespaceType.Role}.`)
-      ?.shift();
-  }
-
-  private defineRequestDate(): void {
-    this.requestDate = new Date((this.iclClaim as any).createdAt);
-  }
-
   isAsset() {
     return (
       this.iclClaim?.subject !== this.iclClaim?.claimType &&
       this.iclClaim?.subject !== this.iclClaim?.requester
     );
+  }
+
+  private defineProperties(): void {
+    this.defineRoleName();
+    this.defineRequestDate();
+    this.defineOrganization();
+    this.defineApplication();
+  }
+
+  private defineRoleName(): void {
+    this.roleName = this.claimType
+      ?.split(`.${NamespaceType.Role}.`)
+      ?.shift();
+  }
+
+  private defineOrganization(): void {
+    this.organization = this.claimType
+      ?.split(`.${NamespaceType.Role}.`)
+      .pop()
+      ?.split(`.${NamespaceType.Application}.`)
+      .pop();
+  }
+
+  private defineApplication(): void {
+    if (!this.claimType?.includes(`.${NamespaceType.Application}.`)) {
+      this.application = '';
+      return;
+    }
+    this.application = this.claimType
+      ?.split(`.${NamespaceType.Role}.`)
+      ?.pop()
+      ?.split(`.${NamespaceType.Application}.`)
+      ?.shift();
+  }
+
+  private defineRequestDate(): void {
+    this.requestDate = new Date((this.iclClaim as any).createdAt);
   }
 }

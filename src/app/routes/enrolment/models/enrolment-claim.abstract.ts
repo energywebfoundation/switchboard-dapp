@@ -14,7 +14,7 @@ export abstract class EnrolmentClaimAbstract {
   }
 
   get claimType(): string {
-    return this.iclClaim.claimType;
+    return this.iclClaim?.claimType;
   }
 
   get claimTypeVersion(): string {
