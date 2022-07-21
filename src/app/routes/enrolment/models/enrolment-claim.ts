@@ -13,7 +13,7 @@ export class EnrolmentClaim
 {
   roleName: string;
   organization: string;
-  application: string;
+  application?: string;
   requestDate: Date;
 
   isRevokedOnChain: boolean;
