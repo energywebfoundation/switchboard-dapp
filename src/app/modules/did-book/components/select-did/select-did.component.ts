@@ -17,7 +17,7 @@ import { DidBookRecord } from '../models/did-book-record';
 export class SelectDidComponent implements OnInit {
   @Input() label: string;
   @Input() placeholder: string;
-  @Input() isRequired: boolean = false;
+  @Input() isRequired = false;
   @Input() showAddButton: boolean;
   @Input() set didToRemove(list: string[]) {
     this._didToRemove = list;
@@ -32,7 +32,7 @@ export class SelectDidComponent implements OnInit {
 
   didBook$: Observable<DidBookRecord[]>;
   newDID = new FormControl('', [HexValidators.isDidValid()]);
-  isNotKnownDid: boolean = false;
+  isNotKnownDid = false;
   private _didToRemove: string[] = [];
 
   constructor(private didBookServ: DidBookService, private dialog: MatDialog) {}
