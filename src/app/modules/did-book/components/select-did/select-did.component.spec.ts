@@ -240,6 +240,18 @@ describe('SelectDidComponent', () => {
       'This DID already exist on the list'
     );
   });
+
+  it('should display error message when element is not a did', () => {
+    fixture.detectChanges();
+
+    const { didInput } = getSelectors(hostDebug);
+    didInput.value = 'did:ethr:0x';
+    dispatchInputEvent(didInput);
+    fixture.detectChanges();
+
+    const { matError } = getSelectors(hostDebug);
+    expect(matError.textContent).toContain('DID format is invalid');
+  });
 });
 
 const getSelectors = (hostDebug) => ({
