@@ -92,7 +92,7 @@ export class IssuerRequestsComponent
       .getDefinition(namespace)
       .subscribe((definitions: IRoleDefinitionV2) => {
         this.roleDefinition = definitions;
-        this.expirationTime = this.roleDefinition?.defaultValidityPeriod;
+        this.expirationTime = Date.now() + this.roleDefinition?.defaultValidityPeriod * 1000;
       });
   }
 }
