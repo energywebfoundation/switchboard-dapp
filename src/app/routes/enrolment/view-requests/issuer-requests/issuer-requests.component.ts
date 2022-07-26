@@ -84,7 +84,7 @@ export class IssuerRequestsComponent
   }
 
   updateExpirationDate(expirationTime: number): void {
-    this.expirationTime = expirationTime;
+    this.expirationTime = Date.now() + expirationTime * 1000;
   }
 
   private getRoleIssuerFields(namespace: string): void {
