@@ -60,15 +60,10 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   }
 
   showRemoveButton(): boolean {
-    console.log(!!this.defaultValidityPeriod, this.defaultValidityPeriod, "def valid")
-    console.log(!!this.expirationTimeShift, this.expirationTimeShift, "time shift")
-    console.log(!this.hideRemoveButton, this.hideRemoveButton, "remove exp date")
-    console.log(!!this.defaultValidityPeriod || !!this.expirationTimeShift, "THE WHOLE THING!!!")
-    return (!!this.defaultValidityPeriod || !!this.expirationTimeShift)
+    return !!this.defaultValidityPeriod || !!this.expirationTimeShift;
   }
 
   restoreDefaultHandler(): void {
-    console.log(this.defaultValidityPeriod, "THE PERIOD")
     this.add.emit(this.defaultValidityPeriod);
     this.expirationDate.setValue(
       new Date(Date.now() + this.defaultValidityPeriod * 1000)
@@ -87,7 +82,6 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   }
 
   setDefaultExpirationDate() {
-    console.log("in set default")
     this.expirationDate.setValue(
       new Date(Date.now() + this.defaultValidityPeriod * 1000)
     );

@@ -86,7 +86,6 @@ export class IssuerRequestsComponent
   }
 
   updateExpirationDate(expirationTime: number): void {
-    console.log(this.expirationTime, 'THE EXPIRATION TIME!!!');
     this.expirationTime = Date.now() + expirationTime * 1000;
   }
 
@@ -94,19 +93,12 @@ export class IssuerRequestsComponent
     this.roleService
       .getDefinition(namespace)
       .subscribe((definitions: IRoleDefinitionV2) => {
-        console.log(definitions, 'THE DEFINITIONS');
         this.roleDefinition = definitions;
         this.defaultValidityPeriodFormatted = formatValidityPeriod(
           this.roleDefinition?.defaultValidityPeriod
         );
-        console.log( this.roleDefinition?.defaultValidityPeriod, "THIS IS THE DEFAULT VALIDITY PERIOD!!!")
-        console.log(
-          this.defaultValidityPeriodFormatted,
-          'THE FORMATTED PERIOD'
-        );
         this.expirationTime =
           Date.now() + this.roleDefinition?.defaultValidityPeriod * 1000;
-          console.log(Date.now() + this.roleDefinition?.defaultValidityPeriod * 1000)
       });
   }
 }

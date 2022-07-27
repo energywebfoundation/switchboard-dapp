@@ -1,5 +1,5 @@
 <app-report-problem>
-   <!-- SECTION 1 -->
+  <!-- SECTION 1 -->
   <ng-container *ngIf="defaultValidityPeriodFormatted">
     The default validity period for this role is <b>{{ defaultValidityPeriodFormatted }}</b
     >.<br
@@ -14,31 +14,19 @@
 
   <ng-container *ngIf="!defaultValidityPeriod">
     A default expiration date is not set for this role.<br />
-    To set an expiration date, use the date picker below.<br /> 
-    To remove the selected expiration date, click 'Remove
-    Expiration Date.'
+    To set an expiration date, use the date picker below.<br />
+    To remove the selected expiration date, click 'Remove Expiration Date.'
   </ng-container>
   <br />
 
-   <!-- SECTION 2 -->
+  <!-- SECTION 2 -->
   <ng-container *ngIf="(!removeExpDate && defaultValidityPeriod) || expirationTime">
     <br />
     This role will now be issued with an expiration date of
     <b>{{ expirationTime || defaultValidityPeriod | timeShift | defaultDate }} UTC</b>
   </ng-container>
-  <ng-container *ngIf="removeExpDate || (!defaultValidityPeriod && !expirationTime)"> 
+  <ng-container *ngIf="removeExpDate || (!defaultValidityPeriod && !expirationTime)">
     <br />
-    This role will be issued with <b>no expiration date</b>. 
+    This role will be issued with <b>no expiration date</b>.
   </ng-container>
-
-  <!-- <ng-container>
-    <br />
-    <br />
-    ><br />
-
-    THE EXPIRATION RAW <b>{{ expirationTime }}</b> <br />
-    THE DEFAULT VALIDITY RAW <b>{{ defaultValidityPeriod }}</b><br />
-    REMOVE EXP DATE <b>{{ removeExpDate }}</b>
-  </ng-container> -->
-
 </app-report-problem>
