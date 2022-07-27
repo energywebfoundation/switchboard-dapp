@@ -33,7 +33,7 @@ import { MenuNotificationTriggerComponent } from './header/menu-notification-tri
       timeout: environment.userIdle,
     }),
     UserMenuModule,
-    DidBookModule.forRoot(),
+    DidBookModule,
     MatBadgeModule,
   ],
   providers: [],

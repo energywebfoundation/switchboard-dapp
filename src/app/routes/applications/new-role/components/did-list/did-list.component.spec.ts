@@ -41,6 +41,6 @@ describe('DidListComponent', () => {
     deleteBtn.click();
     fixture.detectChanges();
 
-    expect(eventSpy).toHaveBeenCalledWith(0);
+    expect(eventSpy).toHaveBeenCalledWith('did');
   });
 });

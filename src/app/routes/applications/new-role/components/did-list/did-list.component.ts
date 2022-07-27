@@ -13,9 +13,9 @@ import {
 })
 export class DidListComponent {
   @Input() list: string[];
-  @Output() remove = new EventEmitter<number>();
+  @Output() remove = new EventEmitter<string>();
 
-  removeDid(id: number) {
+  removeDid(id: string) {
     this.remove.emit(id);
   }
 }
