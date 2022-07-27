@@ -1,10 +1,11 @@
 import {
-  ComponentFixture, discardPeriodicTasks,
+  ComponentFixture,
+  discardPeriodicTasks,
   fakeAsync,
   flush,
   TestBed,
   tick,
-  waitForAsync
+  waitForAsync,
 } from '@angular/core/testing';
 
 import { CascadingFilterComponent } from './cascading-filter.component';
@@ -72,7 +73,6 @@ describe('CascadingFilterComponent', () => {
   });
 
   it('should update orgFilter', fakeAsync(() => {
-
     const { orgFilter } = getSelectors(fixture.debugElement);
 
     orgFilter.value = 'org';
@@ -88,7 +88,6 @@ describe('CascadingFilterComponent', () => {
   }));
 
   it('should update appFilter', fakeAsync(() => {
-
     const { appFilter } = getSelectors(fixture.debugElement);
 
     appFilter.value = 'app';
@@ -97,14 +96,13 @@ describe('CascadingFilterComponent', () => {
 
     tick(300);
 
-    expect(
-      cascadingFilterServiceSpy.setApplicationFilter
-    ).toHaveBeenCalledWith('app');
+    expect(cascadingFilterServiceSpy.setApplicationFilter).toHaveBeenCalledWith(
+      'app'
+    );
     flush();
   }));
 
   it('should update roleNameFilter', fakeAsync(() => {
-
     const { roleNameFilter } = getSelectors(fixture.debugElement);
 
     roleNameFilter.value = 'rolename';
@@ -113,14 +111,16 @@ describe('CascadingFilterComponent', () => {
 
     tick(300);
 
-    expect(
-      cascadingFilterServiceSpy.setRoleFilter
-    ).toHaveBeenCalledWith('rolename');
+    expect(cascadingFilterServiceSpy.setRoleFilter).toHaveBeenCalledWith(
+      'rolename'
+    );
     flush();
   }));
 
   it('should reset roleName and application filters when setting orgFilter', fakeAsync(() => {
-    const { appFilter, orgFilter, roleNameFilter } = getSelectors(fixture.debugElement);
+    const { appFilter, orgFilter, roleNameFilter } = getSelectors(
+      fixture.debugElement
+    );
     appFilter.value = 'app';
     dispatchInputEvent(appFilter);
 
@@ -148,8 +148,7 @@ describe('CascadingFilterComponent', () => {
     expect(roleNameFilter.value).toEqual('');
     expect(appFilter.value).toEqual('');
     flush();
-
-  }))
+  }));
 });
 
 const getSelectors = (hostDebug) => ({

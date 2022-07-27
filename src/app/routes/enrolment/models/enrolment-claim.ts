@@ -153,9 +153,7 @@ export class EnrolmentClaim
   }
 
   private defineRoleName(): void {
-    this.roleName = this.claimType
-      ?.split(`.${NamespaceType.Role}.`)
-      ?.shift();
+    this.roleName = this.claimType?.split(`.${NamespaceType.Role}.`)?.shift();
   }
 
   private defineOrganization(): void {

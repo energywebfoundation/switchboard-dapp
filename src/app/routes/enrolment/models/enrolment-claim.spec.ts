@@ -320,21 +320,37 @@ describe('EnrolmentClaim tests', () => {
 
   describe('organization', () => {
     it('should get organization from claimType where there is no application', () => {
-      expect(new EnrolmentClaim({claimType: `role.${NamespaceType.Role}.test.iam.ewc`} as Claim).organization ).toEqual('test.iam.ewc')
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
+        } as Claim).organization
+      ).toEqual('test.iam.ewc');
     });
 
     it('should get organization from claimType where there is application', () => {
-      expect(new EnrolmentClaim({claimType: `role.${NamespaceType.Role}.app.${NamespaceType.Application}.test.iam.ewc`} as Claim).organization ).toEqual('test.iam.ewc')
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.app.${NamespaceType.Application}.test.iam.ewc`,
+        } as Claim).organization
+      ).toEqual('test.iam.ewc');
     });
   });
 
   describe('application', () => {
     it('should get empty application name from claimType', () => {
-      expect(new EnrolmentClaim({claimType: `role.${NamespaceType.Role}.test.iam.ewc`} as Claim).application ).toEqual('');
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
+        } as Claim).application
+      ).toEqual('');
     });
 
     it('should get application from claimType', () => {
-      expect(new EnrolmentClaim({claimType: `role.${NamespaceType.Role}.app.${NamespaceType.Application}.test.iam.ewc`} as Claim).application ).toEqual('app')
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.app.${NamespaceType.Application}.test.iam.ewc`,
+        } as Claim).application
+      ).toEqual('app');
     });
-  })
+  });
 });

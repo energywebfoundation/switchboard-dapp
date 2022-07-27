@@ -120,11 +120,11 @@ describe('CascadingFilterService', () => {
 
     it('should check if roleName filter do not change applications list', (done) => {
       service.setRoleFilter('dummy');
-      service.getApplications$().subscribe(list => {
+      service.getApplications$().subscribe((list) => {
         expect(list.length).toEqual(2);
         done();
-      })
-    })
+      });
+    });
   });
 
   describe('check setRoleFilter', () => {
@@ -163,6 +163,6 @@ describe('CascadingFilterService', () => {
       });
     });
 
-    it('should ')
+    it('should ');
   });
 });
