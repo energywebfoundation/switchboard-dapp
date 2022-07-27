@@ -60,7 +60,10 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   }
 
   showRemoveButton(): boolean {
-    return !!this.defaultValidityPeriod || !!this.expirationTimeShift;
+    return (
+      !this.hideRemoveButton &&
+      (!!this.defaultValidityPeriod || !!this.expirationTimeShift)
+    );
   }
 
   restoreDefaultHandler(): void {

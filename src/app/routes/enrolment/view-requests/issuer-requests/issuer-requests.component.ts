@@ -85,8 +85,8 @@ export class IssuerRequestsComponent
     this.dialogRef.close(true);
   }
 
-  updateExpirationDate(expirationTime: number): void {
-    this.expirationTime = Date.now() + expirationTime * 1000;
+  updateExpirationDate(validityPeriod: number): void {
+    this.expirationTime = Date.now() + validityPeriod * 1000;
   }
 
   private getRoleIssuerFields(namespace: string): void {
