@@ -25,6 +25,13 @@ export class Timestamp {
   }
 
   parseToSeconds(value: ParseTimestampResult): number {
+    console.log(value, "THE VALUE")
+    if (Object.values(value).every(val => val === 0)) {
+      console.log("true, everything zero")
+      return null
+    }
+    console.log(Object.values(value), "THE VALUES")
+  
     return (
       this.multiply(value.years, this.year) +
       this.multiply(value.days, this.day) +
@@ -32,6 +39,7 @@ export class Timestamp {
       this.multiply(value.minutes, this.minute) +
       value.seconds
     );
+   
   }
 
   private multiply(multiplicand: number, multiplier: number) {

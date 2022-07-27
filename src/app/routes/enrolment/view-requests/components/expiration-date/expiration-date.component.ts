@@ -17,11 +17,14 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ExpirationDateComponent implements OnInit, OnDestroy {
   @Input() defaultValidityPeriod: number;
+  @Input() defaultValidityPeriodFormatted: string;
   @Output() add: EventEmitter<number> = new EventEmitter<number>();
 
   expirationDate = new FormControl('');
   expirationTimeShift: number;
   minDate = new Date(Date.now());
+  hideRemoveButton = false;
+  showRestoreBtn = this.showRestoreButton();
 
   private destroy$ = new Subject();
 
@@ -32,6 +35,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
       .subscribe((value) => {
         this.expirationTimeShift = this.calcSeconds(value);
         this.add.emit(this.expirationTimeShift);
+        this.hideRemoveButton = false;
       });
   }
 
@@ -43,6 +47,34 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   removeHandler(): void {
     this.expirationDate.setValue('');
     this.add.emit(undefined);
+    this.hideRemoveButton = true;
+  }
+
+  showRestoreButton(): boolean {
+    return (
+      (this.defaultValidityPeriod &&
+        this.expirationTimeShift &&
+        this.defaultValidityPeriod !== this.expirationTimeShift) ||
+      (this.hideRemoveButton && !!this.defaultValidityPeriod)
+    );
+  }
+
+  showRemoveButton(): boolean {
+    console.log(!!this.defaultValidityPeriod, this.defaultValidityPeriod, "def valid")
+    console.log(!!this.expirationTimeShift, this.expirationTimeShift, "time shift")
+    console.log(!this.hideRemoveButton, this.hideRemoveButton, "remove exp date")
+    console.log(!!this.defaultValidityPeriod || !!this.expirationTimeShift, "THE WHOLE THING!!!")
+    return (!!this.defaultValidityPeriod || !!this.expirationTimeShift)
+  }
+
+  restoreDefaultHandler(): void {
+    console.log(this.defaultValidityPeriod, "THE PERIOD")
+    this.add.emit(this.defaultValidityPeriod);
+    this.expirationDate.setValue(
+      new Date(Date.now() + this.defaultValidityPeriod * 1000)
+    );
+    this.expirationTimeShift = this.defaultValidityPeriod;
+    this.hideRemoveButton = false;
   }
 
   defaultExpirationDate() {
@@ -55,11 +87,13 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   }
 
   setDefaultExpirationDate() {
+    console.log("in set default")
     this.expirationDate.setValue(
       new Date(Date.now() + this.defaultValidityPeriod * 1000)
     );
     this.add.emit(this.defaultValidityPeriod);
     this.expirationTimeShift = this.defaultValidityPeriod;
+    this.hideRemoveButton = false;
   }
 
   private calcSeconds(value: string): number {

@@ -11,6 +11,7 @@ import { IssuerRequestsService } from '../services/issuer-requests.service';
 import { RoleService } from '../../../../state/governance/role/services/role.service';
 import { ViewRequestsComponent } from '../view-requests.component';
 import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
+import { formatValidityPeriod } from '../../utils/format-validity-period-string';
 
 @Component({
   selector: 'app-issuer-requests',
@@ -25,6 +26,7 @@ export class IssuerRequestsComponent
   userDid$ = this.store.select(userSelectors.getDid);
   roleDefinition: IRoleDefinitionV2;
   expirationTime: number;
+  defaultValidityPeriodFormatted: string;
 
   constructor(
     private dialogRef: MatDialogRef<IssuerRequestsComponent>,
@@ -84,6 +86,7 @@ export class IssuerRequestsComponent
   }
 
   updateExpirationDate(expirationTime: number): void {
+    console.log(this.expirationTime, 'THE EXPIRATION TIME!!!');
     this.expirationTime = Date.now() + expirationTime * 1000;
   }
 
@@ -91,9 +94,19 @@ export class IssuerRequestsComponent
     this.roleService
       .getDefinition(namespace)
       .subscribe((definitions: IRoleDefinitionV2) => {
+        console.log(definitions, 'THE DEFINITIONS');
         this.roleDefinition = definitions;
+        this.defaultValidityPeriodFormatted = formatValidityPeriod(
+          this.roleDefinition?.defaultValidityPeriod
+        );
+        console.log( this.roleDefinition?.defaultValidityPeriod, "THIS IS THE DEFAULT VALIDITY PERIOD!!!")
+        console.log(
+          this.defaultValidityPeriodFormatted,
+          'THE FORMATTED PERIOD'
+        );
         this.expirationTime =
           Date.now() + this.roleDefinition?.defaultValidityPeriod * 1000;
+          console.log(Date.now() + this.roleDefinition?.defaultValidityPeriod * 1000)
       });
   }
 }
