@@ -7,7 +7,7 @@
         [formControl]="organization"
         type="text"
         placeholder="Organization"
-        data-qa-id="organization"
+        data-qa-id="org-filter"
         [matAutocomplete]="organizationAutocomplete"
         maxlength="256" />
       <mat-autocomplete #organizationAutocomplete>
@@ -25,7 +25,7 @@
         [formControl]="application"
         type="text"
         placeholder="Application"
-        data-qa-id="app"
+        data-qa-id="app-filter"
         [matAutocomplete]="applicationAutocomplete"
         maxlength="256" />
       <mat-autocomplete #applicationAutocomplete>
@@ -43,7 +43,7 @@
         [formControl]="roleName"
         type="text"
         placeholder="Claim name"
-        data-qa-id="app"
+        data-qa-id="role-name-filter"
         [matAutocomplete]="roleNameAutocomplete"
         maxlength="256" />
       <mat-autocomplete #roleNameAutocomplete>
