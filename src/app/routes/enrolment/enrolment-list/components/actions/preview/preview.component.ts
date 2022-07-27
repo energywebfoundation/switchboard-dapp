@@ -9,7 +9,7 @@ import { EnrolmentClaim } from '../../../../models/enrolment-claim';
 import { truthy } from '@operators';
 import { MatDialog } from '@angular/material/dialog';
 import { EnrolmentListType } from '../../../models/enrolment-list-type.enum';
-import { IssuerRequestsComponent } from '../../../../view-requests/issuer-requests/issuer-requests.component';
+import { GetPreviewComponent } from './get-preview-component';
 
 @Component({
   selector: 'app-preview',
@@ -25,7 +25,7 @@ export class PreviewComponent {
 
   view(element: EnrolmentClaim) {
     this.dialog
-      .open(IssuerRequestsComponent, {
+      .open(GetPreviewComponent.get(this.enrolmentType), {
         width: '600px',
         data: {
           claimData: element,
