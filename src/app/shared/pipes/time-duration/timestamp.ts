@@ -25,6 +25,9 @@ export class Timestamp {
   }
 
   parseToSeconds(value: ParseTimestampResult): number {
+    if (Object.values(value).every((val) => val === 0)) {
+      return null;
+    }
     return (
       this.multiply(value.years, this.year) +
       this.multiply(value.days, this.day) +

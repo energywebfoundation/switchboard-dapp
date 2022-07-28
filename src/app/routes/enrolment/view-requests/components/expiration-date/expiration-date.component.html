@@ -1,7 +1,10 @@
 <mat-label class="ml-3 pl-1">Expiration Date</mat-label>
 <app-expiration-info
   [defaultValidityPeriod]="defaultValidityPeriod"
-  [expirationTime]="expirationTimeShift"></app-expiration-info>
+  [expirationTime]="expirationTimeShift"
+  [defaultValidityPeriodFormatted]="defaultValidityPeriodFormatted"
+  [removeExpDate]="hideRemoveButton">
+</app-expiration-info>
 <mat-form-field class="mt-2" appearance="outline">
   <input
     [matDatepicker]="picker"
@@ -9,7 +12,7 @@
     data-qa-id="expiration-date-input"
     [formControl]="expirationDate"
     matInput
-    placeholder="Expiration Date"
+    placeholder="Select a New Expiration Date"
     autocomplete="off" />
   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-icon matSuffix data-qa-id="reset-date" class="close-icon" (click)="setDefaultExpirationDate()">close</mat-icon>
@@ -17,10 +20,21 @@
 </mat-form-field>
 <div class="d-flex justify-content-end">
   <button
+    *ngIf="showRemoveButton()"
     mat-stroked-button
     class="btn btn-small mr-2 back"
     data-qa-id="remove-expiration-date"
     (click)="removeHandler()">
     Remove expiration date
   </button>
+  <button
+    *ngIf="showRestoreButton()"
+    mat-stroked-button
+    class="btn btn-small mr-2 back"
+    data-qa-id="restore-expiration-date"
+    (click)="restoreDefaultHandler()">
+    Restore default expiration date
+  </button>
+  <br />
+  <br />
 </div>

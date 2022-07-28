@@ -1,11 +1,32 @@
 <app-report-problem>
+  <!-- SECTION 1 -->
+  <ng-container *ngIf="defaultValidityPeriodFormatted">
+    The default validity period for this role is <b>{{ defaultValidityPeriodFormatted }}</b
+    >.<br
+  /></ng-container>
   <ng-container *ngIf="defaultValidityPeriod">
-    Default expiration date of this role is <b>{{ defaultValidityPeriod | timeShift | defaultDate }} UTC</b>.
+    The calculated <b>default expiration date</b> for this role is
+    <b>{{ defaultValidityPeriod | timeShift | defaultDate }} UTC</b>.<br />
+    <br />
+    To override this date, use the date picker below.<br />
+    To remove the expiration date, click 'Remove Expiration Date'.<br />
   </ng-container>
-  <ng-container *ngIf="!defaultValidityPeriod"> Default expiration date is not set. </ng-container>
-  This role will be issued with
-  <ng-container *ngIf="expirationTime"
-    ><b>{{ expirationTime | timeShift | defaultDate }} UTC</b></ng-container
-  >
-  <ng-container *ngIf="!expirationTime"><b>no</b></ng-container> expiration date
+
+  <ng-container *ngIf="!defaultValidityPeriod">
+    A default expiration date is not set for this role.<br />
+    To set an expiration date, use the date picker below.<br />
+    To remove the selected expiration date, click 'Remove Expiration Date.'
+  </ng-container>
+  <br />
+
+  <!-- SECTION 2 -->
+  <ng-container *ngIf="(!removeExpDate && defaultValidityPeriod) || expirationTime">
+    <br />
+    This role will now be issued with an expiration date of
+    <b>{{ expirationTime || defaultValidityPeriod | timeShift | defaultDate }} UTC</b>
+  </ng-container>
+  <ng-container *ngIf="removeExpDate || (!defaultValidityPeriod && !expirationTime)">
+    <br />
+    This role will be issued with <b>no expiration date</b>.
+  </ng-container>
 </app-report-problem>

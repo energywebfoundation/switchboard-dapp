@@ -8,4 +8,6 @@ import { Component, Input } from '@angular/core';
 export class ExpirationInfoComponent {
   @Input() defaultValidityPeriod: number;
   @Input() expirationTime: number;
+  @Input() defaultValidityPeriodFormatted: string;
+  @Input() removeExpDate: boolean;
 }

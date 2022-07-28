@@ -35,6 +35,7 @@
         <app-expiration-date
           data-qa-id="expiration-date"
           [defaultValidityPeriod]="roleDefinition?.defaultValidityPeriod"
+          [defaultValidityPeriodFormatted]="defaultValidityPeriodFormatted"
           (add)="updateExpirationDate($event)"></app-expiration-date>
       </div>
 
