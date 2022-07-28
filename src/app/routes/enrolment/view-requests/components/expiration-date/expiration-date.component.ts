@@ -80,7 +80,6 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
       this.expirationDate.setValue(
         new Date(Date.now() + this.defaultValidityPeriod * 1000)
       );
-      console.log(this.expirationDate, "THE EXPIRATION DATE DEFAULT")
       this.expirationTimeShift = this.defaultValidityPeriod;
     }
   }
