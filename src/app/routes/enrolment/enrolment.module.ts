@@ -28,6 +28,7 @@ import { RevokeButtonsComponent } from './view-requests/components/revoke-button
 import { IssuerRequestsComponent } from './view-requests/issuer-requests/issuer-requests.component';
 import { ExpirationDateComponent } from './view-requests/components/expiration-date/expiration-date.component';
 import { ExpirationInfoComponent } from './view-requests/components/expiration-info/expiration-info.component';
+import { CascadingFilterComponent } from './revoke-enrolments/components/cascading-filter/cascading-filter.component';
 
 const routes: Routes = [{ path: '', component: EnrolmentComponent }];
 
@@ -46,6 +47,7 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
     IssuerRequestsComponent,
     ExpirationDateComponent,
     ExpirationInfoComponent,
+    CascadingFilterComponent,
   ],
   imports: [
     SharedModule,

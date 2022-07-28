@@ -1,0 +1,56 @@
+<div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
+  <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
+    <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+      <input
+        matInput
+        autocomplete="off"
+        [formControl]="organization"
+        type="text"
+        placeholder="Organization"
+        data-qa-id="org-filter"
+        [matAutocomplete]="organizationAutocomplete"
+        maxlength="256" />
+      <mat-autocomplete #organizationAutocomplete>
+        <mat-option *ngFor="let organization of organizations$ | async" [value]="organization">
+          {{ organization }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
+    <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+      <input
+        matInput
+        autocomplete="off"
+        [formControl]="application"
+        type="text"
+        placeholder="Application"
+        data-qa-id="app-filter"
+        [matAutocomplete]="applicationAutocomplete"
+        maxlength="256" />
+      <mat-autocomplete #applicationAutocomplete>
+        <mat-option *ngFor="let application of applications$ | async" [value]="application">
+          {{ application }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
+    <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+      <input
+        matInput
+        autocomplete="off"
+        [formControl]="roleName"
+        type="text"
+        placeholder="Claim name"
+        data-qa-id="role-name-filter"
+        [matAutocomplete]="roleNameAutocomplete"
+        maxlength="256" />
+      <mat-autocomplete #roleNameAutocomplete>
+        <mat-option *ngFor="let roleName of roleNames$ | async" [value]="roleName">
+          {{ roleName }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+</div>

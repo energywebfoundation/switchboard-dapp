@@ -8,7 +8,7 @@ export class FilterBuilder {
     this.list = list;
   }
 
-  namespace(value: string) {
+  namespace(value: string): FilterBuilder {
     if (!value) {
       return this;
     }
@@ -20,7 +20,7 @@ export class FilterBuilder {
     return this;
   }
 
-  did(value: string) {
+  did(value: string): FilterBuilder {
     if (!value) {
       return this;
     }
@@ -31,8 +31,40 @@ export class FilterBuilder {
     return this;
   }
 
-  status(value: FilterStatus) {
+  status(value: FilterStatus): FilterBuilder {
     this.list = this.statusFilter(this.list, value);
+    return this;
+  }
+
+  organization(filter: string): FilterBuilder {
+    if (!filter) {
+      return this;
+    }
+    this.list = this.list.filter((claim) =>
+      claim.organization.includes(filter)
+    );
+
+    return this;
+  }
+
+  application(filter: string): FilterBuilder {
+    if (!filter) {
+      return this;
+    }
+
+    this.list = this.list.filter((claim) =>
+      claim.application?.includes(filter)
+    );
+    return this;
+  }
+
+  roleName(filter: string): FilterBuilder {
+    if (!filter) {
+      return this;
+    }
+
+    this.list = this.list.filter((claim) => claim.roleName?.includes(filter));
+
     return this;
   }
 
@@ -74,7 +106,7 @@ export class FilterBuilder {
     }
   }
 
-  build() {
+  build(): EnrolmentClaim[] {
     return this.list;
   }
 }
