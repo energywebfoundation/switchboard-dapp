@@ -186,7 +186,12 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
       {
         type: ColumnType.String,
         field: 'expirationStatus',
-        header: 'Expired',
+        header: 'Expiration Status',
+      },
+      {
+        type: ColumnType.Date,
+        field: 'expirationDate',
+        header: 'Expiration Date',
       },
       {
         type: ColumnType.Actions,

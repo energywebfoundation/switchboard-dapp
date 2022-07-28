@@ -17,6 +17,7 @@ export class EnrolmentClaim
   application?: string;
   requestDate: Date;
   expirationStatus: string;
+  expirationDate: Date;
 
   isRevokedOnChain: boolean;
   isRevokedOffChain: boolean;
@@ -43,14 +44,6 @@ export class EnrolmentClaim
 
   get isRevoked() {
     return !!this.isRevokedOnChain || !!this.isRevokedOffChain;
-  }
-
-  get expirationDate() {
-    return this.iclClaim?.expirationTimestamp
-      ? `${this.iclClaim?.expirationTimestamp} / ${new Date(
-          parseInt(this.iclClaim?.expirationTimestamp)
-        ).toISOString()}`
-      : '';
   }
 
   get isPending() {
@@ -161,6 +154,7 @@ export class EnrolmentClaim
     this.defineOrganization();
     this.defineApplication();
     this.defineExpirationStatus();
+    this.defineExpirationDate();
   }
 
   private defineRoleName(): void {
@@ -197,5 +191,11 @@ export class EnrolmentClaim
       : parseInt(this.iclClaim.expirationTimestamp) < Date.now()
       ? ExpirationStatus.EXPIRED
       : ExpirationStatus.NOT_EXPIRED;
+  }
+
+  private defineExpirationDate() {
+    this.expirationDate = this.iclClaim.expirationTimestamp
+      ? new Date(parseInt(this.iclClaim.expirationTimestamp))
+      : null;
   }
 }
