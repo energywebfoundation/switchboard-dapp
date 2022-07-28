@@ -25,6 +25,7 @@ import {
   ColumnType,
 } from '../../../shared/components/table/generic-table/generic-table.component';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
+import { EnrolmentView } from '../models/enrolment-views.enum';
 
 const TOASTR_HEADER = 'Enrolment';
 
@@ -45,6 +46,7 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   sorting = sortingEnrolmentData;
   private _iamSubscriptionId: number;
   enrolmentType = EnrolmentListType.APPLICANT;
+  enrolmentView = EnrolmentView.MINE;
 
   constructor(
     private loadingService: LoadingService,
@@ -178,8 +180,13 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
       {
         type: ColumnType.Custom,
         field: 'status',
-        header: 'status',
+        header: 'Issuance Status',
         customElement: this.status,
+      },
+      {
+        type: ColumnType.String,
+        field: 'expirationStatus',
+        header: 'Expired',
       },
       {
         type: ColumnType.Actions,

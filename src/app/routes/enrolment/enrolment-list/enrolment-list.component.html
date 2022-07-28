@@ -1,3 +1,3 @@
-<app-enrolment-list-filter [showRevokeFilters]="showRevokeFilters" [showDID]="showDID"></app-enrolment-list-filter>
+<app-enrolment-list-filter [showDID]="showDID" [enrolmentView]="enrolmentView"></app-enrolment-list-filter>
 
 <app-generic-table [list]="filteredList$ | async" [columDefinitions]="columDefinitions"></app-generic-table>

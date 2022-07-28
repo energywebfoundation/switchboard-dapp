@@ -3,6 +3,7 @@ import { ColumnDefinition } from '../../../shared/components/table/generic-table
 import { EnrolmentClaim } from '../models/enrolment-claim';
 import { EnrolmentFilterListService } from './services/enrolment-filter-list.service';
 import { FilterStatus } from './models/filter-status.enum';
+import { EnrolmentView } from '../models/enrolment-views.enum';
 
 @Component({
   selector: 'app-enrolment-list',
@@ -17,6 +18,7 @@ export class EnrolmentListComponent {
   @Input() showDID = false;
   @Input() showRevokeFilters = false;
   @Input() columDefinitions: ColumnDefinition[];
+  @Input() enrolmentView: EnrolmentView;
   @Input() set list(data: EnrolmentClaim[]) {
     this.enrolmentFilterListService.setList(data);
   }

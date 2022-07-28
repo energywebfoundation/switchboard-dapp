@@ -6,6 +6,7 @@ import {
 } from 'iam-client-lib';
 import { EnrolmentClaimAbstract } from './enrolment-claim.abstract';
 import { IEnrolmentClaim } from './enrolment-claim.interface';
+import { ExpirationStatus } from './expiration-statys.enum';
 
 export class EnrolmentClaim
   extends EnrolmentClaimAbstract
@@ -15,6 +16,7 @@ export class EnrolmentClaim
   organization: string;
   application?: string;
   requestDate: Date;
+  expirationStatus: string;
 
   isRevokedOnChain: boolean;
   isRevokedOffChain: boolean;
@@ -41,6 +43,14 @@ export class EnrolmentClaim
 
   get isRevoked() {
     return !!this.isRevokedOnChain || !!this.isRevokedOffChain;
+  }
+
+  get expirationDate() {
+    return this.iclClaim?.expirationTimestamp
+      ? `${this.iclClaim?.expirationTimestamp} / ${new Date(
+          parseInt(this.iclClaim?.expirationTimestamp)
+        ).toISOString()}`
+      : '';
   }
 
   get isPending() {
@@ -150,6 +160,7 @@ export class EnrolmentClaim
     this.defineRequestDate();
     this.defineOrganization();
     this.defineApplication();
+    this.defineExpirationStatus();
   }
 
   private defineRoleName(): void {
@@ -178,5 +189,13 @@ export class EnrolmentClaim
 
   private defineRequestDate(): void {
     this.requestDate = new Date((this.iclClaim as any).createdAt);
+  }
+
+  private defineExpirationStatus() {
+    this.expirationStatus = !this.iclClaim.expirationTimestamp
+      ? ''
+      : parseInt(this.iclClaim.expirationTimestamp) < Date.now()
+      ? ExpirationStatus.EXPIRED
+      : ExpirationStatus.NOT_EXPIRED;
   }
 }
