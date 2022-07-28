@@ -52,13 +52,9 @@ export class FilterBuilder {
       return this;
     }
 
-    this.list = this.list.filter((claim) => {
-      if (filter) {
-        return claim.application?.includes(filter);
-      }
-
-      return true;
-    });
+    this.list = this.list.filter((claim) =>
+      claim.application?.includes(filter)
+    );
     return this;
   }
 
