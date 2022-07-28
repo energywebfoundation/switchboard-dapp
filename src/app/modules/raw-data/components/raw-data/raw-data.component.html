@@ -1,1 +1,4 @@
-<p>raw-data works!</p>
+<div class="copy" appCopyToClipboard [copyClipboard]="stringifyData" [message]="message">
+  <mat-icon class="ml-2 default-color">content_copy</mat-icon>
+</div>
+<pre class="default-color">{{ data | json }}</pre>

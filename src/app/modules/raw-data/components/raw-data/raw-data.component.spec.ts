@@ -8,9 +8,8 @@ describe('RawDataComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RawDataComponent ]
-    })
-    .compileComponents();
+      declarations: [RawDataComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

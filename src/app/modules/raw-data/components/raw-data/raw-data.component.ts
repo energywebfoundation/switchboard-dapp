@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { JsonObject } from '@angular-devkit/core';
 
 @Component({
   selector: 'app-raw-data',
   templateUrl: './raw-data.component.html',
-  styleUrls: ['./raw-data.component.scss']
+  styleUrls: ['./raw-data.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RawDataComponent implements OnInit {
+export class RawDataComponent {
+  @Input() data: JsonObject;
+  @Input() message: string;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  get stringifyData() {
+    return JSON.stringify(this.data);
   }
-
 }

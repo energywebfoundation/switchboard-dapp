@@ -43,6 +43,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     .select(userSelectors.getUserName)
     .pipe(map((value) => (value ? value : 'Manage Profile')));
   userDid$ = this.store.select(userSelectors.getDid);
+  didDocument$ = this.store.select(userSelectors.getDIDDocument);
   isExperimentalEnabled$ = this.store.select(
     SettingsSelectors.isExperimentalEnabled
   );
