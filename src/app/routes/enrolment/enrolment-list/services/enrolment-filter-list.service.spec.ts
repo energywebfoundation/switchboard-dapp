@@ -5,9 +5,8 @@ import { FilterStatus } from '../models/filter-status.enum';
 import { EnrolmentClaim } from '../../models/enrolment-claim';
 import { Claim } from 'iam-client-lib';
 
-
-const isExpired = Date.now() - 1000
-const isNotExpired = Date.now() + 1000999898709879
+const isExpired = Date.now() - 1000;
+const isNotExpired = Date.now() + 1000999898709879;
 
 const acceptedClaim = new EnrolmentClaim({
   isAccepted: true,
@@ -17,7 +16,6 @@ const acceptedClaim = new EnrolmentClaim({
   requester: '',
   expirationTimestamp: isNotExpired.toString(),
 } as Claim).setIsRevokedOnChain(false);
-
 
 const notAcceptedClaim = new EnrolmentClaim({
   isAccepted: false,
