@@ -3,7 +3,7 @@
   [list]="list"
   [columDefinitions]="columns"
   [showDID]="true"
-  [enrolmentView]="enrolmentView"></app-enrolment-list>
+  [enrolmentViewFilters]="enrolmentViewFilters"></app-enrolment-list>
 
 <ng-template #actions let-element>
   <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList()"></app-preview>

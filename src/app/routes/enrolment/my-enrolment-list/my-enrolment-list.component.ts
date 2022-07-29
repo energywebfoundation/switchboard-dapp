@@ -26,6 +26,7 @@ import {
 } from '../../../shared/components/table/generic-table/generic-table.component';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
 import { EnrolmentView } from '../models/enrolment-views.enum';
+import { FilterStatus } from '../enrolment-list/models/filter-status.enum';
 
 const TOASTR_HEADER = 'Enrolment';
 
@@ -47,6 +48,14 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   private _iamSubscriptionId: number;
   enrolmentType = EnrolmentListType.APPLICANT;
   enrolmentView = EnrolmentView.MINE;
+  enrolmentViewFilters: FilterStatus[] = [
+    FilterStatus.All,
+    FilterStatus.Pending,
+    FilterStatus.Approved,
+    FilterStatus.Rejected,
+    FilterStatus.Revoked,
+    FilterStatus.Expired,
+  ];
 
   constructor(
     private loadingService: LoadingService,

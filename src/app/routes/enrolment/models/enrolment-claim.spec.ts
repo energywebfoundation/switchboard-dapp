@@ -341,7 +341,7 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
-          expirationTimestamp: (Date.now() + 500000).toString()
+          expirationTimestamp: (Date.now() + 500000).toString(),
         } as Claim).expirationStatus
       ).toEqual('Not Expired');
     });
@@ -349,7 +349,7 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
-          expirationTimestamp: (Date.now() - 1000).toString()
+          expirationTimestamp: (Date.now() - 1000).toString(),
         } as Claim).expirationStatus
       ).toEqual('Expired');
     });
@@ -357,7 +357,7 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
-          expirationTimestamp: null
+          expirationTimestamp: null,
         } as Claim).expirationStatus
       ).toEqual('');
     });
@@ -365,7 +365,7 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
-          expirationTimestamp: "193984857"
+          expirationTimestamp: '193984857',
         } as Claim).expirationDate
       ).toEqual(new Date(193984857));
     });
