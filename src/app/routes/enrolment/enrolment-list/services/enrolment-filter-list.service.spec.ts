@@ -62,6 +62,17 @@ describe('EnrolmentFilterListService', () => {
     });
   });
 
+  it('should filter by namespace', (done) => {
+    service.setList([...claims]);
+
+    service.setNamespace('claim');
+    service.filteredList$.subscribe((list) => {
+      expect(list.length).toEqual(1);
+      expect(list).toEqual([acceptedClaim] as any[]);
+      done();
+    });
+  });
+
   it('should filter by expired claims', (done) => {
     service.setList([...claims]);
 

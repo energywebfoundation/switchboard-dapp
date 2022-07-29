@@ -16,8 +16,8 @@ export class EnrolmentClaim
   organization: string;
   application?: string;
   requestDate: Date;
-  expirationStatus: string;
-  expirationDate: Date;
+  expirationStatus?: string;
+  expirationDate?: Date;
 
   isRevokedOnChain: boolean;
   isRevokedOffChain: boolean;

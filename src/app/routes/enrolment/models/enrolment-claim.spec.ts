@@ -336,6 +336,41 @@ describe('EnrolmentClaim tests', () => {
     });
   });
 
+  describe('expiration status', () => {
+    it('should have an expiration status of "Not Expired" when expired', () => {
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
+          expirationTimestamp: (Date.now() + 500000).toString()
+        } as Claim).expirationStatus
+      ).toEqual('Not Expired');
+    });
+    it('should have an expiration status of "Expired" when expired', () => {
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
+          expirationTimestamp: (Date.now() - 1000).toString()
+        } as Claim).expirationStatus
+      ).toEqual('Expired');
+    });
+    it('should not have an expiration status of when there is no expiration timestamp', () => {
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
+          expirationTimestamp: null
+        } as Claim).expirationStatus
+      ).toEqual('');
+    });
+    it('should have an exporation date if there expiration timestamp', () => {
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
+          expirationTimestamp: "193984857"
+        } as Claim).expirationDate
+      ).toEqual(new Date(193984857));
+    });
+  });
+
   describe('application', () => {
     it('should get empty application name from claimType', () => {
       expect(
