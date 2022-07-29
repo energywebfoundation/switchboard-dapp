@@ -99,7 +99,7 @@ describe('ExpirationDateComponent', () => {
 
     const { expirationDateInput } = getSelectors(hostDebug);
 
-    expect(new Date(expirationDateInput.value)).toEqual(new Date(2000, 0, 2));
+    expect(new Date(expirationDateInput.value)).toEqual(new Date(2000, 0, 1));
   });
 });
 const getSelectors = (hostDebug) => ({

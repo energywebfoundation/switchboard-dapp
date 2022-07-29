@@ -63,6 +63,6 @@ export class Timestamp {
   }
 
   private getRemainder(dividend: number, divisor: number): number {
-    return dividend % divisor;
+    return Math.floor(dividend % divisor);
   }
 }

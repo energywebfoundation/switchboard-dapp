@@ -1,7 +1,7 @@
 <app-report-problem>
   <!-- SECTION 1 -->
   <ng-container *ngIf="defaultValidityPeriodFormatted">
-    The default validity period for this role is <b>{{ defaultValidityPeriodFormatted }}</b
+    The default validity period for this role is <b>{{ defaultValidityPeriod / 1000 | timeDuration }}</b
     >.<br
   /></ng-container>
   <ng-container *ngIf="defaultValidityPeriod">
