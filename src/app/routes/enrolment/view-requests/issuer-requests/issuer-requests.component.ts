@@ -86,7 +86,7 @@ export class IssuerRequestsComponent
   }
 
   updateExpirationDate(validityPeriod: number): void {
-    this.expirationTime = Date.now() + validityPeriod * 1000;
+    this.expirationTime = Date.now() + validityPeriod;
   }
 
   private getRoleIssuerFields(namespace: string): void {
@@ -98,7 +98,7 @@ export class IssuerRequestsComponent
           this.roleDefinition?.defaultValidityPeriod
         );
         this.expirationTime =
-          Date.now() + this.roleDefinition?.defaultValidityPeriod * 1000;
+        this.roleDefinition?.defaultValidityPeriod ? Date.now() + this.roleDefinition?.defaultValidityPeriod : null;
       });
   }
 }

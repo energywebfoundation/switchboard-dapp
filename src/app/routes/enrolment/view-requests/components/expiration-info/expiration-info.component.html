@@ -6,7 +6,7 @@
   /></ng-container>
   <ng-container *ngIf="defaultValidityPeriod">
     The calculated <b>default expiration date</b> for this role is
-    <b>{{ defaultValidityPeriod | timeShift | defaultDate }} UTC</b>.<br />
+    <b>{{ defaultValidityPeriod / 1000 | timeShift | defaultDate }} UTC</b>.<br />
     <br />
     To override this date, use the date picker below.<br />
     To remove the expiration date, click 'Remove Expiration Date'.<br />
@@ -23,7 +23,7 @@
   <ng-container *ngIf="(!removeExpDate && defaultValidityPeriod) || expirationTime">
     <br />
     This role will now be issued with an expiration date of
-    <b>{{ expirationTime || defaultValidityPeriod | timeShift | defaultDate }} UTC</b>
+    <b>{{ expirationTime / 1000 || defaultValidityPeriod / 1000 | timeShift | defaultDate }} UTC</b>
   </ng-container>
   <ng-container *ngIf="removeExpDate || (!defaultValidityPeriod && !expirationTime)">
     <br />
