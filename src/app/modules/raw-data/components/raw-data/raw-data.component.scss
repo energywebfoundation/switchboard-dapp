@@ -1,0 +1,19 @@
+:host {
+  position: relative;
+}
+
+mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  &:hover {
+    color: var(--did-wrapper-hover-color);
+  }
+}
+
+.copy {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}

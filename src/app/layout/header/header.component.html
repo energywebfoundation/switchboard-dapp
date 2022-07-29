@@ -107,6 +107,18 @@
       data-qa-id="menu-qr-code-scanner">
       QR Code Scanner
     </button>
+    <ng-container *ngIf="isExperimentalEnabled$ | async">
+      <button
+        class="color-link px-4 pb-2 border-bottom-1 position-relative"
+        mat-menu-item
+        appShowRawData
+        [data]="didDocument$ | async"
+        header="DID Document"
+        data-qa-id="menu-did-document">
+        DID Document
+        <mat-icon class="experimental" matTooltip="This feature is experimental"> report_problem</mat-icon>
+      </button>
+    </ng-container>
     <div class="d-block d-xl-none">
       <div
         class="d-flex justify-content-between align-items-center my-1 px-4 py-2"

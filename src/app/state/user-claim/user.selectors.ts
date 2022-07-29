@@ -34,3 +34,8 @@ export const getDid = createSelector(
   getUserState,
   (state: UserClaimState) => state?.didDocument?.id
 );
+
+export const getDIDDocument = createSelector(
+  getUserState,
+  (state: UserClaimState) => state?.didDocument
+);

@@ -1,0 +1,11 @@
+<h4 mat-dialog-title class="mb-0 d-flex justify-content-between align-items-center">
+  {{ header ?? 'Raw Data' }}
+  <button mat-icon-button [mat-dialog-close]="true">
+    <mat-icon>close</mat-icon>
+  </button>
+</h4>
+<div mat-dialog-content>
+  <div class="mb-2 mt-4 mx-4 mx-lg-4">
+    <app-raw-data [data]="dataToDisplay" [message]="header"></app-raw-data>
+  </div>
+</div>

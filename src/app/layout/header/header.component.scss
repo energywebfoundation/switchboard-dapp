@@ -104,3 +104,14 @@ a:hover {
     right: 20px;
   }
 }
+
+.experimental {
+  position: absolute;
+  right: 85px;
+  top: 5px;
+  color: var(--warning-color);
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
