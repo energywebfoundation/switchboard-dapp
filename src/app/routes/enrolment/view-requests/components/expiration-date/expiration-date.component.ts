@@ -95,7 +95,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
 
   private calcSeconds(value: string): number {
     const d = new Date(value);
-    return Math.round((d.getTime() - Date.now())) + this.getHoursShift();
+    return Math.round(d.getTime() - Date.now()) + this.getHoursShift();
   }
 
   private getHoursShift() {

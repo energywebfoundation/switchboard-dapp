@@ -97,8 +97,9 @@ export class IssuerRequestsComponent
         this.defaultValidityPeriodFormatted = formatValidityPeriod(
           this.roleDefinition?.defaultValidityPeriod
         );
-        this.expirationTime =
-        this.roleDefinition?.defaultValidityPeriod ? Date.now() + this.roleDefinition?.defaultValidityPeriod : null;
+        this.expirationTime = this.roleDefinition?.defaultValidityPeriod
+          ? Date.now() + this.roleDefinition?.defaultValidityPeriod
+          : null;
       });
   }
 }
