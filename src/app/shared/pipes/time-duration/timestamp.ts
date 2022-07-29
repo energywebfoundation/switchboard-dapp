@@ -38,16 +38,8 @@ export class Timestamp {
   }
 
   parseToMilliseconds(value: ParseTimestampResult): number {
-    if (Object.values(value).every((val) => val === 0)) {
-      return null;
-    }
-    const seconds =
-      this.multiply(value.years, this.year) +
-      this.multiply(value.days, this.day) +
-      this.multiply(value.hours, this.hour) +
-      this.multiply(value.minutes, this.minute) +
-      value.seconds;
-    return seconds * 1000;
+    const seconds = this.parseToSeconds(value);
+    return seconds ? seconds * 1000 : null;
   }
 
   private multiply(multiplicand: number, multiplier: number) {
