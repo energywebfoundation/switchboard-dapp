@@ -1,5 +1,6 @@
 import { EnrolmentClaim } from './enrolment-claim';
 import { Claim, NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import { ExpirationStatus } from './expiration-statys.enum';
 
 describe('EnrolmentClaim tests', () => {
   describe('isAccepted', () => {
@@ -337,13 +338,13 @@ describe('EnrolmentClaim tests', () => {
   });
 
   describe('expiration status', () => {
-    it('should have an expiration status of "Not Expired" when expired', () => {
+    it('should have an expiration status of "Not Expired" when not expired', () => {
       expect(
         new EnrolmentClaim({
           claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
           expirationTimestamp: (Date.now() + 500000).toString(),
         } as Claim).expirationStatus
-      ).toEqual('Not Expired');
+      ).toEqual(ExpirationStatus.NOT_EXPIRED);
     });
     it('should have an expiration status of "Expired" when expired', () => {
       expect(
@@ -351,7 +352,7 @@ describe('EnrolmentClaim tests', () => {
           claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
           expirationTimestamp: (Date.now() - 1000).toString(),
         } as Claim).expirationStatus
-      ).toEqual('Expired');
+      ).toEqual(ExpirationStatus.EXPIRED);
     });
     it('should not have an expiration status of when there is no expiration timestamp', () => {
       expect(

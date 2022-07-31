@@ -186,11 +186,14 @@ export class EnrolmentClaim
   }
 
   private defineExpirationStatus() {
-    this.expirationStatus = !this.iclClaim.expirationTimestamp
-      ? ''
-      : parseInt(this.iclClaim.expirationTimestamp) < Date.now()
-      ? ExpirationStatus.EXPIRED
-      : ExpirationStatus.NOT_EXPIRED;
+    if (!this.iclClaim.expirationTimestamp) {
+      this.expirationStatus = '';
+    } else {
+      this.expirationStatus =
+        parseInt(this.iclClaim.expirationTimestamp) < Date.now()
+          ? ExpirationStatus.EXPIRED
+          : ExpirationStatus.NOT_EXPIRED;
+    }
   }
 
   private defineExpirationDate() {

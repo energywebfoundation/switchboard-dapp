@@ -19,7 +19,6 @@ import {
 import { sortingEnrolmentData } from '../utils/sorting-enrolment-data';
 import { FilterStatus } from '../enrolment-list/models/filter-status.enum';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
-import { EnrolmentView } from '../models/enrolment-views.enum';
 
 @Component({
   selector: 'app-requested-enrolment-list',
@@ -43,7 +42,6 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
   @Output() refreshList = new EventEmitter<void>();
 
   enrolmentType = EnrolmentListType.ISSUER;
-  enrolmentView = EnrolmentView.REQUESTS;
   enrolmentViewFilters = [
     FilterStatus.All,
     FilterStatus.Pending,

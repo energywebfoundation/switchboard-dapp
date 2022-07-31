@@ -47,7 +47,6 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   sorting = sortingEnrolmentData;
   private _iamSubscriptionId: number;
   enrolmentType = EnrolmentListType.APPLICANT;
-  enrolmentView = EnrolmentView.MINE;
   enrolmentViewFilters: FilterStatus[] = [
     FilterStatus.All,
     FilterStatus.Pending,
