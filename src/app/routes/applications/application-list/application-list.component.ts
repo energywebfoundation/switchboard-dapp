@@ -119,6 +119,10 @@ export class ApplicationListComponent
     this.getList();
   }
 
+  transferOwnership() {
+    this.getList();
+  }
+
   async remove(roleDefinition: any) {
     const listType = ListType.APP;
     // Get Removal Steps
