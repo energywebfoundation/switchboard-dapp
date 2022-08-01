@@ -79,7 +79,7 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     if (this.disabledSubmit) {
       return;
     }
-    this.submitForm.emit({
+    this.submitForm.next({
       fields: this.buildEnrolmentFormFields(),
       registrationTypes: this.getRegistrationTypes(),
       valid: this.isValid(),
@@ -114,7 +114,7 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     return list.map((field) => {
       this.setFieldDefaults(field);
 
-      const control = new FormControl('');
+      const control = new FormControl();
       control.setValidators(this.buildValidationOptions(field));
       return control;
     });

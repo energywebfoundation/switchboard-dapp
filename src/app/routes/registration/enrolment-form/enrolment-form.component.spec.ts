@@ -304,28 +304,6 @@ describe('EnrolmentFormComponent', () => {
     const { submit } = getSelectors(hostDebug);
     expect(submit.nativeElement.disabled).toBeFalse();
   });
-
-  it('should emit values with empty strings', () => {
-    component.fieldList = [
-      {
-        fieldType: 'number',
-        label: 'label',
-        maxValue: 10,
-        minValue: 2,
-      },
-    ];
-
-    fixture.detectChanges();
-
-    const submitSpy = spyOn(component.submitForm, 'emit');
-
-    const { submit } = getSelectors(hostDebug);
-    submit.nativeElement.click();
-
-    expect(submitSpy).toHaveBeenCalledWith(
-      jasmine.objectContaining({ fields: [{ key: 'label', value: '' }] })
-    );
-  });
 });
 
 const getSelectors = (hostDebug: DebugElement) => {
