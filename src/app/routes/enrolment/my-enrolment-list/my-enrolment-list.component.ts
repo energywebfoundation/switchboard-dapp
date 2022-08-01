@@ -25,7 +25,6 @@ import {
   ColumnType,
 } from '../../../shared/components/table/generic-table/generic-table.component';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
-import { EnrolmentView } from '../models/enrolment-views.enum';
 import { FilterStatus } from '../enrolment-list/models/filter-status.enum';
 
 const TOASTR_HEADER = 'Enrolment';
@@ -46,7 +45,6 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
   private _iamSubscriptionId: number;
-  enrolmentType = EnrolmentListType.APPLICANT;
   enrolmentViewFilters: FilterStatus[] = [
     FilterStatus.All,
     FilterStatus.Pending,
