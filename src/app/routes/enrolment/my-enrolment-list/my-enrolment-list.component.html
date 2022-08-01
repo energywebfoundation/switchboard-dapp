@@ -16,7 +16,7 @@
     mat-menu-item
     class="btn-color-error"
     (click)="cancelClaimRequest(element)"
-    *ngIf="!element?.isAccepted && !element?.isRejected && !element.isRevokedOffChain && !element.isRevokedOnChain">
+    *ngIf="showCancelClaimOption(element)">
     <mat-icon class="btn-color-error">highlight_off</mat-icon>
     <span>Cancel Claim Request</span>
   </button>
