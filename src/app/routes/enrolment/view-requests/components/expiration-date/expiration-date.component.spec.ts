@@ -94,12 +94,12 @@ describe('ExpirationDateComponent', () => {
   });
 
   it('should set default time in input from current time', () => {
-    component.defaultValidityPeriod = 60 * 60 * 24;
+    component.defaultValidityPeriod = 60 * 60 * 24 * 1000;
     fixture.detectChanges();
 
     const { expirationDateInput } = getSelectors(hostDebug);
 
-    expect(new Date(expirationDateInput.value)).toEqual(new Date(2000, 0, 1));
+    expect(new Date(expirationDateInput.value)).toEqual(new Date(2000, 0, 2));
   });
 });
 const getSelectors = (hostDebug) => ({
