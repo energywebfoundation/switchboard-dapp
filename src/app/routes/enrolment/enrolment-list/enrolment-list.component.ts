@@ -17,6 +17,7 @@ export class EnrolmentListComponent {
   @Input() showDID = false;
   @Input() showRevokeFilters = false;
   @Input() columDefinitions: ColumnDefinition[];
+  @Input() enrolmentViewFilters: FilterStatus[];
   @Input() set list(data: EnrolmentClaim[]) {
     this.enrolmentFilterListService.setList(data);
   }

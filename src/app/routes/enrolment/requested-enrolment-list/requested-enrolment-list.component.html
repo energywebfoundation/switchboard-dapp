@@ -2,7 +2,8 @@
   [enrolmentStatus]="enrolmentStatus"
   [list]="list"
   [columDefinitions]="columns"
-  [showDID]="true"></app-enrolment-list>
+  [showDID]="true"
+  [enrolmentViewFilters]="enrolmentViewFilters"></app-enrolment-list>
 
 <ng-template #actions let-element>
   <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList()"></app-preview>

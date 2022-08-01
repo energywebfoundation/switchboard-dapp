@@ -1,5 +1,6 @@
 import { FilterStatus } from '../models/filter-status.enum';
 import { EnrolmentClaim } from '../../models/enrolment-claim';
+import { ExpirationStatus } from '../../models/expiration-statys.enum';
 
 export class FilterBuilder {
   private list: EnrolmentClaim[];
@@ -102,6 +103,11 @@ export class FilterBuilder {
     if (status === FilterStatus.RevokedOffChainOnly) {
       return list.filter(
         (item) => item.isRevokedOffChain && !item.isRevokedOnChain
+      );
+    }
+    if (status === FilterStatus.Expired) {
+      return list.filter(
+        (item) => item.expirationStatus === ExpirationStatus.EXPIRED
       );
     }
   }

@@ -5,12 +5,16 @@ import { FilterStatus } from '../models/filter-status.enum';
 import { EnrolmentClaim } from '../../models/enrolment-claim';
 import { Claim } from 'iam-client-lib';
 
+const isExpired = Date.now() - 1000;
+const isNotExpired = Date.now() + 1000999898709879;
+
 const acceptedClaim = new EnrolmentClaim({
   isAccepted: true,
   isRejected: false,
   namespace: 'claim.namespace.iam.ewc',
   subject: 'subject',
   requester: '',
+  expirationTimestamp: isNotExpired.toString(),
 } as Claim).setIsRevokedOnChain(false);
 
 const notAcceptedClaim = new EnrolmentClaim({
@@ -19,6 +23,7 @@ const notAcceptedClaim = new EnrolmentClaim({
   namespace: 'another.namespace.iam.ewc',
   subject: '',
   requester: '',
+  expirationTimestamp: isExpired.toString(),
 } as Claim).setIsRevokedOnChain(false);
 const claims = [acceptedClaim, notAcceptedClaim] as any[];
 
@@ -64,6 +69,17 @@ describe('EnrolmentFilterListService', () => {
     service.filteredList$.subscribe((list) => {
       expect(list.length).toEqual(1);
       expect(list).toEqual([acceptedClaim] as any[]);
+      done();
+    });
+  });
+
+  it('should filter by expired claims', (done) => {
+    service.setList([...claims]);
+
+    service.setStatus(FilterStatus.Expired);
+    service.filteredList$.subscribe((list) => {
+      expect(list.length).toEqual(1);
+      expect(list).toEqual([notAcceptedClaim] as any[]);
       done();
     });
   });

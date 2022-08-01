@@ -6,4 +6,5 @@ export enum FilterStatus {
   NotRevoked = 'Not Revoked',
   RevokedOffChainOnly = 'Revoked Off-Chain Only',
   Revoked = 'Revoked',
+  Expired = 'Expired',
 }

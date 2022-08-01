@@ -14,8 +14,8 @@ const INPUT_DEBOUNCE_TIME = 300;
 })
 export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
   @Input() showDID = false;
-  @Input() set showRevokeFilters(value: boolean) {
-    this.setFilters(value);
+  @Input() set enrolmentViewFilters(value: FilterStatus[]) {
+    this.statusButtons = value;
   }
   status$: Observable<FilterStatus> = this.enrolmentFilterListService.status$();
   statusButtons: string[];
@@ -48,22 +48,5 @@ export class EnrolmentListFilterComponent implements OnInit, OnDestroy {
 
   statusChangeHandler(value: FilterStatus) {
     this.enrolmentFilterListService.setStatus(value);
-  }
-
-  public async setFilters(showRevokeFilters: boolean) {
-    this.statusButtons = showRevokeFilters
-      ? [
-          FilterStatus.All,
-          FilterStatus.NotRevoked,
-          FilterStatus.RevokedOffChainOnly,
-          FilterStatus.Revoked,
-        ]
-      : [
-          FilterStatus.All,
-          FilterStatus.Pending,
-          FilterStatus.Approved,
-          FilterStatus.Rejected,
-          FilterStatus.Revoked,
-        ];
   }
 }

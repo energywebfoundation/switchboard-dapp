@@ -1,5 +1,6 @@
 import { EnrolmentClaim } from './enrolment-claim';
 import { Claim, NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import { ExpirationStatus } from './expiration-statys.enum';
 
 describe('EnrolmentClaim tests', () => {
   describe('isAccepted', () => {
@@ -333,6 +334,41 @@ describe('EnrolmentClaim tests', () => {
           claimType: `role.${NamespaceType.Role}.app.${NamespaceType.Application}.test.iam.ewc`,
         } as Claim).organization
       ).toEqual('test.iam.ewc');
+    });
+  });
+
+  describe('expiration status', () => {
+    it('should have an expiration status of "Not Expired" when not expired', () => {
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
+          expirationTimestamp: (Date.now() + 500000).toString(),
+        } as Claim).expirationStatus
+      ).toEqual(ExpirationStatus.NOT_EXPIRED);
+    });
+    it('should have an expiration status of "Expired" when expired', () => {
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
+          expirationTimestamp: (Date.now() - 1000).toString(),
+        } as Claim).expirationStatus
+      ).toEqual(ExpirationStatus.EXPIRED);
+    });
+    it('should not have an expiration status of when there is no expiration timestamp', () => {
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
+          expirationTimestamp: null,
+        } as Claim).expirationStatus
+      ).toEqual('');
+    });
+    it('should have an exporation date if there expiration timestamp', () => {
+      expect(
+        new EnrolmentClaim({
+          claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
+          expirationTimestamp: '193984857',
+        } as Claim).expirationDate
+      ).toEqual(new Date(193984857));
     });
   });
 

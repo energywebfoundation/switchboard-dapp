@@ -12,9 +12,6 @@ import { EnrolmentClaim } from '../models/enrolment-claim';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ViewRequestsComponent } from '../view-requests/view-requests.component';
-import { truthy } from '@operators';
-import { isAsset } from '../../../state/enrolments/utils/remove-assets-from-list/remove-assets-from-list';
 import {
   ColumnDefinition,
   ColumnType,
@@ -45,7 +42,13 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
   @Output() refreshList = new EventEmitter<void>();
 
   enrolmentType = EnrolmentListType.ISSUER;
-
+  enrolmentViewFilters = [
+    FilterStatus.All,
+    FilterStatus.Pending,
+    FilterStatus.Approved,
+    FilterStatus.Rejected,
+    FilterStatus.Revoked,
+  ];
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
 
