@@ -41,11 +41,11 @@ export class NotificationService {
   }
 
   updatePendingApprovalList() {
-    this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
+    this.store.dispatch(RequestedEnrolmentsActions.getEnrolmentRequests());
   }
 
   updatePendingPublishList() {
-    this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
+    this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
   }
 
   increaseAssetsOfferedToMeCount() {

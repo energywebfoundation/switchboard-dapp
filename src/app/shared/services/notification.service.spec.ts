@@ -81,7 +81,7 @@ describe('NotificationService', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     service.updatePendingApprovalList();
     expect(dispatchSpy).toHaveBeenCalledOnceWith(
-      RequestedEnrolmentsActions.updateEnrolmentRequests()
+      RequestedEnrolmentsActions.getEnrolmentRequests()
     );
   });
 
@@ -89,7 +89,7 @@ describe('NotificationService', () => {
     const dispatchSpy = spyOn(store, 'dispatch');
     service.updatePendingPublishList();
     expect(dispatchSpy).toHaveBeenCalledOnceWith(
-      OwnedEnrolmentsActions.updateOwnedEnrolments()
+      OwnedEnrolmentsActions.getOwnedEnrolments()
     );
   });
 
