@@ -74,7 +74,7 @@ describe('ValidityPeriodComponent', () => {
     periodNext.click();
     fixture.detectChanges();
 
-    expect(nextSpy).toHaveBeenCalledWith(100);
+    expect(nextSpy).toHaveBeenCalledWith(100000);
   });
 
   it('should return 10 minutes when passing object contains only minutes', () => {
@@ -89,7 +89,7 @@ describe('ValidityPeriodComponent', () => {
     periodNext.click();
     fixture.detectChanges();
 
-    expect(nextSpy).toHaveBeenCalledWith(600);
+    expect(nextSpy).toHaveBeenCalledWith(600000);
   });
 
   it('should update inputs while containing only minutes', () => {
@@ -119,7 +119,7 @@ describe('ValidityPeriodComponent', () => {
     periodNext.click();
     fixture.detectChanges();
 
-    expect(nextSpy).toHaveBeenCalledWith(60 * 60 * 24 * 365);
+    expect(nextSpy).toHaveBeenCalledWith(60 * 60 * 24 * 365 * 1000);
   });
 });
 

@@ -17,7 +17,6 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ExpirationDateComponent implements OnInit, OnDestroy {
   @Input() defaultValidityPeriod: number;
-  @Input() defaultValidityPeriodFormatted: string;
   @Output() add: EventEmitter<number> = new EventEmitter<number>();
 
   expirationDate = new FormControl('');
@@ -69,7 +68,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   restoreDefaultHandler(): void {
     this.add.emit(this.defaultValidityPeriod);
     this.expirationDate.setValue(
-      new Date(Date.now() + this.defaultValidityPeriod * 1000)
+      new Date(Date.now() + this.defaultValidityPeriod)
     );
     this.expirationTimeShift = this.defaultValidityPeriod;
     this.hideRemoveButton = false;
@@ -78,7 +77,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   defaultExpirationDate() {
     if (this.defaultValidityPeriod) {
       this.expirationDate.setValue(
-        new Date(Date.now() + this.defaultValidityPeriod * 1000)
+        new Date(Date.now() + this.defaultValidityPeriod)
       );
       this.expirationTimeShift = this.defaultValidityPeriod;
     }
@@ -86,7 +85,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
 
   setDefaultExpirationDate() {
     this.expirationDate.setValue(
-      new Date(Date.now() + this.defaultValidityPeriod * 1000)
+      new Date(Date.now() + this.defaultValidityPeriod)
     );
     this.add.emit(this.defaultValidityPeriod);
     this.expirationTimeShift = this.defaultValidityPeriod;
@@ -95,7 +94,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
 
   private calcSeconds(value: string): number {
     const d = new Date(value);
-    return Math.round((d.getTime() - Date.now()) / 1000) + this.getHoursShift();
+    return Math.round(d.getTime() - Date.now()) + this.getHoursShift();
   }
 
   private getHoursShift() {

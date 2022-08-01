@@ -37,6 +37,11 @@ export class Timestamp {
     );
   }
 
+  parseToMilliseconds(value: ParseTimestampResult): number {
+    const seconds = this.parseToSeconds(value);
+    return seconds ? seconds * 1000 : null;
+  }
+
   private multiply(multiplicand: number, multiplier: number) {
     if (multiplicand) {
       return multiplicand * multiplier;
@@ -50,6 +55,6 @@ export class Timestamp {
   }
 
   private getRemainder(dividend: number, divisor: number): number {
-    return dividend % divisor;
+    return Math.floor(dividend % divisor);
   }
 }

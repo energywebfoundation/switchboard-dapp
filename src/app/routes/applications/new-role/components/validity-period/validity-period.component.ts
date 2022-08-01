@@ -40,6 +40,6 @@ export class ValidityPeriodComponent {
     if (this.form.invalid) {
       return;
     }
-    this.next.emit(new Timestamp().parseToSeconds(this.form.value));
+    this.next.emit(new Timestamp().parseToMilliseconds(this.form.value));
   }
 }
