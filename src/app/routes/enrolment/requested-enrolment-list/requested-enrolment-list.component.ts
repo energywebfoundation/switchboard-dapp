@@ -25,7 +25,7 @@ import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.
   templateUrl: './requested-enrolment-list.component.html',
   styleUrls: ['./requested-enrolment-list.component.scss'],
 })
-export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
+export class RequestedEnrolmentListComponent {
   @ViewChild('actions', { static: true }) actions;
   @ViewChild('status', { static: true }) status;
   @Input() list: EnrolmentClaim[];
@@ -54,37 +54,8 @@ export class RequestedEnrolmentListComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  private _iamSubscriptionId: number;
-
-  constructor(
-    private loadingService: LoadingService,
-    private iamService: IamService,
-    private dialog: MatDialog
-  ) {}
-
-  async ngOnInit() {
-    // Subscribe to IAM events
-    this._iamSubscriptionId =
-      await this.iamService.messagingService.subscribeTo({
-        messageHandler: this._handleMessage.bind(this),
-      });
-  }
-
-  async ngOnDestroy(): Promise<void> {
-    // Unsubscribe from IAM Events
-    await this.iamService.messagingService.unsubscribeFrom(
-      this._iamSubscriptionId
-    );
-  }
-
   isAccepted(element: EnrolmentClaim) {
     return element?.isAccepted;
-  }
-
-  private async _handleMessage(message) {
-    if (!message.issuedToken) {
-      this.updateList();
-    }
   }
 
   updateList() {

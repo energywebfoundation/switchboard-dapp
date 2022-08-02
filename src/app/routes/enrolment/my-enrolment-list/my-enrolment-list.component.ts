@@ -34,9 +34,9 @@ const TOASTR_HEADER = 'Enrolment';
   templateUrl: './my-enrolment-list.component.html',
   styleUrls: ['./my-enrolment-list.component.scss'],
 })
-export class MyEnrolmentListComponent implements OnInit, OnDestroy {
-  @ViewChild('actions') actions;
-  @ViewChild('status') status;
+export class MyEnrolmentListComponent implements OnInit {
+  @ViewChild('actions', { static: true }) actions;
+  @ViewChild('status', { static: true }) status;
   @Input() list: EnrolmentClaim[];
 
   @ViewChild(MatSort) sort: MatSort;
@@ -44,7 +44,6 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
 
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
-  private _iamSubscriptionId: number;
   enrolmentType = EnrolmentListType.APPLICANT;
   enrolmentViewFilters: FilterStatus[] = [
     FilterStatus.All,
@@ -68,21 +67,8 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
     isAsset(element);
   }
 
-  async ngOnInit() {
-    // Subscribe to IAM events
-    this._iamSubscriptionId =
-      await this.iamService.messagingService.subscribeTo({
-        messageHandler: this._handleMessage.bind(this),
-      });
-
+  ngOnInit() {
     this.defineColumns();
-  }
-
-  async ngOnDestroy(): Promise<void> {
-    // Unsubscribe from IAM Events
-    await this.iamService.messagingService.unsubscribeFrom(
-      this._iamSubscriptionId
-    );
   }
 
   isAccepted(element: EnrolmentClaim) {
@@ -162,12 +148,6 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
 
   updateList(): void {
     this.refreshList.emit();
-  }
-
-  private async _handleMessage(message) {
-    if (message.issuedToken || message.isRejected) {
-      this.updateList();
-    }
   }
 
   private defineColumns() {
