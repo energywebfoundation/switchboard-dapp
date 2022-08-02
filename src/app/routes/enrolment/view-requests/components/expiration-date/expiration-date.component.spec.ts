@@ -82,7 +82,7 @@ describe('ExpirationDateComponent', () => {
     );
   });
 
-  it('should check if remove button sets expiration time as undefined', () => {
+  it('should check if remove button calls "remove" to set the expiration time as null', () => {
     component.defaultValidityPeriod = 100;
     fixture.detectChanges();
 
@@ -90,7 +90,8 @@ describe('ExpirationDateComponent', () => {
     removeButton.click();
     fixture.detectChanges();
 
-    expect(component.add.emit).toHaveBeenCalledWith(undefined);
+    expect(component.remove.emit).toHaveBeenCalled;
+    expect(component.expirationDate.value).toEqual('');
   });
 
   it('should set default time in input from current time', () => {
