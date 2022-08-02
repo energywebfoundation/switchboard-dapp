@@ -35,7 +35,9 @@
         <app-expiration-date
           data-qa-id="expiration-date"
           [defaultValidityPeriod]="roleDefinition?.defaultValidityPeriod"
-          (add)="updateExpirationDate($event)"></app-expiration-date>
+          (add)="setExpirationTimeUsingValidity($event)"
+          (remove)="clearExpirationDate()">
+        </app-expiration-date>
       </div>
 
       <div class="col-lg-12 mt-2" *ngIf="claim?.registrationTypes?.length === 2 && !claim.isAccepted">
