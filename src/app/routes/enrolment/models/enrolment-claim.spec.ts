@@ -229,6 +229,60 @@ describe('EnrolmentClaim tests', () => {
       ).toBeTrue();
     });
   });
+  describe('canCancelClaimRequest', () => {
+    it('should return true when the claim is accepted, not rejected and not revoked on-chain and not-revoked off-chain', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: false,
+          isRejected: false,
+        } as Claim)
+          .setIsRevokedOffChain(false)
+          .setIsRevokedOnChain(false).canCancelClaimRequest
+      ).toBeTrue();
+    });
+    it('should return false when the claim is accepted', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          isRejected: false,
+        } as Claim)
+          .setIsRevokedOffChain(false)
+          .setIsRevokedOnChain(false).canCancelClaimRequest
+      ).toBeFalse();
+    });
+    it('should return false when the claim is rejected', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: false,
+          isRejected: true,
+        } as Claim)
+          .setIsRevokedOffChain(false)
+          .setIsRevokedOnChain(false).canCancelClaimRequest
+      ).toBeFalse();
+    });
+
+    it('should return false when the claim is revoked off-chain', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          isRejected: false,
+        } as Claim)
+          .setIsRevokedOffChain(true)
+          .setIsRevokedOnChain(false).canCancelClaimRequest
+      ).toBeFalse();
+    });
+
+    it('should return false when the claim is revoked off-chain', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          isRejected: false,
+        } as Claim)
+          .setIsRevokedOffChain(false)
+          .setIsRevokedOnChain(true).canCancelClaimRequest
+      ).toBeFalse();
+    });
+  });
 
   describe('isRevoked', () => {
     it('should return true if is revoked only off chain', () => {

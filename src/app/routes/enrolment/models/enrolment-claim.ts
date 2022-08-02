@@ -107,6 +107,15 @@ export class EnrolmentClaim
     );
   }
 
+  get canCancelClaimRequest(): boolean {
+    return (
+      !this.iclClaim.isAccepted &&
+      !this.iclClaim.isRejected &&
+      !this.isRevokedOffChain &&
+      !this.isRevokedOnChain
+    );
+  }
+
   setIsRevokedOnChain(isRevoked: boolean): EnrolmentClaim {
     this.isRevokedOnChain = isRevoked;
     return this;
