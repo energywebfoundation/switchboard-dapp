@@ -18,7 +18,7 @@ import { takeUntil } from 'rxjs/operators';
 export class ExpirationDateComponent implements OnInit, OnDestroy {
   @Input() defaultValidityPeriod: number;
   @Output() add: EventEmitter<number> = new EventEmitter<number>();
-  @Output() remove: EventEmitter<number> = new EventEmitter<number>();
+  @Output() remove: EventEmitter<void> = new EventEmitter<void>();
 
   expirationDate = new FormControl('');
   expirationTimeShift: number;

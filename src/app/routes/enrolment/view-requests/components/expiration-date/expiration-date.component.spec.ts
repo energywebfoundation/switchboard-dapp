@@ -40,6 +40,7 @@ describe('ExpirationDateComponent', () => {
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
     spyOn(component.add, 'emit');
+    spyOn(component.remove, 'emit');
     jasmine.clock().install();
     baseTime = new Date(2000, 0, 1, 1, 0, 0);
     timezoneSeconds = baseTime.getTimezoneOffset() * 60;
@@ -90,7 +91,7 @@ describe('ExpirationDateComponent', () => {
     removeButton.click();
     fixture.detectChanges();
 
-    expect(component.remove.emit).toHaveBeenCalled;
+    expect(component.remove.emit).toHaveBeenCalled();
     expect(component.expirationDate.value).toEqual('');
   });
 
