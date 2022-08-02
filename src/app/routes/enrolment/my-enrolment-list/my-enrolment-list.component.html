@@ -15,8 +15,8 @@
   <button
     mat-menu-item
     class="btn-color-error"
-    (click)="element.canCancelClaimRequest"
-    *ngIf="showCancelClaimOption(element)">
+    (click)="cancelClaimRequest(element)"
+    *ngIf="element.canCancelClaimRequest">
     <mat-icon class="btn-color-error">highlight_off</mat-icon>
     <span>Cancel Claim Request</span>
   </button>

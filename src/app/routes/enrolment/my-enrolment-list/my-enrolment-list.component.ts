@@ -93,15 +93,6 @@ export class MyEnrolmentListComponent implements OnInit, OnDestroy {
     return !element?.isSynced;
   }
 
-  showCancelClaimOption(element: EnrolmentClaim) {
-    return (
-      !element?.isAccepted &&
-      !element?.isRejected &&
-      !element.isRevokedOffChain &&
-      !element.isRevokedOnChain
-    );
-  }
-
   view(element: EnrolmentClaim) {
     this.dialog
       .open(ViewRequestsComponent, {
