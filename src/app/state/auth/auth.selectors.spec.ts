@@ -24,7 +24,7 @@ describe('Auth Selectors', () => {
     it('should return false when metamaskChainId is set to Volta chain', () => {
       expect(
         authSelectors.isMetamaskDisabled.projector({
-          metamask: { chainId: '0x12047' },
+          metamask: { chainId: 73799 },
           defaultChainId: 73799,
         })
       ).toBeFalsy();

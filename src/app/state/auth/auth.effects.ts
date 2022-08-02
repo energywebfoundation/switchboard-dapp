@@ -23,11 +23,7 @@ import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/
 import * as AuthSelectors from './auth.selectors';
 import { EnvService } from '../../shared/services/env/env.service';
 import { RouterConst } from '../../routes/router-const';
-import {
-  OwnedEnrolmentsActions,
-  RequestedEnrolmentsActions,
-  RevocableEnrolmentsActions,
-} from '@state';
+import { OwnedEnrolmentsActions, RequestedEnrolmentsActions } from '@state';
 
 @Injectable()
 export class AuthEffects {
@@ -39,7 +35,7 @@ export class AuthEffects {
           map(({ isMetamaskPresent, chainId }) =>
             AuthActions.setMetamaskLoginOptions({
               present: isMetamaskPresent,
-              chainId,
+              chainId: chainId ? parseInt(`${chainId}`, 16) : undefined,
             })
           )
         )
@@ -56,6 +52,26 @@ export class AuthEffects {
         })
       )
     )
+  );
+
+  checkNetwork$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.setMetamaskLoginOptions),
+        map(({ present, chainId }) => {
+          if (!present) {
+            return;
+          }
+          if (chainId === this.envService.chainId) {
+            return;
+          }
+          if (!this.loginService.isMetamaskProvider()) {
+            return;
+          }
+          this.loginService.wrongNetwork();
+        })
+      ),
+    { dispatch: false }
   );
 
   loginViaDialog$ = createEffect(() =>
@@ -148,7 +164,6 @@ export class AuthEffects {
         userActions.setUpUser(),
         OwnedEnrolmentsActions.getOwnedEnrolments(),
         RequestedEnrolmentsActions.getEnrolmentRequests(),
-        // RevokableEnrolmentsActions.getRevokableEnrolments(),
       ])
     )
   );
@@ -178,6 +193,10 @@ export class AuthEffects {
         AuthActions.reinitializeAuthForEnrol
       ),
       filter(this.loginService.isSessionActive),
+      concatLatestFrom(() =>
+        this.store.select(AuthSelectors.isMetamaskDisabled)
+      ),
+      filter(([, isMetamaskDisabled]) => !isMetamaskDisabled),
       concatLatestFrom(() => this.store.select(AuthSelectors.isUserLoggedIn)),
       filter(([, isLoggedIn]) => !isLoggedIn),
       tap(() => this.loadingService.show()),

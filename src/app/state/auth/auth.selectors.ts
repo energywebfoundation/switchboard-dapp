@@ -15,9 +15,7 @@ export const isMetamaskPresent = createSelector(
 
 export const isMetamaskDisabled = createSelector(
   getAuthState,
-  (state) =>
-    state?.metamask.chainId &&
-    parseInt(`${state?.metamask.chainId}`, 16) !== state?.defaultChainId
+  (state) => state?.metamask.chainId !== state?.defaultChainId
 );
 
 export const getWalletProvider = createSelector(

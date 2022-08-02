@@ -18,15 +18,8 @@ import { EnvService } from '../../shared/services/env/env.service';
 import { RouterConst } from '../../routes/router-const';
 
 describe('AuthEffects', () => {
-  const loginServiceSpy = jasmine.createSpyObj('LoginService', [
-    'waitForSignature',
-    'clearWaitSignatureTimer',
-    'login',
-    'disconnect',
-    'isSessionActive',
-    'getProviderType',
-    'getSession',
-  ]);
+  let loginServiceSpy;
+  let envServiceSpy;
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['closeAll', 'open']);
   const routerSpy = jasmine.createSpyObj('Router', [
     'navigateByUrl',
@@ -37,13 +30,25 @@ describe('AuthEffects', () => {
   let store: MockStore<AuthState>;
 
   beforeEach(() => {
+    loginServiceSpy = jasmine.createSpyObj('LoginService', [
+      'waitForSignature',
+      'clearWaitSignatureTimer',
+      'login',
+      'disconnect',
+      'isSessionActive',
+      'getProviderType',
+      'getSession',
+      'isMetamaskProvider',
+      'wrongNetwork',
+    ]);
+    envServiceSpy = jasmine.createSpyObj('EnvService', [], { chainId: 73799 });
     TestBed.configureTestingModule({
       providers: [
         AuthEffects,
         { provide: LoginService, useValue: loginServiceSpy },
         { provide: MatDialog, useValue: dialogSpy },
         { provide: Router, useValue: routerSpy },
-        { provide: EnvService, useValue: {} },
+        { provide: EnvService, useValue: envServiceSpy },
         provideMockStore(),
         provideMockActions(() => actions$),
       ],
@@ -74,6 +79,58 @@ describe('AuthEffects', () => {
         );
         done();
       });
+    });
+  });
+  describe('checkNetwork$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should call wrong network method when metamask is present, chainId is different and will try to reauth with metamask', () => {
+      loginServiceSpy.isMetamaskProvider.and.returnValue(true);
+      actions$.next(
+        AuthActions.setMetamaskLoginOptions({ present: true, chainId: 123 })
+      );
+
+      effects.checkNetwork$.subscribe();
+
+      expect(loginServiceSpy.wrongNetwork).toHaveBeenCalled();
+    });
+
+    it('should not call wrongNetwork when metamask is not present', () => {
+      loginServiceSpy.isMetamaskProvider.and.returnValue(true);
+      actions$.next(
+        AuthActions.setMetamaskLoginOptions({
+          present: false,
+          chainId: undefined,
+        })
+      );
+
+      effects.checkNetwork$.subscribe();
+
+      expect(loginServiceSpy.wrongNetwork).not.toHaveBeenCalled();
+    });
+
+    it('should not call wrongNetwork when metamask is present and chainId is correct', () => {
+      loginServiceSpy.isMetamaskProvider.and.returnValue(true);
+      actions$.next(
+        AuthActions.setMetamaskLoginOptions({ present: true, chainId: 73799 })
+      );
+
+      effects.checkNetwork$.subscribe();
+
+      expect(loginServiceSpy.wrongNetwork).not.toHaveBeenCalled();
+    });
+
+    it('should not call wrongNetwork when chainId is wrong but it will not reinitialize with metamask', () => {
+      loginServiceSpy.isMetamaskProvider.and.returnValue(false);
+      actions$.next(
+        AuthActions.setMetamaskLoginOptions({ present: true, chainId: 123 })
+      );
+
+      effects.checkNetwork$.subscribe();
+
+      expect(loginServiceSpy.wrongNetwork).not.toHaveBeenCalled();
     });
   });
 

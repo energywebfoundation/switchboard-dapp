@@ -85,6 +85,10 @@ export class LoginService {
     return this.iamService.providerType;
   }
 
+  isMetamaskProvider(): boolean {
+    return localStorage.getItem(PROVIDER_TYPE) === ProviderType.MetaMask;
+  }
+
   /**
    * Login via IAM and retrieve basic user info
    */
@@ -196,6 +200,15 @@ export class LoginService {
     if (this._throwTimeoutError) {
       this._throwTimeoutError = false;
       throw new Error('Wallet Signature Timeout');
+    }
+  }
+
+  public wrongNetwork() {
+    if (this.isSessionActive()) {
+      this.openSwal(
+        { title: 'Ops!', text: "You're using wrong network" },
+        false
+      );
     }
   }
 
