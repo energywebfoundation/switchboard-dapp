@@ -26,6 +26,8 @@ import {
 } from '../../../shared/components/table/generic-table/generic-table.component';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
 import { FilterStatus } from '../enrolment-list/models/filter-status.enum';
+import { SettingsSelectors } from '@state';
+import { take } from 'rxjs/operators';
 
 const TOASTR_HEADER = 'Enrolment';
 
@@ -41,7 +43,7 @@ export class MyEnrolmentListComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @Output() refreshList = new EventEmitter<void>();
-
+  experimentalEnabled: boolean;
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
   enrolmentType = EnrolmentListType.APPLICANT;
@@ -67,7 +69,11 @@ export class MyEnrolmentListComponent implements OnInit {
     isAsset(element);
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.experimentalEnabled = await this.store
+      .select(SettingsSelectors.isExperimentalEnabled)
+      .pipe(take<boolean>(1))
+      .toPromise();
     this.defineColumns();
   }
 
@@ -86,6 +92,7 @@ export class MyEnrolmentListComponent implements OnInit {
         data: {
           listType: EnrolmentListType.APPLICANT,
           claimData: element,
+          experimentalEnabled: this.experimentalEnabled,
         },
         maxWidth: '100%',
         disableClose: true,

@@ -1,3 +1,5 @@
+import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
+import { ICredentialSubject } from '@sphereon/pex';
 import {
   Claim,
   isRoleCredential,
@@ -7,7 +9,6 @@ import {
 import { EnrolmentClaimAbstract } from './enrolment-claim.abstract';
 import { IEnrolmentClaim } from './enrolment-claim.interface';
 import { ExpirationStatus } from './expiration-statys.enum';
-
 export class EnrolmentClaim
   extends EnrolmentClaimAbstract
   implements IEnrolmentClaim
@@ -21,6 +22,7 @@ export class EnrolmentClaim
 
   isRevokedOnChain: boolean;
   isRevokedOffChain: boolean;
+  decodedToken: string | { [key: string]: any };
   createdAt: string;
 
   private _isSyncedOnChain: boolean;
@@ -92,6 +94,10 @@ export class EnrolmentClaim
     );
   }
 
+  get verifiableCredential(): VerifiableCredential<ICredentialSubject> {
+    return this.iclClaim.vp?.verifiableCredential[0];
+  }
+
   get canRevokeOnChain(): boolean {
     return this.isSyncedOnChain && !this.isRevokedOnChain;
   }
@@ -127,8 +133,17 @@ export class EnrolmentClaim
     );
   }
 
+  get isIssued(): boolean {
+    return this.iclClaim.isAccepted && !this.iclClaim.isRejected;
+  }
+
   setIsRevokedOnChain(isRevoked: boolean): EnrolmentClaim {
     this.isRevokedOnChain = isRevoked;
+    return this;
+  }
+
+  setDecodedToken(token: string | { [key: string]: any }) {
+    this.decodedToken = token;
     return this;
   }
 

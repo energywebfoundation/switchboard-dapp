@@ -18,17 +18,26 @@ import { GetPreviewComponent } from './get-preview-component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PreviewComponent {
-  @Input() element: EnrolmentClaim;
+  private readonly VIEW_CREDENTIAL = 'View Credential';
+  private readonly VIEW_REQUEST = 'View Request';
   @Input() enrolmentType: EnrolmentListType;
+  @Input() experimentalEnabled: boolean;
+  @Input() set element(claim: EnrolmentClaim) {
+    this.enrolmentClaim = claim;
+    this.updateHeader(claim);
+  }
   @Output() refreshList = new EventEmitter();
+  header: string;
+  enrolmentClaim: EnrolmentClaim;
   constructor(private dialog: MatDialog) {}
 
-  view(element: EnrolmentClaim) {
+  view() {
     this.dialog
       .open(GetPreviewComponent.get(this.enrolmentType), {
         width: '600px',
         data: {
-          claimData: element,
+          experimentalEnabled: this.experimentalEnabled,
+          claimData: this.enrolmentClaim,
         },
         maxWidth: '100%',
         disableClose: true,
@@ -38,5 +47,12 @@ export class PreviewComponent {
       .subscribe(() => {
         this.refreshList.emit();
       });
+  }
+
+  updateHeader(claim: EnrolmentClaim) {
+    this.header =
+      claim.isAccepted || claim.isRevoked
+        ? this.VIEW_CREDENTIAL
+        : this.VIEW_REQUEST;
   }
 }
