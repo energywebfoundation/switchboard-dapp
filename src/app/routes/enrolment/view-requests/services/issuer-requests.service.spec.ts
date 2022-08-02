@@ -77,6 +77,44 @@ describe('IssuerRequestsService', () => {
         done();
       });
     });
+
+    it('should use only valid issuer fields when approving', (done) => {
+      const claim = {
+        requester: 'requester',
+        id: 'id',
+        token: 'toke',
+        subjectAgreement: 'subject agreement',
+        registrationTypes: [
+          RegistrationTypes.OnChain,
+          RegistrationTypes.OffChain,
+        ],
+      };
+      claimsFacadeSpy.issueClaimRequest.and.returnValue(of(null));
+
+      service
+        .approve(
+          claim as EnrolmentClaim,
+          [
+            { key: 'label', value: undefined },
+            { key: 'second label', value: '123' },
+          ],
+          undefined
+        )
+        .subscribe(() => {
+          expect(claimsFacadeSpy.issueClaimRequest).toHaveBeenCalledWith(
+            jasmine.objectContaining(claim)
+          );
+          expect(claimsFacadeSpy.issueClaimRequest).toHaveBeenCalledWith(
+            jasmine.objectContaining({
+              issuerFields: [{ key: 'second label', value: '123' }],
+              publishOnChain: false,
+              expirationTimestamp: undefined,
+            })
+          );
+          expect(toastrSpy.success).toHaveBeenCalled();
+          done();
+        });
+    });
   });
 
   describe('reject tests', () => {

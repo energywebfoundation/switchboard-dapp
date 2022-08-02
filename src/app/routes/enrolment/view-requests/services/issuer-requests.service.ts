@@ -32,7 +32,7 @@ export class IssuerRequestsService {
       token: claim.token,
       subjectAgreement: claim.subjectAgreement,
       registrationTypes: claim.registrationTypes,
-      issuerFields: issuerFields,
+      issuerFields: issuerFields.filter((field) => field.value),
       publishOnChain: false,
       expirationTimestamp,
     };
