@@ -50,6 +50,17 @@ export class EnrolmentClaim
     return !this.iclClaim?.isAccepted && !this.iclClaim?.isRejected;
   }
 
+  get isExpired() {
+    return (
+      !!this.iclClaim.expirationTimestamp &&
+      parseInt(this.iclClaim.expirationTimestamp) < Date.now()
+    );
+  }
+
+  get canPublishClaim() {
+    return this.isPendingSync && !this.isExpired;
+  }
+
   get isPendingSync() {
     if (this.isRegisteredOnChain() && this.isRegisteredOffChain()) {
       return !this.isSyncedOffChain || !this.isSyncedOnChain;
@@ -196,12 +207,11 @@ export class EnrolmentClaim
 
   private defineExpirationStatus() {
     if (!this.iclClaim.expirationTimestamp) {
-      this.expirationStatus = '';
+      this.expirationStatus = undefined;
     } else {
-      this.expirationStatus =
-        parseInt(this.iclClaim.expirationTimestamp) < Date.now()
-          ? ExpirationStatus.EXPIRED
-          : ExpirationStatus.NOT_EXPIRED;
+      this.expirationStatus = this.isExpired
+        ? ExpirationStatus.EXPIRED
+        : ExpirationStatus.NOT_EXPIRED;
     }
   }
 
