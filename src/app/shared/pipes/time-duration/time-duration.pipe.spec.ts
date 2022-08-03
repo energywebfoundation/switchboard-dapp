@@ -37,7 +37,7 @@ describe('time-duration', () => {
   });
 
   it('should return 2 minutes', () => {
-    expect(pipe.transform(2 * 60000)).toEqual('2 minutes');
+    expect(pipe.transform(2 * MINUTE_IN_MILISECONDS)).toEqual('2 minutes');
   });
 
   it('should return 2 days and 3 hours', () => {
