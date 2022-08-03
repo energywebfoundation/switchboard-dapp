@@ -41,7 +41,6 @@ export class ValidityPeriodComponent {
       return;
     }
     const theValue = new Timestamp().parseToMilliseconds(this.form.value);
-    console.log(theValue, 'THE VALUE');
     this.next.emit(theValue);
   }
 }
