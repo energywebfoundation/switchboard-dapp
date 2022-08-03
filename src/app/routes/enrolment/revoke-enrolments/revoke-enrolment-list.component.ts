@@ -22,6 +22,7 @@ import { CascadingFilterService } from './services/cascading-filter/cascading-fi
 })
 export class MyRevokablesListComponent implements OnInit {
   @ViewChild('revoke', { static: true }) revoke;
+  @ViewChild('status', { static: true }) status;
   @Input() set list(list: EnrolmentClaim[]) {
     this.cascadingFilterService.setClaims(list);
   }
@@ -71,6 +72,12 @@ export class MyRevokablesListComponent implements OnInit {
         type: ColumnType.DID,
         field: 'requester',
         header: 'Requestor DID',
+      },
+      {
+        type: ColumnType.Custom,
+        field: 'status',
+        header: 'status',
+        customElement: this.status,
       },
       {
         type: ColumnType.Custom,
