@@ -44,7 +44,7 @@ describe('ValidityPeriodComponent', () => {
   });
 
   it('should update input with provided value', () => {
-    component.validityPeriod = 135;
+    component.validityPeriod = 120015;
     fixture.detectChanges();
 
     const { yearsInput, daysInput, hoursInput, minutesInput, secondsInput } =
@@ -74,7 +74,7 @@ describe('ValidityPeriodComponent', () => {
     periodNext.click();
     fixture.detectChanges();
 
-    expect(nextSpy).toHaveBeenCalledWith(100000);
+    expect(nextSpy).toHaveBeenCalledWith(60040);
   });
 
   it('should return 10 minutes when passing object contains only minutes', () => {
@@ -93,7 +93,7 @@ describe('ValidityPeriodComponent', () => {
   });
 
   it('should update inputs while containing only minutes', () => {
-    component.validityPeriod = 600;
+    component.validityPeriod = 600000;
     fixture.detectChanges();
 
     const { yearsInput, daysInput, hoursInput, minutesInput, secondsInput } =

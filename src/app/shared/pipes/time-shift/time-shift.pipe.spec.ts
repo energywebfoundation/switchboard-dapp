@@ -18,7 +18,7 @@ describe('TimeShiftPipe', () => {
 
   it('should return date shifted for 100 seconds', () => {
     const exampleDate = new Date('2014-01-01 10:11:55');
-    expect(pipe.transform(100, exampleDate)).toEqual(
+    expect(pipe.transform(100000, exampleDate)).toEqual(
       new Date('2014-01-01 10:13:35')
     );
   });

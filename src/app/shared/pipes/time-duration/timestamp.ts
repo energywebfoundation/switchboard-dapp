@@ -7,12 +7,15 @@ export interface ParseTimestampResult {
 }
 
 export class Timestamp {
-  private readonly minute = 60;
+  /*
+   The base unit for all time calculations is miliseconds
+  */
+  private readonly minute = 60 * 1000; //60 seconds = 60000 miliseconds
   private readonly hour = this.minute * 60;
   private readonly day = this.hour * 24;
   private readonly year = this.day * 365;
 
-  determineFromSeconds(value: number): ParseTimestampResult {
+  determineFromMiliseconds(value: number): ParseTimestampResult {
     const years = this.getQuotient(value, this.year);
     const yearsRemainder = this.getRemainder(value, this.year);
     const days = this.getQuotient(yearsRemainder, this.day);
@@ -24,7 +27,7 @@ export class Timestamp {
     return { years, days, hours, minutes, seconds };
   }
 
-  parseToSeconds(value: ParseTimestampResult): number {
+  parseToMilliseconds(value: ParseTimestampResult): number {
     if (Object.values(value).every((val) => val === 0)) {
       return null;
     }
@@ -35,11 +38,6 @@ export class Timestamp {
       this.multiply(value.minutes, this.minute) +
       value.seconds
     );
-  }
-
-  parseToMilliseconds(value: ParseTimestampResult): number {
-    const seconds = this.parseToSeconds(value);
-    return seconds ? seconds * 1000 : null;
   }
 
   private multiply(multiplicand: number, multiplier: number) {

@@ -8,7 +8,7 @@ export class TimeShiftPipe implements PipeTransform {
 
   transform(shift: number, dateValue?: string | Date): Date {
     const date = this.getDate(dateValue);
-    date.setSeconds(date.getSeconds() + shift);
+    date.setMilliseconds(date.getMilliseconds() + shift);
     return date;
   }
 
