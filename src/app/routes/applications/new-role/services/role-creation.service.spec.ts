@@ -75,7 +75,7 @@ describe('RoleCreationService', () => {
 
     it('should catch error when is thrown by isOwner', async () => {
       domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
-        Promise.resolve(true)
+        Promise.resolve(false)
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.reject('reason'));
       const result = await service.canUseDomain('domain');

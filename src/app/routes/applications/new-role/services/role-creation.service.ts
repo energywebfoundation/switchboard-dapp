@@ -21,10 +21,12 @@ export class RoleCreationService {
   async canUseDomain(domain: string): Promise<boolean> {
     try {
       const exists = await this.domainsFacade.checkExistenceOfDomain(domain);
-      const isOwner = await this.domainsFacade.isOwner(domain);
       if (exists) {
         return false;
       }
+
+      const isOwner = await this.domainsFacade.isOwner(domain);
+
       if (!exists && !isOwner) {
         return false;
       }
