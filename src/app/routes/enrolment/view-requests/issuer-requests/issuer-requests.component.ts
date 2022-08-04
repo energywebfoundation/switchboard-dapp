@@ -88,7 +88,7 @@ export class IssuerRequestsComponent
   }
 
   clearExpirationDate(): void {
-    this.expirationTime = null;
+    this.expirationTime = undefined;
   }
 
   private getRoleIssuerFields(namespace: string): void {
@@ -98,7 +98,7 @@ export class IssuerRequestsComponent
         this.roleDefinition = definitions;
         this.expirationTime = this.roleDefinition?.defaultValidityPeriod
           ? Date.now() + this.roleDefinition?.defaultValidityPeriod
-          : null;
+          : undefined;
       });
   }
 }
