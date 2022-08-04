@@ -106,9 +106,7 @@ export class FilterBuilder {
       );
     }
     if (status === FilterStatus.Expired) {
-      return list.filter(
-        (item) => item.expirationStatus === ExpirationStatus.EXPIRED
-      );
+      return list.filter((item) => item.isExpired);
     }
   }
 
