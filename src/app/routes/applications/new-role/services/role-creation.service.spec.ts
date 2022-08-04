@@ -31,19 +31,10 @@ describe('RoleCreationService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('checkIfUserCanUseDomain method', () => {
-    it('should return true, when domain do not exist', async () => {
+  describe('canUseDomain method', () => {
+    it('should return true, when domain do not exist and user is the owner', async () => {
       domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
         Promise.resolve(false)
-      );
-      const result = await service.canUseDomain('domain');
-
-      expect(result).toBeTrue();
-    });
-
-    it('should return true, when domain exist and user is the owner', async () => {
-      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
-        Promise.resolve(true)
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(true));
       const result = await service.canUseDomain('domain');
@@ -51,9 +42,19 @@ describe('RoleCreationService', () => {
       expect(result).toBeTrue();
     });
 
-    it('should return false, when domain exist and user is not the owner', async () => {
+    it('should return false, when domain exist', async () => {
       domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
         Promise.resolve(true)
+      );
+      domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(true));
+      const result = await service.canUseDomain('domain');
+
+      expect(result).toBeFalse();
+    });
+
+    it('should return false, when domain do not exist and user is not the owner', async () => {
+      domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
+        Promise.resolve(false)
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(false));
       const result = await service.canUseDomain('domain');
