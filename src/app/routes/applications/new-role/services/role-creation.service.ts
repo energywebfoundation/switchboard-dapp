@@ -25,13 +25,7 @@ export class RoleCreationService {
         return false;
       }
 
-      const isOwner = await this.domainsFacade.isOwner(domain);
-
-      if (!exists && !isOwner) {
-        return false;
-      }
-
-      return !exists;
+      return await this.domainsFacade.isOwner(domain);
     } catch (e) {
       this.toastrService.error(e?.message, TOASTR_HEADER);
       return false;
