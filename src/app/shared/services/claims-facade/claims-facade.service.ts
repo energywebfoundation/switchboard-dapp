@@ -224,7 +224,7 @@ export class ClaimsFacadeService {
   }
 
   private async setIsRevokedOffChainStatus(enrolment: EnrolmentClaim) {
-    if (enrolment.isRevocableOffChain) {
+    if (enrolment.credential?.credentialStatus) {
       return enrolment.setIsRevokedOffChain(
         await this.iamService.verifiableCredentialsService.isRevoked(
           enrolment.credential as VerifiableCredential<RoleCredentialSubject>

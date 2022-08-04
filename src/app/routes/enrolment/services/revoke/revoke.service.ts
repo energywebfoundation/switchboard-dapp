@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EnrolmentClaim } from '../../models/enrolment-claim';
 import { IamService } from '../../../../shared/services/iam.service';
-import { isRoleCredential } from 'iam-client-lib';
+import { isRoleCredential, StatusList2021Credential } from 'iam-client-lib';
 import { from, Observable, of } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { LoadingService } from '../../../../shared/services/loading.service';
@@ -43,7 +43,7 @@ export class RevokeService {
   private handleRevokeResponse() {
     return (source) =>
       source.pipe(
-        map((value: boolean) => {
+        map((value: boolean | StatusList2021Credential) => {
           if (value) {
             this.toastrService.success(
               'Successfully revoked claim',
