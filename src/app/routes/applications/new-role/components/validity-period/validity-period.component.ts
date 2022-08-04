@@ -20,7 +20,7 @@ export class ValidityPeriodComponent {
       return;
     }
     this.form.setValue({
-      ...new Timestamp().determineFromSeconds(value),
+      ...new Timestamp().determineFromMiliseconds(value),
     });
   }
   @Output() next = new EventEmitter<number | undefined>();
@@ -40,6 +40,7 @@ export class ValidityPeriodComponent {
     if (this.form.invalid) {
       return;
     }
-    this.next.emit(new Timestamp().parseToMilliseconds(this.form.value));
+    const theValue = new Timestamp().parseToMilliseconds(this.form.value);
+    this.next.emit(theValue);
   }
 }

@@ -12,7 +12,9 @@ export class TimeDurationPipe implements PipeTransform {
       return this.defaultText;
     }
     if (typeof value === 'number') {
-      return this.createMessage(new Timestamp().determineFromSeconds(value));
+      return this.createMessage(
+        new Timestamp().determineFromMiliseconds(value)
+      );
     }
 
     return this.createMessage(value);
