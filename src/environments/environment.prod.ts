@@ -1,4 +1,5 @@
 import { constants } from './constants';
+import { ChainId } from '../app/core/config/chain-id';
 
 export const environment = {
   production: true,
@@ -6,7 +7,7 @@ export const environment = {
   application: true,
 
   rpcUrl: 'https://rpc.energyweb.org/',
-  chainId: 246,
+  chainId: ChainId.Volta,
   cacheServerUrl: 'https://identitycache.energyweb.org/v1',
   natsServerUrl: 'https://identityevents.energyweb.org/',
   kmsServerUrl: 'https://kms.energyweb.org/connect/new',

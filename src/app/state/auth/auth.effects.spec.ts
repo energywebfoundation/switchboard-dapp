@@ -16,6 +16,7 @@ import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/
 import * as AuthSelectors from './auth.selectors';
 import { EnvService } from '../../shared/services/env/env.service';
 import { RouterConst } from '../../routes/router-const';
+import { ChainId } from '../../core/config/chain-id';
 
 describe('AuthEffects', () => {
   let loginServiceSpy;
@@ -41,7 +42,9 @@ describe('AuthEffects', () => {
       'isMetamaskProvider',
       'wrongNetwork',
     ]);
-    envServiceSpy = jasmine.createSpyObj('EnvService', [], { chainId: 73799 });
+    envServiceSpy = jasmine.createSpyObj('EnvService', [], {
+      chainId: ChainId.Volta,
+    });
     TestBed.configureTestingModule({
       providers: [
         AuthEffects,
@@ -114,7 +117,10 @@ describe('AuthEffects', () => {
     it('should not call wrongNetwork when metamask is present and chainId is correct', () => {
       loginServiceSpy.isMetamaskProvider.and.returnValue(true);
       actions$.next(
-        AuthActions.setMetamaskLoginOptions({ present: true, chainId: 73799 })
+        AuthActions.setMetamaskLoginOptions({
+          present: true,
+          chainId: ChainId.Volta,
+        })
       );
 
       effects.checkNetwork$.subscribe();
