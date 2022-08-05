@@ -206,7 +206,7 @@ export class LoginService {
   public wrongNetwork() {
     if (this.isSessionActive()) {
       this.openSwal(
-        { title: 'Ops!', text: "You're using wrong network" },
+        { title: 'Oops!', text: "You're using the wrong network" },
         false
       );
     }
@@ -218,6 +218,7 @@ export class LoginService {
         icon: 'error',
         button: 'Proceed',
         closeOnClickOutside: false,
+        closeOnEsc: false,
         ...config,
       })
     )
@@ -235,7 +236,7 @@ export class LoginService {
       this.loadingService.hide();
       this.openSwal(
         {
-          title: 'Ops!',
+          title: 'Oops!',
           text: 'Something went wrong :(',
         },
         true
