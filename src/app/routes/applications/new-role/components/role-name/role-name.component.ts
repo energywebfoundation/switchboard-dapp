@@ -65,7 +65,7 @@ export class RoleNameComponent extends CreationBaseAbstract {
     };
   }
 
-  async next(): Promise<void> {
+  next() {
     if (this.form.invalid) {
       return;
     }
