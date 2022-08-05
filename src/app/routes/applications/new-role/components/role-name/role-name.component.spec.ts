@@ -1,4 +1,11 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  flush,
+  TestBed,
+  tick,
+  waitForAsync,
+} from '@angular/core/testing';
 
 import { RoleNameComponent } from './role-name.component';
 import { RoleCreationService } from '../../services/role-creation.service';
@@ -90,25 +97,21 @@ describe('RoleNameComponent', () => {
     );
   });
 
-  it('should display error message with already taken role name', async () => {
+  it('should display error message with already taken role name', fakeAsync(async () => {
     roleCreationServiceSpy.canUseDomain.and.returnValue(Promise.resolve(false));
     const { roleName } = selectors(hostDebug);
 
     roleName.value = 'role';
     dispatchInputEvent(roleName);
-    fixture.detectChanges();
-
-    await component.next();
-    // Some additional reloads occurs when using below code.
-    // const {next} = selectors(hostDebug);
-    // next.click();
+    tick(100);
     fixture.detectChanges();
 
     const { matError } = selectors(hostDebug);
     expect(matError.textContent).toContain(
       'This name already exists. Please try another'
     );
-  });
+    flush();
+  }));
 
   it('should display ens namespace', () => {
     roleCreationServiceSpy.canUseDomain.and.returnValue(Promise.resolve(true));
