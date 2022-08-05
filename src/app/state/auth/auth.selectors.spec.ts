@@ -1,5 +1,6 @@
 import * as authSelectors from './auth.selectors';
 import { ProviderType } from 'iam-client-lib';
+import { ChainId } from '../../core/config/chain-id';
 
 describe('Auth Selectors', () => {
   describe('isMetamaskDisabled', () => {
@@ -24,8 +25,8 @@ describe('Auth Selectors', () => {
     it('should return false when metamaskChainId is set to Volta chain', () => {
       expect(
         authSelectors.isMetamaskDisabled.projector({
-          metamask: { chainId: '0x12047' },
-          defaultChainId: 73799,
+          metamask: { chainId: ChainId.Volta },
+          defaultChainId: ChainId.Volta,
         })
       ).toBeFalsy();
     });

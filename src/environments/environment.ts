@@ -1,4 +1,5 @@
 import { constants } from './constants';
+import { ChainId } from '../app/core/config/chain-id';
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
@@ -10,7 +11,7 @@ export const environment = {
   application: true,
 
   rpcUrl: 'https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/',
-  chainId: 73799,
+  chainId: ChainId.Volta,
   cacheServerUrl: 'https://identitycache-dev.energyweb.org/v1',
   natsServerUrl: 'https://identityevents-dev.energyweb.org/',
   ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',

@@ -976,7 +976,9 @@ mat-label {
 }
 
 .swal-button.swal-button--viewMyEnrolments,
-.swal-button--enrolForAsset {
+.swal-button--enrolForAsset,
+.swal-button--proceed,
+.swal-button--import {
   color: var(--default-text-color) !important;
   background-color: var(--button-primary);
   border: 1px solid var(--button-primary);

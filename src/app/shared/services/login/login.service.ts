@@ -11,8 +11,19 @@ import {
 import SWAL from 'sweetalert';
 import { from, Observable, of } from 'rxjs';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
-import { catchError, delayWhen, filter, map, take } from 'rxjs/operators';
+import {
+  catchError,
+  delayWhen,
+  filter,
+  map,
+  share,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 import { swalLoginError } from './helpers/swal-login-error-handler';
+import { LoginSwalButtons } from './helpers/login-swal.buttons';
+import { MetamaskProviderService } from '../metamask-provider/metamask-provider.service';
 
 export interface LoginOptions {
   providerType?: ProviderType;
@@ -48,7 +59,8 @@ export class LoginService {
     private loadingService: LoadingService,
     private iamService: IamService,
     private toastr: ToastrService,
-    private iamListenerService: IamListenerService
+    private iamListenerService: IamListenerService,
+    private metamaskService: MetamaskProviderService
   ) {}
 
   isSessionActive() {
@@ -83,6 +95,10 @@ export class LoginService {
 
   getProviderType() {
     return this.iamService.providerType;
+  }
+
+  isMetamaskProvider(): boolean {
+    return localStorage.getItem(PROVIDER_TYPE) === ProviderType.MetaMask;
   }
 
   /**
@@ -139,8 +155,7 @@ export class LoginService {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setDeepLink(deepLink: any) {
+  setDeepLink(deepLink: string) {
     this._deepLink = deepLink;
   }
 
@@ -199,12 +214,45 @@ export class LoginService {
     }
   }
 
+  public wrongNetwork() {
+    if (this.isSessionActive()) {
+      const swalSubscription = from(
+        SWAL({
+          icon: 'error',
+          closeOnClickOutside: false,
+          closeOnEsc: false,
+          title: 'Oops!',
+          text: "You're using the wrong network",
+          buttons: {
+            [LoginSwalButtons.Proceed]: {
+              text: 'Proceed',
+              closeModal: false,
+            },
+            [LoginSwalButtons.Import]: {
+              text: 'Import configuration',
+              closeModal: false,
+            },
+          },
+        })
+      ).pipe(take(1), share());
+
+      this.proceedLogout(swalSubscription);
+      this.importMMConfig(swalSubscription);
+    }
+  }
+
   private openSwal(config, navigateOnTimeout: boolean) {
     from(
       SWAL({
         icon: 'error',
-        button: 'Proceed',
+        buttons: {
+          [LoginSwalButtons.Proceed]: {
+            text: 'Proceed',
+            closeModal: false,
+          },
+        },
         closeOnClickOutside: false,
+        closeOnEsc: false,
         ...config,
       })
     )
@@ -222,7 +270,7 @@ export class LoginService {
       this.loadingService.hide();
       this.openSwal(
         {
-          title: 'Ops!',
+          title: 'Oops!',
           text: 'Something went wrong :(',
         },
         true
@@ -265,5 +313,33 @@ export class LoginService {
     };
 
     this.openSwal(config, navigateOnTimeout);
+  }
+
+  private proceedLogout(buttonSubscription: Observable<LoginSwalButtons>) {
+    buttonSubscription
+      .pipe(
+        filter(
+          (buttonName: LoginSwalButtons) =>
+            buttonName === LoginSwalButtons.Proceed
+        )
+      )
+      .subscribe(() => this.disconnect());
+  }
+
+  private importMMConfig(buttonSubscription: Observable<LoginSwalButtons>) {
+    buttonSubscription
+      .pipe(
+        filter(
+          (buttonName: LoginSwalButtons) =>
+            buttonName === LoginSwalButtons.Import
+        )
+      )
+      .subscribe(async () => {
+        this.loadingService.show(
+          'Switching network... Please check Your Metamask '
+        );
+        await this.metamaskService.importMetamaskConf();
+        this.loadingService.hide();
+      });
   }
 }
