@@ -11,6 +11,7 @@ import {
 import { of } from 'rxjs';
 import { ViewType } from '../../new-organization/new-organization.component';
 import { NewRoleComponent } from '../../new-role/new-role.component';
+import { IRole } from 'iam-client-lib';
 
 describe('RoleActionsComponent', () => {
   let component: RoleActionsComponent;
@@ -32,7 +33,7 @@ describe('RoleActionsComponent', () => {
     fixture = TestBed.createComponent(RoleActionsComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
-    component.role = { ...element };
+    component.role = { ...element } as IRole;
     fixture.detectChanges();
   });
 
@@ -84,7 +85,7 @@ describe('RoleActionsComponent', () => {
         definition: {
           roleType: 'org',
         },
-      };
+      } as IRole;
       component.ngOnInit();
       fixture.detectChanges();
 

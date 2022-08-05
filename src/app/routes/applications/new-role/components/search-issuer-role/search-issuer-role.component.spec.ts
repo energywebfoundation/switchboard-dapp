@@ -5,7 +5,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { ENSPrefixes } from '../../new-role.component';
+import { NamespaceType } from 'iam-client-lib';
 
 describe('SearchIssuerRoleComponent', () => {
   let component: SearchIssuerRoleComponent;
@@ -38,7 +38,7 @@ describe('SearchIssuerRoleComponent', () => {
 
   it('should check if placeholder is set', () => {
     expect(component.searchPlaceholder).toEqual(
-      `Example:issuerrole.${ENSPrefixes.Roles}.myorg.iam.ewc`
+      `Example:issuerrole.${NamespaceType.Role}.myorg.iam.ewc`
     );
   });
 });

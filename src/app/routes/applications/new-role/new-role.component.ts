@@ -40,11 +40,6 @@ import { IssuerType } from './models/issuer-type.enum';
 import { CreateRoleOptions } from 'iam-client-lib/dist/src/modules/domains/domains.types';
 import { IRoleType } from './models/role-type.interface';
 
-export enum ENSPrefixes {
-  Roles = 'roles',
-  Apps = 'apps',
-}
-
 export const RoleType = {
   ORG: 'org',
   APP: 'app',
@@ -113,7 +108,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   public restrictionRoleControl = this.fb.control('');
   public isChecking = false;
-  public ENSPrefixes = ENSPrefixes;
 
   // Fields
   requestorFields = new MatTableDataSource<IFieldDefinition>([]);
@@ -379,7 +373,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         if (exists) {
           // Check if role sub-domain exists in this namespace
           exists = await this.iamService.domainsService.checkExistenceOfDomain({
-            domain: DomainUtils.getRoleNamespace(this.roleForm.value.parentNamespace),
+            domain: DomainUtils.getRoleNamespace(
+              this.roleForm.value.parentNamespace
+            ),
           });
 
           if (exists) {

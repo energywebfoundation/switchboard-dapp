@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NamespaceType } from 'iam-client-lib';
-import { ENSPrefixes } from 'src/app/routes/applications/new-role/new-role.component';
+
+export interface FilterByNamespace {
+  namespace: string;
+}
 
 export const filterBy = (
-  data: any[],
+  data: FilterByNamespace[],
   organization: string,
   application: string,
   role: string,
@@ -24,10 +27,14 @@ export const filterBy = (
   return data;
 };
 
-const filterByOrg = (data, organization, namespace) => {
-  return data.filter((item: any) => {
+const filterByOrg = (
+  data: FilterByNamespace[],
+  organization: string,
+  namespace: string
+) => {
+  return data.filter((item) => {
     let arr = item.namespace.split(namespace);
-    arr = arr[0].split(ENSPrefixes.Roles);
+    arr = arr[0].split(NamespaceType.Role);
     arr = arr[arr.length - 1].split(NamespaceType.Application);
 
     const org = arr[arr.length - 1];
@@ -35,19 +42,23 @@ const filterByOrg = (data, organization, namespace) => {
   });
 };
 
-const filterByApp = (data, application) => {
-  return data.filter((item: any) =>
-    filterByType(item, application, ENSPrefixes.Apps)
+const filterByApp = (data: FilterByNamespace[], application: string) => {
+  return data.filter((item: FilterByNamespace) =>
+    filterByType(item, application, NamespaceType.Application)
   );
 };
 
-const filterByRole = (data, role) => {
-  return data.filter((item: any) =>
-    filterByType(item, role, ENSPrefixes.Roles)
+const filterByRole = (data: FilterByNamespace[], role: string) => {
+  return data.filter((item: FilterByNamespace) =>
+    filterByType(item, role, NamespaceType.Role)
   );
 };
 
-const filterByType = (item, filterBy, type: ENSPrefixes) => {
+const filterByType = (
+  item: FilterByNamespace,
+  filterBy: string,
+  type: NamespaceType
+) => {
   let arr = item.namespace.split(`.${type}.`);
   arr = arr[0].split('.');
   return arr[arr.length - 1].toUpperCase().indexOf(filterBy.toUpperCase()) >= 0;

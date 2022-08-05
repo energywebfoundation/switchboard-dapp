@@ -12,8 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewApplicationComponent } from '../../new-application/new-application.component';
 import { ActionBaseAbstract } from '../action-base.abstract';
 import { filter } from 'rxjs/operators';
-import { NamespaceType } from 'iam-client-lib';
 import { TransferOwnershipComponent } from '../../transfer-ownership/transfer-ownership.component';
+import { DomainUtils } from '@utils';
 
 @Component({
   selector: 'app-application-actions',
@@ -59,9 +59,7 @@ export class ApplicationActionsComponent extends ActionBaseAbstract {
   }
 
   edit() {
-    const orgNamespace = this.application.namespace
-      .split(`.${NamespaceType.Application}.`)
-      .pop();
+    const orgNamespace = DomainUtils.getOrgName(this.application.namespace);
     this.showEditComponent(NewApplicationComponent, {
       viewType: ViewType.UPDATE,
       ...this.application,
