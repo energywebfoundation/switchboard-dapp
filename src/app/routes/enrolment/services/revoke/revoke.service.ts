@@ -50,7 +50,10 @@ export class RevokeService {
               'Claim Revoke'
             );
           } else {
-            this.toastrService.error('An error occured. On-chain claim was not revoked', 'Claim Revoke');
+            this.toastrService.error(
+              'An error occured. On-chain claim was not revoked',
+              'Claim Revoke'
+            );
           }
           return Boolean(value);
         }),
@@ -73,7 +76,10 @@ export class RevokeService {
               'Claim Revoke'
             );
           } else {
-            this.toastrService.error('An error occured. Off-chain claim was not revoked', 'Claim Revoke');
+            this.toastrService.error(
+              'An error occured. Off-chain claim was not revoked',
+              'Claim Revoke'
+            );
           }
           return Boolean(value);
         }),
