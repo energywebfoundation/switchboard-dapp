@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EnrolmentClaim } from '../../models/enrolment-claim';
 import { IamService } from '../../../../shared/services/iam.service';
-import { isRoleCredential } from 'iam-client-lib';
+import { isRoleCredential, StatusList2021Credential } from 'iam-client-lib';
 import { from, Observable, of } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { LoadingService } from '../../../../shared/services/loading.service';
@@ -25,7 +25,7 @@ export class RevokeService {
         this.iamService.verifiableCredentialsService.revokeCredential(
           enrolment.credential
         )
-      ).pipe(this.handleRevokeResponse());
+      ).pipe(this.handleOffChainRevokeResponse());
   }
 
   revokeOnChain(claim: EnrolmentClaim): Observable<boolean> {
@@ -37,20 +37,49 @@ export class RevokeService {
       this.iamService.claimsService.revokeClaim({
         claim: { namespace: claim.claimType, subject: claim.subject },
       })
-    ).pipe(this.handleRevokeResponse());
+    ).pipe(this.handleOnChainRevokeResponse());
   }
 
-  private handleRevokeResponse() {
+  private handleOnChainRevokeResponse() {
     return (source) =>
       source.pipe(
         map((value: boolean) => {
           if (value) {
             this.toastrService.success(
-              'Successfully revoked claim',
+              'Successfully revoked on-chain claim',
               'Claim Revoke'
             );
           } else {
-            this.toastrService.error('Claim was not revoked', 'Claim Revoke');
+            this.toastrService.error(
+              'An error occured. On-chain claim was not revoked',
+              'Claim Revoke'
+            );
+          }
+          return Boolean(value);
+        }),
+        catchError((err) => {
+          console.log(err);
+          this.toastrService.error(err.message);
+          return of(err);
+        }),
+        finalize<boolean>(() => this.loadingService.hide())
+      );
+  }
+
+  private handleOffChainRevokeResponse() {
+    return (source) =>
+      source.pipe(
+        map((value: StatusList2021Credential) => {
+          if (value) {
+            this.toastrService.success(
+              'Successfully revoked off-chain claim',
+              'Claim Revoke'
+            );
+          } else {
+            this.toastrService.error(
+              'An error occured. Off-chain claim was not revoked',
+              'Claim Revoke'
+            );
           }
           return Boolean(value);
         }),
