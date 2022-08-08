@@ -5,6 +5,7 @@ import { SwitchboardToastrService } from '../../../../shared/services/switchboar
 import { NamespaceType } from 'iam-client-lib';
 import { IssuerType } from '../models/issuer-type.enum';
 import { RoleStepType } from '../models/role-step.type';
+import { DomainUtils } from '../../../../utils/functions/domain-utils/domain-utils';
 
 const TOASTR_HEADER = 'Role Creation';
 
@@ -25,7 +26,9 @@ export class RoleCreationService {
         return false;
       }
 
-      return await this.domainsFacade.isOwner(domain);
+      return await this.domainsFacade.isOwner(
+        DomainUtils.getRoleNamespace(domain)
+      );
     } catch (e) {
       this.toastrService.error(e?.message, TOASTR_HEADER);
       return false;

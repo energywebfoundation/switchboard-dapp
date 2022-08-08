@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { ENSPrefixes } from '../../new-role.component';
 import { FormControl } from '@angular/forms';
 import { RoleStepType } from '../../models/role-step.type';
+import { NamespaceType } from 'iam-client-lib';
 
 @Component({
   selector: 'app-search-issuer-role',
@@ -13,6 +13,6 @@ export class SearchIssuerRoleComponent {
   @Input() role: FormControl;
 
   get searchPlaceholder() {
-    return `Example:issuerrole.${ENSPrefixes.Roles}.myorg.iam.ewc`;
+    return `Example:issuerrole.${NamespaceType.Role}.myorg.iam.ewc`;
   }
 }

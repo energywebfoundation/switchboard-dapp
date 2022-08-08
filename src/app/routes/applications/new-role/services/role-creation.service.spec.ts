@@ -6,6 +6,7 @@ import { SwitchboardToastrService } from '../../../../shared/services/switchboar
 import { loadingServiceSpy } from '@tests';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { IssuerType } from '../models/issuer-type.enum';
+import { DomainUtils } from '@utils';
 
 describe('RoleCreationService', () => {
   let service: RoleCreationService;
@@ -32,14 +33,21 @@ describe('RoleCreationService', () => {
   });
 
   describe('canUseDomain method', () => {
+    const domain = DomainUtils.addRoleNameToNamespace(
+      'rolename',
+      'org.iam.ewc'
+    );
     it('should return true, when domain do not exist and user is the owner', async () => {
       domainsFacadeServiceSpy.checkExistenceOfDomain.and.returnValue(
         Promise.resolve(false)
       );
       domainsFacadeServiceSpy.isOwner.and.returnValue(Promise.resolve(true));
-      const result = await service.canUseDomain('domain');
+      const result = await service.canUseDomain(domain);
 
       expect(result).toBeTrue();
+      expect(domainsFacadeServiceSpy.isOwner).toHaveBeenCalledWith(
+        DomainUtils.getRoleNamespace(domain)
+      );
     });
 
     it('should return false, when domain exist', async () => {

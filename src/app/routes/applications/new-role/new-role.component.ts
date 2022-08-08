@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import {
   IFieldDefinition,
@@ -30,7 +30,7 @@ import {
 } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
-import { HexValidators, isAlphanumericValidator } from '@utils';
+import { DomainUtils, isAlphanumericValidator } from '@utils';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 import { RoleCreationService } from './services/role-creation.service';
@@ -39,11 +39,6 @@ import { SmartSearchType } from '../../../shared/components/smart-search/models/
 import { IssuerType } from './models/issuer-type.enum';
 import { CreateRoleOptions } from 'iam-client-lib/dist/src/modules/domains/domains.types';
 import { IRoleType } from './models/role-type.interface';
-
-export enum ENSPrefixes {
-  Roles = 'roles',
-  Apps = 'apps',
-}
 
 export const RoleType = {
   ORG: 'org',
@@ -113,7 +108,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   public restrictionRoleControl = this.fb.control('');
   public isChecking = false;
-  public ENSPrefixes = ENSPrefixes;
 
   // Fields
   requestorFields = new MatTableDataSource<IFieldDefinition>([]);
@@ -138,11 +132,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   get namespace() {
-    return (
-      this.roleForm.get('roleName').value +
-      '.' +
-      ENSPrefixes.Roles +
-      '.' +
+    return DomainUtils.addRoleNameToNamespace(
+      this.roleForm.get('roleName').value,
       this.roleForm?.value?.parentNamespace
     );
   }
@@ -263,7 +254,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         roleType: def.roleType,
         parentNamespace,
         roleName: def.roleName,
-        namespace: `${this.ENSPrefixes.Roles}.${parentNamespace}`,
+        namespace: DomainUtils.getRoleNamespace(parentNamespace),
         data: {
           version: def.version,
           enrolmentPreconditions: this._initPreconditions(
@@ -382,7 +373,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         if (exists) {
           // Check if role sub-domain exists in this namespace
           exists = await this.iamService.domainsService.checkExistenceOfDomain({
-            domain: `${this.ENSPrefixes.Roles}.${this.roleForm.value.parentNamespace}`,
+            domain: DomainUtils.getRoleNamespace(
+              this.roleForm.value.parentNamespace
+            ),
           });
 
           if (exists) {
@@ -427,7 +420,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       JSON.stringify({ ...this.roleForm.value, returnSteps: true })
     );
 
-    req.namespace = `${this.ENSPrefixes.Roles}.${req.parentNamespace}`;
+    req.namespace = DomainUtils.getRoleNamespace(req.parentNamespace);
     delete req.parentNamespace;
 
     req.data.roleType = req.roleType;
