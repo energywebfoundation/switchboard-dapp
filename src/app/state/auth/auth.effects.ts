@@ -3,17 +3,9 @@ import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
-import {
-  catchError,
-  delay,
-  filter,
-  map,
-  mergeMap,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
-import { from, Observable, of, timer } from 'rxjs';
+import { from, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';
@@ -177,22 +169,34 @@ export class AuthEffects {
     { dispatch: false }
   );
 
-  reinitializeLoggedUserWithMetamask$ = createEffect(() =>
+  reinitializeUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.setMetamaskLoginOptions),
       filter(this.loginService.isSessionActive),
-      this.isMetamaskDisabled(),
       this.isLoggedIn(),
+      map(() => {
+        if (
+          this.loginService.getSession().providerType === ProviderType.MetaMask
+        ) {
+          return AuthActions.reinitializeAuthWithMetamask();
+        }
+
+        return AuthActions.reinitializeAuth();
+      })
+    )
+  );
+
+  reinitializeLoggedUserWithMetamask$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.reinitializeAuthWithMetamask),
+      this.isMetamaskDisabled(),
       switchMap(() => this.reinitialize())
     )
   );
 
   reinitializeLoggedUser$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AuthActions.setMetamaskLoginOptions),
-      filter(this.loginService.isSessionActive),
-      this.isProviderDifferentThanMetamask(),
-      this.isLoggedIn(),
+      ofType(AuthActions.reinitializeAuth),
       switchMap(() => this.reinitialize())
     )
   );
@@ -242,11 +246,6 @@ export class AuthEffects {
   private isMetamaskDisabled() {
     return (source) => {
       return source.pipe(
-        filter(
-          () =>
-            this.loginService.getSession().providerType ===
-            ProviderType.MetaMask
-        ),
         concatLatestFrom(() =>
           this.store.select(AuthSelectors.isMetamaskDisabled)
         ),
@@ -277,7 +276,9 @@ export class AuthEffects {
 
   private reinitialize() {
     return this.loginService
-      .reinitialize({ providerType: this.loginService.getSession().providerType })
+      .reinitialize({
+        providerType: this.loginService.getSession().providerType,
+      })
       .pipe(
         map(({ success, accountInfo }) => {
           if (success) {
