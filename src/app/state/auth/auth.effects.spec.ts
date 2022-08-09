@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 
 import { of, ReplaySubject, throwError } from 'rxjs';
 
@@ -33,7 +33,6 @@ describe('AuthEffects', () => {
   beforeEach(() => {
     loginServiceSpy = jasmine.createSpyObj('LoginService', [
       'waitForSignature',
-      'clearWaitSignatureTimer',
       'login',
       'disconnect',
       'isSessionActive',
@@ -157,11 +156,6 @@ describe('AuthEffects', () => {
       loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
 
       effects.loginViaDialog$
-        .pipe(
-          finalize(() =>
-            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled()
-          )
-        )
         .subscribe((resultAction) => {
           expect(loginServiceSpy.login).toHaveBeenCalledWith(
             {
@@ -187,11 +181,6 @@ describe('AuthEffects', () => {
       loginServiceSpy.login.and.returnValue(of(false));
 
       effects.loginViaDialog$
-        .pipe(
-          finalize(() =>
-            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled()
-          )
-        )
         .subscribe((resultAction) => {
           expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
           expect(resultAction).toEqual(AuthActions.loginFailure());
@@ -280,7 +269,6 @@ describe('AuthEffects', () => {
       effects.welcomePageLogin$
         .pipe(
           finalize(() => {
-            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled();
             expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(
               '/dashboard',
               jasmine.objectContaining({})
@@ -315,11 +303,6 @@ describe('AuthEffects', () => {
       loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
 
       effects.welcomePageLogin$
-        .pipe(
-          finalize(() => {
-            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled();
-          })
-        )
         .subscribe((resultAction) => {
           expect(loginServiceSpy.login).toHaveBeenCalledWith({
             providerType: ProviderType.MetaMask,
@@ -357,7 +340,7 @@ describe('AuthEffects', () => {
       actions$ = new ReplaySubject(1);
     });
 
-    it('should return failure action when reinitialization fails', (done) => {
+    it('should return failure action when reinitialization fails', fakeAsync((done) => {
       actions$.next(AuthActions.reinitializeAuth());
       loginServiceSpy.isSessionActive.and.returnValue(true);
       store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
@@ -368,11 +351,14 @@ describe('AuthEffects', () => {
         publicKey: 'key',
       });
 
+      tick(100);
+
       effects.reinitializeLoggedUserWithMetamask$.subscribe((resultAction) => {
         expect(resultAction).toEqual(AuthActions.loginFailure());
+        flush();
         done();
       });
-    });
+    }));
 
     it('should return success action when reinitialization completes successfully', (done) => {
       actions$.next(AuthActions.reinitializeAuth());

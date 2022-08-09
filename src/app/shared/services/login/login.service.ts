@@ -14,10 +14,10 @@ import { IamListenerService } from '../iam-listener/iam-listener.service';
 import {
   catchError,
   delayWhen,
-  filter,
+  filter, finalize,
   map,
   share,
-  take,
+  take
 } from 'rxjs/operators';
 import { swalLoginError } from './helpers/swal-login-error-handler';
 import { LoginSwalButtons } from './helpers/login-swal.buttons';
@@ -106,6 +106,7 @@ export class LoginService {
     loginOptions?: LoginOptions,
     redirectOnChange = true
   ): Observable<{ success: boolean; accountInfo?: AccountInfo | undefined }> {
+    this.waitForSignature(loginOptions.providerType, redirectOnChange);
     return from(this.iamService.initializeConnection(loginOptions)).pipe(
       map(({ did, connected, userClosedModal, accountInfo }) => {
         const loginSuccessful = did && connected && !userClosedModal;
@@ -130,7 +131,8 @@ export class LoginService {
       delayWhen(({ success }) => {
         if (success) return this.storeSession();
       }),
-      catchError((err) => this.handleLoginErrors(err, redirectOnChange))
+      catchError((err) => this.handleLoginErrors(err, redirectOnChange)),
+      finalize(() => this.clearWaitSignatureTimer())
     );
   }
 
@@ -179,15 +181,16 @@ export class LoginService {
     this._timer = setTimeout(() => {
       this._displayTimeout(navigateOnTimeout);
       this.clearWaitSignatureTimer();
+      this.clearSession();
       this._throwTimeoutError = true;
     }, timeoutInMinutes * 60000);
   }
 
-  public clearWaitSignatureTimer() {
+  private clearWaitSignatureTimer() {
+    console.log('clearing');
     clearTimeout(this._timer);
     this._timer = undefined;
     this.loadingService.hide();
-    // this.clearSession();
 
     if (this._throwTimeoutError) {
       this._throwTimeoutError = false;

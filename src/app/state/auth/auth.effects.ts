@@ -5,19 +5,18 @@ import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
 import {
   catchError,
+  delay,
   filter,
-  finalize,
   map,
   mergeMap,
   switchMap,
   tap,
 } from 'rxjs/operators';
 import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
-import { from, of } from 'rxjs';
+import { from, of, timer } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';
-import { LoadingService } from '../../shared/services/loading.service';
 import * as userActions from '../user-claim/user.actions';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import * as AuthSelectors from './auth.selectors';
@@ -77,9 +76,6 @@ export class AuthEffects {
   loginViaDialog$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginViaDialog),
-      tap(({ provider, navigateOnTimeout }) =>
-        this.loginService.waitForSignature(provider, navigateOnTimeout)
-      ),
       switchMap(({ provider, navigateOnTimeout }) =>
         this.loginService
           .login(
@@ -100,8 +96,7 @@ export class AuthEffects {
             catchError((err) => {
               console.log(err);
               return of(AuthActions.loginFailure());
-            }),
-            finalize(() => this.loginService.clearWaitSignatureTimer())
+            })
           )
       )
     )
@@ -130,7 +125,6 @@ export class AuthEffects {
   welcomePageLogin$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.welcomeLogin),
-      tap(({ provider }) => this.loginService.waitForSignature(provider)),
       switchMap(({ provider, returnUrl }) =>
         this.loginService
           .login({
@@ -148,9 +142,6 @@ export class AuthEffects {
             catchError((err) => {
               console.log(err);
               return of(AuthActions.loginFailure());
-            }),
-            finalize(() => {
-              this.loginService.clearWaitSignatureTimer();
             })
           )
       )
@@ -192,14 +183,15 @@ export class AuthEffects {
         AuthActions.reinitializeAuth,
         AuthActions.reinitializeAuthForEnrol
       ),
+      // delay added because there is race condition between reinitializing user and getting info from metamask.
+      // When Metamask didn't give any info to the store, reinitialization doesn't work. Most of the time reinitialization is first.
+      // Automatic user reinitialization can't be done after MM info, because we have 2 different ways to initialize.
+      // One is with page redirect, second is with staying on visited page.
+      // Possible refactoring: depend on routing.
+      delay(100),
       filter(this.loginService.isSessionActive),
       this.isMetamaskDisabled(),
       this.isLoggedIn(),
-      tap(() =>
-        this.loginService.waitForSignature(
-          this.loginService.getSession().providerType
-        )
-      ),
       switchMap(() =>
         this.loginService
           .login({ providerType: this.loginService.getSession().providerType })
@@ -213,9 +205,6 @@ export class AuthEffects {
             catchError((err) => {
               console.log(err);
               return of(AuthActions.loginFailure());
-            }),
-            finalize(() => {
-              this.loadingService.hide();
             })
           )
       )
@@ -231,11 +220,6 @@ export class AuthEffects {
       filter(this.loginService.isSessionActive),
       this.isProviderDifferentThanMetamask(),
       this.isLoggedIn(),
-      tap(() =>
-        this.loginService.waitForSignature(
-          this.loginService.getSession().providerType
-        )
-      ),
       switchMap(() =>
         this.loginService
           .login({ providerType: this.loginService.getSession().providerType })
@@ -249,9 +233,6 @@ export class AuthEffects {
             catchError((err) => {
               console.log(err);
               return of(AuthActions.loginFailure());
-            }),
-            finalize(() => {
-              this.loadingService.hide();
             })
           )
       )
@@ -295,7 +276,6 @@ export class AuthEffects {
     private actions$: Actions,
     private store: Store<AuthState>,
     private loginService: LoginService,
-    private loadingService: LoadingService,
     private dialog: MatDialog,
     private router: Router,
     private envService: EnvService
@@ -325,7 +305,6 @@ export class AuthEffects {
       );
     };
   }
-
 
   private isProviderDifferentThanMetamask() {
     return (source) =>
