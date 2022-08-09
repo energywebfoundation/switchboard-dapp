@@ -14,14 +14,16 @@ import { IamListenerService } from '../iam-listener/iam-listener.service';
 import {
   catchError,
   delayWhen,
-  filter, finalize,
+  filter,
+  finalize,
   map,
   share,
-  take
+  take,
 } from 'rxjs/operators';
 import { swalLoginError } from './helpers/swal-login-error-handler';
 import { LoginSwalButtons } from './helpers/login-swal.buttons';
 import { MetamaskProviderService } from '../metamask-provider/metamask-provider.service';
+import { RouterConst } from '../../../routes/router-const';
 
 export interface LoginOptions {
   providerType?: ProviderType;
@@ -106,7 +108,20 @@ export class LoginService {
     loginOptions?: LoginOptions,
     redirectOnChange = true
   ): Observable<{ success: boolean; accountInfo?: AccountInfo | undefined }> {
-    this.waitForSignature(loginOptions.providerType, redirectOnChange);
+    this.waitForSignature(redirectOnChange);
+    return this.initialize(loginOptions, redirectOnChange);
+  }
+
+  reinitialize(
+    loginOptions?: LoginOptions,
+    redirectOnChange = true
+  ): Observable<{ success: boolean; accountInfo?: AccountInfo | undefined }> {
+    this.loadingService.show();
+    this.createTimer(1, redirectOnChange);
+    return this.initialize(loginOptions, redirectOnChange);
+  }
+
+  private initialize(loginOptions?: LoginOptions, redirectOnChange = true) {
     return from(this.iamService.initializeConnection(loginOptions)).pipe(
       map(({ did, connected, userClosedModal, accountInfo }) => {
         const loginSuccessful = did && connected && !userClosedModal;
@@ -127,7 +142,6 @@ export class LoginService {
         }
         return { success: Boolean(loginSuccessful), accountInfo };
       }),
-
       delayWhen(({ success }) => {
         if (success) return this.storeSession();
       }),
@@ -144,7 +158,7 @@ export class LoginService {
     this.iamService.closeConnection().subscribe(() => {
       saveDeepLink
         ? this.saveDeepLink()
-        : (location.href = location.origin + '/welcome');
+        : (location.href = location.origin + '/' + RouterConst.Welcome);
     });
   }
 
@@ -159,25 +173,16 @@ export class LoginService {
     this._deepLink = deepLink;
   }
 
-  public waitForSignature(
-    walletProvider?: ProviderType,
-    isConnectAndSign?: boolean,
-    navigateOnTimeout = true
-  ) {
+  private waitForSignature(navigateOnTimeout = true) {
     this._throwTimeoutError = false;
     const timeoutInMinutes = 1;
-    const connectionMessage = 'connection to a wallet and ';
-    const messages = [
-      {
-        message: `Your ${connectionMessage}signature is being requested.`,
-      },
-      {
-        message: `If you do not complete this within ${timeoutInMinutes} minute your browser will refresh automatically.`,
-      },
-    ];
-    const waitForSignatureMessage = messages
-      .map((m) => m.message);
+
+    const waitForSignatureMessage = `Your connection to a wallet and signature is being requested. If you do not complete this within ${timeoutInMinutes} minute your browser will refresh automatically.`;
     this.loadingService.show(waitForSignatureMessage);
+    this.createTimer(timeoutInMinutes, navigateOnTimeout);
+  }
+
+  private createTimer(timeoutInMinutes: number, navigateOnTimeout: boolean) {
     this._timer = setTimeout(() => {
       this._displayTimeout(navigateOnTimeout);
       this.clearWaitSignatureTimer();
@@ -187,7 +192,6 @@ export class LoginService {
   }
 
   private clearWaitSignatureTimer() {
-    console.log('clearing');
     clearTimeout(this._timer);
     this._timer = undefined;
     this.loadingService.hide();
@@ -280,16 +284,10 @@ export class LoginService {
       encodeURIComponent(this._deepLink);
   }
 
-  private _displayTimeout(
-    navigateOnTimeout?: boolean
-  ) {
-    let message = 'connect with your wallet and sign';
-
+  private _displayTimeout(navigateOnTimeout?: boolean) {
     const config = {
       title: 'Wallet Signature Timeout',
-      text: `The period to ${message} the requested signature has elapsed. Please login again.`,
-      icon: 'error',
-      closeOnClickOutside: false,
+      text: `The period to connect with your wallet and sign the requested signature has elapsed. Please login again.`,
     };
 
     this.openSwal(config, navigateOnTimeout);

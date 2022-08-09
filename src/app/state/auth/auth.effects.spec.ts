@@ -1,4 +1,4 @@
-import { fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { of, ReplaySubject, throwError } from 'rxjs';
 
@@ -32,7 +32,6 @@ describe('AuthEffects', () => {
 
   beforeEach(() => {
     loginServiceSpy = jasmine.createSpyObj('LoginService', [
-      'waitForSignature',
       'login',
       'disconnect',
       'isSessionActive',
@@ -155,23 +154,19 @@ describe('AuthEffects', () => {
       );
       loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
 
-      effects.loginViaDialog$
-        .subscribe((resultAction) => {
-          expect(loginServiceSpy.login).toHaveBeenCalledWith(
-            {
-              providerType: ProviderType.MetaMask,
-              reinitializeMetamask: true,
-            },
-            undefined
-          );
-          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(resultAction).toEqual(
-            AuthActions.loginSuccess({ accountInfo })
-          );
-          expect(dialogSpy.closeAll).toHaveBeenCalled();
+      effects.loginViaDialog$.subscribe((resultAction) => {
+        expect(loginServiceSpy.login).toHaveBeenCalledWith(
+          {
+            providerType: ProviderType.MetaMask,
+            reinitializeMetamask: true,
+          },
+          undefined
+        );
+        expect(resultAction).toEqual(AuthActions.loginSuccess({ accountInfo }));
+        expect(dialogSpy.closeAll).toHaveBeenCalled();
 
-          done();
-        });
+        done();
+      });
     });
 
     it('should do not close dialog and return login failure action on login failure', (done) => {
@@ -180,13 +175,11 @@ describe('AuthEffects', () => {
       );
       loginServiceSpy.login.and.returnValue(of(false));
 
-      effects.loginViaDialog$
-        .subscribe((resultAction) => {
-          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(resultAction).toEqual(AuthActions.loginFailure());
+      effects.loginViaDialog$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(AuthActions.loginFailure());
 
-          done();
-        });
+        done();
+      });
     });
 
     it('should do not close dialog and return login failure action when login throws error', (done) => {
@@ -198,24 +191,6 @@ describe('AuthEffects', () => {
       effects.loginViaDialog$.subscribe((resultAction) => {
         expect(resultAction).toEqual(AuthActions.loginFailure());
 
-        done();
-      });
-    });
-
-    it('should call waitForSignature with metamask and not navigate on timeout option', (done) => {
-      actions$.next(
-        AuthActions.loginViaDialog({
-          provider: ProviderType.MetaMask,
-          navigateOnTimeout: false,
-        })
-      );
-      loginServiceSpy.login.and.returnValue(of({ success: true }));
-
-      effects.loginViaDialog$.subscribe(() => {
-        expect(loginServiceSpy.waitForSignature).toHaveBeenCalledWith(
-          ProviderType.MetaMask,
-          false
-        );
         done();
       });
     });
@@ -280,7 +255,6 @@ describe('AuthEffects', () => {
             providerType: ProviderType.MetaMask,
             reinitializeMetamask: true,
           });
-          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
           expect(resultAction).toEqual(
             AuthActions.loginSuccess({ accountInfo })
           );
@@ -302,21 +276,17 @@ describe('AuthEffects', () => {
       };
       loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
 
-      effects.welcomePageLogin$
-        .subscribe((resultAction) => {
-          expect(loginServiceSpy.login).toHaveBeenCalledWith({
-            providerType: ProviderType.MetaMask,
-            reinitializeMetamask: true,
-          });
-          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(
-            `/${RouterConst.ReturnUrl}`
-          );
-          expect(resultAction).toEqual(
-            AuthActions.loginSuccess({ accountInfo })
-          );
-          done();
+      effects.welcomePageLogin$.subscribe((resultAction) => {
+        expect(loginServiceSpy.login).toHaveBeenCalledWith({
+          providerType: ProviderType.MetaMask,
+          reinitializeMetamask: true,
         });
+        expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(
+          `/${RouterConst.ReturnUrl}`
+        );
+        expect(resultAction).toEqual(AuthActions.loginSuccess({ accountInfo }));
+        done();
+      });
     });
 
     it('should return failure action when login fails', (done) => {
@@ -340,7 +310,7 @@ describe('AuthEffects', () => {
       actions$ = new ReplaySubject(1);
     });
 
-    it('should return failure action when reinitialization fails', fakeAsync((done) => {
+    it('should return failure action when reinitialization fails', (done) => {
       actions$.next(AuthActions.reinitializeAuth());
       loginServiceSpy.isSessionActive.and.returnValue(true);
       store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
@@ -351,14 +321,11 @@ describe('AuthEffects', () => {
         publicKey: 'key',
       });
 
-      tick(100);
-
       effects.reinitializeLoggedUserWithMetamask$.subscribe((resultAction) => {
         expect(resultAction).toEqual(AuthActions.loginFailure());
-        flush();
         done();
       });
-    }));
+    });
 
     it('should return success action when reinitialization completes successfully', (done) => {
       actions$.next(AuthActions.reinitializeAuth());
@@ -388,7 +355,7 @@ describe('AuthEffects', () => {
       loginServiceSpy.isSessionActive.and.returnValue(false);
 
       effects.reinitializeLoggedUserWithMetamask$.subscribe();
-      expect(loginServiceSpy.login).not.toHaveBeenCalled()
+      expect(loginServiceSpy.login).not.toHaveBeenCalled();
       done();
     });
 
@@ -440,7 +407,7 @@ describe('AuthEffects', () => {
       effects.reinitializeLoggedUserWithMetamask$.subscribe();
       expect(loginServiceSpy.login).not.toHaveBeenCalled();
       done();
-    })
+    });
   });
 
   describe('reinitializeLoggedUser$', () => {
@@ -491,7 +458,7 @@ describe('AuthEffects', () => {
       loginServiceSpy.isSessionActive.and.returnValue(false);
 
       effects.reinitializeLoggedUser$.subscribe();
-      expect(loginServiceSpy.login).not.toHaveBeenCalled()
+      expect(loginServiceSpy.login).not.toHaveBeenCalled();
       done();
     });
 
@@ -525,7 +492,7 @@ describe('AuthEffects', () => {
       effects.reinitializeLoggedUser$.subscribe();
       expect(loginServiceSpy.login).not.toHaveBeenCalled();
       done();
-    })
+    });
   });
 
   describe('setWalletProviderAfterLogin$', () => {

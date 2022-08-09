@@ -30,18 +30,10 @@ export const setProvider = createAction(
 
 export const reinitializeAuth = createAction('[AUTH] Reinitialize Logged User');
 
-export const reinitializeAuthForEnrol = createAction(
-  '[AUTH] Reinitialize Logged User For Enrol Page'
-);
-
 export const logout = createAction('[AUTH] Logout');
 
 export const logoutWithRedirectUrl = createAction(
   '[AUTH] Logout With Redirect URL'
-);
-
-export const getMetamaskOptions = createAction(
-  '[AUTH] Get Metamask Login Options'
 );
 
 export const setMetamaskLoginOptions = createAction(

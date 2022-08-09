@@ -63,20 +63,4 @@ describe('Auth Selectors', () => {
       ).toBeTruthy();
     });
   });
-
-  describe('getWalletProvider', () => {
-    it('should return undefined when wallet is not defined', () => {
-      expect(
-        authSelectors.getWalletProvider.projector({ walletProvider: undefined })
-      ).toBeUndefined();
-    });
-
-    it('should return defined wallet provider', () => {
-      expect(
-        authSelectors.getWalletProvider.projector({
-          walletProvider: ProviderType.WalletConnect,
-        })
-      ).toBe(ProviderType.WalletConnect);
-    });
-  });
 });

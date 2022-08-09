@@ -5,7 +5,6 @@ import { AccountInfo, ProviderType } from 'iam-client-lib';
 export const USER_FEATURE_KEY = 'auth';
 
 export interface AuthState {
-  walletProvider: ProviderType | undefined;
   accountInfo: AccountInfo;
   metamask: {
     present: boolean;
@@ -16,7 +15,6 @@ export interface AuthState {
 }
 
 export const initialState: AuthState = {
-  walletProvider: undefined,
   accountInfo: undefined,
   metamask: {
     present: true,
@@ -36,7 +34,6 @@ const authReducer = createReducer(
   on(AuthActions.logout, AuthActions.logoutWithRedirectUrl, (state) => ({
     ...state,
     loggedIn: false,
-    walletProvider: undefined,
     accountInfo: undefined,
   })),
   on(AuthActions.setMetamaskLoginOptions, (state, { present, chainId }) => ({

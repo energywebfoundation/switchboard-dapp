@@ -13,7 +13,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
-import { from, of, timer } from 'rxjs';
+import { from, Observable, of, timer } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';
@@ -179,63 +179,21 @@ export class AuthEffects {
 
   reinitializeLoggedUserWithMetamask$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(
-        AuthActions.reinitializeAuth,
-        AuthActions.reinitializeAuthForEnrol
-      ),
-      // delay added because there is race condition between reinitializing user and getting info from metamask.
-      // When Metamask didn't give any info to the store, reinitialization doesn't work. Most of the time reinitialization is first.
-      // Automatic user reinitialization can't be done after MM info, because we have 2 different ways to initialize.
-      // One is with page redirect, second is with staying on visited page.
-      // Possible refactoring: depend on routing.
-      delay(100),
+      ofType(AuthActions.setMetamaskLoginOptions),
       filter(this.loginService.isSessionActive),
       this.isMetamaskDisabled(),
       this.isLoggedIn(),
-      switchMap(() =>
-        this.loginService
-          .login({ providerType: this.loginService.getSession().providerType })
-          .pipe(
-            map(({ success, accountInfo }) => {
-              if (success) {
-                return AuthActions.loginSuccess({ accountInfo });
-              }
-              return AuthActions.loginFailure();
-            }),
-            catchError((err) => {
-              console.log(err);
-              return of(AuthActions.loginFailure());
-            })
-          )
-      )
+      switchMap(() => this.reinitialize())
     )
   );
 
   reinitializeLoggedUser$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(
-        AuthActions.reinitializeAuth,
-        AuthActions.reinitializeAuthForEnrol
-      ),
+      ofType(AuthActions.setMetamaskLoginOptions),
       filter(this.loginService.isSessionActive),
       this.isProviderDifferentThanMetamask(),
       this.isLoggedIn(),
-      switchMap(() =>
-        this.loginService
-          .login({ providerType: this.loginService.getSession().providerType })
-          .pipe(
-            map(({ success, accountInfo }) => {
-              if (success) {
-                return AuthActions.loginSuccess({ accountInfo });
-              }
-              return AuthActions.loginFailure();
-            }),
-            catchError((err) => {
-              console.log(err);
-              return of(AuthActions.loginFailure());
-            })
-          )
-      )
+      switchMap(() => this.reinitialize())
     )
   );
 
@@ -314,6 +272,23 @@ export class AuthEffects {
             this.loginService.getSession().providerType !==
             ProviderType.MetaMask
         )
+      );
+  }
+
+  private reinitialize() {
+    return this.loginService
+      .reinitialize({ providerType: this.loginService.getSession().providerType })
+      .pipe(
+        map(({ success, accountInfo }) => {
+          if (success) {
+            return AuthActions.loginSuccess({ accountInfo });
+          }
+          return AuthActions.loginFailure();
+        }),
+        catchError((err) => {
+          console.log(err);
+          return of(AuthActions.loginFailure());
+        })
       );
   }
 }
