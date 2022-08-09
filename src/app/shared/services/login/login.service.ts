@@ -17,9 +17,7 @@ import {
   filter,
   map,
   share,
-  switchMap,
   take,
-  tap,
 } from 'rxjs/operators';
 import { swalLoginError } from './helpers/swal-login-error-handler';
 import { LoginSwalButtons } from './helpers/login-swal.buttons';
@@ -165,39 +163,21 @@ export class LoginService {
     navigateOnTimeout = true
   ) {
     this._throwTimeoutError = false;
-    const timeoutInMinutes =
-      walletProvider === ProviderType.EwKeyManager ? 2 : 1;
-    const connectionMessage = isConnectAndSign
-      ? 'connection to a wallet and '
-      : '';
+    const timeoutInMinutes = 1;
+    const connectionMessage = 'connection to a wallet and ';
     const messages = [
       {
         message: `Your ${connectionMessage}signature is being requested.`,
-        relevantProviders: 'all',
       },
       {
-        message:
-          'EW Key Manager should appear in a new browser tab or window. If you do not see it, please check your browser settings.',
-        relevantProviders: ProviderType.EwKeyManager,
-      },
-      {
-        message: `If you do not complete this within ${timeoutInMinutes} minute${
-          timeoutInMinutes === 1 ? '' : 's'
-        },
-          your browser will refresh automatically.`,
-        relevantProviders: 'all',
+        message: `If you do not complete this within ${timeoutInMinutes} minute your browser will refresh automatically.`,
       },
     ];
     const waitForSignatureMessage = messages
-      .filter(
-        (m) =>
-          m.relevantProviders === walletProvider ||
-          m.relevantProviders === 'all'
-      )
       .map((m) => m.message);
     this.loadingService.show(waitForSignatureMessage);
     this._timer = setTimeout(() => {
-      this._displayTimeout(isConnectAndSign, navigateOnTimeout);
+      this._displayTimeout(navigateOnTimeout);
       this.clearWaitSignatureTimer();
       this._throwTimeoutError = true;
     }, timeoutInMinutes * 60000);
@@ -207,6 +187,7 @@ export class LoginService {
     clearTimeout(this._timer);
     this._timer = undefined;
     this.loadingService.hide();
+    // this.clearSession();
 
     if (this._throwTimeoutError) {
       this._throwTimeoutError = false;
@@ -296,19 +277,15 @@ export class LoginService {
       encodeURIComponent(this._deepLink);
   }
 
-  private async _displayTimeout(
-    isConnectAndSign?: boolean,
+  private _displayTimeout(
     navigateOnTimeout?: boolean
   ) {
-    let message = 'sign';
-    if (isConnectAndSign) {
-      message = 'connect with your wallet and sign';
-    }
+    let message = 'connect with your wallet and sign';
+
     const config = {
       title: 'Wallet Signature Timeout',
       text: `The period to ${message} the requested signature has elapsed. Please login again.`,
       icon: 'error',
-      button: 'Proceed',
       closeOnClickOutside: false,
     };
 

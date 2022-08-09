@@ -225,7 +225,6 @@ describe('AuthEffects', () => {
       effects.loginViaDialog$.subscribe(() => {
         expect(loginServiceSpy.waitForSignature).toHaveBeenCalledWith(
           ProviderType.MetaMask,
-          true,
           false
         );
         done();
@@ -353,6 +352,111 @@ describe('AuthEffects', () => {
     });
   });
 
+  describe('reinitializeLoggedUserWithMetamask$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should return failure action when reinitialization fails', (done) => {
+      actions$.next(AuthActions.reinitializeAuth());
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+      store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
+      store.overrideSelector(AuthSelectors.isMetamaskDisabled, false);
+      loginServiceSpy.login.and.returnValue(of(false));
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.MetaMask,
+        publicKey: 'key',
+      });
+
+      effects.reinitializeLoggedUserWithMetamask$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(AuthActions.loginFailure());
+        done();
+      });
+    });
+
+    it('should return success action when reinitialization completes successfully', (done) => {
+      actions$.next(AuthActions.reinitializeAuth());
+      const accountInfo = {
+        chainName: 'chainName',
+        chainId: 123,
+        account: 'account',
+      };
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.MetaMask,
+        publicKey: 'key',
+      });
+      store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
+      store.overrideSelector(AuthSelectors.isMetamaskDisabled, false);
+      loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
+
+      effects.reinitializeLoggedUserWithMetamask$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(AuthActions.loginSuccess({ accountInfo }));
+        done();
+      });
+    });
+
+    it('should not call login method when session is empty', (done) => {
+      actions$.next(AuthActions.reinitializeAuth());
+
+      loginServiceSpy.isSessionActive.and.returnValue(false);
+
+      effects.reinitializeLoggedUserWithMetamask$.subscribe();
+      expect(loginServiceSpy.login).not.toHaveBeenCalled()
+      done();
+    });
+
+    it('should not call login method when it is not using metamask', (done) => {
+      actions$.next(AuthActions.reinitializeAuth());
+
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.WalletConnect,
+        publicKey: 'key',
+      });
+
+      effects.reinitializeLoggedUserWithMetamask$.subscribe();
+      expect(loginServiceSpy.login).not.toHaveBeenCalled();
+      done();
+    });
+
+    it('should not call login method when it is using metamask but with wrong chain id (metamask is disabled)', (done) => {
+      actions$.next(AuthActions.reinitializeAuth());
+
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.MetaMask,
+        publicKey: 'key',
+      });
+
+      store.overrideSelector(AuthSelectors.isMetamaskDisabled, true);
+
+      effects.reinitializeLoggedUserWithMetamask$.subscribe();
+      expect(loginServiceSpy.login).not.toHaveBeenCalled();
+      done();
+    });
+
+    it('should not call login method when user is already logged in', (done) => {
+      actions$.next(AuthActions.reinitializeAuth());
+
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.MetaMask,
+        publicKey: 'key',
+      });
+
+      store.overrideSelector(AuthSelectors.isMetamaskDisabled, false);
+      store.overrideSelector(AuthSelectors.isUserLoggedIn, true);
+
+      effects.reinitializeLoggedUserWithMetamask$.subscribe();
+      expect(loginServiceSpy.login).not.toHaveBeenCalled();
+      done();
+    })
+  });
+
   describe('reinitializeLoggedUser$', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
@@ -364,7 +468,7 @@ describe('AuthEffects', () => {
       store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
       loginServiceSpy.login.and.returnValue(of(false));
       loginServiceSpy.getSession.and.returnValue({
-        providerType: 'type',
+        providerType: ProviderType.WalletConnect,
         publicKey: 'key',
       });
 
@@ -383,7 +487,7 @@ describe('AuthEffects', () => {
       };
       loginServiceSpy.isSessionActive.and.returnValue(true);
       loginServiceSpy.getSession.and.returnValue({
-        providerType: 'type',
+        providerType: ProviderType.WalletConnect,
         publicKey: 'key',
       });
       store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
@@ -394,6 +498,48 @@ describe('AuthEffects', () => {
         done();
       });
     });
+
+    it('should not call login method when session is empty', (done) => {
+      actions$.next(AuthActions.reinitializeAuth());
+
+      loginServiceSpy.isSessionActive.and.returnValue(false);
+
+      effects.reinitializeLoggedUser$.subscribe();
+      expect(loginServiceSpy.login).not.toHaveBeenCalled()
+      done();
+    });
+
+    it('should not call login when it is metamask', (done) => {
+      actions$.next(AuthActions.reinitializeAuth());
+
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.MetaMask,
+        publicKey: 'key',
+      });
+
+      effects.reinitializeLoggedUser$.subscribe();
+      expect(loginServiceSpy.login).not.toHaveBeenCalled();
+      done();
+    });
+
+    it('should not call login method when user is already logged in', (done) => {
+      actions$.next(AuthActions.reinitializeAuth());
+
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.WalletConnect,
+        publicKey: 'key',
+      });
+
+      store.overrideSelector(AuthSelectors.isUserLoggedIn, true);
+
+      effects.reinitializeLoggedUser$.subscribe();
+      expect(loginServiceSpy.login).not.toHaveBeenCalled();
+      done();
+    })
   });
 
   describe('setWalletProviderAfterLogin$', () => {

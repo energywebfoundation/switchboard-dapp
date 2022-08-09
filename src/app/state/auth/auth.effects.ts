@@ -78,7 +78,7 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.loginViaDialog),
       tap(({ provider, navigateOnTimeout }) =>
-        this.loginService.waitForSignature(provider, true, navigateOnTimeout)
+        this.loginService.waitForSignature(provider, navigateOnTimeout)
       ),
       switchMap(({ provider, navigateOnTimeout }) =>
         this.loginService
@@ -130,7 +130,7 @@ export class AuthEffects {
   welcomePageLogin$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.welcomeLogin),
-      tap(({ provider }) => this.loginService.waitForSignature(provider, true)),
+      tap(({ provider }) => this.loginService.waitForSignature(provider)),
       switchMap(({ provider, returnUrl }) =>
         this.loginService
           .login({
@@ -186,6 +186,42 @@ export class AuthEffects {
     { dispatch: false }
   );
 
+  reinitializeLoggedUserWithMetamask$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        AuthActions.reinitializeAuth,
+        AuthActions.reinitializeAuthForEnrol
+      ),
+      filter(this.loginService.isSessionActive),
+      this.isMetamaskDisabled(),
+      this.isLoggedIn(),
+      tap(() =>
+        this.loginService.waitForSignature(
+          this.loginService.getSession().providerType
+        )
+      ),
+      switchMap(() =>
+        this.loginService
+          .login({ providerType: this.loginService.getSession().providerType })
+          .pipe(
+            map(({ success, accountInfo }) => {
+              if (success) {
+                return AuthActions.loginSuccess({ accountInfo });
+              }
+              return AuthActions.loginFailure();
+            }),
+            catchError((err) => {
+              console.log(err);
+              return of(AuthActions.loginFailure());
+            }),
+            finalize(() => {
+              this.loadingService.hide();
+            })
+          )
+      )
+    )
+  );
+
   reinitializeLoggedUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
@@ -193,13 +229,13 @@ export class AuthEffects {
         AuthActions.reinitializeAuthForEnrol
       ),
       filter(this.loginService.isSessionActive),
-      concatLatestFrom(() =>
-        this.store.select(AuthSelectors.isMetamaskDisabled)
+      this.isProviderDifferentThanMetamask(),
+      this.isLoggedIn(),
+      tap(() =>
+        this.loginService.waitForSignature(
+          this.loginService.getSession().providerType
+        )
       ),
-      filter(([, isMetamaskDisabled]) => !isMetamaskDisabled),
-      concatLatestFrom(() => this.store.select(AuthSelectors.isUserLoggedIn)),
-      filter(([, isLoggedIn]) => !isLoggedIn),
-      tap(() => this.loadingService.show()),
       switchMap(() =>
         this.loginService
           .login({ providerType: this.loginService.getSession().providerType })
@@ -264,4 +300,41 @@ export class AuthEffects {
     private router: Router,
     private envService: EnvService
   ) {}
+
+  private isMetamaskDisabled() {
+    return (source) => {
+      return source.pipe(
+        filter(
+          () =>
+            this.loginService.getSession().providerType ===
+            ProviderType.MetaMask
+        ),
+        concatLatestFrom(() =>
+          this.store.select(AuthSelectors.isMetamaskDisabled)
+        ),
+        filter(([, isMetamaskDisabled]) => !isMetamaskDisabled)
+      );
+    };
+  }
+
+  private isLoggedIn() {
+    return (source) => {
+      return source.pipe(
+        concatLatestFrom(() => this.store.select(AuthSelectors.isUserLoggedIn)),
+        filter(([, isLoggedIn]) => !isLoggedIn)
+      );
+    };
+  }
+
+
+  private isProviderDifferentThanMetamask() {
+    return (source) =>
+      source.pipe(
+        filter(
+          () =>
+            this.loginService.getSession().providerType !==
+            ProviderType.MetaMask
+        )
+      );
+  }
 }
