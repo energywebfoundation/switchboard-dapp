@@ -118,5 +118,4 @@ describe('LoginService', () => {
         );
       });
   });
-
 });

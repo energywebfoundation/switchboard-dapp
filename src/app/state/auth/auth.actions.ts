@@ -30,7 +30,9 @@ export const setProvider = createAction(
 
 export const reinitializeAuth = createAction('[AUTH] Reinitialize Logged User');
 
-export const reinitializeAuthWithMetamask = createAction('[AUTH] Reinitialize Logged User With Metamask');
+export const reinitializeAuthWithMetamask = createAction(
+  '[AUTH] Reinitialize Logged User With Metamask'
+);
 
 export const logout = createAction('[AUTH] Logout');
 
