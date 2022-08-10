@@ -78,10 +78,10 @@ export class AuthEffects {
             navigateOnTimeout
           )
           .pipe(
-            map(({ success, accountInfo }) => {
+            map(({ success }) => {
               if (success) {
                 this.dialog.closeAll();
-                return AuthActions.loginSuccess({ accountInfo });
+                return AuthActions.loginSuccess();
               }
               return AuthActions.loginFailure();
             }),
@@ -124,10 +124,10 @@ export class AuthEffects {
             reinitializeMetamask: provider === ProviderType.MetaMask,
           })
           .pipe(
-            map(({ success, accountInfo }) => {
+            map(({ success }) => {
               if (success) {
                 this.router.navigateByUrl(`/${returnUrl}`);
-                return AuthActions.loginSuccess({ accountInfo });
+                return AuthActions.loginSuccess();
               }
               return AuthActions.loginFailure();
             }),
@@ -280,9 +280,9 @@ export class AuthEffects {
         providerType: this.loginService.getSession().providerType,
       })
       .pipe(
-        map(({ success, accountInfo }) => {
+        map(({ success }) => {
           if (success) {
-            return AuthActions.loginSuccess({ accountInfo });
+            return AuthActions.loginSuccess();
           }
           return AuthActions.loginFailure();
         }),

@@ -145,15 +145,10 @@ describe('AuthEffects', () => {
     });
 
     it('should close dialog and return login success action when login was successful', (done) => {
-      const accountInfo = {
-        chainName: 'chainName',
-        chainId: 123,
-        account: 'account',
-      };
       actions$.next(
         AuthActions.loginViaDialog({ provider: ProviderType.MetaMask })
       );
-      loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
+      loginServiceSpy.login.and.returnValue(of({ success: true }));
 
       effects.loginViaDialog$.subscribe((resultAction) => {
         expect(loginServiceSpy.login).toHaveBeenCalledWith(
@@ -163,7 +158,7 @@ describe('AuthEffects', () => {
           },
           undefined
         );
-        expect(resultAction).toEqual(AuthActions.loginSuccess({ accountInfo }));
+        expect(resultAction).toEqual(AuthActions.loginSuccess());
         expect(dialogSpy.closeAll).toHaveBeenCalled();
 
         done();
@@ -229,24 +224,19 @@ describe('AuthEffects', () => {
     });
 
     it('should successfully login', (done) => {
-      const accountInfo = {
-        chainName: 'chainName',
-        chainId: 123,
-        account: 'account',
-      };
       actions$.next(
         AuthActions.welcomeLogin({
           provider: ProviderType.MetaMask,
           returnUrl: '',
         })
       );
-      loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
+      loginServiceSpy.login.and.returnValue(of({ success: true }));
 
       effects.welcomePageLogin$
         .pipe(
           finalize(() => {
             expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(
-              '/dashboard',
+              '/' + RouterConst.Dashboard,
               jasmine.objectContaining({})
             );
           })
@@ -256,9 +246,7 @@ describe('AuthEffects', () => {
             providerType: ProviderType.MetaMask,
             reinitializeMetamask: true,
           });
-          expect(resultAction).toEqual(
-            AuthActions.loginSuccess({ accountInfo })
-          );
+          expect(resultAction).toEqual(AuthActions.loginSuccess());
           done();
         });
     });
@@ -270,12 +258,7 @@ describe('AuthEffects', () => {
           returnUrl: 'returnUrl',
         })
       );
-      const accountInfo = {
-        chainName: 'chainName',
-        chainId: 123,
-        account: 'account',
-      };
-      loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
+      loginServiceSpy.login.and.returnValue(of({ success: true }));
 
       effects.welcomePageLogin$.subscribe((resultAction) => {
         expect(loginServiceSpy.login).toHaveBeenCalledWith({
@@ -285,7 +268,7 @@ describe('AuthEffects', () => {
         expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(
           `/${RouterConst.ReturnUrl}`
         );
-        expect(resultAction).toEqual(AuthActions.loginSuccess({ accountInfo }));
+        expect(resultAction).toEqual(AuthActions.loginSuccess());
         done();
       });
     });
@@ -373,22 +356,15 @@ describe('AuthEffects', () => {
 
     it('should return success action when reinitialization completes successfully', (done) => {
       actions$.next(AuthActions.reinitializeAuthWithMetamask());
-      const accountInfo = {
-        chainName: 'chainName',
-        chainId: 123,
-        account: 'account',
-      };
       loginServiceSpy.getSession.and.returnValue({
         providerType: ProviderType.MetaMask,
         publicKey: 'key',
       });
       store.overrideSelector(AuthSelectors.isMetamaskDisabled, false);
-      loginServiceSpy.reinitialize.and.returnValue(
-        of({ success: true, accountInfo })
-      );
+      loginServiceSpy.reinitialize.and.returnValue(of({ success: true }));
 
       effects.reinitializeLoggedUserWithMetamask$.subscribe((resultAction) => {
-        expect(resultAction).toEqual(AuthActions.loginSuccess({ accountInfo }));
+        expect(resultAction).toEqual(AuthActions.loginSuccess());
         done();
       });
     });
@@ -432,21 +408,14 @@ describe('AuthEffects', () => {
 
     it('should return success action when reinitialization completes successfully', (done) => {
       actions$.next(AuthActions.reinitializeAuth());
-      const accountInfo = {
-        chainName: 'chainName',
-        chainId: 123,
-        account: 'account',
-      };
       loginServiceSpy.getSession.and.returnValue({
         providerType: ProviderType.WalletConnect,
         publicKey: 'key',
       });
-      loginServiceSpy.reinitialize.and.returnValue(
-        of({ success: true, accountInfo })
-      );
+      loginServiceSpy.reinitialize.and.returnValue(of({ success: true }));
 
       effects.reinitializeLoggedUser$.subscribe((resultAction) => {
-        expect(resultAction).toEqual(AuthActions.loginSuccess({ accountInfo }));
+        expect(resultAction).toEqual(AuthActions.loginSuccess());
         done();
       });
     });
@@ -458,12 +427,7 @@ describe('AuthEffects', () => {
     });
 
     it('should return dispatch action for setting wallet provider', (done) => {
-      const accountInfo = {
-        chainName: 'chainName',
-        chainId: 123,
-        account: 'account',
-      };
-      actions$.next(AuthActions.loginSuccess({ accountInfo }));
+      actions$.next(AuthActions.loginSuccess());
       loginServiceSpy.getProviderType.and.returnValue(
         ProviderType.WalletConnect
       );

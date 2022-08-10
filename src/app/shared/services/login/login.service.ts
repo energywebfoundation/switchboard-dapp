@@ -3,7 +3,6 @@ import { IamService, PROVIDER_TYPE } from '../iam.service';
 import { LoadingService } from '../loading.service';
 import { ToastrService } from 'ngx-toastr';
 import {
-  AccountInfo,
   IS_ETH_SIGNER,
   ProviderType,
   PUBLIC_KEY,
@@ -107,7 +106,7 @@ export class LoginService {
   login(
     loginOptions?: LoginOptions,
     redirectOnChange = true
-  ): Observable<{ success: boolean; accountInfo?: AccountInfo | undefined }> {
+  ): Observable<{ success: boolean; }> {
     this.waitForSignature(redirectOnChange);
     return this.initialize(loginOptions, redirectOnChange);
   }
@@ -115,7 +114,7 @@ export class LoginService {
   reinitialize(
     loginOptions?: LoginOptions,
     redirectOnChange = true
-  ): Observable<{ success: boolean; accountInfo?: AccountInfo | undefined }> {
+  ): Observable<{ success: boolean; }> {
     this.loadingService.show();
     this.createTimer(1, redirectOnChange);
     return this.initialize(loginOptions, redirectOnChange);
@@ -123,7 +122,7 @@ export class LoginService {
 
   private initialize(loginOptions?: LoginOptions, redirectOnChange = true) {
     return from(this.iamService.initializeConnection(loginOptions)).pipe(
-      map(({ did, connected, userClosedModal, accountInfo }) => {
+      map(({ did, connected, userClosedModal }) => {
         const loginSuccessful = did && connected && !userClosedModal;
         if (loginSuccessful) {
           this.iamListenerService.setListeners((config) =>
@@ -140,7 +139,7 @@ export class LoginService {
             redirectOnChange
           );
         }
-        return { success: Boolean(loginSuccessful), accountInfo };
+        return { success: Boolean(loginSuccessful) };
       }),
       delayWhen(({ success }) => {
         if (success) return this.storeSession();

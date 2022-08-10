@@ -67,7 +67,7 @@ describe('LoginService', () => {
       const getSpy = jasmine.createSpy().and.returnValue(ProviderType.MetaMask);
       Object.defineProperty(IamService, 'providerType', { get: getSpy });
 
-      from(service.login()).subscribe(({ success }) => {
+      service.login().subscribe(({ success }) => {
         expect(success).toBe(true);
       });
     })

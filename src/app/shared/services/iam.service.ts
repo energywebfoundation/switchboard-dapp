@@ -199,7 +199,6 @@ export class IamService {
         connected: false,
         userClosedModal: e.message === 'User closed modal',
         realtimeExchangeConnected: false,
-        accountInfo: undefined,
         message: e.message,
       };
     }
@@ -208,7 +207,6 @@ export class IamService {
       connected: true,
       userClosedModal: false,
       realtimeExchangeConnected: true,
-      accountInfo: this.signerService.accountInfo,
     };
   }
 

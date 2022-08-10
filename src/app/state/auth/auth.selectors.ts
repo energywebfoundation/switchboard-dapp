@@ -17,8 +17,3 @@ export const isMetamaskDisabled = createSelector(
   getAuthState,
   (state) => state?.metamask.chainId !== state?.defaultChainId
 );
-
-export const getAccountInfo = createSelector(
-  getAuthState,
-  (state) => state.accountInfo
-);

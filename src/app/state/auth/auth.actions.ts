@@ -19,7 +19,6 @@ export const openLoginDialog = createAction('[AUTH] Open Login Dialog');
 
 export const loginSuccess = createAction(
   '[AUTH] User Login Success',
-  props<{ accountInfo: AccountInfo }>()
 );
 export const loginFailure = createAction('[AUTH] User Login Failure');
 
