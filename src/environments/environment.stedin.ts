@@ -10,7 +10,6 @@ export const environment = {
   chainId: ChainId.Volta,
   cacheServerUrl: 'https://identitycache-dev.energyweb.org/v1',
   natsServerUrl: 'https://identityevents-dev.energyweb.org/',
-  kmsServerUrl: undefined,
   ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',
   showAzureLoginOption: true,
   natsEnvironmentName: 'ewf-dev',
