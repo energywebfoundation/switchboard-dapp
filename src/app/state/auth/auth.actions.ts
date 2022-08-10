@@ -27,7 +27,7 @@ export const setProvider = createAction(
   props<{ walletProvider: ProviderType }>()
 );
 
-export const reinitializeAuth = createAction('[AUTH] Reinitialize Logged User');
+export const reinitializeAuthWithoutMetamask = createAction('[AUTH] Reinitialize Logged User Without Metamask');
 
 export const reinitializeAuthWithMetamask = createAction(
   '[AUTH] Reinitialize Logged User With Metamask'

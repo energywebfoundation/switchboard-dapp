@@ -181,7 +181,7 @@ export class AuthEffects {
           return AuthActions.reinitializeAuthWithMetamask();
         }
 
-        return AuthActions.reinitializeAuth();
+        return AuthActions.reinitializeAuthWithoutMetamask();
       })
     )
   );
@@ -196,7 +196,7 @@ export class AuthEffects {
 
   reinitializeLoggedUser$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AuthActions.reinitializeAuth),
+      ofType(AuthActions.reinitializeAuthWithoutMetamask),
       switchMap(() => this.reinitialize())
     )
   );
@@ -204,7 +204,7 @@ export class AuthEffects {
   notPossibleToReinitializeUser$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AuthActions.reinitializeAuth),
+        ofType(AuthActions.reinitializeAuthWithoutMetamask),
         filter(() => !this.loginService.isSessionActive()),
         map(() => {
           this.router.navigate([RouterConst.Welcome]);

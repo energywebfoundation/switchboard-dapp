@@ -307,7 +307,7 @@ describe('AuthEffects', () => {
       });
 
       effects.reinitializeUser$.subscribe((resultAction) => {
-        expect(resultAction).toEqual(AuthActions.reinitializeAuth());
+        expect(resultAction).toEqual(AuthActions.reinitializeAuthWithoutMetamask());
         done();
       });
     });
@@ -393,7 +393,7 @@ describe('AuthEffects', () => {
     });
 
     it('should return failure action when reinitialization fails', (done) => {
-      actions$.next(AuthActions.reinitializeAuth());
+      actions$.next(AuthActions.reinitializeAuthWithoutMetamask());
       loginServiceSpy.reinitialize.and.returnValue(of(false));
       loginServiceSpy.getSession.and.returnValue({
         providerType: ProviderType.WalletConnect,
@@ -407,7 +407,7 @@ describe('AuthEffects', () => {
     });
 
     it('should return success action when reinitialization completes successfully', (done) => {
-      actions$.next(AuthActions.reinitializeAuth());
+      actions$.next(AuthActions.reinitializeAuthWithoutMetamask());
       loginServiceSpy.getSession.and.returnValue({
         providerType: ProviderType.WalletConnect,
         publicKey: 'key',
@@ -450,7 +450,7 @@ describe('AuthEffects', () => {
 
     it('should navigate to welcome page when session is not active', (done) => {
       loginServiceSpy.isSessionActive.and.returnValue(false);
-      actions$.next(AuthActions.reinitializeAuth());
+      actions$.next(AuthActions.reinitializeAuthWithoutMetamask());
       effects.notPossibleToReinitializeUser$.subscribe(() => {
         expect(routerSpy.navigate).toHaveBeenCalledWith([RouterConst.Welcome]);
         done();
