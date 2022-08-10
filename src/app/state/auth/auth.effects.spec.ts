@@ -307,7 +307,9 @@ describe('AuthEffects', () => {
       });
 
       effects.reinitializeUser$.subscribe((resultAction) => {
-        expect(resultAction).toEqual(AuthActions.reinitializeAuthWithoutMetamask());
+        expect(resultAction).toEqual(
+          AuthActions.reinitializeAuthWithoutMetamask()
+        );
         done();
       });
     });

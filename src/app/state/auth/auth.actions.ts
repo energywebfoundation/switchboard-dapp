@@ -17,9 +17,7 @@ export const welcomeLogin = createAction(
 
 export const openLoginDialog = createAction('[AUTH] Open Login Dialog');
 
-export const loginSuccess = createAction(
-  '[AUTH] User Login Success',
-);
+export const loginSuccess = createAction('[AUTH] User Login Success');
 export const loginFailure = createAction('[AUTH] User Login Failure');
 
 export const setProvider = createAction(
@@ -27,7 +25,9 @@ export const setProvider = createAction(
   props<{ walletProvider: ProviderType }>()
 );
 
-export const reinitializeAuthWithoutMetamask = createAction('[AUTH] Reinitialize Logged User Without Metamask');
+export const reinitializeAuthWithoutMetamask = createAction(
+  '[AUTH] Reinitialize Logged User Without Metamask'
+);
 
 export const reinitializeAuthWithMetamask = createAction(
   '[AUTH] Reinitialize Logged User With Metamask'
