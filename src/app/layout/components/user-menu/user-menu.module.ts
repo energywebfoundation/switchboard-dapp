@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ConnectedNetworkComponent } from './connected-network/connected-network.component';
 import { UserDidComponent } from './user-did/user-did.component';
 import { UserNameComponent } from './user-name/user-name.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,12 +10,7 @@ import { QrCodeScannerModule } from '../../../shared/components/qr-code-scanner/
 import { QrCodeModule } from '../../../shared/components/qr-code/qr-code.module';
 
 @NgModule({
-  declarations: [
-    ConnectedNetworkComponent,
-    UserDidComponent,
-    UserNameComponent,
-    UserMenuTriggerComponent,
-  ],
+  declarations: [UserDidComponent, UserNameComponent, UserMenuTriggerComponent],
   imports: [
     CommonModule,
     MatIconModule,
@@ -25,11 +19,6 @@ import { QrCodeModule } from '../../../shared/components/qr-code/qr-code.module'
     QrCodeScannerModule,
     QrCodeModule,
   ],
-  exports: [
-    ConnectedNetworkComponent,
-    UserDidComponent,
-    UserNameComponent,
-    UserMenuTriggerComponent,
-  ],
+  exports: [UserDidComponent, UserNameComponent, UserMenuTriggerComponent],
 })
 export class UserMenuModule {}
