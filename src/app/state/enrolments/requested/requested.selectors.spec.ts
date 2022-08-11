@@ -1,3 +1,5 @@
+import { Claim } from 'iam-client-lib';
+import { EnrolmentClaim } from 'src/app/routes/enrolment/models/enrolment-claim';
 import * as RequestedSelectors from './requested.selectors';
 import { getEnrolments } from './requested.selectors';
 
@@ -41,7 +43,10 @@ describe('Requested Enrolments Selectors', () => {
     it('should return 1 when enrolment is not rejected nor accepted', () => {
       expect(
         RequestedSelectors.getPendingEnrolmentsAmount.projector([
-          { isAccepted: false, isRejected: false },
+          new EnrolmentClaim({
+            isAccepted: false,
+            isRejected: false
+          } as Claim),
         ])
       ).toEqual(1);
     });
