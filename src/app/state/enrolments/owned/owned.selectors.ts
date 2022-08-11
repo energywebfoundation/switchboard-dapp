@@ -21,8 +21,7 @@ export const getEnrolments = createSelector(
 export const getNotSyncedAmount = createSelector(
   getAllEnrolments,
   (enrolments) => {
-    return enrolments
-      .filter((enrolment) => enrolment.isAccepted)
-      .filter((enrolment) => !enrolment.isSynced).length;
+    console.log(enrolments, 'THE ENROLMENTS');
+    return enrolments.filter((enrolment) => enrolment.canPublishClaim).length;
   }
 );
