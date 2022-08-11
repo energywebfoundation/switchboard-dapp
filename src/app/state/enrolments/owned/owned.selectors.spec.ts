@@ -36,7 +36,7 @@ describe('Owned Enrolments Selectors', () => {
         ])
       ).toEqual(1);
     });
-    it('should return 1 when one element is accepted is pending sync (on-chain claim)', () => {
+    it('should return 1 when one element is accepted is pending sync (off-chain claim)', () => {
       expect(
         OwnedSelectors.getNotSyncedAmount.projector([
           new EnrolmentClaim({
