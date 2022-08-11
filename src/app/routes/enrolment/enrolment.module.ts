@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { EnrolmentComponent } from './enrolment.component';
-import { EnrolToRoleComponent } from './enrol-to-role/enrol-to-role.component';
 import { FormsModule } from '@angular/forms';
 import { ViewRequestsComponent } from './view-requests/view-requests.component';
 import { ViewRoleComponent } from './view-role/view-role.component';
@@ -35,7 +34,6 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
 @NgModule({
   declarations: [
     EnrolmentComponent,
-    EnrolToRoleComponent,
     ViewRequestsComponent,
     ViewRoleComponent,
     FieldsComponent,
