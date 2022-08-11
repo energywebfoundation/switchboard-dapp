@@ -187,7 +187,10 @@ export class IamService {
         this.cacheClient = cacheClient;
         this.verifiableCredentialsService = verifiableCredentialsService;
         if (createDocument) {
-          const { didRegistry, claimsService } = await connectToDidRegistry();
+          const { didRegistry, claimsService } = await connectToDidRegistry(
+             // @ts-ignore
+            this.configureIpfsConfig()
+          );
           this.didRegistry = didRegistry;
           this.claimsService = claimsService;
         }
@@ -265,6 +268,22 @@ export class IamService {
     };
 
     return chainConfig;
+  }
+
+  private configureIpfsConfig() {
+    const projectId = this.envService.INFURA_PROJECT_ID;
+    const projectSecret = this.envService.INFURA_PROJECT_SECRET;
+    const auth =
+      'Basic ' +
+      Buffer.from(projectId + ':' + projectSecret).toString('base64');
+    return {
+      host: 'ipfs.infura.io',
+      port: 5001,
+      protocol: 'https',
+      headers: {
+        authorization: auth,
+      },
+    };
   }
 
   private async initSignerService(providerType: ProviderType) {

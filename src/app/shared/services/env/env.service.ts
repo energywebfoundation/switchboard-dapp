@@ -21,4 +21,6 @@ export class EnvService {
   currencySymbol: string = environment.currencySymbol;
   blockExplorerUrl: string = environment.blockExplorerUrl;
   SENTRY_ENVIRONMENT: string = environment.SENTRY_ENVIRONMENT;
+  INFURA_PROJECT_ID: string = environment.INFURA_PROJECT_ID;
+  INFURA_PROJECT_SECRET: string = environment.INFURA_PROJECT_SECRET;
 }
