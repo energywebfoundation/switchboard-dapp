@@ -45,7 +45,7 @@ describe('Requested Enrolments Selectors', () => {
         RequestedSelectors.getPendingEnrolmentsAmount.projector([
           new EnrolmentClaim({
             isAccepted: false,
-            isRejected: false
+            isRejected: false,
           } as Claim),
         ])
       ).toEqual(1);
