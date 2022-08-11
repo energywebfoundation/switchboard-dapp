@@ -2,7 +2,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { SearchType } from 'iam-client-lib';
+import { Claim, SearchType } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import {
@@ -41,7 +41,7 @@ export class SearchResultComponent implements OnInit {
     value: false,
   };
 
-  requestedClaims: any[];
+  requestedClaims: Claim[];
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -79,8 +79,8 @@ export class SearchResultComponent implements OnInit {
         this.filteredOptions.next(options);
       });
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
-      // Get requested claims
       try {
+        this.requestedClaims = await this.iamService.claimsService.getClaimsByRequester({did: this.iamService.signerService.did})
         if (queryParams.keyword) {
           this.searchForm.get('searchTxt').setValue(queryParams.keyword);
         }
