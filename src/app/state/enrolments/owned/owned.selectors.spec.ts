@@ -1,5 +1,6 @@
+import { Claim, RegistrationTypes } from 'iam-client-lib';
+import { EnrolmentClaim } from 'src/app/routes/enrolment/models/enrolment-claim';
 import * as OwnedSelectors from './owned.selectors';
-import { getNotSyncedAmount } from './owned.selectors';
 
 describe('Owned Enrolments Selectors', () => {
   describe('getNotSyncedAmount', () => {
@@ -24,13 +25,25 @@ describe('Owned Enrolments Selectors', () => {
       ).toEqual(0);
     });
 
-    it('should return 1 when one element is accepted but not synced', () => {
+    it('should return 1 when one element is accepted is pending sync (on-chain claim)', () => {
       expect(
         OwnedSelectors.getNotSyncedAmount.projector([
-          {
+          new EnrolmentClaim({
             isAccepted: true,
-            isSynced: false,
-          },
+            registrationTypes: [RegistrationTypes.OnChain],
+            expirationTimestamp: (Date.now() + 500000).toString(),
+          } as Claim),
+        ])
+      ).toEqual(1);
+    });
+    it('should return 1 when one element is accepted is pending sync (off-chain claim)', () => {
+      expect(
+        OwnedSelectors.getNotSyncedAmount.projector([
+          new EnrolmentClaim({
+            isAccepted: true,
+            registrationTypes: [RegistrationTypes.OffChain],
+            expirationTimestamp: (Date.now() + 500000).toString(),
+          } as Claim).setIsSyncedOffChain(false),
         ])
       ).toEqual(1);
     });

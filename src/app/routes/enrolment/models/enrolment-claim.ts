@@ -58,7 +58,7 @@ export class EnrolmentClaim
   }
 
   get canPublishClaim() {
-    return this.isPendingSync && !this.isExpired;
+    return this.isAccepted && this.isPendingSync && !this.isExpired;
   }
 
   get isPendingSync() {
