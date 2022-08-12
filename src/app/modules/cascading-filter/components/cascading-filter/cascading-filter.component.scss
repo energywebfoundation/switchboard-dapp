@@ -1,0 +1,9 @@
+.status-select {
+  width: 116px;
+}
+
+mat-form-field {
+  @media (min-width: 1200px) and (max-width: 1380px) {
+    width: 174px;
+  }
+}

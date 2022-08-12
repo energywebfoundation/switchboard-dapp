@@ -27,7 +27,7 @@ export class FilterBuilder {
     }
 
     this.list = this.list.filter(
-      (item) => item.subject.includes(value) || item.requester.includes(value)
+      (item) => item.subject?.includes(value) || item.requester?.includes(value)
     );
     return this;
   }

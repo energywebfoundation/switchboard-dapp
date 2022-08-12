@@ -1,5 +1,18 @@
-<div class="card-header d-flex flex-column flex-lg-row justify-content-lg-start align-lg-items-center mb-3">
-  <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
+<div class="card-header d-flex flex-column flex-xl-row justify-content-xl-start align-xl-items-center mb-3 flex-wrap">
+  <div
+    class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3"
+    *ngIf="filterStatuses?.length > 0">
+    <mat-label class="pr-2">Status</mat-label>
+    <mat-form-field class="mat-filter-sort status-select" appearance="outline">
+      <mat-select data-qa-id="select-status" [value]="defaultStatus" (selectionChange)="statusChange($event)">
+        <mat-option *ngFor="let status of filterStatuses" [value]="status" [attr.data-qa-id]="status">
+          {{ status }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3">
+    <mat-label class="pr-2">Namespace</mat-label>
     <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
       <input
         matInput
@@ -17,7 +30,7 @@
       </mat-autocomplete>
     </mat-form-field>
   </div>
-  <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3">
     <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
       <input
         matInput
@@ -35,7 +48,7 @@
       </mat-autocomplete>
     </mat-form-field>
   </div>
-  <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 ml-0 ml-md-3">
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3">
     <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
       <input
         matInput
@@ -51,6 +64,24 @@
           {{ roleName }}
         </mat-option>
       </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showDID">
+    <mat-label class="pr-2">Requestor</mat-label>
+    <mat-form-field
+      appearance="outline"
+      class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
+      matTooltip="Filter by did - it will search through Requestor DID and Asset Did">
+      <input matInput placeholder="DID" [formControl]="did" />
+      <button
+        matSuffix
+        mat-icon-button
+        class="qr-code"
+        aria-label="Scan DID"
+        appQrCodeScanner
+        (scannedValue)="updateSearchByDidValue($event.data?.did)">
+        <mat-icon>qr_code_2</mat-icon>
+      </button>
     </mat-form-field>
   </div>
 </div>
