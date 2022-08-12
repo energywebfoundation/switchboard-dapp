@@ -12,7 +12,9 @@ export const getUserProfile = createSelector(
 );
 
 export const getUserData = createSelector(getUserState, (state) =>
-  userLocalStorage.has ? userLocalStorage.parsed : state?.userData
+  userLocalStorage.has
+    ? userLocalStorage.parsed[state?.didDocument?.id]
+    : state?.userData
 );
 
 export const getUserName = createSelector(getUserData, (state) =>
