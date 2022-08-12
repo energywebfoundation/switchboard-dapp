@@ -66,12 +66,6 @@ describe('DashboardComponent', () => {
     );
   });
 
-  it('should call reinitialize action', () => {
-    setUp();
-    fixture.detectChanges();
-    expect(dispatchSpy).toHaveBeenCalledWith(AuthActions.reinitializeAuth());
-  });
-
   it('should check if searching through apps and orgs', () => {
     expect(component.searchBy().length).toEqual(2);
     expect(component.searchBy()).toEqual([SearchType.App, SearchType.Org]);

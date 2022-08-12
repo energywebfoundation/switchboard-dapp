@@ -2,12 +2,7 @@ import { Injectable } from '@angular/core';
 import { IamService, PROVIDER_TYPE } from '../iam.service';
 import { LoadingService } from '../loading.service';
 import { ToastrService } from 'ngx-toastr';
-import {
-  AccountInfo,
-  IS_ETH_SIGNER,
-  ProviderType,
-  PUBLIC_KEY,
-} from 'iam-client-lib';
+import { IS_ETH_SIGNER, ProviderType, PUBLIC_KEY } from 'iam-client-lib';
 import SWAL from 'sweetalert';
 import { from, Observable, of } from 'rxjs';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
@@ -15,15 +10,15 @@ import {
   catchError,
   delayWhen,
   filter,
+  finalize,
   map,
   share,
-  switchMap,
   take,
-  tap,
 } from 'rxjs/operators';
 import { swalLoginError } from './helpers/swal-login-error-handler';
 import { LoginSwalButtons } from './helpers/login-swal.buttons';
 import { MetamaskProviderService } from '../metamask-provider/metamask-provider.service';
+import { RouterConst } from '../../../routes/router-const';
 
 export interface LoginOptions {
   providerType?: ProviderType;
@@ -107,9 +102,23 @@ export class LoginService {
   login(
     loginOptions?: LoginOptions,
     redirectOnChange = true
-  ): Observable<{ success: boolean; accountInfo?: AccountInfo | undefined }> {
+  ): Observable<{ success: boolean }> {
+    this.waitForSignature(redirectOnChange);
+    return this.initialize(loginOptions, redirectOnChange);
+  }
+
+  reinitialize(
+    loginOptions?: LoginOptions,
+    redirectOnChange = true
+  ): Observable<{ success: boolean }> {
+    this.loadingService.show();
+    this.createTimer(1, redirectOnChange);
+    return this.initialize(loginOptions, redirectOnChange);
+  }
+
+  private initialize(loginOptions?: LoginOptions, redirectOnChange = true) {
     return from(this.iamService.initializeConnection(loginOptions)).pipe(
-      map(({ did, connected, userClosedModal, accountInfo }) => {
+      map(({ did, connected, userClosedModal }) => {
         const loginSuccessful = did && connected && !userClosedModal;
         if (loginSuccessful) {
           this.iamListenerService.setListeners((config) =>
@@ -126,13 +135,13 @@ export class LoginService {
             redirectOnChange
           );
         }
-        return { success: Boolean(loginSuccessful), accountInfo };
+        return { success: Boolean(loginSuccessful) };
       }),
-
       delayWhen(({ success }) => {
         if (success) return this.storeSession();
       }),
-      catchError((err) => this.handleLoginErrors(err, redirectOnChange))
+      catchError((err) => this.handleLoginErrors(err, redirectOnChange)),
+      finalize(() => this.clearWaitSignatureTimer())
     );
   }
 
@@ -144,7 +153,7 @@ export class LoginService {
     this.iamService.closeConnection().subscribe(() => {
       saveDeepLink
         ? this.saveDeepLink()
-        : (location.href = location.origin + '/welcome');
+        : (location.href = location.origin + '/' + RouterConst.Welcome);
     });
   }
 
@@ -159,51 +168,25 @@ export class LoginService {
     this._deepLink = deepLink;
   }
 
-  public waitForSignature(
-    walletProvider?: ProviderType,
-    isConnectAndSign?: boolean,
-    navigateOnTimeout = true
-  ) {
+  private waitForSignature(navigateOnTimeout = true) {
     this._throwTimeoutError = false;
-    const timeoutInMinutes =
-      walletProvider === ProviderType.EwKeyManager ? 2 : 1;
-    const connectionMessage = isConnectAndSign
-      ? 'connection to a wallet and '
-      : '';
-    const messages = [
-      {
-        message: `Your ${connectionMessage}signature is being requested.`,
-        relevantProviders: 'all',
-      },
-      {
-        message:
-          'EW Key Manager should appear in a new browser tab or window. If you do not see it, please check your browser settings.',
-        relevantProviders: ProviderType.EwKeyManager,
-      },
-      {
-        message: `If you do not complete this within ${timeoutInMinutes} minute${
-          timeoutInMinutes === 1 ? '' : 's'
-        },
-          your browser will refresh automatically.`,
-        relevantProviders: 'all',
-      },
-    ];
-    const waitForSignatureMessage = messages
-      .filter(
-        (m) =>
-          m.relevantProviders === walletProvider ||
-          m.relevantProviders === 'all'
-      )
-      .map((m) => m.message);
+    const timeoutInMinutes = 1;
+
+    const waitForSignatureMessage = `Your connection to a wallet and signature is being requested. If you do not complete this within ${timeoutInMinutes} minute your browser will refresh automatically.`;
     this.loadingService.show(waitForSignatureMessage);
+    this.createTimer(timeoutInMinutes, navigateOnTimeout);
+  }
+
+  private createTimer(timeoutInMinutes: number, navigateOnTimeout: boolean) {
     this._timer = setTimeout(() => {
-      this._displayTimeout(isConnectAndSign, navigateOnTimeout);
+      this._displayTimeout(navigateOnTimeout);
       this.clearWaitSignatureTimer();
+      this.clearSession();
       this._throwTimeoutError = true;
     }, timeoutInMinutes * 60000);
   }
 
-  public clearWaitSignatureTimer() {
+  private clearWaitSignatureTimer() {
     clearTimeout(this._timer);
     this._timer = undefined;
     this.loadingService.hide();
@@ -296,20 +279,10 @@ export class LoginService {
       encodeURIComponent(this._deepLink);
   }
 
-  private async _displayTimeout(
-    isConnectAndSign?: boolean,
-    navigateOnTimeout?: boolean
-  ) {
-    let message = 'sign';
-    if (isConnectAndSign) {
-      message = 'connect with your wallet and sign';
-    }
+  private _displayTimeout(navigateOnTimeout?: boolean) {
     const config = {
       title: 'Wallet Signature Timeout',
-      text: `The period to ${message} the requested signature has elapsed. Please login again.`,
-      icon: 'error',
-      button: 'Proceed',
-      closeOnClickOutside: false,
+      text: `The period to connect with your wallet and sign the requested signature has elapsed. Please login again.`,
     };
 
     this.openSwal(config, navigateOnTimeout);

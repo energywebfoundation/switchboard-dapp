@@ -201,7 +201,6 @@ export class IamService {
         connected: false,
         userClosedModal: e.message === 'User closed modal',
         realtimeExchangeConnected: false,
-        accountInfo: undefined,
         message: e.message,
       };
     }
@@ -210,7 +209,6 @@ export class IamService {
       connected: true,
       userClosedModal: false,
       realtimeExchangeConnected: true,
-      accountInfo: this.signerService.accountInfo,
     };
   }
 
@@ -291,8 +289,6 @@ export class IamService {
         return initWithMetamask();
       case ProviderType.WalletConnect:
         return initWithWalletConnect();
-      case ProviderType.EwKeyManager:
-        return initWithKms({ kmsServerUrl: this.envService.kmsServerUrl });
       case ProviderType.PrivateKey:
         return initWithPrivateKeySigner(
           localStorage.getItem('PrivateKey'),

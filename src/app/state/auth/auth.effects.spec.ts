@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { of, ReplaySubject, throwError } from 'rxjs';
 
@@ -32,8 +32,7 @@ describe('AuthEffects', () => {
 
   beforeEach(() => {
     loginServiceSpy = jasmine.createSpyObj('LoginService', [
-      'waitForSignature',
-      'clearWaitSignatureTimer',
+      'reinitialize',
       'login',
       'disconnect',
       'isSessionActive',
@@ -146,38 +145,24 @@ describe('AuthEffects', () => {
     });
 
     it('should close dialog and return login success action when login was successful', (done) => {
-      const accountInfo = {
-        chainName: 'chainName',
-        chainId: 123,
-        account: 'account',
-      };
       actions$.next(
         AuthActions.loginViaDialog({ provider: ProviderType.MetaMask })
       );
-      loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
+      loginServiceSpy.login.and.returnValue(of({ success: true }));
 
-      effects.loginViaDialog$
-        .pipe(
-          finalize(() =>
-            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled()
-          )
-        )
-        .subscribe((resultAction) => {
-          expect(loginServiceSpy.login).toHaveBeenCalledWith(
-            {
-              providerType: ProviderType.MetaMask,
-              reinitializeMetamask: true,
-            },
-            undefined
-          );
-          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(resultAction).toEqual(
-            AuthActions.loginSuccess({ accountInfo })
-          );
-          expect(dialogSpy.closeAll).toHaveBeenCalled();
+      effects.loginViaDialog$.subscribe((resultAction) => {
+        expect(loginServiceSpy.login).toHaveBeenCalledWith(
+          {
+            providerType: ProviderType.MetaMask,
+            reinitializeMetamask: true,
+          },
+          undefined
+        );
+        expect(resultAction).toEqual(AuthActions.loginSuccess());
+        expect(dialogSpy.closeAll).toHaveBeenCalled();
 
-          done();
-        });
+        done();
+      });
     });
 
     it('should do not close dialog and return login failure action on login failure', (done) => {
@@ -186,18 +171,11 @@ describe('AuthEffects', () => {
       );
       loginServiceSpy.login.and.returnValue(of(false));
 
-      effects.loginViaDialog$
-        .pipe(
-          finalize(() =>
-            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled()
-          )
-        )
-        .subscribe((resultAction) => {
-          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(resultAction).toEqual(AuthActions.loginFailure());
+      effects.loginViaDialog$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(AuthActions.loginFailure());
 
-          done();
-        });
+        done();
+      });
     });
 
     it('should do not close dialog and return login failure action when login throws error', (done) => {
@@ -209,25 +187,6 @@ describe('AuthEffects', () => {
       effects.loginViaDialog$.subscribe((resultAction) => {
         expect(resultAction).toEqual(AuthActions.loginFailure());
 
-        done();
-      });
-    });
-
-    it('should call waitForSignature with metamask and not navigate on timeout option', (done) => {
-      actions$.next(
-        AuthActions.loginViaDialog({
-          provider: ProviderType.MetaMask,
-          navigateOnTimeout: false,
-        })
-      );
-      loginServiceSpy.login.and.returnValue(of({ success: true }));
-
-      effects.loginViaDialog$.subscribe(() => {
-        expect(loginServiceSpy.waitForSignature).toHaveBeenCalledWith(
-          ProviderType.MetaMask,
-          true,
-          false
-        );
         done();
       });
     });
@@ -265,25 +224,19 @@ describe('AuthEffects', () => {
     });
 
     it('should successfully login', (done) => {
-      const accountInfo = {
-        chainName: 'chainName',
-        chainId: 123,
-        account: 'account',
-      };
       actions$.next(
         AuthActions.welcomeLogin({
           provider: ProviderType.MetaMask,
           returnUrl: '',
         })
       );
-      loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
+      loginServiceSpy.login.and.returnValue(of({ success: true }));
 
       effects.welcomePageLogin$
         .pipe(
           finalize(() => {
-            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled();
             expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(
-              '/dashboard',
+              '/' + RouterConst.Dashboard,
               jasmine.objectContaining({})
             );
           })
@@ -293,10 +246,7 @@ describe('AuthEffects', () => {
             providerType: ProviderType.MetaMask,
             reinitializeMetamask: true,
           });
-          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(resultAction).toEqual(
-            AuthActions.loginSuccess({ accountInfo })
-          );
+          expect(resultAction).toEqual(AuthActions.loginSuccess());
           done();
         });
     });
@@ -308,33 +258,19 @@ describe('AuthEffects', () => {
           returnUrl: 'returnUrl',
         })
       );
-      const accountInfo = {
-        chainName: 'chainName',
-        chainId: 123,
-        account: 'account',
-      };
-      loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
+      loginServiceSpy.login.and.returnValue(of({ success: true }));
 
-      effects.welcomePageLogin$
-        .pipe(
-          finalize(() => {
-            expect(loginServiceSpy.clearWaitSignatureTimer).toHaveBeenCalled();
-          })
-        )
-        .subscribe((resultAction) => {
-          expect(loginServiceSpy.login).toHaveBeenCalledWith({
-            providerType: ProviderType.MetaMask,
-            reinitializeMetamask: true,
-          });
-          expect(loginServiceSpy.waitForSignature).toHaveBeenCalled();
-          expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(
-            `/${RouterConst.ReturnUrl}`
-          );
-          expect(resultAction).toEqual(
-            AuthActions.loginSuccess({ accountInfo })
-          );
-          done();
+      effects.welcomePageLogin$.subscribe((resultAction) => {
+        expect(loginServiceSpy.login).toHaveBeenCalledWith({
+          providerType: ProviderType.MetaMask,
+          reinitializeMetamask: true,
         });
+        expect(routerSpy.navigateByUrl).toHaveBeenCalledWith(
+          `/${RouterConst.ReturnUrl}`
+        );
+        expect(resultAction).toEqual(AuthActions.loginSuccess());
+        done();
+      });
     });
 
     it('should return failure action when login fails', (done) => {
@@ -353,18 +289,116 @@ describe('AuthEffects', () => {
     });
   });
 
+  describe('reinitializeUser$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should reinitialize with Wallet Connect', (done) => {
+      actions$.next(
+        AuthActions.setMetamaskLoginOptions({ present: true, chainId: 1 })
+      );
+
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+      store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.WalletConnect,
+        publicKey: 'key',
+      });
+
+      effects.reinitializeUser$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          AuthActions.reinitializeAuthWithoutMetamask()
+        );
+        done();
+      });
+    });
+
+    it('should reinitialize with metamask', (done) => {
+      actions$.next(
+        AuthActions.setMetamaskLoginOptions({ present: true, chainId: 1 })
+      );
+
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+      store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.MetaMask,
+        publicKey: 'key',
+      });
+
+      effects.reinitializeUser$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          AuthActions.reinitializeAuthWithMetamask()
+        );
+        done();
+      });
+    });
+  });
+
+  describe('reinitializeLoggedUserWithMetamask$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should return failure action when reinitialization fails', (done) => {
+      actions$.next(AuthActions.reinitializeAuthWithMetamask());
+
+      store.overrideSelector(AuthSelectors.isMetamaskDisabled, false);
+      loginServiceSpy.reinitialize.and.returnValue(of(false));
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.MetaMask,
+        publicKey: 'key',
+      });
+
+      effects.reinitializeLoggedUserWithMetamask$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(AuthActions.loginFailure());
+        done();
+      });
+    });
+
+    it('should return success action when reinitialization completes successfully', (done) => {
+      actions$.next(AuthActions.reinitializeAuthWithMetamask());
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.MetaMask,
+        publicKey: 'key',
+      });
+      store.overrideSelector(AuthSelectors.isMetamaskDisabled, false);
+      loginServiceSpy.reinitialize.and.returnValue(of({ success: true }));
+
+      effects.reinitializeLoggedUserWithMetamask$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(AuthActions.loginSuccess());
+        done();
+      });
+    });
+
+    it('should not call login method when it is using metamask but with wrong chain id (metamask is disabled)', (done) => {
+      actions$.next(AuthActions.reinitializeAuthWithMetamask());
+
+      loginServiceSpy.isSessionActive.and.returnValue(true);
+
+      loginServiceSpy.getSession.and.returnValue({
+        providerType: ProviderType.MetaMask,
+        publicKey: 'key',
+      });
+
+      store.overrideSelector(AuthSelectors.isMetamaskDisabled, true);
+
+      effects.reinitializeLoggedUserWithMetamask$.subscribe();
+      expect(loginServiceSpy.reinitialize).not.toHaveBeenCalled();
+      done();
+    });
+  });
+
   describe('reinitializeLoggedUser$', () => {
     beforeEach(() => {
       actions$ = new ReplaySubject(1);
     });
 
     it('should return failure action when reinitialization fails', (done) => {
-      actions$.next(AuthActions.reinitializeAuth());
-      loginServiceSpy.isSessionActive.and.returnValue(true);
-      store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
-      loginServiceSpy.login.and.returnValue(of(false));
+      actions$.next(AuthActions.reinitializeAuthWithoutMetamask());
+      loginServiceSpy.reinitialize.and.returnValue(of(false));
       loginServiceSpy.getSession.and.returnValue({
-        providerType: 'type',
+        providerType: ProviderType.WalletConnect,
         publicKey: 'key',
       });
 
@@ -375,22 +409,15 @@ describe('AuthEffects', () => {
     });
 
     it('should return success action when reinitialization completes successfully', (done) => {
-      actions$.next(AuthActions.reinitializeAuth());
-      const accountInfo = {
-        chainName: 'chainName',
-        chainId: 123,
-        account: 'account',
-      };
-      loginServiceSpy.isSessionActive.and.returnValue(true);
+      actions$.next(AuthActions.reinitializeAuthWithoutMetamask());
       loginServiceSpy.getSession.and.returnValue({
-        providerType: 'type',
+        providerType: ProviderType.WalletConnect,
         publicKey: 'key',
       });
-      store.overrideSelector(AuthSelectors.isUserLoggedIn, false);
-      loginServiceSpy.login.and.returnValue(of({ success: true, accountInfo }));
+      loginServiceSpy.reinitialize.and.returnValue(of({ success: true }));
 
       effects.reinitializeLoggedUser$.subscribe((resultAction) => {
-        expect(resultAction).toEqual(AuthActions.loginSuccess({ accountInfo }));
+        expect(resultAction).toEqual(AuthActions.loginSuccess());
         done();
       });
     });
@@ -402,12 +429,7 @@ describe('AuthEffects', () => {
     });
 
     it('should return dispatch action for setting wallet provider', (done) => {
-      const accountInfo = {
-        chainName: 'chainName',
-        chainId: 123,
-        account: 'account',
-      };
-      actions$.next(AuthActions.loginSuccess({ accountInfo }));
+      actions$.next(AuthActions.loginSuccess());
       loginServiceSpy.getProviderType.and.returnValue(
         ProviderType.WalletConnect
       );
@@ -430,7 +452,7 @@ describe('AuthEffects', () => {
 
     it('should navigate to welcome page when session is not active', (done) => {
       loginServiceSpy.isSessionActive.and.returnValue(false);
-      actions$.next(AuthActions.reinitializeAuth());
+      actions$.next(AuthActions.reinitializeAuthWithoutMetamask());
       effects.notPossibleToReinitializeUser$.subscribe(() => {
         expect(routerSpy.navigate).toHaveBeenCalledWith([RouterConst.Welcome]);
         done();

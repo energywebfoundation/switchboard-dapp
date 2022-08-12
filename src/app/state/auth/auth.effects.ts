@@ -3,21 +3,12 @@ import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import * as AuthActions from './auth.actions';
-import {
-  catchError,
-  filter,
-  finalize,
-  map,
-  mergeMap,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
 import { from, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';
-import { LoadingService } from '../../shared/services/loading.service';
 import * as userActions from '../user-claim/user.actions';
 import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import * as AuthSelectors from './auth.selectors';
@@ -77,9 +68,6 @@ export class AuthEffects {
   loginViaDialog$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginViaDialog),
-      tap(({ provider, navigateOnTimeout }) =>
-        this.loginService.waitForSignature(provider, true, navigateOnTimeout)
-      ),
       switchMap(({ provider, navigateOnTimeout }) =>
         this.loginService
           .login(
@@ -90,18 +78,17 @@ export class AuthEffects {
             navigateOnTimeout
           )
           .pipe(
-            map(({ success, accountInfo }) => {
+            map(({ success }) => {
               if (success) {
                 this.dialog.closeAll();
-                return AuthActions.loginSuccess({ accountInfo });
+                return AuthActions.loginSuccess();
               }
               return AuthActions.loginFailure();
             }),
             catchError((err) => {
               console.log(err);
               return of(AuthActions.loginFailure());
-            }),
-            finalize(() => this.loginService.clearWaitSignatureTimer())
+            })
           )
       )
     )
@@ -130,7 +117,6 @@ export class AuthEffects {
   welcomePageLogin$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.welcomeLogin),
-      tap(({ provider }) => this.loginService.waitForSignature(provider, true)),
       switchMap(({ provider, returnUrl }) =>
         this.loginService
           .login({
@@ -138,19 +124,16 @@ export class AuthEffects {
             reinitializeMetamask: provider === ProviderType.MetaMask,
           })
           .pipe(
-            map(({ success, accountInfo }) => {
+            map(({ success }) => {
               if (success) {
                 this.router.navigateByUrl(`/${returnUrl}`);
-                return AuthActions.loginSuccess({ accountInfo });
+                return AuthActions.loginSuccess();
               }
               return AuthActions.loginFailure();
             }),
             catchError((err) => {
               console.log(err);
               return of(AuthActions.loginFailure());
-            }),
-            finalize(() => {
-              this.loginService.clearWaitSignatureTimer();
             })
           )
       )
@@ -186,46 +169,42 @@ export class AuthEffects {
     { dispatch: false }
   );
 
+  reinitializeUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.setMetamaskLoginOptions),
+      filter(this.loginService.isSessionActive),
+      this.isLoggedIn(),
+      map(() => {
+        if (
+          this.loginService.getSession().providerType === ProviderType.MetaMask
+        ) {
+          return AuthActions.reinitializeAuthWithMetamask();
+        }
+
+        return AuthActions.reinitializeAuthWithoutMetamask();
+      })
+    )
+  );
+
+  reinitializeLoggedUserWithMetamask$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.reinitializeAuthWithMetamask),
+      this.isMetamaskDisabled(),
+      switchMap(() => this.reinitialize())
+    )
+  );
+
   reinitializeLoggedUser$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(
-        AuthActions.reinitializeAuth,
-        AuthActions.reinitializeAuthForEnrol
-      ),
-      filter(this.loginService.isSessionActive),
-      concatLatestFrom(() =>
-        this.store.select(AuthSelectors.isMetamaskDisabled)
-      ),
-      filter(([, isMetamaskDisabled]) => !isMetamaskDisabled),
-      concatLatestFrom(() => this.store.select(AuthSelectors.isUserLoggedIn)),
-      filter(([, isLoggedIn]) => !isLoggedIn),
-      tap(() => this.loadingService.show()),
-      switchMap(() =>
-        this.loginService
-          .login({ providerType: this.loginService.getSession().providerType })
-          .pipe(
-            map(({ success, accountInfo }) => {
-              if (success) {
-                return AuthActions.loginSuccess({ accountInfo });
-              }
-              return AuthActions.loginFailure();
-            }),
-            catchError((err) => {
-              console.log(err);
-              return of(AuthActions.loginFailure());
-            }),
-            finalize(() => {
-              this.loadingService.hide();
-            })
-          )
-      )
+      ofType(AuthActions.reinitializeAuthWithoutMetamask),
+      switchMap(() => this.reinitialize())
     )
   );
 
   notPossibleToReinitializeUser$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AuthActions.reinitializeAuth),
+        ofType(AuthActions.reinitializeAuthWithoutMetamask),
         filter(() => !this.loginService.isSessionActive()),
         map(() => {
           this.router.navigate([RouterConst.Welcome]);
@@ -259,9 +238,58 @@ export class AuthEffects {
     private actions$: Actions,
     private store: Store<AuthState>,
     private loginService: LoginService,
-    private loadingService: LoadingService,
     private dialog: MatDialog,
     private router: Router,
     private envService: EnvService
   ) {}
+
+  private isMetamaskDisabled() {
+    return (source) => {
+      return source.pipe(
+        concatLatestFrom(() =>
+          this.store.select(AuthSelectors.isMetamaskDisabled)
+        ),
+        filter(([, isMetamaskDisabled]) => !isMetamaskDisabled)
+      );
+    };
+  }
+
+  private isLoggedIn() {
+    return (source) => {
+      return source.pipe(
+        concatLatestFrom(() => this.store.select(AuthSelectors.isUserLoggedIn)),
+        filter(([, isLoggedIn]) => !isLoggedIn)
+      );
+    };
+  }
+
+  private isProviderDifferentThanMetamask() {
+    return (source) =>
+      source.pipe(
+        filter(
+          () =>
+            this.loginService.getSession().providerType !==
+            ProviderType.MetaMask
+        )
+      );
+  }
+
+  private reinitialize() {
+    return this.loginService
+      .reinitialize({
+        providerType: this.loginService.getSession().providerType,
+      })
+      .pipe(
+        map(({ success }) => {
+          if (success) {
+            return AuthActions.loginSuccess();
+          }
+          return AuthActions.loginFailure();
+        }),
+        catchError((err) => {
+          console.log(err);
+          return of(AuthActions.loginFailure());
+        })
+      );
+  }
 }

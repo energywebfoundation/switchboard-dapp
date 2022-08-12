@@ -83,7 +83,6 @@ export class VerifiablePresentationComponent implements OnInit {
   private async initLoginUser() {
     // Check Login
     if (this.loginService.isSessionActive()) {
-      this.store.dispatch(AuthActions.reinitializeAuthForEnrol());
       // Set Loggedin Flag to true
       this.isLoggedIn = await this.store
         .select(isUserLoggedIn)

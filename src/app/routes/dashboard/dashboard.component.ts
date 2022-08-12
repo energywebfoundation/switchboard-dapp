@@ -36,7 +36,6 @@ export class DashboardComponent implements AfterViewInit {
       .subscribe((redirectUrl) => {
         this.store.dispatch(LayoutActions.setRedirectUrl({ url: redirectUrl }));
       });
-    this.store.dispatch(AuthActions.reinitializeAuth());
   }
 
   searchBy() {
