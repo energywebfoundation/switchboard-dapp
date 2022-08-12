@@ -188,8 +188,7 @@ export class IamService {
         this.verifiableCredentialsService = verifiableCredentialsService;
         if (createDocument) {
           const { didRegistry, claimsService } = await connectToDidRegistry(
-             // @ts-ignore
-            this.configureIpfsConfig()
+            this.configureIpfsConfig() as any
           );
           this.didRegistry = didRegistry;
           this.claimsService = claimsService;
