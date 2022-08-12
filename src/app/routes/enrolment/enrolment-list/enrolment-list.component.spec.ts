@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnrolmentListComponent } from './enrolment-list.component';
 
-xdescribe('EnrolmentListComponent', () => {
+describe('EnrolmentListComponent', () => {
   let component: EnrolmentListComponent;
   let fixture: ComponentFixture<EnrolmentListComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [EnrolmentListComponent],
     }).compileComponents();
   });

@@ -35,7 +35,10 @@ const userReducer = createReducer(
     })
   ),
   on(userActions.updateUserData, (state, { userData }) => {
-    userLocalStorage.parsed = userData;
+    userLocalStorage.parsed = {
+      ...userLocalStorage.parsed,
+      [state?.didDocument?.id]: userData,
+    };
     return { ...state, userData };
   }),
   on(userActions.clearUserClaim, (state) => ({

@@ -20,6 +20,7 @@ import { SystemNotificationsComponent } from './header/system-notifications/syst
 import { NotificationContainerComponent } from './header/notification-container/notification-container.component';
 import { NotificationHeaderComponent } from './header/notification-header/notification-header.component';
 import { MenuNotificationTriggerComponent } from './header/menu-notification-trigger/menu-notification-trigger.component';
+import { RawDataModule } from '../modules/raw-data/raw-data.module';
 
 @NgModule({
   imports: [
@@ -33,8 +34,9 @@ import { MenuNotificationTriggerComponent } from './header/menu-notification-tri
       timeout: environment.userIdle,
     }),
     UserMenuModule,
-    DidBookModule.forRoot(),
+    DidBookModule,
     MatBadgeModule,
+    RawDataModule,
   ],
   providers: [],
   declarations: [

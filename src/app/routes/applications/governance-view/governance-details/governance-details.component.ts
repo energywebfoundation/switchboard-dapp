@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   IFieldDefinition,
+  IRevokerDefinition,
   NamespaceType,
   PreconditionType,
 } from 'iam-client-lib';
@@ -11,6 +12,7 @@ import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { IssuerType } from '../../new-role/models/issuer-type.enum';
+import { IIssuerDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 
 @Component({
   selector: 'app-governance-details',
@@ -54,16 +56,20 @@ export class GovernanceDetailsComponent {
     return this.formData?.definition?.issuerFields;
   }
 
-  get isDIDType(): boolean {
-    return this.issuer?.issuerType === IssuerType.DID;
+  isDIDType(type: string): boolean {
+    return type === IssuerType.DID;
   }
 
-  get isRoleType() {
-    return this.issuer?.issuerType === IssuerType.ROLE;
+  isRoleType(type: string): boolean {
+    return type === IssuerType.ROLE;
   }
 
-  get issuer() {
+  get issuer(): IIssuerDefinition {
     return this.formData?.definition?.issuer;
+  }
+
+  get revoker(): IRevokerDefinition {
+    return this.formData?.definition?.revoker;
   }
 
   get isApplication(): boolean {
@@ -76,6 +82,10 @@ export class GovernanceDetailsComponent {
 
   get isOrganization(): boolean {
     return this.data?.type === ListType.ORG;
+  }
+
+  get validityPeriod() {
+    return this.formData?.definition?.defaultValidityPeriod;
   }
 
   constructor(
@@ -162,8 +172,6 @@ export class GovernanceDetailsComponent {
       });
     }
 
-    // console.log('appList', this.appList);
-    // console.log('roleList', this.roleList);
     this.loadingService.hide();
   }
 

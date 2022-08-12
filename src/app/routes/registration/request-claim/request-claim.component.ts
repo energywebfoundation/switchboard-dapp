@@ -527,8 +527,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   private async initLoginUser() {
     // Check Login
     if (this.loginService.isSessionActive()) {
-      this.store.dispatch(AuthActions.reinitializeAuthForEnrol());
-      // Set Loggedin Flag to true
       this.isLoggedIn = await this.store
         .select(isUserLoggedIn)
         .pipe(filter<boolean>(Boolean), take(1))

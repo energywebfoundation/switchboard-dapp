@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DomainTypeEnum, ENSPrefixes } from '../../new-role.component';
+import { DomainTypeEnum } from '../../new-role.component';
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
-import { isAlphanumericValidator, StringTransform } from '@utils';
+import { DomainUtils, isAlphanumericValidator, StringTransform } from '@utils';
 import { RoleCreationService } from '../../services/role-creation.service';
 import { from } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { CreationBaseAbstract } from '../../../utils/creation-base.abstract';
 
 @Component({
@@ -35,8 +35,9 @@ export class RoleNameComponent extends CreationBaseAbstract {
   }
 
   get ensNamespace(): string {
-    return (
-      this.form.value + '.' + ENSPrefixes.Roles + '.' + this.parentNamespace
+    return DomainUtils.addRoleNameToNamespace(
+      this.form.value,
+      this.parentNamespace
     );
   }
 
@@ -58,14 +59,11 @@ export class RoleNameComponent extends CreationBaseAbstract {
     return () => {
       return from(
         this.roleCreationService.canUseDomain(this.ensNamespace)
-      ).pipe(
-        debounceTime(300),
-        map((res) => (res ? null : { domainExist: true }))
-      );
+      ).pipe(map((res) => (res ? null : { domainExist: true })));
     };
   }
 
-  async next(): Promise<void> {
+  next() {
     if (this.form.invalid) {
       return;
     }

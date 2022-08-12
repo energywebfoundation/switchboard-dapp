@@ -16,7 +16,7 @@ import { IAppDefinition } from 'iam-client-lib';
 export class NamespaceDetailsComponent {
   @Input() namespace: string;
   @Input() name: string;
-  @Input() type: 'Application' | 'Organization';
+  @Input() type: 'App' | 'Org';
   @Input() data: IAppDefinition;
 
   @Output() imageLoaded = new EventEmitter<boolean>();

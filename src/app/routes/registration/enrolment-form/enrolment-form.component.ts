@@ -7,8 +7,9 @@ import {
   Output,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { IRoleDefinition, RegistrationTypes } from 'iam-client-lib';
+import { RegistrationTypes } from 'iam-client-lib';
 import { KeyValue } from '@angular/common';
+import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 
 export interface EnrolmentField {
   key: string;
@@ -47,12 +48,12 @@ export class EnrolmentFormComponent implements EnrolmentForm {
   @Input() showSubmit = true;
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
 
-  @Input() set fieldList(list: IRoleDefinition['requestorFields']) {
+  @Input() set fieldList(list: IFieldDefinition[]) {
     this.fields = list;
     this.updateEnrolmentForm(new FormArray(this.createControls(list)));
   }
 
-  get fieldList(): IRoleDefinition['requestorFields'] {
+  get fieldList(): IFieldDefinition[] {
     return this.fields;
   }
 

@@ -17,10 +17,7 @@ export const welcomeLogin = createAction(
 
 export const openLoginDialog = createAction('[AUTH] Open Login Dialog');
 
-export const loginSuccess = createAction(
-  '[AUTH] User Login Success',
-  props<{ accountInfo: AccountInfo }>()
-);
+export const loginSuccess = createAction('[AUTH] User Login Success');
 export const loginFailure = createAction('[AUTH] User Login Failure');
 
 export const setProvider = createAction(
@@ -28,20 +25,18 @@ export const setProvider = createAction(
   props<{ walletProvider: ProviderType }>()
 );
 
-export const reinitializeAuth = createAction('[AUTH] Reinitialize Logged User');
+export const reinitializeAuthWithoutMetamask = createAction(
+  '[AUTH] Reinitialize Logged User Without Metamask'
+);
 
-export const reinitializeAuthForEnrol = createAction(
-  '[AUTH] Reinitialize Logged User For Enrol Page'
+export const reinitializeAuthWithMetamask = createAction(
+  '[AUTH] Reinitialize Logged User With Metamask'
 );
 
 export const logout = createAction('[AUTH] Logout');
 
 export const logoutWithRedirectUrl = createAction(
   '[AUTH] Logout With Redirect URL'
-);
-
-export const getMetamaskOptions = createAction(
-  '[AUTH] Get Metamask Login Options'
 );
 
 export const setMetamaskLoginOptions = createAction(

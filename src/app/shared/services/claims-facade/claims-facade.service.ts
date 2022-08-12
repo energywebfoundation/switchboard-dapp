@@ -1,12 +1,23 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
-import { ClaimData } from 'iam-client-lib/dist/src/modules/didRegistry/did.types';
-import { from, Observable } from 'rxjs';
+import {
+  Claim,
+  ClaimData,
+  isValidDID,
+  NamespaceType,
+  RegistrationTypes,
+} from 'iam-client-lib';
+import { forkJoin, from, Observable, of } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { finalize } from 'rxjs/operators';
-import { Claim } from 'iam-client-lib';
-import { RegistrationTypes } from 'iam-client-lib/dist/src/modules/claims/claims.types';
+import { finalize, map, switchMap } from 'rxjs/operators';
+import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
+import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
+import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
+import {
+  IssueClaimRequestOptions,
+  RejectClaimRequestOptions,
+} from 'iam-client-lib/dist/src/modules/claims/claims.types';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +38,25 @@ export class ClaimsFacadeService {
     );
   }
 
+  issueClaimRequest(data: IssueClaimRequestOptions) {
+    return this.iamService.wrapWithLoadingService(
+      this.iamService.claimsService.issueClaimRequest(data),
+      {
+        message: 'Please confirm this transaction in your connected wallet.',
+        cancelable: CancelButton.ENABLED,
+      }
+    );
+  }
+
+  rejectClaimRequest(data: RejectClaimRequestOptions) {
+    this.loadingService.show();
+    return from(this.iamService.claimsService.rejectClaimRequest(data)).pipe(
+      finalize(() => {
+        this.loadingService.hide();
+      })
+    );
+  }
+
   hasOnChainRole(role: string, version: number) {
     return this.iamService.claimsService.hasOnChainRole(
       this.iamService.signerService.did,
@@ -35,20 +65,55 @@ export class ClaimsFacadeService {
     );
   }
 
-  async getNotRejectedClaimsByIssuer() {
-    return (
-      await this.iamService.claimsService.getClaimsByIssuer({
-        did: this.iamService.signerService.did,
-        isAccepted: false,
+  getClaimsBySubject(did) {
+    return from(
+      this.iamService.claimsService.getClaimsBySubject({
+        did,
       })
-    ).filter((item) => !item.isRejected);
+    ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
-  getClaimsByRequester(isAccepted: boolean = undefined): Promise<Claim[]> {
-    return this.iamService.claimsService.getClaimsByRequester({
-      did: this.iamService.signerService.did,
-      isAccepted,
-    });
+  getClaimsByRequester(
+    isAccepted: boolean = undefined
+  ): Observable<EnrolmentClaim[]> {
+    return from(
+      this.iamService.claimsService.getClaimsByRequester({
+        did: this.iamService.signerService.did,
+        isAccepted,
+      })
+    ).pipe(this.createEnrolmentClaimsFromClaims());
+  }
+
+  async addStatusIfIsSyncedOnChain(
+    enrolment: EnrolmentClaim,
+    requesterIsDid = true
+  ) {
+    if (enrolment.isRegisteredOnChain()) {
+      const hasOnChainRole = await this.iamService.claimsService.hasOnChainRole(
+        requesterIsDid ? this.iamService.signerService.did : enrolment.subject,
+        enrolment.claimType,
+        +enrolment.claimTypeVersion
+      );
+      return enrolment.setIsSyncedOnChain(hasOnChainRole);
+    }
+    return enrolment.setIsSyncedOnChain(false);
+  }
+
+  getClaimsByRevoker(): Observable<EnrolmentClaim[]> {
+    const requesterIsDid = false;
+    return from(
+      this.iamService.claimsService.getClaimsByRevoker({
+        did: this.iamService.signerService.did,
+      })
+    ).pipe(this.createEnrolmentClaimsFromClaims(requesterIsDid));
+  }
+
+  getClaimsByIssuer(): Observable<EnrolmentClaim[]> {
+    return from(
+      this.iamService.claimsService.getClaimsByIssuer({
+        did: this.iamService.signerService.did,
+      })
+    ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
   getUserClaims(did: string) {
@@ -83,5 +148,90 @@ export class ClaimsFacadeService {
     subject?: string;
   }): Observable<void> {
     return from(this.iamService.claimsService.registerOnchain(claim));
+  }
+
+  private createEnrolmentClaimsFromClaims(requesterIsDid = true) {
+    return (source: Observable<Claim[]>) =>
+      source.pipe(
+        map((claims) => claims.filter((claim) => isValidDID(claim.subject))),
+        map((claims: Claim[]) =>
+          claims.map((claim: Claim) => new EnrolmentClaim(claim))
+        ),
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          from(this.addStatusIfIsSyncedOffChain(enrolments))
+        ),
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          forkJoin([
+            ...enrolments.map((enrolment) =>
+              from(this.addStatusIfIsSyncedOnChain(enrolment, requesterIsDid))
+            ),
+          ])
+        ),
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          this.setIsRevokedOnChainStatus(enrolments)
+        ),
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          forkJoin([
+            ...enrolments.map((enrolment) =>
+              from(this.setIsRevokedOffChainStatus(enrolment))
+            ),
+          ])
+        )
+      );
+  }
+
+  async addStatusIfIsSyncedOffChain(
+    list: EnrolmentClaim[],
+    did?: string
+  ): Promise<EnrolmentClaim[]> {
+    // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
+    const claims: ClaimData[] = (
+      await this.iamService.claimsService.getUserClaims({ did })
+    )
+      .filter((item) => item && item.claimType)
+      .filter((item: ClaimData) => {
+        const arr = item.claimType.split('.');
+        return arr.length > 1 && arr[1] === NamespaceType.Role;
+      });
+
+    return list.map((item: EnrolmentClaim) => {
+      return item.setIsSyncedOffChain(
+        claims.some((claim) => claim.claimType === item.claimType)
+      );
+    });
+  }
+
+  setIsRevokedOnChainStatus(
+    list: EnrolmentClaim[]
+  ): Observable<EnrolmentClaim[]> {
+    return forkJoin(
+      list.map((claim) => {
+        if (!claim.isSyncedOnChain) {
+          return of(claim.setIsRevokedOnChain(false));
+        }
+
+        return from(
+          this.iamService.claimsService.isClaimRevoked({
+            claimId: claim.id,
+          })
+        ).pipe(
+          map((isRevoked: boolean) => {
+            return claim.setIsRevokedOnChain(isRevoked);
+          })
+        );
+      })
+    );
+  }
+
+  private async setIsRevokedOffChainStatus(enrolment: EnrolmentClaim) {
+    if (enrolment.credential?.credentialStatus) {
+      return enrolment.setIsRevokedOffChain(
+        await this.iamService.verifiableCredentialsService.isRevoked(
+          enrolment.credential as VerifiableCredential<RoleCredentialSubject>
+        )
+      );
+    }
+
+    return enrolment.setIsRevokedOffChain(false);
   }
 }

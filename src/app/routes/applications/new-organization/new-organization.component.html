@@ -179,7 +179,7 @@
             [namespace]="orgForm?.value?.orgName + '.' + orgForm?.value?.namespace"
             [name]="orgForm?.value?.data.organizationName"
             [data]="orgForm?.value.data"
-            type="Organization"
+            type="Org"
             (imageLoaded)="isLogoUrlValid = $event"></app-namespace-details>
           <div>
             <div class="d-flex justify-content-end mb-2">
@@ -192,11 +192,7 @@
         <ng-container *ngFor="let step of txs; let i = index">
           <mat-step #customStep [editable]="false" [completed]="false">
             <ng-template matStepLabel>{{ step.info }}</ng-template>
-            <div
-              class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-              <mat-icon>info</mat-icon>
-              <span class="pb-2">{{ step.info }}</span>
-            </div>
+            <app-card-info [description]="step.info"></app-card-info>
             <div
               class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
               <mat-icon class="px-2">notifications_none</mat-icon>

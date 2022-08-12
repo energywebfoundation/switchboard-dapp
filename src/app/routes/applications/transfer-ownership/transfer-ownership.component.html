@@ -8,19 +8,20 @@
 <div mat-dialog-content>
   <!-- START: New Owner Form -->
   <ng-container *ngIf="!isProcessing">
-    <div
-      class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3"
-      *ngIf="namespace">
-      <mat-icon>info</mat-icon>
-      <span class="pb-2">NAMESPACE: {{ namespace }}</span>
+    <app-card-info *ngIf="namespace" [description]="'NAMESPACE: ' + namespace"></app-card-info>
+    <app-card-info *ngIf="assetDid" [description]="'ASSET: ' + assetDid"></app-card-info>
+
+    <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+      <div class="row">
+        <div class="col-12">
+          <app-select-did
+            placeholder="New Owner DID"
+            label="New Owner DID"
+            [isRequired]="true"
+            (didChange)="didChangeHandler($event)"></app-select-did>
+        </div>
+      </div>
     </div>
-    <div
-      class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mt-3 mb-3"
-      *ngIf="assetDid">
-      <mat-icon>info</mat-icon>
-      <span class="pb-2">ASSET: {{ assetDid }}</span>
-    </div>
-    <app-select-did (didChange)="didChangeHandler($event)"></app-select-did>
     <div class="d-flex justify-content-end mb-3" *ngIf="!mySteps?.length">
       <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
       <button mat-raised-button class="btn btn-small btn-primary" (click)="submit()" [disabled]="!didValid">
@@ -49,11 +50,7 @@
         </ng-template>
         <mat-step [completed]="false" *ngFor="let step of mySteps; let i = index">
           <ng-template matStepLabel>Transfer Ownership</ng-template>
-          <div
-            class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
-            <mat-icon>info</mat-icon>
-            <span class="pb-2">{{ step.info }}</span>
-          </div>
+          <app-card-info [description]="step.info"></app-card-info>
           <div
             class="card card-hint d-flex flex-row justify-content-start align-items-center shadow-none d-flex pt-3 pb-2 mb-3">
             <mat-icon class="px-2">notifications_none</mat-icon>

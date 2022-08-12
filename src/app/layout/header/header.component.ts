@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Event, NavigationEnd, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
-import { IamService } from '../../shared/services/iam.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
@@ -43,15 +41,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     .select(userSelectors.getUserName)
     .pipe(map((value) => (value ? value : 'Manage Profile')));
   userDid$ = this.store.select(userSelectors.getDid);
+  didDocument$ = this.store.select(userSelectors.getDIDDocument);
   isExperimentalEnabled$ = this.store.select(
     SettingsSelectors.isExperimentalEnabled
   );
 
   private _subscription$ = new Subject();
-  private _iamSubscriptionId: number;
 
   constructor(
-    private iamService: IamService,
     private router: Router,
     private notifService: NotificationService,
     public dialog: MatDialog,
@@ -64,11 +61,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   async ngOnDestroy(): Promise<void> {
     this._subscription$.next();
     this._subscription$.complete();
-
-    // Unsubscribe to IAM Events
-    await this.iamService.messagingService.unsubscribeFrom(
-      this._iamSubscriptionId
-    );
   }
 
   openDialogUser(): void {

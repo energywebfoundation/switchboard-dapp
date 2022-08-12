@@ -6,11 +6,12 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import {
   IFieldDefinition,
   IRole,
+  IRoleDefinitionV2,
   NamespaceType,
   PreconditionType,
 } from 'iam-client-lib';
@@ -29,18 +30,15 @@ import {
 } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
-import { HexValidators, isAlphanumericValidator } from '@utils';
+import { DomainUtils, isAlphanumericValidator } from '@utils';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 import { RoleCreationService } from './services/role-creation.service';
 import { ISmartSearch } from '../../../shared/components/smart-search/models/smart-search.interface';
 import { SmartSearchType } from '../../../shared/components/smart-search/models/smart-search-type.enum';
 import { IssuerType } from './models/issuer-type.enum';
-
-export enum ENSPrefixes {
-  Roles = 'roles',
-  Apps = 'apps',
-}
+import { CreateRoleOptions } from 'iam-client-lib/dist/src/modules/domains/domains.types';
+import { IRoleType } from './models/role-type.interface';
 
 export const RoleType = {
   ORG: 'org',
@@ -76,6 +74,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   IssuerTypes = [IssuerType.DID, IssuerType.ROLE];
+  revoker: IRoleType;
+  issuer: IRoleType;
+  signerDID = this.signerFacade.getDid();
 
   public roleForm = this.fb.group({
     roleType: [null, Validators.required],
@@ -99,24 +100,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     namespace: '',
     data: this.fb.group({
       version: 1,
-      issuer: this.fb.group({
-        issuerType: IssuerType.DID,
-        roleName: '',
-        did: this.fb.array([]),
-      }),
       enrolmentPreconditions: [
         [{ type: PreconditionType.Role, conditions: [] }],
       ],
     }),
   });
-  public issuerGroup = this.fb.group({
-    newIssuer: ['', HexValidators.isDidValid()],
-  });
 
   public restrictionRoleControl = this.fb.control('');
   public isChecking = false;
-  public ENSPrefixes = ENSPrefixes;
-  public issuerList: string[] = [this.signerFacade.getDid()];
 
   // Fields
   requestorFields = new MatTableDataSource<IFieldDefinition>([]);
@@ -125,6 +116,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   viewType: string = ViewType.NEW;
   origData: IRole;
   roleName: string;
+  validityPeriod: number;
   private TOASTR_HEADER = 'Create New Role';
   public txs: any[];
   private _retryCount = 0;
@@ -140,11 +132,8 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   }
 
   get namespace() {
-    return (
-      this.roleForm.get('roleName').value +
-      '.' +
-      ENSPrefixes.Roles +
-      '.' +
+    return DomainUtils.addRoleNameToNamespace(
+      this.roleForm.get('roleName').value,
       this.roleForm?.value?.parentNamespace
     );
   }
@@ -153,23 +142,28 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return this.viewType !== ViewType.UPDATE;
   }
 
-  get isDIDType() {
-    return this.roleForm?.value?.data?.issuer?.issuerType === IssuerType.DID;
+  get isIssuerDIDType(): boolean {
+    return this.issuerType === IssuerType.DID;
   }
 
-  get isRoleType() {
-    return this.roleForm?.value?.data?.issuer?.issuerType === IssuerType.ROLE;
+  get isIssuerRoleType(): boolean {
+    return this.issuerType === IssuerType.ROLE;
   }
 
-  get issuerType() {
-    return this.roleForm.get('data').get('issuer').get('issuerType').value;
+  get issuerType(): IssuerType {
+    return this.issuer?.type;
   }
 
-  get issuerRoleName(): FormControl {
-    return this.roleForm
-      .get('data')
-      .get('issuer')
-      .get('roleName') as FormControl;
+  get isRevokerDIDType(): boolean {
+    return this.revokerType === IssuerType.DID;
+  }
+
+  get isRevokerRoleType(): boolean {
+    return this.revokerType === IssuerType.ROLE;
+  }
+
+  get revokerType(): IssuerType {
+    return this.revoker?.type;
   }
 
   constructor(
@@ -235,14 +229,24 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   private _initFormData() {
     if (this.origData) {
-      const def = this.origData.definition;
+      const def = this.origData.definition as IRoleDefinitionV2;
 
       // Construct Parent Namespace
       const arrParentNamespace = this.origData.namespace.split(
         NamespaceType.Role
       );
       const parentNamespace = arrParentNamespace[1].substring(1);
-
+      this.validityPeriod = def.defaultValidityPeriod;
+      this.issuer = {
+        type: def.issuer.issuerType as IssuerType,
+        roleName: def.issuer.roleName,
+        did: def.issuer.did ? [...def.issuer.did] : [],
+      };
+      this.revoker = {
+        type: def.revoker.revokerType as IssuerType,
+        roleName: def.issuer.roleName,
+        did: def.issuer.did ? [...def.revoker.did] : [],
+      };
       // Construct Fields
       this.requestorFields.data = this.getRequestorFieldsFromDefinition(def);
       this.issuerFields.data = def?.issuerFields ? [...def.issuerFields] : [];
@@ -250,23 +254,14 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         roleType: def.roleType,
         parentNamespace,
         roleName: def.roleName,
-        namespace: `${this.ENSPrefixes.Roles}.${parentNamespace}`,
+        namespace: DomainUtils.getRoleNamespace(parentNamespace),
         data: {
           version: def.version,
-          issuer: {
-            issuerType: def.issuer.issuerType,
-            roleName: def.issuer.roleName,
-            did: def.issuer.did ? [...def.issuer.did] : [],
-          },
           enrolmentPreconditions: this._initPreconditions(
             def.enrolmentPreconditions
           ),
         },
       });
-
-      if (def.issuer.did && def.issuer.did.length) {
-        this.issuerList = [...def.issuer.did];
-      }
     }
     this.roleName = this.roleForm.value.roleName;
 
@@ -293,23 +288,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     return retVal;
   }
 
-  issuerTypeChanged(data: any) {
-    this.issuerGroup.reset();
-
-    // Reset DID List
-    if (this.issuerList.length > 0) {
-      this.issuerList.splice(0, this.issuerList.length);
-    }
-
-    // Clear Role
-    this.roleForm.get('data').get('issuer').get('roleName').reset();
-
-    if (IssuerType.DID === data.value) {
-      // Set current user's DID
-      this.issuerList.push(this.signerFacade.getDid());
-    }
-  }
-
   back() {
     this.stepper.steps.toArray()[this.stepper.selectedIndex - 1].editable =
       true;
@@ -328,11 +306,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         .get('enrolmentPreconditions').value;
 
       if (enrolmentPreconditions.length) {
-        enrolmentPreconditions[0].conditions.push(event.role);
+        enrolmentPreconditions[0].conditions.push(event.value);
       } else {
         this.roleForm.get('data').patchValue({
           enrolmentPreconditions: [
-            { type: PreconditionType.Role, conditions: [event.role] },
+            { type: PreconditionType.Role, conditions: [event.value] },
           ],
         });
       }
@@ -347,20 +325,30 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
   proceedSettingIssuer(roleName) {
     this.roleForm.get('roleName').setValue(roleName);
-    this.roleForm
-      .get('data')
-      .get('issuer')
-      .get('issuerType')
-      .setValue(IssuerType.DID);
     this.goNextStep();
   }
 
-  async proceedSettingRestriction(): Promise<void> {
-    const canProceed = await this.roleCreationService.areIssuersValid(
-      this.issuerType,
-      this.issuerRoleName.value,
-      this.issuerList
+  async proceedSettingRevokers(data: IRoleType): Promise<void> {
+    const canProceed = await this.roleCreationService.isListOrRoleNameValid(
+      data.type,
+      data.roleName,
+      data.did,
+      'Issuer'
     );
+    this.issuer = data;
+    if (canProceed) {
+      this.goNextStep();
+    }
+  }
+
+  async proceedSettingRestrictions(data: IRoleType) {
+    const canProceed = await this.roleCreationService.isListOrRoleNameValid(
+      data.type,
+      data.roleName,
+      data.did,
+      'Revoker'
+    );
+    this.revoker = data;
     if (canProceed) {
       this.goNextStep();
     }
@@ -385,7 +373,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         if (exists) {
           // Check if role sub-domain exists in this namespace
           exists = await this.iamService.domainsService.checkExistenceOfDomain({
-            domain: `${this.ENSPrefixes.Roles}.${this.roleForm.value.parentNamespace}`,
+            domain: DomainUtils.getRoleNamespace(
+              this.roleForm.value.parentNamespace
+            ),
           });
 
           if (exists) {
@@ -430,7 +420,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       JSON.stringify({ ...this.roleForm.value, returnSteps: true })
     );
 
-    req.namespace = `${this.ENSPrefixes.Roles}.${req.parentNamespace}`;
+    req.namespace = DomainUtils.getRoleNamespace(req.parentNamespace);
     delete req.parentNamespace;
 
     req.data.roleType = req.roleType;
@@ -438,9 +428,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
     req.data.roleName = req.roleName;
 
-    req.data.issuer.did = this.issuerList;
+    req.data.issuer = { ...this.issuer, issuerType: this.issuer.type };
     req.data.requestorFields = this.requestorFields.data;
     req.data.issuerFields = this.issuerFields.data;
+    req.data.revoker = { ...this.revoker, revokerType: this.revoker.type };
+    req.data.defaultValidityPeriod = this.validityPeriod;
 
     if (!skipNextStep) {
       // Set the second step to non-editable
@@ -491,7 +483,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private async proceedCreateSteps(req: any) {
+  private async proceedCreateSteps(req: CreateRoleOptions) {
     const returnSteps =
       this.data.owner === this.iamService.signerService.address;
     try {
@@ -619,6 +611,11 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     if (await this.confirm('There are unsaved changes.', true)) {
       this.dialogRef.close(false);
     }
+  }
+
+  addValidityPeriod(validityPeriod: number) {
+    this.validityPeriod = validityPeriod;
+    this.goNextStep();
   }
 
   async closeDialog(isSuccess?: boolean) {

@@ -12,7 +12,7 @@
       <td mat-cell *matCellDef="let element" data-label="">
         <div class="d-flex justify-content-center justify-content-md-start">
           <ng-container *ngIf="!element?.definition?.logoUrl">
-            <img class="img-logo-list" src="../assets/img/no-application-image.png" />
+            <img class="img-logo-list" src="../assets/img/no-app-image.png" />
           </ng-container>
           <img class="img-logo-list" [src]="element?.definition?.logoUrl" *ngIf="element?.definition?.logoUrl" />
         </div>
@@ -54,6 +54,7 @@
             (viewRoles)="viewRoles(element)"
             (roleCreated)="viewRoles(element)"
             (edited)="edit()"
+            (transferred)="transferOwnership()"
             (deleteConfirmed)="remove(element)"></app-application-actions>
         </app-actions-menu>
       </td>

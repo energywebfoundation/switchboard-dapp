@@ -15,7 +15,7 @@
           <img
             class="img-logo-list-sm mr-2"
             *ngIf="!orgItem?.definition?.logoUrl"
-            src="../assets/img/no-organization-image.png" />
+            src="../assets/img/no-org-image.png" />
           <img
             class="img-logo-list-sm mr-2"
             *ngIf="orgItem?.definition?.logoUrl"
@@ -27,10 +27,7 @@
         <mat-icon class="default-color opacity-50">chevron_right</mat-icon>
       </div>
       <div class="d-flex align-items-center my-1" *ngIf="i === organizationHierarchy?.length - 1">
-        <img
-          class="img-logo-list-sm mr-2"
-          *ngIf="!orgItem?.definition?.logoUrl"
-          src="../assets/img/no-organization-image.png" />
+        <img class="img-logo-list-sm mr-2" *ngIf="!orgItem?.definition?.logoUrl" src="../assets/img/no-org-image.png" />
         <img class="img-logo-list-sm mr-2" *ngIf="orgItem?.definition?.logoUrl" [src]="orgItem?.definition?.logoUrl" />
         <span class="filter-link default-color opacity-50">
           {{ orgItem?.definition?.orgName }}
@@ -49,7 +46,7 @@
       <td mat-cell *matCellDef="let element" data-label="">
         <div class="d-flex justify-content-center justify-content-md-start">
           <ng-container *ngIf="!element?.definition?.logoUrl">
-            <img class="img-logo-list" src="../assets/img/no-organization-image.png" />
+            <img class="img-logo-list" src="../assets/img/no-org-image.png" />
           </ng-container>
           <img class="img-logo-list" [src]="element?.definition?.logoUrl" *ngIf="element?.definition?.logoUrl" />
         </div>

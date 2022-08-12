@@ -25,14 +25,16 @@ export class MessageSubscriptionService implements OnDestroy {
     });
   }
 
-  private handleMessage(message: any) {
+  private handleMessage(message: {
+    type: ClaimEventType & AssetHistoryEventType;
+  }) {
     if (message.type) {
       this.handleAssetEvents(message.type);
       this.handleClaimEvents(message.type);
     }
   }
 
-  private handleAssetEvents(type: string) {
+  private handleAssetEvents(type: AssetHistoryEventType) {
     switch (type) {
       case AssetHistoryEventType.ASSET_OFFERED:
         this.toastr.info('An asset is offered to you.', 'Asset Offered');
@@ -40,7 +42,7 @@ export class MessageSubscriptionService implements OnDestroy {
         break;
       case AssetHistoryEventType.ASSET_TRANSFERRED:
         this.toastr.success(
-          'Your asset is successfully tranferred to a new owner.',
+          'Your asset is successfully transferred to a new owner.',
           'Asset Transferred'
         );
         break;
@@ -60,17 +62,17 @@ export class MessageSubscriptionService implements OnDestroy {
     }
   }
 
-  private handleClaimEvents(type: string) {
+  private handleClaimEvents(type: ClaimEventType) {
     switch (type) {
       case ClaimEventType.REQUEST_CREDENTIALS:
-        this.notifService.increasePendingApprovalCount();
+        this.notifService.updatePendingApprovalList();
         this.toastr.info(
           'A new enrolment request is waiting for your approval.',
           'New Enrolment Request'
         );
         break;
       case ClaimEventType.ISSUE_CREDENTIAL:
-        this.notifService.increasePendingDidDocSyncCount();
+        this.notifService.updatePendingPublishList();
         this.toastr.info(
           'Your enrolment request is approved. ' +
             'Please sync your approved claims in your DID Document.',
@@ -78,6 +80,7 @@ export class MessageSubscriptionService implements OnDestroy {
         );
         break;
       case ClaimEventType.REJECT_CREDENTIAL:
+        this.notifService.updatePendingApprovalList();
         this.toastr.warning(
           'Your enrolment request is rejected.',
           'New Enrolment Request'

@@ -6,7 +6,7 @@ import { SwitchboardToastrService } from '../../../shared/services/switchboard-t
 
 const TOASTR_HEADER = 'DID Book';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class DidBookService {
   private list = new BehaviorSubject<DidBookRecord[]>([]);
 

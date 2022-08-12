@@ -14,4 +14,14 @@ export class RoleService {
       this.iamService.getENSTypesByOwner(NamespaceType.Role) as Promise<IRole[]>
     );
   }
+
+  getDefinition(namespace: string) {
+    return this.iamService.wrapWithLoadingService(
+      this.iamService.cacheClient.getRoleDefinition(namespace)
+    );
+  }
+
+  getDefinitions(namespaces: string[]) {
+    return this.iamService.cacheClient.getRolesDefinition(namespaces);
+  }
 }

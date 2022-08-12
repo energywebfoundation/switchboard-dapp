@@ -1,7 +1,6 @@
 <div class="row">
   <div class="card card-default w-100 shadow-none d-flex pt-3">
-    <!--    TODO: check how it looks like-->
-    <app-domain-image [url]="formData?.definition?.logoUrl" [type]="type"></app-domain-image>
+    <app-domain-image *ngIf="!isRole" [url]="formData?.definition?.logoUrl" [type]="type"></app-domain-image>
     <div class="text-left my-3">
       <div class="label opacity-50 mb-2">{{ typeLabel }} Namespace</div>
       <span class="default-color mb-0">{{ formData?.namespace }}</span>
@@ -66,16 +65,39 @@
           <span class="default-color mb-0">{{ issuer?.issuerType }}</span>
         </div>
         <mat-divider></mat-divider>
-        <ng-container *ngIf="isRoleType">
+        <ng-container *ngIf="isRoleType(issuer.issuerType)">
           <div class="text-left my-3">
             <div class="label opacity-50 mb-2">Role</div>
             <span class="default-color mb-0">{{ issuer?.roleName }}</span>
           </div>
         </ng-container>
-        <ng-container *ngIf="isDIDType">
+        <ng-container *ngIf="isDIDType(issuer.issuerType)">
           <div class="text-left my-3">
             <div class="label opacity-50 mb-2">Issuer List</div>
-            <div class="default-color mb-0" *ngFor="let did of formData?.definition?.issuer?.did">
+            <div class="default-color mb-0" *ngFor="let did of issuer?.did">
+              {{ did }}
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="revoker">
+        <mat-divider></mat-divider>
+        <div class="text-left my-3">
+          <div class="label opacity-50 mb-2">Revoker Type</div>
+          <span class="default-color mb-0">{{ revoker?.revokerType }}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <ng-container *ngIf="isRoleType(revoker.revokerType)">
+          <div class="text-left my-3">
+            <div class="label opacity-50 mb-2">Role</div>
+            <span class="default-color mb-0">{{ revoker?.roleName }}</span>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="isDIDType(revoker.revokerType)">
+          <div class="text-left my-3">
+            <div class="label opacity-50 mb-2">Revoker List</div>
+            <div class="default-color mb-0" *ngFor="let did of revoker?.did">
               {{ did }}
             </div>
           </div>
@@ -89,8 +111,15 @@
           {{ precondition }}
         </div>
       </div>
+      <div class="text-left my-3">
+        <div class="label opacity-50 mb-2">Validity Period</div>
+        <div class="default-color mb-0">
+          {{ validityPeriod | timeDuration }}
+        </div>
+      </div>
       <mat-divider></mat-divider>
       <app-fields-details [data]="requestorFields" title="Requestor Fields"></app-fields-details>
+      <mat-divider></mat-divider>
       <app-fields-details [data]="issuerFields" title="Issuer Fields"></app-fields-details>
     </ng-container>
     <ng-container *ngIf="isEmbedded && isOrganization">

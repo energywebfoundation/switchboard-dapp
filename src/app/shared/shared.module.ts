@@ -1,12 +1,11 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { ColorsService } from './colors/colors.service';
 import { PreventPasteDirective } from './directives/prevent-paste.directive';
 import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
-import { EnrolmentListComponent } from '../routes/enrolment/enrolment-list/enrolment-list.component';
 import { MinifiedDidViewerDirective } from './directives/minified-did-viewer/minified-did-viewer.directive';
 import { MinifiedDidViewerDialogComponent } from './directives/minified-did-viewer/minified-did-viewer-dialog.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -51,7 +50,13 @@ import { DomainTypePipe } from './pipes/domain-type/domain-type.pipe';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { QrCodeScannerModule } from './components/qr-code-scanner/qr-code-scanner.module';
 import { DomainImageComponent } from './components/domain-image/domain-image.component';
+import { ReportProblemComponent } from './components/report-problem/report-problem.component';
 import { SmartSearchOptionComponent } from './components/smart-search/component/smart-search-option/smart-search-option.component';
+import { GenericTableComponent } from './components/table/generic-table/generic-table.component';
+import { TimeDurationPipe } from './pipes/time-duration/time-duration.pipe';
+import { CardInfoComponent } from './components/card-info/card-info.component';
+import { TimeShiftPipe } from './pipes/time-shift/time-shift.pipe';
+import { DefaultDatePipe } from './pipes/default-date/default-date.pipe';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -100,11 +105,10 @@ const MATERIAL_MODULES = [
     BsDropdownModule,
     QrCodeScannerModule,
   ],
-  providers: [ColorsService],
+  providers: [ColorsService, DatePipe],
   declarations: [
     PreventPasteDirective,
     RetryBtnDirective,
-    EnrolmentListComponent,
     MinifiedDidViewerDirective,
     MinifiedDidViewerDialogComponent,
     SmartSearchComponent,
@@ -113,7 +117,13 @@ const MATERIAL_MODULES = [
     NoRecordsComponent,
     DomainTypePipe,
     DomainImageComponent,
+    ReportProblemComponent,
     SmartSearchOptionComponent,
+    GenericTableComponent,
+    TimeDurationPipe,
+    CardInfoComponent,
+    TimeShiftPipe,
+    DefaultDatePipe,
   ],
   exports: [
     CommonModule,
@@ -123,7 +133,6 @@ const MATERIAL_MODULES = [
     PreventPasteDirective,
     RetryBtnDirective,
     MinifiedDidViewerDirective,
-    EnrolmentListComponent,
     MATERIAL_MODULES,
     SmartSearchComponent,
     ReplaceUnderscorePipe,
@@ -135,6 +144,12 @@ const MATERIAL_MODULES = [
     BsDropdownModule,
     QrCodeScannerModule,
     DomainImageComponent,
+    ReportProblemComponent,
+    GenericTableComponent,
+    TimeDurationPipe,
+    CardInfoComponent,
+    TimeShiftPipe,
+    DefaultDatePipe,
   ],
 })
 

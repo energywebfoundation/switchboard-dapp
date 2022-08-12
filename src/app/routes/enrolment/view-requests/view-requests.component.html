@@ -6,92 +6,20 @@
 </h4>
 <div mat-dialog-content>
   <div class="mt-3">
-    <form role="form">
-      <div class="row">
-        <div class="col-lg-12 w-100">
-          <div class="card card-default text-center mb-3 p-3 shadow-none">
-            <h3 class="default-color mb-2">{{ claim?.roleName | uppercase }}</h3>
-            <div class="btn-color-warn text-truncate-middle" *ngIf="!claim?.isAccepted && !claim?.isRejected">
-              Pending
-            </div>
-            <div class="btn-color-error text-truncate-middle" *ngIf="!claim?.isAccepted && claim?.isRejected">
-              Rejected
-            </div>
-            <div class="btn-color-success text-truncate-middle" *ngIf="claim?.isAccepted">Approved</div>
-          </div>
-        </div>
-
-        <div class="col-lg-12 mt-2">
-          <div class="card card-default mb-3 pb-0 shadow-none">
-            <div class="text-left my-3">
-              <div class="label opacity-50 mb-2">Requested Date</div>
-              <span class="default-color mb-0">
-                {{ claim?.requestDate | date: 'MM/dd/yyyy HH:mm:ss' }}
-              </span>
-            </div>
-            <mat-divider></mat-divider>
-            <div class="text-left my-3">
-              <div class="label opacity-50 mb-2">Requestor</div>
-              <span class="default-color mb-0">{{ claim?.requester }}</span>
-            </div>
-            <ng-container *ngIf="claim?.subject !== claim?.claimType && claim?.subject !== claim?.requester">
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Asset</div>
-                <span class="default-color mb-0">{{ claim?.subject }}</span>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="claim.acceptedBy">
-              <mat-divider></mat-divider>
-              <div class="text-left my-3">
-                <div class="label opacity-50 mb-2">Issuer</div>
-                <span class="color-white mb-0">{{ claim.acceptedBy }}</span>
-              </div>
-            </ng-container>
-          </div>
-        </div>
-
-        <app-fields
-          *ngIf="requestorFields?.length"
-          title="Requestor fields"
-          [fieldsList]="requestorFields"></app-fields>
-        <app-fields *ngIf="issuerFields?.length" title="Issuer fields" [fieldsList]="issuerFields"></app-fields>
-
-        <div class="col-lg-12 mt-2" *ngIf="!requestorFields?.length">
-          <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
-            <mat-icon>info</mat-icon>
-            <span class="f-14"> Role did not require any field for enrolment request. </span>
-          </div>
-        </div>
-        <div class="col-lg-12 mt-2 mb-3" *ngIf="canAccept() && roleContainRequiredParams()">
-          <div class="card card-default mb-3 pb-0 shadow-none">
-            <app-enrolment-form #issuerFields [fieldList]="fieldList" [showSubmit]="false"></app-enrolment-form>
-          </div>
-        </div>
-        <div
-          class="col-lg-12 mt-2"
-          *ngIf="claim?.registrationTypes?.length === 2 && (userDid$ | async) !== claim.requester && !claim.isAccepted">
-          <div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
-            <mat-icon>info</mat-icon>
-            <span class="f-14">
-              Two signatures are required in the event that both Private and Public credentials are requested.
-            </span>
-          </div>
+    <div class="row">
+      <div class="col-lg-12 w-100">
+        <div class="card card-default text-center mb-3 p-3 shadow-none">
+          <h3 class="default-color mb-2">{{ claim?.roleName | uppercase }}</h3>
+          <app-enrolment-status class="d-flex justify-content-center" [claim]="claim"></app-enrolment-status>
         </div>
       </div>
-    </form>
-  </div>
-  <div mat-dialog-actions *ngIf="canAccept()">
-    <button
-      mat-raised-button
-      class="btn btn-primary w-100 mx-3"
-      type="submit"
-      [disabled]="isApproveDisabled"
-      (click)="approve()">
-      Approve
-    </button>
-    <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit" (click)="reject()">
-      Reject
-    </button>
+
+      <app-request-details data-qa-id="request-details" class="col-lg-12 mt-2" [claim]="claim"></app-request-details>
+
+      <app-fields data-qa-id="requestor-fields" title="Requestor fields" [fieldsList]="requestorFields$ | async">
+      </app-fields>
+
+      <app-fields data-qa-id="issuer-fields" title="Issuer fields" [fieldsList]="issuerFields$ | async"> </app-fields>
+    </div>
   </div>
 </div>

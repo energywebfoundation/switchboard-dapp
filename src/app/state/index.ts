@@ -33,6 +33,16 @@ import * as RoleSelectors from './governance/role/role.selectors';
 import * as SettingsActions from './settings/settings.actions';
 import * as SettingsSelectors from './settings/settings.selectors';
 
+// === Enrolments ===
+import * as OwnedEnrolmentsActions from './enrolments/owned/owned.actions';
+import * as OwnedEnrolmentsSelectors from './enrolments/owned/owned.selectors';
+
+import * as RequestedEnrolmentsActions from './enrolments/requested/requested.actions';
+import * as RequestedEnrolmentsSelectors from './enrolments/requested/requested.selectors';
+
+import * as RevocableEnrolmentsActions from './enrolments/revokable/revokable.actions';
+import * as RevocableEnrolmentsSelectors from './enrolments/revokable/revokable.selectors';
+
 export * from './store-root.module';
 export {
   AssetDetailsActions,
@@ -53,4 +63,10 @@ export {
   LayoutSelectors,
   SettingsActions,
   SettingsSelectors,
+  OwnedEnrolmentsActions,
+  OwnedEnrolmentsSelectors,
+  RequestedEnrolmentsActions,
+  RequestedEnrolmentsSelectors,
+  RevocableEnrolmentsActions,
+  RevocableEnrolmentsSelectors,
 };

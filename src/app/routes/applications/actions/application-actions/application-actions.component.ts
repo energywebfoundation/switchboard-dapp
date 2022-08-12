@@ -12,7 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewApplicationComponent } from '../../new-application/new-application.component';
 import { ActionBaseAbstract } from '../action-base.abstract';
 import { filter } from 'rxjs/operators';
-import { NamespaceType } from 'iam-client-lib';
+import { TransferOwnershipComponent } from '../../transfer-ownership/transfer-ownership.component';
+import { DomainUtils } from '@utils';
 
 @Component({
   selector: 'app-application-actions',
@@ -26,6 +27,7 @@ export class ApplicationActionsComponent extends ActionBaseAbstract {
   @Output() roleCreated = new EventEmitter();
   @Output() deleteConfirmed = new EventEmitter();
   @Output() edited = new EventEmitter();
+  @Output() transferred = new EventEmitter();
 
   constructor(dialog: MatDialog) {
     super(dialog);
@@ -57,9 +59,7 @@ export class ApplicationActionsComponent extends ActionBaseAbstract {
   }
 
   edit() {
-    const orgNamespace = this.application.namespace
-      .split(`.${NamespaceType.Application}.`)
-      .pop();
+    const orgNamespace = DomainUtils.getOrgName(this.application.namespace);
     this.showEditComponent(NewApplicationComponent, {
       viewType: ViewType.UPDATE,
       ...this.application,
@@ -72,5 +72,23 @@ export class ApplicationActionsComponent extends ActionBaseAbstract {
       header: 'Remove Application',
       message: 'Do you wish to continue?',
     });
+  }
+
+  transferOwnership(): void {
+    const dialogRef = this.dialog.open(TransferOwnershipComponent, {
+      width: '600px',
+      data: {
+        namespace: this.application.namespace,
+        type: ListType.APP,
+        owner: this.application.owner,
+      },
+      maxWidth: '100%',
+      disableClose: true,
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(filter(Boolean))
+      .subscribe(() => this.transferred.emit(this.application));
   }
 }
