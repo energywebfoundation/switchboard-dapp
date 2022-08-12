@@ -2,6 +2,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { OwnedEnrolmentsSelectors } from '@state';
 import { Claim, SearchType } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -41,13 +43,14 @@ export class SearchResultComponent implements OnInit {
     value: false,
   };
 
-  requestedClaims: Claim[];
+  requestedClaims$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
 
   constructor(
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService,
     private fb: FormBuilder,
-    private iamService: IamService
+    private iamService: IamService,
+    private store: Store
   ) {}
 
   ngOnInit() {
@@ -80,10 +83,6 @@ export class SearchResultComponent implements OnInit {
       });
     this.activeRoute.queryParams.subscribe(async (queryParams: any) => {
       try {
-        this.requestedClaims =
-          await this.iamService.claimsService.getClaimsByRequester({
-            did: this.iamService.signerService.did,
-          });
         if (queryParams.keyword) {
           this.searchForm.get('searchTxt').setValue(queryParams.keyword);
         }
