@@ -31,7 +31,7 @@ describe('SearchResultComponent', () => {
           useValue: loadingServiceSpy,
         },
         { provide: IamService, useValue: {} },
-        provideMockStore()
+        provideMockStore(),
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
