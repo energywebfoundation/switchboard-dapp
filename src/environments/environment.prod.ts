@@ -21,7 +21,7 @@ export const environment = {
   currencySymbol: 'EWT',
   blockExplorerUrl: 'https://explorer.energyweb.org',
   SENTRY_ENVIRONMENT: 'production',
-  INFURA_PROJECT_ID: '2DD5GcJRpMeuqMoKsgT95AQ8OI3',
-  INFURA_PROJECT_SECRET: '842995992aa1edd763196b30d727a45d',
+  INFURA_PROJECT_ID: '2DFVSWTD7gXx4Rl7wkCopHerERU',
+  INFURA_PROJECT_SECRET: 'e5581ebf1485652341637eee8d1955b7',
   ...constants,
 };
