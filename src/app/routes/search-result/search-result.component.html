@@ -20,7 +20,7 @@
           *ngIf="data"
           [isEmbedded]="true"
           [origData]="data"
-          [requestedClaims]="requestedClaims"
+          [requestedClaims]="requestedClaims$ | async"
           #detailView></app-governance-details>
       </div>
     </mat-drawer>
