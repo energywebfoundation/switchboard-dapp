@@ -97,6 +97,7 @@ describe('IssuerRequestsService', () => {
           [
             { key: 'label', value: undefined },
             { key: 'second label', value: '123' },
+            { key: 'boolean value', value: false as any },
           ],
           undefined
         )
@@ -106,7 +107,10 @@ describe('IssuerRequestsService', () => {
           );
           expect(claimsFacadeSpy.issueClaimRequest).toHaveBeenCalledWith(
             jasmine.objectContaining({
-              issuerFields: [{ key: 'second label', value: '123' }],
+              issuerFields: [
+                { key: 'second label', value: '123' },
+                { key: 'boolean value', value: false },
+              ],
               publishOnChain: false,
               expirationTimestamp: undefined,
             })
