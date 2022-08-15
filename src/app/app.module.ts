@@ -44,7 +44,7 @@ const providers: Provider[] = [
     }),
     StoreRootModule,
   ],
-  providers: [...providers, ...SENTRY_PROVIDERS],
+  providers: [...providers, SENTRY_PROVIDERS],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
