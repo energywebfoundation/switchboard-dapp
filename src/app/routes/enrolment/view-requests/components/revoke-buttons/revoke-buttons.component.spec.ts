@@ -7,14 +7,12 @@ describe('RevokeButtonsComponent', () => {
   let component: RevokeButtonsComponent;
   let fixture: ComponentFixture<RevokeButtonsComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [RevokeButtonsComponent],
-        providers: [{ provide: RevokeService, useValue: {} }],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [RevokeButtonsComponent],
+      providers: [{ provide: RevokeService, useValue: {} }],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RevokeButtonsComponent);

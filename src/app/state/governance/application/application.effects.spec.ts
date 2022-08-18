@@ -19,28 +19,26 @@ describe('ApplicationEffects', () => {
   let effects: ApplicationEffects;
   let scheduler;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        providers: [
-          ApplicationEffects,
-          { provide: SwitchboardToastrService, useValue: toastrSpy },
-          { provide: IamService, useValue: iamServiceSpy },
-          { provide: MatDialog, useValue: dialogSpy },
-          { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
-          provideMockStore(),
-          provideMockActions(() => actions$),
-        ],
-      });
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        ApplicationEffects,
+        { provide: SwitchboardToastrService, useValue: toastrSpy },
+        { provide: IamService, useValue: iamServiceSpy },
+        { provide: MatDialog, useValue: dialogSpy },
+        { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
+        provideMockStore(),
+        provideMockActions(() => actions$),
+      ],
+    });
 
-      scheduler = new TestScheduler((actual, expected) => {
-        expect(actual).toEqual(expected);
-      });
+    scheduler = new TestScheduler((actual, expected) => {
+      expect(actual).toEqual(expected);
+    });
 
-      effects = TestBed.inject(ApplicationEffects);
-      iamServiceSpy.wrapWithLoadingService.and.callFake((source) => source);
-    })
-  );
+    effects = TestBed.inject(ApplicationEffects);
+    iamServiceSpy.wrapWithLoadingService.and.callFake((source) => source);
+  }));
 
   beforeEach(() => {
     actions$ = new ReplaySubject(1);

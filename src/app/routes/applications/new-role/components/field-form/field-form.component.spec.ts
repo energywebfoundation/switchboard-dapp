@@ -18,24 +18,22 @@ describe('FieldFormComponent', () => {
     'numberRangeValid',
     'autoRangeControls',
   ]);
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [FieldFormComponent],
-        imports: [
-          ReactiveFormsModule,
-          MatSelectModule,
-          NoopAnimationsModule,
-          MatInputModule,
-          MatCheckboxModule,
-        ],
-        providers: [
-          { provide: FieldValidationService, useValue: fieldValidationService },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [FieldFormComponent],
+      imports: [
+        ReactiveFormsModule,
+        MatSelectModule,
+        NoopAnimationsModule,
+        MatInputModule,
+        MatCheckboxModule,
+      ],
+      providers: [
+        { provide: FieldValidationService, useValue: fieldValidationService },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FieldFormComponent);

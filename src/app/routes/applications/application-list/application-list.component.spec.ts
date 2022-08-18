@@ -28,25 +28,23 @@ describe('ApplicationListComponent', () => {
     store.overrideSelector(ApplicationSelectors.isFilterVisible, false);
     fixture.detectChanges();
   };
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [ApplicationListComponent],
-        imports: [ReactiveFormsModule],
-        providers: [
-          { provide: MatDialog, useValue: dialogSpy },
-          { provide: LoadingService, useValue: loadingServiceSpy },
-          { provide: SwitchboardToastrService, useValue: toastrSpy },
-          { provide: IamService, useValue: iamServiceSpy },
-          { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
-          provideMockStore(),
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ApplicationListComponent],
+      imports: [ReactiveFormsModule],
+      providers: [
+        { provide: MatDialog, useValue: dialogSpy },
+        { provide: LoadingService, useValue: loadingServiceSpy },
+        { provide: SwitchboardToastrService, useValue: toastrSpy },
+        { provide: IamService, useValue: iamServiceSpy },
+        { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
+        provideMockStore(),
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
-      store = TestBed.inject(MockStore);
-    })
-  );
+    store = TestBed.inject(MockStore);
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ApplicationListComponent);

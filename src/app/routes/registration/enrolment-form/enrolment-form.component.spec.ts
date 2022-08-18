@@ -22,24 +22,22 @@ describe('EnrolmentFormComponent', () => {
   const fieldSelector = (id, postSelector = '') =>
     hostDebug.query(By.css(`[data-qa-id=field-${id}] ${postSelector}`));
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [EnrolmentFormComponent],
-        imports: [
-          ReactiveFormsModule,
-          MatFormFieldModule,
-          MatInputModule,
-          MatButtonModule,
-          MatCheckboxModule,
-          MatDatepickerModule,
-          MatNativeDateModule,
-          NoopAnimationsModule,
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [EnrolmentFormComponent],
+      imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        NoopAnimationsModule,
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EnrolmentFormComponent);

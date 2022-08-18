@@ -9,16 +9,14 @@ describe('QrCodeScannerComponent', () => {
   let component: QrCodeScannerComponent;
   let fixture: ComponentFixture<QrCodeScannerComponent>;
   let dialogSpy;
-  beforeEach(
-    waitForAsync(() => {
-      dialogSpy = jasmine.createSpyObj('MatDialog', ['close']);
-      TestBed.configureTestingModule({
-        declarations: [QrCodeScannerComponent],
-        providers: [{ provide: MatDialogRef, useValue: dialogSpy }],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    dialogSpy = jasmine.createSpyObj('MatDialog', ['close']);
+    TestBed.configureTestingModule({
+      declarations: [QrCodeScannerComponent],
+      providers: [{ provide: MatDialogRef, useValue: dialogSpy }],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     spyOn(console, 'error');

@@ -10,23 +10,21 @@ describe('UserNotificationsComponent', () => {
   let fixture: ComponentFixture<UserNotificationsComponent>;
   let toastrSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      toastrSpy = jasmine.createSpyObj('SwitchboardToastrService', [
-        'newMessagesAmount',
-        'getMessageList',
-        'areNewNotifications',
-        'readAll',
-        'reset',
-      ]);
-      TestBed.configureTestingModule({
-        declarations: [UserNotificationsComponent],
-        imports: [MatMenuModule],
-        providers: [{ provide: SwitchboardToastrService, useValue: toastrSpy }],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    toastrSpy = jasmine.createSpyObj('SwitchboardToastrService', [
+      'newMessagesAmount',
+      'getMessageList',
+      'areNewNotifications',
+      'readAll',
+      'reset',
+    ]);
+    TestBed.configureTestingModule({
+      declarations: [UserNotificationsComponent],
+      imports: [MatMenuModule],
+      providers: [{ provide: SwitchboardToastrService, useValue: toastrSpy }],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserNotificationsComponent);

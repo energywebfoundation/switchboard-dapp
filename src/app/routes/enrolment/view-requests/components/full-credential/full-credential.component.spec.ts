@@ -7,15 +7,13 @@ describe('CredentialJsonComponent', () => {
   let component: CredentialJsonComponent;
   let fixture: ComponentFixture<CredentialJsonComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [CredentialJsonComponent],
-        providers: [],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [CredentialJsonComponent],
+      providers: [],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CredentialJsonComponent);

@@ -66,7 +66,7 @@ export class OrganizationListComponent
   }
 
   ngOnDestroy(): void {
-    this.subscription$.next();
+    this.subscription$.next(null);
     this.subscription$.complete();
   }
 

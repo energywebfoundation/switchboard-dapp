@@ -16,27 +16,25 @@ describe('SelectAssetDialogComponent', () => {
   let hostDebug: DebugElement;
   let dialogSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      dialogSpy = jasmine.createSpyObj('MatDialog', [
-        'closeAll',
-        'open',
-        'close',
-      ]);
-      dialogMock = new DialogDataMock();
-      TestBed.configureTestingModule({
-        declarations: [SelectAssetDialogComponent],
-        providers: [
-          { provide: MAT_DIALOG_DATA, useValue: dialogMock },
-          { provide: MatDialogRef, useValue: dialogSpy },
-          provideMockStore(),
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-      store = TestBed.inject(MockStore);
-      dispatchSpy = spyOn(store, 'dispatch');
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    dialogSpy = jasmine.createSpyObj('MatDialog', [
+      'closeAll',
+      'open',
+      'close',
+    ]);
+    dialogMock = new DialogDataMock();
+    TestBed.configureTestingModule({
+      declarations: [SelectAssetDialogComponent],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: dialogMock },
+        { provide: MatDialogRef, useValue: dialogSpy },
+        provideMockStore(),
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+    store = TestBed.inject(MockStore);
+    dispatchSpy = spyOn(store, 'dispatch');
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SelectAssetDialogComponent);

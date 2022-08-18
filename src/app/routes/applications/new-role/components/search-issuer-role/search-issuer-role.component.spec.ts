@@ -11,20 +11,18 @@ describe('SearchIssuerRoleComponent', () => {
   let component: SearchIssuerRoleComponent;
   let fixture: ComponentFixture<SearchIssuerRoleComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [SearchIssuerRoleComponent],
-        providers: [
-          MatIconTestingModule,
-          MatFormFieldModule,
-          NoopAnimationsModule,
-        ],
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [SearchIssuerRoleComponent],
+      providers: [
+        MatIconTestingModule,
+        MatFormFieldModule,
+        NoopAnimationsModule,
+      ],
 
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchIssuerRoleComponent);

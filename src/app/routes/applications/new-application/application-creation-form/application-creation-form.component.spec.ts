@@ -14,21 +14,19 @@ describe('ApplicationCreationFormComponent', () => {
   let component: ApplicationCreationFormComponent;
   let fixture: ComponentFixture<ApplicationCreationFormComponent>;
   let hostDebug: DebugElement;
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          NoopAnimationsModule,
-          ReactiveFormsModule,
-          MatInputModule,
-          MatButtonModule,
-          MatIconTestingModule,
-        ],
-        declarations: [ApplicationCreationFormComponent],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconTestingModule,
+      ],
+      declarations: [ApplicationCreationFormComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ApplicationCreationFormComponent);

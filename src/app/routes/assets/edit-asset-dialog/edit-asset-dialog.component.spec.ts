@@ -35,28 +35,26 @@ describe('EditAssetDialogComponent', () => {
   ]);
   let mockDialogData: MockDialogData;
   let hostDebug: DebugElement;
-  beforeEach(
-    waitForAsync(() => {
-      mockDialogData = new MockDialogData();
-      TestBed.configureTestingModule({
-        declarations: [EditAssetDialogComponent],
-        imports: [
-          ReactiveFormsModule,
-          MatFormFieldModule,
-          MatInputModule,
-          MatButtonModule,
-          MatIconTestingModule,
-          NoopAnimationsModule,
-        ],
-        providers: [
-          { provide: EditAssetService, useValue: editAssetServiceSpy },
-          { provide: MatDialogRef, useValue: dialogSpy },
-          { provide: MAT_DIALOG_DATA, useValue: mockDialogData },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    mockDialogData = new MockDialogData();
+    TestBed.configureTestingModule({
+      declarations: [EditAssetDialogComponent],
+      imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconTestingModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        { provide: EditAssetService, useValue: editAssetServiceSpy },
+        { provide: MatDialogRef, useValue: dialogSpy },
+        { provide: MAT_DIALOG_DATA, useValue: mockDialogData },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EditAssetDialogComponent);

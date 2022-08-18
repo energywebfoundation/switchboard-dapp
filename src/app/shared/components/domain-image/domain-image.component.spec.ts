@@ -6,13 +6,11 @@ describe('DomainImageComponent', () => {
   let component: DomainImageComponent;
   let fixture: ComponentFixture<DomainImageComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [DomainImageComponent],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [DomainImageComponent],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DomainImageComponent);

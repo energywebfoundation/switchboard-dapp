@@ -12,20 +12,18 @@ describe('DidBookFormComponent', () => {
   let component: DidBookFormComponent;
   let fixture: ComponentFixture<DidBookFormComponent>;
   let hostDebug;
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          ReactiveFormsModule,
-          MatFormFieldModule,
-          MatInputModule,
-          MatButtonModule,
-          NoopAnimationsModule,
-        ],
-        declarations: [DidBookFormComponent],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        NoopAnimationsModule,
+      ],
+      declarations: [DidBookFormComponent],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DidBookFormComponent);

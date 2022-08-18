@@ -20,7 +20,7 @@ import { SystemNotificationsComponent } from './header/system-notifications/syst
 import { NotificationContainerComponent } from './header/notification-container/notification-container.component';
 import { NotificationHeaderComponent } from './header/notification-header/notification-header.component';
 import { MenuNotificationTriggerComponent } from './header/menu-notification-trigger/menu-notification-trigger.component';
-import { RawDataModule } from '../modules/raw-data/raw-data.module';
+import { RawDataModule } from '@modules';
 
 @NgModule({
   imports: [
@@ -30,8 +30,8 @@ import { RawDataModule } from '../modules/raw-data/raw-data.module';
     NgxSpinnerModule,
     ClipboardModule,
     UserIdleModule.forRoot({
-      idle: environment.userIdle,
-      timeout: environment.userIdle,
+      idle: environment.idleTime,
+      timeout: environment.idleTimeout,
     }),
     UserMenuModule,
     DidBookModule,
