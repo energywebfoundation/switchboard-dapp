@@ -7,7 +7,7 @@ export const environment = {
   application: true,
 
   rpcUrl: 'https://rpc.energyweb.org/',
-  chainId: ChainId.Volta,
+  chainId: ChainId.EWC,
   cacheServerUrl: 'https://identitycache.energyweb.org/v1',
   natsServerUrl: 'https://identityevents.energyweb.org/',
   ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',
