@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IamService } from '../../shared/services/iam.service';
 import { of } from 'rxjs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-
+import { provideMockStore } from '@ngrx/store/testing';
 const loadingServiceSpy = jasmine.createSpyObj(['show', 'hide']);
 
 describe('SearchResultComponent', () => {
@@ -31,6 +31,7 @@ describe('SearchResultComponent', () => {
           useValue: loadingServiceSpy,
         },
         { provide: IamService, useValue: {} },
+        provideMockStore(),
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
