@@ -5,9 +5,9 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { SwitchboardToastrService } from '../../../../shared/services/switchboard-toastr.service';
 import { DialogService } from '../../../../shared/services/dialog/dialog.service';
-import { KeyValue } from '@angular/common';
 import { truthy } from '@operators';
 import { ClaimsFacadeService } from '../../../../shared/services/claims-facade/claims-facade.service';
+import { IssuerFields } from 'iam-client-lib';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
@@ -23,7 +23,7 @@ export class IssuerRequestsService {
 
   approve(
     claim: EnrolmentClaim,
-    issuerFields: KeyValue<string, string>[],
+    issuerFields: IssuerFields[],
     expirationTimestamp: number
   ) {
     const req: IssueClaimRequestOptions = {
@@ -32,7 +32,9 @@ export class IssuerRequestsService {
       token: claim.token,
       subjectAgreement: claim.subjectAgreement,
       registrationTypes: claim.registrationTypes,
-      issuerFields: issuerFields.filter((field) => field.value),
+      issuerFields: issuerFields.filter(
+        (field) => field.value !== null && field.value !== undefined
+      ),
       publishOnChain: false,
       expirationTimestamp,
     };
