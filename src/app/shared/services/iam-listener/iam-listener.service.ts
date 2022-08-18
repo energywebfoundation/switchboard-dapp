@@ -2,12 +2,6 @@ import { Injectable } from '@angular/core';
 import { ProviderEvent } from 'iam-client-lib';
 import { SignerFacadeService } from '../signer-facade/signer-facade.service';
 
-export enum ProviderEventsEnum {
-  AccountChanged = 'accountChanged',
-  NetworkChanged = 'networkChanged',
-  Disconnected = 'disconnected',
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -42,12 +36,10 @@ export class IamListenerService {
     callback: (config) => void
   ): void {
     const { message, title } = this.getSwalConfigInfo(changeType);
-
     const config = {
       title,
       text: `${message} Please login again.`,
       icon: 'warning',
-      button: 'Proceed',
       closeOnClickOutside: false,
     };
     callback(config);

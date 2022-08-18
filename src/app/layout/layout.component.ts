@@ -30,6 +30,7 @@ export class LayoutComponent implements OnInit {
       icon: 'error',
       button: 'Proceed',
       closeOnClickOutside: false,
+      closeOnEsc: false,
     };
 
     const result = await swal(config);

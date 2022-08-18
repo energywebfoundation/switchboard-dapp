@@ -1,70 +1,51 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
+import { AssetsFacadeService } from './assets-facade/assets-facade.service';
+import {
+  OwnedEnrolmentsActions,
+  OwnedEnrolmentsSelectors,
+  RequestedEnrolmentsActions,
+  RequestedEnrolmentsSelectors,
+} from '@state';
+import { Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
-  private _pendingApproval: BehaviorSubject<number>;
-  private _pendingDidDocSync: BehaviorSubject<number>;
-  private _assetsOfferedToMe: BehaviorSubject<number>;
-  private _pendingAssetDidDocSync: BehaviorSubject<number>;
-  private _pendingSyncCount$ = new BehaviorSubject<number | undefined>(
-    undefined
-  );
-  pendingSyncCount$ = this._pendingSyncCount$.asObservable();
+  private _assetsOfferedToMe = new BehaviorSubject<number>(0);
 
-  public initialized = false;
-
-  constructor() {
-    this._pendingApproval = new BehaviorSubject<number>(0);
-    this._pendingDidDocSync = new BehaviorSubject<number>(0);
-    this._assetsOfferedToMe = new BehaviorSubject<number>(0);
-    this._pendingAssetDidDocSync = new BehaviorSubject<number>(0);
-  }
+  constructor(
+    private claimsFacade: ClaimsFacadeService,
+    private assetsFacade: AssetsFacadeService,
+    private store: Store
+  ) {}
 
   get pendingApproval() {
-    return this._pendingApproval.asObservable();
+    return this.store.select(
+      RequestedEnrolmentsSelectors.getPendingEnrolmentsAmount
+    );
   }
 
   get pendingDidDocSync() {
-    return this._pendingDidDocSync.asObservable();
+    return this.store.select(OwnedEnrolmentsSelectors.getNotSyncedAmount);
   }
 
   get assetsOfferedToMe() {
     return this._assetsOfferedToMe.asObservable();
   }
 
-  get pendingAssetDidDocSync() {
-    return this._pendingAssetDidDocSync.asObservable();
+  async init() {
+    this._assetsOfferedToMe.next(await this.getOfferedAssetsAmount());
   }
 
-  initNotifCounts(
-    pendingApproval: number,
-    pendingDidDocSync: number,
-    assetsOfferedToMe: number,
-    pendingAssetDidDocSync: number
-  ) {
-    this._pendingApproval.next(pendingApproval);
-    this._pendingDidDocSync.next(pendingDidDocSync);
-    this._assetsOfferedToMe.next(assetsOfferedToMe);
-    this._pendingAssetDidDocSync.next(pendingAssetDidDocSync);
+  updatePendingApprovalList() {
+    this.store.dispatch(RequestedEnrolmentsActions.getEnrolmentRequests());
   }
 
-  increasePendingApprovalCount() {
-    this._pendingApproval.next(this._pendingApproval.getValue() + 1);
-  }
-
-  decreasePendingApprovalCount() {
-    this._pendingApproval.next(this._pendingApproval.getValue() - 1);
-  }
-
-  increasePendingDidDocSyncCount() {
-    this._pendingDidDocSync.next(this._pendingDidDocSync.getValue() + 1);
-  }
-
-  decreasePendingDidDocSyncCount() {
-    this._pendingDidDocSync.next(this._pendingDidDocSync.getValue() - 1);
+  updatePendingPublishList() {
+    this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
   }
 
   increaseAssetsOfferedToMeCount() {
@@ -75,19 +56,7 @@ export class NotificationService {
     this._assetsOfferedToMe.next(this._assetsOfferedToMe.getValue() - 1);
   }
 
-  increasePendingAssetDidDocSyncCount() {
-    this._pendingAssetDidDocSync.next(
-      this._pendingAssetDidDocSync.getValue() + 1
-    );
-  }
-
-  decreasePendingAssetDidDocSyncCount() {
-    this._pendingAssetDidDocSync.next(
-      this._pendingAssetDidDocSync.getValue() - 1
-    );
-  }
-
-  setZeroToPendingDidDocSyncCount() {
-    this._pendingSyncCount$.next(0);
+  private async getOfferedAssetsAmount(): Promise<number> {
+    return (await this.assetsFacade.getOfferedAssets()).length;
   }
 }

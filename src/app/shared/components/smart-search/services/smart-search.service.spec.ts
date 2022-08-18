@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { SmartSearchService } from './smart-search.service';
 import { DomainsFacadeService } from '../../../services/domains-facade/domains-facade.service';
+import { of } from 'rxjs';
 
 describe('SmartSearchService', () => {
   let service: SmartSearchService;
@@ -37,7 +38,7 @@ describe('SmartSearchService', () => {
 
   it('should return not empty list when search word contains more than 2 characters', (done) => {
     domainsFacadeSpy.getENSTypesBySearchPhrase.and.returnValue(
-      Promise.resolve([{ namespace: 'a' }, { namespace: 'b' }])
+      of([{ namespace: 'a' }, { namespace: 'b' }])
     );
     service.searchBy('abc').subscribe((v) => {
       expect(v.length).toEqual(2);

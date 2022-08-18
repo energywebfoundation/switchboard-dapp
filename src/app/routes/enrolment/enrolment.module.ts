@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { EnrolmentComponent } from './enrolment.component';
-import { EnrolToRoleComponent } from './enrol-to-role/enrol-to-role.component';
 import { FormsModule } from '@angular/forms';
 import { ViewRequestsComponent } from './view-requests/view-requests.component';
 import { ViewRoleComponent } from './view-role/view-role.component';
@@ -19,16 +18,34 @@ import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-
 import { IssueVcModule } from '../../modules/issue-vc/issue-vc.module';
 import { EnrolmentFormModule } from '../registration/enrolment-form/enrolment-form.module';
 import { FieldsComponent } from './fields/fields.component';
+import { MyEnrolmentListComponent } from './my-enrolment-list/my-enrolment-list.component';
+import { RequestedEnrolmentListComponent } from './requested-enrolment-list/requested-enrolment-list.component';
+import { MyRevokablesListComponent } from './revoke-enrolments/revoke-enrolment-list.component';
+import { EnrolmentListModule } from './enrolment-list/enrolment-list.module';
+import { RequestDetailsComponent } from './view-requests/components/request-details/request-details.component';
+import { RevokeButtonsComponent } from './view-requests/components/revoke-buttons/revoke-buttons.component';
+import { IssuerRequestsComponent } from './view-requests/issuer-requests/issuer-requests.component';
+import { ExpirationDateComponent } from './view-requests/components/expiration-date/expiration-date.component';
+import { ExpirationInfoComponent } from './view-requests/components/expiration-info/expiration-info.component';
+import { CascadingFilterComponent } from './revoke-enrolments/components/cascading-filter/cascading-filter.component';
 
 const routes: Routes = [{ path: '', component: EnrolmentComponent }];
 
 @NgModule({
   declarations: [
     EnrolmentComponent,
-    EnrolToRoleComponent,
     ViewRequestsComponent,
     ViewRoleComponent,
     FieldsComponent,
+    MyEnrolmentListComponent,
+    RequestedEnrolmentListComponent,
+    MyRevokablesListComponent,
+    RequestDetailsComponent,
+    RevokeButtonsComponent,
+    IssuerRequestsComponent,
+    ExpirationDateComponent,
+    ExpirationInfoComponent,
+    CascadingFilterComponent,
   ],
   imports: [
     SharedModule,
@@ -47,6 +64,7 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
     QrCodeScannerModule,
     IssueVcModule,
     EnrolmentFormModule,
+    EnrolmentListModule,
   ],
 })
 export class EnrolmentModule {}

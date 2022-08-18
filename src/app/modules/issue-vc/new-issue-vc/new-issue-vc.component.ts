@@ -9,9 +9,8 @@ import {
 } from '../../../routes/registration/utils/precondition-check';
 import { filter, switchMap } from 'rxjs/operators';
 import { EnrolmentSubmission } from '../../../routes/registration/enrolment-form/enrolment-form.component';
-import { IRole } from 'iam-client-lib';
+import { IRole, IRoleDefinition } from 'iam-client-lib';
 import { MatSelectChange } from '@angular/material/select/select';
-import { IRoleDefinition } from '@energyweb/iam-contracts';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -54,8 +53,12 @@ export class NewIssueVcComponent implements OnInit {
   private setPreconditions(): void {
     [this.isPrecheckSuccess, this.rolePreconditionList] = preconditionCheck(
       this.selectedRoleDefinition.enrolmentPreconditions,
-      this.issuanceVcService.assetClaims
+      this.getClaims()
     );
+  }
+
+  getClaims() {
+    return this.issuanceVcService.assetClaims;
   }
 
   getFormSubject() {

@@ -1,0 +1,10 @@
+<div *ngIf="claim?.canRevokeOnChain">
+  <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit" (click)="revokeOnChain()">
+    Revoke OnChain
+  </button>
+</div>
+<div *ngIf="claim?.canRevokeOffChain">
+  <button mat-raised-button class="btn btn-secondary w-100 ml-0 mt-3 mx-3" type="submit" (click)="revokeOffChain()">
+    Revoke OffChain
+  </button>
+</div>

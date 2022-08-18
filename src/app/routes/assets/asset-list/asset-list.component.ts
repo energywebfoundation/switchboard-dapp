@@ -42,6 +42,7 @@ import { OwnedAssetsActions, OwnedAssetsSelectors } from '@state';
 import { QrCodeService } from '../../../shared/components/qr-code/services/qr-code.service';
 import { ScanType } from '../../../shared/components/qr-code-scanner/models/scan-type.enum';
 import { IssuanceVcService } from '../../../modules/issue-vc/services/issuance-vc.service';
+import { RouterConst } from '../../router-const';
 
 const HEADER_TRANSFER_OWNERSHIP = 'Transfer Ownership';
 const HEADER_CANCEL_OWNERSHIP = 'Cancel Offered Ownership';
@@ -64,6 +65,22 @@ export class AssetListComponent implements OnInit, OnDestroy {
   @Output() selectTab = new EventEmitter<any>();
   searchByDid = new FormControl(undefined);
   AssetListType = AssetListType;
+
+  get isOwned(): boolean {
+    return this.listType === AssetListType.MY_ASSETS;
+  }
+
+  get isPreviouslyOwned(): boolean {
+    return this.listType === AssetListType.PREV_OWNED_ASSETS;
+  }
+
+  get isOffered(): boolean {
+    return this.listType === AssetListType.OFFERED_ASSETS;
+  }
+
+  get isOwnedOrPreviouslyOwned() {
+    return this.isOwned || this.isPreviouslyOwned;
+  }
 
   dataSource: MatTableDataSource<AssetList> = new MatTableDataSource([]);
   displayedColumns: string[] = ['logo', 'createdDate', 'name', 'id'];
@@ -103,18 +120,18 @@ export class AssetListComponent implements OnInit, OnDestroy {
       });
 
     // Set Table Columns
-    if (this.listType === AssetListType.OFFERED_ASSETS) {
+    if (this.isOffered) {
       this.displayedColumns.push('owner');
     } else {
       this.displayedColumns.push('offeredTo');
-      if (this.listType === AssetListType.MY_ASSETS) {
+      if (this.isOwned) {
         this.displayedColumns.push('modifiedDate');
       }
     }
     this.displayedColumns.push('actions');
 
     // Initialize List
-    if (this.listType === AssetListType.MY_ASSETS) {
+    if (this.isOwned) {
       this.getAssetList();
     }
 
@@ -181,7 +198,6 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   createVC(element) {
-    console.log(element);
     this.dialog.open(NewIssueVcComponent, {
       width: '600px',
       data: {
@@ -330,7 +346,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
   }
 
   viewAssetEnrolments(data: Asset) {
-    this.route.navigate(['assets/enrolment/' + data.id]);
+    this.route.navigate([RouterConst.AssetEnrolment + data.id]);
   }
 
   edit(data: Asset) {

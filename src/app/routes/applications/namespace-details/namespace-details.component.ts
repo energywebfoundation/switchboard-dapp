@@ -5,7 +5,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { IAppDefinition } from '@energyweb/iam-contracts';
+import { IAppDefinition } from 'iam-client-lib';
 
 @Component({
   selector: 'app-namespace-details',
@@ -16,7 +16,7 @@ import { IAppDefinition } from '@energyweb/iam-contracts';
 export class NamespaceDetailsComponent {
   @Input() namespace: string;
   @Input() name: string;
-  @Input() type: 'Application' | 'Organization';
+  @Input() type: 'App' | 'Org';
   @Input() data: IAppDefinition;
 
   @Output() imageLoaded = new EventEmitter<boolean>();

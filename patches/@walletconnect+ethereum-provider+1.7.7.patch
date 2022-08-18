@@ -1,0 +1,26 @@
+diff --git a/node_modules/@walletconnect/ethereum-provider/dist/cjs/index.js b/node_modules/@walletconnect/ethereum-provider/dist/cjs/index.js
+index 8b65632..37ee777 100644
+--- a/node_modules/@walletconnect/ethereum-provider/dist/cjs/index.js
++++ b/node_modules/@walletconnect/ethereum-provider/dist/cjs/index.js
+@@ -68,6 +68,8 @@ class WalletConnectProvider {
+         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+             if (!this.signer.connection.connected) {
+                 yield this.signer.connect();
++                const chainId = this.signer.connection.chainId;
++                this.http = this.setHttpProvider(chainId);
+             }
+         });
+     }
+diff --git a/node_modules/@walletconnect/ethereum-provider/dist/esm/index.js b/node_modules/@walletconnect/ethereum-provider/dist/esm/index.js
+index cb51733..c2b55f3 100644
+--- a/node_modules/@walletconnect/ethereum-provider/dist/esm/index.js
++++ b/node_modules/@walletconnect/ethereum-provider/dist/esm/index.js
+@@ -60,6 +60,8 @@ class WalletConnectProvider {
+     async connect() {
+         if (!this.signer.connection.connected) {
+             await this.signer.connect();
++            const chainId = this.signer.connection.chainId;
++            this.http = this.setHttpProvider(chainId);
+         }
+     }
+     async disconnect() {

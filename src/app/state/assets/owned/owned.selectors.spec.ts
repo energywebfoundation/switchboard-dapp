@@ -8,6 +8,12 @@ describe('Owned Assets Selectors', () => {
     updatedAt: '2021-11-18T08:21:45.000Z',
   };
   describe('getOwnedAssets', () => {
+    it('should return undefined when list of array is undefined', () => {
+      expect(
+        OwnedSelectors.getOwnedAssets.projector(undefined, {})
+      ).toBeUndefined();
+    });
+
     it('should return empty array when assets are empty', () => {
       expect(OwnedSelectors.getOwnedAssets.projector([], {})).toEqual([]);
     });
@@ -37,6 +43,30 @@ describe('Owned Assets Selectors', () => {
           hasEnrolments: true,
         } as any,
       ]);
+    });
+  });
+
+  describe('getAssetsWithSelection', () => {
+    it('should return all elements with isSelected set to false', () => {
+      expect(
+        OwnedSelectors.getAssetsWithSelection('123').projector({
+          assets: [{ id: '321' }, { id: '111' }] as any[],
+        })
+      ).toEqual([
+        { id: '321', isSelected: false },
+        { id: '111', isSelected: false },
+      ] as any[]);
+    });
+
+    it('should return one element with isSelected set to true', () => {
+      expect(
+        OwnedSelectors.getAssetsWithSelection('123').projector({
+          assets: [{ id: '123' }, { id: '111' }] as any[],
+        })
+      ).toEqual([
+        { id: '123', isSelected: true },
+        { id: '111', isSelected: false },
+      ] as any[]);
     });
   });
 });

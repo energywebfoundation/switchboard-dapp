@@ -1,0 +1,12 @@
+a:hover {
+  background-color: initial;
+}
+
+:host ::ng-deep .mat-menu-content:not(:empty) {
+  padding: 0 !important;
+}
+
+.spinner {
+  padding: 1.1rem 0.95rem;
+  font-size: 0.85rem;
+}

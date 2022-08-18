@@ -1,4 +1,5 @@
 import { constants } from './constants';
+import { ChainId } from '../app/core/config/chain-id';
 
 export const environment = {
   production: true,
@@ -6,10 +7,9 @@ export const environment = {
   application: true,
 
   rpcUrl: 'https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/',
-  chainId: 73799,
+  chainId: ChainId.Volta,
   cacheServerUrl: 'https://identitycache-staging.energyweb.org/v1',
   natsServerUrl: 'https://identityevents-staging.energyweb.org/',
-  kmsServerUrl: 'https://kms.energyweb.org/connect/new',
   ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',
   showAzureLoginOption: true,
   natsEnvironmentName: 'ewf-dev',
@@ -21,5 +21,7 @@ export const environment = {
   currencySymbol: 'VT',
   blockExplorerUrl: 'https://volta-explorer.energyweb.org',
   SENTRY_ENVIRONMENT: 'staging',
+  INFURA_PROJECT_ID: '2DFPGpCSCenFDtdi5xLYZKxoig7',
+  INFURA_PROJECT_SECRET: 'a7a1b8c56a7c79c592600669f15876b1',
   ...constants,
 };

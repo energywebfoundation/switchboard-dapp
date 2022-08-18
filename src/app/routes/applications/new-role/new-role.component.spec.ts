@@ -14,8 +14,8 @@ import {
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { PreconditionType } from 'iam-client-lib';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
-import { IssuerType } from './models/issuer-type.enum';
 import { DomainTypePipe } from '../../../shared/pipes/domain-type/domain-type.pipe';
+import { TimeDurationPipe } from '../../../shared/pipes/time-duration/time-duration.pipe';
 
 describe('NewRoleComponent', () => {
   let component: NewRoleComponent;
@@ -36,7 +36,7 @@ describe('NewRoleComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NewRoleComponent, DomainTypePipe],
+      declarations: [NewRoleComponent, DomainTypePipe, TimeDurationPipe],
       imports: [ReactiveFormsModule],
       providers: [
         provideMockStore(),
@@ -90,7 +90,6 @@ describe('NewRoleComponent', () => {
     let data;
 
     beforeEach(() => {
-      component.issuerGroup = fb.group({});
       data = { value: 'test value' };
       component.roleForm = fb.group({
         data: fb.group({
@@ -99,36 +98,6 @@ describe('NewRoleComponent', () => {
           }),
         }),
       });
-      spyOn(component.issuerGroup, 'reset');
-      spyOn(
-        component.roleForm.get('data').get('issuer').get('roleName'),
-        'reset'
-      );
-    });
-
-    it('issuerList length > 0', () => {
-      component.issuerList = ['1', '2'];
-
-      component.issuerTypeChanged(data);
-
-      expect(component.issuerGroup.reset).toHaveBeenCalled();
-      expect(component.issuerList.length).toBe(0);
-      expect(
-        component.roleForm.get('data').get('issuer').get('roleName').reset
-      ).toHaveBeenCalled();
-    });
-
-    it('iIssuerType.DID === data.value', () => {
-      data = { value: IssuerType.DID };
-      component.issuerList = [];
-
-      component.issuerTypeChanged(data);
-
-      expect(component.issuerGroup.reset).toHaveBeenCalled();
-      expect(
-        component.roleForm.get('data').get('issuer').get('roleName').reset
-      ).toHaveBeenCalled();
-      expect(component.issuerList.length).toBe(1);
     });
   });
 });

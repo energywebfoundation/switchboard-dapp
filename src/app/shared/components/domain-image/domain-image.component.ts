@@ -14,7 +14,7 @@ import {
 })
 export class DomainImageComponent {
   @Input() url: string;
-  @Input() type: 'Organization' | 'Application';
+  @Input() type: 'Org' | 'App';
 
   @Output() imageLoaded = new EventEmitter<boolean>();
 

@@ -1,0 +1,12 @@
+<div>
+  <div class="label default-color ml-1 pl-2 pb-2" data-qa-id="dids-length">{{ list.length }} {{ type }}(s)</div>
+  <app-did-list [list]="list" (remove)="remove($event)"></app-did-list>
+
+  <div class="pt-2">
+    <app-select-did
+      [didToRemove]="list"
+      placeholder="Add {{ type }} DID (Optional)"
+      [showAddButton]="true"
+      (add)="add($event)"></app-select-did>
+  </div>
+</div>

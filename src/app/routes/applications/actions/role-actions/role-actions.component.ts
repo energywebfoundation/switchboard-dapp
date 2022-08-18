@@ -2,8 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ViewType } from '../../new-organization/new-organization.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NewRoleComponent } from '../../new-role/new-role.component';
-import { NamespaceType } from 'iam-client-lib';
+import { IRole } from 'iam-client-lib';
 import { ActionBaseAbstract } from '../action-base.abstract';
+import { DomainUtils } from '@utils';
 
 @Component({
   selector: 'app-role-actions',
@@ -11,7 +12,7 @@ import { ActionBaseAbstract } from '../action-base.abstract';
   styleUrls: ['./role-actions.component.scss'],
 })
 export class RoleActionsComponent extends ActionBaseAbstract implements OnInit {
-  @Input() role;
+  @Input() role: IRole;
   @Output() edited = new EventEmitter();
   deleteConfirmed;
   enrolmentUrl: string;
@@ -40,15 +41,12 @@ export class RoleActionsComponent extends ActionBaseAbstract implements OnInit {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private constructEnrolmentUrl(listType: string, roleDefinition: any) {
+  private constructEnrolmentUrl(
+    listType: string,
+    roleDefinition: IRole
+  ): string {
     const name = roleDefinition.name;
-    const arr = roleDefinition.namespace.split(`.${NamespaceType.Role}.`);
-    let namespace = '';
-
-    if (arr.length > 1) {
-      namespace = arr[1];
-    }
+    const namespace = DomainUtils.getParentNamespace(roleDefinition.namespace);
 
     return `${location.origin}/enrol?${listType}=${namespace}&roleName=${name}`;
   }

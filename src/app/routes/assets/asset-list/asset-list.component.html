@@ -37,15 +37,15 @@
 
     <ng-container matColumnDef="createdDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        <ng-container *ngIf="listType !== AssetListType.OFFERED_ASSETS"> Created Date</ng-container>
-        <ng-container *ngIf="listType === AssetListType.OFFERED_ASSETS"> Offered Date</ng-container>
+        <ng-container *ngIf="isOwnedOrPreviouslyOwned"> Created Date</ng-container>
+        <ng-container *ngIf="isOffered"> Offered Date</ng-container>
       </th>
       <td mat-cell *matCellDef="let element; let i = index" data-label="Created Date">
-        <div *ngIf="listType !== AssetListType.OFFERED_ASSETS" [attr.data-qa-id]="'create-date-' + i">
-          {{ element.createdDate | date: 'MM/dd/yyyy HH:mm:ss' }}
+        <div *ngIf="isOwnedOrPreviouslyOwned" [attr.data-qa-id]="'create-date-' + i">
+          {{ element.createdDate | defaultDate }}
         </div>
-        <div *ngIf="listType === AssetListType.OFFERED_ASSETS" [attr.data-qa-id]="'modified-date-' + i">
-          {{ element.modifiedDate | date: 'MM/dd/yyyy HH:mm:ss' }}
+        <div *ngIf="isOffered" [attr.data-qa-id]="'modified-date-' + i">
+          {{ element.modifiedDate | defaultDate }}
         </div>
       </td>
     </ng-container>
@@ -54,14 +54,14 @@
     <ng-container matColumnDef="name">
       <th mat-header-cell class="d-flex align-items-center pt-1" *matHeaderCellDef mat-sort-header>
         Asset Name
-        <mat-icon class="btn-color-disabled ml-2">visibility_off</mat-icon>
+        <mat-icon class="icon-disabled ml-2">visibility_off</mat-icon>
       </th>
       <td mat-cell *matCellDef="let element; let i = index" data-label="Name">
         <div class="d-flex flex-row align-items-center justify-content-between justify-content-lg-start">
           <div [attr.data-qa-id]="'name-' + i">
             {{ element.name ? element.name : 'Asset Name' }}
           </div>
-          <div>
+          <div *ngIf="isOwned">
             <button
               class="btn mat-stroked-table-button ml-0 mr-2 mr-md-0 ml-md-2"
               [attr.data-qa-id]="'enrolments-' + i"
@@ -89,12 +89,12 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="offeredTo" *ngIf="listType !== AssetListType.OFFERED_ASSETS">
+    <ng-container matColumnDef="offeredTo" *ngIf="isOwnedOrPreviouslyOwned">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         <ng-container>Offered To</ng-container>
       </th>
       <td mat-cell *matCellDef="let element; let i = index" data-label="Offered To">
-        <ng-container *ngIf="listType === AssetListType.MY_ASSETS">
+        <ng-container *ngIf="isOwned">
           <div
             matTooltip="{{ element.offeredTo }}"
             matTooltipClass="tooltip-full-width"
@@ -103,7 +103,7 @@
             {{ (element.offeredTo | didFormatMinifier) || '-' }}
           </div>
         </ng-container>
-        <ng-container *ngIf="listType === AssetListType.PREV_OWNED_ASSETS">
+        <ng-container *ngIf="isPreviouslyOwned">
           <div
             matTooltip="{{ element.owner }}"
             matTooltipClass="tooltip-full-width"
@@ -115,7 +115,7 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="owner" *ngIf="listType === AssetListType.OFFERED_ASSETS">
+    <ng-container matColumnDef="owner" *ngIf="isPreviouslyOwned">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         <ng-container>Offered By</ng-container>
       </th>
@@ -154,12 +154,12 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="modifiedDate" *ngIf="listType === AssetListType.MY_ASSETS">
+    <ng-container matColumnDef="modifiedDate" *ngIf="isOwned">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         <ng-container>Last Updated Date</ng-container>
       </th>
       <td mat-cell *matCellDef="let element" data-label="Last Updated Date">
-        {{ element.modifiedDate | date: 'MM/dd/yyyy HH:mm:ss' }}
+        {{ element.modifiedDate | defaultDate }}
       </td>
     </ng-container>
 
@@ -190,14 +190,14 @@
               <button
                 mat-menu-item
                 class="btn-color-primary"
-                *ngIf="AssetListType.MY_ASSETS === listType"
+                *ngIf="isOwned"
                 data-qa-id="verification-method"
                 (click)="viewVerificationMethod(element)">
                 <mat-icon class="btn-color-primary btn-action-3"> verified</mat-icon>
                 <span>Verification Method</span>
               </button>
 
-              <ng-container *ngIf="listType === AssetListType.MY_ASSETS">
+              <ng-container *ngIf="isOwned">
                 <!-- Offer Ownership -->
                 <button
                   mat-menu-item
@@ -221,7 +221,7 @@
                 </button>
               </ng-container>
 
-              <ng-container *ngIf="listType === AssetListType.OFFERED_ASSETS">
+              <ng-container *ngIf="isOffered">
                 <!-- Accept Ownership Offer -->
                 <button
                   mat-menu-item
@@ -251,7 +251,7 @@
 
               <!-- QR-Code -->
               <button mat-menu-item class="btn-color-primary" (click)="generateQrCode(element)">
-                <mat-icon class="btn-color-primary btn-action-3" svgIcon="generate-qr-icon"></mat-icon>
+                <mat-icon class="btn-color-primary btn-action-3 icon-color" svgIcon="generate-qr-icon"></mat-icon>
                 <span>Generate QR-Code</span>
               </button>
 

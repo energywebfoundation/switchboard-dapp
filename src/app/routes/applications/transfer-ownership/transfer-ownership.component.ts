@@ -51,7 +51,6 @@ export class TransferOwnershipComponent implements OnDestroy {
   assetDid = '';
   type: string;
 
-  newOwnerModifiedAddress = new FormControl('');
   didValid: boolean;
   newOwnerDID: string;
 

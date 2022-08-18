@@ -12,7 +12,9 @@ export const getUserProfile = createSelector(
 );
 
 export const getUserData = createSelector(getUserState, (state) =>
-  userLocalStorage.has ? userLocalStorage.parsed : state?.userData
+  userLocalStorage.has
+    ? userLocalStorage.parsed[state?.didDocument?.id]
+    : state?.userData
 );
 
 export const getUserName = createSelector(getUserData, (state) =>
@@ -33,4 +35,9 @@ export const getAssetProfile = (profileId: string) =>
 export const getDid = createSelector(
   getUserState,
   (state: UserClaimState) => state?.didDocument?.id
+);
+
+export const getDIDDocument = createSelector(
+  getUserState,
+  (state: UserClaimState) => state?.didDocument
 );

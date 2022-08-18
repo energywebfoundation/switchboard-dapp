@@ -6,7 +6,7 @@
       [mode]="screenWidth > 840 ? 'side' : 'over'"
       #drawer
       position="end"
-      class="p-3 color-white">
+      class="p-3 default-color">
       <!-- NOTE: added padding-top because of scrolling issue -->
       <div class="d-flex flex-column side-panel">
         <!-- NOTE: This component is shared with Governance List - View Org/App/Roles -->
@@ -46,7 +46,7 @@
                   <mat-icon>close</mat-icon>
                 </button>
               </ng-container>
-              <mat-spinner *ngIf="isAutolistLoading?.value" diameter="21" class="color-white"></mat-spinner>
+              <mat-spinner *ngIf="isAutolistLoading?.value" diameter="21" class="default-color"></mat-spinner>
             </div>
           </mat-form-field>
           <div class="d-flex flex-grow-1 justify-content-end align-items-center">
@@ -69,7 +69,7 @@
       </div>
       <div class="d-flex container justify-content-center flex-wrap flex-row flex-start">
         <div class="my-3" *ngIf="!(filteredOptions | async)?.length">
-          <div class="color-white">No record found.</div>
+          <div class="default-color">No record found.</div>
         </div>
         <div *ngFor="let item of filteredOptions | async" class="card-width">
           <mat-card
@@ -80,11 +80,11 @@
               <ng-container *ngIf="!item?.definition?.logoUrl">
                 <div
                   *ngIf="item?.definition?.orgName"
-                  style="background: url(../assets/img/no-organization-image.png)"
+                  style="background: url(../assets/img/no-org-image.png)"
                   class="img-wrapper px-2"></div>
                 <div
                   *ngIf="item?.definition?.appName"
-                  style="background: url(../assets/img/no-application-image.png)"
+                  style="background: url(../assets/img/no-app-image.png)"
                   class="img-wrapper px-2"></div>
               </ng-container>
               <!-- Actual Logo -->

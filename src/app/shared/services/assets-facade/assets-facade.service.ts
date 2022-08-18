@@ -19,4 +19,8 @@ export class AssetsFacadeService {
       finalize(() => this.loadingService.hide())
     );
   }
+
+  getOfferedAssets() {
+    return this.iamService.assetsService.getOfferedAssets();
+  }
 }

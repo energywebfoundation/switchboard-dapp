@@ -1,0 +1,97 @@
+<div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
+  <mat-icon>info</mat-icon>
+  <div class="d-flex flex-column">
+    <mat-label>Default validity period</mat-label>
+    <div class="f-14" data-qa-id="time-duration">{{ this.form.value | timeDuration }}</div>
+  </div>
+</div>
+<div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
+  <form [formGroup]="form">
+    <div class="d-flex justify-content-around">
+      <div>
+        <mat-label class="ml-3 pl-1">Years</mat-label>
+        <mat-form-field class="mt-2" appearance="outline">
+          <input
+            matInput
+            placeholder="Years"
+            type="number"
+            min="0"
+            autocomplete="off"
+            data-qa-id="years"
+            formControlName="years" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-label class="ml-3 pl-1">Days</mat-label>
+        <mat-form-field class="mt-2" appearance="outline">
+          <input
+            matInput
+            placeholder="Days"
+            type="number"
+            min="0"
+            max="365"
+            autocomplete="off"
+            data-qa-id="days"
+            formControlName="days" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-label class="ml-3 pl-1">Hours</mat-label>
+        <mat-form-field class="mt-2" appearance="outline">
+          <input
+            matInput
+            placeholder="Hours"
+            type="number"
+            min="0"
+            max="24"
+            autocomplete="off"
+            data-qa-id="hours"
+            formControlName="hours" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-label class="ml-3 pl-1">Minutes</mat-label>
+        <mat-form-field class="mt-2" appearance="outline">
+          <input
+            matInput
+            placeholder="Minutes"
+            type="number"
+            min="0"
+            max="60"
+            autocomplete="off"
+            data-qa-id="minutes"
+            formControlName="minutes" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-label class="ml-3 pl-1">Seconds</mat-label>
+        <mat-form-field class="mt-2" appearance="outline">
+          <input
+            matInput
+            placeholder="Seconds"
+            type="number"
+            min="0"
+            max="60"
+            autocomplete="off"
+            data-qa-id="seconds"
+            formControlName="seconds" />
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="d-flex justify-content-end mb-2">
+  <button mat-stroked-button class="btn btn-small mr-2" (click)="back.emit()">Back</button>
+  <button
+    mat-raised-button
+    class="btn btn-small btn-primary"
+    data-qa-id="period-next"
+    [disabled]="form.invalid"
+    (click)="onNextHandler()">
+    Next
+  </button>
+</div>

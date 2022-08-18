@@ -14,15 +14,16 @@ import {
   initWithPrivateKeySigner,
   initWithWalletConnect,
   IRole,
+  IRoleDefinitionV2,
   MessagingMethod,
   MessagingService,
   NamespaceType,
   ProviderType,
-  RegistrationTypes,
   setCacheConfig,
   setChainConfig,
   setMessagingConfig,
   SignerService,
+  VerifiableCredentialsServiceBase,
 } from 'iam-client-lib';
 import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
 import { LoadingService } from './loading.service';
@@ -35,6 +36,7 @@ import { EnvService } from './env/env.service';
 import { ChainConfig } from 'iam-client-lib/dist/src/config/chain.config';
 import { EkcSettingsService } from '../../modules/connect-to-wallet/ekc-settings/services/ekc-settings.service';
 import { IOrganization } from 'iam-client-lib/dist/src/modules/domains/domains.types';
+import { IssueClaimOptions } from 'iam-client-lib/dist/src/modules/claims/claims.types';
 
 export const PROVIDER_TYPE = 'ProviderType';
 
@@ -59,6 +61,7 @@ export class IamService {
   domainsService: DomainsService;
   assetsService: AssetsService;
   cacheClient: CacheClient;
+  verifiableCredentialsService: VerifiableCredentialsServiceBase;
 
   constructor(
     private loadingService: LoadingService,
@@ -93,12 +96,7 @@ export class IamService {
     return this.signerService.isEthSigner;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  issueClaim(data: {
-    subject: string;
-    claim: any;
-    registrationTypes: RegistrationTypes[];
-  }) {
+  issueClaim(data: IssueClaimOptions) {
     return this.wrapWithLoadingService(this.claimsService.issueClaim(data));
   }
 
@@ -112,15 +110,16 @@ export class IamService {
 
   getAllowedRolesByIssuer(): Observable<IRole[]> {
     return this.wrapWithLoadingService(
-      this.domainsService.getAllowedRolesByIssuer(
-        this.signerService.did
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ) as any as Promise<IRole[]>
+      this.domainsService.getAllowedRolesByIssuer(this.signerService.did)
     );
   }
 
-  getRolesDefinition(namespaces: string[]) {
-    return this.cacheClient.getRolesDefinition(namespaces);
+  getRolesDefinition(namespace: string) {
+    return this.wrapWithLoadingService(
+      this.cacheClient.getRoleDefinition(
+        namespace
+      ) as Promise<IRoleDefinitionV2>
+    );
   }
 
   registerAsset() {
@@ -181,12 +180,16 @@ export class IamService {
           assetsService,
           connectToDidRegistry,
           cacheClient,
+          verifiableCredentialsService,
         } = await connectToCacheServer();
         this.domainsService = domainsService;
         this.assetsService = assetsService;
         this.cacheClient = cacheClient;
+        this.verifiableCredentialsService = verifiableCredentialsService;
         if (createDocument) {
-          const { didRegistry, claimsService } = await connectToDidRegistry();
+          const { didRegistry, claimsService } = await connectToDidRegistry(
+            this.configureIpfsConfig()
+          );
           this.didRegistry = didRegistry;
           this.claimsService = claimsService;
         }
@@ -198,7 +201,6 @@ export class IamService {
         connected: false,
         userClosedModal: e.message === 'User closed modal',
         realtimeExchangeConnected: false,
-        accountInfo: undefined,
         message: e.message,
       };
     }
@@ -207,7 +209,6 @@ export class IamService {
       connected: true,
       userClosedModal: false,
       realtimeExchangeConnected: true,
-      accountInfo: this.signerService.accountInfo,
     };
   }
 
@@ -266,14 +267,28 @@ export class IamService {
     return chainConfig;
   }
 
+  private configureIpfsConfig() {
+    const projectId = this.envService.INFURA_PROJECT_ID;
+    const projectSecret = this.envService.INFURA_PROJECT_SECRET;
+    const auth =
+      'Basic ' +
+      Buffer.from(projectId + ':' + projectSecret).toString('base64');
+    return {
+      host: 'ipfs.infura.io',
+      port: 5001,
+      protocol: 'https',
+      headers: {
+        authorization: auth,
+      },
+    };
+  }
+
   private async initSignerService(providerType: ProviderType) {
     switch (providerType) {
       case ProviderType.MetaMask:
         return initWithMetamask();
       case ProviderType.WalletConnect:
         return initWithWalletConnect();
-      case ProviderType.EwKeyManager:
-        return initWithKms({ kmsServerUrl: this.envService.kmsServerUrl });
       case ProviderType.PrivateKey:
         return initWithPrivateKeySigner(
           localStorage.getItem('PrivateKey'),

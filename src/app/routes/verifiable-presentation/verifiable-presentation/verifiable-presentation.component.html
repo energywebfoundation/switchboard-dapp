@@ -1,0 +1,8 @@
+<div class="color-default d-flex justify-content-center flex-column align-items-center w-100">
+  <app-vp-header></app-vp-header>
+  <app-received-presentations
+    [tableData]="tableData"
+    [submitDisabled]="isSubmitFormButtonDisabled()"
+    [requiredCredentials]="requiredRedentials"></app-received-presentations>
+  <app-loading></app-loading>
+</div>

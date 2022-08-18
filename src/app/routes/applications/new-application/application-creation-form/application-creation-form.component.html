@@ -1,12 +1,4 @@
-<div class="card card-info d-flex flex-row justify-content-start align-items-center shadow-none d-flex mb-3">
-  <mat-icon>info</mat-icon>
-  <div class="d-flex flex-column">
-    <mat-label>ORGANIZATION</mat-label>
-    <div class="f-14">
-      {{ appForm.value.orgNamespace }}
-    </div>
-  </div>
-</div>
+<app-card-info title="ORGANIZATION" [description]="appForm?.value?.orgNamespace"></app-card-info>
 <form [formGroup]="appForm">
   <div class="card card-default d-flex shadow-none d-flex pt-3 mb-3">
     <div class="row mt-2">

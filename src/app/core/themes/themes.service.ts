@@ -13,7 +13,9 @@ export class ThemesService {
   }
 
   setTheme(name: string) {
-    this.injectStylesheet(name + '.css');
+    this.injectStylesheet(
+      name + '.css' + `?t=${new Date(Date.now()).getTime()}`
+    );
   }
 
   injectStylesheet(theme: string) {

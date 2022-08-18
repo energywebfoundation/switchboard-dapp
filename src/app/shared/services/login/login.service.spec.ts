@@ -10,14 +10,19 @@ import { from, of, throwError } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
 import { IS_ETH_SIGNER, ProviderType, PUBLIC_KEY } from 'iam-client-lib';
+import { MetamaskProviderService } from '../metamask-provider/metamask-provider.service';
 
 describe('LoginService', () => {
   let service: LoginService;
+  let metamaskServiceSpy;
   const iamListenerServiceSpy = jasmine.createSpyObj('IamListenerService', [
     'setListeners',
   ]);
 
   beforeEach(() => {
+    metamaskServiceSpy = jasmine.createSpyObj('MetamaskProviderService', [
+      'importMetamaskConf',
+    ]);
     TestBed.configureTestingModule({
       providers: [
         provideMockStore(),
@@ -25,6 +30,7 @@ describe('LoginService', () => {
         { provide: LoadingService, useValue: loadingServiceSpy },
         { provide: IamService, useValue: iamServiceSpy },
         { provide: IamListenerService, useValue: iamListenerServiceSpy },
+        { provide: MetamaskProviderService, useValue: metamaskServiceSpy },
       ],
     });
     service = TestBed.inject(LoginService);
@@ -61,7 +67,7 @@ describe('LoginService', () => {
       const getSpy = jasmine.createSpy().and.returnValue(ProviderType.MetaMask);
       Object.defineProperty(IamService, 'providerType', { get: getSpy });
 
-      from(service.login()).subscribe(({ success }) => {
+      service.login().subscribe(({ success }) => {
         expect(success).toBe(true);
       });
     })

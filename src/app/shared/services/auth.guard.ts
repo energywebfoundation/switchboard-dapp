@@ -7,26 +7,25 @@ import {
 } from '@angular/router';
 
 import { LoginService } from './login/login.service';
+import { RouterConst } from '../../routes/router-const';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
   constructor(private router: Router, private loginService: LoginService) {}
 
-  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.loginService.isSessionActive()) {
-      if (state.url === 'welcome') {
-        this.router.navigate(['dashboard']);
-      } else if (!state.url.startsWith('/dashboard')) {
-        this.router.navigate(['dashboard'], {
+      if (state.url === RouterConst.Welcome) {
+        this.router.navigate([RouterConst.Dashboard]);
+      } else if (!state.url.startsWith(`/${RouterConst.Dashboard}`)) {
+        this.router.navigate([RouterConst.Dashboard], {
           queryParams: { returnUrl: state.url },
         });
       }
       return true;
     }
 
-    // not logged in so redirect to login page with the return url
-    // this.router.navigate(['welcome'], { queryParams: { returnUrl: state.url } });
-    this.router.navigate(['welcome']);
+    this.router.navigate([RouterConst.Welcome]);
     return false;
   }
 }
