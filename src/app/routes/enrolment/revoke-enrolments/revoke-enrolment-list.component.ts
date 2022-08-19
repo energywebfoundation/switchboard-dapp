@@ -13,12 +13,13 @@ import {
 } from '../../../shared/components/table/generic-table/generic-table.component';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
 import { RevokeService } from '../services/revoke/revoke.service';
-import { CascadingFilterService } from './services/cascading-filter/cascading-filter.service';
+import { CascadingFilterService } from '../../../modules/cascading-filter/services/cascading-filter/cascading-filter.service';
 
 @Component({
   selector: 'app-revoke-enrolment-list',
   templateUrl: './revoke-enrolment-list.component.html',
   styleUrls: ['./revoke-enrolment-list.component.scss'],
+  providers: [CascadingFilterService],
 })
 export class MyRevokablesListComponent implements OnInit {
   @ViewChild('revoke', { static: true }) revoke;

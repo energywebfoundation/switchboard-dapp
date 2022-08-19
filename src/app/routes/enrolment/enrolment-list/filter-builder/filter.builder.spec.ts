@@ -11,6 +11,10 @@ describe('FilterBuilder', () => {
       ]);
     });
 
+    it('should filter list with empty subject and requester', () => {
+      expect(new FilterBuilder([{} as any]).did('did').build()).toEqual([]);
+    });
+
     it('should remove element from list depending on subject property', () => {
       expect(
         new FilterBuilder([
