@@ -262,6 +262,8 @@ export class IamService {
   private getChainConfig(): Partial<ChainConfig> {
     const chainConfig: Partial<ChainConfig> = {
       rpcUrl: this.envService.rpcUrl,
+      claimsRevocationRegistryAddress:
+        '0xd72B4c8D5B1a1A4C7085259548bDF1A175CFc48D',
     };
 
     return chainConfig;
