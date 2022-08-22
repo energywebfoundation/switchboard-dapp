@@ -40,10 +40,10 @@ export class MyEnrolmentListComponent implements OnInit {
   @ViewChild('actions', { static: true }) actions;
   @ViewChild('status', { static: true }) status;
   @Input() list: EnrolmentClaim[];
-
+  @Input() experimentalEnabled: boolean;
+  
   @ViewChild(MatSort) sort: MatSort;
   @Output() refreshList = new EventEmitter<void>();
-  experimentalEnabled: boolean;
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
   enrolmentType = EnrolmentListType.APPLICANT;
@@ -70,10 +70,6 @@ export class MyEnrolmentListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.experimentalEnabled = await this.store
-      .select(SettingsSelectors.isExperimentalEnabled)
-      .pipe(take<boolean>(1))
-      .toPromise();
     this.defineColumns();
   }
 
