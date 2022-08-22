@@ -3,5 +3,4 @@ export enum EnrolmentListType {
   APPLICANT = 'applicant',
   ASSET = 'asset',
   REVOKER = 'revoker',
-  SUBJECT = 'subject',
 }
