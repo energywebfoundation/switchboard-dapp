@@ -12,7 +12,6 @@ import { TokenDecodeService } from './services/token-decode.service';
 export class ViewRequestsComponent {
   private readonly CREDENTIAL = 'Credential';
   private readonly CREDENTIAL_REQUEST = 'Credential Request';
-  headerTitle = this.header;
   requestorFields$ = this.tokenDecodeService.getRequestorFields(
     this.claim?.token
   );
