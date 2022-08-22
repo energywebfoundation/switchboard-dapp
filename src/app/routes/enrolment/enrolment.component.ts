@@ -16,7 +16,7 @@ import {
   SettingsSelectors,
 } from '@state';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { FilterStatus } from './enrolment-list/models/filter-status.enum';
 
 @Component({
@@ -27,6 +27,7 @@ import { FilterStatus } from './enrolment-list/models/filter-status.enum';
 export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
   myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
+  experimentalEnabled: boolean;
   requestedEnrolmentsList$ = this.store.select(
     RequestedEnrolmentsSelectors.getEnrolments
   );
@@ -52,7 +53,11 @@ export class EnrolmentComponent implements AfterViewInit {
     private issuanceVCService: IssuanceVcService
   ) {}
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
+    this.experimentalEnabled = await this.store
+    .select(SettingsSelectors.isExperimentalEnabled)
+    .pipe(take<boolean>(1))
+    .toPromise();
     this.initDefault();
     this.getRevocableList();
     this.getOwnedList();

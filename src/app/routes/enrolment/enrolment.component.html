@@ -30,7 +30,7 @@
           <h4 class="default-color strong my-4">My Enrolments</h4>
         </div>
         <div class="card card-default mb-3 pb-0">
-          <app-my-enrolment-list [list]="myEnrolmentList$ | async" (refreshList)="refreshMyEnrolmentsList()">
+          <app-my-enrolment-list [list]="myEnrolmentList$ | async" (refreshList)="refreshMyEnrolmentsList()" [experimentalEnabled]="experimentalEnabled">
           </app-my-enrolment-list>
         </div>
       </div>
