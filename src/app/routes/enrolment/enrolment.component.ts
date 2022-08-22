@@ -55,9 +55,9 @@ export class EnrolmentComponent implements AfterViewInit {
 
   async ngAfterViewInit(): Promise<void> {
     this.experimentalEnabled = await this.store
-    .select(SettingsSelectors.isExperimentalEnabled)
-    .pipe(take<boolean>(1))
-    .toPromise();
+      .select(SettingsSelectors.isExperimentalEnabled)
+      .pipe(take<boolean>(1))
+      .toPromise();
     this.initDefault();
     this.getRevocableList();
     this.getOwnedList();

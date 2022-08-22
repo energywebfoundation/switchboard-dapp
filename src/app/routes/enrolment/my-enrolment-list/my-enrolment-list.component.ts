@@ -41,7 +41,7 @@ export class MyEnrolmentListComponent implements OnInit {
   @ViewChild('status', { static: true }) status;
   @Input() list: EnrolmentClaim[];
   @Input() experimentalEnabled: boolean;
-  
+
   @ViewChild(MatSort) sort: MatSort;
   @Output() refreshList = new EventEmitter<void>();
   columns: ColumnDefinition[];
