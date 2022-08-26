@@ -25,7 +25,6 @@ export class IssuerRequestsComponent
   userDid$ = this.store.select(userSelectors.getDid);
   roleDefinition: IRoleDefinitionV2;
   expirationTime: number;
-  experimentalEnabled: boolean;
 
   constructor(
     private dialogRef: MatDialogRef<IssuerRequestsComponent>,
@@ -34,7 +33,7 @@ export class IssuerRequestsComponent
     private roleService: RoleService,
     tokenDecodeService: TokenDecodeService,
     @Inject(MAT_DIALOG_DATA)
-    data: { claimData: EnrolmentClaim; experimentalEnabled: boolean }
+    data: { claimData: EnrolmentClaim }
   ) {
     super(data, tokenDecodeService);
   }

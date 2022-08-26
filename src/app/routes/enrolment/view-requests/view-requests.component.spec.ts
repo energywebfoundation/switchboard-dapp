@@ -55,7 +55,6 @@ describe('ViewRequestsComponent', () => {
 
   it('should not show the JSON credential components if the claim is not accepted', () => {
     testClaimData.setData({
-      experimentalEnabled: true,
       claimData: { claimType: 'request-test', isIssued: false },
     });
     fixture.detectChanges();
@@ -73,7 +72,6 @@ describe('ViewRequestsComponent', () => {
           iss: 'string',
         },
       },
-      experimentalEnabled: true,
     });
     fixture.detectChanges();
     const eip191JSON = getElement(hostDebug)('raw-eip191');
@@ -88,7 +86,6 @@ describe('ViewRequestsComponent', () => {
           id: '124',
         },
       },
-      experimentalEnabled: true,
     });
     fixture.detectChanges();
     const credentialJSON = getElement(hostDebug)('raw-credential');
@@ -103,7 +100,6 @@ describe('ViewRequestsComponent', () => {
           id: '124',
         },
       },
-      experimentalEnabled: true,
     });
     fixture.detectChanges();
     expect(component.header).toEqual('Credential');
@@ -117,39 +113,8 @@ describe('ViewRequestsComponent', () => {
           id: '124',
         },
       },
-      experimentalEnabled: true,
     });
     fixture.detectChanges();
     expect(component.header).toEqual('Credential Request');
-  });
-  it('should not show the EIP-712 JSON component if expiremental mode is disabled', () => {
-    testClaimData.setData({
-      claimData: {
-        isIssued: false,
-        claimType: 'request-test',
-        verifiableCredential: {
-          id: '124',
-        },
-      },
-      experimentalEnabled: false,
-    });
-    fixture.detectChanges();
-    const credentialJSON = getElement(hostDebug)('raw-credential');
-    expect(credentialJSON).toBeFalsy();
-  });
-  it('should not show the EIP-191 JSON component if expirimental mode is disabled', () => {
-    testClaimData.setData({
-      claimData: {
-        isIssued: true,
-        claimType: 'request-test',
-        decodedToken: {
-          iss: 'string',
-        },
-      },
-      experimentalEnabled: false,
-    });
-    fixture.detectChanges();
-    const eip191JSON = getElement(hostDebug)('raw-eip191');
-    expect(eip191JSON).toBeFalsy();
   });
 });

@@ -8,6 +8,5 @@ import { Component, Input } from '@angular/core';
 export class CredentialJsonComponent {
   @Input() title: string;
   @Input() credentialData: object;
-  @Input() experimentalEnabled: boolean;
   panelOpenState = false;
 }

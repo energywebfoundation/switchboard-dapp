@@ -38,7 +38,6 @@ export class MyEnrolmentListComponent implements OnInit {
   @ViewChild('actions', { static: true }) actions;
   @ViewChild('status', { static: true }) status;
   @Input() list: EnrolmentClaim[];
-  @Input() experimentalEnabled: boolean;
 
   @ViewChild(MatSort) sort: MatSort;
   @Output() refreshList = new EventEmitter<void>();
@@ -86,7 +85,6 @@ export class MyEnrolmentListComponent implements OnInit {
         data: {
           listType: EnrolmentListType.APPLICANT,
           claimData: element,
-          experimentalEnabled: this.experimentalEnabled,
         },
         maxWidth: '100%',
         disableClose: true,
