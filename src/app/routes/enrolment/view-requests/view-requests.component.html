@@ -20,22 +20,22 @@
       </app-fields>
 
       <app-fields data-qa-id="issuer-fields" title="Issuer fields" [fieldsList]="issuerFields$ | async"> </app-fields>
-      <ng-container *ngIf="claim?.isIssued && claim?.verifiableCredential && expEnabled">
+      <ng-container *ngIf="claim?.isIssued && claim?.verifiableCredential && experimentalEnabled">
         <div class="col-lg-12 mt-2" data-qa-id="raw-credential">
           <app-credential-json
             title="Raw Verifiable Credential (EIP-712 JSON-LD)"
             [credentialData]="claim?.verifiableCredential"
-            expEnabled="expEnabled">
+            experimentalEnabled="experimentalEnabled">
           </app-credential-json>
         </div>
       </ng-container>
 
-      <ng-container *ngIf="claim?.isIssued && claim?.decodedToken && expEnabled">
+      <ng-container *ngIf="claim?.isIssued && claim?.decodedToken && experimentalEnabled">
         <div class="col-lg-12 mt-2" data-qa-id="raw-eip191">
           <app-credential-json
             title="Raw Legacy Energy Web Credential (EIP-191 JWT)"
             [credentialData]="claim?.decodedToken"
-            expEnabled="expEnabled"
+            experimentalEnabled="experimentalEnabled"
             data-qa-id="raw-eip191">
           </app-credential-json>
         </div>

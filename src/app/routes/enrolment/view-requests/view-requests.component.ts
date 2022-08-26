@@ -29,7 +29,7 @@ export class ViewRequestsComponent {
     return this.claim?.isIssued ? this.CREDENTIAL : this.CREDENTIAL_REQUEST;
   }
 
-  get expEnabled() {
+  get experimentalEnabled() {
     return this.data.experimentalEnabled;
   }
 
