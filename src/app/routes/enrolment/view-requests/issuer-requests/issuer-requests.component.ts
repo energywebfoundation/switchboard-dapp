@@ -25,7 +25,6 @@ export class IssuerRequestsComponent
   userDid$ = this.store.select(userSelectors.getDid);
   roleDefinition: IRoleDefinitionV2;
   expirationTime: number;
-  experimentalEnabled: boolean;
 
   constructor(
     private dialogRef: MatDialogRef<IssuerRequestsComponent>,

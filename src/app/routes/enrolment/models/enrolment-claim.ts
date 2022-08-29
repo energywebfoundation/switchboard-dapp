@@ -1,5 +1,3 @@
-import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
-import { ICredentialSubject } from '@sphereon/pex';
 import {
   Claim,
   isRoleCredential,
@@ -92,10 +90,6 @@ export class EnrolmentClaim
       this.isRegisteredOnChain() &&
       !!this._isSyncedOnChain
     );
-  }
-
-  get verifiableCredential(): VerifiableCredential<ICredentialSubject> {
-    return this.iclClaim.vp?.verifiableCredential[0];
   }
 
   get canRevokeOnChain(): boolean {

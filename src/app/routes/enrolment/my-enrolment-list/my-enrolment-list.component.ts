@@ -26,8 +26,6 @@ import {
 } from '../../../shared/components/table/generic-table/generic-table.component';
 import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.enum';
 import { FilterStatus } from '../enrolment-list/models/filter-status.enum';
-import { SettingsSelectors } from '@state';
-import { take } from 'rxjs/operators';
 
 const TOASTR_HEADER = 'Enrolment';
 
@@ -68,7 +66,7 @@ export class MyEnrolmentListComponent implements OnInit {
     isAsset(element);
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.defineColumns();
   }
 

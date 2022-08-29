@@ -1,11 +1,7 @@
 <app-enrolment-list [list]="list" [columDefinitions]="columns" [filterStatuses]="enrolmentViewFilters">
 </app-enrolment-list>
 <ng-template #actions let-element>
-  <app-preview
-    [element]="element"
-    [enrolmentType]="enrolmentType"
-    (refreshList)="updateList()"
-    ></app-preview>
+  <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList()"></app-preview>
 
   <button
     mat-menu-item
