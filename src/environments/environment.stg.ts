@@ -21,7 +21,7 @@ export const environment = {
   currencySymbol: 'VT',
   blockExplorerUrl: 'https://volta-explorer.energyweb.org',
   SENTRY_ENVIRONMENT: 'staging',
-  INFURA_PROJECT_ID: '2DFPGpCSCenFDtdi5xLYZKxoig7',
-  INFURA_PROJECT_SECRET: 'a7a1b8c56a7c79c592600669f15876b1',
+  INFURA_PROJECT_ID: '',
+  INFURA_PROJECT_SECRET: '',
   ...constants,
 };

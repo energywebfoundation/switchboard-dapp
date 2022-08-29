@@ -72,9 +72,10 @@ jobs:
       - name: Build branch
         run: |
           ${{ needs.env_name.outputs.build_script }}
-          npm run setup-sentry
         env:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}
+          INFURA_PROJECT_SECRET: ${{ secrets.INFURA_PROJECT_SECRET }}
       - name: Ensure dist is present
         run: |
           test -d "dist" && echo OK || exit 1
