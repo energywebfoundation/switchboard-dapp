@@ -33,7 +33,7 @@ export class AssetEnrolmentListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   columns: ColumnDefinition[];
   list: EnrolmentClaim[];
-  enrolmentType: EnrolmentListType.ASSET;
+  enrolmentType = EnrolmentListType.ASSET;
 
   constructor(
     private loadingService: LoadingService,

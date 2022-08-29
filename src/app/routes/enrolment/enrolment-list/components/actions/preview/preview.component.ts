@@ -21,7 +21,6 @@ export class PreviewComponent {
   private readonly VIEW_CREDENTIAL = 'View Credential';
   private readonly VIEW_REQUEST = 'View Request';
   @Input() enrolmentType: EnrolmentListType;
-  @Input() experimentalEnabled: boolean;
   @Input() set element(claim: EnrolmentClaim) {
     this.enrolmentClaim = claim;
     this.updateHeader(claim);
@@ -36,7 +35,6 @@ export class PreviewComponent {
       .open(GetPreviewComponent.get(this.enrolmentType), {
         width: '600px',
         data: {
-          experimentalEnabled: this.experimentalEnabled,
           claimData: this.enrolmentClaim,
         },
         maxWidth: '100%',

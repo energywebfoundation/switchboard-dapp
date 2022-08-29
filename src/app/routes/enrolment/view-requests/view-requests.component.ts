@@ -21,16 +21,12 @@ export class ViewRequestsComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    protected data: { claimData: EnrolmentClaim; experimentalEnabled: boolean },
+    protected data: { claimData: EnrolmentClaim },
     protected tokenDecodeService: TokenDecodeService
   ) {}
 
   get header() {
     return this.claim?.isIssued ? this.CREDENTIAL : this.CREDENTIAL_REQUEST;
-  }
-
-  get expEnabled() {
-    return this.data.experimentalEnabled;
   }
 
   get claim() {

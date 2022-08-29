@@ -124,6 +124,14 @@ export class EnrolmentClaim
     );
   }
 
+  get canShowRawEip712(): boolean {
+    return !!this.credential && this.isIssued;
+  }
+
+  get canShowRawEip191(): boolean {
+    return !!this.decodedToken && this.isIssued;
+  }
+
   get canCancelClaimRequest(): boolean {
     return (
       !this.iclClaim.isAccepted &&
