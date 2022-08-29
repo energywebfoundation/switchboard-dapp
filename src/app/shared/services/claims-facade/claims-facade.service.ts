@@ -176,6 +176,13 @@ export class ClaimsFacadeService {
               from(this.setIsRevokedOffChainStatus(enrolment))
             ),
           ])
+        ),
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          forkJoin([
+            ...enrolments.map((enrolment) =>
+              from(this.setDecodedToken(enrolment))
+            ),
+          ])
         )
       );
   }
@@ -221,6 +228,15 @@ export class ClaimsFacadeService {
         );
       })
     );
+  }
+
+  private async setDecodedToken(enrolment: EnrolmentClaim) {
+    if (enrolment.token) {
+      const decodedToken = await this.iamService.didRegistry.decodeJWTToken({
+        token: enrolment.token,
+      });
+      return enrolment.setDecodedToken(decodedToken);
+    }
   }
 
   private async setIsRevokedOffChainStatus(enrolment: EnrolmentClaim) {
