@@ -33,7 +33,7 @@
           <app-my-enrolment-list
             [list]="myEnrolmentList$ | async"
             (refreshList)="refreshMyEnrolmentsList()"
-            [experimentalEnabled]="experimentalEnabled">
+            >
           </app-my-enrolment-list>
         </div>
       </div>
@@ -49,7 +49,7 @@
           <app-revoke-enrolment-list
             [list]="revocableList$ | async"
             (refreshList)="refreshRevocableList()"
-            [experimentalEnabled]="experimentalEnabled">
+            >
           </app-revoke-enrolment-list>
         </div>
       </div>

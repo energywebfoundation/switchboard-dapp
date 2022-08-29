@@ -25,7 +25,6 @@ export class MyRevokablesListComponent implements OnInit {
   @ViewChild('revoke', { static: true }) revoke;
   @ViewChild('status', { static: true }) status;
   @ViewChild('actions', { static: true }) actions;
-  @Input() experimentalEnabled: boolean;
   @Input() set list(list: EnrolmentClaim[]) {
     this.cascadingFilterService.setClaims(list);
   }
