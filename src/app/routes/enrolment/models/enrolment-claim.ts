@@ -1,5 +1,3 @@
-import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
-import { ICredentialSubject } from '@sphereon/pex';
 import {
   Claim,
   isRoleCredential,
@@ -94,10 +92,6 @@ export class EnrolmentClaim
     );
   }
 
-  get verifiableCredential(): VerifiableCredential<ICredentialSubject> {
-    return this.iclClaim.vp?.verifiableCredential[0];
-  }
-
   get canRevokeOnChain(): boolean {
     return this.isSyncedOnChain && !this.isRevokedOnChain;
   }
@@ -122,6 +116,14 @@ export class EnrolmentClaim
       isRoleCredential(this.credential) &&
       !!this.credential?.credentialStatus
     );
+  }
+
+  get canShowRawEip712(): boolean {
+    return !!this.credential && this.isIssued;
+  }
+
+  get canShowRawEip191(): boolean {
+    return !!this.decodedToken && this.isIssued;
   }
 
   get canCancelClaimRequest(): boolean {

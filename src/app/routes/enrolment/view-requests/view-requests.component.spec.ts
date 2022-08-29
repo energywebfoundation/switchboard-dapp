@@ -66,6 +66,7 @@ describe('ViewRequestsComponent', () => {
   it('should show the EIP-191 JSON component if the claim is accepted and has a decoded token', () => {
     testClaimData.setData({
       claimData: {
+        canShowRawEip191: true,
         isIssued: true,
         claimType: 'request-test',
         decodedToken: {
@@ -85,6 +86,7 @@ describe('ViewRequestsComponent', () => {
         verifiableCredential: {
           id: '124',
         },
+        canShowRawEip712: true,
       },
     });
     fixture.detectChanges();
