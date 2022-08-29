@@ -52,7 +52,7 @@ export class EnrolmentComponent implements AfterViewInit {
     private issuanceVCService: IssuanceVcService
   ) {}
 
-  async ngAfterViewInit(): Promise<void> {
+  ngAfterViewInit(): void {
     this.initDefault();
     this.getRevocableList();
     this.getOwnedList();
