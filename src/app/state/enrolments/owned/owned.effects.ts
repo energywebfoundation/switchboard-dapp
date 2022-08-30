@@ -16,6 +16,11 @@ export class OwnedEnrolmentsEffects {
       tap(() => this.loadingService.show()),
       switchMap(() =>
         this.claimsFacade.getClaimsByRequester().pipe(
+          map((claims) => {
+            return claims.filter((claim) => {
+              return claim?.requester === claim?.subject;
+            });
+          }),
           this.getEnrolments(
             OwnedActions.getOwnedEnrolmentsSuccess,
             OwnedActions.getOwnedEnrolmentsFailure
