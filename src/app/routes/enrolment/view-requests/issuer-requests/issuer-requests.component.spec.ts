@@ -26,29 +26,27 @@ describe('IssuerRequestsComponent', () => {
   let roleSpy;
   let dialogMock: DialogDataMock;
   let hostDebug: DebugElement;
-  beforeEach(
-    waitForAsync(() => {
-      dialogMock = new DialogDataMock();
-      issuerRequestServiceSpy = jasmine.createSpyObj(IssuerRequestsService, [
-        'approve',
-        'reject',
-      ]);
-      roleSpy = jasmine.createSpyObj(RoleService, ['getDefinition']);
-      TestBed.configureTestingModule({
-        declarations: [IssuerRequestsComponent],
-        providers: [
-          { provide: TokenDecodeService, useValue: tokenDecodeSpy },
-          { provide: MAT_DIALOG_DATA, useValue: dialogMock },
-          { provide: MatDialogRef, useValue: matDialogRefSpy },
-          { provide: MatDialog, useValue: dialogSpy },
-          { provide: IssuerRequestsService, useValue: issuerRequestServiceSpy },
-          { provide: RoleService, useValue: roleSpy },
-          provideMockStore(),
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    dialogMock = new DialogDataMock();
+    issuerRequestServiceSpy = jasmine.createSpyObj(IssuerRequestsService, [
+      'approve',
+      'reject',
+    ]);
+    roleSpy = jasmine.createSpyObj(RoleService, ['getDefinition']);
+    TestBed.configureTestingModule({
+      declarations: [IssuerRequestsComponent],
+      providers: [
+        { provide: TokenDecodeService, useValue: tokenDecodeSpy },
+        { provide: MAT_DIALOG_DATA, useValue: dialogMock },
+        { provide: MatDialogRef, useValue: matDialogRefSpy },
+        { provide: MatDialog, useValue: dialogSpy },
+        { provide: IssuerRequestsService, useValue: issuerRequestServiceSpy },
+        { provide: RoleService, useValue: roleSpy },
+        provideMockStore(),
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     dialogMock.setData({

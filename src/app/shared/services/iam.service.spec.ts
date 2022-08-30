@@ -7,19 +7,17 @@ import { EkcSettingsService } from '../../modules/connect-to-wallet/ekc-settings
 describe('IamService', () => {
   let service: IamService;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        providers: [
-          IamService,
-          { provide: EnvService, useValue: {} },
-          { provide: EkcSettingsService, useValue: {} },
-        ],
-      });
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        IamService,
+        { provide: EnvService, useValue: {} },
+        { provide: EkcSettingsService, useValue: {} },
+      ],
+    });
 
-      service = TestBed.inject(IamService);
-    })
-  );
+    service = TestBed.inject(IamService);
+  }));
 
   it('should be created', () => {
     expect(service).toBeTruthy();

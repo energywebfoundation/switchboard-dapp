@@ -15,21 +15,19 @@ describe('ValidityPeriodComponent', () => {
   let fixture: ComponentFixture<ValidityPeriodComponent>;
   let hostDebug: DebugElement;
   let nextSpy;
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          MatIconTestingModule,
-          ReactiveFormsModule,
-          MatButtonModule,
-          MatInputModule,
-          NoopAnimationsModule,
-        ],
-        declarations: [ValidityPeriodComponent, TimeDurationPipe],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        MatIconTestingModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatInputModule,
+        NoopAnimationsModule,
+      ],
+      declarations: [ValidityPeriodComponent, TimeDurationPipe],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ValidityPeriodComponent);

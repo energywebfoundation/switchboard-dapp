@@ -21,27 +21,25 @@ describe('ViewRequestsComponent', () => {
   ]);
   let testClaimData: MatDialogDataMock;
   let hostDebug: DebugElement;
-  beforeEach(
-    waitForAsync(() => {
-      testClaimData = new MatDialogDataMock();
-      TestBed.configureTestingModule({
-        declarations: [ViewRequestsComponent],
-        providers: [
-          provideMockStore(),
-          { provide: TokenDecodeService, useValue: tokenDecodeSpy },
-          {
-            provide: MAT_DIALOG_DATA,
-            useValue: testClaimData,
-          },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      })
-        .overrideComponent(ViewRequestsComponent, {
-          set: { changeDetection: ChangeDetectionStrategy.Default },
-        })
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    testClaimData = new MatDialogDataMock();
+    TestBed.configureTestingModule({
+      declarations: [ViewRequestsComponent],
+      providers: [
+        provideMockStore(),
+        { provide: TokenDecodeService, useValue: tokenDecodeSpy },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: testClaimData,
+        },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     })
-  );
+      .overrideComponent(ViewRequestsComponent, {
+        set: { changeDetection: ChangeDetectionStrategy.Default },
+      })
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewRequestsComponent);

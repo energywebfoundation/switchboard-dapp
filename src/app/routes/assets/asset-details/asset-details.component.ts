@@ -27,7 +27,7 @@ export class AssetDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    this.subscription$.next();
+    this.subscription$.next(null);
     this.subscription$.complete();
   }
 

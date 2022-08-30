@@ -25,26 +25,24 @@ describe('DidBookComponent', () => {
   ]);
   let dialogMock: DialogDataMock;
 
-  beforeEach(
-    waitForAsync(() => {
-      dialogMock = new DialogDataMock();
-      TestBed.configureTestingModule({
-        declarations: [DidBookComponent],
-        imports: [
-          ReactiveFormsModule,
-          MatFormFieldModule,
-          MatButtonModule,
-          MatInputModule,
-          NoopAnimationsModule,
-        ],
-        providers: [
-          { provide: DidBookService, useValue: didBookServiceSpy },
-          { provide: MAT_DIALOG_DATA, useValue: dialogMock },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    dialogMock = new DialogDataMock();
+    TestBed.configureTestingModule({
+      declarations: [DidBookComponent],
+      imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatInputModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        { provide: DidBookService, useValue: didBookServiceSpy },
+        { provide: MAT_DIALOG_DATA, useValue: dialogMock },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DidBookComponent);

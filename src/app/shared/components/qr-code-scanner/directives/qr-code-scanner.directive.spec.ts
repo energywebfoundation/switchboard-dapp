@@ -28,21 +28,19 @@ describe('QrCodeScannerDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let hostDebug: DebugElement;
   let qrCodeScannerServiceSpy;
-  beforeEach(
-    waitForAsync(() => {
-      qrCodeScannerServiceSpy = jasmine.createSpyObj(QrCodeScannerService, [
-        'dataFactory',
-      ]);
-      TestBed.configureTestingModule({
-        declarations: [QrCodeScannerDirective, TestComponent],
-        providers: [
-          { provide: MatDialog, useValue: dialogSpy },
-          { provide: QrCodeScannerService, useValue: qrCodeScannerServiceSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    qrCodeScannerServiceSpy = jasmine.createSpyObj(QrCodeScannerService, [
+      'dataFactory',
+    ]);
+    TestBed.configureTestingModule({
+      declarations: [QrCodeScannerDirective, TestComponent],
+      providers: [
+        { provide: MatDialog, useValue: dialogSpy },
+        { provide: QrCodeScannerService, useValue: qrCodeScannerServiceSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);

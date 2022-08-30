@@ -30,25 +30,23 @@ describe('SmartSearchComponent', () => {
     'searchBy',
   ]);
   let hostDebug: DebugElement;
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [SmartSearchComponent],
-        imports: [
-          MatInputModule,
-          ReactiveFormsModule,
-          MatIconTestingModule,
-          MatButtonModule,
-          MatAutocompleteModule,
-          NoopAnimationsModule,
-        ],
-        providers: [
-          { provide: SmartSearchService, useValue: smartSearchServiceSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [SmartSearchComponent],
+      imports: [
+        MatInputModule,
+        ReactiveFormsModule,
+        MatIconTestingModule,
+        MatButtonModule,
+        MatAutocompleteModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        { provide: SmartSearchService, useValue: smartSearchServiceSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SmartSearchComponent);

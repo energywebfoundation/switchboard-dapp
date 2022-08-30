@@ -8,15 +8,13 @@ describe('SystemNotificationsComponent', () => {
   let component: SystemNotificationsComponent;
   let fixture: ComponentFixture<SystemNotificationsComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [SystemNotificationsComponent],
-        imports: [MatMenuModule],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [SystemNotificationsComponent],
+      imports: [MatMenuModule],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SystemNotificationsComponent);

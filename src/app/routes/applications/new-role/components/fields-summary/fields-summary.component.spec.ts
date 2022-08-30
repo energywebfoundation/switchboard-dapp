@@ -7,14 +7,12 @@ describe('FieldsSummaryComponent', () => {
   let component: FieldsSummaryComponent;
   let fixture: ComponentFixture<FieldsSummaryComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [FieldsSummaryComponent],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [FieldsSummaryComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FieldsSummaryComponent);

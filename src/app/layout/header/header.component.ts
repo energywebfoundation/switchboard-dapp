@@ -59,7 +59,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnDestroy(): Promise<void> {
-    this._subscription$.next();
+    this._subscription$.next(null);
     this._subscription$.complete();
   }
 

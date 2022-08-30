@@ -74,7 +74,7 @@ export class ApplicationListComponent
   }
 
   ngOnDestroy(): void {
-    this.subscription$.next();
+    this.subscription$.next(null);
     this.subscription$.complete();
   }
 

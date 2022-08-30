@@ -19,15 +19,13 @@ describe('RoleActionsComponent', () => {
   let hostDebug: DebugElement;
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
   const element = { namespace: '', owner: '' };
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [RoleActionsComponent],
-        providers: [{ provide: MatDialog, useValue: dialogSpy }],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [RoleActionsComponent],
+      providers: [{ provide: MatDialog, useValue: dialogSpy }],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleActionsComponent);

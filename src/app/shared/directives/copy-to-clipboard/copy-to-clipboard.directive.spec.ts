@@ -27,24 +27,22 @@ describe('CopyToClipboardDirective', () => {
   let hostDebug: DebugElement;
   let toastrSpy;
   let clipboardSpy;
-  beforeEach(
-    waitForAsync(() => {
-      toastrSpy = jasmine.createSpyObj('SwitchboardToastrService', [
-        'success',
-        'error',
-      ]);
-      clipboardSpy = jasmine.createSpyObj('Clipboard', ['copy']);
+  beforeEach(waitForAsync(() => {
+    toastrSpy = jasmine.createSpyObj('SwitchboardToastrService', [
+      'success',
+      'error',
+    ]);
+    clipboardSpy = jasmine.createSpyObj('Clipboard', ['copy']);
 
-      TestBed.configureTestingModule({
-        declarations: [CopyToClipboardDirective, TestComponent],
-        providers: [
-          { provide: SwitchboardToastrService, useValue: toastrSpy },
-          { provide: Clipboard, useValue: clipboardSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      declarations: [CopyToClipboardDirective, TestComponent],
+      providers: [
+        { provide: SwitchboardToastrService, useValue: toastrSpy },
+        { provide: Clipboard, useValue: clipboardSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);

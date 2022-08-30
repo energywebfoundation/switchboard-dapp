@@ -34,29 +34,27 @@ describe('NewIssueVCComponent', () => {
   ]);
   let mockDialogData;
   let hostDebug: DebugElement;
-  beforeEach(
-    waitForAsync(() => {
-      mockDialogData = new MockDialogData();
-      TestBed.configureTestingModule({
-        declarations: [NewIssueVcComponent],
-        imports: [
-          ReactiveFormsModule,
-          FormsModule,
-          MatSelectModule,
-          MatFormFieldModule,
-          MatInputModule,
-          NoopAnimationsModule,
-          MatIconTestingModule,
-        ],
-        providers: [
-          { provide: MAT_DIALOG_DATA, useValue: mockDialogData },
-          { provide: MatDialogRef, useValue: dialogSpy },
-          { provide: IssuanceVcService, useValue: issuanceVcServiceSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    mockDialogData = new MockDialogData();
+    TestBed.configureTestingModule({
+      declarations: [NewIssueVcComponent],
+      imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NoopAnimationsModule,
+        MatIconTestingModule,
+      ],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: mockDialogData },
+        { provide: MatDialogRef, useValue: dialogSpy },
+        { provide: IssuanceVcService, useValue: issuanceVcServiceSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NewIssueVcComponent);

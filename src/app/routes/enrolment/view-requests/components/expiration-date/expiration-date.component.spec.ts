@@ -17,23 +17,21 @@ describe('ExpirationDateComponent', () => {
   let hostDebug: DebugElement;
   let baseTime: Date;
   let timezoneSeconds: number;
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [ExpirationDateComponent],
-        imports: [
-          ReactiveFormsModule,
-          MatInputModule,
-          MatIconTestingModule,
-          MatButtonModule,
-          NoopAnimationsModule,
-          MatDatepickerModule,
-          MatNativeDateModule,
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ExpirationDateComponent],
+      imports: [
+        ReactiveFormsModule,
+        MatInputModule,
+        MatIconTestingModule,
+        MatButtonModule,
+        NoopAnimationsModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ExpirationDateComponent);
