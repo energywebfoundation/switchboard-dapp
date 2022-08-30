@@ -24,11 +24,11 @@ import { CascadingFilterService } from '../../../modules/cascading-filter/servic
 export class MyRevokablesListComponent implements OnInit {
   @ViewChild('revoke', { static: true }) revoke;
   @ViewChild('status', { static: true }) status;
+  @ViewChild('actions', { static: true }) actions;
   @Input() set list(list: EnrolmentClaim[]) {
     this.cascadingFilterService.setClaims(list);
   }
   @Output() refreshList = new EventEmitter<void>();
-
   get revokersList$() {
     return this.cascadingFilterService.getList$();
   }
@@ -85,6 +85,11 @@ export class MyRevokablesListComponent implements OnInit {
         field: 'revoke',
         header: 'Revoke',
         customElement: this.revoke,
+      },
+      {
+        type: ColumnType.Actions,
+        field: 'actions',
+        customElement: this.actions,
       },
     ];
   }
