@@ -23,5 +23,7 @@ export const environment = {
   SENTRY_ENVIRONMENT: 'staging',
   INFURA_PROJECT_ID: '',
   INFURA_PROJECT_SECRET: '',
+  idleTime: 900,
+  idleTimeout: 300,
   ...constants,
 };

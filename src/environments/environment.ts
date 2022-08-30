@@ -27,6 +27,8 @@ export const environment = {
   SENTRY_ENVIRONMENT: 'localhost',
   INFURA_PROJECT_ID: '2DFP01RMyiHTTqymIkPlzwWk7CX',
   INFURA_PROJECT_SECRET: '69b837aa674273d7dfa7cf27f8964bc9',
+  idleTime: 900,
+  idleTimeout: 300,
   ...constants,
 };
 
