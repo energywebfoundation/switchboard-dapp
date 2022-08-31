@@ -33,12 +33,7 @@
                 formControlName="enrolFor"
                 (selectionChange)="enrolForSelected($event)">
                 <mat-option class="md-enroll" [ngStyle]="listColor" [value]="EnrolForType.ME">Myself</mat-option>
-                <mat-option
-                  class="md-enroll"
-                  [ngStyle]="listColor"
-                  [value]="EnrolForType.ASSET"
-                  >My Asset
-                </mat-option>
+                <mat-option class="md-enroll" [ngStyle]="listColor" [value]="EnrolForType.ASSET">My Asset </mat-option>
               </mat-select>
             </mat-form-field>
           </div>

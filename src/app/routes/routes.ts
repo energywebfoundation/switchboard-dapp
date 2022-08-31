@@ -27,7 +27,7 @@ export const routes = [
       {
         path: RouterConst.Assets,
         loadChildren: () =>
-          import('./assets/assets.module').then((m) => m.AssetsModule)
+          import('./assets/assets.module').then((m) => m.AssetsModule),
       },
       {
         path: RouterConst.Enrolment,
