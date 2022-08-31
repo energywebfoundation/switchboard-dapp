@@ -3,7 +3,6 @@ import { AuthGuard } from '../shared/services/auth.guard';
 import { RequestClaimComponent } from './registration/request-claim/request-claim.component';
 import { NgModule } from '@angular/core';
 import { NoPreloading, RouterModule } from '@angular/router';
-import { ExperimentalGuard } from '../shared/guards/experimental.guard';
 import { RouterConst } from './router-const';
 
 export const routes = [
@@ -28,8 +27,7 @@ export const routes = [
       {
         path: RouterConst.Assets,
         loadChildren: () =>
-          import('./assets/assets.module').then((m) => m.AssetsModule),
-        canActivate: [ExperimentalGuard],
+          import('./assets/assets.module').then((m) => m.AssetsModule)
       },
       {
         path: RouterConst.Enrolment,

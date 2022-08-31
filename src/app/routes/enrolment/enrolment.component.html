@@ -16,7 +16,6 @@
           <app-requested-enrolment-list
             [list]="requestedEnrolmentsList$ | async"
             [enrolmentStatus]="enrolmentStatus"
-            [showAssets]="isExperimental$ | async"
             (refreshList)="refreshIssuerList()">
           </app-requested-enrolment-list>
         </div>

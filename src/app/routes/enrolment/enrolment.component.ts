@@ -28,7 +28,7 @@ export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
   myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
   requestedEnrolmentsList$ = this.store.select(
-    RequestedEnrolmentsSelectors.getEnrolments
+    RequestedEnrolmentsSelectors.getAllEnrolments
   );
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
   revocableList$ = this.store.select(

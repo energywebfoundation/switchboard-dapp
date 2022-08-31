@@ -85,7 +85,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   isLoading = false;
   rolePreconditionList: PreconditionCheck[] = [];
   public roleType: string;
-  experimentalEnabled: boolean;
 
   userRoleList: FormClaim[];
   private namespace: string;
@@ -140,11 +139,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   }
 
   async ngOnInit() {
-    this.experimentalEnabled = await this.store
-      .select(SettingsSelectors.isExperimentalEnabled)
-      .pipe(take<boolean>(1))
-      .toPromise();
-
     this.activeRoute.queryParams.subscribe(async (params: any) => {
       this.cleanUpSwal();
       this.loadingService.show();
@@ -491,15 +485,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         // No Buttons
         config['buttons'] = false;
       }
-    }
-
-    if (
-      !this.experimentalEnabled &&
-      config &&
-      config['buttons'] &&
-      config['buttons'][SwalButtons.ENROL_FOR_ASSET]
-    ) {
-      delete config['buttons'][SwalButtons.ENROL_FOR_ASSET];
     }
     return config;
   }

@@ -9,7 +9,6 @@
       </a>
     </div>
     <ul class="menu-top navbar-nav mx-auto flex-row align-items-center" *ngIf="isNavMenuVisible">
-      <ng-container *ngIf="isExperimentalEnabled$ | async">
         <li
           class="nav-item position-relative"
           [ngClass]="{ active: currentNav.includes('assets') }"
@@ -20,9 +19,7 @@
             </div>
             <h6 class="mb-0">Assets</h6>
           </a>
-          <mat-icon class="experimental-warning" matTooltip="This feature is experimental"> report_problem</mat-icon>
         </li>
-      </ng-container>
       <li class="nav-item" [ngClass]="{ active: currentNav.includes('governance') }" data-qa-id="header-governance">
         <a class="nav-link d-lg-block d-xl-block cursor-pointer link-footer" routerLink="/governance">
           <div class="icon-footer-center">
