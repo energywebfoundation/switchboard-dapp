@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -15,22 +16,23 @@ import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
 import { Store } from '@ngrx/store';
 import { RoleActions, RoleSelectors } from '@state';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { EnvService } from '../../../shared/services/env/env.service';
+import { CascadingFilterService } from '@modules';
+import { DomainUtils } from '@utils';
 
 @Component({
   selector: 'app-role-list',
   templateUrl: './role-list.component.html',
   styleUrls: ['./role-list.component.scss'],
+  providers: [CascadingFilterService],
 })
 export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild(MatSort) sort: MatSort;
+  @Input() predefinedFilters: { organization: string; application: string };
 
+  @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource([]);
   readonly displayedColumns = ['name', 'type', 'namespace', 'actions'];
-
-  filters$ = this.store.select(RoleSelectors.getFilters);
-  isFilterVisible$ = this.store.select(RoleSelectors.isFilterVisible);
 
   private subscription$ = new Subject();
 
@@ -38,12 +40,16 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
     private dialog: MatDialog,
     private fb: FormBuilder,
     private store: Store,
-    private envService: EnvService
+    private envService: EnvService,
+    private cascadingFilterService: CascadingFilterService
   ) {}
 
   ngOnInit(): void {
     this.setData();
     this.getList();
+    this.store
+      .select(RoleSelectors.getList)
+      .subscribe((list) => this.cascadingFilterService.setItems(list));
   }
 
   isOrgType(type: string): boolean {
@@ -107,8 +113,8 @@ export class RoleListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private setData(): void {
-    this.store
-      .select(RoleSelectors.getFilteredList)
+    this.cascadingFilterService
+      .getList$()
       .pipe(takeUntil(this.subscription$))
       .subscribe((list) => {
         this.dataSource.data = list;

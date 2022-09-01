@@ -19,13 +19,7 @@ describe('ApplicationListComponent', () => {
   let fixture: ComponentFixture<ApplicationListComponent>;
   let store: MockStore;
   const setup = () => {
-    store.overrideSelector(ApplicationSelectors.getFilteredList, []);
-    store.overrideSelector(ApplicationSelectors.getFilters, {
-      organization: '',
-      application: '',
-      role: '',
-    });
-    store.overrideSelector(ApplicationSelectors.isFilterVisible, false);
+    store.overrideSelector(ApplicationSelectors.getList, []);
     fixture.detectChanges();
   };
   beforeEach(waitForAsync(() => {
@@ -37,7 +31,6 @@ describe('ApplicationListComponent', () => {
         { provide: LoadingService, useValue: loadingServiceSpy },
         { provide: SwitchboardToastrService, useValue: toastrSpy },
         { provide: IamService, useValue: iamServiceSpy },
-        { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
         provideMockStore(),
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -66,7 +59,7 @@ describe('ApplicationListComponent', () => {
 
       expect(eventSpy).toHaveBeenCalledWith({
         listType: ListType.ROLE,
-        organization: 'test',
+        organization: 'test.iam.ewc',
         application: 'testapp',
       });
     });
@@ -80,21 +73,10 @@ describe('ApplicationListComponent', () => {
 
       expect(eventSpy).toHaveBeenCalledWith({
         listType: ListType.ROLE,
-        organization: 'suborg.test',
+        organization: 'suborg.test.iam.ewc',
         application: 'testapp',
       });
     });
-  });
-
-  it('should dispatch updateFilters action when calling filter method', () => {
-    const dispatchSpy = spyOn(store, 'dispatch');
-    setup();
-    const filters = { organization: '123', application: 'test', role: '' };
-    component.filter(filters);
-
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      ApplicationActions.updateFilters({ filters, namespace: 'iam.ewc' })
-    );
   });
 
   it('should refresh list after successful edition', () => {

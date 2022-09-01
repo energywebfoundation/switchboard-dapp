@@ -8,6 +8,7 @@ import { IRole } from 'iam-client-lib';
 import { of } from 'rxjs';
 import { RoleService } from './services/role.service';
 import { EnvService } from '../../../shared/services/env/env.service';
+import { DomainUtils } from '@utils';
 
 @Injectable()
 export class RoleEffects {
@@ -16,6 +17,14 @@ export class RoleEffects {
       ofType(RoleActions.getList),
       switchMap(() =>
         this.roleService.getRoleList().pipe(
+          map((items) =>
+            items.map((item) => ({
+              ...item,
+              organization: DomainUtils.getOrgName(item.namespace) ?? '',
+              application: DomainUtils.getAppName(item.namespace) ?? '',
+              roleName: item.name ?? '',
+            }))
+          ),
           map((list: IRole[]) =>
             RoleActions.getListSuccess({
               list,

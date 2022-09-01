@@ -7,7 +7,7 @@ export class DomainUtils {
    * @param domain
    */
   static getParentNamespace(domain: string): string {
-    return domain.split(`.${NamespaceType.Role}.`).pop();
+    return domain?.split(`.${NamespaceType.Role}.`).pop();
   }
 
   /**
@@ -16,12 +16,12 @@ export class DomainUtils {
    */
   static getRoleNamespace(domain: string): string {
     return `${NamespaceType.Role}.${domain
-      .split(`.${NamespaceType.Role}.`)
-      .pop()}`;
+      ?.split(`.${NamespaceType.Role}.`)
+      ?.pop()}`;
   }
 
   static getRoleNameFromDomain(domain: string): string {
-    return domain.split(`.${NamespaceType.Role}.`).shift();
+    return domain?.split(`.${NamespaceType.Role}.`)?.shift();
   }
 
   static addRoleNameToNamespace(roleName: string, namespace: string): string {
@@ -29,6 +29,21 @@ export class DomainUtils {
   }
 
   static getOrgName(domain: string): string {
-    return domain.split(`.${NamespaceType.Application}.`).pop();
+    return domain
+      ?.split(`.${NamespaceType.Role}.`)
+      ?.pop()
+      ?.split(`.${NamespaceType.Application}.`)
+      ?.pop();
+  }
+
+  static getAppName(domain: string): string {
+    if (!domain?.includes(`.${NamespaceType.Application}.`)) {
+      return '';
+    }
+    return domain
+      ?.split(`.${NamespaceType.Role}.`)
+      ?.pop()
+      ?.split(`.${NamespaceType.Application}.`)
+      ?.shift();
   }
 }

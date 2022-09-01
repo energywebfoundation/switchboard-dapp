@@ -11,16 +11,16 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3">
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showOrgFilter">
     <mat-label class="pr-2">Namespace</mat-label>
     <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
       <input
         matInput
         autocomplete="off"
-        [formControl]="organization"
         type="text"
         placeholder="Organization"
         data-qa-id="org-filter"
+        [formControl]="organization"
         [matAutocomplete]="organizationAutocomplete"
         maxlength="256" />
       <mat-autocomplete #organizationAutocomplete>
@@ -30,15 +30,15 @@
       </mat-autocomplete>
     </mat-form-field>
   </div>
-  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3">
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showAppFilter">
     <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
       <input
         matInput
         autocomplete="off"
-        [formControl]="application"
         type="text"
         placeholder="Application"
         data-qa-id="app-filter"
+        [formControl]="application"
         [matAutocomplete]="applicationAutocomplete"
         maxlength="256" />
       <mat-autocomplete #applicationAutocomplete>
@@ -48,15 +48,15 @@
       </mat-autocomplete>
     </mat-form-field>
   </div>
-  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3">
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showRoleFilter">
     <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
       <input
         matInput
         autocomplete="off"
-        [formControl]="roleName"
         type="text"
-        placeholder="Claim name"
         data-qa-id="role-name-filter"
+        [formControl]="roleName"
+        [placeholder]="rolePlaceholder"
         [matAutocomplete]="roleNameAutocomplete"
         maxlength="256" />
       <mat-autocomplete #roleNameAutocomplete>
@@ -66,13 +66,13 @@
       </mat-autocomplete>
     </mat-form-field>
   </div>
-  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showDID">
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showDIDFilter">
     <mat-label class="pr-2">Requestor</mat-label>
     <mat-form-field
       appearance="outline"
       class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
       matTooltip="Filter by did - it will search through Requestor DID and Asset Did">
-      <input matInput placeholder="DID" [formControl]="did" />
+      <input matInput placeholder="DID" data-qa-id="did-filter" [formControl]="did" />
       <button
         matSuffix
         mat-icon-button
@@ -83,5 +83,14 @@
         <mat-icon>qr_code_2</mat-icon>
       </button>
     </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showResetFilter">
+    <button
+      mat-stroked-button
+      class="btn btn-small mb-0 mt-2 mt-lg-0 mb-md-2 mb-lg-0"
+      data-qa-id="filter-reset"
+      (click)="resetFilters()">
+      Clear Filters
+    </button>
   </div>
 </div>

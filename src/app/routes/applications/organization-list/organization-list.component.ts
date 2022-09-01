@@ -33,7 +33,8 @@ const MAX_TOOLTIP_SUBORG_ITEMS = 5;
 export class OrganizationListComponent
   implements OnInit, OnDestroy, AfterViewInit
 {
-  @Output() updateFilter = new EventEmitter<any>();
+  @Output() updateAppFilter = new EventEmitter<any>();
+  @Output() updateRoleFilter = new EventEmitter<any>();
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -90,20 +91,16 @@ export class OrganizationListComponent
   }
 
   viewApps(data: any) {
-    this.updateFilter.emit({
+    this.updateAppFilter.emit({
       listType: ListType.APP,
-      organization: data.namespace.split(
-        `.${this.envService.rootNamespace}`
-      )[0],
+      organization: data.namespace,
     });
   }
 
   viewRoles(data: any) {
-    this.updateFilter.emit({
+    this.updateRoleFilter.emit({
       listType: ListType.ROLE,
-      organization: data.namespace.split(
-        `.${this.envService.rootNamespace}`
-      )[0],
+      organization: data.namespace,
     });
   }
 

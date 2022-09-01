@@ -7,6 +7,9 @@ import {
 import { EnrolmentClaimAbstract } from './enrolment-claim.abstract';
 import { IEnrolmentClaim } from './enrolment-claim.interface';
 import { ExpirationStatus } from './expiration-statys.enum';
+import { FilterStatus } from '../enrolment-list/models/filter-status.enum';
+import { DomainUtils } from '@utils';
+
 export class EnrolmentClaim
   extends EnrolmentClaimAbstract
   implements IEnrolmentClaim
@@ -22,6 +25,7 @@ export class EnrolmentClaim
   isRevokedOffChain: boolean;
   decodedToken: string | { [key: string]: any };
   createdAt: string;
+  status: FilterStatus;
 
   private _isSyncedOnChain: boolean;
   private _isSyncedOffChain: boolean;
@@ -192,18 +196,15 @@ export class EnrolmentClaim
     this.defineApplication();
     this.defineExpirationStatus();
     this.defineExpirationDate();
+    this.defineStatus();
   }
 
   private defineRoleName(): void {
-    this.roleName = this.claimType?.split(`.${NamespaceType.Role}.`)?.shift();
+    this.roleName = DomainUtils.getRoleNameFromDomain(this.claimType);
   }
 
   private defineOrganization(): void {
-    this.organization = this.claimType
-      ?.split(`.${NamespaceType.Role}.`)
-      .pop()
-      ?.split(`.${NamespaceType.Application}.`)
-      .pop();
+    this.organization = DomainUtils.getOrgName(this.claimType);
   }
 
   private defineApplication(): void {
@@ -211,11 +212,7 @@ export class EnrolmentClaim
       this.application = '';
       return;
     }
-    this.application = this.claimType
-      ?.split(`.${NamespaceType.Role}.`)
-      ?.pop()
-      ?.split(`.${NamespaceType.Application}.`)
-      ?.shift();
+    this.application = DomainUtils.getAppName(this.claimType);
   }
 
   private defineRequestDate(): void {
@@ -232,9 +229,45 @@ export class EnrolmentClaim
     }
   }
 
-  private defineExpirationDate() {
+  private defineExpirationDate(): void {
     this.expirationDate = this.iclClaim.expirationTimestamp
       ? new Date(parseInt(this.iclClaim.expirationTimestamp))
       : null;
+  }
+
+  private defineStatus(): void {
+    this.status = this.defineEnrolmentStatus();
+  }
+
+  private defineEnrolmentStatus(): FilterStatus {
+    if (this.isPending) {
+      return FilterStatus.Pending;
+    }
+
+    if (this.isRejected) {
+      return FilterStatus.Rejected;
+    }
+
+    if (this.isAccepted) {
+      return FilterStatus.Approved;
+    }
+
+    if (
+      this.isRevokedOnChain &&
+      (!this.isRevocableOffChain || this.isRevokedOffChain)
+    ) {
+      return FilterStatus.Revoked;
+    }
+
+    if (!this.isRevoked) {
+      return FilterStatus.NotRevoked;
+    }
+
+    if (this.isRevokedOffChain && !this.isRevokedOnChain) {
+      return FilterStatus.RevokedOffChainOnly;
+    }
+    if (this.isExpired) {
+      return FilterStatus.Expired;
+    }
   }
 }

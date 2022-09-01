@@ -48,12 +48,20 @@ describe('ApplicationEffects', () => {
     scheduler.run(({ cold, hot, expectObservable }) => {
       actions$ = hot('-a', { a: ApplicationActions.getList });
       iamServiceSpy.getENSTypesByOwner.and.returnValue(
-        cold('--a|', { a: [{ namespace: 'test' }] })
+        cold('--a|', { a: [{ namespace: 'test', name: 'app' }] })
       );
 
       expectObservable(effects.getList$).toBe('---c', {
         c: ApplicationActions.getListSuccess({
-          list: [{ namespace: 'test', containsRoles: false }] as any as IApp[],
+          list: [
+            {
+              namespace: 'test',
+              name: 'app',
+              organization: 'test',
+              application: 'app',
+              containsRoles: false,
+            },
+          ] as any as IApp[],
           namespace: 'iam.ewc',
         }),
       });
@@ -74,6 +82,8 @@ describe('ApplicationEffects', () => {
               namespace: 'test',
               roles: [{}],
               containsRoles: true,
+              organization: 'test',
+              application: '',
             },
           ] as any as IApp[],
           namespace: 'iam.ewc',

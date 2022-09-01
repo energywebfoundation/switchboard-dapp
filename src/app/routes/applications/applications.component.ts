@@ -18,7 +18,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 import {
-  ApplicationActions,
   OrganizationActions,
   OrganizationSelectors,
   RoleActions,
@@ -50,17 +49,15 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isAppShown = false;
   isRoleShown = false;
-  isFilterShown = false;
   isIamEwcOwner = false;
 
-  showFilter = {
-    org: false,
-    app: false,
-    role: false,
+  applicationFilters = {
+    organization: '',
   };
-  defaultFilterOptions = {
-    app: undefined,
-    role: undefined,
+
+  roleFilters = {
+    organization: '',
+    application: '',
   };
 
   ListType = ListType;
@@ -160,43 +157,36 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  toggleFilter(listType: string) {
-    switch (listType) {
-      case ListType.ORG:
-        this.showFilter.org = !this.showFilter.org;
-        break;
-      case ListType.APP:
-        this.store.dispatch(ApplicationActions.toggleFilters());
-        break;
-      case ListType.ROLE:
-        this.store.dispatch(RoleActions.toggleFilters());
-        break;
-    }
+  updateRoleFilter(filters: {
+    listType: any;
+    organization: string;
+    application?: string;
+  }) {
+    console.log(filters);
+    this.roleFilters = {
+      organization: filters.organization,
+      application: filters?.application || '',
+    };
+    this.setTab(filters.listType);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateFilter(filterOptions: any) {
+  updateAppFilter(filters: {
+    listType: any;
+    organization: string;
+    application?: string;
+  }) {
+    this.applicationFilters = { organization: filters.organization };
+    this.setTab(filters.listType);
+  }
+
+  setTab(listType): void {
     let tabIdx = 0;
-    switch (filterOptions.listType) {
+    switch (listType) {
       case ListType.APP:
         tabIdx = 1;
-        this.store.dispatch(
-          ApplicationActions.updateFilters({
-            filters: filterOptions,
-            namespace: this.envService.rootNamespace,
-          })
-        );
-        this.store.dispatch(ApplicationActions.showFilters());
         break;
       case ListType.ROLE:
         tabIdx = 2;
-        this.store.dispatch(
-          RoleActions.updateFilters({
-            filters: filterOptions,
-            namespace: this.envService.rootNamespace,
-          })
-        );
-        this.store.dispatch(RoleActions.showFilters());
         break;
     }
 
@@ -205,6 +195,5 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private cleanFilters(): void {
     this.store.dispatch(RoleActions.cleanUpFilters());
-    this.store.dispatch(ApplicationActions.cleanUpFilters());
   }
 }

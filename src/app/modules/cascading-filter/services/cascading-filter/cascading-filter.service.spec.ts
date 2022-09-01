@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CascadingFilterService } from './cascading-filter.service';
+import { CascadingFilterService } from '@modules';
 import { EnrolmentClaim } from '../../../../routes/enrolment/models/enrolment-claim';
 import { FilterStatus } from '../../../../routes/enrolment/enrolment-list/models/filter-status.enum';
 
@@ -9,25 +9,20 @@ const CLAIMS = [
     application: 'application',
     organization: 'firstorg.iam.ewc',
     roleName: 'firstrole',
-    isPending: true,
-    isRejected: false,
+    status: FilterStatus.Pending,
     subject: 'first-did',
   },
   {
     organization: 'second.iam.ewc',
     roleName: 'secondrole',
-    isPending: false,
-    isRejected: true,
+    status: FilterStatus.Rejected,
     subject: 'second-did',
   },
   {
     organization: 'thirdorg.iam.ewc',
     roleName: 'thirdrole',
     application: 'app',
-    isPending: false,
-    isRejected: false,
-    isAccepted: true,
-    isRevoked: false,
+    status: FilterStatus.Approved,
     subject: 'third-did',
   },
 ] as EnrolmentClaim[];
@@ -48,8 +43,8 @@ describe('CascadingFilterService', () => {
 
   describe('setClaims', () => {
     it('should update filters when setting new list', (done) => {
-      service.setClaims([...CLAIMS]);
-      service.setClaims([]);
+      service.setItems([...CLAIMS]);
+      service.setItems([]);
       service.getOrganizations$().subscribe((list) => {
         expect(list.length).toEqual(0);
         done();
@@ -59,7 +54,7 @@ describe('CascadingFilterService', () => {
 
   describe('check setOrganizationFilter', () => {
     beforeEach(() => {
-      service.setClaims([...CLAIMS]);
+      service.setItems([...CLAIMS]);
     });
 
     it('should display all organizations names when setting empty filter', (done) => {
@@ -108,7 +103,7 @@ describe('CascadingFilterService', () => {
 
   describe('check setApplicationFilter', () => {
     beforeEach(() => {
-      service.setClaims([...CLAIMS]);
+      service.setItems([...CLAIMS]);
     });
     it('should display all application names when setting empty filter', (done) => {
       service.setApplicationFilter('');
@@ -148,7 +143,7 @@ describe('CascadingFilterService', () => {
 
   describe('check setRoleFilter', () => {
     beforeEach(() => {
-      service.setClaims([...CLAIMS]);
+      service.setItems([...CLAIMS]);
     });
 
     it('should get all roleNames when setting empty filter', (done) => {
@@ -171,7 +166,7 @@ describe('CascadingFilterService', () => {
 
   describe('check getList$', () => {
     beforeEach(() => {
-      service.setClaims([...CLAIMS]);
+      service.setItems([...CLAIMS]);
     });
 
     it('should get all Claims', (done) => {
@@ -222,7 +217,9 @@ describe('CascadingFilterService', () => {
       service.setStatus(FilterStatus.Pending);
       service.getList$().subscribe((list) => {
         expect(list.length).toEqual(1);
-        expect(list).toEqual(CLAIMS.filter((claim) => claim.isPending));
+        expect(list).toEqual(
+          CLAIMS.filter((claim) => claim.status === FilterStatus.Pending)
+        );
         done();
       });
     });
@@ -242,7 +239,7 @@ describe('CascadingFilterService', () => {
 
   describe('check setStatus', () => {
     beforeEach(() => {
-      service.setClaims([...CLAIMS]);
+      service.setItems([...CLAIMS]);
     });
 
     it('should return all claims when setting default filter', (done) => {
