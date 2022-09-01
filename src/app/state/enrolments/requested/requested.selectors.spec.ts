@@ -1,7 +1,6 @@
 import { Claim } from 'iam-client-lib';
 import { EnrolmentClaim } from 'src/app/routes/enrolment/models/enrolment-claim';
 import * as RequestedSelectors from './requested.selectors';
-import { getEnrolments } from './requested.selectors';
 
 describe('Requested Enrolments Selectors', () => {
   describe('getEnrolments', () => {
@@ -10,17 +9,6 @@ describe('Requested Enrolments Selectors', () => {
       claimType: 'claimType',
       requester: 'requester',
     };
-    it('should remove assets when experimental is disabled', () => {
-      expect(
-        RequestedSelectors.getEnrolments.projector(false, [asset])
-      ).toEqual([]);
-    });
-
-    it('should return entire list when experimental is enabled', () => {
-      expect(RequestedSelectors.getEnrolments.projector(true, [asset])).toEqual(
-        [asset]
-      );
-    });
   });
 
   describe('getPendingEnrolmentsAmount', () => {

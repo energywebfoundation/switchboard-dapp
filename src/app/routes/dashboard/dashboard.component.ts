@@ -16,9 +16,6 @@ import { RouterConst } from '../router-const';
 export class DashboardComponent implements AfterViewInit {
   userName$ = this.store.select(userSelectors.getUserName);
   userDid$ = this.store.select(userSelectors.getDid);
-  isExperimentalEnabled$ = this.store.select(
-    SettingsSelectors.isExperimentalEnabled
-  );
 
   constructor(
     private route: Router,
