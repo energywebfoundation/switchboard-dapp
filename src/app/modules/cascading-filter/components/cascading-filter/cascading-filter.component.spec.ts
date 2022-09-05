@@ -24,40 +24,35 @@ describe('CascadingFilterComponent', () => {
   let component: CascadingFilterComponent;
   let fixture: ComponentFixture<CascadingFilterComponent>;
   let cascadingFilterServiceSpy;
-  beforeEach(
-    waitForAsync(() => {
-      cascadingFilterServiceSpy = jasmine.createSpyObj(
-        'CascadingFilterService',
-        [
-          'setOrganizationFilter',
-          'setApplicationFilter',
-          'setRoleFilter',
-          'getOrganizations$',
-          'getApplications$',
-          'getRoleNames$',
-        ]
-      );
+  beforeEach(waitForAsync(() => {
+    cascadingFilterServiceSpy = jasmine.createSpyObj('CascadingFilterService', [
+      'setOrganizationFilter',
+      'setApplicationFilter',
+      'setRoleFilter',
+      'getOrganizations$',
+      'getApplications$',
+      'getRoleNames$',
+    ]);
 
-      TestBed.configureTestingModule({
-        declarations: [CascadingFilterComponent],
-        imports: [
-          MatInputModule,
-          ReactiveFormsModule,
-          MatIconTestingModule,
-          MatButtonModule,
-          MatAutocompleteModule,
-          NoopAnimationsModule,
-        ],
-        providers: [
-          {
-            provide: CascadingFilterService,
-            useValue: cascadingFilterServiceSpy,
-          },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      declarations: [CascadingFilterComponent],
+      imports: [
+        MatInputModule,
+        ReactiveFormsModule,
+        MatIconTestingModule,
+        MatButtonModule,
+        MatAutocompleteModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        {
+          provide: CascadingFilterService,
+          useValue: cascadingFilterServiceSpy,
+        },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CascadingFilterComponent);

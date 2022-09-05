@@ -6,13 +6,11 @@ describe('SmartSearchOptionComponent', () => {
   let component: SmartSearchOptionComponent;
   let fixture: ComponentFixture<SmartSearchOptionComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [SmartSearchOptionComponent],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [SmartSearchOptionComponent],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SmartSearchOptionComponent);

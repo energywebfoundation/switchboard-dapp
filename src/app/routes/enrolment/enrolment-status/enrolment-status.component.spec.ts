@@ -6,13 +6,11 @@ describe('EnrolmentStatusComponent', () => {
   let component: EnrolmentStatusComponent;
   let fixture: ComponentFixture<EnrolmentStatusComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [EnrolmentStatusComponent],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [EnrolmentStatusComponent],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EnrolmentStatusComponent);

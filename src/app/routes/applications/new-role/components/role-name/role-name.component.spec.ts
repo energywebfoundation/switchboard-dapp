@@ -28,24 +28,22 @@ describe('RoleNameComponent', () => {
   ]);
   let hostDebug: DebugElement;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [RoleNameComponent, DomainTypePipe],
-        imports: [
-          MatIconTestingModule,
-          ReactiveFormsModule,
-          MatButtonModule,
-          MatInputModule,
-          NoopAnimationsModule,
-        ],
-        providers: [
-          { provide: RoleCreationService, useValue: roleCreationServiceSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [RoleNameComponent, DomainTypePipe],
+      imports: [
+        MatIconTestingModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatInputModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        { provide: RoleCreationService, useValue: roleCreationServiceSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleNameComponent);

@@ -22,25 +22,23 @@ describe('OrganizationListComponent', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [OrganizationListComponent],
-        providers: [
-          { provide: MatDialog, useValue: {} },
-          { provide: LoadingService, useValue: {} },
-          { provide: IamService, useValue: {} },
-          { provide: SwitchboardToastrService, useValue: {} },
-          { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
-          provideMockStore(),
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [OrganizationListComponent],
+      providers: [
+        { provide: MatDialog, useValue: {} },
+        { provide: LoadingService, useValue: {} },
+        { provide: IamService, useValue: {} },
+        { provide: SwitchboardToastrService, useValue: {} },
+        { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
+        provideMockStore(),
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
-      store = TestBed.inject(MockStore);
-      dispatchSpy = spyOn(store, 'dispatch');
-    })
-  );
+    store = TestBed.inject(MockStore);
+    dispatchSpy = spyOn(store, 'dispatch');
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(OrganizationListComponent);

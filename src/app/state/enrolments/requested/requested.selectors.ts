@@ -15,18 +15,6 @@ export const getAllEnrolments = createSelector(
   (state) => state.enrolments
 );
 
-export const getEnrolments = createSelector(
-  isExperimentalEnabled,
-  getAllEnrolments,
-  (isExperimental, allEnrolments) => {
-    if (!isExperimental) {
-      return removeAssetsFromList(allEnrolments);
-    }
-
-    return allEnrolments;
-  }
-);
-
 export const getPendingEnrolmentsAmount = createSelector(
   getAllEnrolments,
   (enrolments) => {

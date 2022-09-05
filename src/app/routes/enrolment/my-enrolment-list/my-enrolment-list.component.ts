@@ -41,7 +41,6 @@ export class MyEnrolmentListComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @Output() refreshList = new EventEmitter<void>();
-
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
   enrolmentType = EnrolmentListType.APPLICANT;

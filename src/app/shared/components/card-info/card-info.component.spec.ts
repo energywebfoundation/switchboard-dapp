@@ -10,15 +10,13 @@ describe('CardInfoComponent', () => {
   let fixture: ComponentFixture<CardInfoComponent>;
   let hostDebug: DebugElement;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [MatIconTestingModule],
-        declarations: [CardInfoComponent],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [MatIconTestingModule],
+      declarations: [CardInfoComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CardInfoComponent);

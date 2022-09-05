@@ -9,13 +9,11 @@ describe('UserNameComponent', () => {
   let fixture: ComponentFixture<UserNameComponent>;
   let hostDebug: DebugElement;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [UserNameComponent],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [UserNameComponent],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserNameComponent);

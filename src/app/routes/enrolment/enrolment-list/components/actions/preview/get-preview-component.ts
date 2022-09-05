@@ -5,4 +5,5 @@ import { ViewRequestsComponent } from '../../../../view-requests/view-requests.c
 export const GetPreviewComponent = new Map()
   .set(EnrolmentListType.ISSUER, IssuerRequestsComponent)
   .set(EnrolmentListType.ASSET, ViewRequestsComponent)
-  .set(EnrolmentListType.APPLICANT, ViewRequestsComponent);
+  .set(EnrolmentListType.APPLICANT, ViewRequestsComponent)
+  .set(EnrolmentListType.REVOKER, ViewRequestsComponent);

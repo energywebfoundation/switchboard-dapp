@@ -8,15 +8,13 @@ describe('RoleFieldComponent', () => {
   let component: RoleFieldComponent;
   let fixture: ComponentFixture<RoleFieldComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [RoleFieldComponent],
-        imports: [MatButtonModule],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [RoleFieldComponent],
+      imports: [MatButtonModule],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleFieldComponent);

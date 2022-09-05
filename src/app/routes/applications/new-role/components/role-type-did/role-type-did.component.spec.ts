@@ -14,21 +14,19 @@ describe('RoleTypeDidComponent', () => {
   let component: RoleTypeDidComponent;
   let fixture: ComponentFixture<RoleTypeDidComponent>;
   let hostDebug: DebugElement;
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [RoleTypeDidComponent],
-        imports: [
-          ReactiveFormsModule,
-          MatButtonModule,
-          MatInputModule,
-          MatIconTestingModule,
-          NoopAnimationsModule,
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [RoleTypeDidComponent],
+      imports: [
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatInputModule,
+        MatIconTestingModule,
+        NoopAnimationsModule,
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleTypeDidComponent);

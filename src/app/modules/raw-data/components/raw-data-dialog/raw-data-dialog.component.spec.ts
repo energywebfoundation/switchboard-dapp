@@ -9,15 +9,13 @@ describe('RawDataDialogComponent', () => {
   let fixture: ComponentFixture<RawDataDialogComponent>;
   let dialogMock: DialogDataMock;
 
-  beforeEach(
-    waitForAsync(() => {
-      dialogMock = new DialogDataMock();
-      TestBed.configureTestingModule({
-        declarations: [RawDataDialogComponent],
-        providers: [{ provide: MAT_DIALOG_DATA, useValue: dialogMock }],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    dialogMock = new DialogDataMock();
+    TestBed.configureTestingModule({
+      declarations: [RawDataDialogComponent],
+      providers: [{ provide: MAT_DIALOG_DATA, useValue: dialogMock }],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RawDataDialogComponent);

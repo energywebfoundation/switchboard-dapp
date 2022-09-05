@@ -26,26 +26,26 @@ export class DidBookService {
   }
 
   add(record: Partial<DidBookRecord>) {
-    this.httpDidBook.add(record).subscribe(
-      (newRecord: DidBookRecord) => {
+    this.httpDidBook.add(record).subscribe({
+      next: (newRecord: DidBookRecord) => {
         this.list.next([...this.list.value, newRecord]);
         this.toastr.success('New DID Address has been added', TOASTR_HEADER);
       },
-      (error) => this.toastr.error(error.message)
-    );
+      error: (error) => this.toastr.error(error.message),
+    });
   }
 
   delete(id: string) {
-    this.httpDidBook.delete(id).subscribe(
-      () => {
+    this.httpDidBook.delete(id).subscribe({
+      next: () => {
         this.list.next(this.removeFromList(id));
         this.toastr.success(
           'DID Address has been successfully removed',
           TOASTR_HEADER
         );
       },
-      (error) => this.toastr.error(error.message)
-    );
+      error: (error) => this.toastr.error(error.message),
+    });
   }
 
   exist(did: string): boolean {

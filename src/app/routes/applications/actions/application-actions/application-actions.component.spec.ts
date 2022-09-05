@@ -25,16 +25,14 @@ describe('ApplicationActionsComponent', () => {
     owner: '',
     containsRoles: true,
   };
-  beforeEach(
-    waitForAsync(() => {
-      dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
-      TestBed.configureTestingModule({
-        declarations: [ApplicationActionsComponent],
-        providers: [{ provide: MatDialog, useValue: dialogSpy }],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
+    TestBed.configureTestingModule({
+      declarations: [ApplicationActionsComponent],
+      providers: [{ provide: MatDialog, useValue: dialogSpy }],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ApplicationActionsComponent);

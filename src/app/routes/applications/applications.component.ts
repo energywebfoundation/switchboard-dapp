@@ -89,7 +89,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription$.next();
+    this.subscription$.next(null);
     this.subscription$.complete();
     this.cleanFilters();
   }

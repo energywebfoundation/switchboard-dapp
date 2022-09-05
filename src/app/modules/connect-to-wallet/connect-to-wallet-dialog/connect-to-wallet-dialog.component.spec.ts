@@ -28,20 +28,18 @@ describe('ConnectToWalletDialogComponent', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [ConnectToWalletDialogComponent],
-        providers: [
-          provideMockStore(),
-          { provide: MAT_DIALOG_DATA, useValue: { navigateOnTimeout: true } },
-          { provide: EnvService, useValue: {} },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-      store = TestBed.inject(MockStore);
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ConnectToWalletDialogComponent],
+      providers: [
+        provideMockStore(),
+        { provide: MAT_DIALOG_DATA, useValue: { navigateOnTimeout: true } },
+        { provide: EnvService, useValue: {} },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+    store = TestBed.inject(MockStore);
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConnectToWalletDialogComponent);

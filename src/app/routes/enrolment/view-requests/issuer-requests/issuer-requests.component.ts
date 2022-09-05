@@ -32,7 +32,8 @@ export class IssuerRequestsComponent
     private issuerRequestsService: IssuerRequestsService,
     private roleService: RoleService,
     tokenDecodeService: TokenDecodeService,
-    @Inject(MAT_DIALOG_DATA) data: { claimData: EnrolmentClaim }
+    @Inject(MAT_DIALOG_DATA)
+    data: { claimData: EnrolmentClaim }
   ) {
     super(data, tokenDecodeService);
   }

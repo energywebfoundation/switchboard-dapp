@@ -15,22 +15,20 @@ describe('SetRoleTypeDidsOrNameComponent', () => {
   let fixture: ComponentFixture<SetRoleTypeDidsOrNameComponent>;
   let hostDebug: DebugElement;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [SetRoleTypeDidsOrNameComponent],
-        imports: [
-          ReactiveFormsModule,
-          FormsModule,
-          MatSelectModule,
-          MatFormFieldModule,
-          MatInputModule,
-          NoopAnimationsModule,
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [SetRoleTypeDidsOrNameComponent],
+      imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NoopAnimationsModule,
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SetRoleTypeDidsOrNameComponent);

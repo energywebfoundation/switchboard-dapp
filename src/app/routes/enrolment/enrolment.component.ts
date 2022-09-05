@@ -18,7 +18,6 @@ import {
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 import { filter } from 'rxjs/operators';
 import { FilterStatus } from './enrolment-list/models/filter-status.enum';
-import { EnrolmentClaim } from './models/enrolment-claim';
 
 @Component({
   selector: 'app-enrolment',
@@ -29,7 +28,7 @@ export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
   myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
   requestedEnrolmentsList$ = this.store.select(
-    RequestedEnrolmentsSelectors.getEnrolments
+    RequestedEnrolmentsSelectors.getAllEnrolments
   );
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
   revocableList$ = this.store.select(
@@ -56,6 +55,7 @@ export class EnrolmentComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.initDefault();
     this.getRevocableList();
+    this.getOwnedList();
     this.activeRoute.queryParams
       .pipe(filter((queryParams) => !!queryParams))
       .subscribe(async (queryParams: any) => {
@@ -170,5 +170,9 @@ export class EnrolmentComponent implements AfterViewInit {
 
   private getRevocableList(): void {
     this.store.dispatch(RevocableEnrolmentsActions.getRevocableEnrolments());
+  }
+
+  private getOwnedList(): void {
+    this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
   }
 }

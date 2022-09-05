@@ -46,36 +46,30 @@ describe('OrganizationEffects', () => {
       actions$ = new ReplaySubject(1);
     });
 
-    it(
-      'should dispatch success action',
-      waitForAsync(() => {
-        actions$.next(OrganizationActions.getList());
-        organizationServiceSpy.getOrganizationList.and.returnValue(of([]));
+    it('should dispatch success action', waitForAsync(() => {
+      actions$.next(OrganizationActions.getList());
+      organizationServiceSpy.getOrganizationList.and.returnValue(of([]));
 
-        effects.getList$.subscribe((resultAction) => {
-          expect(resultAction).toEqual(
-            OrganizationActions.getListSuccess({ list: [] })
-          );
-        });
-      })
-    );
-
-    it(
-      'should dispatch failure action',
-      waitForAsync(() => {
-        actions$.next(OrganizationActions.getList());
-        organizationServiceSpy.getOrganizationList.and.returnValue(
-          throwError({ message: 'error' })
+      effects.getList$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          OrganizationActions.getListSuccess({ list: [] })
         );
+      });
+    }));
 
-        effects.getList$.subscribe((resultAction) => {
-          expect(toastrSpy.error).toHaveBeenCalled();
-          expect(resultAction).toEqual(
-            OrganizationActions.getListFailure({ error: 'error' })
-          );
-        });
-      })
-    );
+    it('should dispatch failure action', waitForAsync(() => {
+      actions$.next(OrganizationActions.getList());
+      organizationServiceSpy.getOrganizationList.and.returnValue(
+        throwError({ message: 'error' })
+      );
+
+      effects.getList$.subscribe((resultAction) => {
+        expect(toastrSpy.error).toHaveBeenCalled();
+        expect(resultAction).toEqual(
+          OrganizationActions.getListFailure({ error: 'error' })
+        );
+      });
+    }));
   });
 
   describe('updateHistory$', () => {
@@ -83,88 +77,79 @@ describe('OrganizationEffects', () => {
       actions$ = new ReplaySubject(1);
     });
 
-    it(
-      'should dispatch success actions with history and organization',
-      waitForAsync(() => {
-        actions$.next(
-          OrganizationActions.setHistory({
-            element: { namespace: 'test' } as any,
+    it('should dispatch success actions with history and organization', waitForAsync(() => {
+      actions$.next(
+        OrganizationActions.setHistory({
+          element: { namespace: 'test' } as any,
+        })
+      );
+      organizationServiceSpy.getHistory.and.returnValue(
+        of({ namespace: 'test', subOrgs: [{ namespace: 'suborg' }] })
+      );
+
+      effects.updateHistory$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          OrganizationActions.setHistorySuccess({
+            history: [{ namespace: 'suborg' } as any],
+            element: {
+              namespace: 'test',
+              subOrgs: [{ namespace: 'suborg' }],
+            } as any,
           })
         );
-        organizationServiceSpy.getHistory.and.returnValue(
-          of({ namespace: 'test', subOrgs: [{ namespace: 'suborg' }] })
-        );
+      });
+    }));
+    it('should filter not owned organizations', waitForAsync(() => {
+      actions$.next(
+        OrganizationActions.setHistory({
+          element: { namespace: 'test' } as any,
+        })
+      );
+      organizationServiceSpy.getHistory.and.returnValue(
+        of({
+          namespace: 'test',
+          owner: '123',
+          subOrgs: [
+            { namespace: 'suborg', owner: '123' },
+            { namespace: 'suborg2', owner: '321' },
+          ],
+        })
+      );
 
-        effects.updateHistory$.subscribe((resultAction) => {
-          expect(resultAction).toEqual(
-            OrganizationActions.setHistorySuccess({
-              history: [{ namespace: 'suborg' } as any],
-              element: {
-                namespace: 'test',
-                subOrgs: [{ namespace: 'suborg' }],
-              } as any,
-            })
-          );
-        });
-      })
-    );
-    it(
-      'should filter not owned organizations',
-      waitForAsync(() => {
-        actions$.next(
-          OrganizationActions.setHistory({
-            element: { namespace: 'test' } as any,
+      effects.updateHistory$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          OrganizationActions.setHistorySuccess({
+            history: [{ namespace: 'suborg', owner: '123' } as any],
+            element: {
+              namespace: 'test',
+              owner: '123',
+              subOrgs: [
+                { namespace: 'suborg', owner: '123' },
+                { namespace: 'suborg2', owner: '321' },
+              ],
+            } as any,
           })
         );
-        organizationServiceSpy.getHistory.and.returnValue(
-          of({
-            namespace: 'test',
-            owner: '123',
-            subOrgs: [
-              { namespace: 'suborg', owner: '123' },
-              { namespace: 'suborg2', owner: '321' },
-            ],
-          })
-        );
+      });
+    }));
 
-        effects.updateHistory$.subscribe((resultAction) => {
-          expect(resultAction).toEqual(
-            OrganizationActions.setHistorySuccess({
-              history: [{ namespace: 'suborg', owner: '123' } as any],
-              element: {
-                namespace: 'test',
-                owner: '123',
-                subOrgs: [
-                  { namespace: 'suborg', owner: '123' },
-                  { namespace: 'suborg2', owner: '321' },
-                ],
-              } as any,
-            })
-          );
-        });
-      })
-    );
+    it('should dispatch failure action', waitForAsync(() => {
+      actions$.next(
+        OrganizationActions.setHistory({
+          element: { namespace: 'test' } as any,
+        })
+      );
+      organizationServiceSpy.getHistory.and.returnValue(
+        throwError({ message: 'error' })
+      );
 
-    it(
-      'should dispatch failure action',
-      waitForAsync(() => {
-        actions$.next(
-          OrganizationActions.setHistory({
-            element: { namespace: 'test' } as any,
-          })
+      effects.updateHistory$.subscribe((resultAction) => {
+        expect(toastrSpy.error).toHaveBeenCalled();
+        expect(resultAction).toEqual(
+          OrganizationActions.setHistoryFailure({ error: 'error' })
         );
-        organizationServiceSpy.getHistory.and.returnValue(
-          throwError({ message: 'error' })
-        );
-
-        effects.updateHistory$.subscribe((resultAction) => {
-          expect(toastrSpy.error).toHaveBeenCalled();
-          expect(resultAction).toEqual(
-            OrganizationActions.setHistoryFailure({ error: 'error' })
-          );
-        });
-      })
-    );
+      });
+    }));
   });
 
   describe('updateSelectedOrganizationAfterEdit$', () => {
@@ -172,40 +157,30 @@ describe('OrganizationEffects', () => {
       actions$ = new ReplaySubject(1);
     });
 
-    it(
-      'should get organization list when updating main organizations',
-      waitForAsync(() => {
-        actions$.next(OrganizationActions.updateSelectedOrgAfterEdit());
-        store.overrideSelector(
-          OrganizationSelectors.getLastHierarchyOrg,
-          undefined
-        );
-        effects.updateSelectedOrganizationAfterEdit$.subscribe(
-          (resultAction) => {
-            expect(resultAction).toEqual(OrganizationActions.getList());
-          }
-        );
-      })
-    );
+    it('should get organization list when updating main organizations', waitForAsync(() => {
+      actions$.next(OrganizationActions.updateSelectedOrgAfterEdit());
+      store.overrideSelector(
+        OrganizationSelectors.getLastHierarchyOrg,
+        undefined
+      );
+      effects.updateSelectedOrganizationAfterEdit$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(OrganizationActions.getList());
+      });
+    }));
 
-    it(
-      'should get history of organization when updating sub organization',
-      waitForAsync(() => {
-        actions$.next(OrganizationActions.updateSelectedOrgAfterEdit());
-        store.overrideSelector(OrganizationSelectors.getLastHierarchyOrg, {
-          namespace: 'test',
-        } as any);
-        effects.updateSelectedOrganizationAfterEdit$.subscribe(
-          (resultAction) => {
-            expect(resultAction).toEqual(
-              OrganizationActions.setHistory({
-                element: { namespace: 'test' } as any,
-              })
-            );
-          }
+    it('should get history of organization when updating sub organization', waitForAsync(() => {
+      actions$.next(OrganizationActions.updateSelectedOrgAfterEdit());
+      store.overrideSelector(OrganizationSelectors.getLastHierarchyOrg, {
+        namespace: 'test',
+      } as any);
+      effects.updateSelectedOrganizationAfterEdit$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          OrganizationActions.setHistory({
+            element: { namespace: 'test' } as any,
+          })
         );
-      })
-    );
+      });
+    }));
   });
 
   describe('updateSelectedOrganizationAfterTransfer$', () => {
@@ -213,42 +188,32 @@ describe('OrganizationEffects', () => {
       actions$ = new ReplaySubject(1);
     });
 
-    it(
-      'should get organization list when transferring main organizations',
-      waitForAsync(() => {
-        actions$.next(OrganizationActions.updateSelectedOrgAfterEdit());
-        store.overrideSelector(
-          OrganizationSelectors.getLastHierarchyOrg,
-          undefined
-        );
-        store.overrideSelector(OrganizationSelectors.getHierarchyLength, 0);
-        effects.updateSelectedOrganizationAfterEdit$.subscribe(
-          (resultAction) => {
-            expect(resultAction).toEqual(OrganizationActions.getList());
-          }
-        );
-      })
-    );
+    it('should get organization list when transferring main organizations', waitForAsync(() => {
+      actions$.next(OrganizationActions.updateSelectedOrgAfterEdit());
+      store.overrideSelector(
+        OrganizationSelectors.getLastHierarchyOrg,
+        undefined
+      );
+      store.overrideSelector(OrganizationSelectors.getHierarchyLength, 0);
+      effects.updateSelectedOrganizationAfterEdit$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(OrganizationActions.getList());
+      });
+    }));
 
-    it(
-      'should get history of organization when transferring sub organization',
-      waitForAsync(() => {
-        actions$.next(OrganizationActions.updateSelectedOrgAfterEdit());
-        store.overrideSelector(OrganizationSelectors.getLastHierarchyOrg, {
-          namespace: 'test',
-        } as any);
-        store.overrideSelector(OrganizationSelectors.getHierarchyLength, 1);
-        effects.updateSelectedOrganizationAfterEdit$.subscribe(
-          (resultAction) => {
-            expect(resultAction).toEqual(
-              OrganizationActions.setHistory({
-                element: { namespace: 'test' } as any,
-              })
-            );
-          }
+    it('should get history of organization when transferring sub organization', waitForAsync(() => {
+      actions$.next(OrganizationActions.updateSelectedOrgAfterEdit());
+      store.overrideSelector(OrganizationSelectors.getLastHierarchyOrg, {
+        namespace: 'test',
+      } as any);
+      store.overrideSelector(OrganizationSelectors.getHierarchyLength, 1);
+      effects.updateSelectedOrganizationAfterEdit$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          OrganizationActions.setHistory({
+            element: { namespace: 'test' } as any,
+          })
         );
-      })
-    );
+      });
+    }));
   });
 
   describe('createSubOrganization$', () => {
@@ -256,24 +221,21 @@ describe('OrganizationEffects', () => {
       actions$ = new ReplaySubject(1);
     });
 
-    it(
-      'should dispatch setHistory action after closing dialog when successfully created a sub org',
-      waitForAsync(() => {
-        actions$.next(
-          OrganizationActions.createSub({
-            org: { namespace: 'parentOrg' } as any,
+    it('should dispatch setHistory action after closing dialog when successfully created a sub org', waitForAsync(() => {
+      actions$.next(
+        OrganizationActions.createSub({
+          org: { namespace: 'parentOrg' } as any,
+        })
+      );
+      dialogSpy.open.and.returnValue({ afterClosed: () => of(true) });
+
+      effects.createSubOrganization$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          OrganizationActions.setHistory({
+            element: { namespace: 'parentOrg' } as any,
           })
         );
-        dialogSpy.open.and.returnValue({ afterClosed: () => of(true) });
-
-        effects.createSubOrganization$.subscribe((resultAction) => {
-          expect(resultAction).toEqual(
-            OrganizationActions.setHistory({
-              element: { namespace: 'parentOrg' } as any,
-            })
-          );
-        });
-      })
-    );
+      });
+    }));
   });
 });

@@ -29,20 +29,18 @@ describe('ConnectButtonsComponent', () => {
     component.metamaskDisabled = options.metamaskDisabled;
     fixture.detectChanges();
   };
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [ConnectButtonsComponent],
-        providers: [
-          {
-            provide: MetamaskProviderService,
-            useValue: metamaskProviderServiceSpy,
-          },
-          { provide: EkcSettingsService, useValue: ekcSettingsServiceSpy },
-        ],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ConnectButtonsComponent],
+      providers: [
+        {
+          provide: MetamaskProviderService,
+          useValue: metamaskProviderServiceSpy,
+        },
+        { provide: EkcSettingsService, useValue: ekcSettingsServiceSpy },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConnectButtonsComponent);

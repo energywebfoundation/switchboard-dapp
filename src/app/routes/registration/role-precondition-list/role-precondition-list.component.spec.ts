@@ -13,21 +13,19 @@ describe('RolePreconditionListComponent', () => {
   let fixture: ComponentFixture<RolePreconditionListComponent>;
   let publishRoleServiceSpy;
   let hostDebug: DebugElement;
-  beforeEach(
-    waitForAsync(() => {
-      publishRoleServiceSpy = jasmine.createSpyObj('PublishRoleService', [
-        'addToDidDoc',
-      ]);
-      TestBed.configureTestingModule({
-        imports: [MatIconTestingModule],
-        declarations: [RolePreconditionListComponent],
-        providers: [
-          { provide: PublishRoleService, useValue: publishRoleServiceSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    publishRoleServiceSpy = jasmine.createSpyObj('PublishRoleService', [
+      'addToDidDoc',
+    ]);
+    TestBed.configureTestingModule({
+      imports: [MatIconTestingModule],
+      declarations: [RolePreconditionListComponent],
+      providers: [
+        { provide: PublishRoleService, useValue: publishRoleServiceSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RolePreconditionListComponent);

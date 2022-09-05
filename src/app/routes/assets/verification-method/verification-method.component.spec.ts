@@ -31,23 +31,21 @@ describe('VerificationMethodComponent component tests', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [VerificationMethodComponent, TypeAlgorithmPipe],
-        imports: [DidFormatMinifierModule],
-        providers: [
-          { provide: MAT_DIALOG_DATA, useValue: { id: 1 } },
-          {
-            provide: MatDialogRef,
-            useValue: matDialogRefSpy,
-          },
-          { provide: VerificationService, useValue: verificationServiceSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [VerificationMethodComponent, TypeAlgorithmPipe],
+      imports: [DidFormatMinifierModule],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: { id: 1 } },
+        {
+          provide: MatDialogRef,
+          useValue: matDialogRefSpy,
+        },
+        { provide: VerificationService, useValue: verificationServiceSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(VerificationMethodComponent);
@@ -109,33 +107,31 @@ describe('VerificationMethodComponent with html', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [VerificationMethodComponent, TypeAlgorithmPipe],
-        imports: [
-          ReactiveFormsModule,
-          MatInputModule,
-          MatSelectModule,
-          MatFormFieldModule,
-          NoopAnimationsModule,
-          FormsModule,
-          MatIconTestingModule,
-          MatPaginatorModule,
-          DidFormatMinifierModule,
-        ],
-        providers: [
-          { provide: MAT_DIALOG_DATA, useValue: { id: 1 } },
-          {
-            provide: MatDialogRef,
-            useValue: matDialogRefSpy,
-          },
-          { provide: VerificationService, useValue: verificationServiceSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [VerificationMethodComponent, TypeAlgorithmPipe],
+      imports: [
+        ReactiveFormsModule,
+        MatInputModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        NoopAnimationsModule,
+        FormsModule,
+        MatIconTestingModule,
+        MatPaginatorModule,
+        DidFormatMinifierModule,
+      ],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: { id: 1 } },
+        {
+          provide: MatDialogRef,
+          useValue: matDialogRefSpy,
+        },
+        { provide: VerificationService, useValue: verificationServiceSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(VerificationMethodComponent);

@@ -7,7 +7,6 @@ import {
 import { EnrolmentClaimAbstract } from './enrolment-claim.abstract';
 import { IEnrolmentClaim } from './enrolment-claim.interface';
 import { ExpirationStatus } from './expiration-statys.enum';
-
 export class EnrolmentClaim
   extends EnrolmentClaimAbstract
   implements IEnrolmentClaim
@@ -21,6 +20,7 @@ export class EnrolmentClaim
 
   isRevokedOnChain: boolean;
   isRevokedOffChain: boolean;
+  decodedToken: string | { [key: string]: any };
   createdAt: string;
 
   private _isSyncedOnChain: boolean;
@@ -118,6 +118,14 @@ export class EnrolmentClaim
     );
   }
 
+  get canShowRawEip712(): boolean {
+    return !!this.credential && this.isIssued;
+  }
+
+  get canShowRawEip191(): boolean {
+    return !!this.decodedToken && this.isIssued;
+  }
+
   get canCancelClaimRequest(): boolean {
     return (
       !this.iclClaim.isAccepted &&
@@ -127,8 +135,17 @@ export class EnrolmentClaim
     );
   }
 
+  get isIssued(): boolean {
+    return this.iclClaim.isAccepted && !this.iclClaim.isRejected;
+  }
+
   setIsRevokedOnChain(isRevoked: boolean): EnrolmentClaim {
     this.isRevokedOnChain = isRevoked;
+    return this;
+  }
+
+  setDecodedToken(token: string | { [key: string]: any }) {
+    this.decodedToken = token;
     return this;
   }
 

@@ -11,19 +11,17 @@ describe('AddSingleRecordComponent', () => {
   let fixture: ComponentFixture<AddSingleRecordComponent>;
   const didBookServiceSpy = jasmine.createSpyObj(DidBookService, ['add']);
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [AddSingleRecordComponent],
-        providers: [
-          { provide: DidBookService, useValue: didBookServiceSpy },
-          { provide: MatDialogRef, useValue: dialogSpy },
-          { provide: MAT_DIALOG_DATA, useValue: { did: 'did' } },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [AddSingleRecordComponent],
+      providers: [
+        { provide: DidBookService, useValue: didBookServiceSpy },
+        { provide: MatDialogRef, useValue: dialogSpy },
+        { provide: MAT_DIALOG_DATA, useValue: { did: 'did' } },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AddSingleRecordComponent);

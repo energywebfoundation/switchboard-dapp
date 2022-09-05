@@ -505,4 +505,57 @@ describe('EnrolmentClaim tests', () => {
       ).toEqual('app');
     });
   });
+  describe('canShowRawEip712', () => {
+    it('should return true when the claim is issued and there is a credential', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          isRejected: false,
+          vp: { verifiableCredential: [{ credentialStatus: {} }] },
+        } as Claim).canShowRawEip712
+      ).toBeTrue();
+    });
+    it('should return false when the claim is not issued', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: false,
+          isRejected: false,
+        } as Claim).canShowRawEip712
+      ).toBeFalse();
+    });
+    it('should return true when the claim is issued and there is no credential', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          isRejected: false,
+        } as Claim).canShowRawEip712
+      ).toBeFalse();
+    });
+  });
+  describe('canShowRawEip191', () => {
+    it('should return true when the claim is accepted and there is a decoded token', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          isRejected: false,
+        } as Claim).setDecodedToken({ token: 'token' }).canShowRawEip191
+      ).toBeTrue();
+    });
+    it('should return false when the claim is not accepted and there is a decoded token', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: false,
+          isRejected: false,
+        } as Claim).setDecodedToken({ token: 'token' }).canShowRawEip191
+      ).toBeFalse();
+    });
+    it('should return false when the claim does not have a decoded token', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          isRejected: false,
+        } as Claim).canShowRawEip191
+      ).toBeFalse();
+    });
+  });
 });

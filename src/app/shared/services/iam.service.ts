@@ -153,7 +153,7 @@ export class IamService {
     );
   }
 
-  getAssetById(id) {
+  getAssetById(id: string) {
     return this.wrapWithLoadingService(
       this.assetsService.getAssetById({ id }),
       { message: 'Getting selected asset data...' }

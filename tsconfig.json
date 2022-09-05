@@ -22,6 +22,7 @@
     "paths": {
       "@state": ["src/app/state/index"],
       "@operators": ["src/app/operators/index"],
+      "@modules": ["src/app/modules/index"],
       "@tests": ["src/app/tests/index"],
       "@utils": ["src/app/utils/index"]
     }
