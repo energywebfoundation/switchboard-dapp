@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { HexValidators } from '@utils';
+import { HexValidators, ListValidator } from '@utils';
 import { DidBookRecord } from '../models/did-book-record';
 
 @Component({
@@ -19,6 +19,12 @@ import { DidBookRecord } from '../models/did-book-record';
 export class DidBookFormComponent implements OnInit {
   @Input() did: string;
   @Input() label: string;
+  @Input() set existingDIDs(dids: string[]) {
+    if (!dids) {
+      return;
+    }
+    this.form.get('did').addValidators(ListValidator.stringExist(dids));
+  }
   @Output() add = new EventEmitter<Partial<DidBookRecord>>();
   @Output() cancel = new EventEmitter<Partial<DidBookRecord>>();
 
@@ -49,6 +55,10 @@ export class DidBookFormComponent implements OnInit {
   reject() {
     this.cancel.emit();
     this.form.reset();
+  }
+
+  getDIDError(errorCode: string) {
+    return this.form.get('did').hasError(errorCode);
   }
 
   private clear(): void {

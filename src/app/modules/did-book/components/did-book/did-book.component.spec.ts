@@ -4,14 +4,13 @@ import { DidBookComponent } from './did-book.component';
 import { DidBookService } from '../../services/did-book.service';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
-import { dispatchInputEvent, getElement } from '@tests';
+import { DialogDataMock, dispatchInputEvent, getElement } from '@tests';
 import { skip } from 'rxjs/operators';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { DialogDataMock } from '../../../../tests/mocks/dialog-data-mock';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 describe('DidBookComponent', () => {
@@ -22,6 +21,7 @@ describe('DidBookComponent', () => {
     'add',
     'delete',
     'getList$',
+    'getDIDList$',
   ]);
   let dialogMock: DialogDataMock;
 
@@ -48,6 +48,7 @@ describe('DidBookComponent', () => {
     fixture = TestBed.createComponent(DidBookComponent);
     component = fixture.componentInstance;
     hostDebug = fixture.debugElement;
+    didBookServiceSpy.getDIDList$.and.returnValue(of([]));
   });
 
   it('should create', () => {
