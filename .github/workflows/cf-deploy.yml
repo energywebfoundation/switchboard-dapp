@@ -95,9 +95,9 @@ jobs:
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
       - name: ping - dispatching initiating repository event
+        if: github.ref == 'refs/heads/develop'
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/develop" ]; then
-            curl -X POST https://api.github.com/repos/energywebfoundation/switchboard-e2e/dispatches \
-            -H 'Accept: application/vnd.github.everest-preview+json' \
-            -u ${{ secrets.ACCESS_TOKEN }} \
-            --data '{"event_type": "ping", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+          curl -X POST https://api.github.com/repos/energywebfoundation/switchboard-e2e/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.ACCESS_TOKEN }} \
+          --data '{"event_type": "ping", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
