@@ -50,56 +50,24 @@ describe('ClaimsFacadeService', () => {
         claimType: createClaimType(claimType),
       } as Claim);
     };
-
-    it('should return empty list when getting empty list', async () => {
-      claimsServiceSpy.getUserClaims.and.returnValue(Promise.resolve([]));
-      expect(await service.addStatusIfIsSyncedOffChain([])).toEqual([]);
-    });
-
-    it('should return not changed list when UserClaims is empty', async () => {
-      claimsServiceSpy.getUserClaims.and.returnValue(Promise.resolve([]));
-      expect(
-        await service.addStatusIfIsSyncedOffChain([createClaim('123')])
-      ).toEqual([
-        jasmine.objectContaining({
-          claimType: createClaimType('123'),
-          isSyncedOffChain: false,
-        }),
-      ]);
-    });
-
-    it('should return list with object containing isSynced property', async () => {
+    it('should return true for isSyncedOffChain if the claim type matches the subject claims', async () => {
       const claimType = createClaimType('123');
       claimsServiceSpy.getUserClaims.and.returnValue(
         Promise.resolve([{ claimType }])
       );
       expect(
-        await service.addStatusIfIsSyncedOffChain([
-          createClaim('123'),
-          createClaim('111'),
-        ])
-      ).toEqual([
-        jasmine.objectContaining({ claimType, isSyncedOffChain: true }),
-        jasmine.objectContaining({
-          claimType: createClaimType('111'),
-          isSyncedOffChain: false,
-        }),
-      ]);
+        await service.addStatusIfIsSyncedOffChain(createClaim('123'))
+      ).toEqual(jasmine.objectContaining({ isSyncedOffChain: true }));
     });
 
-    it('should not change list when claimType do not match', async () => {
+    it('should return false for isSyncedOffChain if the claim type does not match the subject claims', async () => {
+      const claimType = createClaimType('12');
       claimsServiceSpy.getUserClaims.and.returnValue(
-        Promise.resolve([{ claimType: createClaimType('12') }])
+        Promise.resolve([{ claimType }])
       );
-
       expect(
-        await service.addStatusIfIsSyncedOffChain([createClaim('123')])
-      ).toEqual([
-        jasmine.objectContaining({
-          claimType: createClaimType('123'),
-          isSyncedOffChain: false,
-        }),
-      ]);
+        await service.addStatusIfIsSyncedOffChain(createClaim('123'))
+      ).toEqual(jasmine.objectContaining({ isSyncedOffChain: false }));
     });
   });
 

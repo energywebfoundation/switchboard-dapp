@@ -57,12 +57,12 @@ export class ClaimsFacadeService {
     );
   }
 
-  hasOnChainRole(role: string, version: number) {
-    return this.iamService.claimsService.hasOnChainRole(
-      this.iamService.signerService.did,
-      role,
-      version
-    );
+  hasOnChainRole(
+    role: string,
+    version: number,
+    subject = this.iamService.signerService.did
+  ) {
+    return this.iamService.claimsService.hasOnChainRole(subject, role, version);
   }
 
   getClaimsBySubject(did) {
@@ -84,13 +84,10 @@ export class ClaimsFacadeService {
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
-  async addStatusIfIsSyncedOnChain(
-    enrolment: EnrolmentClaim,
-    requesterIsDid = true
-  ) {
+  async addStatusIfIsSyncedOnChain(enrolment: EnrolmentClaim) {
     if (enrolment.isRegisteredOnChain()) {
       const hasOnChainRole = await this.iamService.claimsService.hasOnChainRole(
-        requesterIsDid ? this.iamService.signerService.did : enrolment.subject,
+        enrolment.subject,
         enrolment.claimType,
         +enrolment.claimTypeVersion
       );
@@ -100,12 +97,11 @@ export class ClaimsFacadeService {
   }
 
   getClaimsByRevoker(): Observable<EnrolmentClaim[]> {
-    const requesterIsDid = false;
     return from(
       this.iamService.claimsService.getClaimsByRevoker({
         did: this.iamService.signerService.did,
       })
-    ).pipe(this.createEnrolmentClaimsFromClaims(requesterIsDid));
+    ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
   getClaimsByIssuer(): Observable<EnrolmentClaim[]> {
@@ -150,7 +146,7 @@ export class ClaimsFacadeService {
     return from(this.iamService.claimsService.registerOnchain(claim));
   }
 
-  private createEnrolmentClaimsFromClaims(requesterIsDid = true) {
+  private createEnrolmentClaimsFromClaims() {
     return (source: Observable<Claim[]>) =>
       source.pipe(
         map((claims) => claims.filter((claim) => isValidDID(claim.subject))),
@@ -158,12 +154,9 @@ export class ClaimsFacadeService {
           claims.map((claim: Claim) => new EnrolmentClaim(claim))
         ),
         switchMap((enrolments: EnrolmentClaim[]) =>
-          from(this.addStatusIfIsSyncedOffChain(enrolments))
-        ),
-        switchMap((enrolments: EnrolmentClaim[]) =>
           forkJoin([
             ...enrolments.map((enrolment) =>
-              from(this.addStatusIfIsSyncedOnChain(enrolment, requesterIsDid))
+              from(this.addStatusIfIsSyncedOnChain(enrolment))
             ),
           ])
         ),
@@ -183,17 +176,23 @@ export class ClaimsFacadeService {
               from(this.setDecodedToken(enrolment))
             ),
           ])
+        ),
+        switchMap((enrolments: EnrolmentClaim[]) =>
+          forkJoin([
+            ...enrolments.map((enrolment) =>
+              from(this.addStatusIfIsSyncedOffChain(enrolment))
+            ),
+          ])
         )
       );
   }
 
-  async addStatusIfIsSyncedOffChain(
-    list: EnrolmentClaim[],
-    did?: string
-  ): Promise<EnrolmentClaim[]> {
+  async addStatusIfIsSyncedOffChain(enrolment: EnrolmentClaim) {
     // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
     const claims: ClaimData[] = (
-      await this.iamService.claimsService.getUserClaims({ did })
+      await this.iamService.claimsService.getUserClaims({
+        did: enrolment.subject,
+      })
     )
       .filter((item) => item && item.claimType)
       .filter((item: ClaimData) => {
@@ -201,11 +200,9 @@ export class ClaimsFacadeService {
         return arr.length > 1 && arr[1] === NamespaceType.Role;
       });
 
-    return list.map((item: EnrolmentClaim) => {
-      return item.setIsSyncedOffChain(
-        claims.some((claim) => claim.claimType === item.claimType)
-      );
-    });
+    return enrolment.setIsSyncedOffChain(
+      claims.some((claim) => claim.claimType === enrolment.claimType)
+    );
   }
 
   setIsRevokedOnChainStatus(
