@@ -167,8 +167,7 @@
                 mat-icon-button
                 matTooltip="Enrol"
                 [routerLink]="['/enrol']"
-                [queryParams]="getQueryParams(data?.type, role)"
-                [disabled]="role?.isEnrolled">
+                [queryParams]="getQueryParams(data?.type, role)">
                 <mat-icon class="btn-color-primary btn-action-3" svgIcon="add-role-icon"></mat-icon>
               </button>
             </div>
