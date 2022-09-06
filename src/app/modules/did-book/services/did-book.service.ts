@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DidBookHttpService } from './did-book-http.service';
 import { DidBookRecord } from '../components/models/did-book-record';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { map, tap } from 'rxjs/operators';
 
 const TOASTR_HEADER = 'DID Book';
 
@@ -17,6 +18,12 @@ export class DidBookService {
 
   getList$(): Observable<DidBookRecord[]> {
     return this.list.asObservable();
+  }
+
+  getDIDList$(): Observable<string[]> {
+    return this.getList$().pipe(
+      map((items) => items.map((item: DidBookRecord) => item.did))
+    );
   }
 
   getList(): void {

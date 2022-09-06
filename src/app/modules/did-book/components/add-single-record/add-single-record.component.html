@@ -7,6 +7,10 @@
 
 <div mat-dialog-content>
   <div class="mb-2 mt-4 mx-4 mx-lg-4 pb-3">
-    <app-did-book-form [did]="data.did" (cancel)="cancelHandler()" (add)="addHandler($event)"></app-did-book-form>
+    <app-did-book-form
+      [did]="data.did"
+      (cancel)="cancelHandler()"
+      (add)="addHandler($event)"
+      [existingDIDs]="didList$ | async"></app-did-book-form>
   </div>
 </div>
