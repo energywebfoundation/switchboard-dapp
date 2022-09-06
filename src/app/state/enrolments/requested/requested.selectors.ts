@@ -18,6 +18,6 @@ export const getAllEnrolments = createSelector(
 export const getPendingEnrolmentsAmount = createSelector(
   getAllEnrolments,
   (enrolments) => {
-    return enrolments.filter((enrolment) => enrolment.isPending).length;
+    return enrolments?.filter((enrolment) => enrolment.isPending).length;
   }
 );
