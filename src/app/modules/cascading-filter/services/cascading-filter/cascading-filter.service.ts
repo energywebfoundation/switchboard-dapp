@@ -115,7 +115,7 @@ export class CascadingFilterService {
           .status(this.statusFilter)
           .organization(this.organizationFilter)
           .build()
-          .map((claim) => claim.organization)
+          .map((claim) => claim?.organization)
       )
     );
   }
