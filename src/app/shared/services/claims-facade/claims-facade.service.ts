@@ -85,13 +85,9 @@ export class ClaimsFacadeService {
   }
 
   async addStatusIfIsSyncedOnChain(enrolment: EnrolmentClaim) {
-    const subjectDid =
-      enrolment?.subject === this.iamService.signerService.did
-        ? this.iamService.signerService.did
-        : enrolment.subject;
     if (enrolment.isRegisteredOnChain()) {
       const hasOnChainRole = await this.iamService.claimsService.hasOnChainRole(
-        subjectDid,
+        enrolment.subject,
         enrolment.claimType,
         +enrolment.claimTypeVersion
       );
