@@ -89,6 +89,7 @@ export class AssetEnrolmentListComponent implements OnInit {
         registrationTypes: element.registrationTypes,
         claimType: element.claimType,
         claimTypeVersion: element.claimTypeVersion,
+        subject: element.subject,
       })
       .pipe(truthy())
       .subscribe(() => this.getList());

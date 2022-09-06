@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -162,6 +161,12 @@ export class MyEnrolmentListComponent implements OnInit {
         type: ColumnType.DID,
         field: 'requester',
         header: 'Requestor DID',
+      },
+      {
+        type: ColumnType.DID,
+        field: 'subject',
+        header: 'Asset DID',
+        condition: (element: EnrolmentClaim) => element.isAsset(),
       },
       {
         type: ColumnType.Custom,
