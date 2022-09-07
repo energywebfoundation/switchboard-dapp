@@ -234,6 +234,7 @@ export class ClaimsFacadeService {
       });
       return enrolment.setDecodedToken(decodedToken);
     }
+    return enrolment;
   }
 
   private async setIsRevokedOffChainStatus(enrolment: EnrolmentClaim) {
