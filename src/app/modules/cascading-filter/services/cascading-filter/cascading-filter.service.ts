@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EnrolmentClaim } from '../../../../routes/enrolment/models/enrolment-claim';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { FilterBuilder } from '../../../../routes/enrolment/enrolment-list/filter-builder/filter.builder';
 import { FilterStatus } from '../../../../routes/enrolment/enrolment-list/models/filter-status.enum';
 import { ICascadingFilter } from './cascading-filter.interface';
@@ -19,12 +18,12 @@ export class CascadingFilterService {
   private applications$ = new BehaviorSubject<string[]>([]);
   private roleNames$ = new BehaviorSubject<string[]>([]);
 
-  setItems(items: ICascadingFilter[]) {
+  setItems(items: ICascadingFilter[]): void {
     this.list.next([...items]);
     this.updateListsOnOrgChange();
   }
 
-  setOrganizationFilter(filter: string) {
+  setOrganizationFilter(filter: string): void {
     if (this.organizationFilter === filter) {
       return;
     }
@@ -34,7 +33,7 @@ export class CascadingFilterService {
     this.updateListsOnOrgChange();
   }
 
-  setApplicationFilter(filter: string) {
+  setApplicationFilter(filter: string): void {
     if (this.applicationFilter === filter) {
       return;
     }
@@ -43,7 +42,7 @@ export class CascadingFilterService {
     this.updateListsOnAppChange();
   }
 
-  setRoleFilter(filter: string) {
+  setRoleFilter(filter: string): void {
     if (this.roleFilter === filter) {
       return;
     }
@@ -71,45 +70,45 @@ export class CascadingFilterService {
     this.updateFilteredList();
   }
 
-  getOrganizations$() {
+  getOrganizations$(): Observable<string[]> {
     return this.organizations$.asObservable();
   }
 
-  getApplications$() {
+  getApplications$(): Observable<string[]> {
     return this.applications$.asObservable();
   }
 
-  getRoleNames$() {
+  getRoleNames$(): Observable<string[]> {
     return this.roleNames$.asObservable();
   }
 
-  getList$() {
+  getList$(): Observable<ICascadingFilter[]> {
     return this.filteredList.asObservable();
   }
 
-  private getClaims() {
+  private getClaims(): ICascadingFilter[] {
     return this.list.value;
   }
 
-  private updateListsOnRoleChange() {
+  private updateListsOnRoleChange(): void {
     this.updateRoleNameList();
     this.updateFilteredList();
   }
 
-  private updateListsOnAppChange() {
+  private updateListsOnAppChange(): void {
     this.updateApplicationsList();
     this.updateRoleNameList();
     this.updateFilteredList();
   }
 
-  private updateListsOnOrgChange() {
+  private updateListsOnOrgChange(): void {
     this.updateOrganizationList();
     this.updateApplicationsList();
     this.updateRoleNameList();
     this.updateFilteredList();
   }
 
-  private updateOrganizationList() {
+  private updateOrganizationList(): void {
     this.organizations$.next(
       this.getUnique(
         new FilterBuilder(this.getClaims())
@@ -121,7 +120,7 @@ export class CascadingFilterService {
     );
   }
 
-  private updateApplicationsList() {
+  private updateApplicationsList(): void {
     this.applications$.next(
       this.getUnique(
         new FilterBuilder(this.getClaims())
@@ -135,7 +134,7 @@ export class CascadingFilterService {
     );
   }
 
-  private updateRoleNameList() {
+  private updateRoleNameList(): void {
     this.roleNames$.next(
       this.getUnique(
         new FilterBuilder(this.getClaims())
@@ -149,11 +148,11 @@ export class CascadingFilterService {
     );
   }
 
-  private getUnique(list: string[]) {
+  private getUnique(list: string[]): string[] {
     return Array.from(new Set(list));
   }
 
-  private updateFilteredList() {
+  private updateFilteredList(): void {
     this.filteredList.next(
       new FilterBuilder(this.getClaims())
         .organization(this.organizationFilter)
@@ -165,15 +164,15 @@ export class CascadingFilterService {
     );
   }
 
-  private resetApplicationFilter() {
+  private resetApplicationFilter(): void {
     this.applicationFilter = '';
   }
 
-  private resetRoleNameFilter() {
+  private resetRoleNameFilter(): void {
     this.roleFilter = '';
   }
 
-  private resetOrganizationFilter() {
+  private resetOrganizationFilter(): void {
     this.organizationFilter = '';
   }
 }
