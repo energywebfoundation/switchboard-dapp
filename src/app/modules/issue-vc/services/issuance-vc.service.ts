@@ -27,7 +27,7 @@ export class IssuanceVcService {
   create(data: { subject: string; claim: any; expirationTimestamp?: number }) {
     return this.iamService.issueClaim({
       ...data,
-      registrationTypes: [RegistrationTypes.OffChain],
+      registrationTypes: [RegistrationTypes.OffChain, RegistrationTypes.OnChain],
     });
   }
 
