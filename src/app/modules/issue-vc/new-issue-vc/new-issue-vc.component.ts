@@ -46,9 +46,9 @@ export class NewIssueVcComponent implements OnInit {
   roleTypeSelected(e: MatSelectChange) {
     this.expirationTime = undefined;
     if (e?.value?.definition) {
-      this.expirationTime =  e.value.definition.defaultValidityPeriod  
-      ? Date.now() + e.value.definition.defaultValidityPeriod
-      : undefined;
+      this.expirationTime = e.value.definition.defaultValidityPeriod
+        ? Date.now() + e.value.definition.defaultValidityPeriod
+        : undefined;
       this.fieldList = e.value.definition.issuerFields || [];
       this.selectedRoleDefinition = e.value.definition;
       this.setPreconditions();
@@ -102,20 +102,17 @@ export class NewIssueVcComponent implements OnInit {
       .create({
         subject: this.getFormSubject().value,
         claim: this.createClaim(e.fields),
-        expirationTimestamp: this.expirationTime
+        expirationTimestamp: this.expirationTime,
       })
       .subscribe(() => this.dialogRef.close());
   }
 
   clearExpirationDate(): void {
     this.expirationTime = undefined;
-    console.log(this.expirationTime, "AFTER CLEAR")
   }
 
   setExpirationTimeUsingValidity(validityPeriod: number): void {
-    console.log("IN ADD!")
     this.expirationTime = Date.now() + validityPeriod;
-    console.log(this.expirationTime, "THE TIME AFTER SET")
   }
 
   private setPossibleRoles(): void {

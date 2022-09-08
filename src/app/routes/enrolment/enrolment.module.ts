@@ -42,7 +42,7 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
     MyRevokablesListComponent,
     RequestDetailsComponent,
     RevokeButtonsComponent,
-  IssuerRequestsComponent,
+    IssuerRequestsComponent,
     CredentialJsonComponent,
   ],
   imports: [
@@ -65,6 +65,6 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
     EnrolmentListModule,
     CascadingFilterModule,
     RawDataModule,
-  ]
+  ],
 })
 export class EnrolmentModule {}

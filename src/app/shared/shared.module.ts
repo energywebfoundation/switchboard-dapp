@@ -127,7 +127,7 @@ const MATERIAL_MODULES = [
     TimeShiftPipe,
     DefaultDatePipe,
     ExpirationInfoComponent,
-    ExpirationDateComponent
+    ExpirationDateComponent,
   ],
   exports: [
     CommonModule,
@@ -155,7 +155,7 @@ const MATERIAL_MODULES = [
     TimeShiftPipe,
     DefaultDatePipe,
     ExpirationInfoComponent,
-    ExpirationDateComponent
+    ExpirationDateComponent,
   ],
 })
 
