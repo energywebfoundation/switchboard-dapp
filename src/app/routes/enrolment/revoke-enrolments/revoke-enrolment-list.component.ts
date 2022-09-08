@@ -26,7 +26,7 @@ export class MyRevokablesListComponent implements OnInit {
   @ViewChild('status', { static: true }) status;
   @ViewChild('actions', { static: true }) actions;
   @Input() set list(list: EnrolmentClaim[]) {
-    this.cascadingFilterService.setClaims(list);
+    this.cascadingFilterService.setItems(list);
   }
   @Output() refreshList = new EventEmitter<void>();
   get revokersList$() {

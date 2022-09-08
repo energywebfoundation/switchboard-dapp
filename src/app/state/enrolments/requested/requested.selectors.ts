@@ -2,8 +2,6 @@ import { createSelector } from '@ngrx/store';
 
 import { USER_FEATURE_KEY } from './requested.reducer';
 import { getEnrolmentsState } from '../enrolments.reducer';
-import { isExperimentalEnabled } from '../../settings/settings.selectors';
-import { removeAssetsFromList } from '../utils/remove-assets-from-list/remove-assets-from-list';
 
 export const getRequestedState = createSelector(
   getEnrolmentsState,

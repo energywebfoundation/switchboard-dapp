@@ -17,7 +17,7 @@ export class EnrolmentListComponent {
   @Input() columDefinitions: ColumnDefinition[];
   @Input() filterStatuses: FilterStatus[];
   @Input() set list(data: EnrolmentClaim[]) {
-    this.cascadingFilterService.setClaims(data);
+    this.cascadingFilterService.setItems(data);
   }
 
   get filteredList$() {

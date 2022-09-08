@@ -1,7 +1,6 @@
 import { FilterBuilder } from './filter.builder';
-import { EnrolmentClaim } from '../../models/enrolment-claim';
 import { FilterStatus } from '../models/filter-status.enum';
-import { Claim } from 'iam-client-lib';
+import { ICascadingFilter } from '@modules';
 
 describe('FilterBuilder', () => {
   describe('DID filter', () => {
@@ -66,15 +65,11 @@ describe('FilterBuilder', () => {
   });
   describe('Status filter', () => {
     const list = [
-      new EnrolmentClaim({ isAccepted: false, isRejected: false } as Claim),
-      new EnrolmentClaim({ isAccepted: false, isRejected: true } as Claim),
-      new EnrolmentClaim({ isAccepted: true, isRejected: false } as Claim),
-      new EnrolmentClaim({
-        isAccepted: true,
-        isRejected: false,
-      } as Claim).setIsRevokedOnChain(true),
-    ] as unknown as EnrolmentClaim[];
-
+      { status: FilterStatus.Pending },
+      { status: FilterStatus.Rejected },
+      { status: FilterStatus.Approved },
+      { status: FilterStatus.Revoked },
+    ] as ICascadingFilter[];
     it('should return all elements', () => {
       expect(
         new FilterBuilder(list).status(FilterStatus.All).build().length

@@ -3,23 +3,24 @@ import { EnrolmentClaim } from '../../../../routes/enrolment/models/enrolment-cl
 import { BehaviorSubject } from 'rxjs';
 import { FilterBuilder } from '../../../../routes/enrolment/enrolment-list/filter-builder/filter.builder';
 import { FilterStatus } from '../../../../routes/enrolment/enrolment-list/models/filter-status.enum';
+import { ICascadingFilter } from './cascading-filter.interface';
 
 @Injectable()
 export class CascadingFilterService {
-  private claims = new BehaviorSubject<EnrolmentClaim[]>([]);
+  private list = new BehaviorSubject<ICascadingFilter[]>([]);
   private organizationFilter = '';
   private applicationFilter = '';
   private roleFilter = '';
   private statusFilter = FilterStatus.All;
   private didFilter = '';
 
-  private filteredList = new BehaviorSubject<EnrolmentClaim[]>([]);
+  private filteredList = new BehaviorSubject<ICascadingFilter[]>([]);
   private organizations$ = new BehaviorSubject<string[]>([]);
   private applications$ = new BehaviorSubject<string[]>([]);
   private roleNames$ = new BehaviorSubject<string[]>([]);
 
-  setClaims(claims: EnrolmentClaim[]) {
-    this.claims.next([...claims]);
+  setItems(items: ICascadingFilter[]) {
+    this.list.next([...items]);
     this.updateListsOnOrgChange();
   }
 
@@ -87,7 +88,7 @@ export class CascadingFilterService {
   }
 
   private getClaims() {
-    return this.claims.value;
+    return this.list.value;
   }
 
   private updateListsOnRoleChange() {

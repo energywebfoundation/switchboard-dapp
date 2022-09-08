@@ -26,7 +26,35 @@ export class CascadingFilterComponent implements OnInit {
     this.defaultStatus = status;
     this.cascadingFilterService.setStatus(status);
   }
-  @Input() showDID = false;
+  @Input() showDIDFilter = false;
+  @Input() showRoleFilter = true;
+  @Input() showAppFilter = true;
+  @Input() showOrgFilter = true;
+  @Input() showResetFilter = false;
+
+  @Input() set filters(filters: {
+    organization?: string;
+    application?: string;
+    role?: string;
+  }) {
+    if (!filters) {
+      return;
+    }
+
+    this.organization.setValue(filters.organization ?? '', {
+      emitEvent: false,
+    });
+    this.cascadingFilterService.setOrganizationFilter(
+      filters.organization ?? ''
+    );
+    this.application.setValue(filters.application ?? '', { emitEvent: false });
+    this.cascadingFilterService.setApplicationFilter(filters.application ?? '');
+    this.roleName.setValue(filters.role ?? '', { emitEvent: false });
+    this.cascadingFilterService.setRoleFilter(filters.role ?? '');
+  }
+
+  @Input() rolePlaceholder = 'Claim name';
+
   organizations$ = this.cascadingFilterService.getOrganizations$();
   applications$: Observable<string[]> =
     this.cascadingFilterService.getApplications$();
@@ -63,6 +91,14 @@ export class CascadingFilterComponent implements OnInit {
     this.resetControl(this.organization);
     this.resetControl(this.application);
     this.resetControl(this.roleName);
+  }
+
+  resetFilters() {
+    this.cascadingFilterService.setStatus(FilterStatus.All);
+    this.resetControl(this.organization);
+    this.resetControl(this.application);
+    this.resetControl(this.roleName);
+    this.resetControl(this.did);
   }
 
   updateSearchByDidValue(did: string) {

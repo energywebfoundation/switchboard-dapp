@@ -29,7 +29,6 @@ import { TransactionsCompleteComponent } from './transactions-complete/transacti
 import { RoleListComponent } from './role-list/role-list.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { ActionsMenuComponent } from './actions/actions-menu/actions-menu.component';
-import { FilterComponent } from './filter/filter.component';
 import { CreateFieldsModule } from './new-role/components/create-fields/create-fields.module';
 import { DidBookModule } from '../../modules/did-book/did-book.module';
 import { RoleNameComponent } from './new-role/components/role-name/role-name.component';
@@ -41,6 +40,7 @@ import { ApplicationCreationFormComponent } from './new-application/application-
 import { DefaultValueModule } from './pipes/default-value.module';
 import { SetRoleTypeDidsOrNameComponent } from './new-role/components/set-role-type-dids-or-name/set-role-type-dids-or-name.component';
 import { ValidityPeriodComponent } from './new-role/components/validity-period/validity-period.component';
+import { CascadingFilterModule } from '@modules';
 
 const routes: Routes = [{ path: '', component: ApplicationsComponent }];
 
@@ -60,7 +60,6 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     RoleListComponent,
     ApplicationListComponent,
     ActionsMenuComponent,
-    FilterComponent,
     ActionsMenuComponent,
     TransactionsCompleteComponent,
     RoleNameComponent,
@@ -92,6 +91,7 @@ const routes: Routes = [{ path: '', component: ApplicationsComponent }];
     CreateFieldsModule,
     DidBookModule,
     DefaultValueModule,
+    CascadingFilterModule,
   ],
 })
 export class ApplicationsModule {}

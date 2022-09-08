@@ -60,7 +60,10 @@ describe('RoleEffects', () => {
     effects.getList$.subscribe((resultAction) => {
       expect(resultAction).toEqual(
         RoleActions.getListSuccess({
-          list: [{}, {}] as IRole[],
+          list: [
+            { organization: '', application: '', roleName: '' },
+            { organization: '', application: '', roleName: '' },
+          ] as unknown as IRole[],
           namespace: 'iam.ewc',
         })
       );

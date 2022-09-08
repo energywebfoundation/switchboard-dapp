@@ -16,13 +16,7 @@ describe('RoleListComponent', () => {
   let store: MockStore;
 
   const setup = (list?) => {
-    store.overrideSelector(RoleSelectors.getFilteredList, list || []);
-    store.overrideSelector(RoleSelectors.getFilters, {
-      organization: '',
-      application: '',
-      role: '',
-    });
-    store.overrideSelector(RoleSelectors.isFilterVisible, false);
+    store.overrideSelector(RoleSelectors.getList, list || []);
     fixture.detectChanges();
   };
 
