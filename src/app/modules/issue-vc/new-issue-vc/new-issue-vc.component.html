@@ -55,6 +55,14 @@
           </div>
         </div>
       </div>
+      <ng-container *ngIf="isPrecheckSuccess">
+          <app-expiration-date
+          data-qa-id="expiration-date"
+          [defaultValidityPeriod]="selectedRoleDefinition?.defaultValidityPeriod"
+          (add)="setExpirationTimeUsingValidity($event)"
+          (remove)="clearExpirationDate()">
+        </app-expiration-date>
+      </ng-container>
       <ng-container *ngIf="!isPrecheckSuccess && rolePreconditionList?.length">
         <app-role-precondition-list
           [preconditionList]="rolePreconditionList"

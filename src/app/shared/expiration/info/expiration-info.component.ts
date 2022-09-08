@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-expiration-info',
+  selector: 'new-app-expiration-info',
   templateUrl: './expiration-info.component.html',
   styleUrls: ['./expiration-info.component.scss'],
 })
