@@ -57,6 +57,8 @@ import { TimeDurationPipe } from './pipes/time-duration/time-duration.pipe';
 import { CardInfoComponent } from './components/card-info/card-info.component';
 import { TimeShiftPipe } from './pipes/time-shift/time-shift.pipe';
 import { DefaultDatePipe } from './pipes/default-date/default-date.pipe';
+import { ExpirationInfoComponent } from './expiration/info/expiration-info.component';
+import { ExpirationDateComponent } from './expiration/date-picker/expiration-date.component';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -124,6 +126,8 @@ const MATERIAL_MODULES = [
     CardInfoComponent,
     TimeShiftPipe,
     DefaultDatePipe,
+    ExpirationInfoComponent,
+    ExpirationDateComponent,
   ],
   exports: [
     CommonModule,
@@ -150,6 +154,8 @@ const MATERIAL_MODULES = [
     CardInfoComponent,
     TimeShiftPipe,
     DefaultDatePipe,
+    ExpirationInfoComponent,
+    ExpirationDateComponent,
   ],
 })
 

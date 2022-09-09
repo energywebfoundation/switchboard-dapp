@@ -155,6 +155,16 @@ export class AssetEnrolmentListComponent implements OnInit {
         customElement: this.status,
       },
       {
+        type: ColumnType.String,
+        field: 'expirationStatus',
+        header: 'Expiration Status',
+      },
+      {
+        type: ColumnType.Date,
+        field: 'expirationDate',
+        header: 'Expiration Date',
+      },
+      {
         type: ColumnType.Actions,
         field: 'actions',
         customElement: this.actions,
