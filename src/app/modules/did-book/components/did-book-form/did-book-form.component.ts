@@ -37,6 +37,10 @@ export class DidBookFormComponent implements OnInit {
     return this.form.invalid;
   }
 
+  get clearDisabled() {
+    return !this.form.getRawValue().label && !this.form.getRawValue().did;
+  }
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
