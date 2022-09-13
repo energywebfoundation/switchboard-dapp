@@ -35,22 +35,22 @@ export class DidBookFormComponent implements OnInit {
     did: ['', [Validators.required, HexValidators.isDidValid()]],
   });
 
-  get isFormInvalid() {
+  get isFormInvalid(): boolean {
     return this.form.invalid;
   }
 
-  get clearDisabled() {
+  get clearDisabled(): boolean {
     return !this.form.getRawValue().label && !this.form.getRawValue().did;
   }
 
   constructor(private fb: FormBuilder) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setPredefinedDid();
     this.setPredefinedLabel();
   }
 
-  submit() {
+  submit(): void {
     if (this.isFormInvalid) {
       return;
     }
@@ -58,15 +58,17 @@ export class DidBookFormComponent implements OnInit {
     this.clear();
   }
 
-  closeForm() {
+  closeForm(): void {
     this.cancel.emit();
   }
 
-  clearForm() {
+  clearForm(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
     this.form.reset();
   }
 
-  getDIDError(errorCode: string) {
+  getDIDError(errorCode: string): boolean {
     return this.form.get('did').hasError(errorCode);
   }
 
