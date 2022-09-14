@@ -66,8 +66,7 @@ export class DidBookFormComponent implements OnInit {
   }
 
   // reject() {
-    
-    
+
   // }
 
   getDIDError(errorCode: string) {

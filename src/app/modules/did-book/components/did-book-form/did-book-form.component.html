@@ -22,23 +22,23 @@
     </mat-form-field>
   </div>
   <div class="d-flex justify-content-between mb-2">
-    <button *ngIf="!isDidBook" 
+    <button
+      *ngIf="!isDidBook"
       mat-raised-button
       class="btn btn-small btn btn-primary"
       data-qa-id="cancel"
-      (click)="closeForm()"
-      >
+      (click)="closeForm()">
       Cancel
     </button>
-    <button *ngIf="isDidBook" 
-    mat-raised-button
-    class="btn btn-small btn btn-primary"
-    data-qa-id="clear"
-    [disabled]="clearDisabled"
-    (click)="clearForm()"
-    >
-    Clear
-  </button>
+    <button
+      *ngIf="isDidBook"
+      mat-raised-button
+      class="btn btn-small btn btn-primary"
+      data-qa-id="clear"
+      [disabled]="clearDisabled"
+      (click)="clearForm()">
+      Clear
+    </button>
     <button
       mat-raised-button
       class="btn btn-small btn btn-primary"
