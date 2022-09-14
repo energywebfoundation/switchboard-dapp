@@ -69,6 +69,8 @@ describe('DidBookFormComponent', () => {
   });
 
   it('should emit cancel when clicking on cancel button', () => {
+    component.did = 'did:ethr:0xA028720Bc0cc22d296DCD3a26E7E8A1234567890';
+    component.label = 'Foo Bar';
     fixture.detectChanges();
     const cancelSpy = spyOn(component.cancel, 'emit');
     const { cancel } = getSelectors(hostDebug);
