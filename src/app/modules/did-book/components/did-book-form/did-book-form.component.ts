@@ -65,10 +65,6 @@ export class DidBookFormComponent implements OnInit {
     this.form.reset();
   }
 
-  // reject() {
-
-  // }
-
   getDIDError(errorCode: string) {
     return this.form.get('did').hasError(errorCode);
   }
