@@ -11,6 +11,8 @@
       [did]="data.did"
       (cancel)="cancelHandler()"
       (add)="addHandler($event)"
-      [existingDIDs]="didList$ | async"></app-did-book-form>
+      [existingDIDs]="didList$ | async"
+      [isDidBook]="false"
+      ></app-did-book-form>
   </div>
 </div>

@@ -19,6 +19,7 @@ import { DidBookRecord } from '../models/did-book-record';
 export class DidBookFormComponent implements OnInit {
   @Input() did: string;
   @Input() label: string;
+  @Input() isDidBook: boolean;
   @Input() set existingDIDs(dids: string[]) {
     if (!dids) {
       return;
@@ -56,10 +57,18 @@ export class DidBookFormComponent implements OnInit {
     this.clear();
   }
 
-  reject() {
+  closeForm() {
     this.cancel.emit();
+  }
+
+  clearForm() {
     this.form.reset();
   }
+
+  // reject() {
+    
+    
+  // }
 
   getDIDError(errorCode: string) {
     return this.form.get('did').hasError(errorCode);

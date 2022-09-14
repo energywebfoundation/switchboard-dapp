@@ -10,7 +10,9 @@
       [did]="did"
       [label]="label"
       (add)="addHandler($event)"
-      [existingDIDs]="didList$ | async"></app-did-book-form>
+      [existingDIDs]="didList$ | async"
+      [isDidBook]="true"
+      ></app-did-book-form>
     <ng-container *ngIf="list$ | async as list">
       <div class="mb-4 mt-4">
         <mat-form-field appearance="outline" class="mat-input-sort line-height-filter pt-1 mr-0 mr-lg-0 mb-2 mb-lg-0">
