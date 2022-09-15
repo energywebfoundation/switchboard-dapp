@@ -49,7 +49,7 @@
     "@ew-did-registry/credentials-interface": "^0.6.3-alpha.596.0",
     "@ew-did-registry/did-resolver-interface": "^0.6.3-alpha.596.0",
     "@fortawesome/fontawesome-free": "5.5.0",
-    "@gnosis.pm/safe-apps-sdk": "^7.3.0",
+    "@gnosis.pm/safe-apps-provider": "^0.13.1",
     "@mat-datetimepicker/core": "^9.0.68",
     "@mat-datetimepicker/moment": "^9.0.68",
     "@metamask/detect-provider": "^1.2.0",
