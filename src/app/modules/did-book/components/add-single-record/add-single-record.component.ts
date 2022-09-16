@@ -1,8 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DidBookService } from '../../services/did-book.service';
-import { map, tap } from 'rxjs/operators';
-import { DidBookRecord } from '../models/did-book-record';
 
 @Component({
   selector: 'app-add-single-record',

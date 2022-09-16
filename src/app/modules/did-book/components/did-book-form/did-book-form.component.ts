@@ -19,6 +19,8 @@ import { DidBookRecord } from '../models/did-book-record';
 export class DidBookFormComponent implements OnInit {
   @Input() did: string;
   @Input() label: string;
+  @Input() shouldClearForm: boolean;
+  @Input() shouldCloseForm: boolean;
   @Input() set existingDIDs(dids: string[]) {
     if (!dids) {
       return;
@@ -37,6 +39,10 @@ export class DidBookFormComponent implements OnInit {
     return this.form.invalid;
   }
 
+  get clearDisabled() {
+    return !this.form.getRawValue().label && !this.form.getRawValue().did;
+  }
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -52,8 +58,11 @@ export class DidBookFormComponent implements OnInit {
     this.clear();
   }
 
-  reject() {
+  closeForm() {
     this.cancel.emit();
+  }
+
+  clearForm() {
     this.form.reset();
   }
 
