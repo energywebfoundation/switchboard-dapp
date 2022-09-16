@@ -19,7 +19,8 @@ import { DidBookRecord } from '../models/did-book-record';
 export class DidBookFormComponent implements OnInit {
   @Input() did: string;
   @Input() label: string;
-  @Input() isDidBook: boolean;
+  @Input() shouldClearForm: boolean;
+  @Input() shouldCloseForm: boolean;
   @Input() set existingDIDs(dids: string[]) {
     if (!dids) {
       return;
