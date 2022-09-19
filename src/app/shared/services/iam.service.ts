@@ -250,7 +250,7 @@ export class IamService {
 
   public wrapWithLoadingService<T>(
     source: Promise<T> | Observable<T>,
-    loaderConfig?: { message: string | string[]; cancelable?: boolean }
+    loaderConfig?: { message: string; cancelable?: boolean }
   ) {
     this.loadingService.show(
       loaderConfig?.message || '',
