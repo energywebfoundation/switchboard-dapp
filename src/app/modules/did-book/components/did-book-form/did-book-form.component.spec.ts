@@ -133,11 +133,32 @@ describe('DidBookFormComponent', () => {
       getElementByCss(hostDebug)('mat-error')?.nativeElement.innerText
     ).toContain('already exist');
   });
+
+  it('should reset inputs and validation when clicking cancel button', () => {
+    component.shouldClearForm = true;
+    fixture.detectChanges();
+    const { clear, label } = getSelectors(hostDebug);
+
+    label.value = 'example';
+    dispatchInputEvent(label);
+    fixture.detectChanges();
+
+    clear.click();
+    fixture.detectChanges();
+
+    const { did, matError } = getSelectors(hostDebug);
+    expect(label.value).toBeFalsy();
+    expect(did.value).toBeFalsy();
+
+    expect(matError).toBeFalsy();
+  });
 });
 
 const getSelectors = (hostDebug) => ({
   cancel: getElement(hostDebug)('cancel')?.nativeElement,
+  clear: getElement(hostDebug)('clear')?.nativeElement,
   add: getElement(hostDebug)('add')?.nativeElement,
   label: getElement(hostDebug)('label')?.nativeElement,
   did: getElement(hostDebug)('did')?.nativeElement,
+  matError: getElementByCss(hostDebug)('mat-error')?.nativeElement,
 });
