@@ -28,7 +28,10 @@ export class ClaimsFacadeService {
     private loadingService: LoadingService
   ) {}
 
-  createSelfSignedClaim(data: { data: ClaimData; subject?: string }) {
+  createSelfSignedClaim(data: {
+    data: Record<string, unknown>;
+    subject?: string;
+  }) {
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.',
       CancelButton.ENABLED
