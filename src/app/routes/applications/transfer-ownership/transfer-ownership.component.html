@@ -23,8 +23,13 @@
       </div>
     </div>
     <div class="d-flex justify-content-end mb-3" *ngIf="!mySteps?.length">
-      <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-      <button mat-raised-button class="btn btn-small btn-primary" (click)="submit()" [disabled]="!didValid">
+      <button mat-stroked-button class="btn btn-small mr-2" data-qa-id="cancel" (click)="closeDialog()">Cancel</button>
+      <button
+        mat-raised-button
+        class="btn btn-small btn-primary"
+        data-qa-id="next"
+        (click)="submit()"
+        [disabled]="!didValid">
         Next
       </button>
     </div>
@@ -36,12 +41,12 @@
       <div class="w-100 card card-default d-flex shadow-none d-flex pt-3 mx-3">
         <div class="text-left my-3">
           <div class="label opacity-50 mb-2">Namespace</div>
-          <span class="default-color mb-0">{{ namespace }}</span>
+          <span class="default-color mb-0" data-qa-id="namespace">{{ namespace }}</span>
         </div>
         <mat-divider></mat-divider>
         <div class="text-left my-3">
           <div class="label opacity-50 mb-2">New Owner Address</div>
-          <span class="default-color mb-0">{{ newOwnerDID }}</span>
+          <span class="default-color mb-0" data-qa-id="new-owner-address">{{ newOwnerDID }}</span>
         </div>
       </div>
       <mat-vertical-stepper class="w-100" [linear]="true" #stepper *ngIf="mySteps?.length">
