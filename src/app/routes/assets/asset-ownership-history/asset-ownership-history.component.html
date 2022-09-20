@@ -8,12 +8,15 @@
 <div mat-dialog-content>
   <!-- Asset Ownership list Layout -->
   <div class="history-list py-2">
-    <div class="history-list-item my-3 px-2 pb-3" *ngFor="let element of dataSource.data">
+    <div
+      class="history-list-item my-3 px-2 pb-3"
+      [attr.data-qa-id]="'history-item-' + id"
+      *ngFor="let element of dataSource.data; let id = index">
       <div class="d-flex justify-content-between align-items-center pt-3 px-2">
-        <h6 class="font-weight-600">
-          {{ element?.emittedDate | date: 'MM/dd/yyyy HH:mm:ss' }}
+        <h6 class="font-weight-600" data-qa-id="emitted-date">
+          {{ element?.emittedDate | defaultDate }}
         </h6>
-        <div class="bg-status">{{ element?.type }}</div>
+        <div class="bg-status" data-qa-id="type">{{ element?.type }}</div>
       </div>
       <app-history-period class="d-flex flex-column justify-content-start px-2" [period]="element"></app-history-period>
     </div>
