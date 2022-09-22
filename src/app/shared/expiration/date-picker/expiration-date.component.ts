@@ -16,6 +16,9 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./expiration-date.component.scss'],
 })
 export class ExpirationDateComponent implements OnInit, OnDestroy {
+  /**
+   * Defined in milliseconds.
+   */
   @Input() defaultValidityPeriod: number;
   @Output() add: EventEmitter<number> = new EventEmitter<number>();
   @Output() remove: EventEmitter<void> = new EventEmitter<void>();
@@ -24,7 +27,6 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   expirationTimeShift: number;
   minDate = new Date(Date.now());
   hideRemoveButton = false;
-  showRestoreBtn = this.showRestoreButton();
 
   private destroy$ = new Subject();
   ngOnInit(): void {
