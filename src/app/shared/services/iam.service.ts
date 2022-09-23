@@ -1,31 +1,33 @@
 import { Injectable } from '@angular/core';
 import {
-  AccountInfo,
   AssetsService,
   CacheClient,
   ClaimData,
   ClaimsService,
   DidRegistry,
   DomainsService,
+  ILogger,
   initWithEKC,
   initWithGnosis,
-  initWithKms,
   initWithMetamask,
   initWithPrivateKeySigner,
   initWithWalletConnect,
   IRole,
   IRoleDefinitionV2,
+  LogLevel,
   MessagingMethod,
   MessagingService,
   NamespaceType,
   ProviderType,
   setCacheConfig,
   setChainConfig,
+  setLogger,
   setMessagingConfig,
   SignerService,
   VerifiableCredentialsServiceBase,
 } from 'iam-client-lib';
-import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
+import * as Sentry from '@sentry/angular';
+import { Severity } from '@sentry/angular';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
 import { from, Observable } from 'rxjs';
@@ -37,18 +39,9 @@ import { ChainConfig } from 'iam-client-lib/dist/src/config/chain.config';
 import { EkcSettingsService } from '../../modules/connect-to-wallet/ekc-settings/services/ekc-settings.service';
 import { IOrganization } from 'iam-client-lib/dist/src/modules/domains/domains.types';
 import { IssueClaimOptions } from 'iam-client-lib/dist/src/modules/claims/claims.types';
+import { logger } from '../utils/logger';
 
 export const PROVIDER_TYPE = 'ProviderType';
-
-export type InitializeData = {
-  did: string | undefined;
-  connected: boolean;
-  userClosedModal: boolean;
-  didDocument: IDIDDocument | null;
-  identityToken?: string;
-  realtimeExchangeConnected: boolean;
-  accountInfo: AccountInfo | undefined;
-};
 
 @Injectable({
   providedIn: 'root',
@@ -82,6 +75,7 @@ export class IamService {
       natsServerUrl: envService.natsServerUrl,
       natsEnvironmentName: envService.natsEnvironmentName,
     });
+    logger();
   }
 
   get address() {
