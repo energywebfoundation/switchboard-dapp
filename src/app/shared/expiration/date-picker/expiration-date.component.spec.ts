@@ -16,7 +16,6 @@ describe('ExpirationDateComponent', () => {
   let fixture: ComponentFixture<ExpirationDateComponent>;
   let hostDebug: DebugElement;
   let baseTime: Date;
-  let timezoneSeconds: number;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ExpirationDateComponent],
@@ -40,8 +39,7 @@ describe('ExpirationDateComponent', () => {
     spyOn(component.add, 'emit');
     spyOn(component.remove, 'emit');
     jasmine.clock().install();
-    baseTime = new Date(2000, 0, 1, 1, 0, 0);
-    timezoneSeconds = baseTime.getTimezoneOffset() * 60;
+    baseTime = new Date(2000, 0, 1, 0, 0, 0);
     jasmine.clock().mockDate(baseTime);
   });
 
@@ -54,9 +52,11 @@ describe('ExpirationDateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // TODO: passing locally, failing on GHA. Check it.
-  xit('should set expiration date and reset it', () => {
-    component.defaultValidityPeriod = 60 * 60 * 24 * 2;
+  it('should set expiration date and reset it', () => {
+    Date.prototype.getTimezoneOffset = function () {
+      return 0;
+    };
+    component.defaultValidityPeriod = 60 * 60 * 24 * 2 * 1000;
     fixture.detectChanges();
 
     const { expirationDateInput, resetDate } = getSelectors(hostDebug);
@@ -64,21 +64,17 @@ describe('ExpirationDateComponent', () => {
     dispatchInputEvent(expirationDateInput);
     fixture.detectChanges();
 
-    expect(component.add.emit).toHaveBeenCalledWith(
-      60 * 60 * 24 + timezoneSeconds
-    );
-
     resetDate.click();
     fixture.detectChanges();
     const expirationDate = new Date(
-      baseTime.getTime() + component.defaultValidityPeriod * 1000
+      baseTime.getTime() + component.defaultValidityPeriod
     );
-    expect(
-      new Date(expirationDateInput.value).getTime() - timezoneSeconds * 1000
-    ).toEqual(expirationDate.getTime());
-    expect(component.add.emit).toHaveBeenCalledWith(
-      component.defaultValidityPeriod
-    );
+    expect(new Date(expirationDateInput.value).getTime())
+      .withContext('date input value is not equal to expiration date')
+      .toEqual(expirationDate.getTime());
+    expect(component.add.emit)
+      .withContext('add emits different value than defaultValidityPeriod')
+      .toHaveBeenCalledWith(component.defaultValidityPeriod);
   });
 
   it('should check if remove button calls "remove" to set the expiration time as null', () => {
