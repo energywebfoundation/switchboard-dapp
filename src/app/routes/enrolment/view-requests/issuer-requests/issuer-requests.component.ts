@@ -1,11 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { EnrolmentForm } from '../../../registration/enrolment-form/enrolment-form.component';
 import { EnrolmentClaim } from '../../models/enrolment-claim';
-import * as userSelectors from '../../../../state/user-claim/user.selectors';
 import { IRoleDefinitionV2 } from 'iam-client-lib';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Store } from '@ngrx/store';
-import { UserClaimState } from '../../../../state/user-claim/user.reducer';
 import { TokenDecodeService } from '../services/token-decode.service';
 import { IssuerRequestsService } from '../services/issuer-requests.service';
 import { RoleService } from '../../../../state/governance/role/services/role.service';
@@ -22,13 +19,11 @@ export class IssuerRequestsComponent
   implements OnInit
 {
   @ViewChild('issuerFields', { static: false }) requiredFields: EnrolmentForm;
-  userDid$ = this.store.select(userSelectors.getDid);
   roleDefinition: IRoleDefinitionV2;
   expirationTime: number;
 
   constructor(
     private dialogRef: MatDialogRef<IssuerRequestsComponent>,
-    private store: Store<UserClaimState>,
     private issuerRequestsService: IssuerRequestsService,
     private roleService: RoleService,
     tokenDecodeService: TokenDecodeService,

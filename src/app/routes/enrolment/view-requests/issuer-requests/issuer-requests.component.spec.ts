@@ -8,7 +8,6 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { provideMockStore } from '@ngrx/store/testing';
 import { IssuerRequestsService } from '../services/issuer-requests.service';
 import { RoleService } from '../../../../state/governance/role/services/role.service';
 import { of } from 'rxjs';
@@ -42,7 +41,6 @@ describe('IssuerRequestsComponent', () => {
         { provide: MatDialog, useValue: dialogSpy },
         { provide: IssuerRequestsService, useValue: issuerRequestServiceSpy },
         { provide: RoleService, useValue: roleSpy },
-        provideMockStore(),
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
