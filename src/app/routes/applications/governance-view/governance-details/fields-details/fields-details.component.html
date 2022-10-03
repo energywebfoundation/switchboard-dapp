@@ -4,70 +4,70 @@
   <table mat-table [dataSource]="data" *ngIf="data?.length">
     <ng-container matColumnDef="type">
       <th mat-header-cell *matHeaderCellDef>Type</th>
-      <td mat-cell *matCellDef="let element" data-label="Type">
+      <td mat-cell *matCellDef="let element; let id = index" data-label="Type" [attr.data-qa-id]="'field-type' + id">
         {{ element.fieldType }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="label">
       <th mat-header-cell *matHeaderCellDef>Label</th>
-      <td mat-cell *matCellDef="let element" data-label="Label">
+      <td mat-cell *matCellDef="let element; let id = index" data-label="Label" [attr.data-qa-id]="'field-label' + id">
         {{ element.label }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="required">
       <th mat-header-cell *matHeaderCellDef>Required</th>
-      <td mat-cell *matCellDef="let element" data-label="Label">
+      <td mat-cell *matCellDef="let element; let id = index" data-label="Label" [attr.data-qa-id]="'is-required-' + id">
         {{ element.required }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="minLength">
       <th mat-header-cell *matHeaderCellDef>Min Length</th>
-      <td mat-cell *matCellDef="let element" data-label="Label">
+      <td mat-cell *matCellDef="let element; let id = index" data-label="Label" [attr.data-qa-id]="'min-length' + id">
         {{ element.minLength }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="maxLength">
       <th mat-header-cell *matHeaderCellDef>Max Length</th>
-      <td mat-cell *matCellDef="let element" data-label="Label">
+      <td mat-cell *matCellDef="let element; let id = index" data-label="Label" [attr.data-qa-id]="'max-length' + id">
         {{ element.maxLength }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="pattern">
       <th mat-header-cell *matHeaderCellDef>Pattern</th>
-      <td mat-cell *matCellDef="let element" data-label="Label">
+      <td mat-cell *matCellDef="let element; let id = index" data-label="Label" [attr.data-qa-id]="'pattern' + id">
         {{ element.pattern }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="minValue">
       <th mat-header-cell *matHeaderCellDef>Min Value</th>
-      <td mat-cell *matCellDef="let element" data-label="Label">
+      <td mat-cell *matCellDef="let element; let id = index" data-label="Label" [attr.data-qa-id]="'min-value' + id">
         {{ element.minValue }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="maxValue">
       <th mat-header-cell *matHeaderCellDef>Max Value</th>
-      <td mat-cell *matCellDef="let element" data-label="Label">
+      <td mat-cell *matCellDef="let element; let id = index" data-label="Label" [attr.data-qa-id]="'max-value' + id">
         {{ element.maxValue }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="minDate">
       <th mat-header-cell *matHeaderCellDef>Min Date</th>
-      <td mat-cell *matCellDef="let element" data-label="Label">
+      <td mat-cell *matCellDef="let element; let id = index" data-label="Label" [attr.data-qa-id]="'min-date' + id">
         {{ element.minDate | date: 'M/d/yyyy' }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="maxDate">
       <th mat-header-cell *matHeaderCellDef>Max Date</th>
-      <td mat-cell *matCellDef="let element" data-label="Label">
+      <td mat-cell *matCellDef="let element; let id = index" data-label="Label" [attr.data-qa-id]="'max-date' + id">
         {{ element.maxDate | date: 'M/d/yyyy' }}
       </td>
     </ng-container>

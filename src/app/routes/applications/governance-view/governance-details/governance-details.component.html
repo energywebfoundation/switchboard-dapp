@@ -2,13 +2,13 @@
   <div class="card card-default w-100 shadow-none d-flex pt-3">
     <app-domain-image *ngIf="!isRole" [url]="formData?.definition?.logoUrl" [type]="type"></app-domain-image>
     <div class="text-left my-3">
-      <div class="label opacity-50 mb-2">{{ typeLabel }} Namespace</div>
-      <span class="default-color mb-0">{{ formData?.namespace }}</span>
+      <div class="label opacity-50 mb-2" data-qa-id="type-namespace">{{ typeLabel }} Namespace</div>
+      <span class="default-color mb-0" data-qa-id="namespace">{{ formData?.namespace }}</span>
     </div>
     <mat-divider></mat-divider>
     <div class="text-left my-3">
       <div class="label opacity-50 mb-2">{{ typeLabel }} Name</div>
-      <span class="default-color mb-0">
+      <span class="default-color mb-0" data-qa-id="name">
         <ng-container *ngIf="isOrganization">
           {{ formData?.definition?.orgName }}
         </ng-container>
@@ -24,21 +24,21 @@
       <mat-divider></mat-divider>
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Website URL</div>
-        <span class="default-color mb-0">
+        <span class="default-color mb-0" data-qa-id="website-url">
           {{ formData?.definition?.websiteUrl | defaultValue }}
         </span>
       </div>
       <mat-divider></mat-divider>
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Description</div>
-        <span class="default-color mb-0">
+        <span class="default-color mb-0" data-qa-id="description">
           {{ formData?.definition?.description | defaultValue }}
         </span>
       </div>
       <mat-divider></mat-divider>
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Others (JSON)</div>
-        <span class="default-color mb-0">
+        <span class="default-color mb-0" data-qa-id="others">
           {{ formData?.definition?.others | defaultValue }}
         </span>
       </div>
@@ -47,14 +47,14 @@
       <mat-divider></mat-divider>
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Role Type</div>
-        <span class="default-color mb-0">
+        <span class="default-color mb-0" data-qa-id="role-type">
           {{ formData?.definition?.roleType | domainType }}
         </span>
       </div>
       <mat-divider></mat-divider>
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Version</div>
-        <span class="default-color mb-0">
+        <span class="default-color mb-0" data-qa-id="version">
           {{ formData?.definition?.version }}
         </span>
       </div>
@@ -62,19 +62,22 @@
         <mat-divider></mat-divider>
         <div class="text-left my-3">
           <div class="label opacity-50 mb-2">Issuer Type</div>
-          <span class="default-color mb-0">{{ issuer?.issuerType }}</span>
+          <span class="default-color mb-0" data-qa-id="issuer-type">{{ issuer?.issuerType }}</span>
         </div>
         <mat-divider></mat-divider>
         <ng-container *ngIf="isRoleType(issuer.issuerType)">
           <div class="text-left my-3">
             <div class="label opacity-50 mb-2">Role</div>
-            <span class="default-color mb-0">{{ issuer?.roleName }}</span>
+            <span class="default-color mb-0" data-qa-id="issuer-role">{{ issuer?.roleName }}</span>
           </div>
         </ng-container>
         <ng-container *ngIf="isDIDType(issuer.issuerType)">
           <div class="text-left my-3">
             <div class="label opacity-50 mb-2">Issuer List</div>
-            <div class="default-color mb-0" *ngFor="let did of issuer?.did">
+            <div
+              class="default-color mb-0"
+              *ngFor="let did of issuer?.did; let id = index"
+              [attr.data-qa-id]="'issuer-did-' + id">
               {{ did }}
             </div>
           </div>
@@ -85,19 +88,22 @@
         <mat-divider></mat-divider>
         <div class="text-left my-3">
           <div class="label opacity-50 mb-2">Revoker Type</div>
-          <span class="default-color mb-0">{{ revoker?.revokerType }}</span>
+          <span class="default-color mb-0" data-qa-id="revoker-type">{{ revoker?.revokerType }}</span>
         </div>
         <mat-divider></mat-divider>
         <ng-container *ngIf="isRoleType(revoker.revokerType)">
           <div class="text-left my-3">
             <div class="label opacity-50 mb-2">Role</div>
-            <span class="default-color mb-0">{{ revoker?.roleName }}</span>
+            <span class="default-color mb-0" data-qa-id="revoker-role">{{ revoker?.roleName }}</span>
           </div>
         </ng-container>
         <ng-container *ngIf="isDIDType(revoker.revokerType)">
           <div class="text-left my-3">
             <div class="label opacity-50 mb-2">Revoker List</div>
-            <div class="default-color mb-0" *ngFor="let did of revoker?.did">
+            <div
+              class="default-color mb-0"
+              *ngFor="let did of revoker?.did; let id = index"
+              [attr.data-qa-id]="'revoker-did-' + id">
               {{ did }}
             </div>
           </div>
@@ -106,14 +112,22 @@
       <mat-divider></mat-divider>
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Restrictions (Role Preconditions)</div>
-        <div class="default-color mb-0" *ngIf="!preconditions[PreconditionTypes.Role]?.length">None</div>
-        <div class="default-color mb-0" *ngFor="let precondition of preconditions[PreconditionTypes.Role]">
+        <div
+          class="default-color mb-0"
+          data-qa-id="empty-preconditions"
+          *ngIf="!preconditions[PreconditionTypes.Role]?.length">
+          None
+        </div>
+        <div
+          class="default-color mb-0"
+          *ngFor="let precondition of preconditions[PreconditionTypes.Role]; let id = index"
+          [attr.data-qa-id]="'precondition-' + id">
           {{ precondition }}
         </div>
       </div>
       <div class="text-left my-3">
         <div class="label opacity-50 mb-2">Validity Period</div>
-        <div class="default-color mb-0">
+        <div class="default-color mb-0" data-qa-id="validity-period">
           {{ validityPeriod | timeDuration }}
         </div>
       </div>
