@@ -89,7 +89,7 @@
       <th mat-header-cell *matHeaderCellDef class="text-right"></th>
       <td mat-cell *matCellDef="let element; let i = index">
         <app-actions-menu [id]="i">
-          <button mat-menu-item class="btn-color-primary" (click)="viewDetails(element)">
+          <button mat-menu-item class="btn-color-primary" data-qa-id="preview" (click)="viewDetails(element)">
             <mat-icon class="btn-color-primary">preview</mat-icon>
             <span>View Details</span>
           </button>
