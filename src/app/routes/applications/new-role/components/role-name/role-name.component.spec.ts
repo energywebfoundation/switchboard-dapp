@@ -158,7 +158,7 @@ const selectors = (hostDebug) => {
     roleName: getElement(hostDebug)('role-name')?.nativeElement,
     roleNamespace: getElement(hostDebug)('role-namespace')?.nativeElement,
     cancel: getElement(hostDebug)('cancel')?.nativeElement,
-    next: getElement(hostDebug)('proceed')?.nativeElement,
+    next: getElement(hostDebug)('proceed-role-name')?.nativeElement,
     matError: hostDebug.query(By.css(`mat-error`))?.nativeElement,
   };
 };

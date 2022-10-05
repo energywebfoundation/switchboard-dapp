@@ -73,7 +73,6 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  IssuerTypes = [IssuerType.DID, IssuerType.ROLE];
   revoker: IRoleType;
   issuer: IRoleType;
   signerDID = this.signerFacade.getDid();
@@ -616,6 +615,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
   addValidityPeriod(validityPeriod: number) {
     this.validityPeriod = validityPeriod;
     this.goNextStep();
+  }
+
+  isLastStep() {
+    return this.stepper?.steps?.length - 1 === this.stepper?.selectedIndex;
   }
 
   async closeDialog(isSuccess?: boolean) {
