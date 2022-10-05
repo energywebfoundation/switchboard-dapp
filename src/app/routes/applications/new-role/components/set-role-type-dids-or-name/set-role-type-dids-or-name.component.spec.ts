@@ -164,7 +164,7 @@ const getSelectors = (hostDebug) => {
     optionDID: getElement(hostDebug)(IssuerType.DID)?.nativeElement,
     optionRole: getElement(hostDebug)(IssuerType.ROLE)?.nativeElement,
     selectType: getElement(hostDebug)('select-type')?.nativeElement,
-    next: getElement(hostDebug)('next')?.nativeElement,
+    next: getElement(hostDebug)('next-issuer')?.nativeElement,
     typeDID: getElementByCss(hostDebug)('app-role-type-did'),
     typeRole: getElementByCss(hostDebug)('app-search-issuer-role'),
   };
