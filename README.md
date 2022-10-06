@@ -31,6 +31,12 @@ Install dependencies:
 npm install
 ```
 
+### Running
+
+Before you start You need to provide some secrets:
+1. Execute `cp .env.example .env`
+2. Fill in necessary variables
+
 Run the project locally:
 
 ```

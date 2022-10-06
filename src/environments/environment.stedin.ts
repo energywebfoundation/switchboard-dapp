@@ -21,8 +21,6 @@ export const environment = {
   currencySymbol: 'VT',
   blockExplorerUrl: 'https://volta-explorer.energyweb.org',
   SENTRY_ENVIRONMENT: 'stedin',
-  INFURA_PROJECT_ID: '',
-  INFURA_PROJECT_SECRET: '',
   idleTime: 900,
   idleTimeout: 300,
   ...constants,
