@@ -8,6 +8,7 @@ import { environment } from './environments/environment';
 if (environment.production) {
   enableProdMode();
 }
+console.log(process.env.INFURA_PROJECT_ID);
 
 const p = platformBrowserDynamic().bootstrapModule(AppModule);
 p.then(() => {

@@ -8,3 +8,4 @@ yarn.lock
 coverage
 tslint-to-eslint-config.log
 eslint_report.json
+.env
