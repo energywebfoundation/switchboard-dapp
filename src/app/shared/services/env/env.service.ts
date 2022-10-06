@@ -21,7 +21,7 @@ export class EnvService {
   blockExplorerUrl: string = environment.blockExplorerUrl;
   SENTRY_ENVIRONMENT: string = environment.SENTRY_ENVIRONMENT;
   INFURA_PROJECT_ID: string =
-    INFURA_PROJECT_ID ?? environment?.INFURA_PROJECT_ID;
+    INFURA_PROJECT_ID ?? process?.env?.INFURA_PROJECT_ID;
   INFURA_PROJECT_SECRET: string =
-    INFURA_PROJECT_SECRET ?? environment?.INFURA_PROJECT_SECRET;
+    INFURA_PROJECT_SECRET ?? process?.env?.INFURA_PROJECT_SECRET;
 }
