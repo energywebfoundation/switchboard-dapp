@@ -2,7 +2,7 @@ name: Deploy to bucket
 
 on:
   push:
-    branches: ['develop', 'master', 'sandbox', 'release']
+    branches: ['develop', 'master', 'sandbox', 'release', 'test1']
 jobs:
   cancel-previous:
     name: 'Cancel Previous Runs'
@@ -22,7 +22,7 @@ jobs:
           if [ "${{ github.ref }}" = "sandbox" ]; then
             echo "::set-output name=env_name::sandbox"
             echo "::set-output name=build_script::'npm run build'"
-          elif [ "${{ github.ref }}" = "refs/heads/develop" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/test1" ]; then
             echo "::set-output name=env_name::dev"
             echo "::set-output name=build_script::npm run build"
           elif [ "${{ github.ref }}" = "refs/heads/master" ]; then
