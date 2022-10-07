@@ -5,7 +5,6 @@ import { Severity } from '@sentry/angular';
 export const logger = () => {
   setLogger({
     log: (message) => {
-      Sentry.captureMessage(message, Severity.Log);
       console.log(message);
     },
     error: (message) => {
@@ -13,7 +12,6 @@ export const logger = () => {
       console.error(message);
     },
     info: (message) => {
-      Sentry.captureMessage(message, Severity.Info);
       console.log(message);
     },
     warn: (message) => {
@@ -21,7 +19,6 @@ export const logger = () => {
       console.warn(message);
     },
     debug: (message) => {
-      Sentry.captureMessage(message, Severity.Debug);
       console.debug(message);
     },
     _logLevel: LogLevel.debug,
