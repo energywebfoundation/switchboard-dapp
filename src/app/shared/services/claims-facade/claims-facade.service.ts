@@ -92,7 +92,7 @@ export class ClaimsFacadeService {
       const hasOnChainRole = await this.iamService.claimsService.hasOnChainRole(
         enrolment.subject,
         enrolment.claimType,
-        +enrolment.claimTypeVersion
+        parseInt(enrolment.claimTypeVersion)
       );
       return enrolment.setIsSyncedOnChain(hasOnChainRole);
     }
