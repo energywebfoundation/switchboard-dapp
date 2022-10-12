@@ -1,0 +1,5 @@
+name: Create Jira Ticket from Issue
+
+on:
+  issues:
+    types: ['opened']
