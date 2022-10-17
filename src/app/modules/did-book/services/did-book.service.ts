@@ -4,6 +4,7 @@ import { DidBookHttpService } from './did-book-http.service';
 import { DidBookRecord } from '../components/models/did-book-record';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { map, tap } from 'rxjs/operators';
+import { retryWhenWithDelay } from '@operators';
 
 const TOASTR_HEADER = 'DID Book';
 
@@ -29,7 +30,11 @@ export class DidBookService {
   getList(): void {
     this.httpDidBook
       .getList()
-      .subscribe((list: DidBookRecord[]) => this.list.next(list));
+      .pipe(retryWhenWithDelay())
+      .subscribe({
+        next: (list: DidBookRecord[]) => this.list.next(list),
+        error: (err) => console.log(err),
+      });
   }
 
   add(record: Partial<DidBookRecord>) {

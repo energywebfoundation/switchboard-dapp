@@ -25,7 +25,13 @@ export class DidBookFormComponent implements OnInit {
     if (!dids) {
       return;
     }
-    this.form.get('did').addValidators(ListValidator.stringExist(dids));
+    this.form
+      .get('did')
+      .setValidators([
+        Validators.required,
+        HexValidators.isDidValid(),
+        ListValidator.stringExist(dids),
+      ]);
   }
   @Output() add = new EventEmitter<Partial<DidBookRecord>>();
   @Output() cancel = new EventEmitter<Partial<DidBookRecord>>();
