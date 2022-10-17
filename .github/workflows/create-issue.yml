@@ -43,9 +43,9 @@ jobs:
         id: generate-labels
         run: |
           LABELS='${{ toJSON(github.event.issue.labels.*.name) }}'
-          echo ::set-output name=labels::${LABELS}
-            
-   add-labels:
+          echo ::set-output name=labels::${LABELS}      
+  
+  add-labels:
     runs-on: ubuntu-latest
     needs:
       - create-issue
