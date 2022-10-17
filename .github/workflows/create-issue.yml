@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       issueId: ${{ steps.save-id.outputs.issueId }}
-    steps: 
+    steps:
       - name: Login to JIRA
         uses: atlassian/gajira-login@v2.0.0
         env:
@@ -24,14 +24,14 @@ jobs:
         with:
           project: Switchboard
           issuetype: Bug
-          summary: "${{ github.event.issue.title }}"
+          summary: '${{ github.event.issue.title }}'
 
       - name: Save Issue ID
         id: save-id
         run: |
           ID='${{ steps.create.outputs.issue }}'
           echo ::set-output name=issueId::${ID}
-  
+
   find-labels:
     runs-on: ubuntu-latest
     needs:
@@ -43,8 +43,8 @@ jobs:
         id: generate-labels
         run: |
           LABELS='${{ toJSON(github.event.issue.labels.*.name) }}'
-          echo ::set-output name=labels::${LABELS}      
-  
+          echo ::set-output name=labels::${LABELS}
+
   add-labels:
     runs-on: ubuntu-latest
     needs:
@@ -56,7 +56,7 @@ jobs:
     steps:
       - name: Setup Jira
         uses: atlassian/gajira-cli@v2.0.2
-        
+
       - name: Login to JIRA
         uses: atlassian/gajira-login@v2.0.0
         env:
