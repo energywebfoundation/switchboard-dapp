@@ -22,7 +22,7 @@ jobs:
         id: create
         uses: atlassian/gajira-create@v2.0.1
         with:
-          project: Switchboard
+          project: SWTCH
           issuetype: Bug
           summary: '${{ github.event.issue.title }}'
 
