@@ -24,8 +24,8 @@ jobs:
         with:
           project: SWTCH
           issuetype: Bug
-          summary: '${{ github.event.issue.title }}'
-          description: 'From GitHub issue: ${{ github.event.issue.html_url }} ${{ github.event.issue.number }} ${{ github.event.issue.comment.body }}'
+          summary: 'GitHub Issue ${{ github.event.issue.number }}: ${{ github.event.issue.title }}'
+          description: '${{ github.event.issue.comment.body }} See issue: ${{ github.event.issue.html_url }}'
 
       - name: Save Issue ID
         id: save-id
