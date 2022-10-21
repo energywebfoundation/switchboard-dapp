@@ -36,7 +36,7 @@ export class NewApplicationComponent
   }
 
   public isLogoUrlValid = true;
-
+  isCompleted = false;
   get origData() {
     return this.data;
   }
@@ -226,9 +226,9 @@ export class NewApplicationComponent
     }
 
     if (this.isUpdating) {
-      this.proceedUpdateStep(req, skipNextStep);
+      await this.proceedUpdateStep(req, skipNextStep);
     } else {
-      this.proceedCreateSteps(req);
+      await this.proceedCreateSteps(req);
     }
   }
 
@@ -293,6 +293,7 @@ export class NewApplicationComponent
 
       // Process
       await this.next(0);
+      this.isCompleted = true;
     } catch (e) {
       console.error('New App Error', e);
       this.toastr.error(
@@ -371,6 +372,7 @@ export class NewApplicationComponent
         this.stepper.selected.completed = true;
         this.stepper.next();
       }
+      this.isCompleted = true;
     } catch (e) {
       console.error('Update App Error', e);
       this.toastr.error(
