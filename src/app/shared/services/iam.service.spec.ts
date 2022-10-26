@@ -3,6 +3,7 @@ import { TestBed, waitForAsync } from '@angular/core/testing';
 import { IamService } from './iam.service';
 import { EnvService } from './env/env.service';
 import { EkcSettingsService } from '../../modules/connect-to-wallet/ekc-settings/services/ekc-settings.service';
+import { SentryService } from './sentry/sentry.service';
 
 describe('IamService', () => {
   let service: IamService;
@@ -13,6 +14,7 @@ describe('IamService', () => {
         IamService,
         { provide: EnvService, useValue: {} },
         { provide: EkcSettingsService, useValue: {} },
+        { provide: SentryService, useValue: {} },
       ],
     });
 
