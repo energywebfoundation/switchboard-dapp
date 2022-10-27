@@ -2,6 +2,7 @@ import { APP_INITIALIZER, ErrorHandler, Injectable } from '@angular/core';
 import * as Sentry from '@sentry/angular';
 import { Router } from '@angular/router';
 import { EnvService } from '../env/env.service';
+import { Severity } from '@sentry/angular';
 
 @Injectable()
 export class SentryService {
@@ -13,6 +14,14 @@ export class SentryService {
       environment: this.envService.SENTRY_ENVIRONMENT,
       tracesSampleRate: 0.2,
     });
+  }
+
+  error(message: string) {
+    Sentry.captureMessage(message, Severity.Error);
+  }
+
+  info(message: string) {
+    Sentry.captureMessage(message, Severity.Info);
   }
 }
 

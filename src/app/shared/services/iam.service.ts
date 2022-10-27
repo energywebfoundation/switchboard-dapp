@@ -40,6 +40,7 @@ import { EkcSettingsService } from '../../modules/connect-to-wallet/ekc-settings
 import { IOrganization } from 'iam-client-lib/dist/src/modules/domains/domains.types';
 import { IssueClaimOptions } from 'iam-client-lib/dist/src/modules/claims/claims.types';
 import { logger } from '../utils/logger';
+import { SentryService } from './sentry/sentry.service';
 
 export const PROVIDER_TYPE = 'ProviderType';
 
@@ -59,7 +60,8 @@ export class IamService {
   constructor(
     private loadingService: LoadingService,
     private envService: EnvService,
-    private ekcSettingsService: EkcSettingsService
+    private ekcSettingsService: EkcSettingsService,
+    private sentryService: SentryService
   ) {
     // Set Cache Server
     setCacheConfig(envService.chainId, {
@@ -180,6 +182,15 @@ export class IamService {
         this.assetsService = assetsService;
         this.cacheClient = cacheClient;
         this.verifiableCredentialsService = verifiableCredentialsService;
+        if (!this.domainsService) {
+          this.sentryService.info(
+            `domains service is not initialized, assetsService: ${Boolean(
+              assetsService
+            )}, cacheClient: ${Boolean(
+              cacheClient
+            )}, verifiableCredentialsService: ${verifiableCredentialsService}`
+          );
+        }
         if (createDocument) {
           const { didRegistry, claimsService } = await connectToDidRegistry(
             this.configureIpfsConfig()
@@ -190,6 +201,7 @@ export class IamService {
       }
     } catch (e) {
       console.error(e);
+      this.sentryService.error(e);
       throw {
         did: undefined,
         connected: false,
