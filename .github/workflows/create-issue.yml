@@ -9,7 +9,7 @@ jobs:
     name: Create Issue
     runs-on: ubuntu-latest
     outputs:
-      issueId: ${{ steps.save-id.outputs.issueId }}
+      issueId: ${{ steps.save-issue-id.outputs.issueId }}
     steps:
       - name: Login to JIRA
         uses: atlassian/gajira-login@v2.0.0
