@@ -27,11 +27,29 @@ export class EnrolmentClaim
   createdAt: string;
   status: FilterStatus;
 
-  private _isSyncedOnChain: boolean;
-  private _isSyncedOffChain: boolean;
   constructor(iclClaim: Claim) {
     super(iclClaim);
     this.defineProperties();
+  }
+
+  private _isSyncedOnChain: boolean;
+
+  get isSyncedOnChain(): boolean {
+    return (
+      this.iclClaim.isAccepted &&
+      this.isRegisteredOnChain() &&
+      !!this._isSyncedOnChain
+    );
+  }
+
+  private _isSyncedOffChain: boolean;
+
+  get isSyncedOffChain(): boolean {
+    return (
+      this.iclClaim.isAccepted &&
+      this.isRegisteredOffChain() &&
+      !!this._isSyncedOffChain
+    );
   }
 
   get isSynced() {
@@ -78,22 +96,6 @@ export class EnrolmentClaim
     }
 
     return false;
-  }
-
-  get isSyncedOffChain(): boolean {
-    return (
-      this.iclClaim.isAccepted &&
-      this.isRegisteredOffChain() &&
-      !!this._isSyncedOffChain
-    );
-  }
-
-  get isSyncedOnChain(): boolean {
-    return (
-      this.iclClaim.isAccepted &&
-      this.isRegisteredOnChain() &&
-      !!this._isSyncedOnChain
-    );
   }
 
   get canRevokeOnChain(): boolean {
@@ -189,6 +191,10 @@ export class EnrolmentClaim
     );
   }
 
+  defineStatus(): void {
+    this.status = this.defineEnrolmentStatus();
+  }
+
   private defineProperties(): void {
     this.defineRoleName();
     this.defineRequestDate();
@@ -196,7 +202,6 @@ export class EnrolmentClaim
     this.defineApplication();
     this.defineExpirationStatus();
     this.defineExpirationDate();
-    this.defineStatus();
   }
 
   private defineRoleName(): void {
@@ -235,10 +240,6 @@ export class EnrolmentClaim
       : null;
   }
 
-  private defineStatus(): void {
-    this.status = this.defineEnrolmentStatus();
-  }
-
   private defineEnrolmentStatus(): FilterStatus {
     if (this.isPending) {
       return FilterStatus.Pending;
@@ -252,10 +253,7 @@ export class EnrolmentClaim
       return FilterStatus.Approved;
     }
 
-    if (
-      this.isRevokedOnChain &&
-      (!this.isRevocableOffChain || this.isRevokedOffChain)
-    ) {
+    if (this.isRevoked) {
       return FilterStatus.Revoked;
     }
 

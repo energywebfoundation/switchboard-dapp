@@ -150,7 +150,7 @@ export class ClaimsFacadeService {
   }
 
   private createEnrolmentClaimsFromClaims() {
-    return (source: Observable<Claim[]>) =>
+    return (source: Observable<Claim[]>): Observable<EnrolmentClaim[]> =>
       source.pipe(
         map((claims) => claims.filter((claim) => isValidDID(claim.subject))),
         map((claims: Claim[]) =>
@@ -186,6 +186,12 @@ export class ClaimsFacadeService {
               from(this.addStatusIfIsSyncedOffChain(enrolment))
             ),
           ])
+        ),
+        map((claims: EnrolmentClaim[]) =>
+          claims.map((claim: EnrolmentClaim) => {
+            claim.defineStatus();
+            return claim;
+          })
         )
       );
   }
