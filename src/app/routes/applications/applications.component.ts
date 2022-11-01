@@ -28,6 +28,7 @@ import { RoleListComponent } from './role-list/role-list.component';
 import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
 import { EnvService } from '../../shared/services/env/env.service';
 import { environment } from '../../../environments/environment';
+import { RouterConst } from '../router-const';
 
 @Component({
   selector: 'app-applications',
@@ -99,6 +100,16 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       const mailText = `mailto:${environment.orgRequestEmail}?subject=Create%20Organization&body=Sending%20request%20for%20the%20following%20organization%20in%20Switchboard%3A%20%7Bplease%20fill%20in%20org%20name%7D`;
       window.location.href = mailText;
     } else {
+      if (!this.isIamEwcOwner) {
+        const namespace =
+          'orgcreator.apps.testorg.' + this.envService.rootNamespace;
+        const roleName = 'org';
+        this.router.navigate([RouterConst.Enrol], {
+          queryParams: { roleName, app: namespace, stayLoggedIn: true },
+        });
+        return;
+      }
+
       const dialogRef = this.dialog.open(NewOrganizationComponent, {
         width: '600px',
         data: {},
