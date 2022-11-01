@@ -27,7 +27,6 @@ jobs:
           description: '${{ github.event.issue.body }} See issue: ${{ github.event.issue.html_url }}'
       - name: Save Issue Id
         id: save-issue-id
-        needs: create-issue
         run: |
           ID='${{ steps.create.outputs.issue }}'
           echo ::set-output name=issueId::${ID}
