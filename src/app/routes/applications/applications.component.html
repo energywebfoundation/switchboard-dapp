@@ -7,8 +7,8 @@
             mat-raised-button
             class="btn btn-primary btn-small mb-3 mb-lg-0"
             *ngIf="(hierarchyLength$ | async) === 0; else subOrg"
-            (click)="openNewOrgComponent()">
-            Create Organization
+            (click)="handleNewOrgRequest()">
+            {{ orgRequestButtonText }}
           </button>
           <ng-template #subOrg>
             <button

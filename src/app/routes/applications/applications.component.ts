@@ -27,7 +27,7 @@ import { ApplicationListComponent } from './application-list/application-list.co
 import { RoleListComponent } from './role-list/role-list.component';
 import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
 import { EnvService } from '../../shared/services/env/env.service';
-import { RouterConst } from '../router-const';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-applications',
@@ -61,6 +61,9 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   ListType = ListType;
+  orgRequestButtonText = environment.production
+    ? 'Request to Create Organization'
+    : 'Create Organization';
 
   private subscription$ = new Subject();
 
@@ -91,34 +94,27 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cleanFilters();
   }
 
-  openNewOrgComponent(): void {
-    if (!this.isIamEwcOwner) {
-      const namespace =
-        'orgcreator.apps.testorg.' + this.envService.rootNamespace;
-      const roleName = 'org';
-      this.router.navigate([RouterConst.Enrol], {
-        queryParams: { roleName, app: namespace, stayLoggedIn: true },
+  handleNewOrgRequest(): void {
+    if (environment.production) {
+      const mailText = `mailto:${environment.orgRequestEmail}?subject=Create%20Organization&body=Sending%20request%20for%20the%20following%20organization%20in%20Switchboard%3A%20%7Bplease%20fill%20in%20org%20name%7D`;
+      window.location.href = mailText;
+    } else {
+      const dialogRef = this.dialog.open(NewOrganizationComponent, {
+        width: '600px',
+        data: {},
+        maxWidth: '100%',
+        disableClose: true,
       });
-      return;
+
+      dialogRef
+        .afterClosed()
+        .pipe(takeUntil(this.subscription$))
+        .subscribe((result) => {
+          if (result) {
+            this.listOrg.getList(true);
+          }
+        });
     }
-
-    const dialogRef = this.dialog.open(NewOrganizationComponent, {
-      width: '600px',
-      data: {},
-      maxWidth: '100%',
-      disableClose: true,
-    });
-
-    dialogRef
-      .afterClosed()
-      .pipe(takeUntil(this.subscription$))
-      .subscribe((result) => {
-        // console.log('The dialog was closed');
-
-        if (result) {
-          this.listOrg.getList(true);
-        }
-      });
   }
 
   createSubOrg() {
