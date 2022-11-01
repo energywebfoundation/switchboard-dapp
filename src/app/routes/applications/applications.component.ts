@@ -27,7 +27,6 @@ import { ApplicationListComponent } from './application-list/application-list.co
 import { RoleListComponent } from './role-list/role-list.component';
 import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
 import { EnvService } from '../../shared/services/env/env.service';
-import { environment } from '../../../environments/environment';
 import { RouterConst } from '../router-const';
 
 @Component({
@@ -62,7 +61,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   ListType = ListType;
-  orgRequestButtonText = environment.production
+  orgRequestButtonText = this.envService.production
     ? 'Request to Create Organization'
     : 'Create Organization';
 
@@ -96,8 +95,8 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleNewOrgRequest(): void {
-    if (environment.production) {
-      const mailText = `mailto:${environment.orgRequestEmail}?subject=Create%20Organization&body=Sending%20request%20for%20the%20following%20organization%20in%20Switchboard%3A%20%7Bplease%20fill%20in%20org%20name%7D`;
+    if (this.envService.production) {
+      const mailText = `mailto:${this.envService.orgRequestEmail}?subject=Create%20Organization&body=Sending%20request%20for%20the%20following%20organization%20in%20Switchboard%3A%20%7Bplease%20fill%20in%20org%20name%7D`;
       window.location.href = mailText;
     } else {
       if (!this.isIamEwcOwner) {
