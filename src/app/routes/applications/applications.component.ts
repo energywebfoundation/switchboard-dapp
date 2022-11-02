@@ -61,9 +61,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   ListType = ListType;
-  orgRequestButtonText = this.envService.production
-    ? 'Request to Create Organization'
-    : 'Create Organization';
+  orgRequestButtonText: string;
 
   private subscription$ = new Subject();
 
@@ -96,35 +94,42 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   handleNewOrgRequest(): void {
     if (this.envService.production) {
-      const mailText = `mailto:${this.envService.orgRequestEmail}?subject=Create%20Organization&body=Sending%20request%20for%20the%20following%20organization%20in%20Switchboard%3A%20%7Bplease%20fill%20in%20org%20name%7D`;
-      window.location.href = mailText;
+      this.createOrgRequestMailTo();
     } else {
-      if (!this.isIamEwcOwner) {
-        const namespace =
-          'orgcreator.apps.testorg.' + this.envService.rootNamespace;
-        const roleName = 'org';
-        this.router.navigate([RouterConst.Enrol], {
-          queryParams: { roleName, app: namespace, stayLoggedIn: true },
-        });
-        return;
-      }
-
-      const dialogRef = this.dialog.open(NewOrganizationComponent, {
-        width: '600px',
-        data: {},
-        maxWidth: '100%',
-        disableClose: true,
-      });
-
-      dialogRef
-        .afterClosed()
-        .pipe(takeUntil(this.subscription$))
-        .subscribe((result) => {
-          if (result) {
-            this.listOrg.getList(true);
-          }
-        });
+      this.launchOrgCreatorForm();
     }
+  }
+
+  launchOrgCreatorForm() {
+    if (!this.isIamEwcOwner) {
+      const namespace =
+        'orgcreator.apps.testorg.' + this.envService.rootNamespace;
+      const roleName = 'org';
+      this.router.navigate([RouterConst.Enrol], {
+        queryParams: { roleName, app: namespace, stayLoggedIn: true },
+      });
+      return;
+    }
+
+    const dialogRef = this.dialog.open(NewOrganizationComponent, {
+      width: '600px',
+      data: {},
+      maxWidth: '100%',
+      disableClose: true,
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntil(this.subscription$))
+      .subscribe((result) => {
+        if (result) {
+          this.listOrg.getList(true);
+        }
+      });
+  }
+
+  createOrgRequestMailTo() {
+    window.location.href = `mailto:${this.envService.orgRequestEmail}?subject=Create%20Organization&body=Sending%20request%20for%20the%20following%20organization%20in%20Switchboard%3A%20%7Bplease%20fill%20in%20org%20name%7D`;
   }
 
   createSubOrg() {
@@ -135,6 +140,9 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isIamEwcOwner = await this.iamService.domainsService.isOwner({
       domain: this.envService.rootNamespace,
     });
+    this.orgRequestButtonText = this.envService.production
+      ? 'Request to Create Organization'
+      : 'Create Organization';
   }
 
   showMe(i: MatTabChangeEvent) {
