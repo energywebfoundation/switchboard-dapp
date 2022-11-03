@@ -76,7 +76,7 @@ E2E Tests for Switchboard and IAM stack are stored in [Switchboard-e2e](https://
 ## Active Maintainers
 
 - Dawid Gil [@dawidgil](https://github.com/dawidgil)
-- Davy Jones Castillo [@davycastillo](https://github.com/davycastillo)
+- Whitney Purdum [@whitneypurdum](https://github.com/whitneypurdum)
 
 ## Contributing
 
