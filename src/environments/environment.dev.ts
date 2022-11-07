@@ -8,7 +8,7 @@ export const environment = {
 
   rpcUrl: 'https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/',
   chainId: ChainId.Volta,
-  cacheServerUrl: 'https://identitycache-dev.energyweb.org/v1',
+  cacheServerUrl: 'http://localhost:3000/v1',
   natsServerUrl: 'https://identityevents-dev.energyweb.org/',
   ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',
   showAzureLoginOption: true,
@@ -23,5 +23,6 @@ export const environment = {
   SENTRY_ENVIRONMENT: 'develop',
   idleTime: 900,
   idleTimeout: 300,
+  orgRequestEmail: '',
   ...constants,
 };

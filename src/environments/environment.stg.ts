@@ -23,5 +23,6 @@ export const environment = {
   SENTRY_ENVIRONMENT: 'staging',
   idleTime: 900,
   idleTimeout: 300,
+  orgRequestEmail: 'john.henderson@energyweb.org',
   ...constants,
 };
