@@ -27,6 +27,7 @@ export const environment = {
   SENTRY_ENVIRONMENT: 'localhost',
   idleTime: 900,
   idleTimeout: 300,
+  orgRequestEmail: '',
   ...constants,
 };
 
