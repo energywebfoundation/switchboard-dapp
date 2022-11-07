@@ -8,7 +8,7 @@ export const environment = {
 
   rpcUrl: 'https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/',
   chainId: ChainId.Volta,
-  cacheServerUrl: 'http://localhost:3000/v1',
+  cacheServerUrl: 'https://identitycache-dev.energyweb.org/v1',
   natsServerUrl: 'https://identityevents-dev.energyweb.org/',
   ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',
   showAzureLoginOption: true,
