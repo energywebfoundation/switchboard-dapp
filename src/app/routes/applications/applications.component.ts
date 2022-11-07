@@ -61,6 +61,7 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   ListType = ListType;
+  orgRequestButtonText: string;
 
   private subscription$ = new Subject();
 
@@ -91,7 +92,15 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cleanFilters();
   }
 
-  openNewOrgComponent(): void {
+  handleNewOrgRequest(): void {
+    if (this.envService.production) {
+      this.createOrgRequestMailTo();
+    } else {
+      this.launchOrgCreatorForm();
+    }
+  }
+
+  launchOrgCreatorForm() {
     if (!this.isIamEwcOwner) {
       const namespace =
         'orgcreator.apps.testorg.' + this.envService.rootNamespace;
@@ -113,12 +122,14 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       .afterClosed()
       .pipe(takeUntil(this.subscription$))
       .subscribe((result) => {
-        // console.log('The dialog was closed');
-
         if (result) {
           this.listOrg.getList(true);
         }
       });
+  }
+
+  createOrgRequestMailTo() {
+    window.location.href = `mailto:${this.envService.orgRequestEmail}?subject=Create%20Organization&body=Sending%20request%20for%20the%20following%20organization%20in%20Switchboard%3A%20%7Bplease%20fill%20in%20org%20name%7D`;
   }
 
   createSubOrg() {
@@ -129,6 +140,9 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isIamEwcOwner = await this.iamService.domainsService.isOwner({
       domain: this.envService.rootNamespace,
     });
+    this.orgRequestButtonText = this.envService.production
+      ? 'Request to Create Organization'
+      : 'Create Organization';
   }
 
   showMe(i: MatTabChangeEvent) {
