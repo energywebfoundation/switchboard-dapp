@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { HexValidators } from '@utils';
+import { HexValidators, ListValidator } from '@utils';
 import { DidBookRecord } from '../models/did-book-record';
 
 @Component({
@@ -19,6 +19,20 @@ import { DidBookRecord } from '../models/did-book-record';
 export class DidBookFormComponent implements OnInit {
   @Input() did: string;
   @Input() label: string;
+  @Input() shouldClearForm: boolean;
+  @Input() shouldCloseForm: boolean;
+  @Input() set existingDIDs(dids: string[]) {
+    if (!dids) {
+      return;
+    }
+    this.form
+      .get('did')
+      .setValidators([
+        Validators.required,
+        HexValidators.isDidValid(),
+        ListValidator.stringExist(dids),
+      ]);
+  }
   @Output() add = new EventEmitter<Partial<DidBookRecord>>();
   @Output() cancel = new EventEmitter<Partial<DidBookRecord>>();
 
@@ -27,18 +41,22 @@ export class DidBookFormComponent implements OnInit {
     did: ['', [Validators.required, HexValidators.isDidValid()]],
   });
 
-  get isFormInvalid() {
+  get isFormInvalid(): boolean {
     return this.form.invalid;
+  }
+
+  get clearDisabled(): boolean {
+    return !this.form.getRawValue().label && !this.form.getRawValue().did;
   }
 
   constructor(private fb: FormBuilder) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setPredefinedDid();
     this.setPredefinedLabel();
   }
 
-  submit() {
+  submit(): void {
     if (this.isFormInvalid) {
       return;
     }
@@ -46,9 +64,18 @@ export class DidBookFormComponent implements OnInit {
     this.clear();
   }
 
-  reject() {
+  closeForm(): void {
     this.cancel.emit();
+  }
+
+  clearForm(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
     this.form.reset();
+  }
+
+  getDIDError(errorCode: string): boolean {
+    return this.form.get('did').hasError(errorCode);
   }
 
   private clear(): void {

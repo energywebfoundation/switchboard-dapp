@@ -9,15 +9,13 @@ describe('ActionsMenuComponent', () => {
   let component: ActionsMenuComponent;
   let fixture: ComponentFixture<ActionsMenuComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [ActionsMenuComponent],
-        imports: [MatIconTestingModule, MatMenuModule],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ActionsMenuComponent],
+      imports: [MatIconTestingModule, MatMenuModule],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ActionsMenuComponent);

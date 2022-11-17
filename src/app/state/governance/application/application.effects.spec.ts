@@ -19,28 +19,26 @@ describe('ApplicationEffects', () => {
   let effects: ApplicationEffects;
   let scheduler;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        providers: [
-          ApplicationEffects,
-          { provide: SwitchboardToastrService, useValue: toastrSpy },
-          { provide: IamService, useValue: iamServiceSpy },
-          { provide: MatDialog, useValue: dialogSpy },
-          { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
-          provideMockStore(),
-          provideMockActions(() => actions$),
-        ],
-      });
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        ApplicationEffects,
+        { provide: SwitchboardToastrService, useValue: toastrSpy },
+        { provide: IamService, useValue: iamServiceSpy },
+        { provide: MatDialog, useValue: dialogSpy },
+        { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
+        provideMockStore(),
+        provideMockActions(() => actions$),
+      ],
+    });
 
-      scheduler = new TestScheduler((actual, expected) => {
-        expect(actual).toEqual(expected);
-      });
+    scheduler = new TestScheduler((actual, expected) => {
+      expect(actual).toEqual(expected);
+    });
 
-      effects = TestBed.inject(ApplicationEffects);
-      iamServiceSpy.wrapWithLoadingService.and.callFake((source) => source);
-    })
-  );
+    effects = TestBed.inject(ApplicationEffects);
+    iamServiceSpy.wrapWithLoadingService.and.callFake((source) => source);
+  }));
 
   beforeEach(() => {
     actions$ = new ReplaySubject(1);
@@ -50,12 +48,20 @@ describe('ApplicationEffects', () => {
     scheduler.run(({ cold, hot, expectObservable }) => {
       actions$ = hot('-a', { a: ApplicationActions.getList });
       iamServiceSpy.getENSTypesByOwner.and.returnValue(
-        cold('--a|', { a: [{ namespace: 'test' }] })
+        cold('--a|', { a: [{ namespace: 'test', name: 'app' }] })
       );
 
       expectObservable(effects.getList$).toBe('---c', {
         c: ApplicationActions.getListSuccess({
-          list: [{ namespace: 'test', containsRoles: false }] as any as IApp[],
+          list: [
+            {
+              namespace: 'test',
+              name: 'app',
+              organization: 'test',
+              application: 'app',
+              containsRoles: false,
+            },
+          ] as any as IApp[],
           namespace: 'iam.ewc',
         }),
       });
@@ -76,6 +82,8 @@ describe('ApplicationEffects', () => {
               namespace: 'test',
               roles: [{}],
               containsRoles: true,
+              organization: 'test',
+              application: '',
             },
           ] as any as IApp[],
           namespace: 'iam.ewc',

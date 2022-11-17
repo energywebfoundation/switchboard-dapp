@@ -14,20 +14,18 @@ describe('QrCodeDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let hostDebug: DebugElement;
   let dialogSpy;
-  beforeEach(
-    waitForAsync(() => {
-      dialogSpy = jasmine.createSpyObj('MatDialog', [
-        'closeAll',
-        'open',
-        'close',
-      ]);
-      TestBed.configureTestingModule({
-        declarations: [QrCodeDirective, TestComponent],
-        providers: [{ provide: MatDialog, useValue: dialogSpy }],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    dialogSpy = jasmine.createSpyObj('MatDialog', [
+      'closeAll',
+      'open',
+      'close',
+    ]);
+    TestBed.configureTestingModule({
+      declarations: [QrCodeDirective, TestComponent],
+      providers: [{ provide: MatDialog, useValue: dialogSpy }],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);

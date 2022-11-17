@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -16,32 +17,31 @@ import { IamService } from '../../../shared/services/iam.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { NamespaceType } from 'iam-client-lib';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { RemoveOrgAppComponent } from '../remove-org-app/remove-org-app.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import { ApplicationActions, ApplicationSelectors } from '@state';
-import { takeUntil } from 'rxjs/operators';
-import { EnvService } from '../../../shared/services/env/env.service';
+import { CascadingFilterService } from '@modules';
+import { map, takeUntil } from 'rxjs/operators';
+import { DomainUtils } from '@utils';
 
 @Component({
   selector: 'app-application-list',
   templateUrl: './application-list.component.html',
   styleUrls: ['./application-list.component.scss'],
+  providers: [CascadingFilterService],
 })
 export class ApplicationListComponent
   implements OnInit, OnDestroy, AfterViewInit
 {
+  @Input() predefinedFilters: { organization: string };
   @Output() updateFilter = new EventEmitter<any>();
 
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource = new MatTableDataSource([]);
   readonly displayedColumns = ['logoUrl', 'name', 'namespace', 'actions'];
-
-  filters$ = this.store.select(ApplicationSelectors.getFilters);
-  isFilterVisible$ = this.store.select(ApplicationSelectors.isFilterVisible);
 
   private subscription$ = new Subject();
 
@@ -52,12 +52,15 @@ export class ApplicationListComponent
     private fb: FormBuilder,
     private toastr: SwitchboardToastrService,
     private store: Store,
-    private envService: EnvService
+    private cascadingFilterService: CascadingFilterService
   ) {}
 
   ngOnInit() {
     this.getList();
     this.setData();
+    this.store
+      .select(ApplicationSelectors.getList)
+      .subscribe((list) => this.cascadingFilterService.setItems(list));
   }
 
   ngAfterViewInit() {
@@ -74,17 +77,15 @@ export class ApplicationListComponent
   }
 
   ngOnDestroy(): void {
-    this.subscription$.next();
+    this.subscription$.next(null);
     this.subscription$.complete();
   }
 
   private setData() {
-    this.store
-      .select(ApplicationSelectors.getFilteredList)
+    this.cascadingFilterService
+      .getList$()
       .pipe(takeUntil(this.subscription$))
-      .subscribe((list) => {
-        this.dataSource.data = list;
-      });
+      .subscribe((list) => (this.dataSource.data = list));
   }
 
   public getList() {
@@ -104,14 +105,10 @@ export class ApplicationListComponent
   }
 
   viewRoles(data: { namespace: string }) {
-    const [app, org] = data.namespace
-      .replace(`.${this.envService.rootNamespace}`, '')
-      .split(`.${NamespaceType.Application}.`);
-
     this.updateFilter.emit({
       listType: ListType.ROLE,
-      organization: org,
-      application: app,
+      organization: DomainUtils.getOrgName(data.namespace),
+      application: DomainUtils.getAppName(data.namespace),
     });
   }
 
@@ -177,14 +174,5 @@ export class ApplicationListComponent
     } finally {
       this.loadingService.hide();
     }
-  }
-
-  filter(filters): void {
-    this.store.dispatch(
-      ApplicationActions.updateFilters({
-        filters,
-        namespace: this.envService.rootNamespace,
-      })
-    );
   }
 }

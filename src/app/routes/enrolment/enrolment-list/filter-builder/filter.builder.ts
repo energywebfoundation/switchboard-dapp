@@ -1,11 +1,10 @@
 import { FilterStatus } from '../models/filter-status.enum';
-import { EnrolmentClaim } from '../../models/enrolment-claim';
-import { ExpirationStatus } from '../../models/expiration-statys.enum';
+import { ICascadingFilter } from '@modules';
 
 export class FilterBuilder {
-  private list: EnrolmentClaim[];
+  private list: ICascadingFilter[];
 
-  constructor(list: EnrolmentClaim[]) {
+  constructor(list: ICascadingFilter[]) {
     this.list = list;
   }
 
@@ -27,7 +26,7 @@ export class FilterBuilder {
     }
 
     this.list = this.list.filter(
-      (item) => item.subject.includes(value) || item.requester.includes(value)
+      (item) => item.subject?.includes(value) || item.requester?.includes(value)
     );
     return this;
   }
@@ -69,48 +68,14 @@ export class FilterBuilder {
     return this;
   }
 
-  private statusFilter(list: EnrolmentClaim[], status: FilterStatus) {
-    if (status === FilterStatus.Pending) {
-      return list.filter((item) => item.isPending);
-    }
-
-    if (status === FilterStatus.Rejected) {
-      return list.filter((item) => item.isRejected);
-    }
-
-    if (status === FilterStatus.Approved) {
-      return list
-        .filter((item) => !item.isRevoked)
-        .filter((item) => item.isAccepted);
-    }
-
-    if (status === FilterStatus.Revoked) {
-      return list.filter(
-        (item) =>
-          item.isRevokedOnChain &&
-          (!item.isRevocableOffChain || item.isRevokedOffChain)
-      );
-    }
-
+  private statusFilter(list: ICascadingFilter[], status: FilterStatus) {
     if (status === FilterStatus.All) {
       return list;
     }
-
-    if (status === FilterStatus.NotRevoked) {
-      return list.filter((item) => !item.isRevoked);
-    }
-
-    if (status === FilterStatus.RevokedOffChainOnly) {
-      return list.filter(
-        (item) => item.isRevokedOffChain && !item.isRevokedOnChain
-      );
-    }
-    if (status === FilterStatus.Expired) {
-      return list.filter((item) => item.isExpired);
-    }
+    return list.filter((item) => item.status === status);
   }
 
-  build(): EnrolmentClaim[] {
+  build(): ICascadingFilter[] {
     return this.list;
   }
 }

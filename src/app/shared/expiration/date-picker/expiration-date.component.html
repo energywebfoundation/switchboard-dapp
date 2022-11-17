@@ -14,7 +14,14 @@
     placeholder="Select a New Expiration Date"
     autocomplete="off" />
   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-icon matSuffix data-qa-id="reset-date" class="close-icon" (click)="setDefaultExpirationDate()">close</mat-icon>
+  <mat-icon
+    matSuffix
+    *ngIf="showRestoreButton"
+    data-qa-id="reset-date"
+    class="close-icon"
+    (click)="restoreDefaultHandler()"
+    >close</mat-icon
+  >
   <mat-datepicker #picker></mat-datepicker>
 </mat-form-field>
 <div class="d-flex justify-content-end">

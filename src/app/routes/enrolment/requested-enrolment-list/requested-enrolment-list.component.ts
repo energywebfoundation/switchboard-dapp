@@ -2,16 +2,12 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
   OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { EnrolmentClaim } from '../models/enrolment-claim';
-import { LoadingService } from '../../../shared/services/loading.service';
-import { IamService } from '../../../shared/services/iam.service';
-import { MatDialog } from '@angular/material/dialog';
 import {
   ColumnDefinition,
   ColumnType,
@@ -25,20 +21,11 @@ import { EnrolmentListType } from '../enrolment-list/models/enrolment-list-type.
   templateUrl: './requested-enrolment-list.component.html',
   styleUrls: ['./requested-enrolment-list.component.scss'],
 })
-export class RequestedEnrolmentListComponent {
+export class RequestedEnrolmentListComponent implements OnInit {
   @ViewChild('actions', { static: true }) actions;
   @ViewChild('status', { static: true }) status;
   @Input() list: EnrolmentClaim[];
   @Input() enrolmentStatus: FilterStatus;
-  @Input() set showAssets(value: boolean) {
-    if (value) {
-      this.columns = this.defineColumns();
-    } else {
-      this.columns = this.defineColumns().filter(
-        (item) => item.field !== 'subject'
-      );
-    }
-  }
   @Output() refreshList = new EventEmitter<void>();
 
   enrolmentType = EnrolmentListType.ISSUER;
@@ -60,6 +47,10 @@ export class RequestedEnrolmentListComponent {
 
   updateList() {
     this.refreshList.emit();
+  }
+
+  ngOnInit() {
+    this.columns = this.defineColumns();
   }
 
   private defineColumns() {

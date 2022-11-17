@@ -15,22 +15,20 @@ describe('SetRoleTypeDidsOrNameComponent', () => {
   let fixture: ComponentFixture<SetRoleTypeDidsOrNameComponent>;
   let hostDebug: DebugElement;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [SetRoleTypeDidsOrNameComponent],
-        imports: [
-          ReactiveFormsModule,
-          FormsModule,
-          MatSelectModule,
-          MatFormFieldModule,
-          MatInputModule,
-          NoopAnimationsModule,
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [SetRoleTypeDidsOrNameComponent],
+      imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NoopAnimationsModule,
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SetRoleTypeDidsOrNameComponent);
@@ -166,7 +164,7 @@ const getSelectors = (hostDebug) => {
     optionDID: getElement(hostDebug)(IssuerType.DID)?.nativeElement,
     optionRole: getElement(hostDebug)(IssuerType.ROLE)?.nativeElement,
     selectType: getElement(hostDebug)('select-type')?.nativeElement,
-    next: getElement(hostDebug)('next')?.nativeElement,
+    next: getElement(hostDebug)('next-issuer')?.nativeElement,
     typeDID: getElementByCss(hostDebug)('app-role-type-did'),
     typeRole: getElementByCss(hostDebug)('app-search-issuer-role'),
   };

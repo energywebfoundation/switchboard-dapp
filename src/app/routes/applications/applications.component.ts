@@ -18,7 +18,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 import {
-  ApplicationActions,
   OrganizationActions,
   OrganizationSelectors,
   RoleActions,
@@ -50,20 +49,19 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isAppShown = false;
   isRoleShown = false;
-  isFilterShown = false;
   isIamEwcOwner = false;
 
-  showFilter = {
-    org: false,
-    app: false,
-    role: false,
+  applicationFilters = {
+    organization: '',
   };
-  defaultFilterOptions = {
-    app: undefined,
-    role: undefined,
+
+  roleFilters = {
+    organization: '',
+    application: '',
   };
 
   ListType = ListType;
+  orgRequestButtonText: string;
 
   private subscription$ = new Subject();
 
@@ -89,12 +87,20 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription$.next();
+    this.subscription$.next(null);
     this.subscription$.complete();
     this.cleanFilters();
   }
 
-  openNewOrgComponent(): void {
+  handleNewOrgRequest(): void {
+    if (this.envService.production) {
+      this.createOrgRequestMailTo();
+    } else {
+      this.launchOrgCreatorForm();
+    }
+  }
+
+  launchOrgCreatorForm() {
     if (!this.isIamEwcOwner) {
       const namespace =
         'orgcreator.apps.testorg.' + this.envService.rootNamespace;
@@ -116,12 +122,14 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
       .afterClosed()
       .pipe(takeUntil(this.subscription$))
       .subscribe((result) => {
-        // console.log('The dialog was closed');
-
         if (result) {
           this.listOrg.getList(true);
         }
       });
+  }
+
+  createOrgRequestMailTo() {
+    window.location.href = `mailto:${this.envService.orgRequestEmail}?subject=Create%20Organization&body=Sending%20request%20for%20the%20following%20organization%20in%20Switchboard%3A%20%7Bplease%20fill%20in%20org%20name%7D`;
   }
 
   createSubOrg() {
@@ -132,6 +140,9 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isIamEwcOwner = await this.iamService.domainsService.isOwner({
       domain: this.envService.rootNamespace,
     });
+    this.orgRequestButtonText = this.envService.production
+      ? 'Request to Create Organization'
+      : 'Create Organization';
   }
 
   showMe(i: MatTabChangeEvent) {
@@ -160,43 +171,36 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  toggleFilter(listType: string) {
-    switch (listType) {
-      case ListType.ORG:
-        this.showFilter.org = !this.showFilter.org;
-        break;
-      case ListType.APP:
-        this.store.dispatch(ApplicationActions.toggleFilters());
-        break;
-      case ListType.ROLE:
-        this.store.dispatch(RoleActions.toggleFilters());
-        break;
-    }
+  updateRoleFilter(filters: {
+    listType: any;
+    organization: string;
+    application?: string;
+  }) {
+    console.log(filters);
+    this.roleFilters = {
+      organization: filters.organization,
+      application: filters?.application || '',
+    };
+    this.setTab(filters.listType);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  updateFilter(filterOptions: any) {
+  updateAppFilter(filters: {
+    listType: any;
+    organization: string;
+    application?: string;
+  }) {
+    this.applicationFilters = { organization: filters.organization };
+    this.setTab(filters.listType);
+  }
+
+  setTab(listType): void {
     let tabIdx = 0;
-    switch (filterOptions.listType) {
+    switch (listType) {
       case ListType.APP:
         tabIdx = 1;
-        this.store.dispatch(
-          ApplicationActions.updateFilters({
-            filters: filterOptions,
-            namespace: this.envService.rootNamespace,
-          })
-        );
-        this.store.dispatch(ApplicationActions.showFilters());
         break;
       case ListType.ROLE:
         tabIdx = 2;
-        this.store.dispatch(
-          RoleActions.updateFilters({
-            filters: filterOptions,
-            namespace: this.envService.rootNamespace,
-          })
-        );
-        this.store.dispatch(RoleActions.showFilters());
         break;
     }
 
@@ -205,6 +209,5 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private cleanFilters(): void {
     this.store.dispatch(RoleActions.cleanUpFilters());
-    this.store.dispatch(ApplicationActions.cleanUpFilters());
   }
 }

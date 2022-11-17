@@ -9,7 +9,7 @@ import {
 } from '../../../routes/registration/utils/precondition-check';
 import { filter, switchMap } from 'rxjs/operators';
 import { EnrolmentSubmission } from '../../../routes/registration/enrolment-form/enrolment-form.component';
-import { IRole, IRoleDefinition } from 'iam-client-lib';
+import { IRole, IRoleDefinitionV2 } from 'iam-client-lib';
 import { MatSelectChange } from '@angular/material/select/select';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -26,9 +26,10 @@ export class NewIssueVcComponent implements OnInit {
     type: ['', [Validators.required]],
   });
   possibleRolesToEnrol: IRole[];
-  selectedRoleDefinition: IRoleDefinition;
+  selectedRoleDefinition: IRoleDefinitionV2;
   isPrecheckSuccess: boolean;
   rolePreconditionList: PreconditionCheck[] = [];
+  expirationTime: number;
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +44,11 @@ export class NewIssueVcComponent implements OnInit {
   }
 
   roleTypeSelected(e: MatSelectChange) {
+    this.expirationTime = undefined;
     if (e?.value?.definition) {
+      this.expirationTime = e.value.definition.defaultValidityPeriod
+        ? Date.now() + e.value.definition.defaultValidityPeriod
+        : undefined;
       this.fieldList = e.value.definition.issuerFields || [];
       this.selectedRoleDefinition = e.value.definition;
       this.setPreconditions();
@@ -97,8 +102,17 @@ export class NewIssueVcComponent implements OnInit {
       .create({
         subject: this.getFormSubject().value,
         claim: this.createClaim(e.fields),
+        expirationTimestamp: this.expirationTime,
       })
       .subscribe(() => this.dialogRef.close());
+  }
+
+  clearExpirationDate(): void {
+    this.expirationTime = undefined;
+  }
+
+  setExpirationTimeUsingValidity(validityPeriod: number): void {
+    this.expirationTime = Date.now() + validityPeriod;
   }
 
   private setPossibleRoles(): void {

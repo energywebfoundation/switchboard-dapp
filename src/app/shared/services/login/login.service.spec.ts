@@ -52,57 +52,48 @@ describe('LoginService', () => {
     expect(service.isSessionActive()).toBe(true);
   });
 
-  it(
-    'should return true when login is successful',
-    waitForAsync(() => {
-      iamServiceSpy.initializeConnection.and.returnValue(
-        of({
-          did: '0x',
-          connected: true,
-          userClosedModal: false,
-        })
-      );
-      iamServiceSpy.getPublicKey.and.returnValue(of('public key'));
-      iamServiceSpy.isEthSigner.and.returnValue(of('true'));
-      const getSpy = jasmine.createSpy().and.returnValue(ProviderType.MetaMask);
-      Object.defineProperty(IamService, 'providerType', { get: getSpy });
+  it('should return true when login is successful', waitForAsync(() => {
+    iamServiceSpy.initializeConnection.and.returnValue(
+      of({
+        did: '0x',
+        connected: true,
+        userClosedModal: false,
+      })
+    );
+    iamServiceSpy.getPublicKey.and.returnValue(of('public key'));
+    iamServiceSpy.isEthSigner.and.returnValue(of('true'));
+    const getSpy = jasmine.createSpy().and.returnValue(ProviderType.MetaMask);
+    Object.defineProperty(IamService, 'providerType', { get: getSpy });
 
-      service.login().subscribe(({ success }) => {
-        expect(success).toBe(true);
+    service.login().subscribe(({ success }) => {
+      expect(success).toBe(true);
+    });
+  }));
+
+  it('should return false when did is null', waitForAsync(() => {
+    iamServiceSpy.initializeConnection.and.returnValue(
+      of({ connected: true, userClosedModal: false })
+    );
+    service
+      .login()
+      .pipe(take(1))
+      .subscribe(({ success }) => {
+        expect(success).toBe(false);
       });
-    })
-  );
+  }));
 
-  it(
-    'should return false when did is null',
-    waitForAsync(() => {
-      iamServiceSpy.initializeConnection.and.returnValue(
-        of({ connected: true, userClosedModal: false })
-      );
-      service
-        .login()
-        .pipe(take(1))
-        .subscribe(({ success }) => {
-          expect(success).toBe(false);
-        });
-    })
-  );
-
-  it(
-    'should display random error with toastr',
-    waitForAsync(() => {
-      iamServiceSpy.initializeConnection.and.returnValue(
-        throwError({ message: 'Sample Error' })
-      );
-      service
-        .login()
-        .pipe(take(1))
-        .subscribe(({ success }) => {
-          expect(success).toBe(false);
-          expect(toastrSpy.error).toHaveBeenCalledWith('Sample Error');
-        });
-    })
-  );
+  it('should display random error with toastr', waitForAsync(() => {
+    iamServiceSpy.initializeConnection.and.returnValue(
+      throwError({ message: 'Sample Error' })
+    );
+    service
+      .login()
+      .pipe(take(1))
+      .subscribe(({ success }) => {
+        expect(success).toBe(false);
+        expect(toastrSpy.error).toHaveBeenCalledWith('Sample Error');
+      });
+  }));
 
   it('should display error with toastr about pending notifications', () => {
     iamServiceSpy.initializeConnection.and.returnValue(

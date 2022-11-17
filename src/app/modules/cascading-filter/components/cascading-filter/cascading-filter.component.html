@@ -1,0 +1,96 @@
+<div class="card-header d-flex flex-column flex-xl-row justify-content-xl-start align-xl-items-center mb-3 flex-wrap">
+  <div
+    class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3"
+    *ngIf="filterStatuses?.length > 0">
+    <mat-label class="pr-2">Status</mat-label>
+    <mat-form-field class="mat-filter-sort status-select" appearance="outline">
+      <mat-select data-qa-id="select-status" [value]="defaultStatus" (selectionChange)="statusChange($event)">
+        <mat-option *ngFor="let status of filterStatuses" [value]="status" [attr.data-qa-id]="status">
+          {{ status }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showOrgFilter">
+    <mat-label class="pr-2">Namespace</mat-label>
+    <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+      <input
+        matInput
+        autocomplete="off"
+        type="text"
+        placeholder="Organization"
+        data-qa-id="org-filter"
+        [formControl]="organization"
+        [matAutocomplete]="organizationAutocomplete"
+        maxlength="256" />
+      <mat-autocomplete #organizationAutocomplete>
+        <mat-option *ngFor="let organization of organizations$ | async" [value]="organization">
+          {{ organization }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showAppFilter">
+    <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+      <input
+        matInput
+        autocomplete="off"
+        type="text"
+        placeholder="Application"
+        data-qa-id="app-filter"
+        [formControl]="application"
+        [matAutocomplete]="applicationAutocomplete"
+        maxlength="256" />
+      <mat-autocomplete #applicationAutocomplete>
+        <mat-option *ngFor="let application of applications$ | async" [value]="application">
+          {{ application }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showRoleFilter">
+    <mat-form-field appearance="outline" class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0">
+      <input
+        matInput
+        autocomplete="off"
+        type="text"
+        data-qa-id="role-name-filter"
+        [formControl]="roleName"
+        [placeholder]="rolePlaceholder"
+        [matAutocomplete]="roleNameAutocomplete"
+        maxlength="256" />
+      <mat-autocomplete #roleNameAutocomplete>
+        <mat-option *ngFor="let roleName of roleNames$ | async" [value]="roleName">
+          {{ roleName }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showDIDFilter">
+    <mat-label class="pr-2">Requestor</mat-label>
+    <mat-form-field
+      appearance="outline"
+      class="mat-filter-sort mr-0 mr-lg-0 mb-2 mb-lg-0"
+      matTooltip="Filter by did - it will search through Requestor DID and Asset Did">
+      <input matInput placeholder="DID" data-qa-id="did-filter" [formControl]="did" />
+      <button
+        matSuffix
+        mat-icon-button
+        class="qr-code"
+        aria-label="Scan DID"
+        appQrCodeScanner
+        (scannedValue)="updateSearchByDidValue($event.data?.did)">
+        <mat-icon>qr_code_2</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center flex-column flex-xl-row mt-3 mt-xl-0 ml-0 ml-xl-3" *ngIf="showResetFilter">
+    <button
+      mat-stroked-button
+      class="btn btn-small mb-0 mt-2 mt-lg-0 mb-md-2 mb-lg-0"
+      data-qa-id="filter-reset"
+      (click)="resetFilters()">
+      Clear Filters
+    </button>
+  </div>
+</div>

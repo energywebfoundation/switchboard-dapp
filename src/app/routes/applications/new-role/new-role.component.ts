@@ -73,10 +73,10 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  IssuerTypes = [IssuerType.DID, IssuerType.ROLE];
   revoker: IRoleType;
   issuer: IRoleType;
   signerDID = this.signerFacade.getDid();
+  isCompleted = false;
 
   public roleForm = this.fb.group({
     roleType: [null, Validators.required],
@@ -441,9 +441,9 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     }
 
     if (this.viewType === ViewType.UPDATE) {
-      this.proceedUpdateStep(req, skipNextStep);
+      await this.proceedUpdateStep(req, skipNextStep);
     } else {
-      this.proceedCreateSteps(req);
+      await this.proceedCreateSteps(req);
     }
   }
 
@@ -502,6 +502,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
       // Process
       await this.next(0);
+      this.isCompleted = true;
     } catch (e) {
       console.error('New Role Error', e);
       this.toastr.error(
@@ -578,6 +579,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
         this.stepper.selected.completed = true;
         this.stepper.next();
       }
+      this.isCompleted = true;
     } catch (e) {
       console.error('Update Role Error', e);
       this.toastr.error(

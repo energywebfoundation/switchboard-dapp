@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -41,7 +40,6 @@ export class MyEnrolmentListComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @Output() refreshList = new EventEmitter<void>();
-
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
   enrolmentType = EnrolmentListType.APPLICANT;
@@ -163,6 +161,12 @@ export class MyEnrolmentListComponent implements OnInit {
         type: ColumnType.DID,
         field: 'requester',
         header: 'Requestor DID',
+      },
+      {
+        type: ColumnType.DID,
+        field: 'subject',
+        header: 'Asset DID',
+        condition: (element: EnrolmentClaim) => element.isAsset(),
       },
       {
         type: ColumnType.Custom,

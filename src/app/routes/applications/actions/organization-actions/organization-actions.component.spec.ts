@@ -19,18 +19,13 @@ describe('OrganizationActionsComponent', () => {
   let fixture: ComponentFixture<OrganizationActionsComponent>;
   let hostDebug: DebugElement;
   const dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [
-          OrganizationActionsComponent,
-          FeatureToggleMockDirective,
-        ],
-        providers: [{ provide: MatDialog, useValue: dialogSpy }],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [OrganizationActionsComponent, FeatureToggleMockDirective],
+      providers: [{ provide: MatDialog, useValue: dialogSpy }],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(OrganizationActionsComponent);

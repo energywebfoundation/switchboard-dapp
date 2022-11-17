@@ -93,7 +93,12 @@
           </div>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2" (click)="back()">Back</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="goNextStep()">
+            <button
+              mat-raised-button
+              class="btn btn-small btn-primary"
+              data-qa-id="next-restrictions"
+              [disabled]="isChecking"
+              (click)="goNextStep()">
               Next
             </button>
           </div>
@@ -113,7 +118,12 @@
             (updateData)="requestorFieldsChangeHandler($event)"></app-role-field>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2 back" data-qa-id="back" (click)="back()">Back</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="goNextStep()">
+            <button
+              mat-raised-button
+              class="btn btn-small btn-primary"
+              [disabled]="isChecking"
+              data-qa-id="next-requestor-fields"
+              (click)="goNextStep()">
               Next
             </button>
           </div>
@@ -126,7 +136,12 @@
             (updateData)="issuerFieldsChangeHandler($event)"></app-role-field>
           <div class="d-flex justify-content-end mb-2">
             <button mat-stroked-button class="btn btn-small mr-2 back" data-qa-id="back" (click)="back()">Back</button>
-            <button mat-raised-button class="btn btn-small btn-primary" [disabled]="isChecking" (click)="goNextStep()">
+            <button
+              mat-raised-button
+              class="btn btn-small btn-primary"
+              data-qa-id="next-issuer-fields"
+              [disabled]="isChecking"
+              (click)="goNextStep()">
               Next
             </button>
           </div>
@@ -234,12 +249,18 @@
           <div>
             <div class="d-flex justify-content-end mb-2">
               <button mat-stroked-button class="btn btn-small mr-2" (click)="back()">Back</button>
-              <button mat-raised-button class="btn btn-small btn-primary" (click)="confirmRole()">Next</button>
+              <button
+                mat-raised-button
+                class="btn btn-small btn-primary"
+                data-qa-id="confirm-details"
+                (click)="confirmRole()">
+                Next
+              </button>
             </div>
           </div>
         </mat-step>
         <ng-container *ngFor="let step of txs; let i = index">
-          <mat-step #customStep [editable]="false" [completed]="false">
+          <mat-step [editable]="false" [completed]="false">
             <ng-template matStepLabel>{{ step.info }}</ng-template>
             <app-card-info [description]="step.info"></app-card-info>
             <div
@@ -249,19 +270,13 @@
             </div>
             <div class="d-flex justify-content-end mb-3">
               <button mat-stroked-button class="btn btn-small mr-2" (click)="closeDialog()">Cancel</button>
-              <button
-                mat-raised-button
-                class="btn btn-small btn-primary"
-                *ngIf="stepper?.selected === customStep"
-                (appRetryBtn)="retry()">
-                Retry
-              </button>
+              <button mat-raised-button class="btn btn-small btn-primary" (appRetryBtn)="retry()">Retry</button>
             </div>
           </mat-step>
         </ng-container>
         <mat-step [completed]="false">
           <ng-template matStepLabel>Complete</ng-template>
-          <app-transactions-complete (completed)="closeDialog(true)"></app-transactions-complete>
+          <app-transactions-complete *ngIf="isCompleted" (completed)="closeDialog(true)"></app-transactions-complete>
         </mat-step>
       </mat-vertical-stepper>
     </div>

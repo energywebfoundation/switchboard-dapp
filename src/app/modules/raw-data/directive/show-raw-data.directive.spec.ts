@@ -12,14 +12,12 @@ class TestRawDataComponent {}
 describe('ShowRawDataDirective', () => {
   let component: TestRawDataComponent;
   let fixture: ComponentFixture<TestRawDataComponent>;
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [TestRawDataComponent, ShowRawDataDirective],
-        providers: [{ provide: MatDialog, useValue: {} }],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [TestRawDataComponent, ShowRawDataDirective],
+      providers: [{ provide: MatDialog, useValue: {} }],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestRawDataComponent);

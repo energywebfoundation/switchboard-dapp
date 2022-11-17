@@ -3,6 +3,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DidBookHttpService } from './did-book-http.service';
 import { DidBookRecord } from '../components/models/did-book-record';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
+import { map, tap } from 'rxjs/operators';
+import { retryWhenWithDelay } from '@operators';
 
 const TOASTR_HEADER = 'DID Book';
 
@@ -19,33 +21,43 @@ export class DidBookService {
     return this.list.asObservable();
   }
 
-  getList(): void {
-    this.httpDidBook
-      .getList()
-      .subscribe((list: DidBookRecord[]) => this.list.next(list));
-  }
-
-  add(record: Partial<DidBookRecord>) {
-    this.httpDidBook.add(record).subscribe(
-      (newRecord: DidBookRecord) => {
-        this.list.next([...this.list.value, newRecord]);
-        this.toastr.success('New DID Address has been added', TOASTR_HEADER);
-      },
-      (error) => this.toastr.error(error.message)
+  getDIDList$(): Observable<string[]> {
+    return this.getList$().pipe(
+      map((items) => items.map((item: DidBookRecord) => item.did))
     );
   }
 
+  getList(): void {
+    this.httpDidBook
+      .getList()
+      .pipe(retryWhenWithDelay())
+      .subscribe({
+        next: (list: DidBookRecord[]) => this.list.next(list),
+        error: (err) => console.log(err),
+      });
+  }
+
+  add(record: Partial<DidBookRecord>) {
+    this.httpDidBook.add(record).subscribe({
+      next: (newRecord: DidBookRecord) => {
+        this.list.next([...this.list.value, newRecord]);
+        this.toastr.success('New DID Address has been added', TOASTR_HEADER);
+      },
+      error: (error) => this.toastr.error(error.message),
+    });
+  }
+
   delete(id: string) {
-    this.httpDidBook.delete(id).subscribe(
-      () => {
+    this.httpDidBook.delete(id).subscribe({
+      next: () => {
         this.list.next(this.removeFromList(id));
         this.toastr.success(
           'DID Address has been successfully removed',
           TOASTR_HEADER
         );
       },
-      (error) => this.toastr.error(error.message)
-    );
+      error: (error) => this.toastr.error(error.message),
+    });
   }
 
   exist(did: string): boolean {

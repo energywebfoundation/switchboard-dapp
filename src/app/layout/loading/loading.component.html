@@ -6,7 +6,7 @@
     type="ball-spin-fade"
     class="text-center">
     <p class="loading-text mt-4" *ngIf="!msg && !msgList" data-qa-id="loading">Loading...</p>
-    <p class="loading-text mt-4" *ngIf="msg">{{ msg }}</p>
+    <p class="loading-text mt-4" *ngIf="msg" data-qa-id="loading">{{ msg }}</p>
     <ng-container *ngIf="msgList">
       <ng-container *ngFor="let message of msgList; let i = index">
         <p class="loading-text position-relative" style="top: 10px" *ngIf="!i">

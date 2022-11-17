@@ -30,6 +30,7 @@ export class PublishRoleService {
     registrationTypes: RegistrationTypes[];
     claimType: string;
     claimTypeVersion: string;
+    subject?: string;
   }) {
     return this.openConfirmationDialog({
       header: 'Publish credential to my DID document',
@@ -54,7 +55,8 @@ export class PublishRoleService {
         ...item,
         notSyncedOnChain: !(await this.claimsFacade.hasOnChainRole(
           item.claimType,
-          parseInt(item.claimTypeVersion.toString(), 10)
+          parseInt(item.claimTypeVersion.toString(), 10),
+          item.subject
         )),
       };
     }
@@ -86,6 +88,7 @@ export class PublishRoleService {
     registrationTypes: RegistrationTypes[];
     claimType: string;
     claimTypeVersion: string;
+    subject?: string;
   }) {
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.',

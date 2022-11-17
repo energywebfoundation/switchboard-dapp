@@ -18,23 +18,21 @@ describe('RoleEffects', () => {
   let effects: RoleEffects;
   const roleServiceSpy = jasmine.createSpyObj('RoleService', ['getRoleList']);
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        providers: [
-          RoleEffects,
-          { provide: RoleService, useValue: roleServiceSpy },
-          { provide: SwitchboardToastrService, useValue: toastrSpy },
-          { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
-          { provide: MatDialog, useValue: dialogSpy },
-          provideMockStore(),
-          provideMockActions(() => actions$),
-        ],
-      });
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        RoleEffects,
+        { provide: RoleService, useValue: roleServiceSpy },
+        { provide: SwitchboardToastrService, useValue: toastrSpy },
+        { provide: EnvService, useValue: { rootNamespace: 'iam.ewc' } },
+        { provide: MatDialog, useValue: dialogSpy },
+        provideMockStore(),
+        provideMockActions(() => actions$),
+      ],
+    });
 
-      effects = TestBed.inject(RoleEffects);
-    })
-  );
+    effects = TestBed.inject(RoleEffects);
+  }));
 
   beforeEach(() => {
     actions$ = new ReplaySubject(1);
@@ -62,7 +60,10 @@ describe('RoleEffects', () => {
     effects.getList$.subscribe((resultAction) => {
       expect(resultAction).toEqual(
         RoleActions.getListSuccess({
-          list: [{}, {}] as IRole[],
+          list: [
+            { organization: '', application: '', roleName: '' },
+            { organization: '', application: '', roleName: '' },
+          ] as unknown as IRole[],
           namespace: 'iam.ewc',
         })
       );

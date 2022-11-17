@@ -1,30 +1,28 @@
 import { Component, Input } from '@angular/core';
 import { ColumnDefinition } from '../../../shared/components/table/generic-table/generic-table.component';
 import { EnrolmentClaim } from '../models/enrolment-claim';
-import { EnrolmentFilterListService } from './services/enrolment-filter-list.service';
 import { FilterStatus } from './models/filter-status.enum';
+import { CascadingFilterService } from '@modules';
 
 @Component({
   selector: 'app-enrolment-list',
   templateUrl: './enrolment-list.component.html',
   styleUrls: ['./enrolment-list.component.scss'],
-  providers: [EnrolmentFilterListService],
+  providers: [CascadingFilterService],
 })
 export class EnrolmentListComponent {
-  @Input() set enrolmentStatus(status: FilterStatus) {
-    this.enrolmentFilterListService.setStatus(status);
-  }
+  @Input() enrolmentStatus: FilterStatus;
   @Input() showDID = false;
   @Input() showRevokeFilters = false;
   @Input() columDefinitions: ColumnDefinition[];
-  @Input() enrolmentViewFilters: FilterStatus[];
+  @Input() filterStatuses: FilterStatus[];
   @Input() set list(data: EnrolmentClaim[]) {
-    this.enrolmentFilterListService.setList(data);
+    this.cascadingFilterService.setItems(data);
   }
 
   get filteredList$() {
-    return this.enrolmentFilterListService.filteredList$;
+    return this.cascadingFilterService.getList$();
   }
 
-  constructor(private enrolmentFilterListService: EnrolmentFilterListService) {}
+  constructor(private cascadingFilterService: CascadingFilterService) {}
 }

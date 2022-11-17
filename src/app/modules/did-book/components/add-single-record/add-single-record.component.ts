@@ -22,4 +22,8 @@ export class AddSingleRecordComponent {
   cancelHandler() {
     this.dialogRef.close();
   }
+
+  get didList$() {
+    return this.didBookService.getDIDList$();
+  }
 }

@@ -27,7 +27,11 @@
       Cancel
     </button>
     <button mat-stroked-button class="btn btn-small mr-2" *ngIf="showBackButton" (click)="back.emit()">Back</button>
-    <button mat-raised-button class="btn btn-small btn-primary" data-qa-id="next" (click)="onNextHandler()">
+    <button
+      mat-raised-button
+      class="btn btn-small btn-primary"
+      [attr.data-qa-id]="'next-' + roleType.toLowerCase()"
+      (click)="onNextHandler()">
       Next
     </button>
   </div>

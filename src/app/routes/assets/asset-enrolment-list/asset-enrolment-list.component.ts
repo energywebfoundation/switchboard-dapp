@@ -32,8 +32,8 @@ export class AssetEnrolmentListComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
   columns: ColumnDefinition[];
-  list: EnrolmentClaim[];
-  enrolmentType: EnrolmentListType.ASSET;
+  list: EnrolmentClaim[] = [];
+  enrolmentType = EnrolmentListType.ASSET;
 
   constructor(
     private loadingService: LoadingService,
@@ -89,6 +89,7 @@ export class AssetEnrolmentListComponent implements OnInit {
         registrationTypes: element.registrationTypes,
         claimType: element.claimType,
         claimTypeVersion: element.claimTypeVersion,
+        subject: element.subject,
       })
       .pipe(truthy())
       .subscribe(() => this.getList());
@@ -152,6 +153,16 @@ export class AssetEnrolmentListComponent implements OnInit {
         field: 'status',
         header: 'status',
         customElement: this.status,
+      },
+      {
+        type: ColumnType.String,
+        field: 'expirationStatus',
+        header: 'Expiration Status',
+      },
+      {
+        type: ColumnType.Date,
+        field: 'expirationDate',
+        header: 'Expiration Date',
       },
       {
         type: ColumnType.Actions,

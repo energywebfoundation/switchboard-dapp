@@ -7,13 +7,11 @@ describe('ApplicationDetailsComponent', () => {
   let component: NamespaceDetailsComponent;
   let fixture: ComponentFixture<NamespaceDetailsComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [NamespaceDetailsComponent, DefaultValuePipe],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [NamespaceDetailsComponent, DefaultValuePipe],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NamespaceDetailsComponent);

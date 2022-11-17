@@ -8,6 +8,7 @@ import { IApp, NamespaceType } from 'iam-client-lib';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { of } from 'rxjs';
 import { EnvService } from '../../../shared/services/env/env.service';
+import { DomainUtils } from '@utils';
 
 @Injectable()
 export class ApplicationEffects {
@@ -24,6 +25,13 @@ export class ApplicationEffects {
               list.map((app) => ({
                 ...app,
                 containsRoles: app?.roles?.length > 0,
+              }))
+            ),
+            map((items) =>
+              items.map((item) => ({
+                ...item,
+                organization: DomainUtils.getOrgName(item.namespace),
+                application: item.name ?? '',
               }))
             ),
             map((list: IApp[]) =>

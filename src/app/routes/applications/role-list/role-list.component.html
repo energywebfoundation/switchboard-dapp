@@ -1,11 +1,8 @@
-<app-filter
-  [isFilterShown]="isFilterVisible$ | async"
-  [filters]="filters$ | async"
-  [showAppFilter]="true"
-  [showOrgFilter]="true"
-  [showRoleFilter]="true"
-  (filtersChange)="filter($event)"></app-filter>
 <div class="card card-default mb-3 pb-3">
+  <app-cascading-filter
+    rolePlaceholder="Role"
+    [filters]="predefinedFilters"
+    [showResetFilter]="true"></app-cascading-filter>
   <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDirection="asc">
     <!-- Name -->
     <ng-container matColumnDef="name">
@@ -42,8 +39,8 @@
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef class="text-right"></th>
-      <td mat-cell *matCellDef="let element">
-        <app-actions-menu>
+      <td mat-cell *matCellDef="let element; let i = index">
+        <app-actions-menu [id]="i">
           <button mat-menu-item class="btn-color-primary" (click)="viewDetails(element)">
             <mat-icon class="btn-color-primary">preview</mat-icon>
             <span>View Details</span>

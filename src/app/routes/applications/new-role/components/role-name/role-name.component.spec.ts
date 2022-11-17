@@ -28,24 +28,22 @@ describe('RoleNameComponent', () => {
   ]);
   let hostDebug: DebugElement;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [RoleNameComponent, DomainTypePipe],
-        imports: [
-          MatIconTestingModule,
-          ReactiveFormsModule,
-          MatButtonModule,
-          MatInputModule,
-          NoopAnimationsModule,
-        ],
-        providers: [
-          { provide: RoleCreationService, useValue: roleCreationServiceSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [RoleNameComponent, DomainTypePipe],
+      imports: [
+        MatIconTestingModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatInputModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        { provide: RoleCreationService, useValue: roleCreationServiceSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RoleNameComponent);
@@ -160,7 +158,7 @@ const selectors = (hostDebug) => {
     roleName: getElement(hostDebug)('role-name')?.nativeElement,
     roleNamespace: getElement(hostDebug)('role-namespace')?.nativeElement,
     cancel: getElement(hostDebug)('cancel')?.nativeElement,
-    next: getElement(hostDebug)('proceed')?.nativeElement,
+    next: getElement(hostDebug)('proceed-role-name')?.nativeElement,
     matError: hostDebug.query(By.css(`mat-error`))?.nativeElement,
   };
 };

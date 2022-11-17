@@ -40,27 +40,25 @@ describe('SelectDidComponent', () => {
     fixture.detectChanges();
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [SelectDidComponent],
-        imports: [
-          ReactiveFormsModule,
-          MatAutocompleteModule,
-          MatFormFieldModule,
-          MatButtonModule,
-          MatSelectModule,
-          MatInputModule,
-          NoopAnimationsModule,
-        ],
-        providers: [
-          { provide: DidBookService, useValue: didBookServiceSpy },
-          { provide: MatDialog, useValue: dialogSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [SelectDidComponent],
+      imports: [
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatSelectModule,
+        MatInputModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        { provide: DidBookService, useValue: didBookServiceSpy },
+        { provide: MatDialog, useValue: dialogSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SelectDidComponent);

@@ -1,5 +1,6 @@
-<app-enrolment-list-filter
-  [showDID]="showDID"
-  [enrolmentViewFilters]="enrolmentViewFilters"></app-enrolment-list-filter>
+<app-cascading-filter
+  [showDIDFilter]="showDID"
+  [status]="enrolmentStatus"
+  [filterStatuses]="filterStatuses"></app-cascading-filter>
 
 <app-generic-table [list]="filteredList$ | async" [columDefinitions]="columDefinitions"></app-generic-table>

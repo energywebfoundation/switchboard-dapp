@@ -21,7 +21,8 @@ export const environment = {
   currencySymbol: 'EWT',
   blockExplorerUrl: 'https://explorer.energyweb.org',
   SENTRY_ENVIRONMENT: 'production',
-  INFURA_PROJECT_ID: '2DFVSWTD7gXx4Rl7wkCopHerERU',
-  INFURA_PROJECT_SECRET: 'e5581ebf1485652341637eee8d1955b7',
+  idleTime: 900,
+  idleTimeout: 300,
+  orgRequestEmail: 'iamteam@energyweb.org', //to do: create generic IAM email for inbound requests
   ...constants,
 };

@@ -18,26 +18,24 @@ describe('EkcSettingsComponent', () => {
   let hostDebug: DebugElement;
   let mockDialogData: DialogDataMock;
 
-  beforeEach(
-    waitForAsync(() => {
-      mockDialogData = new DialogDataMock();
-      TestBed.configureTestingModule({
-        imports: [
-          NoopAnimationsModule,
-          MatIconTestingModule,
-          ReactiveFormsModule,
-          MatInputModule,
-          MatButtonModule,
-        ],
-        declarations: [EkcSettingsComponent],
-        providers: [
-          { provide: MAT_DIALOG_DATA, useValue: mockDialogData },
-          { provide: MatDialogRef, useValue: dialogSpy },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    mockDialogData = new DialogDataMock();
+    TestBed.configureTestingModule({
+      imports: [
+        NoopAnimationsModule,
+        MatIconTestingModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatButtonModule,
+      ],
+      declarations: [EkcSettingsComponent],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: mockDialogData },
+        { provide: MatDialogRef, useValue: dialogSpy },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EkcSettingsComponent);

@@ -7,6 +7,8 @@ import {
 import { EnrolmentClaimAbstract } from './enrolment-claim.abstract';
 import { IEnrolmentClaim } from './enrolment-claim.interface';
 import { ExpirationStatus } from './expiration-statys.enum';
+import { FilterStatus } from '../enrolment-list/models/filter-status.enum';
+import { DomainUtils } from '@utils';
 
 export class EnrolmentClaim
   extends EnrolmentClaimAbstract
@@ -21,13 +23,33 @@ export class EnrolmentClaim
 
   isRevokedOnChain: boolean;
   isRevokedOffChain: boolean;
+  decodedToken: string | { [key: string]: any };
   createdAt: string;
+  status: FilterStatus;
 
-  private _isSyncedOnChain: boolean;
-  private _isSyncedOffChain: boolean;
   constructor(iclClaim: Claim) {
     super(iclClaim);
     this.defineProperties();
+  }
+
+  private _isSyncedOnChain: boolean;
+
+  get isSyncedOnChain(): boolean {
+    return (
+      this.iclClaim.isAccepted &&
+      this.isRegisteredOnChain() &&
+      !!this._isSyncedOnChain
+    );
+  }
+
+  private _isSyncedOffChain: boolean;
+
+  get isSyncedOffChain(): boolean {
+    return (
+      this.iclClaim.isAccepted &&
+      this.isRegisteredOffChain() &&
+      !!this._isSyncedOffChain
+    );
   }
 
   get isSynced() {
@@ -76,22 +98,6 @@ export class EnrolmentClaim
     return false;
   }
 
-  get isSyncedOffChain(): boolean {
-    return (
-      this.iclClaim.isAccepted &&
-      this.isRegisteredOffChain() &&
-      !!this._isSyncedOffChain
-    );
-  }
-
-  get isSyncedOnChain(): boolean {
-    return (
-      this.iclClaim.isAccepted &&
-      this.isRegisteredOnChain() &&
-      !!this._isSyncedOnChain
-    );
-  }
-
   get canRevokeOnChain(): boolean {
     return this.isSyncedOnChain && !this.isRevokedOnChain;
   }
@@ -118,6 +124,14 @@ export class EnrolmentClaim
     );
   }
 
+  get canShowRawEip712(): boolean {
+    return !!this.credential && this.isIssued;
+  }
+
+  get canShowRawEip191(): boolean {
+    return !!this.decodedToken && this.isIssued;
+  }
+
   get canCancelClaimRequest(): boolean {
     return (
       !this.iclClaim.isAccepted &&
@@ -127,8 +141,17 @@ export class EnrolmentClaim
     );
   }
 
+  get isIssued(): boolean {
+    return this.iclClaim.isAccepted && !this.iclClaim.isRejected;
+  }
+
   setIsRevokedOnChain(isRevoked: boolean): EnrolmentClaim {
     this.isRevokedOnChain = isRevoked;
+    return this;
+  }
+
+  setDecodedToken(token: string | { [key: string]: any }) {
+    this.decodedToken = token;
     return this;
   }
 
@@ -168,6 +191,10 @@ export class EnrolmentClaim
     );
   }
 
+  defineStatus(): void {
+    this.status = this.defineEnrolmentStatus();
+  }
+
   private defineProperties(): void {
     this.defineRoleName();
     this.defineRequestDate();
@@ -178,15 +205,11 @@ export class EnrolmentClaim
   }
 
   private defineRoleName(): void {
-    this.roleName = this.claimType?.split(`.${NamespaceType.Role}.`)?.shift();
+    this.roleName = DomainUtils.getRoleNameFromDomain(this.claimType);
   }
 
   private defineOrganization(): void {
-    this.organization = this.claimType
-      ?.split(`.${NamespaceType.Role}.`)
-      .pop()
-      ?.split(`.${NamespaceType.Application}.`)
-      .pop();
+    this.organization = DomainUtils.getOrgName(this.claimType);
   }
 
   private defineApplication(): void {
@@ -194,11 +217,7 @@ export class EnrolmentClaim
       this.application = '';
       return;
     }
-    this.application = this.claimType
-      ?.split(`.${NamespaceType.Role}.`)
-      ?.pop()
-      ?.split(`.${NamespaceType.Application}.`)
-      ?.shift();
+    this.application = DomainUtils.getAppName(this.claimType);
   }
 
   private defineRequestDate(): void {
@@ -215,9 +234,38 @@ export class EnrolmentClaim
     }
   }
 
-  private defineExpirationDate() {
+  private defineExpirationDate(): void {
     this.expirationDate = this.iclClaim.expirationTimestamp
       ? new Date(parseInt(this.iclClaim.expirationTimestamp))
       : null;
+  }
+
+  private defineEnrolmentStatus(): FilterStatus {
+    if (this.isPending) {
+      return FilterStatus.Pending;
+    }
+
+    if (this.isRejected) {
+      return FilterStatus.Rejected;
+    }
+
+    if (this.isAccepted) {
+      return FilterStatus.Approved;
+    }
+
+    if (this.isRevoked) {
+      return FilterStatus.Revoked;
+    }
+
+    if (!this.isRevoked) {
+      return FilterStatus.NotRevoked;
+    }
+
+    if (this.isRevokedOffChain && !this.isRevokedOnChain) {
+      return FilterStatus.RevokedOffChainOnly;
+    }
+    if (this.isExpired) {
+      return FilterStatus.Expired;
+    }
   }
 }

@@ -27,24 +27,22 @@ describe('DashboardComponent', () => {
     store.overrideSelector(userSelectors.getDid, 'did');
     store.overrideSelector(SettingsSelectors.isExperimentalEnabled, true);
   };
-  beforeEach(
-    waitForAsync(() => {
-      activatedRouteStub = new MockActivatedRoute();
-      TestBed.configureTestingModule({
-        imports: [RouterTestingModule.withRoutes([])],
-        declarations: [DashboardComponent],
-        providers: [
-          { provide: ActivatedRoute, useValue: activatedRouteStub },
-          { provide: Router, useValue: routerSpy },
-          provideMockStore(),
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    activatedRouteStub = new MockActivatedRoute();
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule.withRoutes([])],
+      declarations: [DashboardComponent],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRouteStub },
+        { provide: Router, useValue: routerSpy },
+        provideMockStore(),
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
-      store = TestBed.inject(MockStore);
-      dispatchSpy = spyOn(store, 'dispatch');
-    })
-  );
+    store = TestBed.inject(MockStore);
+    dispatchSpy = spyOn(store, 'dispatch');
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);

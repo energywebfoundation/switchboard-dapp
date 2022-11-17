@@ -24,10 +24,13 @@ export class IssuanceVcService {
     return this.roles.length > 0;
   }
 
-  create(data: { subject: string; claim: any }) {
+  create(data: { subject: string; claim: any; expirationTimestamp?: number }) {
     return this.iamService.issueClaim({
       ...data,
-      registrationTypes: [RegistrationTypes.OffChain],
+      registrationTypes: [
+        RegistrationTypes.OffChain,
+        RegistrationTypes.OnChain,
+      ],
     });
   }
 

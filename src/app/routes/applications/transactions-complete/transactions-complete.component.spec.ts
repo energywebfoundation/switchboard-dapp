@@ -7,14 +7,12 @@ describe('TransactionsCompleteComponent', () => {
   let component: TransactionsCompleteComponent;
   let fixture: ComponentFixture<TransactionsCompleteComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [TransactionsCompleteComponent],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [TransactionsCompleteComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionsCompleteComponent);

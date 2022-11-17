@@ -16,17 +16,15 @@ describe('DialogUserComponent', () => {
   let hostDebug: DebugElement;
   let store: MockStore<UserClaimState>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [DialogUserComponent],
-        imports: [ReactiveFormsModule, NoopAnimationsModule, MatInputModule],
-        providers: [provideMockStore()],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-      store = TestBed.inject(MockStore);
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [DialogUserComponent],
+      imports: [ReactiveFormsModule, NoopAnimationsModule, MatInputModule],
+      providers: [provideMockStore()],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+    store = TestBed.inject(MockStore);
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DialogUserComponent);

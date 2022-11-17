@@ -1,31 +1,33 @@
 import { Injectable } from '@angular/core';
 import {
-  AccountInfo,
   AssetsService,
   CacheClient,
   ClaimData,
   ClaimsService,
   DidRegistry,
   DomainsService,
+  ILogger,
   initWithEKC,
   initWithGnosis,
-  initWithKms,
   initWithMetamask,
   initWithPrivateKeySigner,
   initWithWalletConnect,
   IRole,
   IRoleDefinitionV2,
+  LogLevel,
   MessagingMethod,
   MessagingService,
   NamespaceType,
   ProviderType,
   setCacheConfig,
   setChainConfig,
+  setLogger,
   setMessagingConfig,
   SignerService,
   VerifiableCredentialsServiceBase,
 } from 'iam-client-lib';
-import { IDIDDocument } from '@ew-did-registry/did-resolver-interface';
+import * as Sentry from '@sentry/angular';
+import { Severity } from '@sentry/angular';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
 import { from, Observable } from 'rxjs';
@@ -37,18 +39,10 @@ import { ChainConfig } from 'iam-client-lib/dist/src/config/chain.config';
 import { EkcSettingsService } from '../../modules/connect-to-wallet/ekc-settings/services/ekc-settings.service';
 import { IOrganization } from 'iam-client-lib/dist/src/modules/domains/domains.types';
 import { IssueClaimOptions } from 'iam-client-lib/dist/src/modules/claims/claims.types';
+import { logger } from '../utils/logger';
+import { SentryService } from './sentry/sentry.service';
 
 export const PROVIDER_TYPE = 'ProviderType';
-
-export type InitializeData = {
-  did: string | undefined;
-  connected: boolean;
-  userClosedModal: boolean;
-  didDocument: IDIDDocument | null;
-  identityToken?: string;
-  realtimeExchangeConnected: boolean;
-  accountInfo: AccountInfo | undefined;
-};
 
 @Injectable({
   providedIn: 'root',
@@ -66,7 +60,8 @@ export class IamService {
   constructor(
     private loadingService: LoadingService,
     private envService: EnvService,
-    private ekcSettingsService: EkcSettingsService
+    private ekcSettingsService: EkcSettingsService,
+    private sentryService: SentryService
   ) {
     // Set Cache Server
     setCacheConfig(envService.chainId, {
@@ -82,6 +77,7 @@ export class IamService {
       natsServerUrl: envService.natsServerUrl,
       natsEnvironmentName: envService.natsEnvironmentName,
     });
+    logger();
   }
 
   get address() {
@@ -153,7 +149,7 @@ export class IamService {
     );
   }
 
-  getAssetById(id) {
+  getAssetById(id: string) {
     return this.wrapWithLoadingService(
       this.assetsService.getAssetById({ id }),
       { message: 'Getting selected asset data...' }
@@ -186,6 +182,15 @@ export class IamService {
         this.assetsService = assetsService;
         this.cacheClient = cacheClient;
         this.verifiableCredentialsService = verifiableCredentialsService;
+        if (!this.domainsService) {
+          this.sentryService.info(
+            `domains service is not initialized, assetsService: ${Boolean(
+              assetsService
+            )}, cacheClient: ${Boolean(
+              cacheClient
+            )}, verifiableCredentialsService: ${verifiableCredentialsService}`
+          );
+        }
         if (createDocument) {
           const { didRegistry, claimsService } = await connectToDidRegistry(
             this.configureIpfsConfig()
@@ -196,6 +201,7 @@ export class IamService {
       }
     } catch (e) {
       console.error(e);
+      this.sentryService.error(e);
       throw {
         did: undefined,
         connected: false,
@@ -250,7 +256,7 @@ export class IamService {
 
   public wrapWithLoadingService<T>(
     source: Promise<T> | Observable<T>,
-    loaderConfig?: { message: string | string[]; cancelable?: boolean }
+    loaderConfig?: { message: string; cancelable?: boolean }
   ) {
     this.loadingService.show(
       loaderConfig?.message || '',

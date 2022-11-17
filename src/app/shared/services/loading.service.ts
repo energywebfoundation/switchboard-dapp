@@ -31,7 +31,7 @@ export class LoadingService {
   }
 
   // adding timeout wil cause endless loading when this.hide() was called earlier then 100ms after this.show()
-  show(msg?: any, cancellable?: boolean) {
+  show(msg?: string, cancellable?: boolean) {
     if (msg) {
       this._msg.next(msg);
     }
