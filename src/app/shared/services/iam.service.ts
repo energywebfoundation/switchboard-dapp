@@ -268,6 +268,7 @@ export class IamService {
   private getChainConfig(): Partial<ChainConfig> {
     const chainConfig: Partial<ChainConfig> = {
       rpcUrl: this.envService.rpcUrl,
+      assetManagerAddress: '0x524563FeA0c9b54B337F0bAc366A9f541d26b3ea',
     };
 
     return chainConfig;
