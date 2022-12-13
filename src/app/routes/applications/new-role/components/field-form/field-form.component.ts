@@ -12,12 +12,37 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { FieldValidationService } from '../../../../../shared/services/field-validation.service';
 import { Subject } from 'rxjs';
 import { truthy } from '@operators';
+import { isValidJsonFormatValidator } from '@utils';
 
-const FIELD_TYPES = ['text', 'number', 'date', 'boolean'];
+export enum FieldTypesEnum {
+  Text = 'text',
+  Number = 'number',
+  Date = 'date',
+  Boolean = 'boolean',
+  Json = 'json',
+}
+
+const JSON_PLACEHOLDER = {
+  facility: {
+    label: '',
+    address: '',
+    totalEnergyConsumed: '',
+    gridFlexibility: false,
+    gridServices: false,
+  },
+};
+
+const FIELD_TYPES = [
+  FieldTypesEnum.Text,
+  FieldTypesEnum.Number,
+  FieldTypesEnum.Date,
+  FieldTypesEnum.Boolean,
+  FieldTypesEnum.Json,
+];
 
 @Component({
   selector: 'app-field-form',
@@ -66,6 +91,7 @@ export class FieldFormComponent implements OnInit, OnDestroy {
       ],
       minDate: undefined,
       maxDate: undefined,
+      schema: ['', {updateOn: 'blur', validators: [isValidJsonFormatValidator]}],
     }),
   });
   private subscription$ = new Subject();
@@ -82,15 +108,23 @@ export class FieldFormComponent implements OnInit, OnDestroy {
   }
 
   get isText(): boolean {
-    return this.fieldsForm?.value?.fieldType === 'text';
+    return this.fieldsForm?.value?.fieldType === FieldTypesEnum.Text;
   }
 
   get isDate(): boolean {
-    return this.fieldsForm?.value?.fieldType === 'date';
+    return this.fieldsForm?.value?.fieldType === FieldTypesEnum.Date;
   }
 
   get isNumber(): boolean {
-    return this.fieldsForm?.value?.fieldType === 'number';
+    return this.fieldsForm?.value?.fieldType === FieldTypesEnum.Number;
+  }
+
+  get isJSON(): boolean {
+    return this.fieldsForm?.value?.fieldType === FieldTypesEnum.Json;
+  }
+
+  get jsonPlaceholder(): string {
+    return JSON.stringify(JSON_PLACEHOLDER);
   }
 
   isFieldTypeDefined() {
@@ -122,18 +156,22 @@ export class FieldFormComponent implements OnInit, OnDestroy {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _extractValidationObject(value: any) {
+    if(value.fieldType === FieldTypesEnum.Json) {
+      debugger;
+    }
+    console.log(this.fieldsForm.value);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let retVal: any = value;
 
     if (value && value.fieldType) {
       let validation;
-      const { required, minLength, maxLength, pattern, minValue, maxValue } =
+      const { required, minLength, maxLength, pattern, minValue, maxValue, schema } =
         value.validation;
 
       const { minDate, maxDate } = value.validation;
 
       switch (value.fieldType) {
-        case 'text':
+        case FieldTypesEnum.Text:
           validation = {
             required,
             minLength,
@@ -141,29 +179,35 @@ export class FieldFormComponent implements OnInit, OnDestroy {
             pattern,
           };
           break;
-        case 'number':
+        case FieldTypesEnum.Number:
           validation = {
             required,
             minValue,
             maxValue,
           };
           break;
-        case 'date':
+        case FieldTypesEnum.Date:
           validation = {
             required,
             minDate,
             maxDate,
           };
           break;
-        case 'boolean':
+        case FieldTypesEnum.Boolean:
           validation = {
             required,
+          };
+          break;
+        case FieldTypesEnum.Json:
+           validation = {
+            required,
+            schema: JSON.stringify(JSON.parse(schema)).replace(/\s/g,''),
           };
           break;
         default:
           validation = value.validation;
       }
-      retVal = JSON.parse(JSON.stringify(Object.assign(retVal, validation)));
+      retVal = Object.assign(retVal, validation);
       delete retVal.validation;
     }
 

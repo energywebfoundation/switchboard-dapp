@@ -146,6 +146,22 @@
           </mat-form-field>
         </div>
       </ng-container>
+
+      <ng-container *ngIf="isJSON">
+        <div class="px-0">
+          <mat-label class="ml-3 pl-1">JSON Schema</mat-label>
+          <mat-form-field class="mt-2" appearance="outline">
+            <textarea
+                    matInput
+                    type="number"
+                    [placeholder]="jsonPlaceholder | json"
+                    autocomplete="off"
+                    data-qa-id="schema"
+                    formControlName="schema"></textarea>
+            <mat-error *ngIf="fieldsForm.get('validation.schema').hasError('invalidJsonFormat')"> Invalid JSON Schema</mat-error>
+          </mat-form-field>
+        </div>
+      </ng-container>
     </div>
     <div class="d-flex justify-content-end mb-2">
       <button mat-stroked-button class="btn-small mr-2" (click)="cancel()">Cancel</button>

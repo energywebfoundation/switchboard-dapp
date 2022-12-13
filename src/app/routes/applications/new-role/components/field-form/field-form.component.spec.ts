@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { FieldFormComponent } from './field-form.component';
+import { FieldFormComponent, FieldTypesEnum } from './field-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { FieldValidationService } from '../../../../../shared/services/field-validation.service';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { dispatchInputEvent, getElement } from '@tests';
+import { dispatchInputEvent, getElement, getElementByCss } from '@tests';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 describe('FieldFormComponent', () => {
@@ -224,6 +224,64 @@ describe('FieldFormComponent', () => {
       pattern: 'aa',
     });
   });
+
+  it('should add json data ', () => {
+    const schemaValue = JSON.stringify({ year: { label: '123' } });
+    fixture.detectChanges();
+    const { fieldType, fieldLabel } = getSelectors(hostDebug);
+    const addedSpy = spyOn(component.added, 'emit');
+    fieldLabel.value = 'Json Label';
+    dispatchInputEvent(fieldLabel);
+
+    fieldType.click();
+    fixture.detectChanges();
+    getElement(hostDebug)(FieldTypesEnum.Json).nativeElement.click();
+    fixture.detectChanges();
+
+    const { addBtn, schema } = getSelectors(hostDebug);
+
+    expect(addBtn.disabled).toBeFalse();
+
+    schema.value = schemaValue;
+    dispatchInputEvent(schema);
+    fixture.detectChanges();
+
+    addBtn.click();
+
+    expect(addedSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        fieldType: 'json',
+        label: 'Json Label',
+        required: null,
+        schema: schemaValue,
+      })
+    );
+  });
+
+  it('should display invalid json error ', () => {
+    const schemaValue = "{year:{label:'123'}";
+    fixture.detectChanges();
+    const { fieldType, fieldLabel } = getSelectors(hostDebug);
+    fieldLabel.value = 'Json Label';
+    dispatchInputEvent(fieldLabel);
+
+    fieldType.click();
+    fixture.detectChanges();
+    getElement(hostDebug)(FieldTypesEnum.Json).nativeElement.click();
+    fixture.detectChanges();
+
+    const { schema } = getSelectors(hostDebug);
+
+    schema.value = schemaValue;
+    dispatchInputEvent(schema);
+    fixture.detectChanges();
+
+    const { addBtn } = getSelectors(hostDebug);
+    expect(addBtn.disabled).toBeTrue();
+    expect(
+      getElementByCss(hostDebug)('mat-error')?.nativeElement.innerText
+    ).toContain('Invalid JSON Schema');
+  });
 });
 
 const getSelectors = (hostDebug) => {
@@ -239,6 +297,7 @@ const getSelectors = (hostDebug) => {
     minDate: getElement(hostDebug)('field-min-date')?.nativeElement,
     maxDate: getElement(hostDebug)('field-max-date')?.nativeElement,
     updateBtn: getElement(hostDebug)('update-field')?.nativeElement,
+    schema: getElement(hostDebug)('schema')?.nativeElement,
     addBtn: getElement(hostDebug)('add-field')?.nativeElement,
   };
 };

@@ -69,6 +69,7 @@ export class IamService {
     });
 
     // Set RPC
+    debugger;
     setChainConfig(envService.chainId, this.getChainConfig());
 
     // Set Messaging Options
