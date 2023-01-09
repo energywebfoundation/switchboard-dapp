@@ -10,6 +10,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { RegistrationTypes } from 'iam-client-lib';
 import { KeyValue } from '@angular/common';
 import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
+import { FieldTypesEnum } from '../../applications/new-role/components/field-form/field-form.enum';
 
 export interface EnrolmentField {
   key: string;
@@ -48,12 +49,12 @@ export class EnrolmentFormComponent implements EnrolmentForm {
   @Input() showSubmit = true;
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
 
-  @Input() set fieldList(list: IFieldDefinition[]) {
+  @Input() set fieldList(list: any[]) {
     this.fields = list;
     this.updateEnrolmentForm(new FormArray(this.createControls(list)));
   }
 
-  get fieldList(): IFieldDefinition[] {
+  get fieldList(): any[] {
     return this.fields;
   }
 
@@ -122,11 +123,11 @@ export class EnrolmentFormComponent implements EnrolmentForm {
 
   private setFieldDefaults(field) {
     switch (field.fieldType) {
-      case 'text':
+      case FieldTypesEnum.Text:
         break;
-      case 'number':
+      case FieldTypesEnum.Number:
         break;
-      case 'date':
+      case FieldTypesEnum.Date:
         if (field.maxDate) {
           field.maxDate = new Date(field.maxDate);
         }
@@ -134,7 +135,9 @@ export class EnrolmentFormComponent implements EnrolmentForm {
           field.minDate = new Date(field.minDate);
         }
         break;
-      case 'boolean':
+      case FieldTypesEnum.Boolean:
+        break;
+      case FieldTypesEnum.Json:
         break;
     }
   }

@@ -75,4 +75,10 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumnsView"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumnsView"></tr>
   </table>
+  <div>
+    <h4>Json schemas</h4>
+    <div *ngFor="let json of jsonFields">
+      {{json?.schema | json}}
+    </div>
+  </div>
 </div>

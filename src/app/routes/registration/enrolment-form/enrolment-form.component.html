@@ -50,6 +50,18 @@
             <mat-error *ngIf="getControl(i)?.errors?.min"> Min value is {{ fieldList[i].minValue }}.</mat-error>
           </mat-form-field>
 
+          <!-- TYPE: Json -->
+          <mat-form-field
+            class="mt-2 md-enroll"
+            appearance="outline"
+            floatPlaceholder="never"
+            *ngIf="fieldList[i].fieldType === 'json'"
+            [attr.data-qa-id]="'field-' + i"
+            [ngStyle]="txtColor">
+            <textarea matInput type="number" [value]="fieldList[i]?.schema" placeholder="{{ fieldList[i].label }}" [formControl]="getControl(i)"></textarea>
+            <mat-error *ngIf="getControl(i)?.errors?.required"> This field is required.</mat-error>
+          </mat-form-field>
+
           <!-- TYPE: Date -->
           <mat-form-field
             class="mt-2 md-enroll bg-transparent"

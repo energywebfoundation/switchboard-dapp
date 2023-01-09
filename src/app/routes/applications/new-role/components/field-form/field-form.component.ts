@@ -12,29 +12,84 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { filter, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { FieldValidationService } from '../../../../../shared/services/field-validation.service';
 import { Subject } from 'rxjs';
 import { truthy } from '@operators';
 import { isValidJsonFormatValidator } from '@utils';
-
-export enum FieldTypesEnum {
-  Text = 'text',
-  Number = 'number',
-  Date = 'date',
-  Boolean = 'boolean',
-  Json = 'json',
-}
+import { FieldTypesEnum } from './field-form.enum';
 
 const JSON_PLACEHOLDER = {
-  facility: {
-    label: '',
-    address: '',
-    totalEnergyConsumed: '',
-    gridFlexibility: false,
-    gridServices: false,
+  "type": "object",
+  "patternProperties": {
+    "^[0-9]*$": {
+      "type": "object",
+      "properties": {
+        "operations": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "energyConsumed": {
+                  "type": "string"
+                },
+                "enrolled": {
+                  "type": "boolean"
+                },
+                "dispatched": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "label",
+                "address",
+                "energyConsumed",
+                "enrolled",
+                "dispatched"
+              ]
+            }
+          ]
+        },
+        "certifications": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "instrument": {
+                  "type": "string"
+                },
+                "unitQuantity": {
+                  "type": "integer"
+                },
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "instrument",
+                "unitQuantity",
+                "location"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "operations",
+        "certifications"
+      ]
+    },
   },
-};
+  "additionalProperties": false
+}
 
 const FIELD_TYPES = [
   FieldTypesEnum.Text,
@@ -91,7 +146,7 @@ export class FieldFormComponent implements OnInit, OnDestroy {
       ],
       minDate: undefined,
       maxDate: undefined,
-      schema: ['', {updateOn: 'blur', validators: [isValidJsonFormatValidator]}],
+      schema: ['', {validators: [isValidJsonFormatValidator]}],
     }),
   });
   private subscription$ = new Subject();

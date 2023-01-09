@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { FieldFormComponent, FieldTypesEnum } from './field-form.component';
+import { FieldFormComponent } from './field-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +9,7 @@ import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { dispatchInputEvent, getElement, getElementByCss } from '@tests';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FieldTypesEnum } from './field-form.enum';
 
 describe('FieldFormComponent', () => {
   let component: FieldFormComponent;
@@ -226,7 +227,7 @@ describe('FieldFormComponent', () => {
   });
 
   it('should add json data ', () => {
-    const schemaValue = JSON.stringify({ year: { label: '123' } });
+    const schemaValue = '{"year":{"label":"123"}}';
     fixture.detectChanges();
     const { fieldType, fieldLabel } = getSelectors(hostDebug);
     const addedSpy = spyOn(component.added, 'emit');

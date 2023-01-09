@@ -434,6 +434,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
     req.data.revoker = { ...this.revoker, revokerType: this.revoker.type };
     req.data.defaultValidityPeriod = this.validityPeriod;
 
+    debugger;
     if (!skipNextStep) {
       // Set the second step to non-editable
       const list = this.stepper.steps.toArray();
