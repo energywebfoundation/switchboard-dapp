@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { CardComponent } from './card/card.component';
+import { JsonEditorModule } from '@modules';
 
 const routes: Routes = [{ path: '', component: DashboardComponent }];
 
@@ -43,6 +44,7 @@ const routes: Routes = [{ path: '', component: DashboardComponent }];
     MatDatepickerModule,
     WidgetsModule,
     NgxSpinnerModule,
+    JsonEditorModule,
   ],
   declarations: [DashboardComponent, UserInfoComponent, CardComponent],
 })

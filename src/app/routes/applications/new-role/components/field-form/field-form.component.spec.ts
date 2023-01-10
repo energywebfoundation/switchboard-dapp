@@ -7,8 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { FieldValidationService } from '../../../../../shared/services/field-validation.service';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { dispatchInputEvent, getElement, getElementByCss } from '@tests';
+import { dispatchInputEvent, getElement } from '@tests';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { JsonEditorModule } from '@modules';
 import { FieldTypesEnum } from './field-form.enum';
 
 describe('FieldFormComponent', () => {
@@ -28,6 +29,7 @@ describe('FieldFormComponent', () => {
         NoopAnimationsModule,
         MatInputModule,
         MatCheckboxModule,
+        JsonEditorModule,
       ],
       providers: [
         { provide: FieldValidationService, useValue: fieldValidationService },
@@ -67,7 +69,7 @@ describe('FieldFormComponent', () => {
 
     expect(addedSpy).toHaveBeenCalledWith(
       jasmine.objectContaining({
-        fieldType: 'boolean',
+        fieldType: FieldTypesEnum.Boolean,
         label: 'Label',
         required: null,
       })
@@ -102,7 +104,7 @@ describe('FieldFormComponent', () => {
 
     expect(addedSpy).toHaveBeenCalledWith(
       jasmine.objectContaining({
-        fieldType: 'text',
+        fieldType: FieldTypesEnum.Text,
         label: 'Text Label',
         required: null,
         minLength: 1,
@@ -138,7 +140,7 @@ describe('FieldFormComponent', () => {
 
     expect(addedSpy).toHaveBeenCalledWith(
       jasmine.objectContaining({
-        fieldType: 'number',
+        fieldType: FieldTypesEnum.Number,
         label: 'Number Label',
         required: null,
         maxValue: 3,
@@ -170,7 +172,7 @@ describe('FieldFormComponent', () => {
 
     expect(addedSpy).toHaveBeenCalledWith(
       jasmine.objectContaining({
-        fieldType: 'date',
+        fieldType: FieldTypesEnum.Date,
         label: 'Date Label',
         required: true,
         minDate: null,
@@ -182,7 +184,7 @@ describe('FieldFormComponent', () => {
   it('should update data depending on passed values', () => {
     const updateSpy = spyOn(component.updated, 'emit');
     component.data = {
-      fieldType: 'text',
+      fieldType: FieldTypesEnum.Text,
       label: 'Text Label',
       required: true,
       minLength: 1,
@@ -217,7 +219,7 @@ describe('FieldFormComponent', () => {
     updateBtn.click();
 
     expect(updateSpy).toHaveBeenCalledWith({
-      fieldType: 'text',
+      fieldType: FieldTypesEnum.Text,
       label: 'Text Label',
       required: false,
       minLength: 1,
@@ -226,62 +228,19 @@ describe('FieldFormComponent', () => {
     });
   });
 
-  it('should add json data ', () => {
-    const schemaValue = '{"year":{"label":"123"}}';
-    fixture.detectChanges();
-    const { fieldType, fieldLabel } = getSelectors(hostDebug);
-    const addedSpy = spyOn(component.added, 'emit');
-    fieldLabel.value = 'Json Label';
-    dispatchInputEvent(fieldLabel);
+  it('should parse json when setting value', () => {
+    component.data = {
+      fieldType: FieldTypesEnum.Json,
+      label: 'nbvnv',
+      required: null,
+      schema: '{"type":"object"}',
+    };
 
-    fieldType.click();
-    fixture.detectChanges();
-    getElement(hostDebug)(FieldTypesEnum.Json).nativeElement.click();
     fixture.detectChanges();
 
-    const { addBtn, schema } = getSelectors(hostDebug);
-
-    expect(addBtn.disabled).toBeFalse();
-
-    schema.value = schemaValue;
-    dispatchInputEvent(schema);
-    fixture.detectChanges();
-
-    addBtn.click();
-
-    expect(addedSpy).toHaveBeenCalledWith(
-      jasmine.objectContaining({
-        fieldType: 'json',
-        label: 'Json Label',
-        required: null,
-        schema: schemaValue,
-      })
-    );
-  });
-
-  it('should display invalid json error ', () => {
-    const schemaValue = "{year:{label:'123'}";
-    fixture.detectChanges();
-    const { fieldType, fieldLabel } = getSelectors(hostDebug);
-    fieldLabel.value = 'Json Label';
-    dispatchInputEvent(fieldLabel);
-
-    fieldType.click();
-    fixture.detectChanges();
-    getElement(hostDebug)(FieldTypesEnum.Json).nativeElement.click();
-    fixture.detectChanges();
-
-    const { schema } = getSelectors(hostDebug);
-
-    schema.value = schemaValue;
-    dispatchInputEvent(schema);
-    fixture.detectChanges();
-
-    const { addBtn } = getSelectors(hostDebug);
-    expect(addBtn.disabled).toBeTrue();
-    expect(
-      getElementByCss(hostDebug)('mat-error')?.nativeElement.innerText
-    ).toContain('Invalid JSON Schema');
+    expect(component.fieldsForm.get('validation.schema').value).toEqual({
+      type: 'object',
+    });
   });
 });
 
@@ -298,7 +257,6 @@ const getSelectors = (hostDebug) => {
     minDate: getElement(hostDebug)('field-min-date')?.nativeElement,
     maxDate: getElement(hostDebug)('field-max-date')?.nativeElement,
     updateBtn: getElement(hostDebug)('update-field')?.nativeElement,
-    schema: getElement(hostDebug)('schema')?.nativeElement,
     addBtn: getElement(hostDebug)('add-field')?.nativeElement,
   };
 };

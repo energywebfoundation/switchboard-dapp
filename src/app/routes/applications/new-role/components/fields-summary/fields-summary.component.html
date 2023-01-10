@@ -29,7 +29,7 @@
     <div class="text-left pt-1">
       <h4 class="small font-weight-600 mb-1">Json Schema</h4>
       <span class="f-16" data-qa-id="min-length">
-        {{ element?.schema | json }}
+        {{ element?.schema | parseJson | json }}
       </span>
     </div>
   </ng-container>

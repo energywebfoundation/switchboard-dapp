@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, take } from 'rxjs/operators';
 import { SearchType } from 'iam-client-lib';
@@ -7,6 +7,8 @@ import * as userSelectors from '../../state/user-claim/user.selectors';
 import * as AuthActions from '../../state/auth/auth.actions';
 import { LayoutActions, SettingsSelectors } from '@state';
 import { RouterConst } from '../router-const';
+import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import Ajv from 'ajv';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,6 +18,7 @@ import { RouterConst } from '../router-const';
 export class DashboardComponent implements AfterViewInit {
   userName$ = this.store.select(userSelectors.getUserName);
   userDid$ = this.store.select(userSelectors.getDid);
+
 
   constructor(
     private route: Router,

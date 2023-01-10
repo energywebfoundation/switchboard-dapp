@@ -1,95 +1,12 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators, } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { FieldValidationService } from '../../../../../shared/services/field-validation.service';
 import { Subject } from 'rxjs';
 import { truthy } from '@operators';
-import { isValidJsonFormatValidator } from '@utils';
 import { FieldTypesEnum } from './field-form.enum';
-
-const JSON_PLACEHOLDER = {
-  "type": "object",
-  "patternProperties": {
-    "^[0-9]*$": {
-      "type": "object",
-      "properties": {
-        "operations": {
-          "type": "array",
-          "items": [
-            {
-              "type": "object",
-              "properties": {
-                "label": {
-                  "type": "string"
-                },
-                "address": {
-                  "type": "string"
-                },
-                "energyConsumed": {
-                  "type": "string"
-                },
-                "enrolled": {
-                  "type": "boolean"
-                },
-                "dispatched": {
-                  "type": "boolean"
-                }
-              },
-              "required": [
-                "label",
-                "address",
-                "energyConsumed",
-                "enrolled",
-                "dispatched"
-              ]
-            }
-          ]
-        },
-        "certifications": {
-          "type": "array",
-          "items": [
-            {
-              "type": "object",
-              "properties": {
-                "instrument": {
-                  "type": "string"
-                },
-                "unitQuantity": {
-                  "type": "integer"
-                },
-                "location": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "instrument",
-                "unitQuantity",
-                "location"
-              ]
-            }
-          ]
-        }
-      },
-      "required": [
-        "operations",
-        "certifications"
-      ]
-    },
-  },
-  "additionalProperties": false
-}
+import Ajv from 'ajv';
+import { JsonEditorComponent, JsonEditorOptions } from '@modules';
 
 const FIELD_TYPES = [
   FieldTypesEnum.Text,
@@ -105,10 +22,27 @@ const FIELD_TYPES = [
   styleUrls: ['./field-form.component.scss'],
 })
 export class FieldFormComponent implements OnInit, OnDestroy {
-  @Input() data;
+  @Input() data: {
+    fieldType: FieldTypesEnum;
+    label: string;
+    required: boolean;
+    schema?: string;
+    minLength?: number;
+    maxLength?: number;
+    minValue?: number;
+    maxValue?: number;
+    pattern?: string;
+    minDate?: string;
+    maxDate?: string;
+  };
   @Output() added = new EventEmitter();
   @Output() updated = new EventEmitter();
   @Output() canceled = new EventEmitter();
+
+  public editorOptions: JsonEditorOptions;
+  @ViewChild(JsonEditorComponent, { static: false })
+  editor: JsonEditorComponent;
+  isValidSchema = true;
 
   editMode = false;
   FieldTypes = FIELD_TYPES;
@@ -146,7 +80,7 @@ export class FieldFormComponent implements OnInit, OnDestroy {
       ],
       minDate: undefined,
       maxDate: undefined,
-      schema: ['', {validators: [isValidJsonFormatValidator]}],
+      schema: [undefined],
     }),
   });
   private subscription$ = new Subject();
@@ -154,7 +88,22 @@ export class FieldFormComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private fieldValidationService: FieldValidationService
-  ) {}
+  ) {
+    this.editorOptions = new JsonEditorOptions();
+    this.editorOptions.modes = ['tree', 'view', 'form', 'code', 'text'];
+    this.editorOptions.mode = 'code';
+  }
+
+  checkJson(e): void {
+    if (e instanceof Event) {
+      return;
+    }
+    if (this.fieldsForm.get('fieldType').value !== FieldTypesEnum.Json) {
+      return;
+    }
+    const ajv = new Ajv();
+    this.isValidSchema = ajv.validateSchema(e) as boolean;
+  }
 
   ngOnInit(): void {
     this._induceInt();
@@ -178,10 +127,6 @@ export class FieldFormComponent implements OnInit, OnDestroy {
     return this.fieldsForm?.value?.fieldType === FieldTypesEnum.Json;
   }
 
-  get jsonPlaceholder(): string {
-    return JSON.stringify(JSON_PLACEHOLDER);
-  }
-
   isFieldTypeDefined() {
     return this.fieldsForm?.value?.fieldType;
   }
@@ -195,15 +140,19 @@ export class FieldFormComponent implements OnInit, OnDestroy {
     this.canceled.emit();
   }
 
+  get isInvalid() {
+    return this.fieldsForm.invalid || !this.isValidSchema;
+  }
+
   add() {
-    if (this.fieldsForm.invalid) {
+    if (this.isInvalid) {
       return;
     }
     this.added.emit(this._extractValidationObject(this.fieldsForm.value));
   }
 
   update() {
-    if (this.fieldsForm.invalid) {
+    if (this.isInvalid) {
       return;
     }
     this.updated.emit(this._extractValidationObject(this.fieldsForm.value));
@@ -211,17 +160,20 @@ export class FieldFormComponent implements OnInit, OnDestroy {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _extractValidationObject(value: any) {
-    if(value.fieldType === FieldTypesEnum.Json) {
-      debugger;
-    }
-    console.log(this.fieldsForm.value);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let retVal: any = value;
 
     if (value && value.fieldType) {
       let validation;
-      const { required, minLength, maxLength, pattern, minValue, maxValue, schema } =
-        value.validation;
+      const {
+        required,
+        minLength,
+        maxLength,
+        pattern,
+        minValue,
+        maxValue,
+        schema,
+      } = value.validation;
 
       const { minDate, maxDate } = value.validation;
 
@@ -254,9 +206,10 @@ export class FieldFormComponent implements OnInit, OnDestroy {
           };
           break;
         case FieldTypesEnum.Json:
-           validation = {
+          console.log(schema);
+          validation = {
             required,
-            schema: JSON.stringify(JSON.parse(schema)).replace(/\s/g,''),
+            schema: JSON.stringify(schema),
           };
           break;
         default:
@@ -272,13 +225,18 @@ export class FieldFormComponent implements OnInit, OnDestroy {
   private updateForm() {
     if (this.data) {
       this.editMode = true;
+
       const fieldKeys = Object.keys(this.data);
       const valueToPatch = {};
       fieldKeys.map((fieldKey) => {
         this.fieldsForm.get(fieldKey)?.setValue(this.data[fieldKey]);
         valueToPatch[fieldKey] = this.data[fieldKey];
+        if (this.data.fieldType === FieldTypesEnum.Json) {
+          valueToPatch[fieldKey] = JSON.parse(this.data.schema);
+        }
       });
 
+      console.log('valueToPatch', valueToPatch);
       this.fieldsForm.get('validation').patchValue(valueToPatch);
     }
   }
