@@ -204,7 +204,7 @@ describe('FieldFormComponent', () => {
 
     expect(component.isText).toBeTrue();
     expect(
-      component.fieldsForm.get('validation').get('required').value
+      component.fieldsForm.get('required').value
     ).toBeTrue();
     expect(fieldLabel.value).toEqual('Text Label');
     expect(minLength.value).toEqual('1');
@@ -238,7 +238,7 @@ describe('FieldFormComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.fieldsForm.get('validation.schema').value).toEqual({
+    expect(component.fieldsForm.get('schema').value).toEqual({
       type: 'object',
     });
   });

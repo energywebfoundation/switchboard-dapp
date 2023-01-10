@@ -1,5 +1,18 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators, } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { FieldValidationService } from '../../../../../shared/services/field-validation.service';
 import { Subject } from 'rxjs';
@@ -16,32 +29,34 @@ const FIELD_TYPES = [
   FieldTypesEnum.Json,
 ];
 
+export interface IFieldFormData {
+  fieldType: FieldTypesEnum;
+  label: string;
+  required: boolean;
+  schema?: string;
+  minLength?: number;
+  maxLength?: number;
+  minValue?: number;
+  maxValue?: number;
+  pattern?: string;
+  minDate?: string;
+  maxDate?: string;
+}
+
 @Component({
   selector: 'app-field-form',
   templateUrl: './field-form.component.html',
   styleUrls: ['./field-form.component.scss'],
 })
 export class FieldFormComponent implements OnInit, OnDestroy {
-  @Input() data: {
-    fieldType: FieldTypesEnum;
-    label: string;
-    required: boolean;
-    schema?: string;
-    minLength?: number;
-    maxLength?: number;
-    minValue?: number;
-    maxValue?: number;
-    pattern?: string;
-    minDate?: string;
-    maxDate?: string;
-  };
-  @Output() added = new EventEmitter();
-  @Output() updated = new EventEmitter();
-  @Output() canceled = new EventEmitter();
-
-  public editorOptions: JsonEditorOptions;
+  @Input() data: IFieldFormData;
+  @Output() added = new EventEmitter<IFieldFormData>();
+  @Output() updated = new EventEmitter<IFieldFormData>();
+  @Output() canceled = new EventEmitter<void>();
   @ViewChild(JsonEditorComponent, { static: false })
   editor: JsonEditorComponent;
+  public editorOptions: JsonEditorOptions;
+
   isValidSchema = true;
 
   editMode = false;
@@ -49,39 +64,37 @@ export class FieldFormComponent implements OnInit, OnDestroy {
   fieldsForm: FormGroup = this.fb.group({
     fieldType: ['', Validators.required],
     label: ['', Validators.required],
-    validation: this.fb.group({
-      required: undefined,
-      minLength: [
-        undefined,
-        {
-          validators: Validators.min(0),
-          updateOn: 'blur',
-        },
-      ],
-      maxLength: [
-        undefined,
-        {
-          validators: Validators.min(1),
-          updateOn: 'blur',
-        },
-      ],
-      pattern: undefined,
-      minValue: [
-        undefined,
-        {
-          updateOn: 'blur',
-        },
-      ],
-      maxValue: [
-        undefined,
-        {
-          updateOn: 'blur',
-        },
-      ],
-      minDate: undefined,
-      maxDate: undefined,
-      schema: [undefined],
-    }),
+    required: undefined,
+    minLength: [
+      undefined,
+      {
+        validators: Validators.min(0),
+        updateOn: 'blur',
+      },
+    ],
+    maxLength: [
+      undefined,
+      {
+        validators: Validators.min(1),
+        updateOn: 'blur',
+      },
+    ],
+    pattern: undefined,
+    minValue: [
+      undefined,
+      {
+        updateOn: 'blur',
+      },
+    ],
+    maxValue: [
+      undefined,
+      {
+        updateOn: 'blur',
+      },
+    ],
+    minDate: undefined,
+    maxDate: undefined,
+    schema: [undefined],
   });
   private subscription$ = new Subject();
 
@@ -98,7 +111,7 @@ export class FieldFormComponent implements OnInit, OnDestroy {
     if (e instanceof Event) {
       return;
     }
-    if (this.fieldsForm.get('fieldType').value !== FieldTypesEnum.Json) {
+    if (this.fieldType !== FieldTypesEnum.Json) {
       return;
     }
     const ajv = new Ajv();
@@ -109,6 +122,10 @@ export class FieldFormComponent implements OnInit, OnDestroy {
     this._induceInt();
     this._induceRanges();
     this.updateForm();
+  }
+
+  get fieldType(): FieldTypesEnum {
+    return this.fieldsForm.get('fieldType').value;
   }
 
   get isText(): boolean {
@@ -158,68 +175,50 @@ export class FieldFormComponent implements OnInit, OnDestroy {
     this.updated.emit(this._extractValidationObject(this.fieldsForm.value));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _extractValidationObject(value: any) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let retVal: any = value;
+  private _extractValidationObject(value: IFieldFormData): IFieldFormData {
+    const { label, fieldType, required } = value;
 
     if (value && value.fieldType) {
-      let validation;
-      const {
-        required,
-        minLength,
-        maxLength,
-        pattern,
-        minValue,
-        maxValue,
-        schema,
-      } = value.validation;
-
-      const { minDate, maxDate } = value.validation;
-
-      switch (value.fieldType) {
-        case FieldTypesEnum.Text:
-          validation = {
-            required,
-            minLength,
-            maxLength,
-            pattern,
-          };
-          break;
-        case FieldTypesEnum.Number:
-          validation = {
-            required,
-            minValue,
-            maxValue,
-          };
-          break;
-        case FieldTypesEnum.Date:
-          validation = {
-            required,
-            minDate,
-            maxDate,
-          };
-          break;
-        case FieldTypesEnum.Boolean:
-          validation = {
-            required,
-          };
-          break;
-        case FieldTypesEnum.Json:
-          console.log(schema);
-          validation = {
-            required,
-            schema: JSON.stringify(schema),
-          };
-          break;
-        default:
-          validation = value.validation;
-      }
-      retVal = Object.assign(retVal, validation);
-      delete retVal.validation;
+      return { label, required, fieldType, ...this.getFieldsObject(value) };
     }
+  }
 
-    return retVal;
+  private getFieldsObject({
+    minLength,
+    maxLength,
+    pattern,
+    fieldType,
+    minValue,
+    maxValue,
+    minDate,
+    maxDate,
+    schema,
+  }: IFieldFormData): Partial<IFieldFormData> {
+    switch (fieldType) {
+      case FieldTypesEnum.Text:
+        return {
+          minLength,
+          maxLength,
+          pattern,
+        };
+      case FieldTypesEnum.Number:
+        return {
+          minValue,
+          maxValue,
+        };
+      case FieldTypesEnum.Date:
+        return {
+          minDate,
+          maxDate,
+        };
+      case FieldTypesEnum.Json:
+        return {
+          schema: JSON.stringify(schema),
+        };
+      case FieldTypesEnum.Boolean:
+      default:
+        return {};
+    }
   }
 
   private updateForm() {
@@ -236,14 +235,13 @@ export class FieldFormComponent implements OnInit, OnDestroy {
         }
       });
 
-      console.log('valueToPatch', valueToPatch);
-      this.fieldsForm.get('validation').patchValue(valueToPatch);
+      this.fieldsForm.patchValue(valueToPatch);
     }
   }
 
   private _induceInt() {
-    const minLength = this.fieldsForm.get('validation').get('minLength');
-    const maxLength = this.fieldsForm.get('validation').get('maxLength');
+    const minLength = this.fieldsForm.get('minLength');
+    const maxLength = this.fieldsForm.get('maxLength');
 
     this.parseIntControlValue(minLength);
     this.parseIntControlValue(maxLength);
@@ -260,20 +258,20 @@ export class FieldFormComponent implements OnInit, OnDestroy {
   private _induceRanges() {
     // Min & Max Length Range
     this.fieldValidationService.autoRangeControls(
-      this.fieldsForm.get('validation').get('minLength'),
-      this.fieldsForm.get('validation').get('maxLength')
+      this.fieldsForm.get('minLength'),
+      this.fieldsForm.get('maxLength')
     );
 
     // Min & Max Value Range
     this.fieldValidationService.autoRangeControls(
-      this.fieldsForm.get('validation').get('minValue'),
-      this.fieldsForm.get('validation').get('maxValue')
+      this.fieldsForm.get('minValue'),
+      this.fieldsForm.get('maxValue')
     );
 
     // Min & Max Date Range
     this.fieldValidationService.autoRangeControls(
-      this.fieldsForm.get('validation').get('minDate'),
-      this.fieldsForm.get('validation').get('maxDate')
+      this.fieldsForm.get('minDate'),
+      this.fieldsForm.get('maxDate')
     );
   }
 }
