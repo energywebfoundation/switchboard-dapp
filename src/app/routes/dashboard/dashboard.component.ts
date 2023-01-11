@@ -16,7 +16,6 @@ export class DashboardComponent implements AfterViewInit {
   userName$ = this.store.select(userSelectors.getUserName);
   userDid$ = this.store.select(userSelectors.getDid);
 
-
   constructor(
     private route: Router,
     private activeRoute: ActivatedRoute,

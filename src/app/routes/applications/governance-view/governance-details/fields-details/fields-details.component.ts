@@ -11,8 +11,10 @@ import { FieldTypesEnum } from '../../../new-role/components/field-form/field-fo
 export class FieldsDetailsComponent {
   @Input() title: string;
   @Input() set data(data: IFieldDefinition[]) {
-    this.fields = data.filter(item => item.fieldType !== FieldTypesEnum.Json);
-    this.jsonFields = data.filter(item => item.fieldType === FieldTypesEnum.Json)
+    this.fields = data.filter((item) => item.fieldType !== FieldTypesEnum.Json);
+    this.jsonFields = data.filter(
+      (item) => item.fieldType === FieldTypesEnum.Json
+    );
   }
   get data() {
     return this.fields;

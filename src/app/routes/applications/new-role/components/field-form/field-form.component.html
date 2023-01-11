@@ -151,11 +151,13 @@
         <div class="px-0">
           <mat-label class="ml-3 pl-1">JSON Schema</mat-label>
 
-            <app-json-editor [options]="editorOptions" formControlName="schema" (change)="checkJson($event)"></app-json-editor>
+          <app-json-editor
+            [options]="editorOptions"
+            formControlName="schema"
+            (change)="checkJson($event)"></app-json-editor>
 
-            <mat-error *ngIf="!isValidSchema"> Invalid JSON Schema</mat-error>
+          <mat-error *ngIf="!isValidSchema"> Invalid JSON Schema</mat-error>
         </div>
-
       </ng-container>
     </div>
     <div class="d-flex justify-content-end mb-2">

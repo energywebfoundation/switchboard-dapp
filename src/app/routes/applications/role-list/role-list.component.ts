@@ -16,7 +16,7 @@ import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
 import { Store } from '@ngrx/store';
 import { RoleActions, RoleSelectors } from '@state';
-import {  takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { EnvService } from '../../../shared/services/env/env.service';
 import { CascadingFilterService } from '@modules';
 

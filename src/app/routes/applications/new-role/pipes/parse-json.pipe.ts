@@ -4,9 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'parseJson',
 })
 export class ParseJsonPipe implements PipeTransform {
-  transform(
-    value: string
-  ): any {
+  transform(value: string): any {
     if (!value) {
       return value;
     }

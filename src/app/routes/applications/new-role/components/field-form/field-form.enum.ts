@@ -1,4 +1,3 @@
-
 export enum FieldTypesEnum {
   Text = 'text',
   Number = 'number',

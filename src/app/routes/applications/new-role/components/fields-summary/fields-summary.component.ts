@@ -29,6 +29,6 @@ export class FieldsSummaryComponent {
   }
 
   get isJson(): boolean {
-    return this.element?.fieldType === FieldTypesEnum.Json
+    return this.element?.fieldType === FieldTypesEnum.Json;
   }
 }

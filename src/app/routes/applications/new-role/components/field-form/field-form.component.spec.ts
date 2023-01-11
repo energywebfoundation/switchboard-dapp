@@ -203,9 +203,7 @@ describe('FieldFormComponent', () => {
     } = getSelectors(hostDebug);
 
     expect(component.isText).toBeTrue();
-    expect(
-      component.fieldsForm.get('required').value
-    ).toBeTrue();
+    expect(component.fieldsForm.get('required').value).toBeTrue();
     expect(fieldLabel.value).toEqual('Text Label');
     expect(minLength.value).toEqual('1');
     expect(maxLength.value).toEqual('3');

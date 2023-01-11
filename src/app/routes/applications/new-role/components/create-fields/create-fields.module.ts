@@ -12,7 +12,7 @@ import { ParseJsonPipe } from '../../pipes/parse-json.pipe';
     FieldFormComponent,
     FieldsSummaryComponent,
     RoleFieldComponent,
-    ParseJsonPipe
+    ParseJsonPipe,
   ],
   imports: [CommonModule, SharedModule, JsonEditorModule],
   exports: [FieldFormComponent, FieldsSummaryComponent, RoleFieldComponent],
