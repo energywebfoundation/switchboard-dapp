@@ -11,6 +11,8 @@ import { RegistrationTypes } from 'iam-client-lib';
 import { KeyValue } from '@angular/common';
 import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 import { FieldTypesEnum } from '../../applications/new-role/components/field-form/field-form.enum';
+import { JsonEditorOptions } from '@modules';
+import Ajv from 'ajv';
 
 export interface EnrolmentField {
   key: string;
@@ -29,11 +31,6 @@ export interface EnrolmentForm {
   fieldsData(): KeyValue<string, string>[];
 
   getRegistrationTypes(): RegistrationTypes[];
-}
-
-export interface PredefinedRegistrationTypes {
-  onChain?: boolean;
-  offChain?: boolean;
 }
 
 @Component({
@@ -65,11 +62,20 @@ export class EnrolmentFormComponent implements EnrolmentForm {
   @Output() submitForm = new EventEmitter<EnrolmentSubmission>();
 
   private fields;
+  isValidSchema = true;
 
   constructor(private cdRef: ChangeDetectorRef) {}
 
+  createOptions(schema) {
+    const jsonOptions = new JsonEditorOptions();
+    jsonOptions.mode = 'code';
+    jsonOptions.modes = ['tree', 'view', 'form', 'code'];
+    jsonOptions.schema = schema;
+    return jsonOptions;
+  }
+
   isValid() {
-    return this.enrolmentForm.valid;
+    return this.enrolmentForm.valid && this.isValidSchema;
   }
 
   fieldsData(): KeyValue<string, string>[] {
@@ -97,6 +103,14 @@ export class EnrolmentFormComponent implements EnrolmentForm {
       key: field.label,
       value: values[index],
     }));
+  }
+
+  checkJson(e): void {
+    if (e instanceof Event) {
+      return;
+    }
+    const ajv = new Ajv();
+    this.isValidSchema = ajv.validateSchema(e) as boolean;
   }
 
   private updateEnrolmentForm(formArray: FormArray) {

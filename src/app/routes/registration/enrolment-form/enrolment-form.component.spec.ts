@@ -12,7 +12,9 @@ import { RegistrationTypes } from 'iam-client-lib';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { dispatchInputEvent } from '@tests';
+import { dispatchInputEvent, getElementByCss } from '@tests';
+import { FieldTypesEnum } from '../../applications/new-role/components/field-form/field-form.enum';
+import { JsonEditorModule } from '@modules';
 
 describe('EnrolmentFormComponent', () => {
   let component: EnrolmentFormComponent;
@@ -34,6 +36,7 @@ describe('EnrolmentFormComponent', () => {
         MatDatepickerModule,
         MatNativeDateModule,
         NoopAnimationsModule,
+        JsonEditorModule,
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -284,7 +287,7 @@ describe('EnrolmentFormComponent', () => {
   it('should have enabled submit button when registration types are removed and elements from fieldList are filled', () => {
     component.fieldList = [
       {
-        fieldType: 'number',
+        fieldType: FieldTypesEnum.Number,
         label: 'label',
         maxValue: 10,
         minValue: 2,
@@ -301,6 +304,22 @@ describe('EnrolmentFormComponent', () => {
 
     const { submit } = getSelectors(hostDebug);
     expect(submit.nativeElement.disabled).toBeFalse();
+  });
+
+  it('should use json editor when fieldType is json', () => {
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Json,
+        label: 'label',
+        maxValue: 10,
+        minValue: 2,
+        required: true,
+      },
+    ];
+
+    const jsonEditor =
+      getElementByCss(hostDebug)('app-json-editor')?.nativeElement;
+    expect(jsonEditor).toBeTruthy();
   });
 });
 

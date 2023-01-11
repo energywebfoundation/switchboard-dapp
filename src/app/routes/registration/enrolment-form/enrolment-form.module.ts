@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
 import { EnrolmentFormComponent } from './enrolment-form.component';
+import { JsonEditorModule } from '@modules';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { EnrolmentFormComponent } from './enrolment-form.component';
     MatFormFieldModule,
     MatButtonModule,
     MatDividerModule,
+    JsonEditorModule,
   ],
   declarations: [EnrolmentFormComponent],
   exports: [EnrolmentFormComponent],
