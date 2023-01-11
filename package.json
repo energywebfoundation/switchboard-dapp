@@ -70,7 +70,7 @@
     "ng-qrcode": "6.0.0",
     "ngx-bootstrap": "8.0.0",
     "ngx-spinner": "13.1.1",
-    "ngx-toastr": "14.2.1",
+    "ngx-toastr": "14.3.0",
     "rxjs": "^7.5.6",
     "simple-line-icons": "2.4.1",
     "sweetalert": "2.1.2",
