@@ -55,8 +55,6 @@ export class JsonEditorComponent
   private _data: Object = {};
   private editor: any;
 
-  constructor() {}
-
   @Input('data')
   set data(value: Object) {
     this._data = value;
@@ -253,9 +251,11 @@ export class JsonEditorComponent
   }
 
   // Implemented as part of ControlValueAccessor.
+  // eslint-disable-next-line
   private onTouched = () => {};
 
   // Implemented as part of ControlValueAccessor.
+  // eslint-disable-next-line
   private onChangeModel = (e) => {};
 }
 
