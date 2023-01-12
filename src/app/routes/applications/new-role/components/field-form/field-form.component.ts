@@ -20,6 +20,7 @@ import { truthy } from '@operators';
 import { FieldTypesEnum } from './field-form.enum';
 import Ajv from 'ajv';
 import { JsonEditorComponent, JsonEditorOptions } from '@modules';
+import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 
 const FIELD_TYPES = [
   FieldTypesEnum.Text,
@@ -29,18 +30,9 @@ const FIELD_TYPES = [
   FieldTypesEnum.Json,
 ];
 
-export interface IFieldFormData {
+export interface IFieldFormData extends Omit<IFieldDefinition, 'fieldType'>{
   fieldType: FieldTypesEnum;
   label: string;
-  required: boolean;
-  schema?: string;
-  minLength?: number;
-  maxLength?: number;
-  minValue?: number;
-  maxValue?: number;
-  pattern?: string;
-  minDate?: string;
-  maxDate?: string;
 }
 
 @Component({
@@ -213,7 +205,7 @@ export class FieldFormComponent implements OnInit, OnDestroy {
         };
       case FieldTypesEnum.Json:
         return {
-          schema: JSON.stringify(schema),
+          schema,
         };
       case FieldTypesEnum.Boolean:
       default:
@@ -230,9 +222,6 @@ export class FieldFormComponent implements OnInit, OnDestroy {
       fieldKeys.map((fieldKey) => {
         this.fieldsForm.get(fieldKey)?.setValue(this.data[fieldKey]);
         valueToPatch[fieldKey] = this.data[fieldKey];
-        if (this.data.fieldType === FieldTypesEnum.Json) {
-          valueToPatch[fieldKey] = JSON.parse(this.data.schema);
-        }
       });
 
       this.fieldsForm.patchValue(valueToPatch);
