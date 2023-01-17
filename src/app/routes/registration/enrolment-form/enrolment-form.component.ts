@@ -12,7 +12,7 @@ import { KeyValue } from '@angular/common';
 import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 import { FieldTypesEnum } from '../../applications/new-role/components/field-form/field-form.enum';
 import { JsonEditorOptions } from '@modules';
-import Ajv from 'ajv';
+import Ajv, { Schema } from 'ajv';
 
 export interface EnrolmentField {
   key: string;
@@ -105,12 +105,12 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     }));
   }
 
-  checkJson(e): void {
+  checkJson(e, schema: Schema): void {
     if (e instanceof Event) {
       return;
     }
     const ajv = new Ajv();
-    this.isValidSchema = ajv.validateSchema(e) as boolean;
+    this.isValidSchema = ajv.validate(schema, e) as boolean;
   }
 
   private updateEnrolmentForm(formArray: FormArray) {

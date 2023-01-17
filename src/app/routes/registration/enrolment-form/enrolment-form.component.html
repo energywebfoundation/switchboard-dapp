@@ -59,7 +59,7 @@
             *ngIf="fieldList[i].fieldType === 'json'"
             [attr.data-qa-id]="'field-' + i"
             [options]="createOptions(fieldList[i].schema)"
-            (change)="checkJson($event)"
+            (change)="checkJson($event, fieldList[i].schema)"
             [formControl]="getControl(i)"
             [ngStyle]="txtColor">
             <mat-error *ngIf="getControl(i)?.errors?.required"> This field is required.</mat-error>
