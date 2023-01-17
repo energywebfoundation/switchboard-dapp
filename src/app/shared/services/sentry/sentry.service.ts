@@ -1,8 +1,8 @@
 import { APP_INITIALIZER, ErrorHandler, Injectable } from '@angular/core';
-import * as Sentry from '@sentry/angular';
 import { Router } from '@angular/router';
 import { EnvService } from '../env/env.service';
-import { Severity } from '@sentry/angular';
+import { BrowserTracing } from '@sentry/tracing';
+import * as Sentry from '@sentry/angular';
 
 @Injectable()
 export class SentryService {
@@ -12,16 +12,17 @@ export class SentryService {
     return Sentry.init({
       dsn: SENTRY_DSN,
       environment: this.envService.SENTRY_ENVIRONMENT,
+      integrations: [new BrowserTracing()],
       tracesSampleRate: 0.2,
     });
   }
 
   error(message: string) {
-    Sentry.captureMessage(message, Severity.Error);
+    Sentry.captureMessage(message, 'error');
   }
 
   info(message: string) {
-    Sentry.captureMessage(message, Severity.Info);
+    Sentry.captureMessage(message, 'info');
   }
 }
 
