@@ -25,7 +25,7 @@
     "postinstall": "patch-package",
     "test": "ng test --code-coverage",
     "test:headless:cc": "ng test --karma-config=karma-headless.conf.js --code-coverage",
-    "test:headless": "ng test --karma-config=karma-headless.conf.js",
+    "test:headless": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng test --karma-config=karma-headless.conf.js",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "stedin:flags": "node scripts/stedin.js",
