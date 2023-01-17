@@ -5,14 +5,12 @@ import { FieldsSummaryComponent } from '../fields-summary/fields-summary.compone
 import { RoleFieldComponent } from '../role-field/role-field.component';
 import { SharedModule } from '../../../../../shared/shared.module';
 import { JsonEditorModule } from '@modules';
-import { ParseJsonPipe } from '../../pipes/parse-json.pipe';
 
 @NgModule({
   declarations: [
     FieldFormComponent,
     FieldsSummaryComponent,
     RoleFieldComponent,
-    ParseJsonPipe,
   ],
   imports: [CommonModule, SharedModule, JsonEditorModule],
   exports: [FieldFormComponent, FieldsSummaryComponent, RoleFieldComponent],
