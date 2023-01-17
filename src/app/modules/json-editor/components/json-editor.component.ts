@@ -28,6 +28,7 @@ import {
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-json-editor',
   template: `<div [id]="id" #jsonEditorContainer></div>`,
+  styleUrls: ['./json-editor.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
