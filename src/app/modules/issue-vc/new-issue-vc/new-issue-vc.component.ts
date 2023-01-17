@@ -11,6 +11,7 @@ import { filter, switchMap } from 'rxjs/operators';
 import { EnrolmentSubmission } from '../../../routes/registration/enrolment-form/enrolment-form.component';
 import { IRole, IRoleDefinitionV2 } from 'iam-client-lib';
 import { MatSelectChange } from '@angular/material/select/select';
+import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -20,7 +21,7 @@ const DEFAULT_CLAIM_TYPE_VERSION = 1;
   styleUrls: ['./new-issue-vc.component.scss'],
 })
 export class NewIssueVcComponent implements OnInit {
-  fieldList = [];
+  fieldList: IFieldDefinition[] = [];
   form = this.fb.group({
     subject: ['', [Validators.required, HexValidators.isDidValid()]],
     type: ['', [Validators.required]],

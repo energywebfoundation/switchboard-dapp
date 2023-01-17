@@ -321,6 +321,40 @@ describe('EnrolmentFormComponent', () => {
       getElementByCss(hostDebug)('app-json-editor')?.nativeElement;
     expect(jsonEditor).toBeTruthy();
   });
+
+  it('should emit stringified json', () => {
+    const submitDataSpy = spyOn(component.submitForm, 'emit');
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Json,
+        label: 'label 1',
+        required: true,
+        schema: { type: 'object' },
+      },
+      {
+        fieldType: FieldTypesEnum.Json,
+        label: 'label 2',
+        required: true,
+        schema: { type: 'object' },
+      },
+    ];
+
+    fixture.detectChanges();
+
+    component.getControl(0).setValue({ a: 'b' });
+    component.getControl(1).setValue({ b: 'c', d: { e: 2 } });
+
+    component.submit();
+
+    expect(submitDataSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        fields: [
+          { key: 'label 1', value: JSON.stringify({ a: 'b' }) },
+          { key: 'label 2', value: JSON.stringify({ b: 'c', d: { e: 2 } }) },
+        ],
+      })
+    );
+  });
 });
 
 const getSelectors = (hostDebug: DebugElement) => {

@@ -7,7 +7,7 @@
           {{ field?.key }}
         </div>
         <span class="default-color mb-0" [attr.data-qa-id]="'field-list-value-' + i">
-          {{ field?.value | parseFieldValue }}
+          {{ field?.value }}
         </span>
       </div>
       <mat-divider *ngIf="i < fieldsList.length - 1"></mat-divider>

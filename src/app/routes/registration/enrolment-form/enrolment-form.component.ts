@@ -46,12 +46,12 @@ export class EnrolmentFormComponent implements EnrolmentForm {
   @Input() showSubmit = true;
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
 
-  @Input() set fieldList(list: any[]) {
+  @Input() set fieldList(list: IFieldDefinition[]) {
     this.fields = list;
     this.updateEnrolmentForm(new FormArray(this.createControls(list)));
   }
 
-  get fieldList(): any[] {
+  get fieldList(): IFieldDefinition[] {
     return this.fields;
   }
 
@@ -86,7 +86,7 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     if (this.disabledSubmit) {
       return;
     }
-    this.submitForm.next({
+    this.submitForm.emit({
       fields: this.buildEnrolmentFormFields(),
       registrationTypes: this.getRegistrationTypes(),
       valid: this.isValid(),
@@ -101,7 +101,7 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     const values = this.enrolmentForm.value.fields;
     return this.fieldList.map((field, index) => ({
       key: field.label,
-      value: values[index],
+      value: field.schema ? JSON.stringify(values[index]) : values[index],
     }));
   }
 
