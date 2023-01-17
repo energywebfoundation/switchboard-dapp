@@ -231,7 +231,7 @@ describe('FieldFormComponent', () => {
       fieldType: FieldTypesEnum.Json,
       label: 'nbvnv',
       required: null,
-      schema: {"type":"object"},
+      schema: { type: 'object' },
     };
 
     fixture.detectChanges();

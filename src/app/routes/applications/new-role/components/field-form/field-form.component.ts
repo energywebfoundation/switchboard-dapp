@@ -30,7 +30,7 @@ const FIELD_TYPES = [
   FieldTypesEnum.Json,
 ];
 
-export interface IFieldFormData extends Omit<IFieldDefinition, 'fieldType'>{
+export interface IFieldFormData extends Omit<IFieldDefinition, 'fieldType'> {
   fieldType: FieldTypesEnum;
   label: string;
 }
