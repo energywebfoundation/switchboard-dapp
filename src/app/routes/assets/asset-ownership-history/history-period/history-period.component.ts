@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { AssetHistory } from 'iam-client-lib';
+import { AssetHistory, AssetHistoryEventType } from 'iam-client-lib';
 
 export interface Period extends AssetHistory {
-  type: string;
+  type: AssetHistoryEventType;
 }
-
-const ASSET_TRANSFERRED = 'ASSET_TRANSFERRED';
 
 @Component({
   selector: 'app-history-period',
@@ -20,7 +18,7 @@ export class HistoryPeriodComponent {
     if (!this.period) {
       return;
     }
-    if (this.period.type === ASSET_TRANSFERRED) {
+    if (this.period.type === AssetHistoryEventType.ASSET_TRANSFERRED) {
       return {
         header: 'Offered from',
         did: this.period.relatedTo,
@@ -36,7 +34,7 @@ export class HistoryPeriodComponent {
     if (!this.period) {
       return;
     }
-    if (this.period.type === ASSET_TRANSFERRED) {
+    if (this.period.type === AssetHistoryEventType.ASSET_TRANSFERRED) {
       return {
         header: 'Owner',
         did: this.period.emittedBy,

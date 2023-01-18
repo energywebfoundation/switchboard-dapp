@@ -5,7 +5,10 @@
       <ng-container *ngFor="let field of enrolmentForm?.get('fields')?.controls; let i = index">
         <div
           [ngClass]="{
-            'col-lg-12': fieldList[i].fieldType === 'text' || fieldList[i].fieldType === 'boolean',
+            'col-lg-12':
+              fieldList[i].fieldType === 'text' ||
+              fieldList[i].fieldType === 'boolean' ||
+              fieldList[i].fieldType === 'json',
             'col-lg-6': fieldList[i].fieldType === 'number' || fieldList[i].fieldType === 'date'
           }">
           <mat-label
@@ -49,6 +52,19 @@
             <mat-error *ngIf="getControl(i)?.errors?.max"> Max value is {{ fieldList[i].maxValue }}.</mat-error>
             <mat-error *ngIf="getControl(i)?.errors?.min"> Min value is {{ fieldList[i].minValue }}.</mat-error>
           </mat-form-field>
+
+          <!-- TYPE: Json -->
+          <app-json-editor
+            class="mt-2 md-enroll"
+            *ngIf="fieldList[i].fieldType === 'json'"
+            [attr.data-qa-id]="'field-' + i"
+            [options]="createOptions(fieldList[i].schema)"
+            (change)="checkJson($event, fieldList[i].schema)"
+            [formControl]="getControl(i)"
+            [ngStyle]="txtColor">
+            <mat-error *ngIf="getControl(i)?.errors?.required"> This field is required.</mat-error>
+            <mat-error *ngIf="!isValidSchema">Properties do not fits schema.</mat-error>
+          </app-json-editor>
 
           <!-- TYPE: Date -->
           <mat-form-field
@@ -102,7 +118,7 @@
       class="btn btn-primary md-enroll w-100"
       type="submit"
       (click)="submit()"
-      [disabled]="disabledSubmit || enrolmentForm.invalid"
+      [disabled]="disabledSubmit || enrolmentForm.invalid || !isValidSchema"
       [ngStyle]="btnColor">
       Submit Request
     </button>

@@ -9,6 +9,8 @@ import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { dispatchInputEvent, getElement } from '@tests';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { JsonEditorModule } from '@modules';
+import { FieldTypesEnum } from './field-form.enum';
 
 describe('FieldFormComponent', () => {
   let component: FieldFormComponent;
@@ -27,6 +29,7 @@ describe('FieldFormComponent', () => {
         NoopAnimationsModule,
         MatInputModule,
         MatCheckboxModule,
+        JsonEditorModule,
       ],
       providers: [
         { provide: FieldValidationService, useValue: fieldValidationService },
@@ -66,7 +69,7 @@ describe('FieldFormComponent', () => {
 
     expect(addedSpy).toHaveBeenCalledWith(
       jasmine.objectContaining({
-        fieldType: 'boolean',
+        fieldType: FieldTypesEnum.Boolean,
         label: 'Label',
         required: null,
       })
@@ -101,7 +104,7 @@ describe('FieldFormComponent', () => {
 
     expect(addedSpy).toHaveBeenCalledWith(
       jasmine.objectContaining({
-        fieldType: 'text',
+        fieldType: FieldTypesEnum.Text,
         label: 'Text Label',
         required: null,
         minLength: 1,
@@ -137,7 +140,7 @@ describe('FieldFormComponent', () => {
 
     expect(addedSpy).toHaveBeenCalledWith(
       jasmine.objectContaining({
-        fieldType: 'number',
+        fieldType: FieldTypesEnum.Number,
         label: 'Number Label',
         required: null,
         maxValue: 3,
@@ -169,7 +172,7 @@ describe('FieldFormComponent', () => {
 
     expect(addedSpy).toHaveBeenCalledWith(
       jasmine.objectContaining({
-        fieldType: 'date',
+        fieldType: FieldTypesEnum.Date,
         label: 'Date Label',
         required: true,
         minDate: null,
@@ -181,7 +184,7 @@ describe('FieldFormComponent', () => {
   it('should update data depending on passed values', () => {
     const updateSpy = spyOn(component.updated, 'emit');
     component.data = {
-      fieldType: 'text',
+      fieldType: FieldTypesEnum.Text,
       label: 'Text Label',
       required: true,
       minLength: 1,
@@ -200,9 +203,7 @@ describe('FieldFormComponent', () => {
     } = getSelectors(hostDebug);
 
     expect(component.isText).toBeTrue();
-    expect(
-      component.fieldsForm.get('validation').get('required').value
-    ).toBeTrue();
+    expect(component.fieldsForm.get('required').value).toBeTrue();
     expect(fieldLabel.value).toEqual('Text Label');
     expect(minLength.value).toEqual('1');
     expect(maxLength.value).toEqual('3');
@@ -216,12 +217,27 @@ describe('FieldFormComponent', () => {
     updateBtn.click();
 
     expect(updateSpy).toHaveBeenCalledWith({
-      fieldType: 'text',
+      fieldType: FieldTypesEnum.Text,
       label: 'Text Label',
       required: false,
       minLength: 1,
       maxLength: 3,
       pattern: 'aa',
+    });
+  });
+
+  it('should parse json when setting value', () => {
+    component.data = {
+      fieldType: FieldTypesEnum.Json,
+      label: 'nbvnv',
+      required: null,
+      schema: { type: 'object' },
+    };
+
+    fixture.detectChanges();
+
+    expect(component.fieldsForm.get('schema').value).toEqual({
+      type: 'object',
     });
   });
 });

@@ -59,6 +59,7 @@ import { TimeShiftPipe } from './pipes/time-shift/time-shift.pipe';
 import { DefaultDatePipe } from './pipes/default-date/default-date.pipe';
 import { ExpirationInfoComponent } from './expiration/info/expiration-info.component';
 import { ExpirationDateComponent } from './expiration/date-picker/expiration-date.component';
+import { ParseFieldValuePipe } from './pipes/parse-field-value/parse-field-value.pipe';
 
 const MATERIAL_MODULES = [
   MatAutocompleteModule,
@@ -128,6 +129,7 @@ const MATERIAL_MODULES = [
     DefaultDatePipe,
     ExpirationInfoComponent,
     ExpirationDateComponent,
+    ParseFieldValuePipe,
   ],
   exports: [
     CommonModule,
@@ -156,6 +158,7 @@ const MATERIAL_MODULES = [
     DefaultDatePipe,
     ExpirationInfoComponent,
     ExpirationDateComponent,
+    ParseFieldValuePipe,
   ],
 })
 

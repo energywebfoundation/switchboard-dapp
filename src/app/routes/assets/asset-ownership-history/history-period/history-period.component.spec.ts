@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HistoryPeriodComponent, Period } from './history-period.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { AssetHistoryEventType } from 'iam-client-lib';
 
 describe('HistoryPeriodComponent', () => {
   let component: HistoryPeriodComponent;
@@ -51,7 +52,7 @@ describe('HistoryPeriodComponent', () => {
 
   it('should compare history part when perdiod event is not equal to Asset_transferred', () => {
     component.period = {
-      type: '',
+      type: AssetHistoryEventType.ASSET_OFFER_CANCELED,
       relatedTo: 'relatedTo',
       emittedBy: 'emittedBy',
     } as Period;
