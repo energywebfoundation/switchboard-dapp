@@ -47,7 +47,7 @@
             *ngIf="fieldList[i].fieldType === 'number'"
             [attr.data-qa-id]="'field-' + i"
             [ngStyle]="txtColor">
-            <input matInput type="number" placeholder="{{ fieldList[i].label }}" [formControl]="getControl(i)" />
+            <input matInput type="number" placeholder="{{ fieldList[i]?.label }}" [formControl]="getControl(i)" />
             <mat-error *ngIf="getControl(i)?.errors?.required"> This field is required.</mat-error>
             <mat-error *ngIf="getControl(i)?.errors?.max"> Max value is {{ fieldList[i].maxValue }}.</mat-error>
             <mat-error *ngIf="getControl(i)?.errors?.min"> Min value is {{ fieldList[i].minValue }}.</mat-error>

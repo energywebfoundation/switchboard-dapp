@@ -48,6 +48,13 @@ export class JsonEditorComponent
   @Output() change: EventEmitter<any> = new EventEmitter<any>();
   @Output() jsonChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() debug = false;
+  @Input() set copyValue(copiedValue: Object) {
+    if (copiedValue) {
+      this.editor.set(copiedValue);
+      this.onChangeModel(copiedValue);
+      this.change.emit(copiedValue);
+    }
+  }
   public optionsChanged = false;
 
   disabled = false;
@@ -91,6 +98,7 @@ export class JsonEditorComponent
     if (optionsCopy.mode === 'text' || optionsCopy.mode === 'code') {
       optionsCopy.onChangeJSON = null;
     }
+
     this.editor = new editor(
       this.jsonEditorContainer.nativeElement,
       optionsCopy,
@@ -113,6 +121,7 @@ export class JsonEditorComponent
 
   // ControlValueAccessor implementation
   writeValue(value: any) {
+    console.log(value, 'IN WRITE VALUE');
     this.data = value;
   }
 
@@ -132,6 +141,7 @@ export class JsonEditorComponent
   }
 
   public onChange(e) {
+    console.log('in on change!!!!');
     if (this.editor) {
       try {
         const json = this.editor.get();
@@ -146,6 +156,7 @@ export class JsonEditorComponent
   }
 
   public onChangeJSON(e) {
+    console.log('in on change');
     if (this.editor) {
       try {
         this.jsonChange.emit(this.editor.get());
@@ -190,7 +201,7 @@ export class JsonEditorComponent
   }
 
   public set(json: JSON) {
-    this.editor.set(json);
+    this.editor?.set(json);
   }
 
   public setMode(mode: JsonEditorMode) {
@@ -231,6 +242,7 @@ export class JsonEditorComponent
   }
 
   public update(json: JSON) {
+    console.log('in update', json);
     this.editor.update(json);
   }
 

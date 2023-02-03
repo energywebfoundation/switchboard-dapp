@@ -6,9 +6,18 @@
         <div class="label opacity-50 mb-2" [attr.data-qa-id]="'field-list-key-' + i">
           {{ field?.key }}
         </div>
-        <span class="default-color mb-0" [attr.data-qa-id]="'field-list-value-' + i">
-          {{ field?.value }}
-        </span>
+        <div class="text-container">
+          <span class="default-color mb-0" [attr.data-qa-id]="'field-list-value-' + i">
+            {{ field?.value }}
+          </span>
+          <button
+            [attr.data-qa-id]="'field-list-merge-btn-' + i"
+            *ngIf="hasValidValue(field?.value) && isIssuerRequestView"
+            class="merge-button"
+            (click)="this.fieldToCopy.emit(field)">
+            <img src="assets/img/icons/merge-button.svg" />
+          </button>
+        </div>
       </div>
       <mat-divider *ngIf="i < fieldsList.length - 1"></mat-divider>
     </ng-container>

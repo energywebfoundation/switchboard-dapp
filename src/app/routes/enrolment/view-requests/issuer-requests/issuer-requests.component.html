@@ -16,7 +16,13 @@
 
       <app-request-details data-qa-id="request-details" class="col-lg-12 mt-2" [claim]="claim"></app-request-details>
 
-      <app-fields data-qa-id="requestor-fields" title="Requestor fields" [fieldsList]="requestorFields$ | async">
+      <app-fields
+        [isIssuerRequestView]="true"
+        (fieldToCopy)="handleMerge($event)"
+        data-qa-id="requestor-fields"
+        title="Requestor fields"
+        [fieldsList]="requestorFields$ | async"
+        [issuerFields]="fieldList">
       </app-fields>
 
       <app-fields data-qa-id="issuer-fields" title="Issuer fields" [fieldsList]="issuerFields$ | async"> </app-fields>
@@ -29,7 +35,11 @@
           class="card card-default mb-3 pb-0 shadow-none"
           *ngIf="roleContainRequiredParams()"
           data-qa-id="enrolment-issuer-fields">
-          <app-enrolment-form #issuerFields [fieldList]="fieldList" [showSubmit]="false"></app-enrolment-form>
+          <app-enrolment-form
+            #issuerFields
+            [fieldList]="fieldList"
+            [showSubmit]="false"
+            [toCopy]="requestorFields"></app-enrolment-form>
         </div>
 
         <app-expiration-date
