@@ -121,7 +121,6 @@ export class JsonEditorComponent
 
   // ControlValueAccessor implementation
   writeValue(value: any) {
-    console.log(value, 'IN WRITE VALUE');
     this.data = value;
   }
 
@@ -141,7 +140,6 @@ export class JsonEditorComponent
   }
 
   public onChange(e) {
-    console.log('in on change!!!!');
     if (this.editor) {
       try {
         const json = this.editor.get();
@@ -156,7 +154,6 @@ export class JsonEditorComponent
   }
 
   public onChangeJSON(e) {
-    console.log('in on change');
     if (this.editor) {
       try {
         this.jsonChange.emit(this.editor.get());
@@ -242,7 +239,6 @@ export class JsonEditorComponent
   }
 
   public update(json: JSON) {
-    console.log('in update', json);
     this.editor.update(json);
   }
 

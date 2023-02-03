@@ -68,7 +68,6 @@ export class IssuerRequestsComponent
   }
 
   approve(): void {
-    console.log('IN APPROVE');
     this.issuerRequestsService
       .approve(
         this.claim,
