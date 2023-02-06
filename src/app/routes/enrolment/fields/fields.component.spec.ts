@@ -45,11 +45,53 @@ describe('FieldsComponent', () => {
     expect(firstKey.innerText).toContain(component.fieldsList[0].key);
     expect(firstValue.innerText).toContain(component.fieldsList[0].value);
   });
+  it('should emit to copy if value is valid', () => {
+    component.fieldsList = [
+      { key: 'ASIC Models', value: '[{"model":"model","numUnits":2}]' },
+    ];
+    component.isIssuerRequestView = true;
+    fixture.detectChanges();
+    const dispatchSpy = spyOn(component.fieldToCopy, 'emit');
+    const { firstValueMergeBtn } = getSelectors(hostDebug);
+    firstValueMergeBtn.click();
+    fixture.detectChanges();
+    expect(dispatchSpy).toHaveBeenCalledWith({
+      key: 'ASIC Models',
+      value: '[{"model":"model","numUnits":2}]',
+    });
+  });
+  it('should not show copy button if value is null', () => {
+    component.fieldsList = [{ key: 'key', value: null }];
+    component.isIssuerRequestView = true;
+    fixture.detectChanges();
+
+    const { firstValueMergeBtn } = getSelectors(hostDebug);
+    expect(firstValueMergeBtn).toBeUndefined();
+  });
+  it('should not show copy button if value is "null"', () => {
+    component.fieldsList = [{ key: 'key', value: 'null' }];
+    component.isIssuerRequestView = true;
+    fixture.detectChanges();
+
+    const { firstValueMergeBtn } = getSelectors(hostDebug);
+    expect(firstValueMergeBtn).toBeUndefined();
+  });
+  it('should not show copy button if it is not issuer requestor view', () => {
+    component.fieldsList = [
+      { key: 'ASIC Models', value: '[{"model":"model","numUnits":2}]' },
+    ];
+    component.isIssuerRequestView = false;
+    fixture.detectChanges();
+    const { firstValueMergeBtn } = getSelectors(hostDebug);
+    expect(firstValueMergeBtn).toBeUndefined();
+  });
 });
 const getSelectors = (hostDebug) => {
   return {
     title: getElement(hostDebug)('field-list-title')?.nativeElement,
     firstKey: getElement(hostDebug)('field-list-key-0')?.nativeElement,
     firstValue: getElement(hostDebug)('field-list-value-0')?.nativeElement,
+    firstValueMergeBtn: getElement(hostDebug)('field-list-merge-btn-0')
+      ?.nativeElement,
   };
 };

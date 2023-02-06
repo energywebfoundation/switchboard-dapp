@@ -48,6 +48,13 @@ export class JsonEditorComponent
   @Output() change: EventEmitter<any> = new EventEmitter<any>();
   @Output() jsonChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() debug = false;
+  @Input() set copyValue(copiedValue: Object) {
+    if (copiedValue) {
+      this.editor.set(copiedValue);
+      this.onChangeModel(copiedValue);
+      this.change.emit(copiedValue);
+    }
+  }
   public optionsChanged = false;
 
   disabled = false;
@@ -91,6 +98,7 @@ export class JsonEditorComponent
     if (optionsCopy.mode === 'text' || optionsCopy.mode === 'code') {
       optionsCopy.onChangeJSON = null;
     }
+
     this.editor = new editor(
       this.jsonEditorContainer.nativeElement,
       optionsCopy,
@@ -190,7 +198,7 @@ export class JsonEditorComponent
   }
 
   public set(json: JSON) {
-    this.editor.set(json);
+    this.editor?.set(json);
   }
 
   public setMode(mode: JsonEditorMode) {

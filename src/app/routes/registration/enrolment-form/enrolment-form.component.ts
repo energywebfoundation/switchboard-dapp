@@ -45,14 +45,15 @@ export class EnrolmentFormComponent implements EnrolmentForm {
 
   @Input() showSubmit = true;
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
-
+  get fieldList(): IFieldDefinition[] {
+    return this.fields;
+  }
   @Input() set fieldList(list: IFieldDefinition[]) {
     this.fields = list;
     this.updateEnrolmentForm(new FormArray(this.createControls(list)));
   }
-
-  get fieldList(): IFieldDefinition[] {
-    return this.fields;
+  @Input() set toCopy(copyInput: Record<string, string | number> | undefined) {
+    this.updateFormFields(copyInput);
   }
 
   @Input() txtboxColor;
@@ -76,6 +77,21 @@ export class EnrolmentFormComponent implements EnrolmentForm {
 
   isValid() {
     return this.enrolmentForm.valid && this.isValidSchema;
+  }
+
+  updateFormFields(copyInput: Record<string, string | number>) {
+    const fieldLabel = Object.keys(copyInput)[0];
+    const fieldListItemIndex = this.fieldList.findIndex(
+      (fld) => fld.label === fieldLabel
+    );
+    const fieldListItem = this.fieldList[fieldListItemIndex];
+    const valueToSet =
+      fieldListItem.fieldType === 'json'
+        ? JSON.parse(copyInput[fieldLabel] as string)
+        : copyInput[fieldLabel];
+    (this.enrolmentForm?.get('fields') as FormArray)?.controls[
+      fieldListItemIndex
+    ].setValue(valueToSet);
   }
 
   fieldsData(): KeyValue<string, string>[] {
