@@ -84,9 +84,7 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     const fieldListItemIndex = this.fieldList.findIndex(
       (fld) => fld.label === fieldLabel
     );
-    const fieldListItem = this.fieldList.find(
-      (fld) => fld.label === fieldLabel
-    );
+    const fieldListItem = this.fieldList[fieldListItemIndex];
     const valueToSet =
       fieldListItem.fieldType === 'json'
         ? JSON.parse(copyInput[fieldLabel] as string)

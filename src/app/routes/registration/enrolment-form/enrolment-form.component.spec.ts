@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EnrolmentFormComponent } from './enrolment-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -354,6 +354,38 @@ describe('EnrolmentFormComponent', () => {
         ],
       })
     );
+  });
+
+  it('should call the updateFormFields method if there is copied input', () => {
+    const updateFormSpy = spyOn(component, 'updateFormFields');
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Text,
+        label: 'label 1',
+        required: true,
+      },
+    ];
+
+    component.toCopy = { 'label 1': 'The label' };
+
+    fixture.detectChanges();
+    expect(updateFormSpy).toHaveBeenCalled();
+  });
+  it('should update the appropriate form field with the copied input provided', () => {
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Text,
+        label: 'label 1',
+        required: true,
+      },
+    ];
+
+    component.toCopy = { 'label 1': 'The label' };
+
+    fixture.detectChanges();
+    const formValue = (component.enrolmentForm?.get('fields') as FormArray)
+      ?.controls[0];
+    expect(formValue.value).toEqual('The label');
   });
 });
 
