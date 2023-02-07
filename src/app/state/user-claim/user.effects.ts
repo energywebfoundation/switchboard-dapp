@@ -69,26 +69,10 @@ export class UserEffects {
     )
   );
 
-  private mergeProfiles(
-    oldProfile: Partial<Profile>,
-    newProfile: Partial<Profile>
-  ): Partial<Profile> {
-    return {
-      ...oldProfile,
-      ...newProfile,
-      assetProfiles: {
-        ...oldProfile?.assetProfiles,
-        ...newProfile?.assetProfiles,
-      },
-    };
-  }
-
   constructor(
     private actions$: Actions,
     private store: Store<UserClaimState>,
     private iamService: IamService,
     private loadingService: LoadingService,
-    private toastr: ToastrService,
-    private dialog: MatDialog
   ) {}
 }

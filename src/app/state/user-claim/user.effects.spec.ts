@@ -24,8 +24,6 @@ describe('UserEffects', () => {
         UserEffects,
         { provide: IamService, useValue: iamServiceSpy },
         { provide: LoadingService, useValue: loadingServiceSpy },
-        { provide: MatDialog, useValue: dialogSpy },
-        { provide: ToastrService, useValue: toastrSpy },
         provideMockStore(),
         provideMockActions(() => actions$),
       ],
