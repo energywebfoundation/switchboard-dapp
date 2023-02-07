@@ -46,9 +46,9 @@ export class UserEffects {
       map((userClaimsAction) => userClaimsAction.userClaims),
       mapClaimsProfile(),
       mergeMap((profile: Profile) => [
-        UserClaimActions.setProfile({ profile }),
         OwnedEnrolmentsActions.getOwnedEnrolments(),
         RequestedEnrolmentsActions.getEnrolmentRequests(),
+        UserClaimActions.setProfile({ profile }),
       ])
     )
   );
