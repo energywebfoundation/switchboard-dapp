@@ -1,4 +1,5 @@
 import * as userSelectors from './user.selectors';
+import { claimRoleNames } from './user.selectors';
 import { AssetProfile } from 'iam-client-lib';
 
 describe('User Selectors', () => {
@@ -58,6 +59,30 @@ describe('User Selectors', () => {
       expect(
         userSelectors.getDid.projector({ didDocument: { id: 'test' } })
       ).toEqual('test');
+    });
+  });
+
+  describe('getUserRoleClaims', () => {
+    it('should filter out claims that are not roles', () => {
+      const claims = [{ claimType: 'will-be-filtered' }];
+      expect(userSelectors.getUserRoleClaims.projector(claims)).toEqual([]);
+    });
+
+    it('should pass further claim that is role', () => {
+      const claims = [{ claimType: 'valid.roles.org.iam.ewc' }];
+      expect(userSelectors.getUserRoleClaims.projector(claims)).toEqual(
+        claims as any
+      );
+    });
+  });
+
+  describe('claimRoleNames', () => {
+    it('should get list of role names', () => {
+      const roleName = 'some.roles.';
+      const claims = [{ claimType: roleName }];
+      expect(userSelectors.claimRoleNames.projector(claims)).toEqual([
+        roleName,
+      ]);
     });
   });
 });

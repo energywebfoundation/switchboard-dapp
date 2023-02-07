@@ -6,7 +6,6 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { OwnedEnrolmentsEffects } from './owned.effects';
 import * as OwnedActions from './owned.actions';
-import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 
