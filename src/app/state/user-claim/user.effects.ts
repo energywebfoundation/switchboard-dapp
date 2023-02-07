@@ -73,6 +73,6 @@ export class UserEffects {
     private actions$: Actions,
     private store: Store<UserClaimState>,
     private iamService: IamService,
-    private loadingService: LoadingService,
+    private loadingService: LoadingService
   ) {}
 }
