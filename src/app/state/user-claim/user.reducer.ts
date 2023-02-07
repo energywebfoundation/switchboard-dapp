@@ -1,7 +1,8 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { Profile } from 'iam-client-lib';
+import { ClaimData, Profile } from 'iam-client-lib';
 import * as userActions from './user.actions';
 import { userLocalStorage } from '../../shared/utils/local-storage-wrapper';
+import { IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
 
 export const USER_FEATURE_KEY = 'user';
 
@@ -15,6 +16,7 @@ export interface UserClaimState {
     birthdate: string;
     address: string;
   };
+  userClaims: (IServiceEndpoint & ClaimData)[];
 }
 
 export const initialState: UserClaimState = {
@@ -22,6 +24,7 @@ export const initialState: UserClaimState = {
   profile: null,
   error: '',
   userData: null,
+  userClaims: [],
 };
 
 const userReducer = createReducer(
@@ -34,6 +37,10 @@ const userReducer = createReducer(
       profile,
     })
   ),
+  on(userActions.loadUserClaimsSuccess, (state, { userClaims }) => ({
+    ...state,
+    userClaims,
+  })),
   on(userActions.updateUserData, (state, { userData }) => {
     userLocalStorage.parsed = {
       ...userLocalStorage.parsed,

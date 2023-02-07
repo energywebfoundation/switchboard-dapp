@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserClaimState } from './user.reducer';
 import { ToastrService } from 'ngx-toastr';
 import * as UserClaimActions from './user.actions';
+import { OwnedEnrolmentsActions, RequestedEnrolmentsActions } from '@state';
 
 @Injectable()
 export class UserEffects {
@@ -44,7 +45,11 @@ export class UserEffects {
       ofType(UserClaimActions.loadUserClaimsSuccess),
       map((userClaimsAction) => userClaimsAction.userClaims),
       mapClaimsProfile(),
-      map((profile: Profile) => UserClaimActions.setProfile({ profile }))
+      mergeMap((profile: Profile) => [
+        UserClaimActions.setProfile({ profile }),
+        OwnedEnrolmentsActions.getOwnedEnrolments(),
+        RequestedEnrolmentsActions.getEnrolmentRequests(),
+      ])
     )
   );
 

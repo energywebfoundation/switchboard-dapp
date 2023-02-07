@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { AccountInfo, ProviderType } from 'iam-client-lib';
+import { ProviderType } from 'iam-client-lib';
 
 export const init = createAction(
   '[AUTH] Initialize Possible Options To Log In'
