@@ -46,7 +46,7 @@
     "@angular/platform-browser-dynamic": "13.3.11",
     "@angular/router": "13.3.11",
     "@angular/service-worker": "13.3.11",
-    "@ew-did-registry/credentials-interface": "^0.6.3-alpha.596.0",
+    "@ew-did-registry/credentials-interface": "^0.7.0",
     "@ew-did-registry/did-resolver-interface": "^0.6.3-alpha.596.0",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@mat-datetimepicker/core": "^9.0.68",
