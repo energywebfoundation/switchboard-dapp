@@ -26,6 +26,9 @@ const ownedReducer = createReducer(
     enrolments: state.enrolments.map((e) =>
       e.id === enrolment.id ? enrolment : e
     ),
+  })),
+  on(OwnedActions.removeEnrolment, (state, { enrolment }) => ({
+    enrolments: state.enrolments.filter((e) => e.id !== enrolment.id),
   }))
 );
 

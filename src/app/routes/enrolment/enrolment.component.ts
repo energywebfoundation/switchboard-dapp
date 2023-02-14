@@ -19,6 +19,7 @@ import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.s
 import { filter, tap } from 'rxjs/operators';
 import { FilterStatus } from './enrolment-list/models/filter-status.enum';
 import { EnrolmentClaim } from './models/enrolment-claim';
+import { removeEnrolment } from '../../state/enrolments/owned/owned.actions';
 
 @Component({
   selector: 'app-enrolment',
@@ -115,6 +116,10 @@ export class EnrolmentComponent implements AfterViewInit {
 
   refreshMyEnrolmentsList(enrolment: EnrolmentClaim): void {
     this.store.dispatch(OwnedEnrolmentsActions.updateEnrolment({enrolment}));
+  }
+
+  removeEnrolmentFromMyList(enrolment: EnrolmentClaim): void {
+    this.store.dispatch(OwnedEnrolmentsActions.removeEnrolment({enrolment}));
   }
 
   refreshRevocableList(enrolment: EnrolmentClaim): void {

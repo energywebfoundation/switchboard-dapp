@@ -40,6 +40,7 @@ export class MyEnrolmentListComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @Output() refreshList = new EventEmitter<EnrolmentClaim>();
+  @Output() removeEnrolment = new EventEmitter<EnrolmentClaim>();
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
   enrolmentType = EnrolmentListType.APPLICANT;
@@ -127,7 +128,7 @@ export class MyEnrolmentListComponent implements OnInit {
           'Action is successful.',
           'Cancel Enrolment Request'
         );
-        this.updateList(element);
+        this.removeEnrolment.emit(element)
       } catch (e) {
         console.error(e);
         this.toastr.error(

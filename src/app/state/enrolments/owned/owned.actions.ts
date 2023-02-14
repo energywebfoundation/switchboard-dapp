@@ -34,6 +34,11 @@ export const updateEnrolment = createAction(
   props<{ enrolment: EnrolmentClaim }>()
 );
 
+export const removeEnrolment = createAction(
+  '[OWNED ENROLMENTS] Remove Enrolment',
+  props<{ enrolment: EnrolmentClaim }>()
+);
+
 export const updateEnrolmentSuccess = createAction(
   '[OWNED ENROLMENTS] Update Enrolment Success',
   props<{ enrolment: EnrolmentClaim }>()
