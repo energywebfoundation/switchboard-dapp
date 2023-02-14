@@ -26,7 +26,7 @@ export class RequestedEnrolmentListComponent implements OnInit {
   @ViewChild('status', { static: true }) status;
   @Input() list: EnrolmentClaim[];
   @Input() enrolmentStatus: FilterStatus;
-  @Output() refreshList = new EventEmitter<void>();
+  @Output() refreshList = new EventEmitter<EnrolmentClaim>();
 
   enrolmentType = EnrolmentListType.ISSUER;
   enrolmentViewFilters = [
@@ -45,8 +45,8 @@ export class RequestedEnrolmentListComponent implements OnInit {
     return element?.isAccepted;
   }
 
-  updateList() {
-    this.refreshList.emit();
+  updateList(enrolment: EnrolmentClaim) {
+    this.refreshList.emit(enrolment);
   }
 
   ngOnInit() {

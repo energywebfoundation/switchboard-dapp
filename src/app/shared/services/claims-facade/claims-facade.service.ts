@@ -4,7 +4,7 @@ import { Claim, isValidDID, RegistrationTypes } from 'iam-client-lib';
 import { firstValueFrom, forkJoin, from, Observable, of } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { finalize, map, switchMap } from 'rxjs/operators';
+import { filter, finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
 import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
@@ -66,6 +66,7 @@ export class ClaimsFacadeService {
   }
 
   getClaimsBySubject(did) {
+    console.log('getClaimsBySubject');
     return from(
       this.iamService.claimsService.getClaimsBySubject({
         did,
@@ -76,12 +77,25 @@ export class ClaimsFacadeService {
   getClaimsByRequester(
     isAccepted: boolean = undefined
   ): Observable<EnrolmentClaim[]> {
+    console.log('getClaimsByRequester');
+
     return from(
       this.iamService.claimsService.getClaimsByRequester({
         did: this.iamService.signerService.did,
         isAccepted,
       })
     ).pipe(this.createEnrolmentClaimsFromClaims());
+  }
+
+  getClaimByRequester(enrolment: EnrolmentClaim) {
+    return from(
+      this.iamService.claimsService.getClaimsByRequester({
+        did: this.iamService.signerService.did,
+      })
+    )
+      .pipe(
+        this.mapAndFilterClaimToEnrolmentClaim(enrolment),
+      );
   }
 
   async addStatusIfIsSyncedOnChain(enrolment: EnrolmentClaim) {
@@ -97,6 +111,7 @@ export class ClaimsFacadeService {
   }
 
   getClaimsByRevoker(): Observable<EnrolmentClaim[]> {
+    console.log('getClaimsByRevoker');
     return from(
       this.iamService.claimsService.getClaimsByRevoker({
         did: this.iamService.signerService.did,
@@ -104,7 +119,28 @@ export class ClaimsFacadeService {
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
+  getClaimByRevoker(enrolment: EnrolmentClaim) {
+    return from(
+      this.iamService.claimsService.getClaimsByRevoker({
+        did: this.iamService.signerService.did,
+      })
+    )
+      .pipe(
+        this.mapAndFilterClaimToEnrolmentClaim(enrolment),
+      );
+  }
+
+  getClaimByIssuer(enrolment: EnrolmentClaim) {
+    return from(
+      this.iamService.claimsService.getClaimsByIssuer({
+        did: this.iamService.signerService.did,
+      })).pipe(
+      this.mapAndFilterClaimToEnrolmentClaim(enrolment),
+    )
+  }
+
   getClaimsByIssuer(): Observable<EnrolmentClaim[]> {
+    console.log('getClaimsByIssuer');
     return from(
       this.iamService.claimsService.getClaimsByIssuer({
         did: this.iamService.signerService.did,
@@ -243,5 +279,15 @@ export class ClaimsFacadeService {
     }
 
     return enrolment.setIsRevokedOffChain(false);
+  }
+
+  private mapAndFilterClaimToEnrolmentClaim(enrolment: EnrolmentClaim) {
+    return (source: Observable<Claim[]>): Observable<EnrolmentClaim> =>
+      source.pipe(
+        map((claims) => claims.filter((c) => c.id === enrolment.id)),
+        filter((claims) => claims.length > 0),
+        this.createEnrolmentClaimsFromClaims(),
+        map((claims) => claims[0]),
+      );
   }
 }

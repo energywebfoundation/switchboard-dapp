@@ -25,7 +25,7 @@ export class PreviewComponent {
     this.enrolmentClaim = claim;
     this.updateHeader(claim);
   }
-  @Output() refreshList = new EventEmitter();
+  @Output() refreshList = new EventEmitter<EnrolmentClaim>();
   header: string;
   enrolmentClaim: EnrolmentClaim;
   constructor(private dialog: MatDialog) {}
@@ -43,7 +43,7 @@ export class PreviewComponent {
       .afterClosed()
       .pipe(truthy())
       .subscribe(() => {
-        this.refreshList.emit();
+        this.refreshList.emit(this.enrolmentClaim);
       });
   }
 

@@ -21,7 +21,12 @@ const ownedReducer = createReducer(
       ...state,
       enrolments,
     })
-  )
+  ),
+  on(OwnedActions.updateEnrolmentSuccess, (state, { enrolment }) => ({
+    enrolments: state.enrolments.map((e) =>
+      e.id === enrolment.id ? enrolment : e
+    ),
+  }))
 );
 
 export function reducer(state: OwnedState | undefined, action: Action) {

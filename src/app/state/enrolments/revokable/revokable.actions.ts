@@ -27,3 +27,18 @@ export const updateRevocableEnrolmentsFailure = createAction(
   '[REVOCABLE ENROLMENTS] Update Revocable Enrolments Failure',
   props<{ error: string }>()
 );
+
+export const updateEnrolment = createAction(
+  '[REVOCABLE ENROLMENTS] Update Enrolment',
+  props<{ enrolment: EnrolmentClaim }>()
+);
+
+export const updateEnrolmentSuccess = createAction(
+  '[REVOCABLE ENROLMENTS] Update Enrolment Success',
+  props<{ enrolment: EnrolmentClaim }>()
+);
+
+export const updateEnrolmentFailure = createAction(
+  '[REVOCABLE ENROLMENTS] Update Enrolment Failure',
+  props<{ error: string }>()
+);

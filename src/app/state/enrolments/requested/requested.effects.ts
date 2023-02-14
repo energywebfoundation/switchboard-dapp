@@ -40,6 +40,25 @@ export class EnrolmentRequestsEffects {
     )
   );
 
+  updateEnrolment$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RequestedActions.updateEnrolment),
+      switchMap(({ enrolment }) =>
+        from(this.claimsFacade.getClaimByIssuer(enrolment)).pipe(
+          map((updatedEnrolment) => RequestedActions.updateEnrolmentSuccess({ enrolment: updatedEnrolment })),
+          catchError((e) => {
+            console.error(e);
+            return of(
+              RequestedActions.updateEnrolmentFailure({
+                error: e.message,
+              })
+            );
+          })
+        )
+      )
+    )
+  );
+
   private getEnrolments(successAction, failureAction) {
     return (source: Observable<EnrolmentClaim[]>) => {
       return source.pipe(

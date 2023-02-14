@@ -17,7 +17,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start-dev": "ng build --watch",
     "build-staging": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=staging",
     "build-prod": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=production",
     "build-stedin": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=stedin",
@@ -27,8 +26,6 @@
     "test:headless:cc": "ng test --karma-config=karma-headless.conf.js --code-coverage",
     "test:headless": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng test --karma-config=karma-headless.conf.js",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "stedin:flags": "node scripts/stedin.js",
     "analyze": "ng build -- --statsJson=true && webpack-bundle-analyzer dist/stats.json",
     "extract-i18n": "ng extract-i18n --output-path src/locale --format=json",
     "prettier": "npx prettier --check ."

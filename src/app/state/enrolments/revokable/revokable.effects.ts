@@ -39,6 +39,25 @@ export class RevokableEnrolmentEffects {
     )
   );
 
+  updateEnrolment$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RevokableActions.updateEnrolment),
+      switchMap(({ enrolment }) =>
+        from(this.claimsFacade.getClaimByRevoker(enrolment)).pipe(
+          map((updatedEnrolment: EnrolmentClaim) => RevokableActions.updateEnrolmentSuccess({ enrolment: updatedEnrolment })),
+          catchError((e) => {
+            console.error(e);
+            return of(
+              RevokableActions.updateEnrolmentFailure({
+                error: e.message,
+              })
+            );
+          })
+        )
+      )
+    )
+  );
+
   private getRevokableEnrolments(successAction, failureAction) {
     return (source: Observable<EnrolmentClaim[]>) => {
       return source.pipe(

@@ -2,7 +2,7 @@
 <app-generic-table [list]="revokersList$ | async" [columDefinitions]="columns"></app-generic-table>
 
 <ng-template #actions let-element>
-  <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList()"> </app-preview>
+  <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList($event)"> </app-preview>
 </ng-template>
 <ng-template #status let-element>
   <app-enrolment-status [claim]="element"></app-enrolment-status>
