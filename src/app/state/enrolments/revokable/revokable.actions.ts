@@ -30,7 +30,7 @@ export const updateRevocableEnrolmentsFailure = createAction(
 
 export const updateEnrolment = createAction(
   '[REVOCABLE ENROLMENTS] Update Enrolment',
-  props<{ enrolment: EnrolmentClaim }>()
+  props<{ id: string }>()
 );
 
 export const updateEnrolmentSuccess = createAction(

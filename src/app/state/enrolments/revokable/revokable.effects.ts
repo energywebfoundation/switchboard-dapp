@@ -44,8 +44,8 @@ export class RevokableEnrolmentEffects extends EffectBaseAbstract {
     return this.claimsFacade.getClaimsByRevoker();
   }
 
-  protected getClaim(enrolment: EnrolmentClaim): Observable<EnrolmentClaim> {
-    return this.claimsFacade.getClaimByRevoker(enrolment);
+  protected getClaim(id: string): Observable<EnrolmentClaim> {
+    return this.claimsFacade.getClaimByRevoker(id);
   }
 
   constructor(

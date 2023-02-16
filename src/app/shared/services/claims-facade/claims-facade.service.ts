@@ -4,7 +4,7 @@ import { Claim, isValidDID, RegistrationTypes } from 'iam-client-lib';
 import { firstValueFrom, forkJoin, from, Observable, of } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { filter, finalize, map, switchMap } from 'rxjs/operators';
+import { filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
 import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
@@ -84,14 +84,14 @@ export class ClaimsFacadeService {
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
-  getClaimByRequester(enrolment: EnrolmentClaim) {
+  getClaimByRequester(id: string) {
     return from(
       this.iamService.claimsService.getClaimsByRequester({
         did: this.iamService.signerService.did,
       })
     )
       .pipe(
-        this.mapAndFilterClaimToEnrolmentClaim(enrolment),
+        this.mapAndFilterClaimToEnrolmentClaim(id),
       );
   }
 
@@ -115,18 +115,18 @@ export class ClaimsFacadeService {
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
-  getClaimByRevoker(enrolment: EnrolmentClaim) {
+  getClaimByRevoker(id: string) {
     return from(
       this.iamService.claimsService.getClaimsByRevoker({
         did: this.iamService.signerService.did,
       })
     )
       .pipe(
-        this.mapAndFilterClaimToEnrolmentClaim(enrolment),
+        this.mapAndFilterClaimToEnrolmentClaim(id),
       );
   }
 
-  getClaimByIssuer(enrolment: EnrolmentClaim) {
+  getClaimByIssuer(enrolment: string) {
     return from(
       this.iamService.claimsService.getClaimsByIssuer({
         did: this.iamService.signerService.did,
@@ -276,10 +276,10 @@ export class ClaimsFacadeService {
     return enrolment.setIsRevokedOffChain(false);
   }
 
-  private mapAndFilterClaimToEnrolmentClaim(enrolment: EnrolmentClaim) {
+  private mapAndFilterClaimToEnrolmentClaim(id: string) {
     return (source: Observable<Claim[]>): Observable<EnrolmentClaim> =>
       source.pipe(
-        map((claims) => claims.filter((c) => c.id === enrolment.id)),
+        map((claims) => claims.filter((c) => c.id === id)),
         filter((claims) => claims.length > 0),
         this.createEnrolmentClaimsFromClaims(),
         map((claims) => claims[0]),

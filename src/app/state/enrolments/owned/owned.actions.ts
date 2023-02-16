@@ -31,12 +31,12 @@ export const updateOwnedEnrolmentsFailure = createAction(
 
 export const updateEnrolment = createAction(
   '[OWNED ENROLMENTS] Update Enrolment',
-  props<{ enrolment: EnrolmentClaim }>()
+  props<{ id: string }>()
 );
 
 export const removeEnrolment = createAction(
   '[OWNED ENROLMENTS] Remove Enrolment',
-  props<{ enrolment: EnrolmentClaim }>()
+  props<{ id: string }>()
 );
 
 export const updateEnrolmentSuccess = createAction(

@@ -6,15 +6,15 @@ import { LoadingService } from '../../../shared/services/loading.service';
 export abstract class EffectBaseAbstract {
   constructor(private loadingService: LoadingService) {}
   protected abstract getClaim(
-    enrolment: EnrolmentClaim
+    enrolmentId: string
   ): Observable<EnrolmentClaim>;
   protected abstract getClaims(): Observable<EnrolmentClaim[]>;
 
   updateEnrolment(successAction, failureAction) {
-    return (source: Observable<any>) =>
+    return (source: Observable<{ id: string }>) =>
       source.pipe(
-        switchMap(({ enrolment }) =>
-          from(this.getClaim(enrolment)).pipe(
+        switchMap(({ id }) =>
+          from(this.getClaim(id)).pipe(
             map((updatedEnrolment: EnrolmentClaim) =>
               successAction({ enrolment: updatedEnrolment })
             ),

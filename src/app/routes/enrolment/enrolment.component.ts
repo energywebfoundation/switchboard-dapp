@@ -111,19 +111,19 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   refreshIssuerList(enrolment:EnrolmentClaim) {
-    this.store.dispatch(RequestedEnrolmentsActions.updateEnrolment({enrolment}));
+    this.store.dispatch(RequestedEnrolmentsActions.updateEnrolment({id: enrolment.id}));
   }
 
   refreshMyEnrolmentsList(enrolment: EnrolmentClaim): void {
-    this.store.dispatch(OwnedEnrolmentsActions.updateEnrolment({enrolment}));
+    this.store.dispatch(OwnedEnrolmentsActions.updateEnrolment({id: enrolment.id}));
   }
 
   removeEnrolmentFromMyList(enrolment: EnrolmentClaim): void {
-    this.store.dispatch(OwnedEnrolmentsActions.removeEnrolment({enrolment}));
+    this.store.dispatch(OwnedEnrolmentsActions.removeEnrolment({id: enrolment.id}));
   }
 
   refreshRevocableList(enrolment: EnrolmentClaim): void {
-    this.store.dispatch(RevocableEnrolmentsActions.updateEnrolment({enrolment}));
+    this.store.dispatch(RevocableEnrolmentsActions.updateEnrolment({id: enrolment.id}));
   }
 
   createVC() {

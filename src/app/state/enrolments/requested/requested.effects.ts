@@ -45,8 +45,8 @@ export class EnrolmentRequestsEffects extends EffectBaseAbstract {
     return this.claimsFacade.getClaimsByIssuer();
   }
 
-  protected getClaim(enrolment: EnrolmentClaim): Observable<EnrolmentClaim> {
-    return this.claimsFacade.getClaimByIssuer(enrolment);
+  protected getClaim(enrolmentId: string): Observable<EnrolmentClaim> {
+    return this.claimsFacade.getClaimByIssuer(enrolmentId);
   }
 
   constructor(

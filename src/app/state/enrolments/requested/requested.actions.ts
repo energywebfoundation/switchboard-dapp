@@ -21,7 +21,7 @@ export const updateEnrolmentRequests = createAction(
 
 export const updateEnrolment = createAction(
   '[Enrolment Requests] Update Enrolment',
-  props<{ enrolment: EnrolmentClaim }>()
+  props<{ id: string }>()
 );
 
 export const updateEnrolmentSuccess = createAction(
