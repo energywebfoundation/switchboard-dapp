@@ -23,6 +23,7 @@ describe('EnrolmentRequestsEffects', () => {
     ]);
     claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
       'getClaimsByIssuer',
+      'getClaimByIssuer',
     ]);
     TestBed.configureTestingModule({
       providers: [
@@ -74,6 +75,46 @@ describe('EnrolmentRequestsEffects', () => {
               } as EnrolmentClaim,
             ],
           })
+        );
+        done();
+      });
+    });
+  });
+
+  describe('updateEnrolment$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should call success action', (done) => {
+      const enrolment = {
+        claimType: 'role.roles.org.iam.ewc',
+        createdAt: '2021-12-06T20:43:35.471Z',
+        id: '1',
+      } as EnrolmentClaim;
+      claimsFacadeSpy.getClaimByIssuer.and.returnValue(of(enrolment));
+
+      actions$.next(RequestedActions.updateEnrolment({ id: '1' }));
+
+      effects.updateEnrolment$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          RequestedActions.updateEnrolmentSuccess({
+            enrolment,
+          })
+        );
+        done();
+      });
+    });
+
+    it('should return failure action', (done) => {
+      claimsFacadeSpy.getClaimByIssuer.and.returnValue(
+        throwError(() => ({ message: 'Error' }))
+      );
+      actions$.next(RequestedActions.updateEnrolment({ id: '1' }));
+
+      effects.updateEnrolment$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          RequestedActions.updateEnrolmentFailure({ error: 'Error' })
         );
         done();
       });

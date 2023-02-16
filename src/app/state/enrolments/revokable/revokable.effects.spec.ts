@@ -6,6 +6,7 @@ import { RevokableEnrolmentEffects } from './revokable.effects';
 import * as RevokableActions from './revokable.actions';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
+import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 
 describe('RevokableEnrolmentsEffects', () => {
   let actions$: ReplaySubject<any>;
@@ -20,6 +21,7 @@ describe('RevokableEnrolmentsEffects', () => {
     ]);
     claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
       'getClaimsByRevoker',
+      'getClaimByRevoker',
     ]);
     TestBed.configureTestingModule({
       providers: [
@@ -74,6 +76,46 @@ describe('RevokableEnrolmentsEffects', () => {
               } as any,
             ],
           })
+        );
+        done();
+      });
+    });
+  });
+
+  describe('updateEnrolment$', () => {
+    beforeEach(() => {
+      actions$ = new ReplaySubject(1);
+    });
+
+    it('should call success action', (done) => {
+      const enrolment = {
+        claimType: 'role.roles.org.iam.ewc',
+        createdAt: '2021-12-06T20:43:35.471Z',
+        id: '1',
+      } as EnrolmentClaim;
+      claimsFacadeSpy.getClaimByRevoker.and.returnValue(of(enrolment));
+
+      actions$.next(RevokableActions.updateEnrolment({ id: '1' }));
+
+      effects.updateEnrolment$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          RevokableActions.updateEnrolmentSuccess({
+            enrolment,
+          })
+        );
+        done();
+      });
+    });
+
+    it('should return failure action', (done) => {
+      claimsFacadeSpy.getClaimByRevoker.and.returnValue(
+        throwError(() => ({ message: 'Error' }))
+      );
+      actions$.next(RevokableActions.updateEnrolment({ id: '1' }));
+
+      effects.updateEnrolment$.subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          RevokableActions.updateEnrolmentFailure({ error: 'Error' })
         );
         done();
       });
