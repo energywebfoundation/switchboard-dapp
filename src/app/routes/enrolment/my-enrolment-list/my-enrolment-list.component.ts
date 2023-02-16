@@ -127,7 +127,7 @@ export class MyEnrolmentListComponent implements OnInit {
           'Action is successful.',
           'Cancel Enrolment Request'
         );
-        this.removeEnrolment.emit(element)
+        this.removeEnrolment.emit(element);
       } catch (e) {
         console.error(e);
         this.toastr.error(

@@ -5,9 +5,7 @@ import { LoadingService } from '../../../shared/services/loading.service';
 
 export abstract class EffectBaseAbstract {
   constructor(private loadingService: LoadingService) {}
-  protected abstract getClaim(
-    enrolmentId: string
-  ): Observable<EnrolmentClaim>;
+  protected abstract getClaim(enrolmentId: string): Observable<EnrolmentClaim>;
   protected abstract getClaims(): Observable<EnrolmentClaim[]>;
 
   updateEnrolment(successAction, failureAction) {

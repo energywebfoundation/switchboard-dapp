@@ -89,10 +89,7 @@ export class ClaimsFacadeService {
       this.iamService.claimsService.getClaimsByRequester({
         did: this.iamService.signerService.did,
       })
-    )
-      .pipe(
-        this.mapAndFilterClaimToEnrolmentClaim(id),
-      );
+    ).pipe(this.getEnrolmentClaimFromClaimForId(id));
   }
 
   async addStatusIfIsSyncedOnChain(enrolment: EnrolmentClaim) {
@@ -120,19 +117,15 @@ export class ClaimsFacadeService {
       this.iamService.claimsService.getClaimsByRevoker({
         did: this.iamService.signerService.did,
       })
-    )
-      .pipe(
-        this.mapAndFilterClaimToEnrolmentClaim(id),
-      );
+    ).pipe(this.getEnrolmentClaimFromClaimForId(id));
   }
 
-  getClaimByIssuer(enrolment: string) {
+  getClaimByIssuer(id: string) {
     return from(
       this.iamService.claimsService.getClaimsByIssuer({
         did: this.iamService.signerService.did,
-      })).pipe(
-      this.mapAndFilterClaimToEnrolmentClaim(enrolment),
-    )
+      })
+    ).pipe(this.getEnrolmentClaimFromClaimForId(id));
   }
 
   getClaimsByIssuer(): Observable<EnrolmentClaim[]> {
@@ -276,13 +269,13 @@ export class ClaimsFacadeService {
     return enrolment.setIsRevokedOffChain(false);
   }
 
-  private mapAndFilterClaimToEnrolmentClaim(id: string) {
+  private getEnrolmentClaimFromClaimForId(id: string) {
     return (source: Observable<Claim[]>): Observable<EnrolmentClaim> =>
       source.pipe(
         map((claims) => claims.filter((c) => c.id === id)),
         filter((claims) => claims.length > 0),
         this.createEnrolmentClaimsFromClaims(),
-        map((claims) => claims[0]),
+        map((claims) => claims[0])
       );
   }
 }

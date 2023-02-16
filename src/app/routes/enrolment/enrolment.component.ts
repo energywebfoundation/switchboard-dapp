@@ -28,19 +28,23 @@ import { removeEnrolment } from '../../state/enrolments/owned/owned.actions';
 })
 export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
-  myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getAllEnrolments);
+  myEnrolmentList$ = this.store.select(
+    OwnedEnrolmentsSelectors.getAllEnrolments
+  );
   requestedEnrolmentsList$ = this.store.select(
     RequestedEnrolmentsSelectors.getAllEnrolments
   );
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
-  revocableList$ = this.store.select(
-    RevocableEnrolmentsSelectors.getAllEnrolments
-  ).pipe(tap(enrolments => {
-    // If there are no revocable enrolments, get the list
-    if (enrolments.length === 0) {
-      this.getRevocableList();
-    }
-  }));
+  revocableList$ = this.store
+    .select(RevocableEnrolmentsSelectors.getAllEnrolments)
+    .pipe(
+      tap((enrolments) => {
+        // If there are no revocable enrolments, get the list
+        if (enrolments.length === 0) {
+          this.getRevocableList();
+        }
+      })
+    );
   enrolmentStatus: FilterStatus = FilterStatus.Pending;
 
   private _queryParamSelectedTabInit = false;
@@ -110,20 +114,28 @@ export class EnrolmentComponent implements AfterViewInit {
     this.enrolmentStatus = value;
   }
 
-  refreshIssuerList(enrolment:EnrolmentClaim) {
-    this.store.dispatch(RequestedEnrolmentsActions.updateEnrolment({id: enrolment.id}));
+  refreshIssuerList(enrolment: EnrolmentClaim) {
+    this.store.dispatch(
+      RequestedEnrolmentsActions.updateEnrolment({ id: enrolment.id })
+    );
   }
 
   refreshMyEnrolmentsList(enrolment: EnrolmentClaim): void {
-    this.store.dispatch(OwnedEnrolmentsActions.updateEnrolment({id: enrolment.id}));
+    this.store.dispatch(
+      OwnedEnrolmentsActions.updateEnrolment({ id: enrolment.id })
+    );
   }
 
   removeEnrolmentFromMyList(enrolment: EnrolmentClaim): void {
-    this.store.dispatch(OwnedEnrolmentsActions.removeEnrolment({id: enrolment.id}));
+    this.store.dispatch(
+      OwnedEnrolmentsActions.removeEnrolment({ id: enrolment.id })
+    );
   }
 
   refreshRevocableList(enrolment: EnrolmentClaim): void {
-    this.store.dispatch(RevocableEnrolmentsActions.updateEnrolment({id: enrolment.id}));
+    this.store.dispatch(
+      RevocableEnrolmentsActions.updateEnrolment({ id: enrolment.id })
+    );
   }
 
   createVC() {
@@ -163,5 +175,4 @@ export class EnrolmentComponent implements AfterViewInit {
   private getRevocableList(): void {
     this.store.dispatch(RevocableEnrolmentsActions.getRevocableEnrolments());
   }
-
 }

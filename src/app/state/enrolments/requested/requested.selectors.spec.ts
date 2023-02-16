@@ -35,7 +35,9 @@ describe('Requested Enrolments Selectors', () => {
 
   describe('getAllEnrolments', () => {
     it('should return default state', () => {
-      expect(RequestedSelectors.getAllEnrolments.projector({enrolments: []})).toEqual([]);
+      expect(
+        RequestedSelectors.getAllEnrolments.projector({ enrolments: [] })
+      ).toEqual([]);
     });
   });
 });
