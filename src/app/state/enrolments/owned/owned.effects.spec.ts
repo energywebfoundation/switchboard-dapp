@@ -45,7 +45,7 @@ describe('OwnedEnrolmentsEffects', () => {
 
     it('should dispatch failure action on thrown error ', (done) => {
       claimsFacadeSpy.getClaimsByRequester.and.returnValue(
-        throwError({ message: 'Error' })
+        throwError(() => ({ message: 'Error' }))
       );
       actions$.next(OwnedActions.getOwnedEnrolments());
 
@@ -82,7 +82,5 @@ describe('OwnedEnrolmentsEffects', () => {
     });
   });
 
-  describe('updateEnrolment$', () => {
-
-  })
+  describe('updateEnrolment$', () => {});
 });

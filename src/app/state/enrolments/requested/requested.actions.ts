@@ -22,17 +22,17 @@ export const updateEnrolmentRequests = createAction(
 export const updateEnrolment = createAction(
   '[Enrolment Requests] Update Enrolment',
   props<{ enrolment: EnrolmentClaim }>()
-)
+);
 
 export const updateEnrolmentSuccess = createAction(
   '[Enrolment Requests] Update Enrolment Success',
   props<{ enrolment: EnrolmentClaim }>()
-)
+);
 
 export const updateEnrolmentFailure = createAction(
   '[Enrolment Requests] Update Enrolment Failure',
   props<{ error: string }>()
-)
+);
 
 export const updateEnrolmentRequestsSuccess = createAction(
   '[ENROLMENT REQUESTS] Update Enrolment Requests Success',

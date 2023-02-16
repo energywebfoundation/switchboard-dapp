@@ -43,7 +43,7 @@ describe('RevokableEnrolmentsEffects', () => {
 
     it('should dispatch failure action on thrown error ', (done) => {
       claimsFacadeSpy.getClaimsByRevoker.and.returnValue(
-        throwError({ message: 'Error' })
+        throwError(() => ({ message: 'Error' }))
       );
       actions$.next(RevokableActions.getRevocableEnrolments());
 

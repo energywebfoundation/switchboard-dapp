@@ -15,8 +15,8 @@ export class OwnedEnrolmentsEffects extends EffectBaseAbstract {
       ofType(OwnedActions.getOwnedEnrolments),
       this.getEnrolments(
         OwnedActions.getOwnedEnrolmentsSuccess,
-        OwnedActions.getOwnedEnrolmentsFailure,
-      ),
+        OwnedActions.getOwnedEnrolmentsFailure
+      )
     )
   );
 

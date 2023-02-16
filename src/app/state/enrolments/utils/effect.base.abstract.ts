@@ -4,8 +4,7 @@ import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { LoadingService } from '../../../shared/services/loading.service';
 
 export abstract class EffectBaseAbstract {
-  constructor(private loadingService: LoadingService) {
-  }
+  constructor(private loadingService: LoadingService) {}
   protected abstract getClaim(
     enrolment: EnrolmentClaim
   ): Observable<EnrolmentClaim>;

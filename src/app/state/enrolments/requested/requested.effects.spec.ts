@@ -44,7 +44,7 @@ describe('EnrolmentRequestsEffects', () => {
 
     it('should dispatch failure action on thrown error ', (done) => {
       claimsFacadeSpy.getClaimsByIssuer.and.returnValue(
-        throwError({ message: 'Error' })
+        throwError(() => ({ message: 'Error' }))
       );
       actions$.next(RequestedActions.getEnrolmentRequests());
 
