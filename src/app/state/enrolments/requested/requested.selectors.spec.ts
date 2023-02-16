@@ -1,6 +1,7 @@
 import { Claim } from 'iam-client-lib';
 import { EnrolmentClaim } from 'src/app/routes/enrolment/models/enrolment-claim';
 import * as RequestedSelectors from './requested.selectors';
+import * as OwnedSelectors from '../owned/owned.selectors';
 
 describe('Requested Enrolments Selectors', () => {
   describe('getPendingEnrolmentsAmount', () => {
@@ -29,6 +30,12 @@ describe('Requested Enrolments Selectors', () => {
           } as Claim),
         ])
       ).toEqual(1);
+    });
+  });
+
+  describe('getAllEnrolments', () => {
+    it('should return default state', () => {
+      expect(RequestedSelectors.getAllEnrolments.projector({enrolments: []})).toEqual([]);
     });
   });
 });

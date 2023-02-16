@@ -34,7 +34,7 @@ export class EnrolmentComponent implements AfterViewInit {
   );
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
   revocableList$ = this.store.select(
-    RevocableEnrolmentsSelectors.getEnrolments
+    RevocableEnrolmentsSelectors.getAllEnrolments
   ).pipe(tap(enrolments => {
     // If there are no revocable enrolments, get the list
     if (enrolments.length === 0) {
