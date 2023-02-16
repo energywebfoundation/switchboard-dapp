@@ -28,7 +28,7 @@ import { removeEnrolment } from '../../state/enrolments/owned/owned.actions';
 })
 export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
-  myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
+  myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getAllEnrolments);
   requestedEnrolmentsList$ = this.store.select(
     RequestedEnrolmentsSelectors.getAllEnrolments
   );

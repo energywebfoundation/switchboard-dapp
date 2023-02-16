@@ -43,7 +43,7 @@ export class SearchResultComponent implements OnInit {
     value: false,
   };
 
-  requestedClaims$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
+  requestedClaims$ = this.store.select(OwnedEnrolmentsSelectors.getAllEnrolments);
 
   constructor(
     private activeRoute: ActivatedRoute,
