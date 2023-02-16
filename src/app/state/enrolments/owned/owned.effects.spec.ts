@@ -81,4 +81,8 @@ describe('OwnedEnrolmentsEffects', () => {
       });
     });
   });
+
+  describe('updateEnrolment$', () => {
+
+  })
 });
