@@ -66,7 +66,6 @@ export class ClaimsFacadeService {
   }
 
   getClaimsBySubject(did) {
-    console.log('getClaimsBySubject');
     return from(
       this.iamService.claimsService.getClaimsBySubject({
         did,
@@ -77,8 +76,6 @@ export class ClaimsFacadeService {
   getClaimsByRequester(
     isAccepted: boolean = undefined
   ): Observable<EnrolmentClaim[]> {
-    console.log('getClaimsByRequester');
-
     return from(
       this.iamService.claimsService.getClaimsByRequester({
         did: this.iamService.signerService.did,
@@ -111,7 +108,6 @@ export class ClaimsFacadeService {
   }
 
   getClaimsByRevoker(): Observable<EnrolmentClaim[]> {
-    console.log('getClaimsByRevoker');
     return from(
       this.iamService.claimsService.getClaimsByRevoker({
         did: this.iamService.signerService.did,
@@ -140,7 +136,6 @@ export class ClaimsFacadeService {
   }
 
   getClaimsByIssuer(): Observable<EnrolmentClaim[]> {
-    console.log('getClaimsByIssuer');
     return from(
       this.iamService.claimsService.getClaimsByIssuer({
         did: this.iamService.signerService.did,
