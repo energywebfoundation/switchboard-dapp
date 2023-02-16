@@ -40,14 +40,6 @@ export class NotificationService {
     this._assetsOfferedToMe.next(await this.getOfferedAssetsAmount());
   }
 
-  updatePendingApprovalList() {
-    this.store.dispatch(RequestedEnrolmentsActions.getEnrolmentRequests());
-  }
-
-  updatePendingPublishList() {
-    this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
-  }
-
   increaseAssetsOfferedToMeCount() {
     this._assetsOfferedToMe.next(this._assetsOfferedToMe.getValue() + 1);
   }

@@ -4,12 +4,7 @@ import { NotificationService } from './notification.service';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import {
-  OwnedEnrolmentsActions,
-  OwnedEnrolmentsSelectors,
-  RequestedEnrolmentsActions,
-  RequestedEnrolmentsSelectors,
-} from '@state';
+import { OwnedEnrolmentsSelectors, RequestedEnrolmentsSelectors } from '@state';
 
 describe('NotificationService', () => {
   let service: NotificationService;
@@ -75,22 +70,6 @@ describe('NotificationService', () => {
       expect(v).toEqual(3);
       done();
     });
-  });
-
-  it('should refresh requested enrolments list after approving or rejecting', () => {
-    const dispatchSpy = spyOn(store, 'dispatch');
-    service.updatePendingApprovalList();
-    expect(dispatchSpy).toHaveBeenCalledOnceWith(
-      RequestedEnrolmentsActions.getEnrolmentRequests()
-    );
-  });
-
-  it('should refresh owned enrolments list after publishing', () => {
-    const dispatchSpy = spyOn(store, 'dispatch');
-    service.updatePendingPublishList();
-    expect(dispatchSpy).toHaveBeenCalledOnceWith(
-      OwnedEnrolmentsActions.getOwnedEnrolments()
-    );
   });
 
   it('should increase assets offered', (done) => {

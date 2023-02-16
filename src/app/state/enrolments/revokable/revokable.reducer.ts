@@ -24,9 +24,10 @@ const revokableReducer = createReducer(
     })
   ),
   on(RevokableActions.updateEnrolmentSuccess, (state, { enrolment }) => ({
-    enrolments: state.enrolments.map((e) =>
-      e.id === enrolment.id ? enrolment : e
-    ),
+    enrolments: [
+      ...state.enrolments.filter((e) => e.id !== enrolment.id),
+      enrolment,
+    ].filter(Boolean),
   }))
 );
 
