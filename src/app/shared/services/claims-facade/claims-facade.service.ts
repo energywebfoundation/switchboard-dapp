@@ -4,7 +4,7 @@ import { Claim, isValidDID, RegistrationTypes } from 'iam-client-lib';
 import { firstValueFrom, forkJoin, from, Observable, of } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { filter, finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
 import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
@@ -84,7 +84,7 @@ export class ClaimsFacadeService {
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
-  getClaimByRequester(id: string) {
+  getClaimByRequester(id: string): Observable<EnrolmentClaim> {
     return from(
       this.iamService.claimsService.getClaimsByRequester({
         did: this.iamService.signerService.did,
@@ -112,7 +112,7 @@ export class ClaimsFacadeService {
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
-  getClaimByRevoker(id: string) {
+  getClaimByRevoker(id: string): Observable<EnrolmentClaim> {
     return from(
       this.iamService.claimsService.getClaimsByRevoker({
         did: this.iamService.signerService.did,
@@ -120,7 +120,7 @@ export class ClaimsFacadeService {
     ).pipe(this.getEnrolmentClaimFromClaimForId(id));
   }
 
-  getClaimByIssuer(id: string) {
+  getClaimByIssuer(id: string): Observable<EnrolmentClaim> {
     return from(
       this.iamService.claimsService.getClaimsByIssuer({
         did: this.iamService.signerService.did,
