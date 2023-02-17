@@ -43,3 +43,8 @@ export const updateEnrolmentRequestsFailure = createAction(
   '[ENROLMENT REQUESTS] Update Enrolment Requests Failure',
   props<{ error: string }>()
 );
+
+export const removeEnrolment = createAction(
+  '[Enrolment Requests] Remove Enrolment',
+  props<{ id: string }>()
+);
