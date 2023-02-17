@@ -6,7 +6,10 @@ import { EnrolmentsFacadeService } from '@state';
 import { SearchType } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { ListType, LoadingCount, } from '../../shared/constants/shared-constants';
+import {
+  ListType,
+  LoadingCount,
+} from '../../shared/constants/shared-constants';
 import { IamService } from '../../shared/services/iam.service';
 import { LoadingService } from '../../shared/services/loading.service';
 import { GovernanceDetailsComponent } from '../applications/governance-view/governance-details/governance-details.component';

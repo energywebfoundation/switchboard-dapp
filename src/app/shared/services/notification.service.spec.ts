@@ -18,12 +18,16 @@ describe('NotificationService', () => {
       Promise.resolve([{}, {}])
     );
 
-    spyOnProperty(enrolmentFacadeSpy, 'notSyncedAmount$', 'get').and.returnValue(
-      of(1)
-    );
-    spyOnProperty(enrolmentFacadeSpy, 'pendingApprovalAmount$', 'get').and.returnValue(
-      of(3)
-    );
+    spyOnProperty(
+      enrolmentFacadeSpy,
+      'notSyncedAmount$',
+      'get'
+    ).and.returnValue(of(1));
+    spyOnProperty(
+      enrolmentFacadeSpy,
+      'pendingApprovalAmount$',
+      'get'
+    ).and.returnValue(of(3));
   };
   beforeEach(() => {
     assetsFacadeServiceSpy = jasmine.createSpyObj('AssetsFacadeService', [
@@ -34,7 +38,7 @@ describe('NotificationService', () => {
       providers: [
         { provide: AssetsFacadeService, useValue: assetsFacadeServiceSpy },
         { provide: ClaimsFacadeService, useValue: claimsFacadeSpy },
-        provideMockStore()
+        provideMockStore(),
       ],
     });
     service = TestBed.inject(NotificationService);
@@ -57,7 +61,7 @@ describe('NotificationService', () => {
     });
   });
 
-  it('should get number of not synced DID Docs when initializing',  (done) => {
+  it('should get number of not synced DID Docs when initializing', (done) => {
     setUp();
 
     service.pendingDidDocSync.subscribe((v) => {
@@ -66,7 +70,7 @@ describe('NotificationService', () => {
     });
   });
 
-  it('should get number of pending approvals when initializing',  (done) => {
+  it('should get number of pending approvals when initializing', (done) => {
     setUp();
 
     service.pendingApproval.subscribe((v) => {

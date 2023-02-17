@@ -45,7 +45,9 @@ describe('EnrolmentsFacadeService', () => {
 
   it('should not dispatch action when there is not an empty list', (done) => {
     const dispatchSpy = spyOn(store, 'dispatch');
-    store.overrideSelector(RevocableEnrolmentsSelectors.getAllEnrolments, [{} as any]);
+    store.overrideSelector(RevocableEnrolmentsSelectors.getAllEnrolments, [
+      {} as any,
+    ]);
     service.revokableList$.subscribe({
       next: () => {
         expect(dispatchSpy).not.toHaveBeenCalledOnceWith(
@@ -54,5 +56,5 @@ describe('EnrolmentsFacadeService', () => {
         done();
       },
     });
-  })
+  });
 });

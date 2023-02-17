@@ -6,7 +6,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog } from '@angular/material/dialog';
 import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 import { Store } from '@ngrx/store';
-import { EnrolmentsFacadeService, SettingsSelectors, } from '@state';
+import { EnrolmentsFacadeService, SettingsSelectors } from '@state';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 import { filter } from 'rxjs/operators';
 import { FilterStatus } from './enrolment-list/models/filter-status.enum';
