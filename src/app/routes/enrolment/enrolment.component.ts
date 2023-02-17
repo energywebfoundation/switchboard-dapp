@@ -130,7 +130,9 @@ export class EnrolmentComponent implements AfterViewInit {
     this.store.dispatch(
       OwnedEnrolmentsActions.removeEnrolment({ id: enrolment.id })
     );
-    this.store.dispatch(RequestedEnrolmentsActions.removeEnrolment({ id: enrolment.id }));
+    this.store.dispatch(
+      RequestedEnrolmentsActions.removeEnrolment({ id: enrolment.id })
+    );
   }
 
   refreshRevocableList(enrolment: EnrolmentClaim): void {

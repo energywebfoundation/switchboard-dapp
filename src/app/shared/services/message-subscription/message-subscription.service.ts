@@ -100,7 +100,11 @@ export class MessageSubscriptionService implements OnDestroy {
    * @private
    */
   private updateEnrolmentLists(claimId: string) {
-    this.store.dispatch(RequestedEnrolmentsActions.updateEnrolment({id: claimId}));
-    this.store.dispatch(OwnedEnrolmentsActions.updateEnrolment({id: claimId}));
+    this.store.dispatch(
+      RequestedEnrolmentsActions.updateEnrolment({ id: claimId })
+    );
+    this.store.dispatch(
+      OwnedEnrolmentsActions.updateEnrolment({ id: claimId })
+    );
   }
 }
