@@ -28,3 +28,23 @@ export const updateOwnedEnrolmentsFailure = createAction(
   '[OWNED ENROLMENTS] Update Owned Enrolments Failure',
   props<{ error: string }>()
 );
+
+export const updateEnrolment = createAction(
+  '[OWNED ENROLMENTS] Update Enrolment',
+  props<{ id: string }>()
+);
+
+export const removeEnrolment = createAction(
+  '[OWNED ENROLMENTS] Remove Enrolment',
+  props<{ id: string }>()
+);
+
+export const updateEnrolmentSuccess = createAction(
+  '[OWNED ENROLMENTS] Update Enrolment Success',
+  props<{ enrolment: EnrolmentClaim }>()
+);
+
+export const updateEnrolmentFailure = createAction(
+  '[OWNED ENROLMENTS] Update Enrolment Failure',
+  props<{ error: string }>()
+);

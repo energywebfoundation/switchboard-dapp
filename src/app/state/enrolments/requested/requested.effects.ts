@@ -7,21 +7,16 @@ import { from, Observable, of } from 'rxjs';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
+import { EffectBaseAbstract } from '../utils/effect.base.abstract';
 
 @Injectable()
-export class EnrolmentRequestsEffects {
+export class EnrolmentRequestsEffects extends EffectBaseAbstract {
   getEnrolmentRequests$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RequestedActions.getEnrolmentRequests),
-      tap(() => this.loadingService.show()),
-      switchMap(() =>
-        this.claimsFacade.getClaimsByIssuer().pipe(
-          this.getEnrolments(
-            RequestedActions.getEnrolmentRequestsSuccess,
-            RequestedActions.getEnrolmentRequestsFailure
-          ),
-          finalize(() => this.loadingService.hide())
-        )
+      this.getEnrolments(
+        RequestedActions.getEnrolmentRequestsSuccess,
+        RequestedActions.getEnrolmentRequestsFailure
       )
     )
   );
@@ -29,37 +24,37 @@ export class EnrolmentRequestsEffects {
   updateEnrolmentRequests$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RequestedActions.updateEnrolmentRequests),
-      switchMap(() =>
-        from(this.claimsFacade.getClaimsByIssuer()).pipe(
-          this.getEnrolments(
-            RequestedActions.updateEnrolmentRequestsSuccess,
-            RequestedActions.updateEnrolmentRequestsFailure
-          )
-        )
+      this.getEnrolments(
+        RequestedActions.updateEnrolmentRequestsSuccess,
+        RequestedActions.updateEnrolmentRequestsFailure
       )
     )
   );
 
-  private getEnrolments(successAction, failureAction) {
-    return (source: Observable<EnrolmentClaim[]>) => {
-      return source.pipe(
-        map((enrolments) => successAction({ enrolments })),
-        catchError((e) => {
-          console.error(e);
-          return of(
-            failureAction({
-              error: e.message,
-            })
-          );
-        })
-      );
-    };
+  updateEnrolment$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RequestedActions.updateEnrolment),
+      this.updateEnrolment(
+        RequestedActions.updateEnrolmentSuccess,
+        RequestedActions.updateEnrolmentFailure
+      )
+    )
+  );
+
+  protected getClaims(): Observable<EnrolmentClaim[]> {
+    return this.claimsFacade.getClaimsByIssuer();
+  }
+
+  protected getClaim(enrolmentId: string): Observable<EnrolmentClaim> {
+    return this.claimsFacade.getClaimByIssuer(enrolmentId);
   }
 
   constructor(
     private actions$: Actions,
     private store: Store,
     private claimsFacade: ClaimsFacadeService,
-    private loadingService: LoadingService
-  ) {}
+    loadingService: LoadingService
+  ) {
+    super(loadingService);
+  }
 }

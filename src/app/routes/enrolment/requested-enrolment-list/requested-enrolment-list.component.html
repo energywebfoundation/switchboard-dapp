@@ -4,9 +4,8 @@
   [columDefinitions]="columns"
   [showDID]="true"
   [filterStatuses]="enrolmentViewFilters"></app-enrolment-list>
-
 <ng-template #actions let-element>
-  <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList()"></app-preview>
+  <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList($event)"></app-preview>
 </ng-template>
 
 <ng-template #status let-element>

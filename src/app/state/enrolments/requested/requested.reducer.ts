@@ -21,7 +21,12 @@ const requestedReducer = createReducer(
       ...state,
       enrolments,
     })
-  )
+  ),
+  on(RequestedActions.updateEnrolmentSuccess, (state, { enrolment }) => ({
+    enrolments: state.enrolments.map((e) =>
+      e.id === enrolment.id ? enrolment : e
+    ),
+  }))
 );
 
 export function reducer(state: RequestedState | undefined, action: Action) {
