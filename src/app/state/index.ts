@@ -64,9 +64,7 @@ export {
   SettingsActions,
   SettingsSelectors,
   OwnedEnrolmentsActions,
-  OwnedEnrolmentsSelectors,
   RequestedEnrolmentsActions,
-  RequestedEnrolmentsSelectors,
   RevocableEnrolmentsActions,
-  RevocableEnrolmentsSelectors,
 };
+export * from './enrolments/enrolments-facade.service';

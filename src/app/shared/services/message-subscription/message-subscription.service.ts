@@ -3,8 +3,7 @@ import { IamService } from '../iam.service';
 import { AssetHistoryEventType, ClaimEventType } from 'iam-client-lib';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
 import { NotificationService } from '../notification.service';
-import { OwnedEnrolmentsActions, RequestedEnrolmentsActions } from '@state';
-import { Store } from '@ngrx/store';
+import { EnrolmentsFacadeService } from '@state';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +14,7 @@ export class MessageSubscriptionService implements OnDestroy {
     private iamService: IamService,
     private toastr: SwitchboardToastrService,
     private notifService: NotificationService,
-    private store: Store
+    private enrolmentsFacade: EnrolmentsFacadeService
   ) {}
 
   ngOnDestroy() {
@@ -100,11 +99,6 @@ export class MessageSubscriptionService implements OnDestroy {
    * @private
    */
   private updateEnrolmentLists(claimId: string) {
-    this.store.dispatch(
-      RequestedEnrolmentsActions.updateEnrolment({ id: claimId })
-    );
-    this.store.dispatch(
-      OwnedEnrolmentsActions.updateEnrolment({ id: claimId })
-    );
+    this.enrolmentsFacade.update(claimId);
   }
 }

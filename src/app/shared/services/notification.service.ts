@@ -2,13 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
-import {
-  OwnedEnrolmentsActions,
-  OwnedEnrolmentsSelectors,
-  RequestedEnrolmentsActions,
-  RequestedEnrolmentsSelectors,
-} from '@state';
-import { Store } from '@ngrx/store';
+import { EnrolmentsFacadeService } from '@state';
 
 @Injectable({
   providedIn: 'root',
@@ -19,17 +13,15 @@ export class NotificationService {
   constructor(
     private claimsFacade: ClaimsFacadeService,
     private assetsFacade: AssetsFacadeService,
-    private store: Store
+    private enrolmentFacade: EnrolmentsFacadeService
   ) {}
 
   get pendingApproval() {
-    return this.store.select(
-      RequestedEnrolmentsSelectors.getPendingEnrolmentsAmount
-    );
+    return this.enrolmentFacade.pendingApprovalAmount$;
   }
 
   get pendingDidDocSync() {
-    return this.store.select(OwnedEnrolmentsSelectors.getNotSyncedAmount);
+    return this.enrolmentFacade.notSyncedAmount$;
   }
 
   get assetsOfferedToMe() {

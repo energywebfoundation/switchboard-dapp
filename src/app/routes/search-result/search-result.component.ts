@@ -2,15 +2,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { OwnedEnrolmentsSelectors } from '@state';
-import { Claim, SearchType } from 'iam-client-lib';
+import { EnrolmentsFacadeService } from '@state';
+import { SearchType } from 'iam-client-lib';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import {
-  ListType,
-  LoadingCount,
-} from '../../shared/constants/shared-constants';
+import { ListType, LoadingCount, } from '../../shared/constants/shared-constants';
 import { IamService } from '../../shared/services/iam.service';
 import { LoadingService } from '../../shared/services/loading.service';
 import { GovernanceDetailsComponent } from '../applications/governance-view/governance-details/governance-details.component';
@@ -43,16 +39,14 @@ export class SearchResultComponent implements OnInit {
     value: false,
   };
 
-  requestedClaims$ = this.store.select(
-    OwnedEnrolmentsSelectors.getAllEnrolments
-  );
+  requestedClaims$ = this.enrolmentFacade.ownedList$;
 
   constructor(
     private activeRoute: ActivatedRoute,
     private loadingService: LoadingService,
     private fb: FormBuilder,
     private iamService: IamService,
-    private store: Store
+    private enrolmentFacade: EnrolmentsFacadeService
   ) {}
 
   ngOnInit() {

@@ -3,39 +3,42 @@ import { TestBed } from '@angular/core/testing';
 import { NotificationService } from './notification.service';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { OwnedEnrolmentsSelectors, RequestedEnrolmentsSelectors } from '@state';
+import { EnrolmentsFacadeService } from '@state';
+import { of } from 'rxjs';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('NotificationService', () => {
   let service: NotificationService;
   let claimsFacadeSpy;
   let assetsFacadeServiceSpy;
-  let store: MockStore;
+  let enrolmentFacadeSpy: EnrolmentsFacadeService;
 
   const setUp = () => {
     assetsFacadeServiceSpy.getOfferedAssets.and.returnValue(
       Promise.resolve([{}, {}])
     );
 
-    store.overrideSelector(OwnedEnrolmentsSelectors.getNotSyncedAmount, 1);
-    store.overrideSelector(
-      RequestedEnrolmentsSelectors.getPendingEnrolmentsAmount,
-      3
+    spyOnProperty(enrolmentFacadeSpy, 'notSyncedAmount$', 'get').and.returnValue(
+      of(1)
+    );
+    spyOnProperty(enrolmentFacadeSpy, 'pendingApprovalAmount$', 'get').and.returnValue(
+      of(3)
     );
   };
   beforeEach(() => {
     assetsFacadeServiceSpy = jasmine.createSpyObj('AssetsFacadeService', [
       'getOfferedAssets',
     ]);
+
     TestBed.configureTestingModule({
       providers: [
         { provide: AssetsFacadeService, useValue: assetsFacadeServiceSpy },
         { provide: ClaimsFacadeService, useValue: claimsFacadeSpy },
-        provideMockStore(),
+        provideMockStore()
       ],
     });
     service = TestBed.inject(NotificationService);
-    store = TestBed.inject(MockStore);
+    enrolmentFacadeSpy = TestBed.inject(EnrolmentsFacadeService);
   });
 
   it('should be created', () => {
@@ -54,7 +57,7 @@ describe('NotificationService', () => {
     });
   });
 
-  it('should get number of not synced DID Docs when initializing', async (done) => {
+  it('should get number of not synced DID Docs when initializing',  (done) => {
     setUp();
 
     service.pendingDidDocSync.subscribe((v) => {
@@ -63,7 +66,7 @@ describe('NotificationService', () => {
     });
   });
 
-  it('should get number of pending approvals when initializing', async (done) => {
+  it('should get number of pending approvals when initializing',  (done) => {
     setUp();
 
     service.pendingApproval.subscribe((v) => {
