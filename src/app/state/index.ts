@@ -67,4 +67,4 @@ export {
   RequestedEnrolmentsActions,
   RevocableEnrolmentsActions,
 };
-export * from './enrolments/enrolments-facade.service';
+export * from './enrolments/facade/enrolments-facade.service';

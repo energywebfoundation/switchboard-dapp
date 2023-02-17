@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import * as RequestedEnrolmentsSelectors from './requested/requested.selectors';
-import * as OwnedEnrolmentsSelectors from './owned/owned.selectors';
-import * as RevocableEnrolmentsSelectors from './revokable/revokable.selectors';
-import * as OwnedEnrolmentsActions from './owned/owned.actions';
-import * as RequestedEnrolmentsActions from './requested/requested.actions';
-import * as RevocableEnrolmentsActions from './revokable/revokable.actions';
+import * as RequestedEnrolmentsSelectors from '../requested/requested.selectors';
+import * as OwnedEnrolmentsSelectors from '../owned/owned.selectors';
+import * as RevocableEnrolmentsSelectors from '../revokable/revokable.selectors';
+import * as OwnedEnrolmentsActions from '../owned/owned.actions';
+import * as RequestedEnrolmentsActions from '../requested/requested.actions';
+import * as RevocableEnrolmentsActions from '../revokable/revokable.actions';
 import { Store } from '@ngrx/store';
 import { tap } from 'rxjs/operators';
 
@@ -38,22 +38,23 @@ export class EnrolmentsFacadeService {
         })
       );
   }
-  private updated = false;
+  private updatedId: string = null;
   constructor(private store: Store) {}
 
   /**
    * Checks for updates for Owned and Requested enrolments are needed, and updates them if needed in the store.
+   * If method is called again within 1 second, it will not dispatch the actions again.
    * @param id
    */
   update(id: string) {
-    if (!this.updated) {
+    if (this.updatedId !== id) {
       this.store.dispatch(OwnedEnrolmentsActions.updateEnrolment({ id }));
       this.store.dispatch(RequestedEnrolmentsActions.updateEnrolment({ id }));
-      this.updated = true;
+      this.updatedId = id;
     }
 
     setTimeout(() => {
-      this.updated = false;
+      this.updatedId = null;
     }, 1000);
   }
 
