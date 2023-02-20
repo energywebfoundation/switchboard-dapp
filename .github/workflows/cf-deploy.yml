@@ -2,7 +2,7 @@ name: Deploy to bucket
 
 on:
   push:
-    branches: ['develop', 'master', 'sandbox', 'release', 'gp4btc-staging']
+    branches: ['develop', 'master', 'sandbox', 'release', 'gp4btc-staging', 'gp4btc-prod']
 jobs:
   cancel-previous:
     name: 'Cancel Previous Runs'
