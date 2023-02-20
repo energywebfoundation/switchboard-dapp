@@ -19,6 +19,8 @@
     "start": "ng serve",
     "start-dev": "ng build --watch",
     "build-staging": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=staging",
+    "build-gp4btc-staging": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=gp4btc-staging",
+    "build-gp4btc-prod": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=gp4btc-production",
     "build-prod": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=production",
     "build-stedin": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=stedin",
     "build": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --aot -c=development",
