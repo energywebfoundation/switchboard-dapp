@@ -4,6 +4,7 @@ import { MessageSubscriptionService } from './message-subscription.service';
 import { IamService } from '../iam.service';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
 import { NotificationService } from '../notification.service';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('MessageSubscriptionService', () => {
   let service: MessageSubscriptionService;
@@ -14,6 +15,7 @@ describe('MessageSubscriptionService', () => {
         { provide: IamService, useValue: {} },
         { provide: SwitchboardToastrService, useValue: {} },
         { provide: NotificationService, useValue: {} },
+        provideMockStore(),
       ],
     });
     service = TestBed.inject(MessageSubscriptionService);
