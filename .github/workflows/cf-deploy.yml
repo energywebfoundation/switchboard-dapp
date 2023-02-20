@@ -29,8 +29,11 @@ jobs:
             echo "::set-output name=env_name::staging"
             echo "::set-output name=build_script::npm run build-staging"
           elif [ "${{ github.ref }}" = "refs/heads/gp4btc-staging" ]; then
-            echo "::set-output name=env_name::staging"
-            echo "::set-output name=build_script::npm run build-staging"            
+            echo "::set-output name=env_name::gp4btc-staging"
+            echo "::set-output name=build_script::npm run build-gp4btc-staging"            
+          elif [ "${{ github.ref }}" = "refs/heads/gp4btc-prod" ]; then
+            echo "::set-output name=env_name::gp4btc-prod"
+            echo "::set-output name=build_script::npm run build-gp4btc-prod"            
           elif [ "${{ github.ref }}" = "refs/heads/release" ]; then
             echo "::set-output name=env_name::prod"
             echo "::set-output name=build_script::npm run build-prod"
