@@ -14,7 +14,6 @@ import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/
 import * as AuthSelectors from './auth.selectors';
 import { EnvService } from '../../shared/services/env/env.service';
 import { RouterConst } from '../../routes/router-const';
-import { OwnedEnrolmentsActions, RequestedEnrolmentsActions } from '@state';
 
 @Injectable()
 export class AuthEffects {
@@ -143,11 +142,7 @@ export class AuthEffects {
   userSuccessfullyLoggedIn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginSuccess),
-      mergeMap(() => [
-        userActions.setUpUser(),
-        OwnedEnrolmentsActions.getOwnedEnrolments(),
-        RequestedEnrolmentsActions.getEnrolmentRequests(),
-      ])
+      mergeMap(() => [userActions.setUpUser()])
     )
   );
 

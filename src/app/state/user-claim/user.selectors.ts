@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { USER_FEATURE_KEY, UserClaimState } from './user.reducer';
-import { Profile } from 'iam-client-lib';
+import { ClaimData, NamespaceType, Profile } from 'iam-client-lib';
 import { userLocalStorage } from '../../shared/utils/local-storage-wrapper';
 
 export const getUserState =
@@ -40,4 +40,21 @@ export const getDid = createSelector(
 export const getDIDDocument = createSelector(
   getUserState,
   (state: UserClaimState) => state?.didDocument
+);
+
+export const getUserClaims = createSelector(
+  getUserState,
+  (state) => state.userClaims
+);
+export const getUserRoleClaims = createSelector(getUserClaims, (claims) =>
+  claims
+    .filter((item) => item && item.claimType)
+    .filter((item: ClaimData) => {
+      const arr = item.claimType.split('.');
+      return arr.length > 1 && arr[1] === NamespaceType.Role;
+    })
+);
+
+export const claimRoleNames = createSelector(getUserRoleClaims, (claims) =>
+  claims.map((claim) => claim.claimType)
 );

@@ -1,6 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as RevokableActions from './revokable.actions';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
+import * as RequestedActions from '../requested/requested.actions';
 
 export const USER_FEATURE_KEY = 'revokable';
 
@@ -21,7 +22,13 @@ const revokableReducer = createReducer(
       ...state,
       enrolments,
     })
-  )
+  ),
+  on(RevokableActions.updateEnrolmentSuccess, (state, { enrolment }) => ({
+    enrolments: [
+      ...state.enrolments.filter((e) => e.id !== enrolment.id),
+      enrolment,
+    ].filter(Boolean),
+  }))
 );
 
 export function reducer(state: RevokableState | undefined, action: Action) {

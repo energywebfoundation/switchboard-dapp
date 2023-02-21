@@ -1,5 +1,4 @@
 import * as authSelectors from './auth.selectors';
-import { ProviderType } from 'iam-client-lib';
 import { ChainId } from '../../core/config/chain-id';
 
 describe('Auth Selectors', () => {

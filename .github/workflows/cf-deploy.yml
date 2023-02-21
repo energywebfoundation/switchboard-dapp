@@ -2,7 +2,15 @@ name: Deploy to bucket
 
 on:
   push:
-    branches: ['develop', 'master', 'sandbox', 'release']
+    branches:
+      [
+        'develop',
+        'master',
+        'sandbox',
+        'release',
+        'gp4btc-staging',
+        'gp4btc-prod',
+      ]
 jobs:
   cancel-previous:
     name: 'Cancel Previous Runs'
@@ -28,6 +36,12 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/master" ]; then
             echo "::set-output name=env_name::staging"
             echo "::set-output name=build_script::npm run build-staging"
+          elif [ "${{ github.ref }}" = "refs/heads/gp4btc-staging" ]; then
+            echo "::set-output name=env_name::gp4btc-staging"
+            echo "::set-output name=build_script::npm run build-gp4btc-staging"            
+          elif [ "${{ github.ref }}" = "refs/heads/gp4btc-prod" ]; then
+            echo "::set-output name=env_name::gp4btc-prod"
+            echo "::set-output name=build_script::npm run build-gp4btc-prod"            
           elif [ "${{ github.ref }}" = "refs/heads/release" ]; then
             echo "::set-output name=env_name::prod"
             echo "::set-output name=build_script::npm run build-prod"

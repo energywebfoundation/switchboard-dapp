@@ -28,7 +28,7 @@ export class MyRevokablesListComponent implements OnInit {
   @Input() set list(list: EnrolmentClaim[]) {
     this.cascadingFilterService.setItems(list);
   }
-  @Output() refreshList = new EventEmitter<void>();
+  @Output() refreshList = new EventEmitter<EnrolmentClaim>();
   get revokersList$() {
     return this.cascadingFilterService.getList$();
   }
@@ -46,18 +46,18 @@ export class MyRevokablesListComponent implements OnInit {
 
   revokeOnChainClaim(element: EnrolmentClaim) {
     this.revokeService.revokeOnChain(element).subscribe(() => {
-      this.updateList();
+      this.updateList(element);
     });
   }
 
   revokeOffChainClaim(element: EnrolmentClaim) {
     this.revokeService.revokeOffChain(element).subscribe(() => {
-      this.updateList();
+      this.updateList(element);
     });
   }
 
-  updateList(): void {
-    this.refreshList.emit();
+  updateList(enrolment: EnrolmentClaim): void {
+    this.refreshList.emit(enrolment);
   }
 
   private defineColumns() {

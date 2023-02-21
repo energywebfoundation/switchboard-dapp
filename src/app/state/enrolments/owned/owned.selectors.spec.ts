@@ -48,4 +48,12 @@ describe('Owned Enrolments Selectors', () => {
       ).toEqual(1);
     });
   });
+
+  describe('getAllEnrolments', () => {
+    it('should return default state', () => {
+      expect(
+        OwnedSelectors.getAllEnrolments.projector({ enrolments: [] })
+      ).toEqual([]);
+    });
+  });
 });

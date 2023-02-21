@@ -21,7 +21,16 @@ const ownedReducer = createReducer(
       ...state,
       enrolments,
     })
-  )
+  ),
+  on(OwnedActions.updateEnrolmentSuccess, (state, { enrolment }) => ({
+    enrolments: [
+      ...state.enrolments.filter((e) => e.id !== enrolment.id),
+      enrolment,
+    ].filter(Boolean),
+  })),
+  on(OwnedActions.removeEnrolment, (state, { id }) => ({
+    enrolments: state.enrolments.filter((e) => e.id !== id),
+  }))
 );
 
 export function reducer(state: OwnedState | undefined, action: Action) {

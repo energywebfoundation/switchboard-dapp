@@ -17,7 +17,6 @@ import { PublishRoleService } from '../../../shared/services/publish-role/publis
 import { ViewRequestsComponent } from '../view-requests/view-requests.component';
 import { truthy } from '@operators';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
-import { isAsset } from 'src/app/state/enrolments/utils/remove-assets-from-list/remove-assets-from-list';
 import { sortingEnrolmentData } from '../utils/sorting-enrolment-data';
 import {
   ColumnDefinition,
@@ -39,7 +38,8 @@ export class MyEnrolmentListComponent implements OnInit {
   @Input() list: EnrolmentClaim[];
 
   @ViewChild(MatSort) sort: MatSort;
-  @Output() refreshList = new EventEmitter<void>();
+  @Output() refreshList = new EventEmitter<EnrolmentClaim>();
+  @Output() removeEnrolment = new EventEmitter<EnrolmentClaim>();
   columns: ColumnDefinition[];
   sorting = sortingEnrolmentData;
   enrolmentType = EnrolmentListType.APPLICANT;
@@ -60,10 +60,6 @@ export class MyEnrolmentListComponent implements OnInit {
     private store: Store,
     private publishRoleService: PublishRoleService
   ) {}
-
-  isAsset(element) {
-    isAsset(element);
-  }
 
   ngOnInit() {
     this.defineColumns();
@@ -90,7 +86,7 @@ export class MyEnrolmentListComponent implements OnInit {
       })
       .afterClosed()
       .pipe(truthy())
-      .subscribe(() => this.updateList());
+      .subscribe(() => this.updateList(element));
   }
 
   addToDidDoc(element: EnrolmentClaim) {
@@ -102,7 +98,7 @@ export class MyEnrolmentListComponent implements OnInit {
         claimTypeVersion: element.claimTypeVersion,
       })
       .pipe(truthy())
-      .subscribe(() => this.updateList());
+      .subscribe(() => this.updateList(element));
   }
 
   async cancelClaimRequest(element: EnrolmentClaim) {
@@ -131,7 +127,7 @@ export class MyEnrolmentListComponent implements OnInit {
           'Action is successful.',
           'Cancel Enrolment Request'
         );
-        this.updateList();
+        this.removeEnrolment.emit(element);
       } catch (e) {
         console.error(e);
         this.toastr.error(
@@ -144,8 +140,8 @@ export class MyEnrolmentListComponent implements OnInit {
     }
   }
 
-  updateList(): void {
-    this.refreshList.emit();
+  updateList(enrolment: EnrolmentClaim): void {
+    this.refreshList.emit(enrolment);
   }
 
   private defineColumns() {

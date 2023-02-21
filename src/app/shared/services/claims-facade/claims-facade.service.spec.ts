@@ -4,8 +4,16 @@ import { ClaimsFacadeService } from './claims-facade.service';
 import { IamService } from '../iam.service';
 import { loadingServiceSpy } from '@tests';
 import { LoadingService } from '../loading.service';
-import { Claim, NamespaceType, RegistrationTypes } from 'iam-client-lib';
+import {
+  Claim,
+  ClaimData,
+  NamespaceType,
+  RegistrationTypes,
+} from 'iam-client-lib';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import * as userSelectors from '../../../state/user-claim/user.selectors';
+import { claimRoleNames } from '../../../state/user-claim/user.selectors';
 
 describe('ClaimsFacadeService', () => {
   let service: ClaimsFacadeService;
@@ -20,6 +28,8 @@ describe('ClaimsFacadeService', () => {
     'isClaimRevoked',
   ]);
 
+  let store: MockStore;
+
   const signerServiceSpy = jasmine.createSpyObj('IamService', ['did']);
 
   beforeEach(() => {
@@ -33,9 +43,11 @@ describe('ClaimsFacadeService', () => {
           },
         },
         { provide: LoadingService, useValue: loadingServiceSpy },
+        provideMockStore(),
       ],
     });
     service = TestBed.inject(ClaimsFacadeService);
+    store = TestBed.inject(MockStore);
   });
 
   it('should be created', () => {
@@ -52,9 +64,7 @@ describe('ClaimsFacadeService', () => {
     };
     it('should return true for isSyncedOffChain if the claim type matches the subject claims', async () => {
       const claimType = createClaimType('123');
-      claimsServiceSpy.getUserClaims.and.returnValue(
-        Promise.resolve([{ claimType }])
-      );
+      store.overrideSelector(userSelectors.claimRoleNames, [claimType]);
       expect(
         await service.addStatusIfIsSyncedOffChain(createClaim('123'))
       ).toEqual(jasmine.objectContaining({ isSyncedOffChain: true }));
@@ -62,9 +72,8 @@ describe('ClaimsFacadeService', () => {
 
     it('should return false for isSyncedOffChain if the claim type does not match the subject claims', async () => {
       const claimType = createClaimType('12');
-      claimsServiceSpy.getUserClaims.and.returnValue(
-        Promise.resolve([{ claimType }])
-      );
+      store.overrideSelector(userSelectors.claimRoleNames, [claimType]);
+
       expect(
         await service.addStatusIfIsSyncedOffChain(createClaim('123'))
       ).toEqual(jasmine.objectContaining({ isSyncedOffChain: false }));
@@ -134,6 +143,6 @@ describe('ClaimsFacadeService', () => {
   });
 });
 
-const createClaimType = (value: string) => {
+const createClaimType = (value: string): string => {
   return `${value}.${NamespaceType.Role}`;
 };
