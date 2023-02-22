@@ -159,9 +159,11 @@ export class LoginService {
 
   disconnect(): void {
     this.clearSession();
-    this.iamService.closeConnection().subscribe(() => {
-      location.reload();
-    });
+    if (this.iamService) {
+      this.iamService.closeConnection().subscribe(() => {
+        location.reload();
+      });
+    }
   }
 
   setDeepLink(deepLink: string) {
