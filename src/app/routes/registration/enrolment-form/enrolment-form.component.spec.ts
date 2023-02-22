@@ -371,6 +371,7 @@ describe('EnrolmentFormComponent', () => {
     fixture.detectChanges();
     expect(updateFormSpy).toHaveBeenCalled();
   });
+
   it('should update the appropriate form field with the copied input provided', () => {
     component.fieldList = [
       {
@@ -386,6 +387,40 @@ describe('EnrolmentFormComponent', () => {
     const formValue = (component.enrolmentForm?.get('fields') as FormArray)
       ?.controls[0];
     expect(formValue.value).toEqual('The label');
+  });
+
+  it('should not update the form field if the copied input does not match the label', () => {
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Text,
+        label: 'label 1',
+        required: true,
+      },
+    ];
+
+    component.toCopy = { 'label 2': 'The label' };
+
+    fixture.detectChanges();
+    const formValue = (component.enrolmentForm?.get('fields') as FormArray)
+      ?.controls[0];
+    expect(formValue.value).toBeFalsy();
+  });
+
+  it('should not update the form field if passed object is empty', () => {
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Text,
+        label: 'label 1',
+        required: true,
+      },
+    ];
+
+    component.toCopy = {};
+
+    fixture.detectChanges();
+    const formValue = (component.enrolmentForm?.get('fields') as FormArray)
+      ?.controls[0];
+    expect(formValue.value).toBeFalsy();
   });
 });
 
