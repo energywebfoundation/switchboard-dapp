@@ -39,6 +39,7 @@ describe('IssuanceVcService', () => {
       ])
     );
     service = TestBed.inject(IssuanceVcService);
+    service.init();
   });
 
   it('should be created', () => {
