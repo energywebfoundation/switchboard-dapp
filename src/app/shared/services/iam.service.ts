@@ -30,7 +30,7 @@ import * as Sentry from '@sentry/angular';
 import { Severity } from '@sentry/angular';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { LoginOptions } from './login/login.service';
 import { truthy } from '@operators';
 import { finalize, map } from 'rxjs/operators';
@@ -157,6 +157,9 @@ export class IamService {
   }
 
   closeConnection() {
+    if (!this.signerService) {
+      return of(true);
+    }
     return from(this.signerService.closeConnection()).pipe(truthy());
   }
 
