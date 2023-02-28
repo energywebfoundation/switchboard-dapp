@@ -19,7 +19,7 @@ export class IssuerRequestsComponent
   extends ViewRequestsComponent
   implements OnInit
 {
-  @ViewChild('issuerFields', { static: true }) requiredFields: EnrolmentForm;
+  @ViewChild('issuerFields', { static: false }) requiredFields: EnrolmentForm;
   roleDefinition: IRoleDefinitionV2;
   expirationTime: number;
   requestorFields: Record<string, string | number> = {};
