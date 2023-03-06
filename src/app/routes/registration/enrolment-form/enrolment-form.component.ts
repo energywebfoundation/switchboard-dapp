@@ -53,6 +53,9 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     this.updateEnrolmentForm(new FormArray(this.createControls(list)));
   }
   @Input() set toCopy(copyInput: Record<string, string | number> | undefined) {
+    if (!copyInput || Object.keys(copyInput).length === 0) {
+      return;
+    }
     this.updateFormFields(copyInput);
   }
 
@@ -62,7 +65,7 @@ export class EnrolmentFormComponent implements EnrolmentForm {
   @Input() disabledSubmit: boolean;
   @Output() submitForm = new EventEmitter<EnrolmentSubmission>();
 
-  private fields;
+  private fields: IFieldDefinition[];
   isValidSchema = true;
 
   constructor(private cdRef: ChangeDetectorRef) {}
@@ -84,6 +87,9 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     const fieldListItemIndex = this.fieldList.findIndex(
       (fld) => fld.label === fieldLabel
     );
+    if (fieldListItemIndex === -1) {
+      return;
+    }
     const fieldListItem = this.fieldList[fieldListItemIndex];
     const valueToSet =
       fieldListItem.fieldType === 'json'

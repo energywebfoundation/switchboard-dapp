@@ -22,6 +22,7 @@ import { truthy } from '@operators';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MessageSubscriptionService } from '../../shared/services/message-subscription/message-subscription.service';
 import { RouterConst } from '../../routes/router-const';
+import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 
 @Component({
   selector: 'app-header',
@@ -55,7 +56,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private store: Store,
     private loginService: LoginService,
     private didBookService: DidBookService,
-    private messageSubscriptionService: MessageSubscriptionService
+    private messageSubscriptionService: MessageSubscriptionService,
+    private issuanceVcService: IssuanceVcService
   ) {}
 
   async ngOnDestroy(): Promise<void> {
@@ -95,6 +97,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.didBookService.getList();
         await this.notifService.init();
         await this.messageSubscriptionService.init();
+        this.issuanceVcService.init();
         this.store.dispatch(LayoutActions.redirect());
       });
 
