@@ -66,6 +66,9 @@ export class IamService {
     // Set Cache Server
     setCacheConfig(envService.chainId, {
       url: envService.cacheServerUrl,
+      auth: {
+        domain: window.location.origin,
+      },
     });
 
     // Set RPC
