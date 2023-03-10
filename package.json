@@ -16,7 +16,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng serve --verbose",
+    "start": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng serve",
     "build-staging": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=staging",
     "build-gp4btc-staging": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=gp4btc-staging",
     "build-gp4btc-prod": "node --max_old_space_size=8048 node_modules/@angular/cli/bin/ng build --prod --aot -c=gp4btc-production",
