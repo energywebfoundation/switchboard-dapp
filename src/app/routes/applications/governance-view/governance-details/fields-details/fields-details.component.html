@@ -1,6 +1,6 @@
 <div class="text-left my-3">
   <div class="label opacity-50 mb-2">{{ title }}</div>
-  <span class="default-color mb-0" *ngIf="!data?.length">None</span>
+  <span class="default-color mb-0" *ngIf="!containsFields">None</span>
   <table mat-table [dataSource]="data" *ngIf="data?.length">
     <ng-container matColumnDef="type">
       <th mat-header-cell *matHeaderCellDef>Type</th>
@@ -76,9 +76,9 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumnsView"></tr>
   </table>
   <div>
-    <h4>Json schemas</h4>
     <div *ngFor="let json of jsonFields">
-      {{ json?.schema | json }}
+      <h4>{{ json.label }}</h4>
+      <app-json-editor [options]="generateOptions(json.schema, json.label)"></app-json-editor>
     </div>
   </div>
 </div>
