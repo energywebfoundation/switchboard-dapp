@@ -8,8 +8,8 @@ export const environment = {
 
   rpcUrl: 'https://rpc.energyweb.org/',
   chainId: ChainId.EWC,
-  cacheServerUrl: 'https://identitycache-gp4btc-prod.energyweb.org/v1',
-  natsServerUrl: 'https://identityevents-gp4btc-prod.energyweb.org/',
+  cacheServerUrl: 'https://identitycache-gp4btc.energyweb.org/v1',
+  natsServerUrl: 'https://identityevents-gp4btc.energyweb.org/',
   ekcUrl: 'https://azure-proxy-server.energyweb.org/api/v1',
   showAzureLoginOption: false,
   natsEnvironmentName: 'ewf-gp4btc-prod',
