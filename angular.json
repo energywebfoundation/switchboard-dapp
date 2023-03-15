@@ -229,7 +229,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.stg.ts"
+                  "with": "src/environments/environment.dev.ts"
                 }
               ],
               "optimization": true,
