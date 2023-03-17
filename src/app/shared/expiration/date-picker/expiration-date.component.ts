@@ -32,7 +32,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   @Output() add: EventEmitter<number> = new EventEmitter<number>();
   @Output() remove: EventEmitter<void> = new EventEmitter<void>();
 
-  expirationDate = new FormControl('');
+  expirationDate = new FormControl<Date>(null);
   expirationTimeShift: number;
   minDate = new Date(Date.now());
   hideRemoveButton = false;
@@ -55,7 +55,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   }
 
   removeHandler(): void {
-    this.expirationDate.setValue('');
+    this.expirationDate.setValue(null);
     this.remove.emit();
     this.hideRemoveButton = true;
   }
@@ -91,7 +91,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
     }
   }
 
-  private calcSeconds(value: string): number {
+  private calcSeconds(value: Date): number {
     const d = new Date(value);
     return Math.round(d.getTime() - Date.now()) + this.getHoursShift();
   }

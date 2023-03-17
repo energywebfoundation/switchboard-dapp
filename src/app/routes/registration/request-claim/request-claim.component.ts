@@ -40,10 +40,10 @@ import { RouterConst } from '../../router-const';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
-const EnrolForType = {
-  ME: 'me',
-  ASSET: 'asset',
-};
+export enum EnrolForType {
+  ME = 'me',
+  ASSET = 'asset',
+}
 const SwalButtons = {
   VIEW_MY_ENROMENTS: 'viewMyEnrolments',
   ENROL_FOR_ASSET: 'enrolForAsset',
@@ -55,6 +55,12 @@ export interface FormClaim extends Claim {
   claimTypeVersion: string;
 }
 
+export interface IRoleTypeForm {
+  roleType?: string;
+  enrolFor: EnrolForType;
+  assetDid?: string;
+}
+
 @Component({
   selector: 'app-request-claim',
   templateUrl: './request-claim.component.html',
@@ -62,7 +68,7 @@ export interface FormClaim extends Claim {
 })
 export class RequestClaimComponent implements OnInit, SubjectElements {
   public EnrolForType = EnrolForType;
-  public roleTypeForm = this.fb.group({
+  public roleTypeForm = this.fb.group<IRoleTypeForm>({
     roleType: '',
     enrolFor: EnrolForType.ME,
     assetDid: '',
@@ -230,7 +236,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   async enrolForSelected(e: any) {
     this.roleTypeForm.patchValue({
-      enrolType: '',
       assetDid: '',
     });
     this.resetForm();
@@ -276,9 +281,10 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         registrationTypes: enrolForm.registrationTypes,
       } as any);
 
+      // TODO: remove any, add proper typing to the form
       this.displayAlert(
         'Request to enrol as ' +
-          this.roleTypeForm.value.roleType.name.toUpperCase() +
+          (this.roleTypeForm.value.roleType as any).name.toUpperCase() +
           ' is submitted for review and approval.',
         'success'
       );
@@ -408,14 +414,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         case SwalButtons.ENROL_FOR_MYSELF:
           this.roleTypeForm.patchValue({
             enrolFor: EnrolForType.ME,
-            enrolType: '',
           });
           await this.initRoles();
           break;
         case SwalButtons.ENROL_FOR_ASSET:
           this.roleTypeForm.patchValue({
             enrolFor: EnrolForType.ASSET,
-            enrolType: '',
             assetDid: '',
           });
           this.resetForm();
@@ -445,9 +449,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
           }
       }
     } else {
-      this.roleTypeForm.patchValue({
-        enrolType: '',
-      });
+      this.roleTypeForm.patchValue({});
     }
   }
 

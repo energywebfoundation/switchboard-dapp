@@ -50,7 +50,6 @@ import { RawDataModule } from '@modules';
     NotificationHeaderComponent,
     MenuNotificationTriggerComponent,
   ],
-  entryComponents: [DialogUserComponent],
   exports: [LayoutComponent, HeaderComponent, LoadingComponent],
 })
 export class LayoutModule {}

@@ -25,7 +25,7 @@ import {
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { RoleListComponent } from './role-list/role-list.component';
-import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { EnvService } from '../../shared/services/env/env.service';
 import { RouterConst } from '../router-const';
 

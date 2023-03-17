@@ -17,9 +17,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSortModule } from '@angular/material/sort';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -31,7 +29,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
@@ -47,7 +44,6 @@ import { DidFormatMinifierModule } from './pipes/did-format-minifier/did-format-
 import { TableHeadingComponent } from './components/table-heading/table-heading.component';
 import { NoRecordsComponent } from './components/no-records/no-records.component';
 import { DomainTypePipe } from './pipes/domain-type/domain-type.pipe';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { QrCodeScannerModule } from './components/qr-code-scanner/qr-code-scanner.module';
 import { DomainImageComponent } from './components/domain-image/domain-image.component';
 import { ReportProblemComponent } from './components/report-problem/report-problem.component';
@@ -73,7 +69,6 @@ const MATERIAL_MODULES = [
   MatDialogModule,
   MatExpansionModule,
   MatFormFieldModule,
-  MatGridListModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
@@ -84,10 +79,8 @@ const MATERIAL_MODULES = [
   MatRadioModule,
   MatRippleModule,
   MatSelectModule,
-  MatSidenavModule,
   MatSlideToggleModule,
   MatSliderModule,
-  MatSnackBarModule,
   MatSortModule,
   MatTabsModule,
   MatToolbarModule,
@@ -105,7 +98,6 @@ const MATERIAL_MODULES = [
     CopyToClipboardModule,
     DidFormatMinifierModule,
     MATERIAL_MODULES,
-    BsDropdownModule,
     QrCodeScannerModule,
   ],
   providers: [ColorsService, DatePipe],
@@ -147,7 +139,6 @@ const MATERIAL_MODULES = [
     TableHeadingComponent,
     NoRecordsComponent,
     DomainTypePipe,
-    BsDropdownModule,
     QrCodeScannerModule,
     DomainImageComponent,
     ReportProblemComponent,
