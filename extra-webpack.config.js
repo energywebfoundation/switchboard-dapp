@@ -2,6 +2,7 @@ const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 module.exports = {
+  devtool: 'source-map',
   plugins: [
     new NodePolyfillPlugin({
       excludeAliases: [
