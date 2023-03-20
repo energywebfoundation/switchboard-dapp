@@ -7,6 +7,7 @@ import {
   Asset,
   Claim,
   IFieldDefinition,
+  IRole,
   IRoleDefinition,
   NamespaceType,
   RegistrationTypes,
@@ -79,7 +80,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public fieldList: IFieldDefinition[];
 
   public orgAppDetails: any;
-  public roleList: any;
+  public roleList: IRole[];
   public submitting = false;
   public bgColor = {};
   public txtColor = {};
@@ -281,10 +282,9 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         registrationTypes: enrolForm.registrationTypes,
       } as any);
 
-      // TODO: remove any, add proper typing to the form
       this.displayAlert(
         'Request to enrol as ' +
-          (this.roleTypeForm.value.roleType as any).name.toUpperCase() +
+          this.roleTypeForm.value.roleType.toUpperCase() +
           ' is submitted for review and approval.',
         'success'
       );
@@ -642,7 +642,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
               this.selectedRole = role.definition;
               this.selectedNamespace = role.namespace;
               this.fieldList = this.selectedRole?.requestorFields || [];
-              this.roleTypeForm.get('roleType').setValue(role);
+              this.roleTypeForm.controls.roleType.setValue(role.name);
 
               // Init Preconditions
               this.setPreconditions();
@@ -658,7 +658,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     this.resetForm();
 
     this.roleTypeForm.reset();
-    this.roleTypeForm.get('enrolFor').setValue(EnrolForType.ME);
+    this.roleTypeForm.controls.enrolFor.setValue(EnrolForType.ME);
   }
 
   private resetForm() {
