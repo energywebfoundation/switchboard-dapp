@@ -32,7 +32,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   @Output() add: EventEmitter<number> = new EventEmitter<number>();
   @Output() remove: EventEmitter<void> = new EventEmitter<void>();
 
-  expirationDate = new FormControl<Date>(null);
+  expirationDate = new FormControl<Date | string>('');
   expirationTimeShift: number;
   minDate = new Date(Date.now());
   hideRemoveButton = false;
@@ -41,8 +41,9 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject();
   ngOnInit(): void {
     this.expirationDate.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: Date) => {
+      .pipe(
+        takeUntil(this.destroy$))
+      .subscribe((value: string) => {
         this.expirationTimeShift = this.calcSeconds(value);
         this.emitExpirationTimeShift();
         this.hideRemoveButton = false;
@@ -91,7 +92,8 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
     }
   }
 
-  private calcSeconds(d: Date): number {
+  private calcSeconds(value: Date | string): number {
+    const d = new Date(value);
     return Math.round(d.getTime() - Date.now()) + this.getHoursShift();
   }
 
