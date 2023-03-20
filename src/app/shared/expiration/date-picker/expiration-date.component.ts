@@ -42,7 +42,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.expirationDate.valueChanges
       .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
+      .subscribe((value: Date) => {
         this.expirationTimeShift = this.calcSeconds(value);
         this.emitExpirationTimeShift();
         this.hideRemoveButton = false;
@@ -91,8 +91,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
     }
   }
 
-  private calcSeconds(value: Date): number {
-    const d = new Date(value);
+  private calcSeconds(d: Date): number {
     return Math.round(d.getTime() - Date.now()) + this.getHoursShift();
   }
 
