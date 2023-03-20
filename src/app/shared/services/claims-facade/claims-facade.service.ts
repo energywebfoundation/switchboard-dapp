@@ -39,6 +39,7 @@ export class ClaimsFacadeService {
   }
 
   issueClaimRequest(data: IssueClaimRequestOptions) {
+    console.log(`ISSUING CLAIM REQUEST WITH DATA CLAIM DATA: ${JSON.stringify(data)}`)
     return this.iamService.wrapWithLoadingService(
       this.iamService.claimsService.issueClaimRequest(data),
       {
