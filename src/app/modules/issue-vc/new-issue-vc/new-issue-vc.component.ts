@@ -10,7 +10,7 @@ import {
 import { filter, switchMap } from 'rxjs/operators';
 import { EnrolmentSubmission } from '../../../routes/registration/enrolment-form/enrolment-form.component';
 import { IRole, IRoleDefinitionV2 } from 'iam-client-lib';
-import { MatSelectChange } from '@angular/material/select/select';
+import { MatSelectChange } from '@angular/material/select';
 import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -154,8 +154,9 @@ export class NewIssueVcComponent implements OnInit {
       return version;
     };
 
+    // TODO: add proper typing and remove any.
     return {
-      claimType: this.getFormType().value.namespace,
+      claimType: (this.getFormType().value as any).namespace,
       claimTypeVersion:
         parseVersion(this.selectedRoleDefinition.version) ||
         DEFAULT_CLAIM_TYPE_VERSION,

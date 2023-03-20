@@ -6,7 +6,7 @@ import {
   isValidJsonFormatValidator,
 } from '@utils';
 import { CreationBaseAbstract } from '../../utils/creation-base.abstract';
-import { NamespaceType } from 'iam-client-lib';
+import { IAppDefinition, NamespaceType } from 'iam-client-lib';
 import { AppDomain } from '../models/app-domain.interface';
 import { AppCreationDefinition } from '../models/app-creation-definition.interface';
 
@@ -115,7 +115,7 @@ export class ApplicationCreationFormComponent
           : undefined,
       },
       ...this.appForm.value,
-    });
+    } as AppCreationDefinition);
   }
 
   cancelHandler() {

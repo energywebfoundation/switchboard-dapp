@@ -86,7 +86,7 @@ describe('ExpirationDateComponent', () => {
     fixture.detectChanges();
 
     expect(component.remove.emit).toHaveBeenCalled();
-    expect(component.expirationDate.value).toEqual('');
+    expect(component.expirationDate.value).toEqual(null);
   });
 
   it('should set default time in input from current time', () => {

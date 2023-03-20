@@ -14,10 +14,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import {
-  MatDatetimepickerModule,
-  MatNativeDatetimeModule,
-} from '@mat-datetimepicker/core';
 
 const routes: Routes = [];
 
@@ -39,8 +35,6 @@ const routes: Routes = [];
     MatDialogModule,
     MatFormFieldModule,
     MatDatepickerModule,
-    MatNativeDatetimeModule,
-    MatDatetimepickerModule,
   ],
 })
 export class WidgetsModule {}

@@ -22,7 +22,9 @@ mat-datetimepicker-content {
   font-size: 16px !important;
 }
 
-.mat-datetimepicker-calendar-body-cell-content.mat-datetimepicker-calendar-body-today:not(.mat-datetimepicker-calendar-body-selected) {
+.mat-datetimepicker-calendar-body-cell-content.mat-datetimepicker-calendar-body-today:not(
+    .mat-datetimepicker-calendar-body-selected
+  ) {
   border-color: #fff !important;
 }
 

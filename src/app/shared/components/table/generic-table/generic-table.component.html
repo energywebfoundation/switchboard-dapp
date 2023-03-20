@@ -7,7 +7,7 @@
           <ng-container *ngIf="checkCondition(item, element)">
             <ng-container [ngSwitch]="item?.type">
               <ng-container *ngSwitchCase="columnType.Date">
-                {{ element[item.field] | date: 'MM/dd/yyyy HH:mm:ss' }}
+                {{ element[item.field] | date : 'MM/dd/yyyy HH:mm:ss' }}
               </ng-container>
 
               <ng-container *ngSwitchCase="columnType.String">

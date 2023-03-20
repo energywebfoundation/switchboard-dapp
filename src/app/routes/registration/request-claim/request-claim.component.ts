@@ -7,6 +7,7 @@ import {
   Asset,
   Claim,
   IFieldDefinition,
+  IRole,
   IRoleDefinition,
   NamespaceType,
   RegistrationTypes,
@@ -40,10 +41,10 @@ import { RouterConst } from '../../router-const';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
-const EnrolForType = {
-  ME: 'me',
-  ASSET: 'asset',
-};
+export enum EnrolForType {
+  ME = 'me',
+  ASSET = 'asset',
+}
 const SwalButtons = {
   VIEW_MY_ENROMENTS: 'viewMyEnrolments',
   ENROL_FOR_ASSET: 'enrolForAsset',
@@ -55,6 +56,12 @@ export interface FormClaim extends Claim {
   claimTypeVersion: string;
 }
 
+export interface IRoleTypeForm {
+  roleType?: string;
+  enrolFor: EnrolForType;
+  assetDid?: string;
+}
+
 @Component({
   selector: 'app-request-claim',
   templateUrl: './request-claim.component.html',
@@ -62,7 +69,7 @@ export interface FormClaim extends Claim {
 })
 export class RequestClaimComponent implements OnInit, SubjectElements {
   public EnrolForType = EnrolForType;
-  public roleTypeForm = this.fb.group({
+  public roleTypeForm = this.fb.group<IRoleTypeForm>({
     roleType: '',
     enrolFor: EnrolForType.ME,
     assetDid: '',
@@ -73,7 +80,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
   public fieldList: IFieldDefinition[];
 
   public orgAppDetails: any;
-  public roleList: any;
+  public roleList: IRole[];
   public submitting = false;
   public bgColor = {};
   public txtColor = {};
@@ -230,7 +237,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
   async enrolForSelected(e: any) {
     this.roleTypeForm.patchValue({
-      enrolType: '',
       assetDid: '',
     });
     this.resetForm();
@@ -278,7 +284,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
       this.displayAlert(
         'Request to enrol as ' +
-          this.roleTypeForm.value.roleType.name.toUpperCase() +
+          this.roleTypeForm.value.roleType.toUpperCase() +
           ' is submitted for review and approval.',
         'success'
       );
@@ -408,14 +414,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         case SwalButtons.ENROL_FOR_MYSELF:
           this.roleTypeForm.patchValue({
             enrolFor: EnrolForType.ME,
-            enrolType: '',
           });
           await this.initRoles();
           break;
         case SwalButtons.ENROL_FOR_ASSET:
           this.roleTypeForm.patchValue({
             enrolFor: EnrolForType.ASSET,
-            enrolType: '',
             assetDid: '',
           });
           this.resetForm();
@@ -445,9 +449,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
           }
       }
     } else {
-      this.roleTypeForm.patchValue({
-        enrolType: '',
-      });
+      this.roleTypeForm.patchValue({});
     }
   }
 
@@ -640,7 +642,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
               this.selectedRole = role.definition;
               this.selectedNamespace = role.namespace;
               this.fieldList = this.selectedRole?.requestorFields || [];
-              this.roleTypeForm.get('roleType').setValue(role);
+              this.roleTypeForm.controls.roleType.setValue(role.name);
 
               // Init Preconditions
               this.setPreconditions();
@@ -656,7 +658,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     this.resetForm();
 
     this.roleTypeForm.reset();
-    this.roleTypeForm.get('enrolFor').setValue(EnrolForType.ME);
+    this.roleTypeForm.controls.enrolFor.setValue(EnrolForType.ME);
   }
 
   private resetForm() {
