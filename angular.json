@@ -225,7 +225,7 @@
               "ngswConfigPath": "ngsw-config.json",
               "localize": ["std"]
             },
-            "dev": {
+            "develop": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
