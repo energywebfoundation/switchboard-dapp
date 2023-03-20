@@ -41,8 +41,7 @@ export class ExpirationDateComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject();
   ngOnInit(): void {
     this.expirationDate.valueChanges
-      .pipe(
-        takeUntil(this.destroy$))
+      .pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
         this.expirationTimeShift = this.calcSeconds(value);
         this.emitExpirationTimeShift();
