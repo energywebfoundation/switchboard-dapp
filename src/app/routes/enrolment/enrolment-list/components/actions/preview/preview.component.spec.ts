@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PreviewComponent } from './preview.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { EnrolmentListType } from '../../../models/enrolment-list-type.enum';
 import { getElement } from '@tests';
 import { IssuerRequestsComponent } from '../../../../view-requests/issuer-requests/issuer-requests.component';

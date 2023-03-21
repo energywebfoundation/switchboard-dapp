@@ -13,11 +13,11 @@ import { CascadingFilterService } from '../../services/cascading-filter/cascadin
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { dispatchInputEvent, getElement } from '@tests';
 import { of } from 'rxjs';
-import { MatInputModule } from '@angular/material/input';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { MatButtonModule } from '@angular/material/button';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('CascadingFilterComponent', () => {

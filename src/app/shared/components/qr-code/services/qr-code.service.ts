@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { QrCodeComponent } from '../qr-code/qr-code.component';
 import { QrCodeDialog } from '../models/qr-code-dialog.interface';
 

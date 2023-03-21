@@ -8,7 +8,7 @@ import {
   NewOrganizationComponent,
   ViewType,
 } from '../../../routes/applications/new-organization/new-organization.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { truthy } from '@operators';
 import { OrganizationService } from './services/organization.service';

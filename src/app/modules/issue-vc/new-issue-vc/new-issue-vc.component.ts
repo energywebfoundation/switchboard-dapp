@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HexValidators } from '@utils';
 import { IssuanceVcService } from '../services/issuance-vc.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import {
   PreconditionCheck,
   preconditionCheck,
@@ -10,7 +10,7 @@ import {
 import { filter, switchMap } from 'rxjs/operators';
 import { EnrolmentSubmission } from '../../../routes/registration/enrolment-form/enrolment-form.component';
 import { IRole, IRoleDefinitionV2 } from 'iam-client-lib';
-import { MatSelectChange } from '@angular/material/select';
+import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
 import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;

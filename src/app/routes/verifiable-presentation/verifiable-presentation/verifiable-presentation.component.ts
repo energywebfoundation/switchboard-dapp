@@ -7,7 +7,7 @@ import { LoginService } from 'src/app/shared/services/login/login.service';
 import { AuthActions } from '@state';
 import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 import { VpRequestInteractService } from '@ew-did-registry/credentials-interface';
 import { IPresentationDefinition, IVerifiableCredential } from '@sphereon/pex';

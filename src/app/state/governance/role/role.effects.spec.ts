@@ -6,7 +6,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { RoleEffects } from './role.effects';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { dialogSpy, toastrSpy } from '@tests';
 import { RoleService } from './services/role.service';
 import * as RoleActions from './role.actions';

@@ -6,7 +6,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ApplicationEffects } from './application.effects';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { dialogSpy, iamServiceSpy, toastrSpy } from '@tests';
 import { TestScheduler } from 'rxjs/testing';
 import { IamService } from '../../../shared/services/iam.service';

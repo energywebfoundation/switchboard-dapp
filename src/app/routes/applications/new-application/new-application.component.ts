@@ -5,10 +5,10 @@ import { NamespaceType } from 'iam-client-lib';
 import { IamService } from '../../../shared/services/iam.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { CreationBaseAbstract } from '../utils/creation-base.abstract';

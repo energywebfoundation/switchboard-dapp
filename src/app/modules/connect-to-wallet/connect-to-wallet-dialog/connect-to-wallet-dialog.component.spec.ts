@@ -5,7 +5,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import * as authSelectors from '../../../state/auth/auth.selectors';
 import { ProviderType } from 'iam-client-lib';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { EnvService } from '../../../shared/services/env/env.service';
 
 describe('ConnectToWalletDialogComponent', () => {

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { QrCodeScannerComponent } from './qr-code-scanner.component';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ScanType } from '../models/scan-type.enum';
 

@@ -14,8 +14,8 @@ import { ListType } from '../../shared/constants/shared-constants';
 import { IamService } from '../../shared/services/iam.service';
 import { UrlParamService } from '../../shared/services/url-param.service';
 import { takeUntil } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTabGroup } from '@angular/material/tabs';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
 import { Store } from '@ngrx/store';
 import {
   OrganizationActions,
@@ -25,7 +25,7 @@ import {
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { RoleListComponent } from './role-list/role-list.component';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatLegacyTabChangeEvent as MatTabChangeEvent } from '@angular/material/legacy-tabs';
 import { EnvService } from '../../shared/services/env/env.service';
 import { RouterConst } from '../router-const';
 

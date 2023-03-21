@@ -5,8 +5,8 @@ import {
   ConfirmationDialogData,
 } from './confirmation-dialog.component';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { dialogSpy, getElement } from '@tests';
 

@@ -7,9 +7,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { FormBuilder } from '@angular/forms';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';

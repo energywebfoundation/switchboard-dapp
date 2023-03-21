@@ -7,10 +7,10 @@ import { NewRoleComponent } from './new-role.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { ToastrService } from 'ngx-toastr';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { PreconditionType } from 'iam-client-lib';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';

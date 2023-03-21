@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { EnrolmentForm } from '../../../registration/enrolment-form/enrolment-form.component';
 import { EnrolmentClaim } from '../../models/enrolment-claim';
 import { IRoleDefinitionV2 } from 'iam-client-lib';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { TokenDecodeService } from '../services/token-decode.service';
 import { IssuerRequestsService } from '../services/issuer-requests.service';
 import { RoleService } from '../../../../state/governance/role/services/role.service';

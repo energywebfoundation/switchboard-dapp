@@ -6,7 +6,7 @@ import { UserEffects } from './user.effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { LoadingService } from '../../shared/services/loading.service';
 import { IamService } from '../../shared/services/iam.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ToastrService } from 'ngx-toastr';
 import { dialogSpy, iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';

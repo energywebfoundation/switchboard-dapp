@@ -14,7 +14,7 @@ import { mapClaimsProfile } from '@operators';
 import { Profile } from 'iam-client-lib';
 import { LoadingService } from '../../shared/services/loading.service';
 import { Store } from '@ngrx/store';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { UserClaimState } from './user.reducer';
 import { ToastrService } from 'ngx-toastr';
 import * as UserClaimActions from './user.actions';

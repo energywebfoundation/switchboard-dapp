@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ApplicationListComponent } from './application-list.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { dialogSpy, iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';

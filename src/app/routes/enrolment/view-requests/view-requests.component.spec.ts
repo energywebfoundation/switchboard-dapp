@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ViewRequestsComponent } from './view-requests.component';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TokenDecodeService } from './services/token-decode.service';

@@ -4,10 +4,10 @@ import { IssuerRequestsComponent } from './issuer-requests.component';
 import { TokenDecodeService } from '../services/token-decode.service';
 import { DialogDataMock, dialogSpy, getElement } from '@tests';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { IssuerRequestsService } from '../services/issuer-requests.service';
 import { RoleService } from '../../../../state/governance/role/services/role.service';
 import { of } from 'rxjs';

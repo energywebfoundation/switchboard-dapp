@@ -8,7 +8,7 @@ import { AuthState } from './auth.reducer';
 import { AuthEffects } from './auth.effects';
 import * as AuthActions from './auth.actions';
 import { ProviderType } from 'iam-client-lib';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { finalize } from 'rxjs/operators';
 import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';

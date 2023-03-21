@@ -5,8 +5,8 @@ import { AssetListType } from '../../shared/constants/shared-constants';
 import { UrlParamService } from '../../shared/services/url-param.service';
 import { AssetListComponent } from './asset-list/asset-list.component';
 import { NewPassiveAssetComponent } from './new-passive-asset/new-passive-asset.component';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTabGroup } from '@angular/material/tabs';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
 
 @Component({
   selector: 'app-assets',

@@ -3,7 +3,7 @@ import { HeaderComponent } from './header.component';
 import { IamService } from '../../shared/services/iam.service';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../shared/services/notification.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SwitchboardToastrService } from '../../shared/services/switchboard-toastr.service';
 import { provideMockStore } from '@ngrx/store/testing';

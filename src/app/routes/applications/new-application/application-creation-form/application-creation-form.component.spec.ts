@@ -4,8 +4,8 @@ import { ApplicationCreationFormComponent } from './application-creation-form.co
 import { dispatchInputEvent, getElement } from '@tests';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NamespaceType } from 'iam-client-lib';
