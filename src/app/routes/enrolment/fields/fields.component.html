@@ -11,9 +11,10 @@
             {{ field?.value }}
           </span>
           <button
+            mat-raised-button
+            class="btn btn-small btn btn-primary"
             [attr.data-qa-id]="'field-list-merge-btn-' + i"
             *ngIf="hasValidValue(field?.value) && isIssuerRequestView"
-            class="merge-button"
             (click)="this.fieldToCopy.emit(field)">
             <img src="assets/img/icons/merge-button.svg" />
           </button>
