@@ -225,7 +225,7 @@
               "ngswConfigPath": "ngsw-config.json",
               "localize": ["std"]
             },
-            "development": {
+            "develop": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -252,6 +252,14 @@
               ],
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
+            },
+            "development": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ]
             }
           },
           "defaultConfiguration": ""
