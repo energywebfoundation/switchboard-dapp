@@ -2,6 +2,7 @@ import {
   getHierarchyLength,
   getLastHierarchyOrg,
 } from './organization.selectors';
+import { OrganizationProvider } from './models/organization-provider.interface';
 
 describe('Organization Selectors', () => {
   describe('getLastHierarchyOrg', () => {
@@ -10,7 +11,9 @@ describe('Organization Selectors', () => {
     });
 
     it('should return last element from the list', () => {
-      expect(getLastHierarchyOrg.projector([1, 2, 3])).toEqual(3 as any);
+      expect(
+        getLastHierarchyOrg.projector([{}, {}, {}] as OrganizationProvider[])
+      ).toEqual(3 as any);
     });
   });
 
