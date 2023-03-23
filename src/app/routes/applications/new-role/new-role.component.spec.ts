@@ -12,7 +12,6 @@ import {
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { PreconditionType } from 'iam-client-lib';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 import { DomainTypePipe } from '../../../shared/pipes/domain-type/domain-type.pipe';
 import { TimeDurationPipe } from '../../../shared/pipes/time-duration/time-duration.pipe';

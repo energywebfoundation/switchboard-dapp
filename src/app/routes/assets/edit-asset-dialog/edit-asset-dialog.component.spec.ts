@@ -2,7 +2,10 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EditAssetDialogComponent } from './edit-asset-dialog.component';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditAssetService } from './services/edit-asset.service';
 import { dialogSpy, dispatchInputEvent, getElement } from '@tests';

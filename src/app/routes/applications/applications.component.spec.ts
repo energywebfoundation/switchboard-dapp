@@ -6,7 +6,7 @@ import { EnvService } from 'src/app/shared/services/env/env.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { UrlParamService } from 'src/app/shared/services/url-param.service';
 import { provideMockStore } from '@ngrx/store/testing';
-import { MockActivatedRoute, dialogSpy } from '@tests';
+import { dialogSpy, MockActivatedRoute } from '@tests';
 import { ApplicationsComponent } from './applications.component';
 
 describe('ApplicationsComponent', () => {

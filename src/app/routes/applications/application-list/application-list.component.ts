@@ -23,7 +23,7 @@ import { ListType } from 'src/app/shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import { ApplicationActions, ApplicationSelectors } from '@state';
 import { CascadingFilterService } from '@modules';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { DomainUtils } from '@utils';
 
 @Component({

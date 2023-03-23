@@ -12,7 +12,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NamespaceType } from 'iam-client-lib';
 import { ListType } from '../../../shared/constants/shared-constants';
-import { EnvService } from '../../../shared/services/env/env.service';
 
 describe('ApplicationListComponent', () => {
   let component: ApplicationListComponent;

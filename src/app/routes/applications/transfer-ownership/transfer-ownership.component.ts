@@ -5,7 +5,6 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { ExpiredRequestError } from '../../../shared/errors/errors';
 import { IamRequestService } from '../../../shared/services/iam-request.service';
 import { IamService } from '../../../shared/services/iam.service';

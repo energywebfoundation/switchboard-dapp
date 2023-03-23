@@ -31,7 +31,6 @@ import { Store } from '@ngrx/store';
 import { logout } from '../../../state/auth/auth.actions';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 import { filter, take } from 'rxjs/operators';
-import { AuthActions, SettingsSelectors } from '@state';
 import {
   PreconditionCheck,
   preconditionCheck,

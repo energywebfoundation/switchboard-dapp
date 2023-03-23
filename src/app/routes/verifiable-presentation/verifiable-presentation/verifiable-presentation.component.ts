@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, from } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { ConnectToWalletDialogComponent } from '../../../modules/connect-to-wallet/connect-to-wallet-dialog/connect-to-wallet-dialog.component';
 import { LoginService } from 'src/app/shared/services/login/login.service';
-import { AuthActions } from '@state';
 import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs/operators';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
@@ -15,6 +14,7 @@ import { ICredentialTableData } from '../models/credential-table-data.interface'
 import { PresentationService } from '../services/presentation.service';
 import SWAL from 'sweetalert';
 import { truncate } from 'fs';
+
 @Component({
   selector: 'app-verifiable-presentation',
   templateUrl: './verifiable-presentation.component.html',

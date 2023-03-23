@@ -6,7 +6,7 @@ import {
   isValidJsonFormatValidator,
 } from '@utils';
 import { CreationBaseAbstract } from '../../utils/creation-base.abstract';
-import { IAppDefinition, NamespaceType } from 'iam-client-lib';
+import { NamespaceType } from 'iam-client-lib';
 import { AppDomain } from '../models/app-domain.interface';
 import { AppCreationDefinition } from '../models/app-creation-definition.interface';
 

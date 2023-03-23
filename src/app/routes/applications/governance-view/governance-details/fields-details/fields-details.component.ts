@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IFieldDefinition } from 'iam-client-lib';
 import { FieldTypesEnum } from '../../../new-role/components/field-form/field-form.enum';
 

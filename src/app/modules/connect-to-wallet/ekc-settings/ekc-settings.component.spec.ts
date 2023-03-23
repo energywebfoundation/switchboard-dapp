@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EkcSettingsComponent } from './ekc-settings.component';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { dialogSpy, dispatchInputEvent, getElement } from '@tests';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatIconTestingModule } from '@angular/material/icon/testing';

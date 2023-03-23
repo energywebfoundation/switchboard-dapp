@@ -3,7 +3,10 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { VerificationMethodComponent } from './verification-method.component';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { VerificationService } from './verification.service';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { of } from 'rxjs';
 import { TypeAlgorithmPipe } from '../pipes/type-algorithm.pipe';
 import { By } from '@angular/platform-browser';
