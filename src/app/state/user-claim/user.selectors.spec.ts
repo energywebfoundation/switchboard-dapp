@@ -1,18 +1,22 @@
 import * as userSelectors from './user.selectors';
 import { claimRoleNames } from './user.selectors';
-import { AssetProfile } from 'iam-client-lib';
+import { AssetProfile, ClaimData } from 'iam-client-lib';
+import { IServiceEndpoint } from '@ew-did-registry/did-resolver-interface';
+import { UserClaimState } from './user.reducer';
 
 describe('User Selectors', () => {
   describe('profile', () => {
     it('should return undefined when initial state is empty object', () => {
-      expect(userSelectors.getUserProfile.projector({})).toBeUndefined();
+      expect(
+        userSelectors.getUserProfile.projector({} as UserClaimState)
+      ).toBeUndefined();
     });
 
     it('should return empty profile object', () => {
       expect(
         userSelectors.getUserProfile.projector({
           profile: {},
-        })
+        } as UserClaimState)
       ).toEqual({});
     });
 
@@ -39,37 +43,40 @@ describe('User Selectors', () => {
       expect(
         userSelectors
           .getAssetProfile('1')
-          .projector({ assetProfiles: { 1: '123' } })
-      ).toEqual('123' as AssetProfile);
+          .projector({ assetProfiles: { 1: { name: '' } } })
+      ).toEqual({ name: '' } as AssetProfile);
     });
   });
 
   describe('did document', () => {
     it('should return undefined when passing empty state object', () => {
-      expect(userSelectors.getDid.projector({})).toBeUndefined();
+      expect(userSelectors.getDid.projector({} as any)).toBeUndefined();
     });
 
     it('should return undefined when passing empty did document object', () => {
       expect(
-        userSelectors.getDid.projector({ didDocument: {} })
+        userSelectors.getDid.projector({ didDocument: {} } as any)
       ).toBeUndefined();
     });
 
     it('should return id of specified did document', () => {
       expect(
-        userSelectors.getDid.projector({ didDocument: { id: 'test' } })
+        userSelectors.getDid.projector({ didDocument: { id: 'test' } } as any)
       ).toEqual('test');
     });
   });
 
   describe('getUserRoleClaims', () => {
     it('should filter out claims that are not roles', () => {
-      const claims = [{ claimType: 'will-be-filtered' }];
+      const claims = [{ claimType: 'will-be-filtered' }] as (IServiceEndpoint &
+        ClaimData)[];
       expect(userSelectors.getUserRoleClaims.projector(claims)).toEqual([]);
     });
 
     it('should pass further claim that is role', () => {
-      const claims = [{ claimType: 'valid.roles.org.iam.ewc' }];
+      const claims = [
+        { claimType: 'valid.roles.org.iam.ewc' },
+      ] as (IServiceEndpoint & ClaimData)[];
       expect(userSelectors.getUserRoleClaims.projector(claims)).toEqual(
         claims as any
       );
@@ -79,7 +86,8 @@ describe('User Selectors', () => {
   describe('claimRoleNames', () => {
     it('should get list of role names', () => {
       const roleName = 'some.roles.';
-      const claims = [{ claimType: roleName }];
+      const claims = [{ claimType: roleName }] as (IServiceEndpoint &
+        ClaimData)[];
       expect(userSelectors.claimRoleNames.projector(claims)).toEqual([
         roleName,
       ]);
