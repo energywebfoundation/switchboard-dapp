@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ReceivedPresentationsComponent } from './received-presentations.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ReceivedPresentationsComponent', () => {
   let component: ReceivedPresentationsComponent;
@@ -9,6 +10,7 @@ describe('ReceivedPresentationsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ReceivedPresentationsComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 

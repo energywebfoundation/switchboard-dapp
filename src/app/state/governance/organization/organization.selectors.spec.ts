@@ -12,8 +12,12 @@ describe('Organization Selectors', () => {
 
     it('should return last element from the list', () => {
       expect(
-        getLastHierarchyOrg.projector([{}, {}, {}] as OrganizationProvider[])
-      ).toEqual(3 as any);
+        getLastHierarchyOrg.projector([
+          { id: 1 },
+          { id: 2 },
+          { id: 3 },
+        ] as OrganizationProvider[])
+      ).toEqual({ id: 3 } as any);
     });
   });
 

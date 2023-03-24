@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SwitchboardToastrService } from './switchboard-toastr.service';
 import { ToastrService } from 'ngx-toastr';
@@ -13,8 +13,8 @@ describe('SwitchboardToastrService', () => {
     'warning',
   ]);
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       providers: [{ provide: ToastrService, useValue: toastrSpyObj }],
     });
     service = TestBed.inject(SwitchboardToastrService);
@@ -24,16 +24,15 @@ describe('SwitchboardToastrService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should clean list elements', (done) => {
+  it('should clean list elements', waitForAsync(() => {
     service.success('test');
     service.reset();
     service.getMessageList().subscribe((list) => {
       expect(list).toEqual([]);
-      done();
     });
-  });
+  }));
 
-  it('should mark all items as read', (done) => {
+  it('should mark all items as read', () => {
     service.success('test');
     const expectedResult = {
       message: 'test',
@@ -43,7 +42,6 @@ describe('SwitchboardToastrService', () => {
     service.readAll();
     service.getMessageList().subscribe((list) => {
       expect(list).toEqual([expectedResult]);
-      done();
     });
   });
 
@@ -98,39 +96,35 @@ describe('SwitchboardToastrService', () => {
     expect(toastrSpyObj.warning).toHaveBeenCalledWith(message, title, override);
   });
 
-  it('should get 0 when there are no new items', (done) => {
+  it('should get 0 when there are no new items', waitForAsync(() => {
     service.newMessagesAmount().subscribe((v) => {
       expect(v).toBe(0);
-      done();
     });
-  });
+  }));
 
-  it('should get 1 when there is 1 new item', (done) => {
+  it('should get 1 when there is 1 new item', waitForAsync(() => {
     service.success('Message');
 
     service.newMessagesAmount().subscribe((v) => {
       expect(v).toBe(1);
-      done();
     });
-  });
+  }));
 
-  it('should return true when there are new elements', (done) => {
+  it('should return true when there are new elements', waitForAsync(() => {
     service.success('Message');
 
     service.areNewNotifications().subscribe((v) => {
       expect(v).toBeTrue();
-      done();
     });
-  });
+  }));
 
-  it('should reset notifications after destroying service', (done) => {
+  it('should reset notifications after destroying service', waitForAsync(() => {
     service.success('Message');
 
     service.ngOnDestroy();
 
     service.getMessageList().subscribe((v) => {
       expect(v.length).toBe(0);
-      done();
     });
-  });
+  }));
 });

@@ -52,7 +52,7 @@ describe('Owned Assets Selectors', () => {
       expect(
         OwnedSelectors.getAssetsWithSelection('123').projector({
           assets: [{ id: '321' }, { id: '111' }] as OwnedAsset[],
-          error: ''
+          error: '',
         })
       ).toEqual([
         { id: '321', isSelected: false },
@@ -64,7 +64,7 @@ describe('Owned Assets Selectors', () => {
       expect(
         OwnedSelectors.getAssetsWithSelection('123').projector({
           assets: [{ id: '123' }, { id: '111' }] as OwnedAsset[],
-          error: ''
+          error: '',
         })
       ).toEqual([
         { id: '123', isSelected: true },

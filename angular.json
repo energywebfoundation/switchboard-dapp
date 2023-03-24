@@ -291,8 +291,10 @@
             "customWebpackConfig": {
               "path": "./extra-webpack.config.js"
             },
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js"
           }

@@ -10,7 +10,6 @@ import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
   styleUrls: ['./received-presentations.component.scss'],
 })
 export class ReceivedPresentationsComponent {
-  tableDataFormatted: MatTableDataSource<ICredentialTableData>;
   @Input() set tableData(data: ICredentialTableData[]) {
     this.dataSource = new MatTableDataSource<ICredentialTableData>(data);
   }

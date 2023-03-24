@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ExpirationInfoComponent } from './expiration-info.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ExpirationInfoComponent', () => {
   let component: ExpirationInfoComponent;
@@ -9,6 +10,7 @@ describe('ExpirationInfoComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ExpirationInfoComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 

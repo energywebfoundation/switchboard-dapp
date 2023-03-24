@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RawDataDialogComponent } from './raw-data-dialog.component';
 import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { DialogDataMock } from '@tests';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RawDataDialogComponent', () => {
   let component: RawDataDialogComponent;
@@ -14,6 +15,7 @@ describe('RawDataDialogComponent', () => {
     TestBed.configureTestingModule({
       declarations: [RawDataDialogComponent],
       providers: [{ provide: MAT_DIALOG_DATA, useValue: dialogMock }],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 

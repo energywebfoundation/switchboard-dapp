@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NotificationService } from './notification.service';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
@@ -14,9 +14,7 @@ describe('NotificationService', () => {
   let enrolmentFacadeSpy: EnrolmentsFacadeService;
 
   const setUp = () => {
-    assetsFacadeServiceSpy.getOfferedAssets.and.returnValue(
-      Promise.resolve([{}, {}])
-    );
+    assetsFacadeServiceSpy.getOfferedAssets.and.returnValue(of([{}, {}]));
 
     spyOnProperty(
       enrolmentFacadeSpy,
@@ -50,16 +48,15 @@ describe('NotificationService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should get number of offered assets when initializing', async (done) => {
+  it('should get number of offered assets when initializing', waitForAsync(() => {
     setUp();
 
-    await service.init();
+    service.init();
 
     service.assetsOfferedToMe.subscribe((v) => {
       expect(v).toEqual(2);
-      done();
     });
-  });
+  }));
 
   it('should get number of not synced DID Docs when initializing', (done) => {
     setUp();

@@ -25,7 +25,9 @@ export class SwitchboardToastrService implements OnDestroy {
   private readonly maxMessagesNumber = 20;
   private messageList = new BehaviorSubject<SwitchboardToastr[]>([]);
 
-  constructor(private toastr: ToastrService) {}
+  constructor(private toastr: ToastrService) {
+    this.messageList.subscribe((v) => console.log(v));
+  }
 
   ngOnDestroy() {
     this.reset();

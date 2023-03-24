@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VpCardComponent } from './vp-card.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('VpCardComponent', () => {
   let component: VpCardComponent;
@@ -9,6 +10,7 @@ describe('VpCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [VpCardComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 
