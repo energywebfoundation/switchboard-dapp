@@ -12,7 +12,12 @@ describe('MessageSubscriptionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: IamService, useValue: {} },
+        {
+          provide: IamService,
+          useValue: {
+            messagingService: { unsubscribeFrom: (id: number) => {} },
+          },
+        },
         { provide: SwitchboardToastrService, useValue: {} },
         { provide: NotificationService, useValue: {} },
         provideMockStore(),
