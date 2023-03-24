@@ -2,6 +2,7 @@ import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SwitchboardToastrService } from './switchboard-toastr.service';
 import { ToastrService } from 'ngx-toastr';
+import { take } from 'rxjs/operators';
 
 describe('SwitchboardToastrService', () => {
   let service: SwitchboardToastrService;
@@ -40,9 +41,12 @@ describe('SwitchboardToastrService', () => {
       isNew: false,
     };
     service.readAll();
-    service.getMessageList().subscribe((list) => {
-      expect(list).toEqual([expectedResult]);
-    });
+    service
+      .getMessageList()
+      .pipe(take(1))
+      .subscribe((list) => {
+        expect(list).toEqual([expectedResult]);
+      });
   });
 
   it('should display toastr message', () => {
@@ -105,17 +109,23 @@ describe('SwitchboardToastrService', () => {
   it('should get 1 when there is 1 new item', waitForAsync(() => {
     service.success('Message');
 
-    service.newMessagesAmount().subscribe((v) => {
-      expect(v).toBe(1);
-    });
+    service
+      .newMessagesAmount()
+      .pipe(take(1))
+      .subscribe((v) => {
+        expect(v).toBe(1);
+      });
   }));
 
   it('should return true when there are new elements', waitForAsync(() => {
     service.success('Message');
 
-    service.areNewNotifications().subscribe((v) => {
-      expect(v).toBeTrue();
-    });
+    service
+      .areNewNotifications()
+      .pipe(take(1))
+      .subscribe((v) => {
+        expect(v).toBeTrue();
+      });
   }));
 
   it('should reset notifications after destroying service', waitForAsync(() => {
