@@ -300,6 +300,7 @@
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"],
+            "outputFile": "eslint_report.json"
           }
         }
       }
