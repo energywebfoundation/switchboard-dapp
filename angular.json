@@ -291,10 +291,7 @@
             "customWebpackConfig": {
               "path": "./extra-webpack.config.js"
             },
-            "polyfills": [
-              "src/polyfills.ts",
-              "zone.js/testing"
-            ],
+            "polyfills": ["src/polyfills.ts", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js"
           }
@@ -303,7 +300,6 @@
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"],
-            "outputFile": "eslint_report.json"
           }
         }
       }
