@@ -5,17 +5,23 @@ import { IamService } from '../iam.service';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
 import { NotificationService } from '../notification.service';
 import { provideMockStore } from '@ngrx/store/testing';
+import { MessagingService } from 'iam-client-lib';
 
 describe('MessageSubscriptionService', () => {
   let service: MessageSubscriptionService;
+  let messagingServiceSpy: jasmine.SpyObj<MessagingService>;
 
   beforeEach(() => {
+    messagingServiceSpy = jasmine.createSpyObj('MessagingService', [
+      'unsubscribeFrom',
+      'subscribeTo',
+    ]);
     TestBed.configureTestingModule({
       providers: [
         {
           provide: IamService,
           useValue: {
-            messagingService: { unsubscribeFrom: (id: number) => {} },
+            messagingService: messagingServiceSpy,
           },
         },
         { provide: SwitchboardToastrService, useValue: {} },
