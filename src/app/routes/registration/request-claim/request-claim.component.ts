@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   Asset,
@@ -31,7 +31,6 @@ import { Store } from '@ngrx/store';
 import { logout } from '../../../state/auth/auth.actions';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 import { filter, take } from 'rxjs/operators';
-import { AuthActions, SettingsSelectors } from '@state';
 import {
   PreconditionCheck,
   preconditionCheck,

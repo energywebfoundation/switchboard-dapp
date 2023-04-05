@@ -3,7 +3,7 @@ import { ProviderType } from 'iam-client-lib';
 import * as authSelectors from '../../../state/auth/auth.selectors';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../../../state/auth/auth.actions';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { EnvService } from '../../../shared/services/env/env.service';
 
 @Component({

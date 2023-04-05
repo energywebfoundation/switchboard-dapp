@@ -7,9 +7,9 @@ import {
 import { DidBookService } from '../../services/did-book.service';
 import { FormControl } from '@angular/forms';
 import { combineLatest, Observable } from 'rxjs';
-import { map, startWith, tap } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { DidBookRecord } from '../models/did-book-record';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-did-book',

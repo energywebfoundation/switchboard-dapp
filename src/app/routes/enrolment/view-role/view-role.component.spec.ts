@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ViewRoleComponent } from './view-role.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
+import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 
 describe('ViewRoleComponent', () => {
   let component: ViewRoleComponent;

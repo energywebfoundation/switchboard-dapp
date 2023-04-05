@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActionsMenuComponent } from './actions-menu.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 
 describe('ActionsMenuComponent', () => {
   let component: ActionsMenuComponent;

@@ -2,12 +2,9 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { finalize, map, switchMap, tap } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 import { Claim, IRole, RegistrationTypes } from 'iam-client-lib';
 import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AuthSelectors } from '@state';
-import { truthy } from '@operators';
 
 @Injectable({
   providedIn: 'root',

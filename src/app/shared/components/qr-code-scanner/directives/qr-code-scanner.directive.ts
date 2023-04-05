@@ -5,7 +5,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { QrCodeScannerComponent } from '../components/qr-code-scanner.component';
 import { filter } from 'rxjs/operators';
 import { QrCodeData } from '../models/qr-code-data.interface';

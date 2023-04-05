@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DidBookHttpService } from './did-book-http.service';
 import { DidBookRecord } from '../components/models/did-book-record';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { retryWhenWithDelay } from '@operators';
 
 const TOASTR_HEADER = 'DID Book';

@@ -1,7 +1,7 @@
 import { Event, NavigationEnd, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { NotificationService } from '../../shared/services/notification.service';
 import { Subject } from 'rxjs';
@@ -19,7 +19,7 @@ import {
   SettingsSelectors,
 } from '@state';
 import { truthy } from '@operators';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatLegacySlideToggleChange as MatSlideToggleChange } from '@angular/material/legacy-slide-toggle';
 import { MessageSubscriptionService } from '../../shared/services/message-subscription/message-subscription.service';
 import { RouterConst } from '../../routes/router-const';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';

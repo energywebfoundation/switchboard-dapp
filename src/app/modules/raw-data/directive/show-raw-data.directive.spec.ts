@@ -1,7 +1,7 @@
 import { ShowRawDataDirective } from './show-raw-data.directive';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'test-raw-data',

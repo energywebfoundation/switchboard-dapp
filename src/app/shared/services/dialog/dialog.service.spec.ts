@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { DialogService } from './dialog.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { of } from 'rxjs';
 
 describe('DialogService', () => {

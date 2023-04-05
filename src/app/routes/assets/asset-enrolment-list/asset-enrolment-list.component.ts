@@ -5,7 +5,7 @@ import { LoadingService } from '../../../shared/services/loading.service';
 import { NotificationService } from '../../../shared/services/notification.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { MatSort } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { truthy } from '@operators';
 import { Store } from '@ngrx/store';

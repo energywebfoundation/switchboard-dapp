@@ -1,7 +1,7 @@
 import { QrCodeDirective } from './qr-code.directive';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { getElement } from '@tests';
 
 @Component({

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, from, Observable } from 'rxjs';
 import { ClaimsFacadeService } from './claims-facade/claims-facade.service';
 import { AssetsFacadeService } from './assets-facade/assets-facade.service';
 import { EnrolmentsFacadeService } from '@state';
+import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -28,8 +29,12 @@ export class NotificationService {
     return this._assetsOfferedToMe.asObservable();
   }
 
-  async init() {
-    this._assetsOfferedToMe.next(await this.getOfferedAssetsAmount());
+  init() {
+    this.getOfferedAssetsAmount().subscribe({
+      next: (v) => {
+        this._assetsOfferedToMe.next(v);
+      },
+    });
   }
 
   increaseAssetsOfferedToMeCount() {
@@ -40,7 +45,9 @@ export class NotificationService {
     this._assetsOfferedToMe.next(this._assetsOfferedToMe.getValue() - 1);
   }
 
-  private async getOfferedAssetsAmount(): Promise<number> {
-    return (await this.assetsFacade.getOfferedAssets()).length;
+  private getOfferedAssetsAmount(): Observable<number> {
+    return this.assetsFacade
+      .getOfferedAssets()
+      .pipe(map((assets) => assets.length));
   }
 }

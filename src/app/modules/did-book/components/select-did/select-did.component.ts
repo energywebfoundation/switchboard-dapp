@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { HexValidators } from '@utils';
+import { HexValidators, ListValidator } from '@utils';
 import { DidBookService } from '../../services/did-book.service';
 import { combineLatest, Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { AddSingleRecordComponent } from '../add-single-record/add-single-record.component';
-import { ListValidator } from '@utils';
 import { DidBookRecord } from '../models/did-book-record';
 
 @Component({

@@ -1,6 +1,6 @@
 import * as fromReducer from './role.reducer';
 import * as RoleActions from './role.actions';
-import { IRole, NamespaceType } from 'iam-client-lib';
+import { IRole } from 'iam-client-lib';
 
 describe('Role reducer', () => {
   describe('getListSuccess action', () => {

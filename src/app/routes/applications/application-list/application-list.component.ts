@@ -10,11 +10,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { IamService } from '../../../shared/services/iam.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { FormBuilder } from '@angular/forms';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
@@ -23,7 +23,7 @@ import { ListType } from 'src/app/shared/constants/shared-constants';
 import { Store } from '@ngrx/store';
 import { ApplicationActions, ApplicationSelectors } from '@state';
 import { CascadingFilterService } from '@modules';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { DomainUtils } from '@utils';
 
 @Component({

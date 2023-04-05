@@ -1,9 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   Output,
-  EventEmitter,
 } from '@angular/core';
 import { KeyValue } from '@angular/common';
 import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';

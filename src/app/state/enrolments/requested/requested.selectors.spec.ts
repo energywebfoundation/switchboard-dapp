@@ -1,7 +1,6 @@
 import { Claim } from 'iam-client-lib';
 import { EnrolmentClaim } from 'src/app/routes/enrolment/models/enrolment-claim';
 import * as RequestedSelectors from './requested.selectors';
-import * as OwnedSelectors from '../owned/owned.selectors';
 
 describe('Requested Enrolments Selectors', () => {
   describe('getPendingEnrolmentsAmount', () => {
@@ -9,7 +8,7 @@ describe('Requested Enrolments Selectors', () => {
       expect(
         RequestedSelectors.getPendingEnrolmentsAmount.projector([
           { isAccepted: true, isRejected: false },
-        ])
+        ] as EnrolmentClaim[])
       ).toEqual(0);
     });
 
@@ -17,7 +16,7 @@ describe('Requested Enrolments Selectors', () => {
       expect(
         RequestedSelectors.getPendingEnrolmentsAmount.projector([
           { isAccepted: false, isRejected: true },
-        ])
+        ] as EnrolmentClaim[])
       ).toEqual(0);
     });
 

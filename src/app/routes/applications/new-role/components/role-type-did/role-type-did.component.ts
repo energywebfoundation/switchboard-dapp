@@ -1,6 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { HexValidators, ListValidator } from '@utils';
 import { RoleStepType } from '../../models/role-step.type';
 
 @Component({

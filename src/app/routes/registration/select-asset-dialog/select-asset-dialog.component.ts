@@ -4,7 +4,10 @@ import {
   Inject,
   OnInit,
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { SelectAssetDialogData } from './select-asset-dialog.interface';
 import { OwnedAssetsActions, OwnedAssetsSelectors } from '@state';
 import { Store } from '@ngrx/store';

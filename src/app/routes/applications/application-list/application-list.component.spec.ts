@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ApplicationListComponent } from './application-list.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { dialogSpy, iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
@@ -12,7 +12,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NamespaceType } from 'iam-client-lib';
 import { ListType } from '../../../shared/constants/shared-constants';
-import { EnvService } from '../../../shared/services/env/env.service';
 
 describe('ApplicationListComponent', () => {
   let component: ApplicationListComponent;

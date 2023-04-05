@@ -31,8 +31,8 @@ import {
 import { from, Observable, Subject } from 'rxjs';
 import { VerificationMethodComponent } from '../verification-method/verification-method.component';
 import { MatSort } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { ASSET_DEFAULT_LOGO } from '../models/asset-default-logo';
 import { FormControl } from '@angular/forms';
