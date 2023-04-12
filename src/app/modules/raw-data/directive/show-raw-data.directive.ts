@@ -1,5 +1,5 @@
 import { Directive, HostListener, Input } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { RawDataDialogComponent } from '../components/raw-data-dialog/raw-data-dialog.component';
 import { JsonObject } from '@angular-devkit/core';
 

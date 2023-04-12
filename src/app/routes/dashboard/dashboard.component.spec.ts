@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { LayoutActions, SettingsSelectors } from '@state';
 import * as userSelectors from '../../state/user-claim/user.selectors';
-import * as AuthActions from '../../state/auth/auth.actions';
 import { SearchType } from 'iam-client-lib';
 import { RouterConst } from '../router-const';
 

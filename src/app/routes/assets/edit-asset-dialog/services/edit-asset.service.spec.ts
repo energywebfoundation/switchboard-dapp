@@ -5,7 +5,7 @@ import { ClaimsFacadeService } from '../../../../shared/services/claims-facade/c
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { SwitchboardToastrService } from '../../../../shared/services/switchboard-toastr.service';
 import { dialogSpy, toastrSpy } from '@tests';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { UserClaimActions, UserClaimSelectors } from '@state';
 import { of, throwError } from 'rxjs';
 

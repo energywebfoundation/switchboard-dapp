@@ -1,6 +1,6 @@
 import { Directive, HostListener, Input } from '@angular/core';
 import { MinifiedDidViewerDialogComponent } from './minified-did-viewer-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 @Directive({
   selector: '[appMinifiedDidViewer]',

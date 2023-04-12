@@ -9,7 +9,7 @@ import { FormControl } from '@angular/forms';
 import { CascadingFilterService } from '../../services/cascading-filter/cascading-filter.service';
 import { debounceTime } from 'rxjs/operators';
 import { FilterStatus } from '../../../../routes/enrolment/enrolment-list/models/filter-status.enum';
-import { MatSelectChange } from '@angular/material/select/select';
+import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
 
 @Component({
   selector: 'app-cascading-filter',

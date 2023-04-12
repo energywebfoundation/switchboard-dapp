@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { VerificationService } from './verification.service';
 import { FormControl, Validators } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { KeyTypesEnum } from '../models/keyTypesEnum';
 import { HexValidators } from '../../../utils/validators/is-hex/is-hex.validator';
 import { listContainsValidator } from '../../../utils/validators/list-contains.validator';

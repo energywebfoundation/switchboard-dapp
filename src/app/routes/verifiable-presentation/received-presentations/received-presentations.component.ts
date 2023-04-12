@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ICredentialTableData } from '../models/credential-table-data.interface';
 import { IVerifiableCredential } from '@sphereon/pex';
-import { MatSelect } from '@angular/material/select';
+import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 
 @Component({
   selector: 'app-received-presentations',
@@ -10,7 +10,6 @@ import { MatSelect } from '@angular/material/select';
   styleUrls: ['./received-presentations.component.scss'],
 })
 export class ReceivedPresentationsComponent {
-  tableDataFormatted: MatTableDataSource<ICredentialTableData>;
   @Input() set tableData(data: ICredentialTableData[]) {
     this.dataSource = new MatTableDataSource<ICredentialTableData>(data);
   }

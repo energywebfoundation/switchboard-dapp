@@ -5,7 +5,7 @@ import {
   ConfirmationDialogData,
 } from '../../../routes/widgets/confirmation-dialog/confirmation-dialog.component';
 import { truthy } from '@operators';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';

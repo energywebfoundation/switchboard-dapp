@@ -2,7 +2,10 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AddSingleRecordComponent } from './add-single-record.component';
 import { DidBookService } from '../../services/did-book.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { dialogSpy } from '@tests';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';

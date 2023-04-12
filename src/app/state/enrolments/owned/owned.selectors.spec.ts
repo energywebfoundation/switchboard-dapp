@@ -10,7 +10,7 @@ describe('Owned Enrolments Selectors', () => {
           {
             isAccepted: false,
           },
-        ])
+        ] as EnrolmentClaim[])
       ).toEqual(0);
     });
 
@@ -21,7 +21,7 @@ describe('Owned Enrolments Selectors', () => {
             isAccepted: true,
             isSynced: true,
           },
-        ])
+        ] as EnrolmentClaim[])
       ).toEqual(0);
     });
 

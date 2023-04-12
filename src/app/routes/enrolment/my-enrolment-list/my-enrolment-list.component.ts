@@ -10,7 +10,7 @@ import { MatSort } from '@angular/material/sort';
 import { EnrolmentClaim } from '../models/enrolment-claim';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { IamService } from '../../../shared/services/iam.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { Store } from '@ngrx/store';
 import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';

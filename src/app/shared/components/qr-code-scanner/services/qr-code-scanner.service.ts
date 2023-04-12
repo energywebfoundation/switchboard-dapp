@@ -5,7 +5,7 @@ import { ScanType } from '../models/scan-type.enum';
 import { DidBookComponent } from '../../../../modules/did-book/components/did-book/did-book.component';
 import { DidBookRecord } from '../../../../modules/did-book/components/models/did-book-record';
 import { SwitchboardToastrService } from '../../../services/switchboard-toastr.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 @Injectable({
   providedIn: 'root',

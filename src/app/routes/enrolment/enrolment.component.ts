@@ -2,8 +2,8 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlParamService } from '../../shared/services/url-param.service';
-import { MatTabGroup } from '@angular/material/tabs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 import { Store } from '@ngrx/store';
 import { EnrolmentsFacadeService, SettingsSelectors } from '@state';

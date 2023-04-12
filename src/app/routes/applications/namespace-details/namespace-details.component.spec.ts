@@ -2,14 +2,16 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NamespaceDetailsComponent } from './namespace-details.component';
 import { DefaultValuePipe } from '../pipes/default-value.pipe';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-describe('ApplicationDetailsComponent', () => {
+describe('NamespaceDetailsComponent', () => {
   let component: NamespaceDetailsComponent;
   let fixture: ComponentFixture<NamespaceDetailsComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [NamespaceDetailsComponent, DefaultValuePipe],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NewPassiveAssetComponent } from './new-passive-asset.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { of, throwError } from 'rxjs';
 import { AssetService } from '../services/asset.service';
 

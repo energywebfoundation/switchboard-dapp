@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { truthy } from '@operators';
 import { EkcSettingsComponent } from '../ekc-settings.component';
 import { EnvService } from '../../../../shared/services/env/env.service';

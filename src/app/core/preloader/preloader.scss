@@ -1,9 +1,9 @@
 /* ========================================================================
    Component: preloader
  ========================================================================== */
-@import '~bootstrap/scss/_functions.scss';
-@import '~bootstrap/scss/_variables.scss';
-@import '~bootstrap/scss/_mixins';
+@import 'node_modules/bootstrap/scss/_functions.scss';
+@import 'node_modules/bootstrap/scss/_variables.scss';
+@import 'node_modules/bootstrap/scss/_mixins';
 @import '../../shared/styles/app/variables';
 
 $preloader-wd: 200px;

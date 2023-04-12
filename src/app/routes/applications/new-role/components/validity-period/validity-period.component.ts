@@ -26,7 +26,7 @@ export class ValidityPeriodComponent {
   @Output() next = new EventEmitter<number | undefined>();
   @Output() back = new EventEmitter();
 
-  form = this.fb.group({
+  form = this.fb.nonNullable.group({
     years: [0, [Validators.min(0)]],
     days: [0, [Validators.min(0), Validators.max(364)]],
     hours: [0, [Validators.min(0), Validators.max(23)]],

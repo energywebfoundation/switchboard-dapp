@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoadingService } from '../loading.service';
 import { IamService, PROVIDER_TYPE } from '../iam.service';
 import { IamListenerService } from '../iam-listener/iam-listener.service';
-import { from, of, throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
 import { IS_ETH_SIGNER, ProviderType, PUBLIC_KEY } from 'iam-client-lib';

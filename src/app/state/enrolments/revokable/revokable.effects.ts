@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as RevokableActions from './revokable.actions';
-import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
-import { from, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { LoadingService } from '../../../shared/services/loading.service';

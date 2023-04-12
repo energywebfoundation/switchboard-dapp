@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DidListComponent } from './did-list.component';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { getElement } from '@tests';
 

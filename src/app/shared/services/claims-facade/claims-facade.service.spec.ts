@@ -4,16 +4,10 @@ import { ClaimsFacadeService } from './claims-facade.service';
 import { IamService } from '../iam.service';
 import { loadingServiceSpy } from '@tests';
 import { LoadingService } from '../loading.service';
-import {
-  Claim,
-  ClaimData,
-  NamespaceType,
-  RegistrationTypes,
-} from 'iam-client-lib';
+import { Claim, NamespaceType, RegistrationTypes } from 'iam-client-lib';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
-import { claimRoleNames } from '../../../state/user-claim/user.selectors';
 
 describe('ClaimsFacadeService', () => {
   let service: ClaimsFacadeService;

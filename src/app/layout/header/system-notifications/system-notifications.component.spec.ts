@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SystemNotificationsComponent } from './system-notifications.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 
 describe('SystemNotificationsComponent', () => {
   let component: SystemNotificationsComponent;

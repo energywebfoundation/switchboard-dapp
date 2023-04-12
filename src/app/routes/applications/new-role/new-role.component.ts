@@ -24,12 +24,12 @@ import { IamService } from '../../../shared/services/iam.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { ViewType } from '../new-organization/new-organization.component';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { DomainUtils, isAlphanumericValidator } from '@utils';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
@@ -251,7 +251,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
       this.requestorFields.data = this.getRequestorFieldsFromDefinition(def);
       this.issuerFields.data = def?.issuerFields ? [...def.issuerFields] : [];
       this.roleForm.patchValue({
-        roleType: def.roleType,
+        roleType: def.roleType as any,
         parentNamespace,
         roleName: def.roleName,
         namespace: DomainUtils.getRoleNamespace(parentNamespace),
@@ -267,7 +267,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
 
     this.roleForm.valueChanges.subscribe((value) => {
       if (typeof value.roleName !== 'string') {
-        this.roleName = value.roleName.namespace;
+        this.roleName = (value.roleName as any).namespace;
       } else {
         this.roleName = value.roleName;
       }
@@ -312,7 +312,7 @@ export class NewRoleComponent implements OnInit, AfterViewInit {
           enrolmentPreconditions: [
             { type: PreconditionType.Role, conditions: [event.value] },
           ],
-        });
+        } as any);
       }
 
       this.restrictionRoleControl.setErrors(null);
