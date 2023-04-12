@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../../../shared/services/iam.service';
-import { catchError, map } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 import { SubmissionRequirementMatch } from '@sphereon/pex';
 import { ICredentialTableData } from '../models/credential-table-data.interface';
 import { PresentationRequest } from '../models/presentation-request-data.interface';
+
 @Injectable({
   providedIn: 'root',
 })

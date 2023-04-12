@@ -4,13 +4,13 @@ import { UserIdleModule } from 'angular-user-idle';
 import { LayoutComponent } from './layout.component';
 import { HeaderComponent } from './header/header.component';
 import { SharedModule } from '../shared/shared.module';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { DialogUserComponent } from './header/dialog-user/dialog-user.component';
 import { LoadingComponent } from './loading/loading.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { environment } from '../../environments/environment';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { UserMenuModule } from './components/user-menu/user-menu.module';
 import { DidBookModule } from '../modules/did-book/did-book.module';
@@ -50,7 +50,6 @@ import { RawDataModule } from '@modules';
     NotificationHeaderComponent,
     MenuNotificationTriggerComponent,
   ],
-  entryComponents: [DialogUserComponent],
   exports: [LayoutComponent, HeaderComponent, LoadingComponent],
 })
 export class LayoutModule {}

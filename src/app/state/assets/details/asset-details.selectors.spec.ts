@@ -3,11 +3,11 @@ import { getAsset, getAssetDetails } from './asset-details.selectors';
 describe('Asset Details Selectors', () => {
   describe('getAsset selector', () => {
     it('should return undefined when passing empty object', () => {
-      expect(getAsset.projector({})).toBeUndefined();
+      expect(getAsset.projector({ asset: null, error: '' })).toBeNull();
     });
 
     it('should return object when passing object containing asset', () => {
-      expect(getAsset.projector({ asset: {} })).toEqual({});
+      expect(getAsset.projector({ asset: {}, error: '' })).toEqual({});
     });
   });
 

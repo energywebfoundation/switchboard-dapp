@@ -17,7 +17,7 @@ import {
   takeWhile,
 } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ConfirmationDialogComponent } from '../../../routes/widgets/confirmation-dialog/confirmation-dialog.component';
 
 @Directive({

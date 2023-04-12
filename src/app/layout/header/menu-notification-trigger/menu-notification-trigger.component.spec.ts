@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MenuNotificationTriggerComponent } from './menu-notification-trigger.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('MenuNotificationTriggerComponent', () => {
   let component: MenuNotificationTriggerComponent;
@@ -9,6 +10,7 @@ describe('MenuNotificationTriggerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MenuNotificationTriggerComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 

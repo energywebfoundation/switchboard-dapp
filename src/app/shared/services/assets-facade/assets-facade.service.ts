@@ -21,6 +21,6 @@ export class AssetsFacadeService {
   }
 
   getOfferedAssets() {
-    return this.iamService.assetsService.getOfferedAssets();
+    return from(this.iamService.assetsService.getOfferedAssets());
   }
 }

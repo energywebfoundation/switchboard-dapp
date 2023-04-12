@@ -5,7 +5,6 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { ExpiredRequestError } from '../../../shared/errors/errors';
 import { IamRequestService } from '../../../shared/services/iam-request.service';
 import { IamService } from '../../../shared/services/iam.service';
@@ -13,10 +12,10 @@ import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/c
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../../../shared/services/loading.service';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { Subject } from 'rxjs';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';

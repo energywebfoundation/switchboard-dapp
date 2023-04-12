@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { EkcSettingsService } from './ekc-settings.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { dialogSpy } from '@tests';
 import { EnvService } from '../../../../shared/services/env/env.service';
 import { of } from 'rxjs';

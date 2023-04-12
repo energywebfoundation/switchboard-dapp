@@ -6,7 +6,7 @@ import { UserClaimState } from '../../../state/user-claim/user.reducer';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatInputModule } from '@angular/material/input';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { dispatchInputEvent } from '@tests';
 import { UserClaimActions, UserClaimSelectors } from '@state';
 

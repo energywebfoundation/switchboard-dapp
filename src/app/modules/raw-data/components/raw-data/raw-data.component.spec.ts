@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RawDataComponent } from './raw-data.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RawDataComponent', () => {
   let component: RawDataComponent;
@@ -9,6 +10,7 @@ describe('RawDataComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RawDataComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 

@@ -1,4 +1,5 @@
 import * as OwnedSelectors from './owned.selectors';
+import { OwnedAsset } from './models/owned-asset';
 
 describe('Owned Assets Selectors', () => {
   const asset: any = {
@@ -50,7 +51,8 @@ describe('Owned Assets Selectors', () => {
     it('should return all elements with isSelected set to false', () => {
       expect(
         OwnedSelectors.getAssetsWithSelection('123').projector({
-          assets: [{ id: '321' }, { id: '111' }] as any[],
+          assets: [{ id: '321' }, { id: '111' }] as OwnedAsset[],
+          error: '',
         })
       ).toEqual([
         { id: '321', isSelected: false },
@@ -61,7 +63,8 @@ describe('Owned Assets Selectors', () => {
     it('should return one element with isSelected set to true', () => {
       expect(
         OwnedSelectors.getAssetsWithSelection('123').projector({
-          assets: [{ id: '123' }, { id: '111' }] as any[],
+          assets: [{ id: '123' }, { id: '111' }] as OwnedAsset[],
+          error: '',
         })
       ).toEqual([
         { id: '123', isSelected: true },

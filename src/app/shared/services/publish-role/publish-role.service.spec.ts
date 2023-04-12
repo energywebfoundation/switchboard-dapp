@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PublishRoleService } from './publish-role.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { dialogSpy, loadingServiceSpy } from '@tests';
 import { LoadingService } from '../loading.service';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';

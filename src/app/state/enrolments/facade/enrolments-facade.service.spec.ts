@@ -1,8 +1,6 @@
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { EnrolmentsFacadeService } from '@state';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import * as OwnedEnrolmentsActions from '../owned/owned.actions';
-import * as RequestedEnrolmentsActions from '../requested/requested.actions';
 import * as RevocableEnrolmentsActions from '../revokable/revokable.actions';
 import * as RevocableEnrolmentsSelectors from '../revokable/revokable.selectors';
 

@@ -3,8 +3,7 @@ import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../routes/widgets/confirmation-dialog/confirmation-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { truthy } from '@operators';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Observable } from 'rxjs';
 
 @Injectable({

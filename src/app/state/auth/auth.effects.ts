@@ -6,7 +6,7 @@ import * as AuthActions from './auth.actions';
 import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
 import { from, of } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';
 import * as userActions from '../user-claim/user.actions';

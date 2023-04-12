@@ -8,7 +8,7 @@ import {
 import { NewRoleComponent } from '../../new-role/new-role.component';
 import { ViewType } from '../../new-organization/new-organization.component';
 import { ListType } from '../../../../shared/constants/shared-constants';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { NewApplicationComponent } from '../../new-application/new-application.component';
 import { ActionBaseAbstract } from '../action-base.abstract';
 import { filter } from 'rxjs/operators';

@@ -9,36 +9,33 @@ import { RetryBtnDirective } from './directives/retry-btn/retry-btn.directive';
 import { MinifiedDidViewerDirective } from './directives/minified-did-viewer/minified-did-viewer.directive';
 import { MinifiedDidViewerDialogComponent } from './directives/minified-did-viewer/minified-did-viewer-dialog.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatInputModule } from '@angular/material/input';
+import { MatLegacyProgressBarModule as MatProgressBarModule } from '@angular/material/legacy-progress-bar';
+import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
+import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatGridListModule } from '@angular/material/grid-list';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { MatSortModule } from '@angular/material/sort';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTableModule } from '@angular/material/table';
-import { MatCardModule } from '@angular/material/card';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
+import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
+import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
+import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 
 import { SmartSearchComponent } from './components/smart-search/smart-search.component';
 import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
@@ -47,7 +44,6 @@ import { DidFormatMinifierModule } from './pipes/did-format-minifier/did-format-
 import { TableHeadingComponent } from './components/table-heading/table-heading.component';
 import { NoRecordsComponent } from './components/no-records/no-records.component';
 import { DomainTypePipe } from './pipes/domain-type/domain-type.pipe';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { QrCodeScannerModule } from './components/qr-code-scanner/qr-code-scanner.module';
 import { DomainImageComponent } from './components/domain-image/domain-image.component';
 import { ReportProblemComponent } from './components/report-problem/report-problem.component';
@@ -73,7 +69,6 @@ const MATERIAL_MODULES = [
   MatDialogModule,
   MatExpansionModule,
   MatFormFieldModule,
-  MatGridListModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
@@ -84,10 +79,8 @@ const MATERIAL_MODULES = [
   MatRadioModule,
   MatRippleModule,
   MatSelectModule,
-  MatSidenavModule,
   MatSlideToggleModule,
   MatSliderModule,
-  MatSnackBarModule,
   MatSortModule,
   MatTabsModule,
   MatToolbarModule,
@@ -105,7 +98,6 @@ const MATERIAL_MODULES = [
     CopyToClipboardModule,
     DidFormatMinifierModule,
     MATERIAL_MODULES,
-    BsDropdownModule,
     QrCodeScannerModule,
   ],
   providers: [ColorsService, DatePipe],
@@ -147,7 +139,6 @@ const MATERIAL_MODULES = [
     TableHeadingComponent,
     NoRecordsComponent,
     DomainTypePipe,
-    BsDropdownModule,
     QrCodeScannerModule,
     DomainImageComponent,
     ReportProblemComponent,
