@@ -16,19 +16,11 @@ import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/type
 })
 export class FieldsComponent {
   @Input() title: string;
-  @Input() isIssuerRequestView = false;
+  @Input() showMergeButton = false;
   @Input() fieldsList: KeyValue<string, string | number>[];
   @Output() fieldToCopy = new EventEmitter<KeyValue<string, string | number>>();
   @Input() issuerFields: IFieldDefinition[] | undefined;
   hasValidValue(val: string | number) {
     return val && val !== 'null';
-  }
-
-  showMergeButton(field): boolean {
-    return (
-      this.isIssuerRequestView &&
-      this.hasValidValue(field?.value) &&
-      !!this.issuerFields.find((fld) => fld.label === field.label)
-    );
   }
 }
