@@ -7,9 +7,15 @@
           {{ field?.key }}
         </div>
         <div class="text-container">
-          <span class="default-color mb-0" [attr.data-qa-id]="'field-list-value-' + i">
+          <ng-container *ngIf="isJsonString(field.value); else notJson">
+            <pre class="default-color">{{ parseToJson(field?.value) | json }}</pre>
+          </ng-container>
+          <ng-template #notJson>
+            <span class="default-color mb-0" [attr.data-qa-id]="'field-list-value-' + i">
             {{ field?.value }}
           </span>
+          </ng-template>
+
           <button
             mat-raised-button
             class="btn btn-small btn btn-primary"

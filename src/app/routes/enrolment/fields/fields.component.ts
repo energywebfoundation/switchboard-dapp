@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { KeyValue } from '@angular/common';
 import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
+import { JsonObject } from '@angular-devkit/core';
 
 @Component({
   selector: 'app-fields',
@@ -22,5 +23,24 @@ export class FieldsComponent {
   @Input() issuerFields: IFieldDefinition[] | undefined;
   hasValidValue(val: string | number) {
     return val && val !== 'null';
+  }
+
+  isJsonString(value: string | number) {
+    if (typeof value === 'number' ) {
+      return false;
+    }
+    try {
+      JSON.parse(value);
+    } catch {
+      return false;
+    }
+    return true;
+  }
+
+  parseToJson(value: string | number): JsonObject {
+    if (typeof value === 'number' ) {
+      return;
+    }
+    return JSON.parse(value);
   }
 }
