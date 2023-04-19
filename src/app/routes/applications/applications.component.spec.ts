@@ -19,7 +19,7 @@ describe('ApplicationsComponent', () => {
     'navigateByUrl',
     'navigate',
   ]);
-  const envService = { production: false };
+  const envService = { orgRequestEmail: '' };
   let activatedRouteStub: MockActivatedRoute;
   beforeEach(() => {
     dialog = jasmine.createSpyObj(DialogService, ['open']);
@@ -43,16 +43,14 @@ describe('ApplicationsComponent', () => {
     component = fixture.componentInstance;
     domainsService.isOwner.and.returnValue(Promise.resolve(true));
   });
-  it('should create Request Organization Button text correctly based on env (non-production)', async () => {
-    envService.production = false;
-    await component.ngOnInit();
+  it('should create "Create Organization" button text when email is empty string', () => {
+    envService.orgRequestEmail = '';
     fixture.detectChanges();
     expect(component.orgRequestButtonText).toBe('Create Organization');
   });
 
-  it('should create Request Organization Button text correctly based on env (production)', async () => {
-    envService.production = true;
-    await component.ngOnInit();
+  it('should create "Request to Create Organization" button text when organization email is defined', () => {
+    envService.orgRequestEmail = 'example@email.com';
     fixture.detectChanges();
     expect(component.orgRequestButtonText).toBe(
       'Request to Create Organization'
