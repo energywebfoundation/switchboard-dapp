@@ -49,7 +49,7 @@ describe('FieldsComponent', () => {
     component.fieldsList = [
       { key: 'ASIC Models', value: '[{"model":"model","numUnits":2}]' },
     ];
-    component.isIssuerRequestView = true;
+    component.showMergeButton = true;
     fixture.detectChanges();
     const dispatchSpy = spyOn(component.fieldToCopy, 'emit');
     const { firstValueMergeBtn } = getSelectors(hostDebug);
@@ -62,7 +62,7 @@ describe('FieldsComponent', () => {
   });
   it('should not show copy button if value is null', () => {
     component.fieldsList = [{ key: 'key', value: null }];
-    component.isIssuerRequestView = true;
+    component.showMergeButton = true;
     fixture.detectChanges();
 
     const { firstValueMergeBtn } = getSelectors(hostDebug);
@@ -70,7 +70,7 @@ describe('FieldsComponent', () => {
   });
   it('should not show copy button if value is "null"', () => {
     component.fieldsList = [{ key: 'key', value: 'null' }];
-    component.isIssuerRequestView = true;
+    component.showMergeButton = true;
     fixture.detectChanges();
 
     const { firstValueMergeBtn } = getSelectors(hostDebug);
@@ -80,7 +80,7 @@ describe('FieldsComponent', () => {
     component.fieldsList = [
       { key: 'ASIC Models', value: '[{"model":"model","numUnits":2}]' },
     ];
-    component.isIssuerRequestView = false;
+    component.showMergeButton = false;
     fixture.detectChanges();
     const { firstValueMergeBtn } = getSelectors(hostDebug);
     expect(firstValueMergeBtn).toBeUndefined();
