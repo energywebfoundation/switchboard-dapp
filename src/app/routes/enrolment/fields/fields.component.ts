@@ -26,7 +26,7 @@ export class FieldsComponent {
   }
 
   isJsonString(value: string | number) {
-    if (typeof value === 'number' ) {
+    if (typeof value === 'number') {
       return false;
     }
     try {
@@ -38,7 +38,7 @@ export class FieldsComponent {
   }
 
   parseToJson(value: string | number): JsonObject {
-    if (typeof value === 'number' ) {
+    if (typeof value === 'number') {
       return;
     }
     return JSON.parse(value);
