@@ -18,7 +18,7 @@
 
           <button
             mat-raised-button
-            class="btn btn-small btn btn-primary"
+            class="btn btn-small btn btn-primary ml-3"
             [attr.data-qa-id]="'field-list-merge-btn-' + i"
             *ngIf="hasValidValue(field?.value) && showMergeButton"
             (click)="this.fieldToCopy.emit(field)">
