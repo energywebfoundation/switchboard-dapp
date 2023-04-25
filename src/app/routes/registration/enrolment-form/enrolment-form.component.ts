@@ -121,7 +121,6 @@ export class EnrolmentFormComponent implements EnrolmentForm {
 
   private buildEnrolmentFormFields() {
     const values = this.enrolmentForm.value.fields;
-    console.log(`THE FIELD LIST: ${JSON.stringify(this.fieldList)}`);
     return this.fieldList.map((field, index) => ({
       key: field.label,
       value: field.schema ? JSON.stringify(values[index]) : values[index],
