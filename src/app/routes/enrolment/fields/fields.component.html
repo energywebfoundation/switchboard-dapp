@@ -7,14 +7,20 @@
           {{ field?.key }}
         </div>
         <div class="text-container">
-          <span class="default-color mb-0" [attr.data-qa-id]="'field-list-value-' + i">
-            {{ field?.value }}
-          </span>
+          <ng-container *ngIf="isJsonString(field.value); else notJson">
+            <pre class="default-color">{{ parseToJson(field?.value) | json }}</pre>
+          </ng-container>
+          <ng-template #notJson>
+            <span class="default-color mb-0" [attr.data-qa-id]="'field-list-value-' + i">
+              {{ field?.value }}
+            </span>
+          </ng-template>
+
           <button
             mat-raised-button
-            class="btn btn-small btn btn-primary"
+            class="btn btn-small btn btn-primary ml-3"
             [attr.data-qa-id]="'field-list-merge-btn-' + i"
-            *ngIf="hasValidValue(field?.value) && isIssuerRequestView"
+            *ngIf="hasValidValue(field?.value) && showMergeButton"
             (click)="this.fieldToCopy.emit(field)">
             <img src="assets/img/icons/merge-button.svg" />
           </button>

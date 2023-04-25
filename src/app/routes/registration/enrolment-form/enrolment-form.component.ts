@@ -43,6 +43,8 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     fields: new FormArray([]),
   });
 
+  private ajv = new Ajv();
+
   @Input() showSubmit = true;
   @Input() namespaceRegistrationRoles: Set<RegistrationTypes>;
   get fieldList(): IFieldDefinition[] {
@@ -66,20 +68,31 @@ export class EnrolmentFormComponent implements EnrolmentForm {
   @Output() submitForm = new EventEmitter<EnrolmentSubmission>();
 
   private fields: IFieldDefinition[];
-  isValidSchema = true;
+  isValidSchema: Record<string, boolean> = {};
 
   constructor(private cdRef: ChangeDetectorRef) {}
 
-  createOptions(schema) {
+  createOptions(schema, label: string) {
     const jsonOptions = new JsonEditorOptions();
     jsonOptions.mode = 'code';
     jsonOptions.modes = ['tree', 'view', 'form', 'code'];
     jsonOptions.schema = schema;
+    jsonOptions.onChangeText = (text: string) => {
+      try {
+        this.checkSchema(schema, JSON.parse(text), label);
+      } catch (e) {
+        this.isValidSchema[label] = false;
+      }
+    };
     return jsonOptions;
   }
 
   isValid() {
-    return this.enrolmentForm.valid && this.isValidSchema;
+    return this.enrolmentForm.valid && this.areSchemasValid();
+  }
+
+  areSchemasValid() {
+    return Object.values(this.isValidSchema).every((v) => v);
   }
 
   updateFormFields(copyInput: Record<string, string | number>) {
@@ -121,18 +134,31 @@ export class EnrolmentFormComponent implements EnrolmentForm {
 
   private buildEnrolmentFormFields() {
     const values = this.enrolmentForm.value.fields;
-    return this.fieldList.map((field, index) => ({
-      key: field.label,
-      value: field.schema ? JSON.stringify(values[index]) : values[index],
-    }));
+    return this.fieldList.map((field: IFieldDefinition, index) => {
+      if (field.schema) {
+        this.checkSchema(field.schema, {}, field.label);
+        return {
+          key: field.label,
+          value: JSON.stringify(values[index]),
+        };
+      }
+
+      return {
+        key: field.label,
+        value: values[index],
+      };
+    });
   }
 
-  checkJson(e, schema: Schema): void {
+  checkJson(e: Event | unknown, schema: Schema, label: string): void {
     if (e instanceof Event) {
       return;
     }
-    const ajv = new Ajv();
-    this.isValidSchema = ajv.validate(schema, e) as boolean;
+    this.checkSchema(schema, e, label);
+  }
+
+  checkSchema(schema: Schema, data: unknown, label: string) {
+    this.isValidSchema[label] = this.ajv.validate(schema, data);
   }
 
   private updateEnrolmentForm(formArray: FormArray) {
@@ -147,10 +173,12 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     ] as FormControl;
   }
 
-  private createControls(list) {
-    return list.map((field) => {
+  private createControls(list: IFieldDefinition[]) {
+    return list.map((field: IFieldDefinition) => {
       this.setFieldDefaults(field);
-
+      if (field.schema) {
+        this.checkSchema(field.schema, {}, field.label);
+      }
       const control = new FormControl();
       control.setValidators(this.buildValidationOptions(field));
       return control;
@@ -178,7 +206,7 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     }
   }
 
-  private buildValidationOptions(field: any) {
+  private buildValidationOptions(field: IFieldDefinition) {
     const validations = [];
 
     if (field.required) {
