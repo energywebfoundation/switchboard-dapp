@@ -111,6 +111,9 @@ export class EnrolmentFormComponent implements EnrolmentForm {
     (this.enrolmentForm?.get('fields') as FormArray)?.controls[
       fieldListItemIndex
     ].setValue(valueToSet);
+    if (fieldListItem.fieldType === 'json') {
+      this.checkSchema(fieldListItem.schema, valueToSet, fieldListItem.label);
+    }
   }
 
   fieldsData(): KeyValue<string, string>[] {
