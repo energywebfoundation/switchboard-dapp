@@ -7,6 +7,7 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { GovernanceViewComponent } from '../governance-view.component';
 import { FieldsDetailsComponent } from './fields-details/fields-details.component';
 import { DefaultValueModule } from '../../pipes/default-value.module';
+import { JsonEditorModule } from '@modules';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { DefaultValueModule } from '../../pipes/default-value.module';
     MatDividerModule,
     MatInputModule,
     DefaultValueModule,
+    JsonEditorModule,
   ],
   exports: [GovernanceDetailsComponent, GovernanceViewComponent],
 })
