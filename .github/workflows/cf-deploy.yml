@@ -115,3 +115,24 @@ jobs:
           -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.ACCESS_TOKEN }} \
           --data '{"event_type": "ping", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+      # Deployment to extra Cloudfront/S3 for gp4btc.org domain 
+      - name: Configure AWS credentials for GP4BTC Switchboard CLONE
+        uses: aws-actions/configure-aws-credentials@v1
+        if: ${{ steps.env_vars.outputs.env_name == 'gp4btc-prod' }}
+        with:
+          aws-access-key-id: ${{ secrets.GP4BTC_SWITCHBOARD_CLONE_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.GP4BTC_SWITCHBOARD_CLONE_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Clear GP4BTC Switchboard CLONE bucket
+        if: ${{ steps.env_vars.outputs.env_name == 'gp4btc-prod' }}
+        run: |
+          aws s3 rm s3://${{ secrets.GP4BTC_SWITCHBOARD_CLONE_BUCKET_NAME }} --recursive
+      - name: Upload to GP4BTC Switchboard CLONE bucket
+        if: ${{ steps.env_vars.outputs.env_name == 'gp4btc-prod' }}
+        run: |
+          aws s3 cp dist/apps/gp4btc-miner-ui s3://${{ secrets.GP4BTC_SWITCHBOARD_CLONE_BUCKET_NAME }} --recursive
+      - name: Invalidate GP4BTC Switchboard CLONE CloudFront # cloudfront caches s3 content so after each deployment, it needs to be cleared.
+        if: ${{ steps.env_vars.outputs.env_name == 'gp4btc-prod' }}
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.GP4BTC_SWITCHBOARD_CLONE_CLOUDFRONT_ID }} --paths "/*"
+          
