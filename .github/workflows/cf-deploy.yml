@@ -115,7 +115,7 @@ jobs:
           -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.ACCESS_TOKEN }} \
           --data '{"event_type": "ping", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
-      # Deployment to extra Cloudfront/S3 for gp4btc.org domain 
+      # Deployment to Cloudfront/S3 for gp4btc.org domain 
       - name: Configure AWS credentials for gp4btc.org Switchboard
         uses: aws-actions/configure-aws-credentials@v1
         if: ${{ steps.env_vars.outputs.env_name == 'gp4btc-prod' }}
