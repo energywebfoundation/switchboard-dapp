@@ -252,20 +252,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
       return;
     }
     this.loadingService.show();
-
-    let issuerDids = [];
-    if (enrolForm.registrationTypes.includes(RegistrationTypes.OffChain)) {
-      issuerDids = await this.getIssuerDid();
-      if (!(issuerDids && issuerDids.length > 0)) {
-        this.toastr.error(
-          'Cannot identify issuer for this role.',
-          TOASTR_HEADER
-        );
-        this.loadingService.hide();
-        return;
-      }
-    }
-
     this.submitting = true;
     this.loadingService.show(
       'Please confirm this transaction in your connected wallet.'
@@ -273,7 +259,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
     try {
       await this.iamService.claimsService.createClaimRequest({
-        issuer: issuerDids,
         claim: this.createClaim(enrolForm.fields),
         subject: this.roleTypeForm.value.assetDid
           ? this.roleTypeForm.value.assetDid
@@ -296,19 +281,6 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     }
 
     this.loadingService.hide();
-  }
-
-  private async getIssuerDid(): Promise<string[]> {
-    if (this.selectedRole.issuer) {
-      if (this.selectedRole.issuer.roleName) {
-        // Retrieve list of issuers by roleName
-        return await this.iamService.domainsService.getDIDsByRole(
-          this.selectedRole.issuer.roleName
-        );
-      } else if (this.selectedRole.issuer.did) {
-        return this.selectedRole.issuer.did;
-      }
-    }
   }
 
   goToEnrolment() {

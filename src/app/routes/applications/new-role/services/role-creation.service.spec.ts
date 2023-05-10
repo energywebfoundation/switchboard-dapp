@@ -13,7 +13,6 @@ describe('RoleCreationService', () => {
   const domainsFacadeServiceSpy = jasmine.createSpyObj(DomainsFacadeService, [
     'isOwner',
     'checkExistenceOfDomain',
-    'getDIDsByRole',
   ]);
   let toastrSpy;
   beforeEach(() => {
