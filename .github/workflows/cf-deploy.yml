@@ -120,8 +120,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         if: ${{ steps.env_vars.outputs.env_name == 'gp4btc-prod' }}
         with:
-          aws-access-key-id: ${{ secrets.GP4BTC_SWITCHBOARD_CLONE_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.GP4BTC_SWITCHBOARD_CLONE_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.GP4BTC_DOMAIN_SWITCHBOARD_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.GP4BTC_DOMAIN_SWITCHBOARD_CLONE_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Clear GP4BTC Switchboard CLONE bucket
         if: ${{ steps.env_vars.outputs.env_name == 'gp4btc-prod' }}
