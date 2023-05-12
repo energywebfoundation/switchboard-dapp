@@ -264,7 +264,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
           ? this.roleTypeForm.value.assetDid
           : undefined,
         registrationTypes: enrolForm.registrationTypes,
-      } as any);
+      });
 
       this.displayAlert(
         'Request to enrol as ' +
