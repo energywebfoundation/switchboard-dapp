@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subject } from 'rxjs';
+import { from, Subject } from 'rxjs';
 
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
 import { ListType } from '../../shared/constants/shared-constants';
@@ -138,11 +138,14 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.store.dispatch(OrganizationActions.createSubForParent());
   }
 
-  async ngOnInit() {
-    this.isIamEwcOwner = await this.iamService.domainsService.isOwner({
-      domain: this.envService.rootNamespace,
-    });
-    this.orgRequestButtonText = this.envService.production
+  ngOnInit() {
+    from(
+      this.iamService.domainsService.isOwner({
+        domain: this.envService.rootNamespace,
+      })
+    ).subscribe({ next: (isOwner) => (this.isIamEwcOwner = isOwner) });
+
+    this.orgRequestButtonText = this.envService.orgRequestEmail
       ? 'Request to Create Organization'
       : 'Create Organization';
   }
