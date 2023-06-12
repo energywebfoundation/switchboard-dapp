@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConnectToWalletDialogComponent } from './connect-to-wallet-dialog/connect-to-wallet-dialog.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { ConnectButtonsComponent } from './connect-buttons/connect-buttons.component';
 import { MatIconModule } from '@angular/material/icon';
 import { EkcSettingsComponent } from './ekc-settings/ekc-settings.component';
-import { MatInputModule } from '@angular/material/input';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({

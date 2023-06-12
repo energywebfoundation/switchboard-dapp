@@ -2,7 +2,10 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SelectAssetDialogComponent } from './select-asset-dialog.component';
 import { DialogDataMock, getElementByCss } from '@tests';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { OwnedAssetsActions, OwnedAssetsSelectors } from '@state';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';

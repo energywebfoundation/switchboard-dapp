@@ -3,12 +3,15 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NewIssueVcComponent } from './new-issue-vc.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IssuanceVcService } from '../services/issuance-vc.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
+import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { MatInputModule } from '@angular/material/input';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { dialogSpy, dispatchInputEvent, getElement } from '@tests';
 import { of } from 'rxjs';

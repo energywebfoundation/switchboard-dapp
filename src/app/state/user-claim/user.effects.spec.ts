@@ -6,11 +6,11 @@ import { UserEffects } from './user.effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { LoadingService } from '../../shared/services/loading.service';
 import { IamService } from '../../shared/services/iam.service';
-import { MatDialog } from '@angular/material/dialog';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ToastrService } from 'ngx-toastr';
-import { dialogSpy, iamServiceSpy, loadingServiceSpy, toastrSpy } from '@tests';
+import { iamServiceSpy, loadingServiceSpy } from '@tests';
 import * as UserClaimActions from './user.actions';
+import { skip, take } from 'rxjs/operators';
+import { OwnedEnrolmentsActions, RequestedEnrolmentsActions } from '@state';
 
 describe('UserEffects', () => {
   let actions$: ReplaySubject<any>;
@@ -22,8 +22,6 @@ describe('UserEffects', () => {
         UserEffects,
         { provide: IamService, useValue: iamServiceSpy },
         { provide: LoadingService, useValue: loadingServiceSpy },
-        { provide: MatDialog, useValue: dialogSpy },
-        { provide: ToastrService, useValue: toastrSpy },
         provideMockStore(),
         provideMockActions(() => actions$),
       ],
@@ -71,13 +69,32 @@ describe('UserEffects', () => {
       actions$ = new ReplaySubject(1);
     });
 
+    it('should call for owned and requested enrolments', (done) => {
+      actions$.next(UserClaimActions.loadUserClaimsSuccess({ userClaims: [] }));
+
+      effects.getUserProfile$
+        .pipe(skip(1), take(1))
+        .subscribe((resultAction) => {
+          expect(resultAction).toEqual(
+            RequestedEnrolmentsActions.getEnrolmentRequests()
+          );
+        });
+
+      effects.getUserProfile$.pipe(take(1)).subscribe((resultAction) => {
+        expect(resultAction).toEqual(
+          OwnedEnrolmentsActions.getOwnedEnrolments()
+        );
+      });
+      done();
+    });
+
     it('should return empty object as a profile when passing empty list', (done) => {
       const claims = [];
       actions$.next(
         UserClaimActions.loadUserClaimsSuccess({ userClaims: claims })
       );
 
-      effects.getUserProfile$.subscribe((resultAction) => {
+      effects.getUserProfile$.pipe(skip(2)).subscribe((resultAction) => {
         expect(resultAction).toEqual(
           UserClaimActions.setProfile({ profile: {} })
         );
@@ -95,7 +112,7 @@ describe('UserEffects', () => {
         UserClaimActions.loadUserClaimsSuccess({ userClaims: claims } as any)
       );
 
-      effects.getUserProfile$.subscribe((resultAction) => {
+      effects.getUserProfile$.pipe(skip(2)).subscribe((resultAction) => {
         expect(resultAction).toEqual(
           UserClaimActions.setProfile({ profile: {} })
         );
@@ -130,7 +147,7 @@ describe('UserEffects', () => {
         UserClaimActions.loadUserClaimsSuccess({ userClaims: claims } as any)
       );
 
-      effects.getUserProfile$.subscribe((resultAction) => {
+      effects.getUserProfile$.pipe(skip(2)).subscribe((resultAction) => {
         expect(resultAction).toEqual(UserClaimActions.setProfile({ profile }));
         done();
       });
@@ -178,7 +195,7 @@ describe('UserEffects', () => {
         UserClaimActions.loadUserClaimsSuccess({ userClaims: claims } as any)
       );
 
-      effects.getUserProfile$.subscribe((resultAction) => {
+      effects.getUserProfile$.pipe(skip(2)).subscribe((resultAction) => {
         expect(resultAction).toEqual(
           UserClaimActions.setProfile({ profile: firstClaim.profile } as any)
         );

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ViewType } from '../../new-organization/new-organization.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { NewRoleComponent } from '../../new-role/new-role.component';
 import { IRole } from 'iam-client-lib';
 import { ActionBaseAbstract } from '../action-base.abstract';

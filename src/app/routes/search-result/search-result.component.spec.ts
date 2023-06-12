@@ -9,6 +9,7 @@ import { IamService } from '../../shared/services/iam.service';
 import { of } from 'rxjs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { provideMockStore } from '@ngrx/store/testing';
+
 const loadingServiceSpy = jasmine.createSpyObj(['show', 'hide']);
 
 describe('SearchResultComponent', () => {

@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { QrCodeScannerService } from './qr-code-scanner.service';
 import { DidBookService } from '../../../../modules/did-book/services/did-book.service';
 import { SwitchboardToastrService } from '../../../services/switchboard-toastr.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ScanType } from '../models/scan-type.enum';
 
 describe('QrCodeScannerService', () => {

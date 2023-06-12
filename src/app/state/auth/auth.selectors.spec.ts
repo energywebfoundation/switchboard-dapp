@@ -1,6 +1,6 @@
 import * as authSelectors from './auth.selectors';
-import { ProviderType } from 'iam-client-lib';
 import { ChainId } from '../../core/config/chain-id';
+import { AuthState } from './auth.reducer';
 
 describe('Auth Selectors', () => {
   describe('isMetamaskDisabled', () => {
@@ -9,7 +9,7 @@ describe('Auth Selectors', () => {
         authSelectors.isMetamaskDisabled.projector({
           metamask: { chainId: undefined },
           defaultChainId: undefined,
-        })
+        } as AuthState)
       ).toBeFalsy();
     });
 
@@ -18,7 +18,7 @@ describe('Auth Selectors', () => {
         authSelectors.isMetamaskDisabled.projector({
           metamask: { chainId: 123 },
           defaultChainId: 1,
-        })
+        } as AuthState)
       ).toBeTruthy();
     });
 
@@ -27,7 +27,7 @@ describe('Auth Selectors', () => {
         authSelectors.isMetamaskDisabled.projector({
           metamask: { chainId: ChainId.Volta },
           defaultChainId: ChainId.Volta,
-        })
+        } as AuthState)
       ).toBeFalsy();
     });
   });
@@ -37,7 +37,7 @@ describe('Auth Selectors', () => {
       expect(
         authSelectors.isMetamaskPresent.projector({
           metamask: { present: false },
-        })
+        } as AuthState)
       ).toBeFalsy();
     });
 
@@ -45,7 +45,7 @@ describe('Auth Selectors', () => {
       expect(
         authSelectors.isMetamaskPresent.projector({
           metamask: { present: true },
-        })
+        } as AuthState)
       ).toBeTruthy();
     });
   });
@@ -53,13 +53,13 @@ describe('Auth Selectors', () => {
   describe('isUserLoggedIn', () => {
     it('should return false when user is not loggedIn', () => {
       expect(
-        authSelectors.isUserLoggedIn.projector({ loggedIn: false })
+        authSelectors.isUserLoggedIn.projector({ loggedIn: false } as AuthState)
       ).toBeFalsy();
     });
 
     it('should return true when user is logged in', () => {
       expect(
-        authSelectors.isUserLoggedIn.projector({ loggedIn: true })
+        authSelectors.isUserLoggedIn.projector({ loggedIn: true } as AuthState)
       ).toBeTruthy();
     });
   });

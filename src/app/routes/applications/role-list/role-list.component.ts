@@ -7,19 +7,18 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Subject } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { FormBuilder } from '@angular/forms';
 import { GovernanceViewComponent } from '../governance-view/governance-view.component';
 import { ListType } from 'src/app/shared/constants/shared-constants';
 import { RoleType } from '../new-role/new-role.component';
 import { Store } from '@ngrx/store';
 import { RoleActions, RoleSelectors } from '@state';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { EnvService } from '../../../shared/services/env/env.service';
 import { CascadingFilterService } from '@modules';
-import { DomainUtils } from '@utils';
 
 @Component({
   selector: 'app-role-list',

@@ -2,22 +2,15 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlParamService } from '../../shared/services/url-param.service';
-import { MatTabGroup } from '@angular/material/tabs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { NewIssueVcComponent } from '../../modules/issue-vc/new-issue-vc/new-issue-vc.component';
 import { Store } from '@ngrx/store';
-import {
-  OwnedEnrolmentsActions,
-  OwnedEnrolmentsSelectors,
-  RequestedEnrolmentsActions,
-  RequestedEnrolmentsSelectors,
-  RevocableEnrolmentsActions,
-  RevocableEnrolmentsSelectors,
-  SettingsSelectors,
-} from '@state';
+import { EnrolmentsFacadeService, SettingsSelectors } from '@state';
 import { IssuanceVcService } from '../../modules/issue-vc/services/issuance-vc.service';
 import { filter } from 'rxjs/operators';
 import { FilterStatus } from './enrolment-list/models/filter-status.enum';
+import { EnrolmentClaim } from './models/enrolment-claim';
 
 @Component({
   selector: 'app-enrolment',
@@ -26,15 +19,10 @@ import { FilterStatus } from './enrolment-list/models/filter-status.enum';
 })
 export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
-  myEnrolmentList$ = this.store.select(OwnedEnrolmentsSelectors.getEnrolments);
-  requestedEnrolmentsList$ = this.store.select(
-    RequestedEnrolmentsSelectors.getAllEnrolments
-  );
+  myEnrolmentList$ = this.enrolmentFacade.ownedList$;
+  requestedEnrolmentsList$ = this.enrolmentFacade.requestedList$;
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
-  revocableList$ = this.store.select(
-    RevocableEnrolmentsSelectors.getEnrolments
-  );
-  isMyEnrolmentShown = false;
+  revocableList$ = this.enrolmentFacade.revokableList$;
   enrolmentStatus: FilterStatus = FilterStatus.Pending;
 
   private _queryParamSelectedTabInit = false;
@@ -49,13 +37,11 @@ export class EnrolmentComponent implements AfterViewInit {
     private router: Router,
     private dialog: MatDialog,
     private store: Store,
-    private issuanceVCService: IssuanceVcService
+    private issuanceVCService: IssuanceVcService,
+    private enrolmentFacade: EnrolmentsFacadeService
   ) {}
 
   ngAfterViewInit(): void {
-    this.initDefault();
-    this.getRevocableList();
-    this.getOwnedList();
     this.activeRoute.queryParams
       .pipe(filter((queryParams) => !!queryParams))
       .subscribe(async (queryParams: any) => {
@@ -101,37 +87,26 @@ export class EnrolmentComponent implements AfterViewInit {
       },
       ['notif']
     );
-
-    if (i.index === 1) {
-      if (this.isMyEnrolmentShown) {
-        this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
-      } else {
-        this.isMyEnrolmentShown = true;
-      }
-    } else if (i.index === 0) {
-      this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
-    } else {
-      this.store.dispatch(
-        RevocableEnrolmentsActions.updateRevocableEnrolments()
-      );
-      //this.isMyEnrolmentShown = true;
-    }
   }
 
   updateEnrolmentListStatus(value: FilterStatus): void {
     this.enrolmentStatus = value;
   }
 
-  refreshIssuerList() {
-    this.store.dispatch(RequestedEnrolmentsActions.updateEnrolmentRequests());
+  refreshIssuerList(enrolment: EnrolmentClaim) {
+    this.enrolmentFacade.update(enrolment.id);
   }
 
-  refreshMyEnrolmentsList(): void {
-    this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
+  refreshMyEnrolmentsList(enrolment: EnrolmentClaim): void {
+    this.enrolmentFacade.update(enrolment.id);
   }
 
-  refreshRevocableList(): void {
-    this.store.dispatch(RevocableEnrolmentsActions.updateRevocableEnrolments());
+  removeEnrolment(enrolment: EnrolmentClaim): void {
+    this.enrolmentFacade.remove(enrolment.id);
+  }
+
+  refreshRevocableList(enrolment: EnrolmentClaim): void {
+    this.enrolmentFacade.updateRevokable(enrolment.id);
   }
 
   createVC() {
@@ -142,7 +117,7 @@ export class EnrolmentComponent implements AfterViewInit {
     });
   }
 
-  private initDefault(index?: number) {
+  private initDefault(index?: number): void {
     if (!this._queryParamSelectedTabInit) {
       this.asyncSetDropdownValue(FilterStatus.Pending);
     }
@@ -166,13 +141,5 @@ export class EnrolmentComponent implements AfterViewInit {
 
   private asyncSetDropdownValue(value: FilterStatus) {
     this.updateEnrolmentListStatus(value);
-  }
-
-  private getRevocableList(): void {
-    this.store.dispatch(RevocableEnrolmentsActions.getRevocableEnrolments());
-  }
-
-  private getOwnedList(): void {
-    this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
   }
 }

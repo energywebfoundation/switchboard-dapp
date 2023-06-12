@@ -3,20 +3,12 @@ import { EnrolmentClaim } from 'src/app/routes/enrolment/models/enrolment-claim'
 import * as RequestedSelectors from './requested.selectors';
 
 describe('Requested Enrolments Selectors', () => {
-  describe('getEnrolments', () => {
-    const asset: any = {
-      subject: 'subject',
-      claimType: 'claimType',
-      requester: 'requester',
-    };
-  });
-
   describe('getPendingEnrolmentsAmount', () => {
     it('should return 0 when all enrolments are accepted', () => {
       expect(
         RequestedSelectors.getPendingEnrolmentsAmount.projector([
           { isAccepted: true, isRejected: false },
-        ])
+        ] as EnrolmentClaim[])
       ).toEqual(0);
     });
 
@@ -24,7 +16,7 @@ describe('Requested Enrolments Selectors', () => {
       expect(
         RequestedSelectors.getPendingEnrolmentsAmount.projector([
           { isAccepted: false, isRejected: true },
-        ])
+        ] as EnrolmentClaim[])
       ).toEqual(0);
     });
 
@@ -37,6 +29,14 @@ describe('Requested Enrolments Selectors', () => {
           } as Claim),
         ])
       ).toEqual(1);
+    });
+  });
+
+  describe('getAllEnrolments', () => {
+    it('should return default state', () => {
+      expect(
+        RequestedSelectors.getAllEnrolments.projector({ enrolments: [] })
+      ).toEqual([]);
     });
   });
 });

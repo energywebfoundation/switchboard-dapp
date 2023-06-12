@@ -16,7 +16,7 @@ export const environment = {
   rootNamespace: 'iam.ewc',
 
   fullNetworkName: 'EnergyWeb Volta Chain',
-  networkName: 'EnergyWeb Volta Chain',
+  networkName: 'Volta',
   currencyName: 'Volta Token',
   currencySymbol: 'VT',
   blockExplorerUrl: 'https://volta-explorer.energyweb.org',

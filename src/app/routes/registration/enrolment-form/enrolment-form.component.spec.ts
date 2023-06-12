@@ -1,18 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EnrolmentFormComponent } from './enrolment-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormArray, ReactiveFormsModule } from '@angular/forms';
+import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
+import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { RegistrationTypes } from 'iam-client-lib';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { dispatchInputEvent } from '@tests';
+import { dispatchInputEvent, getElementByCss } from '@tests';
+import { FieldTypesEnum } from '../../applications/new-role/components/field-form/field-form.enum';
+import { JsonEditorModule } from '@modules';
 
 describe('EnrolmentFormComponent', () => {
   let component: EnrolmentFormComponent;
@@ -34,6 +36,7 @@ describe('EnrolmentFormComponent', () => {
         MatDatepickerModule,
         MatNativeDateModule,
         NoopAnimationsModule,
+        JsonEditorModule,
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -284,7 +287,7 @@ describe('EnrolmentFormComponent', () => {
   it('should have enabled submit button when registration types are removed and elements from fieldList are filled', () => {
     component.fieldList = [
       {
-        fieldType: 'number',
+        fieldType: FieldTypesEnum.Number,
         label: 'label',
         maxValue: 10,
         minValue: 2,
@@ -301,6 +304,123 @@ describe('EnrolmentFormComponent', () => {
 
     const { submit } = getSelectors(hostDebug);
     expect(submit.nativeElement.disabled).toBeFalse();
+  });
+
+  it('should use json editor when fieldType is json', () => {
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Json,
+        label: 'label',
+        maxValue: 10,
+        minValue: 2,
+        required: true,
+      },
+    ];
+
+    const jsonEditor =
+      getElementByCss(hostDebug)('app-json-editor')?.nativeElement;
+    expect(jsonEditor).toBeTruthy();
+  });
+
+  it('should emit stringified json', () => {
+    const submitDataSpy = spyOn(component.submitForm, 'emit');
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Json,
+        label: 'label 1',
+        required: true,
+        schema: { type: 'object' },
+      },
+      {
+        fieldType: FieldTypesEnum.Json,
+        label: 'label 2',
+        required: true,
+        schema: { type: 'object' },
+      },
+    ];
+
+    fixture.detectChanges();
+
+    component.getControl(0).setValue({ a: 'b' });
+    component.getControl(1).setValue({ b: 'c', d: { e: 2 } });
+
+    component.submit();
+
+    expect(submitDataSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        fields: [
+          { key: 'label 1', value: JSON.stringify({ a: 'b' }) },
+          { key: 'label 2', value: JSON.stringify({ b: 'c', d: { e: 2 } }) },
+        ],
+      })
+    );
+  });
+
+  it('should call the updateFormFields method if there is copied input', () => {
+    const updateFormSpy = spyOn(component, 'updateFormFields');
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Text,
+        label: 'label 1',
+        required: true,
+      },
+    ];
+
+    component.toCopy = { 'label 1': 'The label' };
+
+    fixture.detectChanges();
+    expect(updateFormSpy).toHaveBeenCalled();
+  });
+
+  it('should update the appropriate form field with the copied input provided', () => {
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Text,
+        label: 'label 1',
+        required: true,
+      },
+    ];
+
+    component.toCopy = { 'label 1': 'The label' };
+
+    fixture.detectChanges();
+    const formValue = (component.enrolmentForm?.get('fields') as FormArray)
+      ?.controls[0];
+    expect(formValue.value).toEqual('The label');
+  });
+
+  it('should not update the form field if the copied input does not match the label', () => {
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Text,
+        label: 'label 1',
+        required: true,
+      },
+    ];
+
+    component.toCopy = { 'label 2': 'The label' };
+
+    fixture.detectChanges();
+    const formValue = (component.enrolmentForm?.get('fields') as FormArray)
+      ?.controls[0];
+    expect(formValue.value).toBeFalsy();
+  });
+
+  it('should not update the form field if passed object is empty', () => {
+    component.fieldList = [
+      {
+        fieldType: FieldTypesEnum.Text,
+        label: 'label 1',
+        required: true,
+      },
+    ];
+
+    component.toCopy = {};
+
+    fixture.detectChanges();
+    const formValue = (component.enrolmentForm?.get('fields') as FormArray)
+      ?.controls[0];
+    expect(formValue.value).toBeFalsy();
   });
 });
 

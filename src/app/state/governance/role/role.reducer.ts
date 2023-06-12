@@ -1,8 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as RoleActions from './role.actions';
-import { filterBy } from '../utils/filter-by/filter-by';
 import { IRole } from 'iam-client-lib';
-import { Filters } from '../models/filters';
 
 export const USER_FEATURE_KEY = 'role';
 

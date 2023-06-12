@@ -7,14 +7,7 @@ export const getRevokableState = createSelector(
   (state) => state && state[USER_FEATURE_KEY]
 );
 
-export const getAllRevokableEnrolments = createSelector(
+export const getAllEnrolments = createSelector(
   getRevokableState,
   (state) => state.enrolments
-);
-
-export const getEnrolments = createSelector(
-  getAllRevokableEnrolments,
-  (allEnrolments) => {
-    return allEnrolments;
-  }
 );

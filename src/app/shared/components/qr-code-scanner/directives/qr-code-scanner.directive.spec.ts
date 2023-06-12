@@ -1,6 +1,6 @@
 import { QrCodeScannerDirective } from './qr-code-scanner.directive';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { dialogSpy, getElement } from '@tests';
 import { Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';

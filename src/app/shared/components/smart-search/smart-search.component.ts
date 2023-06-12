@@ -14,7 +14,7 @@ import { truthy } from '@operators';
 import { SmartSearchService } from './services/smart-search.service';
 import { SmartSearchType } from './models/smart-search-type.enum';
 import { IApp, IRole, SearchType } from 'iam-client-lib';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete/autocomplete';
+import { MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent } from '@angular/material/legacy-autocomplete';
 import { IOrganization } from 'iam-client-lib/dist/src/modules/domains/domains.types';
 
 @Component({

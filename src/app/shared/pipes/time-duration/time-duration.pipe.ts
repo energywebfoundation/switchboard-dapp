@@ -7,7 +7,7 @@ import { ParseTimestampResult, Timestamp } from './timestamp';
 export class TimeDurationPipe implements PipeTransform {
   private readonly defaultText = '---';
 
-  transform(value: ParseTimestampResult | number): string {
+  transform(value: Partial<ParseTimestampResult> | number): string {
     if (!value || +value < 0) {
       return this.defaultText;
     }
@@ -20,7 +20,7 @@ export class TimeDurationPipe implements PipeTransform {
     return this.createMessage(value);
   }
 
-  private createMessage(value: ParseTimestampResult): string {
+  private createMessage(value: Partial<ParseTimestampResult>): string {
     const validValues = this.getValidValues(value);
 
     if (validValues.length === 0) {
@@ -36,7 +36,7 @@ export class TimeDurationPipe implements PipeTransform {
     )}`;
   }
 
-  private getValidValues(value: ParseTimestampResult): string[] {
+  private getValidValues(value: Partial<ParseTimestampResult>): string[] {
     const { years, days, hours, minutes, seconds } = value;
     return [
       this.mapToString(years, 'year'),

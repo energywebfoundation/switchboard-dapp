@@ -10,7 +10,7 @@ describe('Owned Enrolments Selectors', () => {
           {
             isAccepted: false,
           },
-        ])
+        ] as EnrolmentClaim[])
       ).toEqual(0);
     });
 
@@ -21,7 +21,7 @@ describe('Owned Enrolments Selectors', () => {
             isAccepted: true,
             isSynced: true,
           },
-        ])
+        ] as EnrolmentClaim[])
       ).toEqual(0);
     });
 
@@ -46,6 +46,14 @@ describe('Owned Enrolments Selectors', () => {
           } as Claim).setIsSyncedOffChain(false),
         ])
       ).toEqual(1);
+    });
+  });
+
+  describe('getAllEnrolments', () => {
+    it('should return default state', () => {
+      expect(
+        OwnedSelectors.getAllEnrolments.projector({ enrolments: [] })
+      ).toEqual([]);
     });
   });
 });

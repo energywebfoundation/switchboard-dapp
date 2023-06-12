@@ -3,6 +3,7 @@ import { IamService } from '../iam.service';
 import { AssetHistoryEventType, ClaimEventType } from 'iam-client-lib';
 import { SwitchboardToastrService } from '../switchboard-toastr.service';
 import { NotificationService } from '../notification.service';
+import { EnrolmentsFacadeService } from '@state';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,8 @@ export class MessageSubscriptionService implements OnDestroy {
   constructor(
     private iamService: IamService,
     private toastr: SwitchboardToastrService,
-    private notifService: NotificationService
+    private notifService: NotificationService,
+    private enrolmentsFacade: EnrolmentsFacadeService
   ) {}
 
   ngOnDestroy() {
@@ -27,10 +29,11 @@ export class MessageSubscriptionService implements OnDestroy {
 
   private handleMessage(message: {
     type: ClaimEventType & AssetHistoryEventType;
+    claimId: string;
   }) {
     if (message.type) {
       this.handleAssetEvents(message.type);
-      this.handleClaimEvents(message.type);
+      this.handleClaimEvents(message.type, message.claimId);
     }
   }
 
@@ -62,17 +65,17 @@ export class MessageSubscriptionService implements OnDestroy {
     }
   }
 
-  private handleClaimEvents(type: ClaimEventType) {
+  private handleClaimEvents(type: ClaimEventType, claimId: string) {
     switch (type) {
       case ClaimEventType.REQUEST_CREDENTIALS:
-        this.notifService.updatePendingApprovalList();
+        this.updateEnrolmentLists(claimId);
         this.toastr.info(
           'A new enrolment request is waiting for your approval.',
           'New Enrolment Request'
         );
         break;
       case ClaimEventType.ISSUE_CREDENTIAL:
-        this.notifService.updatePendingPublishList();
+        this.updateEnrolmentLists(claimId);
         this.toastr.info(
           'Your enrolment request is approved. ' +
             'Please sync your approved claims in your DID Document.',
@@ -80,12 +83,22 @@ export class MessageSubscriptionService implements OnDestroy {
         );
         break;
       case ClaimEventType.REJECT_CREDENTIAL:
-        this.notifService.updatePendingApprovalList();
+        this.updateEnrolmentLists(claimId);
         this.toastr.warning(
           'Your enrolment request is rejected.',
           'New Enrolment Request'
         );
         break;
     }
+  }
+
+  /**
+   * Update enrolment lists in the store. User might enrol for a role, that is an issuer.
+   * The safest is to update both lists.
+   * @param claimId
+   * @private
+   */
+  private updateEnrolmentLists(claimId: string) {
+    this.enrolmentsFacade.update(claimId);
   }
 }

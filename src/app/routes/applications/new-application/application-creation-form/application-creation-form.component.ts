@@ -115,7 +115,7 @@ export class ApplicationCreationFormComponent
           : undefined,
       },
       ...this.appForm.value,
-    });
+    } as AppCreationDefinition);
   }
 
   cancelHandler() {

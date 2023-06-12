@@ -1,9 +1,9 @@
 // Stedin Theme
 
 // Bootstrap
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-@import '~bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
 @import '../app/variables';
 @import '../app/material/colors';
 @import './preloader';
@@ -205,6 +205,10 @@ $preloader-bg: #ffd100;
   --slide-toggle-thumb-checked: #ffd100;
   --slide-toggle-bar-bg: #ffffff;
   --slide-toggle-content-color: #97999b;
+
+  --json-editor-menu-bg: #ffd100;
+  --json-editor-text-color: #ffffff;
+  --json-editor-object-text-color: #ffffff;
 }
 
 .img-dashboard,

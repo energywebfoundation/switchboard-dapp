@@ -1,7 +1,7 @@
 // Bootstrap
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-@import '~bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
 @import '../app/variables';
 @import '../app/material/colors';
 @import './preloader';
@@ -52,6 +52,10 @@ $preloader-bg: #181423;
   --input-color-disabled: rgba(255, 255, 255, 0.4);
   --search-input-color: #ffffff;
   --default-link-color: #33cbcb;
+
+  --json-editor-menu-bg: #2a2837;
+  --json-editor-text-color: #ffffff;
+  --json-editor-object-text-color: #ffffff;
 
   --list-group-item: #2a2a37;
 

@@ -7,15 +7,18 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subject } from 'rxjs';
+import { from, Subject } from 'rxjs';
 
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
 import { ListType } from '../../shared/constants/shared-constants';
 import { IamService } from '../../shared/services/iam.service';
 import { UrlParamService } from '../../shared/services/url-param.service';
 import { takeUntil } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTabGroup } from '@angular/material/tabs';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyTabChangeEvent as MatTabChangeEvent,
+  MatLegacyTabGroup as MatTabGroup,
+} from '@angular/material/legacy-tabs';
 import { Store } from '@ngrx/store';
 import {
   OrganizationActions,
@@ -25,7 +28,6 @@ import {
 import { OrganizationListComponent } from './organization-list/organization-list.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { RoleListComponent } from './role-list/role-list.component';
-import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
 import { EnvService } from '../../shared/services/env/env.service';
 import { RouterConst } from '../router-const';
 
@@ -136,11 +138,14 @@ export class ApplicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.store.dispatch(OrganizationActions.createSubForParent());
   }
 
-  async ngOnInit() {
-    this.isIamEwcOwner = await this.iamService.domainsService.isOwner({
-      domain: this.envService.rootNamespace,
-    });
-    this.orgRequestButtonText = this.envService.production
+  ngOnInit() {
+    from(
+      this.iamService.domainsService.isOwner({
+        domain: this.envService.rootNamespace,
+      })
+    ).subscribe({ next: (isOwner) => (this.isIamEwcOwner = isOwner) });
+
+    this.orgRequestButtonText = this.envService.orgRequestEmail
       ? 'Request to Create Organization'
       : 'Create Organization';
   }

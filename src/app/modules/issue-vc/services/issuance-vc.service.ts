@@ -16,7 +16,9 @@ export class IssuanceVcService {
   constructor(
     private iamService: IamService,
     private loadingService: LoadingService
-  ) {
+  ) {}
+
+  init() {
     this.getAllowedRoles();
   }
 

@@ -14,10 +14,9 @@ import { mapClaimsProfile } from '@operators';
 import { Profile } from 'iam-client-lib';
 import { LoadingService } from '../../shared/services/loading.service';
 import { Store } from '@ngrx/store';
-import { MatDialog } from '@angular/material/dialog';
 import { UserClaimState } from './user.reducer';
-import { ToastrService } from 'ngx-toastr';
 import * as UserClaimActions from './user.actions';
+import { OwnedEnrolmentsActions, RequestedEnrolmentsActions } from '@state';
 
 @Injectable()
 export class UserEffects {
@@ -44,7 +43,11 @@ export class UserEffects {
       ofType(UserClaimActions.loadUserClaimsSuccess),
       map((userClaimsAction) => userClaimsAction.userClaims),
       mapClaimsProfile(),
-      map((profile: Profile) => UserClaimActions.setProfile({ profile }))
+      mergeMap((profile: Profile) => [
+        OwnedEnrolmentsActions.getOwnedEnrolments(),
+        RequestedEnrolmentsActions.getEnrolmentRequests(),
+        UserClaimActions.setProfile({ profile }),
+      ])
     )
   );
 
@@ -64,26 +67,10 @@ export class UserEffects {
     )
   );
 
-  private mergeProfiles(
-    oldProfile: Partial<Profile>,
-    newProfile: Partial<Profile>
-  ): Partial<Profile> {
-    return {
-      ...oldProfile,
-      ...newProfile,
-      assetProfiles: {
-        ...oldProfile?.assetProfiles,
-        ...newProfile?.assetProfiles,
-      },
-    };
-  }
-
   constructor(
     private actions$: Actions,
     private store: Store<UserClaimState>,
     private iamService: IamService,
-    private loadingService: LoadingService,
-    private toastr: ToastrService,
-    private dialog: MatDialog
+    private loadingService: LoadingService
   ) {}
 }

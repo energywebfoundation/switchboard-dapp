@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { UserNotificationsComponent } from './user-notifications.component';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 

@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { EnrolmentClaim } from '../../../../models/enrolment-claim';
 import { truthy } from '@operators';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { EnrolmentListType } from '../../../models/enrolment-list-type.enum';
 import { GetPreviewComponent } from './get-preview-component';
 
@@ -25,7 +25,7 @@ export class PreviewComponent {
     this.enrolmentClaim = claim;
     this.updateHeader(claim);
   }
-  @Output() refreshList = new EventEmitter();
+  @Output() refreshList = new EventEmitter<EnrolmentClaim>();
   header: string;
   enrolmentClaim: EnrolmentClaim;
   constructor(private dialog: MatDialog) {}
@@ -43,7 +43,7 @@ export class PreviewComponent {
       .afterClosed()
       .pipe(truthy())
       .subscribe(() => {
-        this.refreshList.emit();
+        this.refreshList.emit(this.enrolmentClaim);
       });
   }
 

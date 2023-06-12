@@ -1,13 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'src/app/shared/services/dialog/dialog.service';
 import { EnvService } from 'src/app/shared/services/env/env.service';
 import { IamService } from 'src/app/shared/services/iam.service';
 import { UrlParamService } from 'src/app/shared/services/url-param.service';
 import { provideMockStore } from '@ngrx/store/testing';
-import { MockActivatedRoute, dialogSpy } from '@tests';
+import { dialogSpy, MockActivatedRoute } from '@tests';
 import { ApplicationsComponent } from './applications.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ApplicationsComponent', () => {
   let component: ApplicationsComponent;
@@ -18,7 +19,7 @@ describe('ApplicationsComponent', () => {
     'navigateByUrl',
     'navigate',
   ]);
-  const envService = { production: false };
+  const envService = { orgRequestEmail: '' };
   let activatedRouteStub: MockActivatedRoute;
   beforeEach(() => {
     dialog = jasmine.createSpyObj(DialogService, ['open']);
@@ -36,21 +37,20 @@ describe('ApplicationsComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         provideMockStore(),
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
     fixture = TestBed.createComponent(ApplicationsComponent);
     component = fixture.componentInstance;
     domainsService.isOwner.and.returnValue(Promise.resolve(true));
   });
-  it('should create Request Organization Button text correctly based on env (non-production)', async () => {
-    envService.production = false;
-    await component.ngOnInit();
+  it('should create "Create Organization" button text when email is empty string', () => {
+    envService.orgRequestEmail = '';
     fixture.detectChanges();
     expect(component.orgRequestButtonText).toBe('Create Organization');
   });
 
-  it('should create Request Organization Button text correctly based on env (production)', async () => {
-    envService.production = true;
-    await component.ngOnInit();
+  it('should create "Request to Create Organization" button text when organization email is defined', () => {
+    envService.orgRequestEmail = 'example@email.com';
     fixture.detectChanges();
     expect(component.orgRequestButtonText).toBe(
       'Request to Create Organization'

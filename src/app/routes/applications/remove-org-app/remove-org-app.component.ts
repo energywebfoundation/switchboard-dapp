@@ -3,7 +3,10 @@ import { ExpiredRequestError } from '../../../shared/errors/errors';
 import { IamRequestService } from '../../../shared/services/iam-request.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
 import { DomainTypeEnum } from '../new-role/new-role.component';

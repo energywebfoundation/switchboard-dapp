@@ -8,15 +8,15 @@ import {
 } from '@angular/core/testing';
 
 import { SmartSearchComponent } from './smart-search.component';
-import { MatInputModule } from '@angular/material/input';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import {
-  MatAutocompleteModule,
-  MatAutocompleteSelectedEvent,
-} from '@angular/material/autocomplete';
+  MatLegacyAutocompleteModule as MatAutocompleteModule,
+  MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent,
+} from '@angular/material/legacy-autocomplete';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { dispatchInputEvent, getElement } from '@tests';
 import { SmartSearchService } from './services/smart-search.service';

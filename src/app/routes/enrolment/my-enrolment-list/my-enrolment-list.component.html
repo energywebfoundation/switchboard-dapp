@@ -1,7 +1,7 @@
 <app-enrolment-list [list]="list" [columDefinitions]="columns" [filterStatuses]="enrolmentViewFilters">
 </app-enrolment-list>
 <ng-template #actions let-element>
-  <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList()"></app-preview>
+  <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList($event)"></app-preview>
 
   <button
     mat-menu-item
@@ -18,7 +18,7 @@
     (click)="cancelClaimRequest(element)"
     *ngIf="element.canCancelClaimRequest">
     <mat-icon class="btn-color-error">highlight_off</mat-icon>
-    <span>Cancel Claim Request</span>
+    <span>Cancel Enrolment Request</span>
   </button>
 </ng-template>
 <ng-template #status let-element>

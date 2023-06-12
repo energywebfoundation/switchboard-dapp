@@ -27,7 +27,7 @@ export class Timestamp {
     return { years, days, hours, minutes, seconds };
   }
 
-  parseToMilliseconds(value: ParseTimestampResult): number {
+  parseToMilliseconds(value: Partial<ParseTimestampResult>): number {
     if (Object.values(value).every((val) => val === 0)) {
       return null;
     }

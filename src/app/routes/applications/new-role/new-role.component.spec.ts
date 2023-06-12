@@ -7,12 +7,11 @@ import { NewRoleComponent } from './new-role.component';
 import { IamService } from '../../../shared/services/iam.service';
 import { ToastrService } from 'ngx-toastr';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { PreconditionType } from 'iam-client-lib';
 import { SignerFacadeService } from '../../../shared/services/signer-facade/signer-facade.service';
 import { DomainTypePipe } from '../../../shared/pipes/domain-type/domain-type.pipe';
 import { TimeDurationPipe } from '../../../shared/pipes/time-duration/time-duration.pipe';
@@ -60,22 +59,6 @@ describe('NewRoleComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should be run removePreconditionRole', () => {
-    const index = 1;
-    component.roleForm = fb.group({
-      data: fb.group({
-        enrolmentPreconditions: [
-          [{ type: PreconditionType.Role, conditions: ['a', 'b', 'c', 'd'] }],
-        ],
-      }),
-    });
-    component.removePreconditionRole(index);
-    expect(
-      component.roleForm.get('data').get('enrolmentPreconditions').value[0]
-        .conditions
-    ).toEqual(['a', 'c', 'd']);
-  });
-
   it('should be run displayFn', () => {
     const selectedFirst = { namespace: 'value' };
     const selectedSecond = { namespace: null };
@@ -84,20 +67,5 @@ describe('NewRoleComponent', () => {
     const resultSecond = component.displayFn(selectedSecond);
     expect(resultFirst).toBe('value');
     expect(resultSecond).toBe('');
-  });
-
-  describe('should be run issuerTypeChanged', () => {
-    let data;
-
-    beforeEach(() => {
-      data = { value: 'test value' };
-      component.roleForm = fb.group({
-        data: fb.group({
-          issuer: fb.group({
-            roleName: '',
-          }),
-        }),
-      });
-    });
   });
 });

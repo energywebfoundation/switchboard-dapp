@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
-import {
-  Claim,
-  ClaimData,
-  isValidDID,
-  NamespaceType,
-  RegistrationTypes,
-} from 'iam-client-lib';
-import { forkJoin, from, Observable, of } from 'rxjs';
+import { Claim, isValidDID, RegistrationTypes } from 'iam-client-lib';
+import { firstValueFrom, forkJoin, from, Observable, of } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
-import { finalize, map, switchMap } from 'rxjs/operators';
+import { filter, finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
 import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
@@ -18,6 +12,8 @@ import {
   IssueClaimRequestOptions,
   RejectClaimRequestOptions,
 } from 'iam-client-lib/dist/src/modules/claims/claims.types';
+import * as userSelectors from '../../../state/user-claim/user.selectors';
+import { Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +21,8 @@ import {
 export class ClaimsFacadeService {
   constructor(
     private iamService: IamService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private store: Store
   ) {}
 
   createSelfSignedClaim(data: {
@@ -87,6 +84,14 @@ export class ClaimsFacadeService {
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
 
+  getClaimByRequester(id: string): Observable<EnrolmentClaim> {
+    return from(
+      this.iamService.claimsService.getClaimsByRequester({
+        did: this.iamService.signerService.did,
+      })
+    ).pipe(this.getEnrolmentClaimFromClaimForId(id));
+  }
+
   async addStatusIfIsSyncedOnChain(enrolment: EnrolmentClaim) {
     if (enrolment.isRegisteredOnChain()) {
       const hasOnChainRole = await this.iamService.claimsService.hasOnChainRole(
@@ -105,6 +110,22 @@ export class ClaimsFacadeService {
         did: this.iamService.signerService.did,
       })
     ).pipe(this.createEnrolmentClaimsFromClaims());
+  }
+
+  getClaimByRevoker(id: string): Observable<EnrolmentClaim> {
+    return from(
+      this.iamService.claimsService.getClaimsByRevoker({
+        did: this.iamService.signerService.did,
+      })
+    ).pipe(this.getEnrolmentClaimFromClaimForId(id));
+  }
+
+  getClaimByIssuer(id: string): Observable<EnrolmentClaim> {
+    return from(
+      this.iamService.claimsService.getClaimsByIssuer({
+        did: this.iamService.signerService.did,
+      })
+    ).pipe(this.getEnrolmentClaimFromClaimForId(id));
   }
 
   getClaimsByIssuer(): Observable<EnrolmentClaim[]> {
@@ -197,21 +218,11 @@ export class ClaimsFacadeService {
   }
 
   async addStatusIfIsSyncedOffChain(enrolment: EnrolmentClaim) {
-    // Get Approved Claims in DID Doc & Idenitfy Only Role-related Claims
-    const claims: ClaimData[] = (
-      await this.iamService.claimsService.getUserClaims({
-        did: enrolment.subject,
-      })
-    )
-      .filter((item) => item && item.claimType)
-      .filter((item: ClaimData) => {
-        const arr = item.claimType.split('.');
-        return arr.length > 1 && arr[1] === NamespaceType.Role;
-      });
-
-    return enrolment.setIsSyncedOffChain(
-      claims.some((claim) => claim.claimType === enrolment.claimType)
+    const claims: string[] = await firstValueFrom(
+      this.store.select(userSelectors.claimRoleNames)
     );
+
+    return enrolment.setIsSyncedOffChain(claims.includes(enrolment.claimType));
   }
 
   setIsRevokedOnChainStatus(
@@ -256,5 +267,15 @@ export class ClaimsFacadeService {
     }
 
     return enrolment.setIsRevokedOffChain(false);
+  }
+
+  private getEnrolmentClaimFromClaimForId(id: string) {
+    return (source: Observable<Claim[]>): Observable<EnrolmentClaim> =>
+      source.pipe(
+        map((claims) => claims.filter((c) => c.id === id)),
+        filter((claims) => claims.length > 0),
+        this.createEnrolmentClaimsFromClaims(),
+        map((claims) => claims[0])
+      );
   }
 }

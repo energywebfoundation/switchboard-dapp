@@ -6,7 +6,6 @@ import {
   ClaimsService,
   DidRegistry,
   DomainsService,
-  ILogger,
   initWithEKC,
   initWithGnosis,
   initWithMetamask,
@@ -14,23 +13,19 @@ import {
   initWithWalletConnect,
   IRole,
   IRoleDefinitionV2,
-  LogLevel,
   MessagingMethod,
   MessagingService,
   NamespaceType,
   ProviderType,
   setCacheConfig,
   setChainConfig,
-  setLogger,
   setMessagingConfig,
   SignerService,
   VerifiableCredentialsServiceBase,
 } from 'iam-client-lib';
-import * as Sentry from '@sentry/angular';
-import { Severity } from '@sentry/angular';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { LoginOptions } from './login/login.service';
 import { truthy } from '@operators';
 import { finalize, map } from 'rxjs/operators';
@@ -66,6 +61,9 @@ export class IamService {
     // Set Cache Server
     setCacheConfig(envService.chainId, {
       url: envService.cacheServerUrl,
+      auth: {
+        domain: window.location.origin,
+      },
     });
 
     // Set RPC
@@ -157,6 +155,9 @@ export class IamService {
   }
 
   closeConnection() {
+    if (!this.signerService) {
+      return of(true);
+    }
     return from(this.signerService.closeConnection()).pipe(truthy());
   }
 

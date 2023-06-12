@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { QrCodeService } from './qr-code.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 describe('QrCodeService', () => {
   let service: QrCodeService;

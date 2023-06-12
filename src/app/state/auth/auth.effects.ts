@@ -6,7 +6,7 @@ import * as AuthActions from './auth.actions';
 import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
 import { from, of } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { LoginService } from '../../shared/services/login/login.service';
 import { Router } from '@angular/router';
 import * as userActions from '../user-claim/user.actions';
@@ -14,7 +14,6 @@ import { ConnectToWalletDialogComponent } from '../../modules/connect-to-wallet/
 import * as AuthSelectors from './auth.selectors';
 import { EnvService } from '../../shared/services/env/env.service';
 import { RouterConst } from '../../routes/router-const';
-import { OwnedEnrolmentsActions, RequestedEnrolmentsActions } from '@state';
 
 @Injectable()
 export class AuthEffects {
@@ -143,11 +142,7 @@ export class AuthEffects {
   userSuccessfullyLoggedIn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginSuccess),
-      mergeMap(() => [
-        userActions.setUpUser(),
-        OwnedEnrolmentsActions.getOwnedEnrolments(),
-        RequestedEnrolmentsActions.getEnrolmentRequests(),
-      ])
+      mergeMap(() => [userActions.setUpUser()])
     )
   );
 

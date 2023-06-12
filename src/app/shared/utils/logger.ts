@@ -1,6 +1,5 @@
 import { ILogger, LogLevel, setLogger } from 'iam-client-lib';
 import * as Sentry from '@sentry/angular';
-import { Severity } from '@sentry/angular';
 
 export const logger = () => {
   setLogger({
@@ -8,14 +7,14 @@ export const logger = () => {
       console.log(message);
     },
     error: (message) => {
-      Sentry.captureMessage(message, Severity.Error);
+      Sentry.captureMessage(message, 'error');
       console.error(message);
     },
     info: (message) => {
       console.log(message);
     },
     warn: (message) => {
-      Sentry.captureMessage(message, Severity.Warning);
+      Sentry.captureMessage(message, 'warning');
       console.warn(message);
     },
     debug: (message) => {

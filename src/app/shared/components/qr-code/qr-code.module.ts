@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { QrCodeDirective } from './directives/qr-code.directive';
 import { QrCodeComponent } from './qr-code/qr-code.component';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { QrCodeModule as QrCode } from 'ng-qrcode';
 
 @NgModule({
