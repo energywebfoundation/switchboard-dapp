@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { EnrolmentClaim } from '../../models/enrolment-claim';
-import { IssueClaimRequestOptions } from 'iam-client-lib/dist/src/modules/claims/claims.types';
+import { IssuerFields, IssueClaimRequestOptions } from 'iam-client-lib';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { SwitchboardToastrService } from '../../../../shared/services/switchboard-toastr.service';
 import { DialogService } from '../../../../shared/services/dialog/dialog.service';
 import { truthy } from '@operators';
 import { ClaimsFacadeService } from '../../../../shared/services/claims-facade/claims-facade.service';
-import { IssuerFields } from 'iam-client-lib';
 
 const TOASTR_HEADER = 'Enrolment Request';
 
