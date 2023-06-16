@@ -25,10 +25,6 @@ export class DomainsFacadeService {
     return await this.domainsService.isOwner({ domain });
   }
 
-  async getDIDsByRole(role: string): Promise<string[]> {
-    return await this.domainsService.getDIDsByRole(role);
-  }
-
   getENSTypesBySearchPhrase(search: string, types?: SearchType[]) {
     return from(this.domainsService.getENSTypesBySearchPhrase(search, types));
   }

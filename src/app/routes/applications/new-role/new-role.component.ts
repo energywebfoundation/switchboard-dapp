@@ -14,6 +14,7 @@ import {
   IRoleDefinitionV2,
   NamespaceType,
   PreconditionType,
+  CreateRoleOptions,
 } from 'iam-client-lib';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { delay, take } from 'rxjs/operators';
@@ -37,7 +38,6 @@ import { RoleCreationService } from './services/role-creation.service';
 import { ISmartSearch } from '../../../shared/components/smart-search/models/smart-search.interface';
 import { SmartSearchType } from '../../../shared/components/smart-search/models/smart-search-type.enum';
 import { IssuerType } from './models/issuer-type.enum';
-import { CreateRoleOptions } from 'iam-client-lib/dist/src/modules/domains/domains.types';
 import { IRoleType } from './models/role-type.interface';
 
 export const RoleType = {
