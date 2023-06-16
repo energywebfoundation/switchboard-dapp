@@ -65,10 +65,7 @@
                 "inject": false
               }
             ],
-            "scripts": [
-              "src/app/core/preloader/preloader.js",
-              "node_modules/moment/min/moment-with-locales.min.js"
-            ],
+            "scripts": ["src/app/core/preloader/preloader.js"],
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
