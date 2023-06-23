@@ -52,8 +52,6 @@ describe('PublishRoleDirective', () => {
     hostDebug = fixture.debugElement;
   }));
 
-  beforeEach(() => {});
-
   it('should create component with directive', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
