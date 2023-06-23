@@ -159,6 +159,7 @@ export class NewIssueVcComponent implements OnInit {
 
     // TODO: add proper typing and remove any.
     return {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       claimType: (this.getFormType().value as any).namespace,
       claimTypeVersion:
         parseVersion(this.selectedRoleDefinition.version) ||
