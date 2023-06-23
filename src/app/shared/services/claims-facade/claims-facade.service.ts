@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
 import {
   Claim,
-  isValidDID,
-  RegistrationTypes,
   IssueClaimRequestOptions,
+  isValidDID,
+  PublishPublicClaimOptions,
   RejectClaimRequestOptions,
   RoleCredentialSubject,
 } from 'iam-client-lib';
@@ -146,13 +146,7 @@ export class ClaimsFacadeService {
   publishPublicClaim({
     registrationTypes,
     claim,
-  }: {
-    registrationTypes?: RegistrationTypes[];
-    claim: {
-      token: string;
-      claimType: string;
-    };
-  }): Observable<string | undefined> {
+  }: PublishPublicClaimOptions): Observable<string | undefined> {
     return from(
       this.iamService.claimsService.publishPublicClaim({
         registrationTypes,

@@ -2,15 +2,12 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IamService } from '../../../shared/services/iam.service';
 import { LoadingService } from '../../../shared/services/loading.service';
-import { NotificationService } from '../../../shared/services/notification.service';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
 import { MatSort } from '@angular/material/sort';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { truthy } from '@operators';
 import { Store } from '@ngrx/store';
 import { EnrolmentClaim } from '../../enrolment/models/enrolment-claim';
-import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 import {
   ColumnDefinition,
@@ -40,9 +37,7 @@ export class AssetEnrolmentListComponent implements OnInit {
     private iamService: IamService,
     private dialog: MatDialog,
     private toastr: SwitchboardToastrService,
-    private notifService: NotificationService,
     private store: Store,
-    private publishRoleService: PublishRoleService,
     private claimsFacade: ClaimsFacadeService
   ) {}
 
@@ -62,37 +57,8 @@ export class AssetEnrolmentListComponent implements OnInit {
     this.loadingService.hide();
   }
 
-  isAccepted(element: EnrolmentClaim) {
-    return element?.isAccepted;
-  }
-
-  isSynced(element: EnrolmentClaim) {
-    return element?.isSynced;
-  }
-
-  isRejected(element: EnrolmentClaim) {
-    return !element?.isAccepted && element?.isRejected;
-  }
-
-  isPending(element: EnrolmentClaim) {
-    return !element?.isAccepted && !element?.isRejected;
-  }
-
-  isPendingSync(element: EnrolmentClaim) {
-    return !element?.isSynced;
-  }
-
-  async addToDidDoc(element: EnrolmentClaim) {
-    this.publishRoleService
-      .addToDidDoc({
-        issuedToken: element.issuedToken,
-        registrationTypes: element.registrationTypes,
-        claimType: element.claimType,
-        claimTypeVersion: element.claimTypeVersion,
-        subject: element.subject,
-      })
-      .pipe(truthy())
-      .subscribe(() => this.getList());
+  getEnrolmentClaim(element: EnrolmentClaim) {
+    return element;
   }
 
   async cancelClaimRequest(element: EnrolmentClaim) {

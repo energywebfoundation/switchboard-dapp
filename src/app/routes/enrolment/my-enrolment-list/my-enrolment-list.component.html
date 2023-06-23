@@ -6,8 +6,9 @@
   <button
     mat-menu-item
     class="btn-color-primary"
-    (click)="addToDidDoc(element)"
-    *ngIf="isPendingSync(element) && isAccepted(element)">
+    [appPublishRole]="element"
+    (updated)="updateList(element)"
+    *ngIf="getEnrolmentClaim(element).canPublishClaim">
     <mat-icon class="btn-color-primary">note_add</mat-icon>
     <span>Publish</span>
   </button>
@@ -25,7 +26,9 @@
   <app-enrolment-status [claim]="element">
     <div class="mt-2 mt-md-2 mb-md-2">
       <mat-icon class="color-warned icon-small mr-2" svgIcon="sync-did-icon"></mat-icon>
-      <span class="default-color cursor-pointer" (click)="addToDidDoc(element)">Publish</span>
+      <span class="default-color cursor-pointer" [appPublishRole]="element" (updated)="updateList(element)"
+        >Publish</span
+      >
     </div>
   </app-enrolment-status>
 </ng-template>
