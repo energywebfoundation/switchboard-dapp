@@ -28,6 +28,7 @@ import { IssuerRequestsComponent } from './view-requests/issuer-requests/issuer-
 import { CascadingFilterModule } from '../../modules/cascading-filter/cascading-filter.module';
 import { RawDataModule } from 'src/app/modules/raw-data/raw-data.module';
 import { CredentialJsonComponent } from './view-requests/components/full-credential/full-credential.component';
+import { PublishRoleDirective } from '../../shared/services/publish-role/publish-role.directive';
 
 const routes: Routes = [{ path: '', component: EnrolmentComponent }];
 
@@ -65,6 +66,7 @@ const routes: Routes = [{ path: '', component: EnrolmentComponent }];
     EnrolmentListModule,
     CascadingFilterModule,
     RawDataModule,
+    PublishRoleDirective,
   ],
 })
 export class EnrolmentModule {}
