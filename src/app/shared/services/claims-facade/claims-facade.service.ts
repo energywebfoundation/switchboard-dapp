@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
-import { Claim, isValidDID, RegistrationTypes } from 'iam-client-lib';
+import {
+  Claim,
+  IssueClaimRequestOptions,
+  isValidDID,
+  PublishPublicClaimOptions,
+  RejectClaimRequestOptions,
+  RoleCredentialSubject,
+} from 'iam-client-lib';
 import { firstValueFrom, forkJoin, from, Observable, of } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
 import { filter, finalize, map, switchMap } from 'rxjs/operators';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
-import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
-import {
-  IssueClaimRequestOptions,
-  RejectClaimRequestOptions,
-} from 'iam-client-lib/dist/src/modules/claims/claims.types';
+
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { Store } from '@ngrx/store';
 
@@ -143,13 +146,7 @@ export class ClaimsFacadeService {
   publishPublicClaim({
     registrationTypes,
     claim,
-  }: {
-    registrationTypes?: RegistrationTypes[];
-    claim: {
-      token: string;
-      claimType: string;
-    };
-  }): Observable<string | undefined> {
+  }: PublishPublicClaimOptions): Observable<string | undefined> {
     return from(
       this.iamService.claimsService.publishPublicClaim({
         registrationTypes,

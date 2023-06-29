@@ -12,8 +12,6 @@ import { LoadingService } from '../../../shared/services/loading.service';
 import { IamService } from '../../../shared/services/iam.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SwitchboardToastrService } from '../../../shared/services/switchboard-toastr.service';
-import { Store } from '@ngrx/store';
-import { PublishRoleService } from '../../../shared/services/publish-role/publish-role.service';
 import { ViewRequestsComponent } from '../view-requests/view-requests.component';
 import { truthy } from '@operators';
 import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/confirmation-dialog.component';
@@ -56,21 +54,15 @@ export class MyEnrolmentListComponent implements OnInit {
     private loadingService: LoadingService,
     private iamService: IamService,
     private dialog: MatDialog,
-    private toastr: SwitchboardToastrService,
-    private store: Store,
-    private publishRoleService: PublishRoleService
+    private toastr: SwitchboardToastrService
   ) {}
 
   ngOnInit() {
     this.defineColumns();
   }
 
-  isAccepted(element: EnrolmentClaim) {
-    return element?.isAccepted;
-  }
-
-  isPendingSync(element: EnrolmentClaim) {
-    return !element?.isSynced;
+  getEnrolmentClaim(element: EnrolmentClaim) {
+    return element;
   }
 
   view(element: EnrolmentClaim) {
@@ -85,18 +77,6 @@ export class MyEnrolmentListComponent implements OnInit {
         disableClose: true,
       })
       .afterClosed()
-      .pipe(truthy())
-      .subscribe(() => this.updateList(element));
-  }
-
-  addToDidDoc(element: EnrolmentClaim) {
-    this.publishRoleService
-      .addToDidDoc({
-        issuedToken: element.issuedToken,
-        registrationTypes: element.registrationTypes,
-        claimType: element.claimType,
-        claimTypeVersion: element.claimTypeVersion,
-      })
       .pipe(truthy())
       .subscribe(() => this.updateList(element));
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
-import { ProviderEvent } from 'iam-client-lib/dist/src/modules/signer/signer.types';
+import { ProviderEvent } from 'iam-client-lib';
 
 @Injectable({
   providedIn: 'root',

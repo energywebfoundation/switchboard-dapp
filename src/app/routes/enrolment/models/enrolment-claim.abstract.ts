@@ -1,6 +1,9 @@
-import { Claim, RegistrationTypes } from 'iam-client-lib';
+import {
+  Claim,
+  RegistrationTypes,
+  RoleCredentialSubject,
+} from 'iam-client-lib';
 import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
-import { RoleCredentialSubject } from 'iam-client-lib/dist/src/modules/verifiable-credentials/types';
 
 export abstract class EnrolmentClaimAbstract {
   protected constructor(protected iclClaim: Claim) {}

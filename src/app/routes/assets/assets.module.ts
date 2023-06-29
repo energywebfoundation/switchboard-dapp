@@ -30,6 +30,7 @@ import { QrCodeScannerModule } from '../../shared/components/qr-code-scanner/qr-
 import { RouterConst } from '../router-const';
 import { AssetEnrolmentListComponent } from './asset-enrolment-list/asset-enrolment-list.component';
 import { EnrolmentListModule } from '../enrolment/enrolment-list/enrolment-list.module';
+import { PublishRoleDirective } from '../../shared/services/publish-role/publish-role.directive';
 
 const routes: Routes = [
   { path: '', component: AssetsComponent },
@@ -74,6 +75,7 @@ const routes: Routes = [
     ClipboardModule,
     QrCodeScannerModule,
     EnrolmentListModule,
+    PublishRoleDirective,
   ],
 })
 export class AssetsModule {}

@@ -65,10 +65,7 @@
                 "inject": false
               }
             ],
-            "scripts": [
-              "src/app/core/preloader/preloader.js",
-              "node_modules/moment/min/moment-with-locales.min.js"
-            ],
+            "scripts": ["src/app/core/preloader/preloader.js"],
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
@@ -300,7 +297,8 @@
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"],
-            "outputFile": "eslint_report.json"
+            "outputFile": "eslint_report.json",
+            "format": "json"
           }
         }
       }
