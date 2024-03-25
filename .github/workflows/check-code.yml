@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - uses: styfle/cancel-workflow-action@0.9.1
+      - uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
   install:
@@ -91,7 +91,7 @@ jobs:
       - name: Run ESLint
         run: npm run lint
       - name: Annotate Code Linting Results
-        uses: ataylorme/eslint-annotate-action@1.0.4
+        uses: ataylorme/eslint-annotate-action@1.2.0
         if: always()
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
