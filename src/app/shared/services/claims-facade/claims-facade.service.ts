@@ -135,6 +135,7 @@ export class ClaimsFacadeService {
     return from(
       this.iamService.claimsService.getClaimsByIssuer({
         did: this.iamService.signerService.did,
+        isAccepted: false,
       })
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
