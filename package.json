@@ -63,7 +63,7 @@
     "angular-user-idle": "^4.0.0",
     "bootstrap": "4.6.2",
     "core-js": "3.30.1",
-    "eslint": "^8.42.0",
+    "eslint": "^9.0.0",
     "hammerjs": "^2.0.8",
     "iam-client-lib": "^8.0.0-alpha.8",
     "jsoneditor": "^9.10.0",
