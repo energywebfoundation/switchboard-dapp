@@ -61,7 +61,7 @@
     "@zxing/ngx-scanner": "3.9.0",
     "ajv": "^8.12.0",
     "angular-user-idle": "^4.0.0",
-    "bootstrap": "4.6.2",
+    "bootstrap": "5.0.0",
     "core-js": "3.30.1",
     "eslint": "^8.42.0",
     "hammerjs": "^2.0.8",
