@@ -266,6 +266,8 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         registrationTypes: enrolForm.registrationTypes,
       });
 
+      console.log('ROLE TYPE FORM: ', this.roleTypeForm);
+
       this.displayAlert(
         'Request to enrol as ' +
           this.roleTypeForm.value.roleType.toUpperCase() +
