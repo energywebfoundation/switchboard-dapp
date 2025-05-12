@@ -3,4 +3,8 @@
   [status]="enrolmentStatus"
   [filterStatuses]="filterStatuses"></app-cascading-filter>
 
-<app-generic-table [list]="filteredList$ | async" [columDefinitions]="columDefinitions"></app-generic-table>
+<app-generic-table
+  [list]="filteredList$ | async"
+  [columDefinitions]="columDefinitions"
+  [sortColumn]="sortColumn"
+  [sortDirection]="sortDirection"></app-generic-table>

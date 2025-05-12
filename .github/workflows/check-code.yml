@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           cache-name: cache-node-modules
         with:
@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-
       - name: Install Dependencies
         run: npm ci
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: restore-build
         with:
           path: ./*
@@ -50,7 +50,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ needs.install.outputs.matrix.node-version }}
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: restore-build
         with:
           path: ./*
@@ -66,7 +66,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ needs.install.outputs.matrix.node-version }}
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: restore-build
         with:
           path: ./*
@@ -83,7 +83,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ needs.install.outputs.matrix.node-version }}
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: restore-build
         with:
           path: ./*

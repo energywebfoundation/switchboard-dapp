@@ -1,4 +1,9 @@
-<app-enrolment-list [list]="list" [columDefinitions]="columns" [filterStatuses]="enrolmentViewFilters">
+<app-enrolment-list
+  [list]="list"
+  [columDefinitions]="columns"
+  [sortColumn]="'requestDate'"
+  [sortDirection]="'desc'"
+  [filterStatuses]="enrolmentViewFilters">
 </app-enrolment-list>
 <ng-template #actions let-element>
   <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList($event)"></app-preview>

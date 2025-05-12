@@ -1,5 +1,5 @@
 <div class="mb-3">
-  <table mat-table [dataSource]="dataSource" matSort>
+  <table mat-table [dataSource]="dataSource" matSort [matSortActive]="sortColumn" [matSortDirection]="sortDirection">
     <ng-container *ngFor="let item of columDefinitions">
       <ng-container [matColumnDef]="item.field">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ item?.header }}</th>
