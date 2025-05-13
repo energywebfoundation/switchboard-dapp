@@ -65,7 +65,7 @@
     "core-js": "3.30.1",
     "eslint": "^8.42.0",
     "hammerjs": "^2.0.8",
-    "iam-client-lib": "^8.0.0-alpha.8",
+    "iam-client-lib": "^8.0.0",
     "jsoneditor": "^9.10.0",
     "ng-qrcode": "^8.0.1",
     "ngx-spinner": "^15.0.1",
