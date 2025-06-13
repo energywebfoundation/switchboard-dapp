@@ -290,7 +290,7 @@ describe('EnrolmentClaim tests', () => {
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OnChain],
           expirationTimestamp: (Date.now() + 500000).toString(),
-        } as Claim).canPublishClaim
+        } as unknown as Claim).canPublishClaim
       ).toBeTrue();
     });
     it('should return false if claim is not synced and claim IS expired', () => {
@@ -299,7 +299,7 @@ describe('EnrolmentClaim tests', () => {
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OnChain],
           expirationTimestamp: (Date.now() - 500).toString(),
-        } as Claim).canPublishClaim
+        } as unknown as Claim).canPublishClaim
       ).toBeFalse();
     });
     it('should return false if claim IS synced and claim is not expired', () => {
@@ -308,7 +308,7 @@ describe('EnrolmentClaim tests', () => {
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OffChain],
           expirationTimestamp: (Date.now() + 5000).toString(),
-        } as Claim).setIsSyncedOffChain(true).canPublishClaim
+        } as unknown as Claim).setIsSyncedOffChain(true).canPublishClaim
       ).toBeFalse();
     });
     it('should return false if claim IS synced and claim IS expired', () => {
@@ -317,7 +317,7 @@ describe('EnrolmentClaim tests', () => {
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OffChain],
           expirationTimestamp: (Date.now() - 50).toString(),
-        } as Claim).setIsSyncedOffChain(true).canPublishClaim
+        } as unknown as Claim).setIsSyncedOffChain(true).canPublishClaim
       ).toBeFalse();
     });
   });
@@ -327,14 +327,14 @@ describe('EnrolmentClaim tests', () => {
       expect(
         new EnrolmentClaim({
           expirationTimestamp: (Date.now() - 500).toString(),
-        } as Claim).isExpired
+        } as unknown as Claim).isExpired
       ).toBeTrue();
     });
     it('should return false if claim expiration timestamp is in the future', () => {
       expect(
         new EnrolmentClaim({
           expirationTimestamp: (Date.now() + 5000).toString(),
-        } as Claim).isExpired
+        } as unknown as Claim).isExpired
       ).toBeFalse();
     });
     it('should return false if there is no timestamp', () => {
@@ -459,7 +459,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
           expirationTimestamp: (Date.now() + 500000).toString(),
-        } as Claim).expirationStatus
+        } as unknown as Claim).expirationStatus
       ).toEqual(ExpirationStatus.NOT_EXPIRED);
     });
     it('should have an expiration status of "Expired" when expired', () => {
@@ -467,7 +467,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
           expirationTimestamp: (Date.now() - 1000).toString(),
-        } as Claim).expirationStatus
+        } as unknown as Claim).expirationStatus
       ).toEqual(ExpirationStatus.EXPIRED);
     });
     it('should not have an expiration status of when there is no expiration timestamp', () => {
@@ -483,7 +483,7 @@ describe('EnrolmentClaim tests', () => {
         new EnrolmentClaim({
           claimType: `role.${NamespaceType.Role}.test.iam.ewc`,
           expirationTimestamp: '193984857',
-        } as Claim).expirationDate
+        } as unknown as Claim).expirationDate
       ).toEqual(new Date(193984857));
     });
   });
