@@ -12,7 +12,8 @@ import { DomainUtils } from '@utils';
 
 export class EnrolmentClaim
   extends EnrolmentClaimAbstract
-  implements IEnrolmentClaim {
+  implements IEnrolmentClaim
+{
   roleName: string;
   organization: string;
   application?: string;

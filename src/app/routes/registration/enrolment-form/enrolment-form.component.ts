@@ -69,7 +69,7 @@ export class EnrolmentFormComponent implements EnrolmentForm {
   private fields: IFieldDefinition[];
   isValidSchema: Record<string, boolean> = {};
 
-  constructor(private cdRef: ChangeDetectorRef) { }
+  constructor(private cdRef: ChangeDetectorRef) {}
 
   createOptions(schema, label: string) {
     const jsonOptions = new JsonEditorOptions();

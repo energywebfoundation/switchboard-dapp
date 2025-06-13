@@ -37,7 +37,7 @@ export class VerifiablePresentationComponent implements OnInit {
     private store: Store,
     public dialog: MatDialog,
     private presentationService: PresentationService
-  ) { }
+  ) {}
   isAutolistLoading = {
     requests: [],
     value: false,

@@ -19,7 +19,8 @@ import { KeyValue } from '@angular/common';
 })
 export class IssuerRequestsComponent
   extends ViewRequestsComponent
-  implements OnInit {
+  implements OnInit
+{
   @ViewChild('issuerFields', { static: false }) requiredFields: EnrolmentForm;
   roleDefinition: IRoleDefinitionV2;
   expirationTime: number;

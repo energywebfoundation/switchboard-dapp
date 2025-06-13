@@ -39,7 +39,7 @@ export class NewIssueVcComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { did: string },
     public dialogRef: MatDialogRef<NewIssueVcComponent>,
     private issuanceVcService: IssuanceVcService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.setDid();

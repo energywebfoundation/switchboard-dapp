@@ -22,7 +22,7 @@ module.exports = {
     fallback: {
       zlib: require.resolve('browserify-zlib'),
       stream: require.resolve('stream-browserify'),
-      vm: require.resolve("vm-browserify")
+      vm: require.resolve('vm-browserify'),
     },
   },
   plugins: [

@@ -92,7 +92,7 @@ export class GovernanceDetailsComponent {
     private iamService: IamService,
     private loadingService: LoadingService,
     private dialog: MatDialog
-  ) { }
+  ) {}
 
   public async setData(data: any) {
     this.data = data;
