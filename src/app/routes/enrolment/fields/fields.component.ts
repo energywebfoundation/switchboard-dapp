@@ -6,8 +6,8 @@ import {
   Output,
 } from '@angular/core';
 import { KeyValue } from '@angular/common';
-import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 import { JsonObject } from '@angular-devkit/core';
+import { IFieldDefinition } from 'iam-client-lib';
 
 @Component({
   selector: 'app-fields',

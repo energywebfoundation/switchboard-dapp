@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import {
   IFieldDefinition,
+  IIssuerDefinition,
   IRevokerDefinition,
   NamespaceType,
   PreconditionType,
@@ -12,7 +13,6 @@ import { IamService } from '../../../../shared/services/iam.service';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { IssuerType } from '../../new-role/models/issuer-type.enum';
-import { IIssuerDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 
 @Component({
   selector: 'app-governance-details',
@@ -92,7 +92,7 @@ export class GovernanceDetailsComponent {
     private iamService: IamService,
     private loadingService: LoadingService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   public async setData(data: any) {
     this.data = data;

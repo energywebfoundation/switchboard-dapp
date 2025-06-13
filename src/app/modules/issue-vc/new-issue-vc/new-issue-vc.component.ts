@@ -12,9 +12,8 @@ import {
 } from '../../../routes/registration/utils/precondition-check';
 import { filter, switchMap } from 'rxjs/operators';
 import { EnrolmentSubmission } from '../../../routes/registration/enrolment-form/enrolment-form.component';
-import { IRole, IRoleDefinitionV2 } from 'iam-client-lib';
+import { IFieldDefinition, IRole, IRoleDefinitionV2 } from 'iam-client-lib';
 import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
-import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
 
@@ -40,7 +39,7 @@ export class NewIssueVcComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { did: string },
     public dialogRef: MatDialogRef<NewIssueVcComponent>,
     private issuanceVcService: IssuanceVcService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.setDid();

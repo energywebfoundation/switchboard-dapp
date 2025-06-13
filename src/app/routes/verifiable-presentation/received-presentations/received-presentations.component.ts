@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ICredentialTableData } from '../models/credential-table-data.interface';
-import { IVerifiableCredential } from '@sphereon/pex';
 import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
+import { IVerifiableCredential } from '@sphereon/ssi-types';
 
 @Component({
   selector: 'app-received-presentations',

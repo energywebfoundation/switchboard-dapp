@@ -20,7 +20,7 @@ import { truthy } from '@operators';
 import { FieldTypesEnum } from './field-form.enum';
 import Ajv from 'ajv';
 import { JsonEditorComponent, JsonEditorOptions } from '@modules';
-import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
+import { IFieldDefinition } from 'iam-client-lib';
 
 const FIELD_TYPES = [
   FieldTypesEnum.Text,

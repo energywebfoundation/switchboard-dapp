@@ -7,9 +7,8 @@ import {
   Output,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { RegistrationTypes } from 'iam-client-lib';
+import { IFieldDefinition, RegistrationTypes } from 'iam-client-lib';
 import { KeyValue } from '@angular/common';
-import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 import { FieldTypesEnum } from '../../applications/new-role/components/field-form/field-form.enum';
 import { JsonEditorOptions } from '@modules';
 import Ajv, { Schema } from 'ajv';
@@ -70,7 +69,7 @@ export class EnrolmentFormComponent implements EnrolmentForm {
   private fields: IFieldDefinition[];
   isValidSchema: Record<string, boolean> = {};
 
-  constructor(private cdRef: ChangeDetectorRef) {}
+  constructor(private cdRef: ChangeDetectorRef) { }
 
   createOptions(schema, label: string) {
     const jsonOptions = new JsonEditorOptions();
