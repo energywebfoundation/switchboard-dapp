@@ -14,7 +14,7 @@ export class DidBookHttpService {
     private http: HttpClient,
     private loadingService: LoadingService,
     private envService: EnvService
-  ) {}
+  ) { }
 
   getList() {
     return this.http.get(
