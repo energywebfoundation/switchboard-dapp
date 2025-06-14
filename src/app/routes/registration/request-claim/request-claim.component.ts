@@ -268,7 +268,9 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
       this.displayAlert(
         'Request to enrol as ' +
-          this.roleTypeForm.value.roleType.toUpperCase() +
+          (
+            this.roleTypeForm.value.roleType as unknown as { name: string }
+          ).name.toUpperCase() +
           ' is submitted for review and approval.',
         'success'
       );
