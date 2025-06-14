@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { EnrolmentForm } from '../../../registration/enrolment-form/enrolment-form.component';
 import { EnrolmentClaim } from '../../models/enrolment-claim';
-import { IRoleDefinitionV2 } from 'iam-client-lib';
+import { IFieldDefinition, IRoleDefinitionV2 } from 'iam-client-lib';
 import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef,
@@ -10,7 +10,6 @@ import { TokenDecodeService } from '../services/token-decode.service';
 import { IssuerRequestsService } from '../services/issuer-requests.service';
 import { RoleService } from '../../../../state/governance/role/services/role.service';
 import { ViewRequestsComponent } from '../view-requests.component';
-import { IFieldDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
 import { KeyValue } from '@angular/common';
 
 @Component({

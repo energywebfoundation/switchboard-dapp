@@ -75,7 +75,7 @@ export class EnrolmentClaim
   get isExpired() {
     return (
       !!this.iclClaim.expirationTimestamp &&
-      parseInt(this.iclClaim.expirationTimestamp) < Date.now()
+      this.iclClaim.expirationTimestamp < Date.now()
     );
   }
 
@@ -236,7 +236,7 @@ export class EnrolmentClaim
 
   private defineExpirationDate(): void {
     this.expirationDate = this.iclClaim.expirationTimestamp
-      ? new Date(parseInt(this.iclClaim.expirationTimestamp))
+      ? new Date(this.iclClaim.expirationTimestamp)
       : null;
   }
 

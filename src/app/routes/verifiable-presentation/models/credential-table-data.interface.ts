@@ -1,4 +1,4 @@
-import { IVerifiableCredential } from '@sphereon/pex';
+import { IVerifiableCredential } from '@sphereon/ssi-types';
 
 interface ICredentialData {
   role: string;

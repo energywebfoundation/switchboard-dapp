@@ -9,11 +9,12 @@ import { filter, take } from 'rxjs/operators';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { isUserLoggedIn } from '../../../state/auth/auth.selectors';
 import { VpRequestInteractService } from '@ew-did-registry/credentials-interface';
-import { IPresentationDefinition, IVerifiableCredential } from '@sphereon/pex';
+import { IPresentationDefinition } from '@sphereon/pex';
 import { ICredentialTableData } from '../models/credential-table-data.interface';
 import { PresentationService } from '../services/presentation.service';
 import SWAL from 'sweetalert';
 import { truncate } from 'fs';
+import { IVerifiableCredential } from '@sphereon/ssi-types';
 
 @Component({
   selector: 'app-verifiable-presentation',
