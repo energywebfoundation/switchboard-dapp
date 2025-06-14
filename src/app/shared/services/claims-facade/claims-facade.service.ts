@@ -6,8 +6,8 @@ import {
   isValidDID,
   PublishPublicClaimOptions,
   RejectClaimRequestOptions,
-  RoleCredentialSubject,
 } from 'iam-client-lib';
+
 import { firstValueFrom, forkJoin, from, Observable, of } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
@@ -17,6 +17,7 @@ import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
 
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { Store } from '@ngrx/store';
+import { RoleCredentialSubject } from '../../../routes/enrolment/models/role-credential-subject.interface';
 
 @Injectable({
   providedIn: 'root',
