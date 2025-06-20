@@ -266,9 +266,12 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         registrationTypes: enrolForm.registrationTypes,
       });
 
+      // TODO: Improve form field type from string to object
       this.displayAlert(
         'Request to enrol as ' +
-          this.roleTypeForm.value.roleType.toUpperCase() +
+          (
+            this.roleTypeForm.value.roleType as unknown as { name: string }
+          ).name.toUpperCase() +
           ' is submitted for review and approval.',
         'success'
       );
