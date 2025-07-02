@@ -5,7 +5,7 @@ on:
     branches:
       [
         'develop',
-        'feat/s3-deploy-dev',
+        'master',
         'sandbox',
         'release',
         'gp4btc-staging',
@@ -33,9 +33,9 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/develop" ]; then
             echo "::set-output name=env_name::dev"
             echo "::set-output name=build_script::npm run build"
-          elif [ "${{ github.ref }}" = "refs/heads/feat/s3-deploy-dev" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/master" ]; then
             echo "::set-output name=env_name::staging"
-            echo "::set-output name=build_script::npm run build-staging"
+            echo "::set-output name=build_script::npm run build-staging"  
           elif [ "${{ github.ref }}" = "refs/heads/gp4btc-staging" ]; then
             echo "::set-output name=env_name::gp4btc-staging"
             echo "::set-output name=build_script::npm run build-gp4btc-staging"            

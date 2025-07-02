@@ -25,6 +25,7 @@ import {
   ChainConfig,
   IOrganization,
   IssueClaimOptions,
+  DidStoreType,
 } from 'iam-client-lib';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
@@ -280,6 +281,7 @@ export class IamService {
     const AWS_REGION = this.envService.AWS_REGION;
     const AWS_S3_BUCKET = this.envService.AWS_S3_BUCKET;
     return {
+      type: DidStoreType.S3,
       bucketName: AWS_S3_BUCKET,
       credential: {
         region: AWS_REGION,

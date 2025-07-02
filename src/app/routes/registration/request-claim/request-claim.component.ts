@@ -111,7 +111,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     public dialog: MatDialog,
     private loadingService: LoadingService,
     private store: Store
-  ) { }
+  ) {}
 
   @HostListener('window:beforeunload', ['$event'])
   public onPageUnload() {
@@ -268,8 +268,9 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
 
       // TODO: Improve form field type from string to object
       this.displayAlert(
-        'Request to enrol as ' + this.roleTypeForm.value.roleType.toUpperCase() +
-        ' is submitted for review and approval.',
+        'Request to enrol as ' +
+          this.roleTypeForm.value.roleType.toUpperCase() +
+          ' is submitted for review and approval.',
         'success'
       );
     } catch (e) {
@@ -564,7 +565,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
             role.namespace === this.userRoleList[i].claimType &&
             // split on '.' and take first digit in order to handle legacy role version format of '1.0.0'
             role.definition.version.toString().split('.')[0] ===
-            this.userRoleList[i].claimTypeVersion.toString().split('.')[0]
+              this.userRoleList[i].claimTypeVersion.toString().split('.')[0]
           ) {
             if (role.namespace === defaultRole) {
               // Display Error
