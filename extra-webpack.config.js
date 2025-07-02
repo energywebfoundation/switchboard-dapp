@@ -41,7 +41,7 @@ module.exports = {
         'tty',
         'util',
         'vm',
-        'zlib',
+        // 'zlib',
       ],
     }),
     new webpack.DefinePlugin({
@@ -52,6 +52,11 @@ module.exports = {
       AWS_SECRET_ACCESS_KEY: JSON.stringify(process.env?.AWS_S3_SECRET_ACCESS_KEY),
       AWS_REGION: JSON.stringify(process.env?.AWS_S3_REGION),
       AWS_S3_BUCKET: JSON.stringify(process.env?.AWS_S3_BUCKET),
+      'process.env': JSON.stringify({
+        FORCE_COLOR: '0',
+        NODE_ENV: process.env.NODE_ENV || 'development',
+        DEBUG: process.env.DEBUG || '',
+      }),
     }),
     new Dotenv(),
     ...sentryPlugin(),
