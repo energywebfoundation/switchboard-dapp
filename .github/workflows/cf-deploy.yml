@@ -5,6 +5,7 @@ on:
     branches:
       [
         'develop',
+        'fix/config-s3',
         'master',
         'sandbox',
         'release',
@@ -30,7 +31,7 @@ jobs:
           if [ "${{ github.ref }}" = "sandbox" ]; then
             echo "::set-output name=env_name::sandbox"
             echo "::set-output name=build_script::'npm run build'"
-          elif [ "${{ github.ref }}" = "refs/heads/develop" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/fix/config-s3" ]; then
             echo "::set-output name=env_name::dev"
             echo "::set-output name=build_script::npm run build"
           elif [ "${{ github.ref }}" = "refs/heads/master" ]; then
