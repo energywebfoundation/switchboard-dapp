@@ -16,6 +16,8 @@ export class EnrolmentListComponent {
   @Input() showRevokeFilters = false;
   @Input() columDefinitions: ColumnDefinition[];
   @Input() filterStatuses: FilterStatus[];
+  @Input() sortColumn = 'requestDate';
+  @Input() sortDirection: 'asc' | 'desc' = 'desc';
   @Input() set list(data: EnrolmentClaim[]) {
     this.cascadingFilterService.setItems(data);
   }

@@ -32,7 +32,7 @@ describe('Owned Enrolments Selectors', () => {
             isAccepted: true,
             registrationTypes: [RegistrationTypes.OnChain],
             expirationTimestamp: (Date.now() + 500000).toString(),
-          } as Claim),
+          } as unknown as Claim),
         ])
       ).toEqual(1);
     });
@@ -43,7 +43,7 @@ describe('Owned Enrolments Selectors', () => {
             isAccepted: true,
             registrationTypes: [RegistrationTypes.OffChain],
             expirationTimestamp: (Date.now() + 500000).toString(),
-          } as Claim).setIsSyncedOffChain(false),
+          } as unknown as Claim).setIsSyncedOffChain(false),
         ])
       ).toEqual(1);
     });
