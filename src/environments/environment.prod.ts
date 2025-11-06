@@ -23,6 +23,6 @@ export const environment = {
   SENTRY_ENVIRONMENT: 'production',
   idleTime: 900,
   idleTimeout: 300,
-  orgRequestEmail: 'iamteam@energyweb.org', //to do: create generic IAM email for inbound requests
+  orgRequestEmail: '', //to do: create generic IAM email for inbound requests
   ...constants,
 };
