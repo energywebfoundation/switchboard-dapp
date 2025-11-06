@@ -1,5 +1,9 @@
 <app-cascading-filter showDIDFilter="true"></app-cascading-filter>
-<app-generic-table [list]="revokersList$ | async" [columDefinitions]="columns"></app-generic-table>
+<app-generic-table
+  [list]="revokersList$ | async"
+  [columDefinitions]="columns"
+  [sortColumn]="'requestDate'"
+  [sortDirection]="'desc'"></app-generic-table>
 
 <ng-template #actions let-element>
   <app-preview [element]="element" [enrolmentType]="enrolmentType" (refreshList)="updateList($event)"> </app-preview>

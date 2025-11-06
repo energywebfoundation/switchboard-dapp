@@ -25,6 +25,7 @@ import {
   ChainConfig,
   IOrganization,
   IssueClaimOptions,
+  DidStoreType,
 } from 'iam-client-lib';
 import { LoadingService } from './loading.service';
 import { safeAppSdk } from './gnosis.safe.service';
@@ -194,7 +195,7 @@ export class IamService {
         }
         if (createDocument) {
           const { didRegistry, claimsService } = await connectToDidRegistry(
-            this.configureIpfsConfig()
+            this.configureDidStoreConfig()
           );
           this.didRegistry = didRegistry;
           this.claimsService = claimsService;
@@ -274,18 +275,20 @@ export class IamService {
     return chainConfig;
   }
 
-  private configureIpfsConfig() {
-    const projectId = this.envService.INFURA_PROJECT_ID;
-    const projectSecret = this.envService.INFURA_PROJECT_SECRET;
-    const auth =
-      'Basic ' +
-      Buffer.from(projectId + ':' + projectSecret).toString('base64');
+  private configureDidStoreConfig() {
+    const AWS_ACCESS_KEY_ID = this.envService.AWS_ACCESS_KEY_ID;
+    const AWS_SECRET_ACCESS_KEY = this.envService.AWS_SECRET_ACCESS_KEY;
+    const AWS_REGION = this.envService.AWS_REGION;
+    const AWS_S3_BUCKET = this.envService.AWS_S3_BUCKET;
     return {
-      host: 'ipfs.infura.io',
-      port: 5001,
-      protocol: 'https',
-      headers: {
-        authorization: auth,
+      type: DidStoreType.S3,
+      bucketName: AWS_S3_BUCKET,
+      credential: {
+        region: AWS_REGION,
+        credentials: {
+          accessKeyId: AWS_ACCESS_KEY_ID,
+          secretAccessKey: AWS_SECRET_ACCESS_KEY,
+        },
       },
     };
   }
