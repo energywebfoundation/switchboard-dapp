@@ -2,7 +2,7 @@ import { constants } from './constants';
 import { ChainId } from '../app/core/config/chain-id';
 
 export const environment = {
-  production: true,
+  production: false,
   theme: 'default',
   application: true,
 
