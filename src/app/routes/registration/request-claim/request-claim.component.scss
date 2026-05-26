@@ -35,3 +35,37 @@
 //   color: currentColor;
 //   opacity: 0.3;
 // }
+
+.enrol-header-logo-link {
+  align-items: center;
+  display: flex;
+  height: 48px;
+}
+
+.enrol-header-logo {
+  max-height: 48px;
+  max-width: 220px;
+  object-fit: contain;
+}
+
+.enrol-header-logo-fallback {
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+
+.enrol-header-actions {
+  align-items: center;
+  display: flex;
+}
+
+.enrol-header-action {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  color: #1f1a2d;
+  font-weight: 600;
+}
+
+.enrol-header-action:hover {
+  background: #ffffff;
+}
