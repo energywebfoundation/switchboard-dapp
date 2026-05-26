@@ -301,6 +301,17 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     }
   }
 
+  backToLandingPage() {
+    this.cleanUpSwal();
+
+    if (this.isLoggedIn && !this.stayLoggedIn) {
+      this.logout();
+      return;
+    }
+
+    this.route.navigate([RouterConst.Welcome]);
+  }
+
   logout() {
     this.isLoggedIn = false;
     this.store.dispatch(logout());

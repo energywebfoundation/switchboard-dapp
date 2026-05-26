@@ -178,6 +178,7 @@
                 <mat-icon class="btn-color-primary">preview</mat-icon>
               </button>
               <button
+                *ngIf="!hasUserRole(role)"
                 mat-icon-button
                 matTooltip="Enrol"
                 [routerLink]="['/enrol']"
