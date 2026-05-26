@@ -8,7 +8,7 @@ import {
   RejectClaimRequestOptions,
   RoleCredentialSubject,
 } from 'iam-client-lib';
-import { firstValueFrom, forkJoin, from, Observable, of } from 'rxjs';
+import { concat, firstValueFrom, forkJoin, from, Observable, of } from 'rxjs';
 import { CancelButton } from '../../../layout/loading/loading.component';
 import { LoadingService } from '../loading.service';
 import { filter, finalize, map, switchMap } from 'rxjs/operators';
@@ -174,6 +174,30 @@ export class ClaimsFacadeService {
         map((claims: Claim[]) =>
           claims.map((claim: Claim) => new EnrolmentClaim(claim))
         ),
+        switchMap((enrolments: EnrolmentClaim[]) => {
+          if (!enrolments.length) {
+            return of([]);
+          }
+
+          const initialEnrolments = enrolments.map((claim) =>
+            this.defineStatus(claim)
+          );
+          return concat(
+            of(initialEnrolments),
+            this.enrichEnrolmentClaims(enrolments)
+          );
+        })
+      );
+  }
+
+  private enrichEnrolmentClaims(
+    enrolments: EnrolmentClaim[]
+  ): Observable<EnrolmentClaim[]> {
+    if (!enrolments.length) {
+      return of([]);
+    }
+
+    return of(enrolments).pipe(
         switchMap((enrolments: EnrolmentClaim[]) =>
           forkJoin([
             ...enrolments.map((enrolment) =>
@@ -206,12 +230,14 @@ export class ClaimsFacadeService {
           ])
         ),
         map((claims: EnrolmentClaim[]) =>
-          claims.map((claim: EnrolmentClaim) => {
-            claim.defineStatus();
-            return claim;
-          })
+          claims.map((claim: EnrolmentClaim) => this.defineStatus(claim))
         )
       );
+  }
+
+  private defineStatus(claim: EnrolmentClaim): EnrolmentClaim {
+    claim.defineStatus();
+    return claim;
   }
 
   async addStatusIfIsSyncedOffChain(enrolment: EnrolmentClaim) {

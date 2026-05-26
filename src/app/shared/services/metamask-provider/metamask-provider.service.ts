@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { EnvService } from '../env/env.service';
 import detectMetamask from '@metamask/detect-provider';
 
+interface MetamaskRequestProvider {
+  request(args: { method: string; params?: unknown[] }): Promise<unknown>;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -14,20 +18,38 @@ export class MetamaskProviderService {
 
   public async importMetamaskConf() {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const metamaskProvider: any = await detectMetamask({
-        mustBeMetaMask: true,
-      });
+      const metamaskProvider = await this.detectMetamaskProvider();
+      const chainId = this.getHexChainId();
 
-      if (!metamaskProvider) {
-        throw new Error('MetaMask not detected');
+      await metamaskProvider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [
+          {
+            chainId,
+          },
+        ],
+      });
+      window.location.reload();
+    } catch (switchError) {
+      if (!this.isUnknownChainError(switchError)) {
+        console.error('Did not switch network', switchError);
+        return;
       }
+
+      await this.addNetwork();
+    }
+  }
+
+  private async addNetwork() {
+    try {
+      const metamaskProvider = await this.detectMetamaskProvider();
+      const chainId = this.getHexChainId();
 
       await metamaskProvider.request({
         method: 'wallet_addEthereumChain',
         params: [
           {
-            chainId: `0x${this.envService.chainId.toString(16)}`, // Hexadecimal version of chain ID
+            chainId,
             chainName: this.envService.networkName,
             nativeCurrency: {
               name: this.envService.currencyName,
@@ -36,13 +58,58 @@ export class MetamaskProviderService {
             },
             rpcUrls: [this.envService.rpcUrl],
             blockExplorerUrls: [this.envService.blockExplorerUrl],
-            iconUrls: [''],
           },
         ],
       });
+
+      await metamaskProvider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [
+          {
+            chainId,
+          },
+        ],
+      });
+
       window.location.reload();
     } catch (addError) {
-      console.log('Did not add network');
+      console.error('Did not add network', addError);
     }
+  }
+
+  private async detectMetamaskProvider(): Promise<MetamaskRequestProvider> {
+    const metamaskProvider: unknown = await detectMetamask({
+      mustBeMetaMask: true,
+    });
+
+    if (!this.isMetamaskRequestProvider(metamaskProvider)) {
+      throw new Error('MetaMask not detected');
+    }
+
+    return metamaskProvider;
+  }
+
+  private isMetamaskRequestProvider(
+    provider: unknown
+  ): provider is MetamaskRequestProvider {
+    return (
+      typeof provider === 'object' &&
+      provider !== null &&
+      'request' in provider &&
+      typeof (provider as { request?: unknown }).request === 'function'
+    );
+  }
+
+  private getHexChainId() {
+    return `0x${this.envService.chainId.toString(16)}`;
+  }
+
+  private isUnknownChainError(error: unknown) {
+    return (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      error.code === 4902
+    );
   }
 }

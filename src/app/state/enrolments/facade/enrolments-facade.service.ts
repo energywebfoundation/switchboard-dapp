@@ -10,6 +10,9 @@ import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class EnrolmentsFacadeService {
+  private revokableListRequested = false;
+  private updatedId: string = null;
+
   get pendingApprovalAmount$() {
     return this.store.select(
       RequestedEnrolmentsSelectors.getPendingEnrolmentsAmount
@@ -29,8 +32,10 @@ export class EnrolmentsFacadeService {
       .select(RevocableEnrolmentsSelectors.getAllEnrolments)
       .pipe(
         tap((enrolments) => {
-          // If there are no revocable enrolments, get the list
-          if (enrolments.length === 0) {
+          // If there are no revocable enrolments, get the list once.
+          // An empty result is valid and must not trigger a reload loop.
+          if (enrolments.length === 0 && !this.revokableListRequested) {
+            this.revokableListRequested = true;
             this.store.dispatch(
               RevocableEnrolmentsActions.getRevocableEnrolments()
             );
@@ -38,7 +43,6 @@ export class EnrolmentsFacadeService {
         })
       );
   }
-  private updatedId: string = null;
   constructor(private store: Store) {}
 
   /**
@@ -72,6 +76,7 @@ export class EnrolmentsFacadeService {
   }
 
   updateRevokable(id: string): void {
+    this.revokableListRequested = true;
     this.store.dispatch(RevocableEnrolmentsActions.updateEnrolment({ id }));
   }
 }
