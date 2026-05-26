@@ -10,6 +10,8 @@ import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class EnrolmentsFacadeService {
+  private ownedListRequested = false;
+  private requestedListRequested = false;
   private revokableListRequested = false;
   private updatedId: string = null;
 
@@ -44,6 +46,20 @@ export class EnrolmentsFacadeService {
       );
   }
   constructor(private store: Store) {}
+
+  loadOwned(): void {
+    if (!this.ownedListRequested) {
+      this.ownedListRequested = true;
+      this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
+    }
+  }
+
+  loadRequested(): void {
+    if (!this.requestedListRequested) {
+      this.requestedListRequested = true;
+      this.store.dispatch(RequestedEnrolmentsActions.getEnrolmentRequests());
+    }
+  }
 
   /**
    * Checks for updates for Owned and Requested enrolments are needed, and updates them if needed in the store.
