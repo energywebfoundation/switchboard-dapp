@@ -16,7 +16,6 @@ import { LoadingService } from '../../shared/services/loading.service';
 import { Store } from '@ngrx/store';
 import { UserClaimState } from './user.reducer';
 import * as UserClaimActions from './user.actions';
-import { OwnedEnrolmentsActions, RequestedEnrolmentsActions } from '@state';
 
 @Injectable()
 export class UserEffects {
@@ -43,11 +42,7 @@ export class UserEffects {
       ofType(UserClaimActions.loadUserClaimsSuccess),
       map((userClaimsAction) => userClaimsAction.userClaims),
       mapClaimsProfile(),
-      mergeMap((profile: Profile) => [
-        OwnedEnrolmentsActions.getOwnedEnrolments(),
-        RequestedEnrolmentsActions.getEnrolmentRequests(),
-        UserClaimActions.setProfile({ profile }),
-      ])
+      map((profile: Profile) => UserClaimActions.setProfile({ profile }))
     )
   );
 

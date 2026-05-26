@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { IamService } from '../iam.service';
-import { from } from 'rxjs';
+import { from, of } from 'rxjs';
 import { LoadingService } from '../loading.service';
-import { finalize } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +21,13 @@ export class AssetsFacadeService {
   }
 
   getOfferedAssets() {
-    return from(this.iamService.assetsService.getOfferedAssets());
+    return from(this.iamService.assetsService.getOfferedAssets()).pipe(
+      catchError((error) => {
+        if (error?.status === 404 || String(error?.message).includes('404')) {
+          return of([]);
+        }
+        throw error;
+      })
+    );
   }
 }

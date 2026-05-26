@@ -1,6 +1,8 @@
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { EnrolmentsFacadeService } from '@state';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import * as OwnedEnrolmentsActions from '../owned/owned.actions';
+import * as RequestedEnrolmentsActions from '../requested/requested.actions';
 import * as RevocableEnrolmentsActions from '../revokable/revokable.actions';
 import * as RevocableEnrolmentsSelectors from '../revokable/revokable.selectors';
 
@@ -27,6 +29,28 @@ describe('EnrolmentsFacadeService', () => {
 
     expect(dispatchSpy).toHaveBeenCalledTimes(2);
   }));
+
+  it('should load owned enrolments only once', () => {
+    const dispatchSpy = spyOn(store, 'dispatch');
+
+    service.loadOwned();
+    service.loadOwned();
+
+    expect(dispatchSpy).toHaveBeenCalledOnceWith(
+      OwnedEnrolmentsActions.getOwnedEnrolments()
+    );
+  });
+
+  it('should load requested enrolments only once', () => {
+    const dispatchSpy = spyOn(store, 'dispatch');
+
+    service.loadRequested();
+    service.loadRequested();
+
+    expect(dispatchSpy).toHaveBeenCalledOnceWith(
+      RequestedEnrolmentsActions.getEnrolmentRequests()
+    );
+  });
 
   it('should dispatch action for getting list when list is empty', (done) => {
     const dispatchSpy = spyOn(store, 'dispatch');

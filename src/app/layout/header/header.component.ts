@@ -93,10 +93,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.store
       .select(AuthSelectors.isUserLoggedIn)
       .pipe(truthy(), takeUntil(this._subscription$))
-      .subscribe(async () => {
+      .subscribe(() => {
         this.didBookService.getList();
-        await this.notifService.init();
-        await this.messageSubscriptionService.init();
+        this.notifService.init();
+        this.messageSubscriptionService.init();
         this.issuanceVcService.init();
         this.store.dispatch(LayoutActions.redirect());
       });

@@ -49,6 +49,7 @@ export class EnrolmentComponent implements AfterViewInit {
           if (queryParams.notif === 'pendingSyncToDidDoc') {
             // Display Approved Claims
             this.asyncSetDropdownValue(FilterStatus.Approved);
+            this.enrolmentFacade.loadOwned();
 
             if (this.enrolmentTabGroup) {
               this.enrolmentTabGroup.selectedIndex = 1;
@@ -56,6 +57,7 @@ export class EnrolmentComponent implements AfterViewInit {
           } else if (queryParams.notif === 'myEnrolments') {
             // Display All Claims
             this.asyncSetDropdownValue(FilterStatus.All);
+            this.enrolmentFacade.loadOwned();
 
             if (this.enrolmentTabGroup) {
               this.enrolmentTabGroup.selectedIndex = 1;
@@ -79,6 +81,7 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   showMe(i: any) {
+    this.loadTabData(i.index);
     this.urlParamService.updateQueryParams(
       this.router,
       this.activeRoute,
@@ -118,6 +121,8 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   private initDefault(index?: number): void {
+    this.enrolmentFacade.loadRequested();
+
     if (!this._queryParamSelectedTabInit) {
       this.asyncSetDropdownValue(FilterStatus.Pending);
     }
@@ -128,6 +133,8 @@ export class EnrolmentComponent implements AfterViewInit {
   }
 
   private initDefaultMyEnrolments() {
+    this.enrolmentFacade.loadOwned();
+
     if (this.enrolmentTabGroup) {
       this.enrolmentTabGroup.selectedIndex = 1;
     }
@@ -136,6 +143,16 @@ export class EnrolmentComponent implements AfterViewInit {
   private initDefaultMyRevokables() {
     if (this.enrolmentTabGroup) {
       this.enrolmentTabGroup.selectedIndex = 2;
+    }
+  }
+
+  private loadTabData(index: number): void {
+    if (index === 0) {
+      this.enrolmentFacade.loadRequested();
+    }
+
+    if (index === 1) {
+      this.enrolmentFacade.loadOwned();
     }
   }
 
