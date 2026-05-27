@@ -563,11 +563,14 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         })
       ).filter((claim: Claim) => !claim.isRejected);
     } else {
+      const currentUserDid = this.iamService.signerService.did;
       this.userRoleList = (
         await this.iamService.claimsService.getClaimsByRequester({
-          did: this.iamService.signerService.did,
+          did: currentUserDid,
         })
-      ).filter((claim: Claim) => !claim.isRejected);
+      ).filter(
+        (claim: Claim) => !claim.isRejected && claim.subject === currentUserDid
+      );
     }
 
     if (roleList && roleList.length) {
