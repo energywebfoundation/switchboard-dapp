@@ -198,41 +198,41 @@ export class ClaimsFacadeService {
     }
 
     return of(enrolments).pipe(
-        switchMap((enrolments: EnrolmentClaim[]) =>
-          forkJoin([
-            ...enrolments.map((enrolment) =>
-              from(this.addStatusIfIsSyncedOnChain(enrolment))
-            ),
-          ])
-        ),
-        switchMap((enrolments: EnrolmentClaim[]) =>
-          this.setIsRevokedOnChainStatus(enrolments)
-        ),
-        switchMap((enrolments: EnrolmentClaim[]) =>
-          forkJoin([
-            ...enrolments.map((enrolment) =>
-              from(this.setIsRevokedOffChainStatus(enrolment))
-            ),
-          ])
-        ),
-        switchMap((enrolments: EnrolmentClaim[]) =>
-          forkJoin([
-            ...enrolments.map((enrolment) =>
-              from(this.setDecodedToken(enrolment))
-            ),
-          ])
-        ),
-        switchMap((enrolments: EnrolmentClaim[]) =>
-          forkJoin([
-            ...enrolments.map((enrolment) =>
-              from(this.addStatusIfIsSyncedOffChain(enrolment))
-            ),
-          ])
-        ),
-        map((claims: EnrolmentClaim[]) =>
-          claims.map((claim: EnrolmentClaim) => this.defineStatus(claim))
-        )
-      );
+      switchMap((enrolments: EnrolmentClaim[]) =>
+        forkJoin([
+          ...enrolments.map((enrolment) =>
+            from(this.addStatusIfIsSyncedOnChain(enrolment))
+          ),
+        ])
+      ),
+      switchMap((enrolments: EnrolmentClaim[]) =>
+        this.setIsRevokedOnChainStatus(enrolments)
+      ),
+      switchMap((enrolments: EnrolmentClaim[]) =>
+        forkJoin([
+          ...enrolments.map((enrolment) =>
+            from(this.setIsRevokedOffChainStatus(enrolment))
+          ),
+        ])
+      ),
+      switchMap((enrolments: EnrolmentClaim[]) =>
+        forkJoin([
+          ...enrolments.map((enrolment) =>
+            from(this.setDecodedToken(enrolment))
+          ),
+        ])
+      ),
+      switchMap((enrolments: EnrolmentClaim[]) =>
+        forkJoin([
+          ...enrolments.map((enrolment) =>
+            from(this.addStatusIfIsSyncedOffChain(enrolment))
+          ),
+        ])
+      ),
+      map((claims: EnrolmentClaim[]) =>
+        claims.map((claim: EnrolmentClaim) => this.defineStatus(claim))
+      )
+    );
   }
 
   private defineStatus(claim: EnrolmentClaim): EnrolmentClaim {
