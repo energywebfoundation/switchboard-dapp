@@ -54,6 +54,11 @@ export class EnrolmentsFacadeService {
     }
   }
 
+  refreshOwned(): void {
+    this.ownedListRequested = true;
+    this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
+  }
+
   loadRequested(): void {
     if (!this.requestedListRequested) {
       this.requestedListRequested = true;

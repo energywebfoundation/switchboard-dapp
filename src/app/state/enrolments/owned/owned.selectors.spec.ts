@@ -32,7 +32,7 @@ describe('Owned Enrolments Selectors', () => {
             isAccepted: true,
             registrationTypes: [RegistrationTypes.OnChain],
             expirationTimestamp: (Date.now() + 500000).toString(),
-          } as unknown as Claim),
+          } as unknown as Claim).setIsSyncedOnChain(false),
         ])
       ).toEqual(1);
     });
