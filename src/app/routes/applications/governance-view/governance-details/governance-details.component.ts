@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import {
   IFieldDefinition,
@@ -13,13 +13,17 @@ import { LoadingService } from '../../../../shared/services/loading.service';
 import { GovernanceViewComponent } from '../governance-view.component';
 import { IssuerType } from '../../new-role/models/issuer-type.enum';
 import { IIssuerDefinition } from '@energyweb/credential-governance/dist/src/types/domain-definitions';
+import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { UserClaimSelectors } from '@state';
 
 @Component({
   selector: 'app-governance-details',
   templateUrl: './governance-details.component.html',
   styleUrls: ['./governance-details.component.scss'],
 })
-export class GovernanceDetailsComponent {
+export class GovernanceDetailsComponent implements OnDestroy {
   @Input() set origData(value: any) {
     this.setData(value);
   }
@@ -40,6 +44,8 @@ export class GovernanceDetailsComponent {
   preconditions = {};
   PreconditionTypes = PreconditionType;
   panelOpenState = false;
+  private userRoleNames = new Set<string>();
+  private destroy$ = new Subject<void>();
 
   get requestorFields(): IFieldDefinition[] {
     return (
@@ -91,8 +97,21 @@ export class GovernanceDetailsComponent {
   constructor(
     private iamService: IamService,
     private loadingService: LoadingService,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private store: Store
+  ) {
+    this.store
+      .select(UserClaimSelectors.claimRoleNames)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((roleNames) => {
+        this.userRoleNames = new Set(roleNames);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   public async setData(data: any) {
     this.data = data;
@@ -197,5 +216,9 @@ export class GovernanceDetailsComponent {
     retVal[listType] = namespace;
 
     return retVal;
+  }
+
+  hasUserRole(roleDefinition: any): boolean {
+    return this.userRoleNames.has(roleDefinition?.namespace);
   }
 }

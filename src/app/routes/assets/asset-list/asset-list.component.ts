@@ -20,6 +20,7 @@ import { ConfirmationDialogComponent } from '../../widgets/confirmation-dialog/c
 import { AssetOwnershipHistoryComponent } from '../asset-ownership-history/asset-ownership-history.component';
 import { EditAssetDialogComponent } from '../edit-asset-dialog/edit-asset-dialog.component';
 import {
+  catchError,
   distinctUntilChanged,
   filter,
   finalize,
@@ -28,7 +29,7 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs/operators';
-import { from, Observable, Subject } from 'rxjs';
+import { from, Observable, of, Subject } from 'rxjs';
 import { VerificationMethodComponent } from '../verification-method/verification-method.component';
 import { MatSort } from '@angular/material/sort';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
@@ -414,12 +415,28 @@ export class AssetListComponent implements OnInit, OnDestroy {
         this.iamService.assetsService.getPreviouslyOwnedAssets({
           owner: this.iamService.signerService.did,
         })
-      ).pipe(this.mapEnrolments());
+      ).pipe(
+        this.mapEnrolments(),
+        catchError((error) => {
+          if (this.isNotFoundError(error)) {
+            return of([]);
+          }
+          throw error;
+        })
+      );
     } else if (this.listType === AssetListType.OFFERED_ASSETS) {
       this.loadingService.show();
       return this.loadAssetList(
         this.iamService.assetsService.getOfferedAssets()
-      ).pipe(this.mapEnrolments());
+      ).pipe(
+        this.mapEnrolments(),
+        catchError((error) => {
+          if (this.isNotFoundError(error)) {
+            return of([]);
+          }
+          throw error;
+        })
+      );
     } else {
       this.store.dispatch(OwnedAssetsActions.getOwnedAssets());
       return this.store.select(OwnedAssetsSelectors.getOwnedAssets);
@@ -492,5 +509,9 @@ export class AssetListComponent implements OnInit, OnDestroy {
         })
       )
     );
+  }
+
+  private isNotFoundError(error: any): boolean {
+    return error?.status === 404 || String(error?.message).includes('404');
   }
 }
