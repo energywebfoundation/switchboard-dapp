@@ -284,13 +284,23 @@ describe('EnrolmentClaim tests', () => {
     });
   });
   describe('canPublishClaim', () => {
-    it('should return true if claim is not synced and claim is not expired', () => {
+    it('should return false if sync status is not known yet', () => {
       expect(
         new EnrolmentClaim({
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OnChain],
           expirationTimestamp: (Date.now() + 500000).toString(),
         } as unknown as Claim).canPublishClaim
+      ).toBeFalse();
+    });
+
+    it('should return true if claim is confirmed not synced and claim is not expired', () => {
+      expect(
+        new EnrolmentClaim({
+          isAccepted: true,
+          registrationTypes: [RegistrationTypes.OnChain],
+          expirationTimestamp: (Date.now() + 500000).toString(),
+        } as unknown as Claim).setIsSyncedOnChain(false).canPublishClaim
       ).toBeTrue();
     });
     it('should return false if claim is not synced and claim IS expired', () => {
@@ -299,7 +309,7 @@ describe('EnrolmentClaim tests', () => {
           isAccepted: true,
           registrationTypes: [RegistrationTypes.OnChain],
           expirationTimestamp: (Date.now() - 500).toString(),
-        } as unknown as Claim).canPublishClaim
+        } as unknown as Claim).setIsSyncedOnChain(false).canPublishClaim
       ).toBeFalse();
     });
     it('should return false if claim IS synced and claim is not expired', () => {

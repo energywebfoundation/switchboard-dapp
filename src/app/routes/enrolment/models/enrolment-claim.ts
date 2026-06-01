@@ -56,6 +56,15 @@ export class EnrolmentClaim
     return this.isSyncedOnChain && this.isSyncedOffChain;
   }
 
+  get isSyncStatusKnown(): boolean {
+    const onChainStatusKnown =
+      !this.isRegisteredOnChain() || this._isSyncedOnChain !== undefined;
+    const offChainStatusKnown =
+      !this.isRegisteredOffChain() || this._isSyncedOffChain !== undefined;
+
+    return onChainStatusKnown && offChainStatusKnown;
+  }
+
   get isAccepted() {
     return this.iclClaim.isAccepted && !this.isRevoked;
   }
@@ -80,7 +89,12 @@ export class EnrolmentClaim
   }
 
   get canPublishClaim() {
-    return this.isAccepted && this.isPendingSync && !this.isExpired;
+    return (
+      this.isAccepted &&
+      this.isSyncStatusKnown &&
+      this.isPendingSync &&
+      !this.isExpired
+    );
   }
 
   get isPendingSync() {

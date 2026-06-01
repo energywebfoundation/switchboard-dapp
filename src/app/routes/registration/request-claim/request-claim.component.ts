@@ -37,6 +37,7 @@ import {
 } from '../utils/precondition-check';
 import { LoginService } from 'src/app/shared/services/login/login.service';
 import { RouterConst } from '../../router-const';
+import { EnrolmentsFacadeService } from '@state';
 
 const TOASTR_HEADER = 'Enrolment';
 const DEFAULT_CLAIM_TYPE_VERSION = 1;
@@ -110,7 +111,8 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
     private toastr: SwitchboardToastrService,
     public dialog: MatDialog,
     private loadingService: LoadingService,
-    private store: Store
+    private store: Store,
+    private enrolmentsFacade: EnrolmentsFacadeService
   ) {}
 
   @HostListener('window:beforeunload', ['$event'])
@@ -265,6 +267,7 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
           : undefined,
         registrationTypes: enrolForm.registrationTypes,
       });
+      this.enrolmentsFacade.refreshOwned();
 
       // TODO: Improve form field type from string to object
       this.displayAlert(
@@ -299,6 +302,17 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         queryParams: { returnUrl: RouterConst.MyEnrolments },
       });
     }
+  }
+
+  backToLandingPage() {
+    this.cleanUpSwal();
+
+    if (this.isLoggedIn && !this.stayLoggedIn) {
+      this.logout();
+      return;
+    }
+
+    this.route.navigate([RouterConst.Welcome]);
   }
 
   logout() {
@@ -549,11 +563,14 @@ export class RequestClaimComponent implements OnInit, SubjectElements {
         })
       ).filter((claim: Claim) => !claim.isRejected);
     } else {
+      const currentUserDid = this.iamService.signerService.did;
       this.userRoleList = (
         await this.iamService.claimsService.getClaimsByRequester({
-          did: this.iamService.signerService.did,
+          did: currentUserDid,
         })
-      ).filter((claim: Claim) => !claim.isRejected);
+      ).filter(
+        (claim: Claim) => !claim.isRejected && claim.subject === currentUserDid
+      );
     }
 
     if (roleList && roleList.length) {

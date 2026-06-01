@@ -2,14 +2,23 @@
   <div
     class="header-enroll bg-color d-flex justify-content-center justify-content-between position-fixed pl-4 py-2 w-100"
     [ngStyle]="bgColor">
-    <img src="{{ orgAppDetails?.logoUrl }}" height="48px" *ngIf="orgAppDetails?.logoUrl" />
-    <ng-container *ngIf="!orgAppDetails?.logoUrl">
-      <img src="../assets/img/no-org-image.png" height="48px" *ngIf="isOrganization()" />
-      <img src="../assets/img/no-app-image.png" height="48px" *ngIf="isApplication()" />
-    </ng-container>
-    <div>
-      <button mat-button class="btn btn-small md-enroll px-4 mr-2" (click)="logout()" *ngIf="isLoggedIn">
-        <div [ngStyle]="txtColor">Logout</div>
+    <a routerLink="/dashboard" class="enrol-header-logo-link" aria-label="Go to dashboard">
+      <img src="{{ orgAppDetails?.logoUrl }}" class="enrol-header-logo" *ngIf="orgAppDetails?.logoUrl" />
+      <img
+        src="assets/img/logo-ew-switchboard.svg"
+        class="enrol-header-logo enrol-header-logo-fallback"
+        *ngIf="!orgAppDetails?.logoUrl" />
+    </a>
+    <div class="enrol-header-actions">
+      <button mat-button class="btn btn-small md-enroll enrol-header-action px-4 mr-2" (click)="backToLandingPage()">
+        <div>Back</div>
+      </button>
+      <button
+        mat-button
+        class="btn btn-small md-enroll enrol-header-action px-4 mr-2"
+        (click)="logout()"
+        *ngIf="isLoggedIn">
+        <div>Logout</div>
       </button>
     </div>
   </div>
