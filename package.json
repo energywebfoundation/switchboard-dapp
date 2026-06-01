@@ -62,7 +62,7 @@
     "bootstrap": "4.6.2",
     "browserify-zlib": "^0.2.0",
     "core-js": "3.30.1",
-    "eslint": "^8.42.0",
+    "eslint": "^9.0.0",
     "hammerjs": "^2.0.8",
     "iam-client-lib": "8.2.0-dev.2560.0",
     "jsoneditor": "^9.10.0",
