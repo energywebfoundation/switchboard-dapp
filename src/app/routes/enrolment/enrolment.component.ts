@@ -20,6 +20,7 @@ import { EnrolmentClaim } from './models/enrolment-claim';
 export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
   myEnrolmentList$ = this.enrolmentFacade.ownedList$;
+  myEnrolmentPagination$ = this.enrolmentFacade.ownedPagination$;
   requestedEnrolmentsList$ = this.enrolmentFacade.requestedList$;
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
   revocableList$ = this.enrolmentFacade.revokableList$;
@@ -106,6 +107,10 @@ export class EnrolmentComponent implements AfterViewInit {
 
   removeEnrolment(enrolment: EnrolmentClaim): void {
     this.enrolmentFacade.remove(enrolment.id);
+  }
+
+  goToOwnedPage(skip: number): void {
+    this.enrolmentFacade.goToOwnedPage(skip);
   }
 
   refreshRevocableList(enrolment: EnrolmentClaim): void {

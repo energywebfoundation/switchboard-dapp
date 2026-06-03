@@ -37,7 +37,10 @@ describe('EnrolmentsFacadeService', () => {
     service.loadOwned();
 
     expect(dispatchSpy).toHaveBeenCalledOnceWith(
-      OwnedEnrolmentsActions.getOwnedEnrolments()
+      OwnedEnrolmentsActions.getOwnedEnrolments({
+        skip: 0,
+        take: OwnedEnrolmentsActions.PAGE_SIZE,
+      })
     );
   });
 

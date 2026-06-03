@@ -18,3 +18,9 @@ export const getNotSyncedAmount = createSelector(
     return enrolments.filter((enrolment) => enrolment.canPublishClaim).length;
   }
 );
+
+export const getPagination = createSelector(getOwnedState, (state) => ({
+  skip: state.skip,
+  take: state.take,
+  hasNextPage: state.hasNextPage,
+}));

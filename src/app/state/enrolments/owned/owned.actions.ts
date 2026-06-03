@@ -1,13 +1,16 @@
 import { createAction, props } from '@ngrx/store';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 
+export const PAGE_SIZE = 10;
+
 export const getOwnedEnrolments = createAction(
-  '[OWNED ENROLMENTS] Get Owned Enrolments'
+  '[OWNED ENROLMENTS] Get Owned Enrolments',
+  props<{ skip: number; take: number }>()
 );
 
 export const getOwnedEnrolmentsSuccess = createAction(
   '[OWNED ENROLMENTS] Get Owned Enrolments Success',
-  props<{ enrolments: EnrolmentClaim[] }>()
+  props<{ enrolments: EnrolmentClaim[]; skip: number; take: number }>()
 );
 
 export const getOwnedEnrolmentsFailure = createAction(

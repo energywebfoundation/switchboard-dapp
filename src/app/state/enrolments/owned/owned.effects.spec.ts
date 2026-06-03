@@ -23,6 +23,7 @@ describe('OwnedEnrolmentsEffects', () => {
     ]);
     claimsFacadeSpy = jasmine.createSpyObj('ClaimsFacadeService', [
       'getClaimsByRequester',
+      'getClaimsByRequesterPaginated',
       'getClaimByRequester',
     ]);
     TestBed.configureTestingModule({
@@ -46,12 +47,20 @@ describe('OwnedEnrolmentsEffects', () => {
     });
 
     it('should dispatch failure action on thrown error ', (done) => {
-      claimsFacadeSpy.getClaimsByRequester.and.returnValue(
+      claimsFacadeSpy.getClaimsByRequesterPaginated.and.returnValue(
         throwError(() => ({ message: 'Error' }))
       );
-      actions$.next(OwnedActions.getOwnedEnrolments());
+      actions$.next(
+        OwnedActions.getOwnedEnrolments({
+          skip: 0,
+          take: OwnedActions.PAGE_SIZE,
+        })
+      );
 
       effects.getOwnedEnrolments$.subscribe((resultAction) => {
+        expect(
+          claimsFacadeSpy.getClaimsByRequesterPaginated
+        ).toHaveBeenCalledWith(0, OwnedActions.PAGE_SIZE);
         expect(resultAction).toEqual(
           OwnedActions.getOwnedEnrolmentsFailure({ error: 'Error' })
         );
@@ -64,19 +73,27 @@ describe('OwnedEnrolmentsEffects', () => {
         claimType: 'role.roles.org.iam.ewc',
         createdAt: '2021-12-06T20:43:35.471Z',
       };
-      claimsFacadeSpy.getClaimsByRequester.and.returnValue(of([enrolment]));
+      claimsFacadeSpy.getClaimsByRequesterPaginated.and.returnValue(
+        of([enrolment])
+      );
 
-      actions$.next(OwnedActions.getOwnedEnrolments());
+      actions$.next(
+        OwnedActions.getOwnedEnrolments({
+          skip: 0,
+          take: OwnedActions.PAGE_SIZE,
+        })
+      );
 
       effects.getOwnedEnrolments$.subscribe((resultAction) => {
         expect(loadingServiceSpy.show).toHaveBeenCalled();
+        expect(
+          claimsFacadeSpy.getClaimsByRequesterPaginated
+        ).toHaveBeenCalledWith(0, OwnedActions.PAGE_SIZE);
         expect(resultAction).toEqual(
           OwnedActions.getOwnedEnrolmentsSuccess({
-            enrolments: [
-              {
-                ...enrolment,
-              } as any,
-            ],
+            enrolments: [{ ...enrolment } as any],
+            skip: 0,
+            take: OwnedActions.PAGE_SIZE,
           })
         );
         done();

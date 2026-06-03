@@ -68,7 +68,7 @@ export class ClaimsFacadeService {
     return this.iamService.claimsService.hasOnChainRole(subject, role, version);
   }
 
-  getClaimsBySubject(did) {
+  getClaimsBySubject(did: string) {
     return from(
       this.iamService.claimsService.getClaimsBySubject({
         did,
@@ -85,6 +85,17 @@ export class ClaimsFacadeService {
         isAccepted,
       })
     ).pipe(this.createEnrolmentClaimsFromClaims());
+  }
+
+  getClaimsByRequesterPaginated(
+    skip: number,
+    take: number
+  ): Observable<EnrolmentClaim[]> {
+    const did = this.iamService.signerService.did;
+    const url = `${this.envService.cacheServerUrl}/claim/requester/${did}`;
+    return this.http
+      .get<Claim[]>(url, { params: { skip, take }, withCredentials: true })
+      .pipe(this.createEnrolmentClaimsFromClaims());
   }
 
   getClaimByRequester(id: string): Observable<EnrolmentClaim> {

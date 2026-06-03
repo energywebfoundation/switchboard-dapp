@@ -26,6 +26,9 @@ export class EnrolmentsFacadeService {
   get ownedList$() {
     return this.store.select(OwnedEnrolmentsSelectors.getAllEnrolments);
   }
+  get ownedPagination$() {
+    return this.store.select(OwnedEnrolmentsSelectors.getPagination);
+  }
   get requestedList$() {
     return this.store.select(RequestedEnrolmentsSelectors.getAllEnrolments);
   }
@@ -50,8 +53,22 @@ export class EnrolmentsFacadeService {
   loadOwned(): void {
     if (!this.ownedListRequested) {
       this.ownedListRequested = true;
-      this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
+      this.store.dispatch(
+        OwnedEnrolmentsActions.getOwnedEnrolments({
+          skip: 0,
+          take: OwnedEnrolmentsActions.PAGE_SIZE,
+        })
+      );
     }
+  }
+
+  goToOwnedPage(skip: number): void {
+    this.store.dispatch(
+      OwnedEnrolmentsActions.getOwnedEnrolments({
+        skip,
+        take: OwnedEnrolmentsActions.PAGE_SIZE,
+      })
+    );
   }
 
   refreshOwned(): void {
