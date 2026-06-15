@@ -18,6 +18,32 @@
             [enrolmentStatus]="enrolmentStatus"
             (refreshList)="refreshIssuerList($event)">
           </app-requested-enrolment-list>
+          <ng-container *ngIf="requestedEnrolmentPagination$ | async as pagination">
+            <div class="enrolment-pagination" *ngIf="pagination.skip > 0 || pagination.hasNextPage">
+              <button
+                mat-icon-button
+                class="enrolment-pagination__button"
+                matTooltip="Previous page"
+                aria-label="Previous page"
+                [disabled]="pagination.skip === 0"
+                (click)="goToRequestedPage(pagination.skip - pagination.take)">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+              <div class="enrolment-pagination__label" aria-live="polite">
+                <span class="enrolment-pagination__label-caption">Page</span>
+                <span class="enrolment-pagination__label-number">{{ pagination.skip / pagination.take + 1 }}</span>
+              </div>
+              <button
+                mat-icon-button
+                class="enrolment-pagination__button"
+                matTooltip="Next page"
+                aria-label="Next page"
+                [disabled]="!pagination.hasNextPage"
+                (click)="goToRequestedPage(pagination.skip + pagination.take)">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>
@@ -35,23 +61,23 @@
             (removeEnrolment)="removeEnrolment($event)">
           </app-my-enrolment-list>
           <ng-container *ngIf="myEnrolmentPagination$ | async as pagination">
-            <div class="owned-pagination" *ngIf="pagination.skip > 0 || pagination.hasNextPage">
+            <div class="enrolment-pagination" *ngIf="pagination.skip > 0 || pagination.hasNextPage">
               <button
                 mat-icon-button
-                class="owned-pagination__button"
+                class="enrolment-pagination__button"
                 matTooltip="Previous page"
                 aria-label="Previous page"
                 [disabled]="pagination.skip === 0"
                 (click)="goToOwnedPage(pagination.skip - pagination.take)">
                 <mat-icon>chevron_left</mat-icon>
               </button>
-              <div class="owned-pagination__label" aria-live="polite">
-                <span class="owned-pagination__label-caption">Page</span>
-                <span class="owned-pagination__label-number">{{ pagination.skip / pagination.take + 1 }}</span>
+              <div class="enrolment-pagination__label" aria-live="polite">
+                <span class="enrolment-pagination__label-caption">Page</span>
+                <span class="enrolment-pagination__label-number">{{ pagination.skip / pagination.take + 1 }}</span>
               </div>
               <button
                 mat-icon-button
-                class="owned-pagination__button"
+                class="enrolment-pagination__button"
                 matTooltip="Next page"
                 aria-label="Next page"
                 [disabled]="!pagination.hasNextPage"
@@ -73,6 +99,32 @@
         <div class="card card-default mb-3 pb-0">
           <app-revoke-enrolment-list [list]="revocableList$ | async" (refreshList)="refreshRevocableList($event)">
           </app-revoke-enrolment-list>
+          <ng-container *ngIf="revocablePagination$ | async as pagination">
+            <div class="enrolment-pagination" *ngIf="pagination.skip > 0 || pagination.hasNextPage">
+              <button
+                mat-icon-button
+                class="enrolment-pagination__button"
+                matTooltip="Previous page"
+                aria-label="Previous page"
+                [disabled]="pagination.skip === 0"
+                (click)="goToRevokablePage(pagination.skip - pagination.take)">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+              <div class="enrolment-pagination__label" aria-live="polite">
+                <span class="enrolment-pagination__label-caption">Page</span>
+                <span class="enrolment-pagination__label-number">{{ pagination.skip / pagination.take + 1 }}</span>
+              </div>
+              <button
+                mat-icon-button
+                class="enrolment-pagination__button"
+                matTooltip="Next page"
+                aria-label="Next page"
+                [disabled]="!pagination.hasNextPage"
+                (click)="goToRevokablePage(pagination.skip + pagination.take)">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>

@@ -11,3 +11,9 @@ export const getAllEnrolments = createSelector(
   getRevokableState,
   (state) => state.enrolments
 );
+
+export const getPagination = createSelector(getRevokableState, (state) => ({
+  skip: state.skip,
+  take: state.take,
+  hasNextPage: state.hasNextPage,
+}));

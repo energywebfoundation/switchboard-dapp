@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { IamService } from '../iam.service';
 import {
   Claim,
@@ -17,6 +18,7 @@ import { VerifiableCredential } from '@ew-did-registry/credentials-interface';
 
 import * as userSelectors from '../../../state/user-claim/user.selectors';
 import { Store } from '@ngrx/store';
+import { EnvService } from '../env/env.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +27,9 @@ export class ClaimsFacadeService {
   constructor(
     private iamService: IamService,
     private loadingService: LoadingService,
-    private store: Store
+    private store: Store,
+    private envService: EnvService,
+    private http: HttpClient
   ) {}
 
   createSelfSignedClaim(data: {
@@ -94,7 +98,10 @@ export class ClaimsFacadeService {
     const did = this.iamService.signerService.did;
     const url = `${this.envService.cacheServerUrl}/claim/requester/${did}`;
     return this.http
-      .get<Claim[]>(url, { params: { skip, take }, withCredentials: true })
+      .get<Claim[]>(url, {
+        params: { skip, take, order: 'DESC' },
+        withCredentials: true,
+      })
       .pipe(this.createEnrolmentClaimsFromClaims());
   }
 
@@ -118,10 +125,15 @@ export class ClaimsFacadeService {
     return enrolment.setIsSyncedOnChain(false);
   }
 
-  getClaimsByRevoker(): Observable<EnrolmentClaim[]> {
+  getClaimsByRevoker(
+    skip?: number,
+    take?: number
+  ): Observable<EnrolmentClaim[]> {
     return from(
       this.iamService.claimsService.getClaimsByRevoker({
         did: this.iamService.signerService.did,
+        skip,
+        take,
       })
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }
@@ -142,10 +154,15 @@ export class ClaimsFacadeService {
     ).pipe(this.getEnrolmentClaimFromClaimForId(id));
   }
 
-  getClaimsByIssuer(): Observable<EnrolmentClaim[]> {
+  getClaimsByIssuer(
+    skip?: number,
+    take?: number
+  ): Observable<EnrolmentClaim[]> {
     return from(
       this.iamService.claimsService.getClaimsByIssuer({
         did: this.iamService.signerService.did,
+        skip,
+        take,
       })
     ).pipe(this.createEnrolmentClaimsFromClaims());
   }

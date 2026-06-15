@@ -47,9 +47,18 @@ describe('RevokableEnrolmentsEffects', () => {
       claimsFacadeSpy.getClaimsByRevoker.and.returnValue(
         throwError(() => ({ message: 'Error' }))
       );
-      actions$.next(RevokableActions.getRevocableEnrolments());
+      actions$.next(
+        RevokableActions.getRevocableEnrolments({
+          skip: 0,
+          take: RevokableActions.PAGE_SIZE,
+        })
+      );
 
       effects.getRevokableEnrolments$.subscribe((resultAction) => {
+        expect(claimsFacadeSpy.getClaimsByRevoker).toHaveBeenCalledWith(
+          0,
+          RevokableActions.PAGE_SIZE
+        );
         expect(resultAction).toEqual(
           RevokableActions.getRevocableEnrolmentsFailure({ error: 'Error' })
         );
@@ -64,10 +73,19 @@ describe('RevokableEnrolmentsEffects', () => {
       };
       claimsFacadeSpy.getClaimsByRevoker.and.returnValue(of([enrolment]));
 
-      actions$.next(RevokableActions.getRevocableEnrolments());
+      actions$.next(
+        RevokableActions.getRevocableEnrolments({
+          skip: 0,
+          take: RevokableActions.PAGE_SIZE,
+        })
+      );
 
       effects.getRevokableEnrolments$.subscribe((resultAction) => {
         expect(loadingServiceSpy.show).toHaveBeenCalled();
+        expect(claimsFacadeSpy.getClaimsByRevoker).toHaveBeenCalledWith(
+          0,
+          RevokableActions.PAGE_SIZE
+        );
         expect(resultAction).toEqual(
           RevokableActions.getRevocableEnrolmentsSuccess({
             enrolments: [
@@ -75,6 +93,8 @@ describe('RevokableEnrolmentsEffects', () => {
                 ...enrolment,
               } as any,
             ],
+            skip: 0,
+            take: RevokableActions.PAGE_SIZE,
           })
         );
         done();

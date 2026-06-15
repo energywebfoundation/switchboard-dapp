@@ -47,9 +47,18 @@ describe('EnrolmentRequestsEffects', () => {
       claimsFacadeSpy.getClaimsByIssuer.and.returnValue(
         throwError(() => ({ message: 'Error' }))
       );
-      actions$.next(RequestedActions.getEnrolmentRequests());
+      actions$.next(
+        RequestedActions.getEnrolmentRequests({
+          skip: 0,
+          take: RequestedActions.PAGE_SIZE,
+        })
+      );
 
       effects.getEnrolmentRequests$.subscribe((resultAction) => {
+        expect(claimsFacadeSpy.getClaimsByIssuer).toHaveBeenCalledWith(
+          0,
+          RequestedActions.PAGE_SIZE
+        );
         expect(resultAction).toEqual(
           RequestedActions.getEnrolmentRequestsFailure({ error: 'Error' })
         );
@@ -63,10 +72,19 @@ describe('EnrolmentRequestsEffects', () => {
         createdAt: '2021-12-06T20:43:35.471Z',
       };
       claimsFacadeSpy.getClaimsByIssuer.and.returnValue(of([enrolment]));
-      actions$.next(RequestedActions.getEnrolmentRequests());
+      actions$.next(
+        RequestedActions.getEnrolmentRequests({
+          skip: 0,
+          take: RequestedActions.PAGE_SIZE,
+        })
+      );
 
       effects.getEnrolmentRequests$.subscribe((resultAction) => {
         expect(loadingServiceSpy.show).toHaveBeenCalled();
+        expect(claimsFacadeSpy.getClaimsByIssuer).toHaveBeenCalledWith(
+          0,
+          RequestedActions.PAGE_SIZE
+        );
         expect(resultAction).toEqual(
           RequestedActions.getEnrolmentRequestsSuccess({
             enrolments: [
@@ -74,6 +92,8 @@ describe('EnrolmentRequestsEffects', () => {
                 ...enrolment,
               } as EnrolmentClaim,
             ],
+            skip: 0,
+            take: RequestedActions.PAGE_SIZE,
           })
         );
         done();

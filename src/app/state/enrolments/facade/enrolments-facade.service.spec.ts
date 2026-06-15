@@ -51,7 +51,10 @@ describe('EnrolmentsFacadeService', () => {
     service.loadRequested();
 
     expect(dispatchSpy).toHaveBeenCalledOnceWith(
-      RequestedEnrolmentsActions.getEnrolmentRequests()
+      RequestedEnrolmentsActions.getEnrolmentRequests({
+        skip: 0,
+        take: RequestedEnrolmentsActions.PAGE_SIZE,
+      })
     );
   });
 
@@ -61,7 +64,10 @@ describe('EnrolmentsFacadeService', () => {
     service.revokableList$.subscribe({
       next: () => {
         expect(dispatchSpy).toHaveBeenCalledOnceWith(
-          RevocableEnrolmentsActions.getRevocableEnrolments()
+          RevocableEnrolmentsActions.getRevocableEnrolments({
+            skip: 0,
+            take: RevocableEnrolmentsActions.PAGE_SIZE,
+          })
         );
         done();
       },
@@ -76,7 +82,10 @@ describe('EnrolmentsFacadeService', () => {
     service.revokableList$.subscribe({
       next: () => {
         expect(dispatchSpy).not.toHaveBeenCalledOnceWith(
-          RevocableEnrolmentsActions.getRevocableEnrolments()
+          RevocableEnrolmentsActions.getRevocableEnrolments({
+            skip: 0,
+            take: RevocableEnrolmentsActions.PAGE_SIZE,
+          })
         );
         done();
       },

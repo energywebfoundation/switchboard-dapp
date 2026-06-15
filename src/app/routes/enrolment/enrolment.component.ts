@@ -22,8 +22,10 @@ export class EnrolmentComponent implements AfterViewInit {
   myEnrolmentList$ = this.enrolmentFacade.ownedList$;
   myEnrolmentPagination$ = this.enrolmentFacade.ownedPagination$;
   requestedEnrolmentsList$ = this.enrolmentFacade.requestedList$;
+  requestedEnrolmentPagination$ = this.enrolmentFacade.requestedPagination$;
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
   revocableList$ = this.enrolmentFacade.revokableList$;
+  revocablePagination$ = this.enrolmentFacade.revokablePagination$;
   enrolmentStatus: FilterStatus = FilterStatus.Pending;
 
   private _queryParamSelectedTabInit = false;
@@ -109,8 +111,16 @@ export class EnrolmentComponent implements AfterViewInit {
     this.enrolmentFacade.remove(enrolment.id);
   }
 
+  goToRequestedPage(skip: number): void {
+    this.enrolmentFacade.goToRequestedPage(skip);
+  }
+
   goToOwnedPage(skip: number): void {
     this.enrolmentFacade.goToOwnedPage(skip);
+  }
+
+  goToRevokablePage(skip: number): void {
+    this.enrolmentFacade.goToRevokablePage(skip);
   }
 
   refreshRevocableList(enrolment: EnrolmentClaim): void {

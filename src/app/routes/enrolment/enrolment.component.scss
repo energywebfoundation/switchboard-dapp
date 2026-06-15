@@ -54,7 +54,7 @@
   }
 }
 
-.owned-pagination {
+.enrolment-pagination {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,7 +63,7 @@
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.owned-pagination__button {
+.enrolment-pagination__button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,7 +87,7 @@
   }
 }
 
-.owned-pagination__label {
+.enrolment-pagination__label {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -100,12 +100,12 @@
   border-radius: 4px;
 }
 
-.owned-pagination__label-caption {
+.enrolment-pagination__label-caption {
   color: rgba(255, 255, 255, 0.62);
   font-size: 12px;
 }
 
-.owned-pagination__label-number {
+.enrolment-pagination__label-number {
   font-size: 15px;
   font-weight: 700;
 }

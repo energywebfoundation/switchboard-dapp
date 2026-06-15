@@ -6,23 +6,37 @@ export const USER_FEATURE_KEY = 'revokable';
 
 export interface RevokableState {
   enrolments: EnrolmentClaim[];
+  skip: number;
+  take: number;
+  hasNextPage: boolean;
 }
 
 export const initialState: RevokableState = {
   enrolments: [],
+  skip: 0,
+  take: RevokableActions.PAGE_SIZE,
+  hasNextPage: false,
 };
 
 const revokableReducer = createReducer(
   initialState,
   on(
     RevokableActions.getRevocableEnrolmentsSuccess,
-    RevokableActions.updateRevocableEnrolmentsSuccess,
-    (state, { enrolments }) => ({
+    (state, { enrolments, skip, take }) => ({
       ...state,
       enrolments,
+      skip,
+      take,
+      hasNextPage: enrolments.length === take,
     })
   ),
+  on(RevokableActions.updateRevocableEnrolmentsSuccess, (state, { enrolments }) => ({
+    ...state,
+    enrolments,
+    hasNextPage: enrolments.length === state.take,
+  })),
   on(RevokableActions.updateEnrolmentSuccess, (state, { enrolment }) => ({
+    ...state,
     enrolments: [
       ...state.enrolments.filter((e) => e.id !== enrolment.id),
       enrolment,
