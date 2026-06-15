@@ -57,7 +57,7 @@ describe('RevokableEnrolmentsEffects', () => {
       effects.getRevokableEnrolments$.subscribe((resultAction) => {
         expect(claimsFacadeSpy.getClaimsByRevoker).toHaveBeenCalledWith(
           0,
-          RevokableActions.PAGE_SIZE
+          RevokableActions.PAGE_SIZE + 1
         );
         expect(resultAction).toEqual(
           RevokableActions.getRevocableEnrolmentsFailure({ error: 'Error' })
@@ -84,7 +84,7 @@ describe('RevokableEnrolmentsEffects', () => {
         expect(loadingServiceSpy.show).toHaveBeenCalled();
         expect(claimsFacadeSpy.getClaimsByRevoker).toHaveBeenCalledWith(
           0,
-          RevokableActions.PAGE_SIZE
+          RevokableActions.PAGE_SIZE + 1
         );
         expect(resultAction).toEqual(
           RevokableActions.getRevocableEnrolmentsSuccess({
@@ -95,6 +95,7 @@ describe('RevokableEnrolmentsEffects', () => {
             ],
             skip: 0,
             take: RevokableActions.PAGE_SIZE,
+            hasNextPage: false,
           })
         );
         done();

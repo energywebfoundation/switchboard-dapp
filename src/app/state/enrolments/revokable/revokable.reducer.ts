@@ -22,18 +22,18 @@ const revokableReducer = createReducer(
   initialState,
   on(
     RevokableActions.getRevocableEnrolmentsSuccess,
-    (state, { enrolments, skip, take }) => ({
+    (state, { enrolments, skip, take, hasNextPage }) => ({
       ...state,
       enrolments,
       skip,
       take,
-      hasNextPage: enrolments.length === take,
+      hasNextPage,
     })
   ),
-  on(RevokableActions.updateRevocableEnrolmentsSuccess, (state, { enrolments }) => ({
+  on(RevokableActions.updateRevocableEnrolmentsSuccess, (state, { enrolments, hasNextPage }) => ({
     ...state,
     enrolments,
-    hasNextPage: enrolments.length === state.take,
+    hasNextPage,
   })),
   on(RevokableActions.updateEnrolmentSuccess, (state, { enrolment }) => ({
     ...state,

@@ -115,12 +115,24 @@ export class EnrolmentComponent implements AfterViewInit {
     this.enrolmentFacade.goToRequestedPage(skip);
   }
 
+  goToRequestedLastPage(): void {
+    this.enrolmentFacade.goToRequestedLastPage();
+  }
+
   goToOwnedPage(skip: number): void {
     this.enrolmentFacade.goToOwnedPage(skip);
   }
 
+  goToOwnedLastPage(): void {
+    this.enrolmentFacade.goToOwnedLastPage();
+  }
+
   goToRevokablePage(skip: number): void {
     this.enrolmentFacade.goToRevokablePage(skip);
+  }
+
+  goToRevokableLastPage(): void {
+    this.enrolmentFacade.goToRevokableLastPage();
   }
 
   refreshRevocableList(enrolment: EnrolmentClaim): void {

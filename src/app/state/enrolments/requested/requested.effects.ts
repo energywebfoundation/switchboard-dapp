@@ -3,11 +3,15 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as RequestedActions from './requested.actions';
 import * as RequestedSelectors from './requested.selectors';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { EffectBaseAbstract } from '../utils/effect.base.abstract';
+import {
+  loadEnrolmentPage,
+  loadLastEnrolmentPageFromAll,
+} from '../utils/pagination';
 import {
   catchError,
   finalize,
@@ -31,12 +35,63 @@ export class EnrolmentRequestsEffects extends EffectBaseAbstract {
             hidden = true;
           }
         };
-        return this.claimsFacade.getClaimsByIssuer(skip, take).pipe(
-          map((enrolments) =>
+        return from(
+          loadEnrolmentPage(
+            (pageSkip, pageTake) =>
+              this.claimsFacade.getClaimsByIssuer(pageSkip, pageTake),
+            skip,
+            take
+          )
+        ).pipe(
+          map((page) =>
             RequestedActions.getEnrolmentRequestsSuccess({
-              enrolments,
-              skip,
-              take,
+              enrolments: page.enrolments,
+              skip: page.skip,
+              take: page.take,
+              hasNextPage: page.hasNextPage,
+            })
+          ),
+          tap(() => hide()),
+          catchError((e) => {
+            console.error(e);
+            hide();
+            return of(
+              RequestedActions.getEnrolmentRequestsFailure({
+                error: e.message,
+              })
+            );
+          }),
+          finalize(() => hide())
+        );
+      })
+    )
+  );
+
+  getLastEnrolmentRequests$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RequestedActions.getLastEnrolmentRequests),
+      withLatestFrom(this.store.select(RequestedSelectors.getPagination)),
+      switchMap(([_, { skip, take }]) => {
+        this.loadingService.show();
+        let hidden = false;
+        const hide = () => {
+          if (!hidden) {
+            this.loadingService.hide();
+            hidden = true;
+          }
+        };
+        return from(
+          loadLastEnrolmentPageFromAll(
+            () => this.claimsFacade.getClaimsByIssuer(),
+            take
+          )
+        ).pipe(
+          map((page) =>
+            RequestedActions.getEnrolmentRequestsSuccess({
+              enrolments: page.enrolments,
+              skip: page.skip,
+              take: page.take,
+              hasNextPage: page.hasNextPage,
             })
           ),
           tap(() => hide()),
@@ -68,9 +123,19 @@ export class EnrolmentRequestsEffects extends EffectBaseAbstract {
             hidden = true;
           }
         };
-        return this.claimsFacade.getClaimsByIssuer(skip, take).pipe(
-          map((enrolments) =>
-            RequestedActions.updateEnrolmentRequestsSuccess({ enrolments })
+        return from(
+          loadEnrolmentPage(
+            (pageSkip, pageTake) =>
+              this.claimsFacade.getClaimsByIssuer(pageSkip, pageTake),
+            skip,
+            take
+          )
+        ).pipe(
+          map((page) =>
+            RequestedActions.updateEnrolmentRequestsSuccess({
+              enrolments: page.enrolments,
+              hasNextPage: page.hasNextPage,
+            })
           ),
           tap(() => hide()),
           catchError((e) => {

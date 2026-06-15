@@ -22,18 +22,18 @@ const ownedReducer = createReducer(
   initialState,
   on(
     OwnedActions.getOwnedEnrolmentsSuccess,
-    (state, { enrolments, skip, take }) => ({
+    (state, { enrolments, skip, take, hasNextPage }) => ({
       ...state,
       enrolments,
       skip,
       take,
-      hasNextPage: enrolments.length === take,
+      hasNextPage,
     })
   ),
-  on(OwnedActions.updateOwnedEnrolmentsSuccess, (state, { enrolments }) => ({
+  on(OwnedActions.updateOwnedEnrolmentsSuccess, (state, { enrolments, hasNextPage }) => ({
     ...state,
     enrolments,
-    hasNextPage: enrolments.length === state.take,
+    hasNextPage,
   })),
   on(OwnedActions.updateEnrolmentSuccess, (state, { enrolment }) => ({
     ...state,

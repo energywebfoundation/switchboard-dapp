@@ -14,6 +14,7 @@ describe('Requested enrolments reducer', () => {
         enrolments,
         skip: 5,
         take: RequestedActions.PAGE_SIZE,
+        hasNextPage: true,
       });
       const state = fromReducer.reducer(initialState, action);
 

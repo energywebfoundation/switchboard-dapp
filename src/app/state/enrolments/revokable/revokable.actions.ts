@@ -8,9 +8,18 @@ export const getRevocableEnrolments = createAction(
   props<{ skip: number; take: number }>()
 );
 
+export const getLastRevocableEnrolments = createAction(
+  '[REVOCABLE ENROLMENTS] Get Last Enrolments'
+);
+
 export const getRevocableEnrolmentsSuccess = createAction(
   '[REVOCABLE ENROLMENTS] Get Enrolments Success',
-  props<{ enrolments: EnrolmentClaim[]; skip: number; take: number }>()
+  props<{
+    enrolments: EnrolmentClaim[];
+    skip: number;
+    take: number;
+    hasNextPage: boolean;
+  }>()
 );
 
 export const getRevocableEnrolmentsFailure = createAction(
@@ -24,7 +33,7 @@ export const updateRevocableEnrolments = createAction(
 
 export const updateRevocableEnrolmentsSuccess = createAction(
   '[REVOCABLE ENROLMENTS] Update Revocable Enrolments Success',
-  props<{ enrolments: EnrolmentClaim[] }>()
+  props<{ enrolments: EnrolmentClaim[]; hasNextPage: boolean }>()
 );
 
 export const updateRevocableEnrolmentsFailure = createAction(

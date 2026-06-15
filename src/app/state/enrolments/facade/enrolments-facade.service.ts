@@ -80,6 +80,10 @@ export class EnrolmentsFacadeService {
     );
   }
 
+  goToOwnedLastPage(): void {
+    this.store.dispatch(OwnedEnrolmentsActions.getLastOwnedEnrolments());
+  }
+
   refreshOwned(): void {
     this.ownedListRequested = true;
     this.store.dispatch(OwnedEnrolmentsActions.updateOwnedEnrolments());
@@ -106,6 +110,10 @@ export class EnrolmentsFacadeService {
     );
   }
 
+  goToRequestedLastPage(): void {
+    this.store.dispatch(RequestedEnrolmentsActions.getLastEnrolmentRequests());
+  }
+
   goToRevokablePage(skip: number): void {
     this.revokableListRequested = true;
     this.store.dispatch(
@@ -114,6 +122,11 @@ export class EnrolmentsFacadeService {
         take: RevocableEnrolmentsActions.PAGE_SIZE,
       })
     );
+  }
+
+  goToRevokableLastPage(): void {
+    this.revokableListRequested = true;
+    this.store.dispatch(RevocableEnrolmentsActions.getLastRevocableEnrolments());
   }
 
   /**

@@ -57,7 +57,7 @@ describe('EnrolmentRequestsEffects', () => {
       effects.getEnrolmentRequests$.subscribe((resultAction) => {
         expect(claimsFacadeSpy.getClaimsByIssuer).toHaveBeenCalledWith(
           0,
-          RequestedActions.PAGE_SIZE
+          RequestedActions.PAGE_SIZE + 1
         );
         expect(resultAction).toEqual(
           RequestedActions.getEnrolmentRequestsFailure({ error: 'Error' })
@@ -83,7 +83,7 @@ describe('EnrolmentRequestsEffects', () => {
         expect(loadingServiceSpy.show).toHaveBeenCalled();
         expect(claimsFacadeSpy.getClaimsByIssuer).toHaveBeenCalledWith(
           0,
-          RequestedActions.PAGE_SIZE
+          RequestedActions.PAGE_SIZE + 1
         );
         expect(resultAction).toEqual(
           RequestedActions.getEnrolmentRequestsSuccess({
@@ -94,6 +94,7 @@ describe('EnrolmentRequestsEffects', () => {
             ],
             skip: 0,
             take: RequestedActions.PAGE_SIZE,
+            hasNextPage: false,
           })
         );
         done();

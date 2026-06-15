@@ -11,6 +11,7 @@ describe('Owned Enrolments reducer', () => {
         enrolments,
         skip: 0,
         take: OwnedActions.PAGE_SIZE,
+        hasNextPage: false,
       });
       const state = fromReducer.reducer(initialState, action);
 
@@ -27,6 +28,7 @@ describe('Owned Enrolments reducer', () => {
         enrolments,
         skip: 5,
         take: OwnedActions.PAGE_SIZE,
+        hasNextPage: true,
       });
       const state = fromReducer.reducer(initialState, action);
 

@@ -8,9 +8,18 @@ export const getOwnedEnrolments = createAction(
   props<{ skip: number; take: number }>()
 );
 
+export const getLastOwnedEnrolments = createAction(
+  '[OWNED ENROLMENTS] Get Last Owned Enrolments'
+);
+
 export const getOwnedEnrolmentsSuccess = createAction(
   '[OWNED ENROLMENTS] Get Owned Enrolments Success',
-  props<{ enrolments: EnrolmentClaim[]; skip: number; take: number }>()
+  props<{
+    enrolments: EnrolmentClaim[];
+    skip: number;
+    take: number;
+    hasNextPage: boolean;
+  }>()
 );
 
 export const getOwnedEnrolmentsFailure = createAction(
@@ -24,7 +33,7 @@ export const updateOwnedEnrolments = createAction(
 
 export const updateOwnedEnrolmentsSuccess = createAction(
   '[OWNED ENROLMENTS] Update Owned Enrolments Success',
-  props<{ enrolments: EnrolmentClaim[] }>()
+  props<{ enrolments: EnrolmentClaim[]; hasNextPage: boolean }>()
 );
 
 export const updateOwnedEnrolmentsFailure = createAction(

@@ -11,11 +11,15 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { ClaimsFacadeService } from '../../../shared/services/claims-facade/claims-facade.service';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { EffectBaseAbstract } from '../utils/effect.base.abstract';
+import {
+  loadEnrolmentPage,
+  loadLastEnrolmentPage,
+} from '../utils/pagination';
 
 @Injectable()
 export class OwnedEnrolmentsEffects extends EffectBaseAbstract {
@@ -31,9 +35,70 @@ export class OwnedEnrolmentsEffects extends EffectBaseAbstract {
             hidden = true;
           }
         };
-        return this.claimsFacade.getClaimsByRequesterPaginated(skip, take).pipe(
-          map((enrolments) =>
-            OwnedActions.getOwnedEnrolmentsSuccess({ enrolments, skip, take })
+        return from(
+          loadEnrolmentPage(
+            (pageSkip, pageTake) =>
+              this.claimsFacade.getClaimsByRequesterPaginated(
+                pageSkip,
+                pageTake
+              ),
+            skip,
+            take
+          )
+        ).pipe(
+          map((page) =>
+            OwnedActions.getOwnedEnrolmentsSuccess({
+              enrolments: page.enrolments,
+              skip: page.skip,
+              take: page.take,
+              hasNextPage: page.hasNextPage,
+            })
+          ),
+          tap(() => hide()),
+          catchError((e) => {
+            console.error(e);
+            hide();
+            return of(
+              OwnedActions.getOwnedEnrolmentsFailure({ error: e.message })
+            );
+          }),
+          finalize(() => hide())
+        );
+      })
+    )
+  );
+
+  getLastOwnedEnrolments$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OwnedActions.getLastOwnedEnrolments),
+      withLatestFrom(this.store.select(OwnedSelectors.getPagination)),
+      switchMap(([_, { skip, take }]) => {
+        this.loadingService.show();
+        let hidden = false;
+        const hide = () => {
+          if (!hidden) {
+            this.loadingService.hide();
+            hidden = true;
+          }
+        };
+        return from(
+          loadLastEnrolmentPage(
+            (pageSkip, pageTake) =>
+              this.claimsFacade.getClaimsByRequesterPaginated(
+                pageSkip,
+                pageTake
+              ),
+            skip,
+            take
+          )
+        ).pipe(
+          map((page) =>
+            OwnedActions.getOwnedEnrolmentsSuccess({
+              enrolments: page.enrolments,
+              skip: page.skip,
+              take: page.take,
+              hasNextPage: page.hasNextPage,
+            })
           ),
           tap(() => hide()),
           catchError((e) => {
@@ -62,9 +127,22 @@ export class OwnedEnrolmentsEffects extends EffectBaseAbstract {
             hidden = true;
           }
         };
-        return this.claimsFacade.getClaimsByRequesterPaginated(skip, take).pipe(
-          map((enrolments) =>
-            OwnedActions.updateOwnedEnrolmentsSuccess({ enrolments })
+        return from(
+          loadEnrolmentPage(
+            (pageSkip, pageTake) =>
+              this.claimsFacade.getClaimsByRequesterPaginated(
+                pageSkip,
+                pageTake
+              ),
+            skip,
+            take
+          )
+        ).pipe(
+          map((page) =>
+            OwnedActions.updateOwnedEnrolmentsSuccess({
+              enrolments: page.enrolments,
+              hasNextPage: page.hasNextPage,
+            })
           ),
           tap(() => hide()),
           catchError((e) => {

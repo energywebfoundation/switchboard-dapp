@@ -60,7 +60,7 @@ describe('OwnedEnrolmentsEffects', () => {
       effects.getOwnedEnrolments$.subscribe((resultAction) => {
         expect(
           claimsFacadeSpy.getClaimsByRequesterPaginated
-        ).toHaveBeenCalledWith(0, OwnedActions.PAGE_SIZE);
+        ).toHaveBeenCalledWith(0, OwnedActions.PAGE_SIZE + 1);
         expect(resultAction).toEqual(
           OwnedActions.getOwnedEnrolmentsFailure({ error: 'Error' })
         );
@@ -88,12 +88,13 @@ describe('OwnedEnrolmentsEffects', () => {
         expect(loadingServiceSpy.show).toHaveBeenCalled();
         expect(
           claimsFacadeSpy.getClaimsByRequesterPaginated
-        ).toHaveBeenCalledWith(0, OwnedActions.PAGE_SIZE);
+        ).toHaveBeenCalledWith(0, OwnedActions.PAGE_SIZE + 1);
         expect(resultAction).toEqual(
           OwnedActions.getOwnedEnrolmentsSuccess({
             enrolments: [{ ...enrolment } as any],
             skip: 0,
             take: OwnedActions.PAGE_SIZE,
+            hasNextPage: false,
           })
         );
         done();

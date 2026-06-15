@@ -14,6 +14,7 @@ describe('Revokable enrolments reducer', () => {
         enrolments,
         skip: 5,
         take: RevokableActions.PAGE_SIZE,
+        hasNextPage: true,
       });
       const state = fromReducer.reducer(initialState, action);
 
