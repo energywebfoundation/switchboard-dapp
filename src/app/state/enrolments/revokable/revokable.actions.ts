@@ -1,7 +1,7 @@
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { createAction, props } from '@ngrx/store';
 
-export const PAGE_SIZE = 5;
+export const PAGE_SIZE = 20;
 
 export const getRevocableEnrolments = createAction(
   '[REVOCABLE ENROLMENTS] Get Enrolments',
