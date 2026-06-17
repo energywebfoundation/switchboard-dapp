@@ -6,13 +6,22 @@ describe('Requested enrolments reducer', () => {
   describe('getEnrolmentRequestsSuccess action', () => {
     it('should set enrolments in an immutable way', () => {
       const { initialState } = fromReducer;
-      const enrolments = [{} as EnrolmentClaim];
+      const enrolments = Array.from(
+        { length: RequestedActions.PAGE_SIZE },
+        () => ({} as EnrolmentClaim)
+      );
       const action = RequestedActions.getEnrolmentRequestsSuccess({
         enrolments,
+        skip: 5,
+        take: RequestedActions.PAGE_SIZE,
+        hasNextPage: true,
       });
       const state = fromReducer.reducer(initialState, action);
 
       expect(state.enrolments).toEqual(enrolments);
+      expect(state.skip).toEqual(5);
+      expect(state.take).toEqual(RequestedActions.PAGE_SIZE);
+      expect(state.hasNextPage).toEqual(true);
     });
   });
 

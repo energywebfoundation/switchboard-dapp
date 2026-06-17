@@ -18,6 +18,14 @@
             [enrolmentStatus]="enrolmentStatus"
             (refreshList)="refreshIssuerList($event)">
           </app-requested-enrolment-list>
+          <app-enrolment-pagination
+            *ngIf="requestedEnrolmentPagination$ | async as pagination"
+            [skip]="pagination.skip"
+            [take]="pagination.take"
+            [hasNextPage]="pagination.hasNextPage"
+            (pageChange)="goToRequestedPage($event)"
+            (lastPage)="goToRequestedLastPage()">
+          </app-enrolment-pagination>
         </div>
       </div>
     </div>
@@ -34,6 +42,14 @@
             (refreshList)="refreshMyEnrolmentsList($event)"
             (removeEnrolment)="removeEnrolment($event)">
           </app-my-enrolment-list>
+          <app-enrolment-pagination
+            *ngIf="myEnrolmentPagination$ | async as pagination"
+            [skip]="pagination.skip"
+            [take]="pagination.take"
+            [hasNextPage]="pagination.hasNextPage"
+            (pageChange)="goToOwnedPage($event)"
+            (lastPage)="goToOwnedLastPage()">
+          </app-enrolment-pagination>
         </div>
       </div>
     </div>
@@ -47,6 +63,14 @@
         <div class="card card-default mb-3 pb-0">
           <app-revoke-enrolment-list [list]="revocableList$ | async" (refreshList)="refreshRevocableList($event)">
           </app-revoke-enrolment-list>
+          <app-enrolment-pagination
+            *ngIf="revocablePagination$ | async as pagination"
+            [skip]="pagination.skip"
+            [take]="pagination.take"
+            [hasNextPage]="pagination.hasNextPage"
+            (pageChange)="goToRevokablePage($event)"
+            (lastPage)="goToRevokableLastPage()">
+          </app-enrolment-pagination>
         </div>
       </div>
     </div>

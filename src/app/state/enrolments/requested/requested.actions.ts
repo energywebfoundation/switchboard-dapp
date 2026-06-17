@@ -1,13 +1,25 @@
 import { createAction, props } from '@ngrx/store';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 
+export const PAGE_SIZE = 20;
+
 export const getEnrolmentRequests = createAction(
-  '[ENROLMENT REQUESTS] Get Enrolment Requests'
+  '[ENROLMENT REQUESTS] Get Enrolment Requests',
+  props<{ skip: number; take: number }>()
+);
+
+export const getLastEnrolmentRequests = createAction(
+  '[ENROLMENT REQUESTS] Get Last Enrolment Requests'
 );
 
 export const getEnrolmentRequestsSuccess = createAction(
   '[ENROLMENT REQUESTS] Get Enrolment Requests Success',
-  props<{ enrolments: EnrolmentClaim[] }>()
+  props<{
+    enrolments: EnrolmentClaim[];
+    skip: number;
+    take: number;
+    hasNextPage: boolean;
+  }>()
 );
 
 export const getEnrolmentRequestsFailure = createAction(
@@ -36,7 +48,7 @@ export const updateEnrolmentFailure = createAction(
 
 export const updateEnrolmentRequestsSuccess = createAction(
   '[ENROLMENT REQUESTS] Update Enrolment Requests Success',
-  props<{ enrolments: EnrolmentClaim[] }>()
+  props<{ enrolments: EnrolmentClaim[]; hasNextPage: boolean }>()
 );
 
 export const updateEnrolmentRequestsFailure = createAction(

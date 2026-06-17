@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-no-records',
@@ -6,4 +6,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['./no-records.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NoRecordsComponent {}
+export class NoRecordsComponent {
+  @Input() message = 'No Record Found';
+}

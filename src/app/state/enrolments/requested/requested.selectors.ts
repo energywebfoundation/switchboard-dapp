@@ -19,3 +19,9 @@ export const getPendingEnrolmentsAmount = createSelector(
     return enrolments.filter((enrolment) => enrolment.isPending).length;
   }
 );
+
+export const getPagination = createSelector(getRequestedState, (state) => ({
+  skip: state.skip,
+  take: state.take,
+  hasNextPage: state.hasNextPage,
+}));

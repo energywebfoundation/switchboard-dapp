@@ -22,6 +22,9 @@ import { CascadingFilterService } from '../../../modules/cascading-filter/servic
   providers: [CascadingFilterService],
 })
 export class MyRevokablesListComponent implements OnInit {
+  readonly noRecordsMessage =
+    'No Record Found. Make sure all the filters are applied correctly.';
+
   @ViewChild('revoke', { static: true }) revoke;
   @ViewChild('status', { static: true }) status;
   @ViewChild('actions', { static: true }) actions;

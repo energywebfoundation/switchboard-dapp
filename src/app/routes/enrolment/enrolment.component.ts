@@ -20,9 +20,12 @@ import { EnrolmentClaim } from './models/enrolment-claim';
 export class EnrolmentComponent implements AfterViewInit {
   @ViewChild('enrolmentTabGroup') enrolmentTabGroup: MatTabGroup;
   myEnrolmentList$ = this.enrolmentFacade.ownedList$;
+  myEnrolmentPagination$ = this.enrolmentFacade.ownedPagination$;
   requestedEnrolmentsList$ = this.enrolmentFacade.requestedList$;
+  requestedEnrolmentPagination$ = this.enrolmentFacade.requestedPagination$;
   isExperimental$ = this.store.select(SettingsSelectors.isExperimentalEnabled);
   revocableList$ = this.enrolmentFacade.revokableList$;
+  revocablePagination$ = this.enrolmentFacade.revokablePagination$;
   enrolmentStatus: FilterStatus = FilterStatus.Pending;
 
   private _queryParamSelectedTabInit = false;
@@ -106,6 +109,30 @@ export class EnrolmentComponent implements AfterViewInit {
 
   removeEnrolment(enrolment: EnrolmentClaim): void {
     this.enrolmentFacade.remove(enrolment.id);
+  }
+
+  goToRequestedPage(skip: number): void {
+    this.enrolmentFacade.goToRequestedPage(skip);
+  }
+
+  goToRequestedLastPage(): void {
+    this.enrolmentFacade.goToRequestedLastPage();
+  }
+
+  goToOwnedPage(skip: number): void {
+    this.enrolmentFacade.goToOwnedPage(skip);
+  }
+
+  goToOwnedLastPage(): void {
+    this.enrolmentFacade.goToOwnedLastPage();
+  }
+
+  goToRevokablePage(skip: number): void {
+    this.enrolmentFacade.goToRevokablePage(skip);
+  }
+
+  goToRevokableLastPage(): void {
+    this.enrolmentFacade.goToRevokableLastPage();
   }
 
   refreshRevocableList(enrolment: EnrolmentClaim): void {

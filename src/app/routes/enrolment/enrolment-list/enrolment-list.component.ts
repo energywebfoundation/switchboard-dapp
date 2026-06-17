@@ -11,6 +11,9 @@ import { CascadingFilterService } from '@modules';
   providers: [CascadingFilterService],
 })
 export class EnrolmentListComponent {
+  readonly noRecordsMessage =
+    'No Record Found. Make sure all the filters are applied correctly.';
+
   @Input() enrolmentStatus: FilterStatus;
   @Input() showDID = false;
   @Input() showRevokeFilters = false;
