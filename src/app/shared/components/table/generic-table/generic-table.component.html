@@ -45,5 +45,5 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <app-no-records *ngIf="!dataSource?.data?.length"></app-no-records>
+  <app-no-records *ngIf="!dataSource?.data?.length" [message]="noRecordsMessage"></app-no-records>
 </div>
