@@ -30,11 +30,14 @@ const requestedReducer = createReducer(
       hasNextPage,
     })
   ),
-  on(RequestedActions.updateEnrolmentRequestsSuccess, (state, { enrolments, hasNextPage }) => ({
-    ...state,
-    enrolments,
-    hasNextPage,
-  })),
+  on(
+    RequestedActions.updateEnrolmentRequestsSuccess,
+    (state, { enrolments, hasNextPage }) => ({
+      ...state,
+      enrolments,
+      hasNextPage,
+    })
+  ),
   on(RequestedActions.updateEnrolmentSuccess, (state, { enrolment }) => ({
     ...state,
     enrolments: [

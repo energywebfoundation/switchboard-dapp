@@ -126,7 +126,9 @@ export class EnrolmentsFacadeService {
 
   goToRevokableLastPage(): void {
     this.revokableListRequested = true;
-    this.store.dispatch(RevocableEnrolmentsActions.getLastRevocableEnrolments());
+    this.store.dispatch(
+      RevocableEnrolmentsActions.getLastRevocableEnrolments()
+    );
   }
 
   /**

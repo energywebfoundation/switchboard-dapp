@@ -16,10 +16,7 @@ import { ClaimsFacadeService } from '../../../shared/services/claims-facade/clai
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { EffectBaseAbstract } from '../utils/effect.base.abstract';
-import {
-  loadEnrolmentPage,
-  loadLastEnrolmentPage,
-} from '../utils/pagination';
+import { loadEnrolmentPage, loadLastEnrolmentPage } from '../utils/pagination';
 
 @Injectable()
 export class OwnedEnrolmentsEffects extends EffectBaseAbstract {

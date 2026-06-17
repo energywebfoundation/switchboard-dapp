@@ -30,11 +30,14 @@ const revokableReducer = createReducer(
       hasNextPage,
     })
   ),
-  on(RevokableActions.updateRevocableEnrolmentsSuccess, (state, { enrolments, hasNextPage }) => ({
-    ...state,
-    enrolments,
-    hasNextPage,
-  })),
+  on(
+    RevokableActions.updateRevocableEnrolmentsSuccess,
+    (state, { enrolments, hasNextPage }) => ({
+      ...state,
+      enrolments,
+      hasNextPage,
+    })
+  ),
   on(RevokableActions.updateEnrolmentSuccess, (state, { enrolment }) => ({
     ...state,
     enrolments: [

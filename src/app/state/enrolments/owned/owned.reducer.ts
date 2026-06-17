@@ -30,11 +30,14 @@ const ownedReducer = createReducer(
       hasNextPage,
     })
   ),
-  on(OwnedActions.updateOwnedEnrolmentsSuccess, (state, { enrolments, hasNextPage }) => ({
-    ...state,
-    enrolments,
-    hasNextPage,
-  })),
+  on(
+    OwnedActions.updateOwnedEnrolmentsSuccess,
+    (state, { enrolments, hasNextPage }) => ({
+      ...state,
+      enrolments,
+      hasNextPage,
+    })
+  ),
   on(OwnedActions.updateEnrolmentSuccess, (state, { enrolment }) => ({
     ...state,
     enrolments: [
