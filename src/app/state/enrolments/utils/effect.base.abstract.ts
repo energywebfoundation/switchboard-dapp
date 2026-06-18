@@ -37,22 +37,28 @@ export abstract class EffectBaseAbstract {
             this.loadingService.show();
           }
         }),
-        switchMap(() =>
-          this.getClaims().pipe(
+        switchMap(() => {
+          let loaderHidden = false;
+          const hideLoader = () => {
+            if (displayLoader && !loaderHidden) {
+              this.loadingService.hide();
+              loaderHidden = true;
+            }
+          };
+
+          return this.getClaims().pipe(
             map((enrolments: EnrolmentClaim[]) =>
               successAction({ enrolments })
             ),
+            tap(() => hideLoader()),
             catchError((e) => {
               console.error(e);
+              hideLoader();
               return of(failureAction({ error: e.message }));
             }),
-            finalize(() => {
-              if (displayLoader) {
-                this.loadingService.hide();
-              }
-            })
-          )
-        )
+            finalize(() => hideLoader())
+          );
+        })
       );
     };
   }

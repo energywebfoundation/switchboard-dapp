@@ -10,6 +10,9 @@ import { EnrolmentsFacadeService } from '@state';
 })
 export class MessageSubscriptionService implements OnDestroy {
   private subscriptionId: number;
+  private isInitializing = false;
+  private isInitialized = false;
+
   constructor(
     private iamService: IamService,
     private toastr: SwitchboardToastrService,
@@ -18,13 +21,31 @@ export class MessageSubscriptionService implements OnDestroy {
   ) {}
 
   ngOnDestroy() {
-    this.iamService.messagingService.unsubscribeFrom(this.subscriptionId);
+    if (this.subscriptionId !== undefined) {
+      this.iamService.messagingService.unsubscribeFrom(this.subscriptionId);
+    }
   }
 
-  async init() {
-    this.subscriptionId = await this.iamService.messagingService.subscribeTo({
-      messageHandler: this.handleMessage.bind(this),
-    });
+  init(): void {
+    if (this.isInitialized || this.isInitializing) {
+      return;
+    }
+
+    this.isInitializing = true;
+    void this.subscribe();
+  }
+
+  private async subscribe(): Promise<void> {
+    try {
+      this.subscriptionId = await this.iamService.messagingService.subscribeTo({
+        messageHandler: this.handleMessage.bind(this),
+      });
+      this.isInitialized = true;
+    } catch (error) {
+      console.error('Unable to initialize message subscription', error);
+    } finally {
+      this.isInitializing = false;
+    }
   }
 
   private handleMessage(message: {

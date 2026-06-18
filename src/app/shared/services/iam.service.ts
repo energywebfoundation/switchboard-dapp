@@ -276,20 +276,8 @@ export class IamService {
   }
 
   private configureDidStoreConfig() {
-    const AWS_ACCESS_KEY_ID = this.envService.AWS_ACCESS_KEY_ID;
-    const AWS_SECRET_ACCESS_KEY = this.envService.AWS_SECRET_ACCESS_KEY;
-    const AWS_REGION = this.envService.AWS_REGION;
-    const AWS_S3_BUCKET = this.envService.AWS_S3_BUCKET;
     return {
       type: DidStoreType.S3,
-      bucketName: AWS_S3_BUCKET,
-      credential: {
-        region: AWS_REGION,
-        credentials: {
-          accessKeyId: AWS_ACCESS_KEY_ID,
-          secretAccessKey: AWS_SECRET_ACCESS_KEY,
-        },
-      },
     };
   }
 
