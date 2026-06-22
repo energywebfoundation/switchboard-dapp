@@ -1,0 +1,33 @@
+<div class="enrolment-pagination" *ngIf="canPaginate">
+  <button
+    mat-icon-button
+    class="enrolment-pagination__button"
+    matTooltip="First page"
+    aria-label="First page"
+    [disabled]="!hasPreviousPage"
+    (click)="goToFirstPage()">
+    <mat-icon>first_page</mat-icon>
+  </button>
+  <button
+    mat-icon-button
+    class="enrolment-pagination__button"
+    matTooltip="Previous page"
+    aria-label="Previous page"
+    [disabled]="!hasPreviousPage"
+    (click)="goToPreviousPage()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <div class="enrolment-pagination__label" aria-live="polite">
+    <span class="enrolment-pagination__label-caption">Page</span>
+    <span class="enrolment-pagination__label-number">{{ pageNumber }}</span>
+  </div>
+  <button
+    mat-icon-button
+    class="enrolment-pagination__button"
+    matTooltip="Next page"
+    aria-label="Next page"
+    [disabled]="!hasNextPage"
+    (click)="goToNextPage()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>

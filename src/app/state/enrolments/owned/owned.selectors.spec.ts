@@ -1,5 +1,6 @@
 import { Claim, RegistrationTypes } from 'iam-client-lib';
 import { EnrolmentClaim } from 'src/app/routes/enrolment/models/enrolment-claim';
+import { PAGE_SIZE } from './owned.actions';
 import * as OwnedSelectors from './owned.selectors';
 
 describe('Owned Enrolments Selectors', () => {
@@ -52,8 +53,30 @@ describe('Owned Enrolments Selectors', () => {
   describe('getAllEnrolments', () => {
     it('should return default state', () => {
       expect(
-        OwnedSelectors.getAllEnrolments.projector({ enrolments: [] })
+        OwnedSelectors.getAllEnrolments.projector({
+          enrolments: [],
+          skip: 0,
+          take: PAGE_SIZE,
+          hasNextPage: false,
+        })
       ).toEqual([]);
+    });
+  });
+
+  describe('getPagination', () => {
+    it('should return pagination state', () => {
+      expect(
+        OwnedSelectors.getPagination.projector({
+          enrolments: [],
+          skip: 5,
+          take: PAGE_SIZE,
+          hasNextPage: true,
+        })
+      ).toEqual({
+        skip: 5,
+        take: PAGE_SIZE,
+        hasNextPage: true,
+      });
     });
   });
 });

@@ -35,8 +35,30 @@ describe('Requested Enrolments Selectors', () => {
   describe('getAllEnrolments', () => {
     it('should return default state', () => {
       expect(
-        RequestedSelectors.getAllEnrolments.projector({ enrolments: [] })
+        RequestedSelectors.getAllEnrolments.projector({
+          enrolments: [],
+          skip: 0,
+          take: 5,
+          hasNextPage: false,
+        })
       ).toEqual([]);
+    });
+  });
+
+  describe('getPagination', () => {
+    it('should return pagination state', () => {
+      expect(
+        RequestedSelectors.getPagination.projector({
+          enrolments: [],
+          skip: 5,
+          take: 5,
+          hasNextPage: true,
+        })
+      ).toEqual({
+        skip: 5,
+        take: 5,
+        hasNextPage: true,
+      });
     });
   });
 });

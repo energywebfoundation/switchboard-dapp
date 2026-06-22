@@ -26,8 +26,14 @@ export class EnrolmentsFacadeService {
   get ownedList$() {
     return this.store.select(OwnedEnrolmentsSelectors.getAllEnrolments);
   }
+  get ownedPagination$() {
+    return this.store.select(OwnedEnrolmentsSelectors.getPagination);
+  }
   get requestedList$() {
     return this.store.select(RequestedEnrolmentsSelectors.getAllEnrolments);
+  }
+  get requestedPagination$() {
+    return this.store.select(RequestedEnrolmentsSelectors.getPagination);
   }
   get revokableList$() {
     return this.store
@@ -39,19 +45,43 @@ export class EnrolmentsFacadeService {
           if (enrolments.length === 0 && !this.revokableListRequested) {
             this.revokableListRequested = true;
             this.store.dispatch(
-              RevocableEnrolmentsActions.getRevocableEnrolments()
+              RevocableEnrolmentsActions.getRevocableEnrolments({
+                skip: 0,
+                take: RevocableEnrolmentsActions.PAGE_SIZE,
+              })
             );
           }
         })
       );
+  }
+  get revokablePagination$() {
+    return this.store.select(RevocableEnrolmentsSelectors.getPagination);
   }
   constructor(private store: Store) {}
 
   loadOwned(): void {
     if (!this.ownedListRequested) {
       this.ownedListRequested = true;
-      this.store.dispatch(OwnedEnrolmentsActions.getOwnedEnrolments());
+      this.store.dispatch(
+        OwnedEnrolmentsActions.getOwnedEnrolments({
+          skip: 0,
+          take: OwnedEnrolmentsActions.PAGE_SIZE,
+        })
+      );
     }
+  }
+
+  goToOwnedPage(skip: number): void {
+    this.store.dispatch(
+      OwnedEnrolmentsActions.getOwnedEnrolments({
+        skip,
+        take: OwnedEnrolmentsActions.PAGE_SIZE,
+      })
+    );
+  }
+
+  goToOwnedLastPage(): void {
+    this.store.dispatch(OwnedEnrolmentsActions.getLastOwnedEnrolments());
   }
 
   refreshOwned(): void {
@@ -62,8 +92,43 @@ export class EnrolmentsFacadeService {
   loadRequested(): void {
     if (!this.requestedListRequested) {
       this.requestedListRequested = true;
-      this.store.dispatch(RequestedEnrolmentsActions.getEnrolmentRequests());
+      this.store.dispatch(
+        RequestedEnrolmentsActions.getEnrolmentRequests({
+          skip: 0,
+          take: RequestedEnrolmentsActions.PAGE_SIZE,
+        })
+      );
     }
+  }
+
+  goToRequestedPage(skip: number): void {
+    this.store.dispatch(
+      RequestedEnrolmentsActions.getEnrolmentRequests({
+        skip,
+        take: RequestedEnrolmentsActions.PAGE_SIZE,
+      })
+    );
+  }
+
+  goToRequestedLastPage(): void {
+    this.store.dispatch(RequestedEnrolmentsActions.getLastEnrolmentRequests());
+  }
+
+  goToRevokablePage(skip: number): void {
+    this.revokableListRequested = true;
+    this.store.dispatch(
+      RevocableEnrolmentsActions.getRevocableEnrolments({
+        skip,
+        take: RevocableEnrolmentsActions.PAGE_SIZE,
+      })
+    );
+  }
+
+  goToRevokableLastPage(): void {
+    this.revokableListRequested = true;
+    this.store.dispatch(
+      RevocableEnrolmentsActions.getLastRevocableEnrolments()
+    );
   }
 
   /**

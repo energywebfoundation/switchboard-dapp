@@ -7,10 +7,34 @@ describe('Owned Enrolments reducer', () => {
     it('should set enrolments in an immutable way', () => {
       const { initialState } = fromReducer;
       const enrolments = [{} as EnrolmentClaim];
-      const action = OwnedActions.getOwnedEnrolmentsSuccess({ enrolments });
+      const action = OwnedActions.getOwnedEnrolmentsSuccess({
+        enrolments,
+        skip: 0,
+        take: OwnedActions.PAGE_SIZE,
+        hasNextPage: false,
+      });
       const state = fromReducer.reducer(initialState, action);
 
       expect(state.enrolments).toEqual(enrolments);
+    });
+
+    it('should set pagination state', () => {
+      const { initialState } = fromReducer;
+      const enrolments = Array.from(
+        { length: OwnedActions.PAGE_SIZE },
+        () => ({} as EnrolmentClaim)
+      );
+      const action = OwnedActions.getOwnedEnrolmentsSuccess({
+        enrolments,
+        skip: 5,
+        take: OwnedActions.PAGE_SIZE,
+        hasNextPage: true,
+      });
+      const state = fromReducer.reducer(initialState, action);
+
+      expect(state.skip).toEqual(5);
+      expect(state.take).toEqual(OwnedActions.PAGE_SIZE);
+      expect(state.hasNextPage).toEqual(true);
     });
   });
 

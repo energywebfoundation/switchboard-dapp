@@ -52,6 +52,7 @@ export class GenericTableComponent {
   @Input() sortingFunction: (data, sortHeaderId: string) => string | number;
   @Input() sortColumn = 'createdDate';
   @Input() sortDirection: 'asc' | 'desc' = 'desc';
+  @Input() noRecordsMessage = 'No Record Found';
 
   columnType = ColumnType;
 

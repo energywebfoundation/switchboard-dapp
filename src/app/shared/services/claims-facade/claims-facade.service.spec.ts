@@ -8,9 +8,13 @@ import { Claim, NamespaceType, RegistrationTypes } from 'iam-client-lib';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import * as userSelectors from '../../../state/user-claim/user.selectors';
+import { HttpClient } from '@angular/common/http';
+import { EnvService } from '../env/env.service';
+import { of } from 'rxjs';
 
 describe('ClaimsFacadeService', () => {
   let service: ClaimsFacadeService;
+  let httpSpy: jasmine.SpyObj<HttpClient>;
   const claimsServiceSpy = jasmine.createSpyObj('IamService', [
     'createSelfSignedClaim',
     'hasOnChainRole',
@@ -27,6 +31,7 @@ describe('ClaimsFacadeService', () => {
   const signerServiceSpy = jasmine.createSpyObj('IamService', ['did']);
 
   beforeEach(() => {
+    httpSpy = jasmine.createSpyObj('HttpClient', ['get']);
     TestBed.configureTestingModule({
       providers: [
         {
@@ -37,6 +42,11 @@ describe('ClaimsFacadeService', () => {
           },
         },
         { provide: LoadingService, useValue: loadingServiceSpy },
+        { provide: EnvService, useValue: { cacheServerUrl: 'cache-server' } },
+        {
+          provide: HttpClient,
+          useValue: httpSpy,
+        },
         provideMockStore(),
       ],
     });
@@ -46,6 +56,24 @@ describe('ClaimsFacadeService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  describe('getClaimsByRequesterPaginated', () => {
+    it('should request claims in descending order', (done) => {
+      signerServiceSpy.did = 'did:ethr:ewc:0x123';
+      httpSpy.get.and.returnValue(of([]));
+
+      service.getClaimsByRequesterPaginated(10, 5).subscribe(() => {
+        expect(httpSpy.get).toHaveBeenCalledWith(
+          'cache-server/claim/requester/did:ethr:ewc:0x123',
+          {
+            params: { skip: 10, take: 5, order: 'DESC' },
+            withCredentials: true,
+          }
+        );
+        done();
+      });
+    });
   });
 
   describe('addStatusIfIsSyncedOffChain', () => {
