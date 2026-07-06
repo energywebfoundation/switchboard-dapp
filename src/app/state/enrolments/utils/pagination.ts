@@ -1,4 +1,4 @@
-import { firstValueFrom, Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { EnrolmentClaim } from '../../../routes/enrolment/models/enrolment-claim';
 
 export interface EnrolmentPage {
@@ -13,7 +13,7 @@ export async function loadEnrolmentPage(
   skip: number,
   take: number
 ): Promise<EnrolmentPage> {
-  const enrolments = await firstValueFrom(getPage(skip, take + 1));
+  const enrolments = await lastValueFrom(getPage(skip, take + 1));
 
   return {
     enrolments: enrolments.slice(0, take),
@@ -59,7 +59,7 @@ export async function loadLastEnrolmentPageFromAll(
   getAll: () => Observable<EnrolmentClaim[]>,
   take: number
 ): Promise<EnrolmentPage> {
-  const enrolments = await firstValueFrom(getAll());
+  const enrolments = await lastValueFrom(getAll());
   const lastPageSkip =
     enrolments.length && take
       ? Math.floor((enrolments.length - 1) / take) * take
