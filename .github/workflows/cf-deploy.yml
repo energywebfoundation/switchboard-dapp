@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - uses: styfle/cancel-workflow-action@0.8.0
+      - uses: styfle/cancel-workflow-action@0.13.1
         with:
           access_token: ${{ github.token }}
   env_name:
@@ -70,7 +70,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v2-beta
         with:
-          node-version: '16.13.0'
+          node-version: '16.20.2'
           registry-url: https://registry.npmjs.org/
       - name: Cache node modules
         uses: actions/cache@v4
