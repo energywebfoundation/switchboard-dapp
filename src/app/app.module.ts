@@ -1,5 +1,5 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
-import { APP_INITIALIZER, NgModule, Provider } from '@angular/core';
+import { APP_INITIALIZER, NgModule, type Provider } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
