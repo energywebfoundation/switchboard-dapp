@@ -17,7 +17,6 @@ const sentryPlugin = () => {
   return [];
 };
 module.exports = {
-  devtool: 'source-map',
   plugins: [
     new NodePolyfillPlugin({
       excludeAliases: [
