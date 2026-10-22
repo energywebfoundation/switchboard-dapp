@@ -30,6 +30,7 @@ class LocalStorageWrapper<T> {
       return JSON.parse(localStorage.getItem(this.key));
     } catch (e) {
       console.error(e);
+      return null;
     }
   }
 
