@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - uses: styfle/cancel-workflow-action@0.8.0
+      - uses: styfle/cancel-workflow-action@3d86a7cc43670094ac248017207be0295edbc31d # 0.8.0
         with:
           access_token: ${{ github.token }}
   env_name:
@@ -25,24 +25,26 @@ jobs:
     steps:
       - name: Get GHA environment name
         id: env_name # TODO - Add sandbox ICS configuration, to use sandbox instead of dev
+        env:
+          GITHUB_REF: ${{ github.ref }}
         run: |
-          echo "Running on branch ${{ github.ref }}"
-          if [ "${{ github.ref }}" = "sandbox" ]; then
+          echo "Running on branch $GITHUB_REF"
+          if [ "$GITHUB_REF" = "sandbox" ]; then
             echo "::set-output name=env_name::sandbox"
             echo "::set-output name=build_script::'npm run build'"
-          elif [ "${{ github.ref }}" = "refs/heads/develop" ]; then
+          elif [ "$GITHUB_REF" = "refs/heads/develop" ]; then
             echo "::set-output name=env_name::dev"
             echo "::set-output name=build_script::npm run build"
-          elif [ "${{ github.ref }}" = "refs/heads/master" ]; then
+          elif [ "$GITHUB_REF" = "refs/heads/master" ]; then
             echo "::set-output name=env_name::staging"
             echo "::set-output name=build_script::npm run build-staging"  
-          elif [ "${{ github.ref }}" = "refs/heads/gp4btc-staging" ]; then
+          elif [ "$GITHUB_REF" = "refs/heads/gp4btc-staging" ]; then
             echo "::set-output name=env_name::gp4btc-staging"
             echo "::set-output name=build_script::npm run build-gp4btc-staging"            
-          elif [ "${{ github.ref }}" = "refs/heads/gp4btc-prod" ]; then
+          elif [ "$GITHUB_REF" = "refs/heads/gp4btc-prod" ]; then
             echo "::set-output name=env_name::gp4btc-prod"
             echo "::set-output name=build_script::npm run build-gp4btc-prod"            
-          elif [ "${{ github.ref }}" = "refs/heads/release" ]; then
+          elif [ "$GITHUB_REF" = "refs/heads/release" ]; then
             echo "::set-output name=env_name::prod"
             echo "::set-output name=build_script::npm run build-prod"
           fi
@@ -65,15 +67,15 @@ jobs:
       packages: read
       actions: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v2-beta
+      - uses: actions/setup-node@27082cecf3ff7a1742dbd5e12605f0cb59dce2d9 # v2-beta
         with:
           node-version: '22.23.3'
           registry-url: https://registry.npmjs.org/
       - name: Cache node modules
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         env:
           cache-name: cache-node-modules
         with:
@@ -89,7 +91,7 @@ jobs:
           npm install
           envsubst < src/environments/constants.template.ts > src/environments/constants.ts
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
         with:
           role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ secrets.AWS_REGION }}
