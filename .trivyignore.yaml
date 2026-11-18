@@ -31,13 +31,3 @@ vulnerabilities:
     statement: Accepted on Angular 15.2.8. Fixed releases start at Angular 20.3.33.
   - id: CVE-2026-54264
     statement: Accepted on Angular 15.2.8. Fixed releases start at Angular 20.3.25.
-  - id: CVE-2026-118664
-    statement: Accepted for decode-uri-component 0.2.2 in the current lockfile.
-  - id: CVE-2026-111755
-    statement: Accepted for follow-redirects 1.16.0 in the current lockfile.
-  - id: CVE-2026-111756
-    statement: Accepted for follow-redirects 1.16.0 in the current lockfile.
-  - id: CVE-2026-116689
-    statement: Accepted for follow-redirects 1.16.0 in the current lockfile.
-  - id: CVE-2026-118772
-    statement: Accepted for joi 17.13.8 in the current lockfile.
