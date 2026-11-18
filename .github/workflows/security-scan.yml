@@ -76,6 +76,7 @@ jobs:
               --scanners vuln \
               --pkg-types library \
               --severity HIGH,CRITICAL \
+              --ignorefile .trivyignore.yaml \
               --exit-code 1 \
               . 2>&1 | tee "${RUNNER_TEMP}/trivy.log"
           if grep -q 'Supported files for scanner(s) not found' "${RUNNER_TEMP}/trivy.log"; then
