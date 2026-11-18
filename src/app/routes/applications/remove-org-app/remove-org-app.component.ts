@@ -77,7 +77,7 @@ export class RemoveOrgAppComponent implements OnInit {
           this.stepper.next();
         } catch (e) {
           if (!(e instanceof ExpiredRequestError)) {
-            console.error(this.TOASTR_HEADER, e);
+            console.error('%s', this.TOASTR_HEADER, e);
             this.toastr.error(
               e.message || 'Please contact system administrator.',
               'System Error'
